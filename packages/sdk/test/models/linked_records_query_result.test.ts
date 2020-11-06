@@ -399,6 +399,38 @@ describe('LinkedRecordQueryResult', () => {
         });
     });
 
+    describe('#getRecordById', () => {
+        it('throws an error for unloaded records', () => {
+            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('throws an error for non-existent records', async () => {
+            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"No record with ID not a record id in this query result"`,
+            );
+        });
+    });
+
+    describe('#getRecordByIdIfExists', () => {
+        it('throws an error for unloaded records', () => {
+            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            expect(() =>
+                result.getRecordByIdIfExists('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('returns `null` for non-existent records', async () => {
+            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            expect(result.getRecordByIdIfExists('not a record id')).toBe(null);
+        });
+    });
+
     describe('#loadDataAsync', () => {
         it('works for loaded instances', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');

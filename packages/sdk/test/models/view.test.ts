@@ -279,6 +279,52 @@ describe('View', () => {
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recC');
             });
+
+            test('throws for invalid record color modes', () => {
+                expect(() => {
+                    view.selectRecords({
+                        recordColorMode: {
+                            type: 'cranberries' as 'none',
+                        },
+                    });
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"Unknown record coloring mode: [object Object]"`,
+                );
+            });
+
+            test('throws for invalid sorting directions', () => {
+                expect(() => {
+                    view.selectRecords({
+                        sorts: [{field: 'fldPrimary', direction: 'descending' as 'desc'}],
+                    });
+                }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: descending"`);
+            });
+
+            it('does not throw for some falsey `fields` values', () => {
+                view.selectRecords({
+                    // eslint-disable-next-line no-sparse-arrays
+                    fields: [,],
+                });
+                view.selectRecords({
+                    fields: [undefined],
+                });
+                view.selectRecords({
+                    fields: [null],
+                });
+                view.selectRecords({
+                    fields: [false],
+                });
+            });
+
+            it('throws for invalid field specifiers', () => {
+                expect(() => {
+                    view.selectRecords({
+                        fields: [(1.0004 as unknown) as string],
+                    });
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"Invalid value for field, expected a field, id, or name but got: 1.0004"`,
+                );
+            });
         });
 
         describe('#selectRecordsAsync()', () => {

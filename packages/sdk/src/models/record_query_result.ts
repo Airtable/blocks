@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import Colors, {Color} from '../colors';
 import {BaseData} from '../types/base';
@@ -287,6 +286,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Throws if data is not loaded yet.
      * Can be watched.
      */
+    // istanbul ignore next
     get recordIds(): Array<RecordId> {
         throw spawnAbstractMethodError();
     }
@@ -296,6 +296,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      *
      * @internal
      */
+    // istanbul ignore next
     _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void> {
         throw spawnAbstractMethodError();
     }
@@ -304,6 +305,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Null if fields were not specified, which means the QueryResult
      * will load all fields in the table.
      */
+    // istanbul ignore next
     get fields(): Array<Field> | null {
         throw spawnAbstractMethodError();
     }
@@ -312,6 +314,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
+    // istanbul ignore next
     get parentTable(): Table {
         throw spawnAbstractMethodError();
     }
@@ -343,6 +346,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     static _normalizeOpts(
         table: Table,
         recordStore: RecordStore,
+        // Every one of this method's three call sites force a value to be set
+        // for the `opts` parameter.
+        // TODO(jugglinmike): remove the default parameter value
+        // istanbul ignore next
         opts: RecordQueryResultOpts = {},
     ): NormalizedRecordQueryResultOpts {
         const sorts = !opts.sorts
@@ -415,6 +422,9 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
                 break;
             default:
+                // The record color mode object does not serialize to a
+                // meaningful string.
+                // TODO(jugglinmike): compute a more helpful error message
                 throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
         }
 
@@ -549,6 +559,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 return this._recordStore
                     .getViewDataStore(recordColorMode.view.id)
                     .getRecordColor(record);
+            // istanbul ignore next
             default:
                 throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
         }
@@ -630,6 +641,13 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @internal
      */
     _watchRecordColorsIfNeeded() {
+        // This method is only invoked when the `watch` method has been
+        // called for the "recordColors" key. Due to this, the associated
+        // entry in the `_changeWatchersByKey` object will always be a
+        // truthy value, making the following logical "or" expression
+        // superfluous.
+        // TODO(jugglinmike): remove the logical "or" expression
+        // istanbul ignore next
         const watchCount = (
             this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
         ).length;
@@ -667,6 +685,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .watch('recordColors', handler);
                 break;
             }
+            // istanbul ignore next
             default:
                 throw spawnError('Unknown record coloring type %s', cast<never>(recordColorMode));
         }
@@ -710,6 +729,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .unwatch('recordColors', handler);
                 break;
             }
+            // istanbul ignore next
             default:
                 throw spawnError('unknown record coloring type %s', cast<never>(recordColorMode));
         }
@@ -732,6 +752,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.BY_VIEW:
                 await this._recordStore.getViewDataStore(recordColorMode.view.id).loadDataAsync();
                 return;
+            // istanbul ignore next
             default:
                 throw spawnUnknownSwitchCaseError(
                     'record color mode type',
@@ -755,6 +776,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.BY_VIEW:
                 this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
                 break;
+            // istanbul ignore next
             default:
                 throw spawnUnknownSwitchCaseError(
                     'record color mode type',

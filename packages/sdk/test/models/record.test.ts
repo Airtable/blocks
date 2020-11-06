@@ -1028,10 +1028,6 @@ describe('Record', () => {
                 field = recordB.parentTable.getFieldById('fldLinked1');
             });
 
-            afterEach(async () => {
-                linkedRecordsFromCell.unloadData();
-            });
-
             test('#selectLinkedRecordsFromCell(fieldOrFieldIdOrFieldName), Field', async () => {
                 linkedRecordsFromCell = recordB.selectLinkedRecordsFromCell(field);
                 await linkedRecordsFromCell.loadDataAsync();
@@ -1066,6 +1062,40 @@ describe('Record', () => {
                 linkedRecordsFromCell = recordB.selectLinkedRecordsFromCell(field.name, {});
                 await linkedRecordsFromCell.loadDataAsync();
                 expect(linkedRecordsFromCell.isDataLoaded).toBe(true);
+            });
+
+            test('throws for invalid sorting directions', () => {
+                expect(() => {
+                    recordB.selectLinkedRecordsFromCell(field.name, {
+                        sorts: [{field: 'fldPrimary', direction: 'rowboatscending' as 'desc'}],
+                    });
+                }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: rowboatscending"`);
+            });
+
+            it('does not throw for some falsey `fields` values', () => {
+                recordB.selectLinkedRecordsFromCell(field.name, {
+                    // eslint-disable-next-line no-sparse-arrays
+                    fields: [,],
+                });
+                recordB.selectLinkedRecordsFromCell(field.name, {
+                    fields: [undefined],
+                });
+                recordB.selectLinkedRecordsFromCell(field.name, {
+                    fields: [null],
+                });
+                recordB.selectLinkedRecordsFromCell(field.name, {
+                    fields: [false],
+                });
+            });
+
+            it('throws for invalid field specifiers', () => {
+                expect(() => {
+                    recordB.selectLinkedRecordsFromCell(field.name, {
+                        fields: [(1.0004 as unknown) as string],
+                    });
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"Invalid value for field, expected a field, id, or name but got: 1.0004"`,
+                );
             });
         });
 

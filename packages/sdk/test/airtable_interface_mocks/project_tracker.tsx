@@ -41,7 +41,7 @@ const projectTracker: SdkInitData = {
                     fldRljtoVpOt1IDYH: {
                         id: 'fldRljtoVpOt1IDYH',
                         name: 'Category',
-                        type: 'select',
+                        type: 'singleSelect',
                         typeOptions: {
                             choiceOrder: [
                                 'seljTTcI4KHd0jrta',

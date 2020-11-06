@@ -5,6 +5,9 @@ import getSdk, {clearSdkForTest} from '../../src/get_sdk';
 import {modes as recordColorModes} from '../../src/models/record_coloring';
 import {FieldType} from '../../src/types/field';
 import {RecordData} from '../../src/types/record';
+import Table from '../../src/models/table';
+import Field from '../../src/models/field';
+import View from '../../src/models/view';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -12,7 +15,9 @@ jest.mock('../../src/injected/airtable_interface', () => ({
     default: () => mockAirtableInterface,
 }));
 
-const recordEntry = (id: string, valuesByFieldId: {[key: string]: string | number}) => ({
+type CellValue = string | number | {[key: string]: string};
+
+const recordEntry = (id: string, valuesByFieldId: {[key: string]: CellValue}) => ({
     [id]: {
         id,
         cellValuesByFieldId: valuesByFieldId,
@@ -29,9 +34,18 @@ const mockRecordData = (
 
     if (tableId === 'tbly388E8NA1CNhnF') {
         recordsById = {
-            ...recordEntry('recA', {fldXaTPfxIVhAUYde: 'b'}),
-            ...recordEntry('recB', {fldXaTPfxIVhAUYde: 'a'}),
-            ...recordEntry('recC', {fldXaTPfxIVhAUYde: 'c'}),
+            ...recordEntry('recA', {
+                fldXaTPfxIVhAUYde: 'b',
+                fldRljtoVpOt1IDYH: {color: 'teal'},
+            }),
+            ...recordEntry('recB', {
+                fldXaTPfxIVhAUYde: 'a',
+                fldRljtoVpOt1IDYH: {color: 'redBright'},
+            }),
+            ...recordEntry('recC', {
+                fldXaTPfxIVhAUYde: 'c',
+                fldRljtoVpOt1IDYH: {},
+            }),
         };
     } else {
         recordsById = {
@@ -220,6 +234,145 @@ describe('TableOrViewQueryResult', () => {
         });
     });
 
+    describe('#getRecordById', () => {
+        it('throws an error for unloaded records', () => {
+            const result = base.tables[0].selectRecords();
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('throws an error for non-existent records', async () => {
+            mockRecordData('tbly388E8NA1CNhnF', false);
+            const result = await base.tables[0].selectRecordsAsync();
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"No record with ID not a record id in this query result"`,
+            );
+        });
+    });
+
+    describe('#getRecordByIdIfExists', () => {
+        it('throws an error for unloaded records', () => {
+            const result = base.tables[0].selectRecords();
+            expect(() =>
+                result.getRecordByIdIfExists('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('returns `null` for non-existent records', async () => {
+            mockRecordData('tbly388E8NA1CNhnF', false);
+            const result = await base.tables[0].selectRecordsAsync();
+            expect(result.getRecordByIdIfExists('not a record id')).toBe(null);
+        });
+    });
+
+    describe('#getRecordColor', () => {
+        it('throws an error for unloaded records', () => {
+            const result = base.tables[0].selectRecords();
+            expect(() => result.getRecordColor('recB')).toThrowErrorMatchingInlineSnapshot(
+                `"Record metadata is not loaded"`,
+            );
+        });
+
+        describe('mode: none', () => {
+            it('returns `null` (record specified by ID)', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', false);
+                const result = await base.tables[0].selectRecordsAsync();
+                expect(result.getRecordColor('recB')).toBe(null);
+            });
+
+            it('returns `null` (record specified by instance)', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', false);
+                const result = await base.tables[0].selectRecordsAsync();
+                expect(result.getRecordColor(result.records[1])).toBe(null);
+            });
+        });
+
+        describe('mode: bySelectField', () => {
+            it('returns the correct color', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', false);
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(
+                        base.tables[0].getField('Category'),
+                    ),
+                });
+
+                expect(result.getRecordColor('recA')).toBe('teal');
+                expect(result.getRecordColor('recB')).toBe('redBright');
+            });
+
+            it('returns `null` when color is not specified', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', false);
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(
+                        base.tables[0].getField('Category'),
+                    ),
+                });
+
+                expect(result.getRecordColor('recC')).toBe(null);
+            });
+
+            it('returns `null` when field type has been modified', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', false);
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(
+                        base.tables[0].getField('Category'),
+                    ),
+                });
+
+                // Type modification must occur after selection since
+                // validation logic would otherwise prevent the
+                // TableOrViewQueryResult from being created.
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'fieldsById',
+                            'fldRljtoVpOt1IDYH',
+                            'type',
+                        ],
+                        value: 'text',
+                    },
+                ]);
+
+                expect(result.getRecordColor('recA')).toBe(null);
+            });
+        });
+
+        describe('mode: byView', () => {
+            it('returns the correct color', async () => {
+                const view = base.tables[0].getView('All projects');
+                mockRecordData('tbly388E8NA1CNhnF', true);
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.byView(view),
+                });
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'viewsById',
+                            view.id,
+                            'colorsByRecordId',
+                        ],
+                        value: {
+                            recA: 'red',
+                            recB: 'white',
+                            recC: 'grayLight2',
+                        },
+                    },
+                ]);
+
+                expect(result.getRecordColor('recA')).toBe('red');
+                expect(result.getRecordColor('recB')).toBe('white');
+                expect(result.getRecordColor('recC')).toBe('grayLight2');
+            });
+        });
+    });
+
     describe('#hasRecord', () => {
         it('rejects requests for unloaded results', () => {
             const result = base.tables[0].selectRecords();
@@ -382,6 +535,51 @@ describe('TableOrViewQueryResult', () => {
 
                 expect(result.records.length).toBe(3);
                 expect(result.records[0].getCellValue('fldSelect')).toBe(null);
+            });
+
+            it('loads all fields when no particular fields are requested and `recordColorMode` option references a field', async () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'fieldsById', 'fldSelect'],
+                        value: {
+                            id: 'fldSelect',
+                            name: 'Select Field',
+                            type: FieldType.SINGLE_SELECT,
+                            typeOptions: {
+                                choiceOrder: ['selA', 'selB'],
+                                choices: {
+                                    selA: {
+                                        name: 'Option A',
+                                        id: 'selA',
+                                        color: 'cyanDark',
+                                    },
+                                    selB: {
+                                        name: 'Option B',
+                                        id: 'selB',
+                                        color: 'redDark',
+                                    },
+                                },
+                            },
+                            description: '',
+                            lock: null,
+                        },
+                    },
+                ]);
+                const selectField = base.tables[1].fields[6];
+                const result = base.tables[1].selectRecords({
+                    recordColorMode: recordColorModes.bySelectField(selectField),
+                });
+
+                await result.loadDataAsync();
+
+                expect(result.records.length).toBe(3);
+                result.records[0].getCellValue('fldfu76MKFFh6x6IM');
+                result.records[0].getCellValue('fldij9kocxowfur16');
+                result.records[0].getCellValue('fldxsrKD1DItS6Auv');
+                result.records[0].getCellValue('fldSCh5AV7Z3056Vw');
+                result.records[0].getCellValue('fldX2QXZGxsqj7YC0');
+                result.records[0].getCellValue('fldfxDIwSfAEb1wLI');
+                result.records[0].getCellValue('fldSelect');
             });
 
             it('does not load fields that are not specified by `fields` nor `sorts`', async () => {
@@ -661,6 +859,136 @@ describe('TableOrViewQueryResult', () => {
 
         beforeEach(() => {
             mockRecordData('tbly388E8NA1CNhnF', false);
+        });
+
+        describe('recordColors', () => {
+            const changeByView = (table: Table, view: View, value: string) => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            table.id,
+                            'viewsById',
+                            view.id,
+                            'colorsByRecordId',
+                            'recC',
+                        ],
+                        value: 'green',
+                    },
+                ]);
+            };
+            const changeBySelectField = (table: Table, field: Field, value: string) => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            table.id,
+                            'recordsById',
+                            'recC',
+                            'cellValuesByFieldId',
+                            field.id,
+                        ],
+                        value,
+                    },
+                ]);
+            };
+
+            it('colorMode: none - cleans up final listener', async () => {
+                const view = base.tables[0].views[0];
+                const field = base.tables[0].getField('Category');
+                const result = await base.tables[0].selectRecordsAsync();
+                const spy = jest.fn();
+                result.watch('recordColors', spy);
+                changeByView(base.tables[0], view, 'green');
+                changeBySelectField(base.tables[0], field, 'green');
+                expect(spy.mock.calls.length).toBe(0);
+
+                result.unwatch('recordColors', spy);
+
+                changeByView(base.tables[0], view, 'yellow');
+                changeBySelectField(base.tables[0], field, 'yellow');
+                expect(spy.mock.calls.length).toBe(0);
+            });
+
+            it('colorMode: byView - cleans up final listener', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', true);
+                const view = base.tables[0].views[0];
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.byView(view),
+                });
+                const spy = jest.fn();
+                // By watching, unwatching, and watching again, this test can
+                // validate that internal state is completely reset whenever
+                // all listeners are removed. This approach would cause a
+                // faulty implementation to emit multiple events for a single
+                // handler.
+                result.watch('recordColors', spy);
+                result.unwatch('recordColors', spy);
+                result.watch('recordColors', spy);
+                changeByView(base.tables[0], view, 'red orange');
+                expect(spy.mock.calls.length).toBe(1);
+
+                result.unwatch('recordColors', spy);
+                changeByView(base.tables[0], view, 'orange red');
+
+                expect(spy.mock.calls.length).toBe(1);
+            });
+
+            it('colorMode: byView - persists other listeners', async () => {
+                mockRecordData('tbly388E8NA1CNhnF', true);
+                const view = base.tables[0].views[0];
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.byView(view),
+                });
+                const noop = () => {};
+                const spy = jest.fn();
+                result.watch('recordColors', noop);
+                result.watch('recordColors', spy);
+
+                result.unwatch('recordColors', noop);
+                changeByView(base.tables[0], view, 'orange red');
+
+                expect(spy.mock.calls.length).toBe(1);
+            });
+
+            it('colorMode: bySelectField - cleans up final listener', async () => {
+                const field = base.tables[0].getField('Category');
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(field),
+                });
+                const spy = jest.fn();
+                // By watching, unwatching, and watching again, this test can
+                // validate that internal state is completely reset whenever
+                // all listeners are removed. This approach would cause a
+                // faulty implementation to emit multiple events for a single
+                // handler.
+                result.watch('recordColors', spy);
+                result.unwatch('recordColors', spy);
+                result.watch('recordColors', spy);
+                changeBySelectField(base.tables[0], field, 'green');
+                expect(spy.mock.calls.length).toBe(1);
+
+                result.unwatch('recordColors', spy);
+
+                changeBySelectField(base.tables[0], field, 'yellow');
+                expect(spy.mock.calls.length).toBe(1);
+            });
+
+            it('colorMode: bySelectField - persists other listeners', async () => {
+                const field = base.tables[0].getField('Category');
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(field),
+                });
+                const noop = () => {};
+                const spy = jest.fn();
+                result.watch('recordColors', noop);
+                result.watch('recordColors', spy);
+
+                result.unwatch('recordColors', noop);
+
+                changeBySelectField(base.tables[0], field, 'yellow');
+                expect(spy.mock.calls.length).toBe(1);
+            });
         });
 
         describe('recordIds', () => {
@@ -1088,6 +1416,58 @@ describe('TableOrViewQueryResult', () => {
                         removedRecordIds: ['recE'],
                     });
                 });
+            });
+        });
+
+        describe('recordColors', () => {
+            beforeEach(() => {
+                mockRecordData('tbly388E8NA1CNhnF', true);
+            });
+
+            it('notified exactly once for initial data load', async () => {
+                const result = base.tables[1].selectRecords({
+                    recordColorMode: recordColorModes.byView(base.tables[1].views[0]),
+                });
+                const spy = jest.fn();
+                result.watch('recordColors', spy);
+
+                await result.loadDataAsync();
+
+                expect(spy.mock.calls.length).toBe(1);
+                expect(spy).toHaveBeenCalledWith(result, 'recordColors');
+            });
+
+            it('notified when select field changes', async () => {
+                const field = base.tables[0].getField('Category');
+                const result = await base.tables[0].selectRecordsAsync({
+                    recordColorMode: recordColorModes.bySelectField(field),
+                });
+                // This tests registers two distinct event handlers in order to
+                // verify that doing so does not prompt repeated event
+                // emission.
+                const spy1 = jest.fn();
+                const spy2 = jest.fn();
+                result.watch('recordColors', spy1);
+                result.watch('recordColors', spy2);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'recordsById',
+                            'recC',
+                            'cellValuesByFieldId',
+                            field.id,
+                        ],
+                        value: 'green',
+                    },
+                ]);
+
+                expect(spy1.mock.calls.length).toBe(1);
+                expect(spy1).toHaveBeenCalledWith(result, 'recordColors', ['recC']);
+                expect(spy2.mock.calls.length).toBe(1);
+                expect(spy2).toHaveBeenCalledWith(result, 'recordColors', ['recC']);
             });
         });
 

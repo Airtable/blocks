@@ -1751,6 +1751,40 @@ describe('Table', () => {
 
             table.selectRecords();
         });
+
+        it('throws for invalid sorting directions', () => {
+            expect(() => {
+                table.selectRecords({
+                    sorts: [{field: 'fld3DvZllJtyaNYpm', direction: 'ascending' as 'asc'}],
+                });
+            }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: ascending"`);
+        });
+
+        it('does not throw for some falsey `fields` values', () => {
+            table.selectRecords({
+                // eslint-disable-next-line no-sparse-arrays
+                fields: [,],
+            });
+            table.selectRecords({
+                fields: [undefined],
+            });
+            table.selectRecords({
+                fields: [null],
+            });
+            table.selectRecords({
+                fields: [false],
+            });
+        });
+
+        it('throws for invalid field specifiers', () => {
+            expect(() => {
+                table.selectRecords({
+                    fields: [(1.0003 as unknown) as string],
+                });
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Invalid value for field, expected a field, id, or name but got: 1.0003"`,
+            );
+        });
     });
 
     describe('#selectRecordsAsync', () => {
