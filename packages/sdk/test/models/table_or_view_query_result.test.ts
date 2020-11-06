@@ -793,6 +793,50 @@ describe('TableOrViewQueryResult', () => {
 
                 await waitForWatchKeyAsync(result, 'isDataLoaded');
             });
+
+            describe('unsubscribing from cell values in fields', () => {
+                const whenUnsubscribed = () => {
+                    return new Promise(resolve => {
+                        mockAirtableInterface.unsubscribeFromCellValuesInFields.mockImplementation(
+                            resolve,
+                        );
+                    });
+                };
+
+                it('succeeds after all records have been nullified', async () => {
+                    const result = await base.tables[1].selectRecordsAsync({
+                        fields: ['fldTaskName', 'fldTaskNotes'],
+                    });
+                    result.unloadData();
+                    mockAirtableInterface.triggerModelUpdates([
+                        {
+                            path: ['tablesById', 'tblTasks', 'recordsById'],
+                            value: undefined,
+                        },
+                    ]);
+                    await whenUnsubscribed();
+                });
+
+                it('succeeds after individual record data has been nullified', async () => {
+                    const result = await base.tables[1].selectRecordsAsync({
+                        fields: ['fldTaskName', 'fldTaskNotes'],
+                    });
+                    result.unloadData();
+                    mockAirtableInterface.triggerModelUpdates([
+                        {
+                            path: [
+                                'tablesById',
+                                'tblTasks',
+                                'recordsById',
+                                'recD',
+                                'cellValuesByFieldId',
+                            ],
+                            value: undefined,
+                        },
+                    ]);
+                    await whenUnsubscribed();
+                });
+            });
         });
 
         describe('from view', () => {
@@ -923,6 +967,33 @@ describe('TableOrViewQueryResult', () => {
                 result.unwatch('recordColors', noop);
                 changeByView(base.tables[0], view, 'orange red');
 
+                expect(spy.mock.calls.length).toBe(1);
+            });
+
+            it('colorMode: bySelectField - ignores invocations prior to loading', async () => {
+                const field = base.tables[0].getField('Category');
+                const result = base.tables[0].selectRecords({
+                    fields: [field],
+                    recordColorMode: recordColorModes.bySelectField(field),
+                });
+                const spy = jest.fn();
+                let consoleSpies = [
+                    jest.spyOn(console, 'log').mockImplementation(() => {}),
+                    jest.spyOn(console, 'warn').mockImplementation(() => {}),
+                ];
+
+                try {
+                    result.unloadData();
+                } finally {
+                    consoleSpies[0].mockRestore();
+                    consoleSpies[1].mockRestore();
+                }
+
+                await result.loadDataAsync();
+
+                result.watch('recordColors', spy);
+
+                changeBySelectField(base.tables[0], field, 'yellow');
                 expect(spy.mock.calls.length).toBe(1);
             });
 
@@ -1132,6 +1203,28 @@ describe('TableOrViewQueryResult', () => {
             describe('from table', () => {
                 beforeEach(() => {
                     mockRecordData('tblTasks', false);
+                });
+
+                it('notified when record is deleted', async () => {
+                    const result = await base.tables[1].selectRecordsAsync();
+                    const spy = jest.fn();
+
+                    result.watch('recordIds', spy);
+                    mockAirtableInterface.triggerModelUpdates([
+                        {
+                            path: ['tablesById', 'tblTasks', 'recordsById', 'recE'],
+                            value: undefined,
+                        },
+                    ]);
+
+                    expect(spy.mock.calls.length).toBe(1);
+                    expect(spy.mock.calls[0].length).toBe(3);
+                    expect(spy.mock.calls[0][0]).toBe(result);
+                    expect(spy.mock.calls[0][1]).toBe('recordIds');
+                    expect(spy.mock.calls[0][2]).toStrictEqual({
+                        addedRecordIds: [],
+                        removedRecordIds: ['recE'],
+                    });
                 });
 
                 it('notified when values in sorted fields change', async () => {

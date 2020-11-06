@@ -1852,6 +1852,36 @@ describe('Table', () => {
                 `"model (tblDesignProjects-RecordStore) permanently deleted"`,
             );
         });
+
+        it('tolerates missing data from AirtableInterface', async () => {
+            const mockPartialRecordData = () => {
+                const recordsById = {
+                    recJ: {
+                        id: 'recJ',
+                        cellValuesByFieldId: null,
+                        commentCount: 0,
+                        createdTime: '2020-10-28T01:40:24.913Z',
+                    },
+                };
+                mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValueOnce({
+                    recordsById,
+                });
+                mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue({
+                    recordsById,
+                });
+            };
+
+            mockPartialRecordData();
+            await table.selectRecordsAsync({
+                fields: [table.fields[0]],
+            });
+            mockPartialRecordData();
+            const result = await table.selectRecordsAsync({
+                fields: [table.fields[1]],
+            });
+            expect(result.records.length).toBe(1);
+            expect(result.records[0].id).toBe('recJ');
+        });
     });
 
     describe('#updateRecordAsync', () => {
