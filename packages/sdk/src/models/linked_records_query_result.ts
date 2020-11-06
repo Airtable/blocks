@@ -259,7 +259,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     /**
      * the key used to identify this query result in ObjectPool
      *
-     * @internal
+     * @hidden
      */
     get __poolKey() {
         return `${this._serializedOpts}::${this._field.id}::${this._linkedTable.id}::${this.isValid}`;
