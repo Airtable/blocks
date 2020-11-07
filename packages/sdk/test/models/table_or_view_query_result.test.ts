@@ -561,7 +561,7 @@ describe('TableOrViewQueryResult', () => {
                 await waitForWatchKeyAsync(result, 'isDataLoaded');
 
                 expect(() => result.records).toThrowErrorMatchingInlineSnapshot(
-                    `"RecordQueryResult data is not loaded"`,
+                    `"RecordQueryResult's underlying table has been deleted"`,
                 );
             });
 

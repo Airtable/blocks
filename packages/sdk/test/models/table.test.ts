@@ -1819,7 +1819,7 @@ describe('Table', () => {
             deleteTable('tbly388E8NA1CNhnF');
 
             await expect(table.selectRecordsAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
-                `"RecordStore has been deleted"`,
+                `"model (tbly388E8NA1CNhnF-RecordStore) permanently deleted"`,
             );
         });
     });

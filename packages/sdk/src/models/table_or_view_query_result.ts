@@ -168,9 +168,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
      * Can be watched.
      */
     get recordIds(): Array<string> {
+        // The following statements have been carefully sequenced to ensure
+        // that when this method fails, it reports the most salient error.
+        const {recordIds} = this._data; // Throws when the model has been deleted.
         invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
-        invariant(this._data.recordIds, 'No recordIds');
-        return this._data.recordIds;
+        invariant(recordIds, 'No recordIds');
+        return recordIds;
     }
     /**
      * The set of record IDs in this RecordQueryResult.

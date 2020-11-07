@@ -229,9 +229,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         // similarly unsubscribe from the view data.
         // this comes after _forceUnload to avoid over releasing the table data.
         for (const viewDataStore of values(this._viewDataStoresByViewId)) {
-            if (viewDataStore) {
-                viewDataStore.__onDataDeletion();
-            }
+            viewDataStore.__onDataDeletion();
         }
     }
 
@@ -592,7 +590,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         if (dirtyPaths.viewOrder) {
             // clean up deleted views
             for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
-                if (viewDataStore && viewDataStore.isDeleted) {
+                if (viewDataStore.isDeleted) {
                     viewDataStore.__onDataDeletion();
                     delete this._viewDataStoresByViewId[viewId];
                 }

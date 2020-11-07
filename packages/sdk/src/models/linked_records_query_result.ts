@@ -23,6 +23,9 @@ export const getLinkedTableId = (field: Field): string => {
     return linkedTableId;
 };
 
+/** internal */
+interface LinkedRecordsQueryResultData {}
+
 /**
  * Represents a set of records from a LinkedRecord cell value. See {@link RecordQueryResult} for main
  * documentation.
@@ -32,7 +35,7 @@ export const getLinkedTableId = (field: Field): string => {
  *
  * @docsPath models/query results/LinkedRecordsQueryResult
  */
-class LinkedRecordsQueryResult extends RecordQueryResult {
+class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResultData> {
     /** @internal */
     static _className = 'LinkedRecordsQueryResult';
 
@@ -401,6 +404,22 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         // not. it may have done though, so notify watchers
         this._onChange('records');
         this._onChange('recordIds');
+    }
+
+    /**
+     * This model doesn't use the `_data` computed property it inherits from
+     * AbstractModel. It implements the following method only so that internal
+     * checks for model deletion behave appropriately (the data itself is
+     * inconsequential).
+     *
+     * @internal
+     */
+    get _dataOrNullIfDeleted(): LinkedRecordsQueryResultData | null {
+        if (this._record.isDeleted || this._linkedRecordStore.isDeleted) {
+            return null;
+        }
+
+        return {};
     }
 
     /** @internal */
