@@ -36,7 +36,7 @@
         "test:coverage": "yarn run test --coverage",
         "build:clean": "rm -rf dist",
         "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
-        "watch:babel": "yarn run build:babel --watch",
+        "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
         "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
