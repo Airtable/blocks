@@ -111,7 +111,7 @@ describe('Record', () => {
         recordB = tableQueryResult.getRecordById('recordB');
         recordC = tableQueryResult.getRecordById('recordC');
 
-        view = table.getViewById('viwkNnS94RQAQQTMn');
+        view = table.getViewById('viwPrjctAll');
         viewQueryResult = await view.selectRecordsAsync();
         await viewQueryResult.loadDataAsync();
     });
@@ -1160,7 +1160,7 @@ describe('Record', () => {
                 'tablesById',
                 'tblFirst',
                 'viewsById',
-                'viwkNnS94RQAQQTMn',
+                'viwPrjctAll',
                 'colorsByRecordId',
             ];
 
@@ -1246,7 +1246,7 @@ describe('Record', () => {
                 'tablesById',
                 'tblFirst',
                 'viewsById',
-                'viwkNnS94RQAQQTMn',
+                'viwPrjctAll',
                 'colorsByRecordId',
             ];
 

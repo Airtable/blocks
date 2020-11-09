@@ -44,7 +44,7 @@ const recordsById = {
     },
 };
 
-const viewPath = ['tablesById', 'tblFirst', 'viewsById', 'viwkNnS94RQAQQTMn'];
+const viewPath = ['tablesById', 'tblFirst', 'viewsById', 'viwPrjctAll'];
 const viewOrderPath = ['tablesById', 'tblFirst', 'viewOrder'];
 const activeViewIdPath = ['tablesById', 'tblFirst', 'activeViewId'];
 const deleteView = () => {
@@ -99,7 +99,7 @@ describe('View', () => {
         sdk = getSdk();
         base = sdk.base;
         table = base.getTable('First Table');
-        view = table.getViewById('viwkNnS94RQAQQTMn');
+        view = table.getViewById('viwPrjctAll');
     });
 
     afterEach(() => {
@@ -118,14 +118,14 @@ describe('View', () => {
 
     describe('properties', () => {
         test('#id', () => {
-            expect(view.id).toBe('viwkNnS94RQAQQTMn');
+            expect(view.id).toBe('viwPrjctAll');
             expect(() => {
                 // @ts-ignore
                 view.id = 1;
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Cannot set property id of [object Object] which has only a getter"`,
             );
-            expect(view.id).toBe('viwkNnS94RQAQQTMn');
+            expect(view.id).toBe('viwPrjctAll');
         });
         test('#isDeleted', () => {
             expect(view.isDeleted).toBe(false);
@@ -148,14 +148,14 @@ describe('View', () => {
             expect(view.name).toBe('All projects');
         });
         test('#url', () => {
-            expect(view.url).toBe('https://airtable.test/tblFirst/viwkNnS94RQAQQTMn');
+            expect(view.url).toBe('https://airtable.test/tblFirst/viwPrjctAll');
             expect(() => {
                 // @ts-ignore
                 view.url = 1;
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Cannot set property url of [object Object] which has only a getter"`,
             );
-            expect(view.url).toBe('https://airtable.test/tblFirst/viwkNnS94RQAQQTMn');
+            expect(view.url).toBe('https://airtable.test/tblFirst/viwPrjctAll');
         });
         test('#type', () => {
             expect(view.type).toBe(ViewType.GRID);
@@ -389,7 +389,7 @@ describe('View', () => {
 
         describe('#toString()', () => {
             test('returns a debugging string', async () => {
-                expect(view.toString()).toMatchInlineSnapshot(`"[View viwkNnS94RQAQQTMn]"`);
+                expect(view.toString()).toMatchInlineSnapshot(`"[View viwPrjctAll]"`);
             });
         });
 

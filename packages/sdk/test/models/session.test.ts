@@ -67,10 +67,10 @@ describe('Session', () => {
         });
 
         it('returns profile information of current user', () => {
-            const session = create({currentUserId: 'usr3VLCpyqgcI46Sh'});
+            const session = create({currentUserId: 'usrGalSamari'});
 
             expect(session.currentUser).toStrictEqual({
-                id: 'usr3VLCpyqgcI46Sh',
+                id: 'usrGalSamari',
                 email: 'collab10@example.com',
                 name: 'Gal Samari',
                 profilePicUrl:
@@ -318,7 +318,7 @@ describe('Session', () => {
         });
 
         it('returns `"session"` when this is a current user', () => {
-            const session = create({currentUserId: 'usr3VLCpyqgcI46Sh'});
+            const session = create({currentUserId: 'usrGalSamari'});
 
             expect(session.id).toBe('session');
         });
@@ -362,7 +362,7 @@ describe('Session', () => {
 
         describe('key: currentUser', () => {
             it('notifies when the current user changes', () => {
-                const session = create({currentUserId: 'usr3VLCpyqgcI46Sh'});
+                const session = create({currentUserId: 'usrGalSamari'});
                 const spy = jest.fn();
                 session.watch('currentUser', spy);
 
@@ -370,7 +370,7 @@ describe('Session', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['collaboratorsById', 'usr3VLCpyqgcI46Sh', 'email'],
+                        path: ['collaboratorsById', 'usrGalSamari', 'email'],
                         value: 'roll@fizzlebeef.com',
                     },
                 ]);
@@ -380,7 +380,7 @@ describe('Session', () => {
             });
 
             it('notifies when a user other than the current user changes', () => {
-                const session = create({currentUserId: 'usr3VLCpyqgcI46Sh'});
+                const session = create({currentUserId: 'usrGalSamari'});
                 const spy = jest.fn();
                 session.watch('currentUser', spy);
 
@@ -388,7 +388,7 @@ describe('Session', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['collaboratorsById', 'usr6hWARwVNgmt3WW', 'email'],
+                        path: ['collaboratorsById', 'usrSamEpps', 'email'],
                         value: 'roll@fizzlebeef.com',
                     },
                 ]);

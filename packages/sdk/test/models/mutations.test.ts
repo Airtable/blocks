@@ -85,7 +85,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.CREATE_SINGLE_FIELD,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         id: 'fldNewFieldId',
                         name: 'new field',
                         config: {
@@ -99,7 +99,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.CREATE_SINGLE_FIELD,
-                        tableId: 'tblcstEo50YXLJcK4',
+                        tableId: 'tblTasks',
                         id: 'fldNewFieldId',
                         name: '',
                         config: {
@@ -111,7 +111,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.CREATE_SINGLE_FIELD,
-                        tableId: 'tblcstEo50YXLJcK4',
+                        tableId: 'tblTasks',
                         id: 'fldNewFieldId',
                         name: 'really long field name wow',
                         config: {
@@ -125,7 +125,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.CREATE_SINGLE_FIELD,
-                        tableId: 'tblcstEo50YXLJcK4',
+                        tableId: 'tblTasks',
                         id: 'fldNewFieldId',
                         name: 'name',
                         config: {
@@ -153,7 +153,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.CREATE_SINGLE_FIELD,
-                        tableId: 'tblcstEo50YXLJcK4',
+                        tableId: 'tblTasks',
                         id: 'fldNewFieldId',
                         name: 'new field',
                         config,
@@ -183,7 +183,7 @@ describe('Mutations', () => {
 
                 mutations._assertMutationIsValid({
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tblcstEo50YXLJcK4',
+                    tableId: 'tblTasks',
                     id: 'fldNewFieldId',
                     name: 'new field',
                     config,
@@ -218,7 +218,7 @@ describe('Mutations', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
                         type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
-                        tableId: 'tblcstEo50YXLJcK4',
+                        tableId: 'tblTasks',
                         id: 'fldNonExistentFieldId',
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
@@ -245,8 +245,8 @@ describe('Mutations', () => {
                     return oldConfig;
                 });
 
-                const table = base.getTableById('tblcstEo50YXLJcK4');
-                const field = table.getFieldById('fldX2QXZGxsqj7YC0');
+                const table = base.getTableById('tblTasks');
+                const field = table.getFieldById('fldTaskCompleted');
 
                 const newConfig = {
                     type: FieldType.CHECKBOX,
@@ -487,7 +487,7 @@ describe('Mutations', () => {
             const validRecord = {
                 id: 'recA',
                 cellValuesByFieldId: {
-                    fldRljtoVpOt1IDYH: 9,
+                    fldPrjctCtgry: 9,
                 },
             };
 
@@ -508,7 +508,7 @@ describe('Mutations', () => {
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [
                             {
                                 id: 'recNonExistent',
@@ -529,12 +529,12 @@ describe('Mutations', () => {
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [
                             {
                                 id: 'recNonExistent',
                                 cellValuesByFieldId: {
-                                    fldRljtoVpOt1IDYH: {},
+                                    fldPrjctCtgry: {},
                                 },
                             },
                         ],
@@ -549,7 +549,7 @@ describe('Mutations', () => {
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: Array.from(new Array(51)).map(() => validRecord),
                     }),
                 ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -561,7 +561,7 @@ describe('Mutations', () => {
             it('fails when permission is denied', async () => {
                 const mutation = {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [validRecord],
                 };
                 mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
@@ -585,7 +585,7 @@ describe('Mutations', () => {
             it('succeeds when input is valid', async () => {
                 await mutations.applyMutationAsync({
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: Array.from(new Array(50)).map(() => validRecord),
                 });
                 expect(applyModelChanges.mock.calls.length).toBe(0);
@@ -608,7 +608,7 @@ describe('Mutations', () => {
                     expect(
                         mutations.applyMutationAsync({
                             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                            tableId: 'tbly388E8NA1CNhnF',
+                            tableId: 'tblDesignProjects',
                             records: [
                                 {
                                     id: 'recNonExistent',
@@ -631,12 +631,12 @@ describe('Mutations', () => {
                     await expect(
                         mutations.applyMutationAsync({
                             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                            tableId: 'tbly388E8NA1CNhnF',
+                            tableId: 'tblDesignProjects',
                             records: [
                                 {
                                     id: 'recA',
                                     cellValuesByFieldId: {
-                                        fldRljtoVpOt1IDYH: 9,
+                                        fldPrjctCtgry: 9,
                                     },
                                 },
                             ],
@@ -651,7 +651,7 @@ Mock reason"
                 it('succeeds when input is valid', () =>
                     mutations.applyMutationAsync({
                         type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [validRecord],
                     }));
             });
@@ -675,7 +675,7 @@ Mock reason"
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         recordIds: Array.from(new Array(51)).map(() => 'recA'),
                     }),
                 ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -687,7 +687,7 @@ Mock reason"
             it('fails when permission is denied', async () => {
                 const mutation = {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recA'],
                 };
                 mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
@@ -711,7 +711,7 @@ Mock reason"
             it('succeeds when input is valid', async () => {
                 await mutations.applyMutationAsync({
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: Array.from(new Array(50)).map(() => 'recA'),
                 });
 
@@ -726,7 +726,7 @@ Mock reason"
                     mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
                         visibleRecordIds: ['recA', 'recB', 'recC'],
                         fieldOrder: {
-                            fieldIds: ['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm'],
+                            fieldIds: ['fldPrjctName', 'fldPrjctClient'],
                             visibleFieldCount: 2,
                         },
                         colorsByRecordId: {},
@@ -745,7 +745,7 @@ Mock reason"
                     await expect(
                         mutations.applyMutationAsync({
                             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                            tableId: 'tbly388E8NA1CNhnF',
+                            tableId: 'tblDesignProjects',
                             recordIds: ['recNonExistent'],
                         }),
                     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -757,7 +757,7 @@ Mock reason"
                 it('succeeds when input is valid', async () => {
                     await mutations.applyMutationAsync({
                         type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         recordIds: ['recA', 'recC'],
                     });
 
@@ -766,19 +766,19 @@ Mock reason"
                         applyModelChanges.mock.calls[0][0].sort(compareUpdatePath),
                     ).toStrictEqual([
                         {
-                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recA'],
+                            path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recA'],
                             value: undefined,
                         },
                         {
-                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recC'],
+                            path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recC'],
                             value: undefined,
                         },
                         {
                             path: [
                                 'tablesById',
-                                'tbly388E8NA1CNhnF',
+                                'tblDesignProjects',
                                 'viewsById',
-                                'viwkNnS94RQAQQTMn',
+                                'viwPrjctAll',
                                 'visibleRecordIds',
                             ],
                             value: ['recB'],
@@ -792,11 +792,11 @@ Mock reason"
             const validRecord = {
                 id: 'recD',
                 cellValuesByFieldId: {
-                    fldXaTPfxIVhAUYde: 9,
+                    fldPrjctName: 9,
                     // The following field is intentionally left unloaded in
                     // order to verify that such fields are omitted from
                     // mutation descriptors.
-                    fldRljtoVpOt1IDYH: 10,
+                    fldPrjctCtgry: 10,
                 },
             };
 
@@ -817,7 +817,7 @@ Mock reason"
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [
                             {
                                 id: 'recNonExistent',
@@ -838,12 +838,12 @@ Mock reason"
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [
                             {
                                 id: 'recNonExistent',
                                 cellValuesByFieldId: {
-                                    fldRljtoVpOt1IDYH: {},
+                                    fldPrjctCtgry: {},
                                 },
                             },
                         ],
@@ -862,12 +862,12 @@ Mock reason"
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [
                             {
                                 id: 'recA',
                                 cellValuesByFieldId: {
-                                    fldRljtoVpOt1IDYH: 9,
+                                    fldPrjctCtgry: 9,
                                 },
                             },
                         ],
@@ -883,7 +883,7 @@ Mock reason"
                 await expect(
                     mutations.applyMutationAsync({
                         type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: Array.from(new Array(51)).map(() => validRecord),
                     }),
                 ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -895,7 +895,7 @@ Mock reason"
             it('fails when permission is denied', async () => {
                 const mutation = {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [validRecord],
                 };
                 mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
@@ -919,7 +919,7 @@ Mock reason"
             it('succeeds when input is valid', async () => {
                 await mutations.applyMutationAsync({
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: Array.from(new Array(50)).map(() => validRecord),
                 });
                 expect(applyModelChanges.mock.calls.length).toBe(0);
@@ -933,7 +933,7 @@ Mock reason"
                     mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
                         visibleRecordIds: ['recA', 'recB', 'recC'],
                         fieldOrder: {
-                            fieldIds: ['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm'],
+                            fieldIds: ['fldPrjctName', 'fldPrjctClient'],
                             visibleFieldCount: 2,
                         },
                         colorsByRecordId: {},
@@ -950,7 +950,7 @@ Mock reason"
                 it('succeeds when input is valid', async () => {
                     await mutations.applyMutationAsync({
                         type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                        tableId: 'tbly388E8NA1CNhnF',
+                        tableId: 'tblDesignProjects',
                         records: [validRecord],
                     });
                     expect(applyModelChanges.mock.calls.length).toBe(1);
@@ -959,11 +959,11 @@ Mock reason"
                     changes[0].value.createdTime = '';
                     expect(changes).toStrictEqual([
                         {
-                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recD'],
+                            path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recD'],
                             value: {
                                 id: 'recD',
                                 cellValuesByFieldId: {
-                                    fldXaTPfxIVhAUYde: 9,
+                                    fldPrjctName: 9,
                                 },
                                 commentCount: 0,
                                 createdTime: '',
@@ -972,9 +972,9 @@ Mock reason"
                         {
                             path: [
                                 'tablesById',
-                                'tbly388E8NA1CNhnF',
+                                'tblDesignProjects',
                                 'viewsById',
-                                'viwkNnS94RQAQQTMn',
+                                'viwPrjctAll',
                                 'visibleRecordIds',
                             ],
                             value: ['recA', 'recB', 'recC', 'recD'],
@@ -993,7 +993,7 @@ Mock reason"
             it('fails when permission is denied', async () => {
                 const mutation = {
                     type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     updates: [],
                 };
                 mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
@@ -1041,7 +1041,7 @@ Mock reason"
             it('succeeds when input is valid', async () => {
                 await mutations.applyMutationAsync({
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tblcstEo50YXLJcK4',
+                    tableId: 'tblTasks',
                     name: 'foo',
                     id: 'fldNew',
                     config: {
@@ -1057,8 +1057,8 @@ Mock reason"
             it('succeeds when input is valid', async () => {
                 await mutations.applyMutationAsync({
                     type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
-                    tableId: 'tblcstEo50YXLJcK4',
-                    id: 'fldij9kocxowfur16',
+                    tableId: 'tblTasks',
+                    id: 'fldTaskNotes',
                     config: {
                         type: FieldType.SINGLE_LINE_TEXT,
                     },
@@ -1092,12 +1092,12 @@ Mock reason"
             await expect(
                 mutations.applyMutationAsync({
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldRljtoVpOt1IDYH: 'x'.repeat(2 * 2 ** 20),
+                                fldPrjctCtgry: 'x'.repeat(2 * 2 ** 20),
                             },
                         },
                     ],
@@ -1130,7 +1130,7 @@ Mock reason"
             await expect(
                 mutations.applyMutationAsync({
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: [],
                 }),
             ).rejects.toThrowErrorMatchingInlineSnapshot(`"foobar"`);
@@ -1150,12 +1150,12 @@ Mock reason"
             const applyPromise = mutations
                 .applyMutationAsync({
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldRljtoVpOt1IDYH: 9,
+                                fldPrjctCtgry: 9,
                             },
                         },
                     ],

@@ -72,17 +72,17 @@ describe('Base', () => {
 
     describe('#activeViewId', () => {
         test('initial', () => {
-            expect(cursor.activeViewId).toEqual('viwkNnS94RQAQQTMn');
+            expect(cursor.activeViewId).toEqual('viwPrjctAll');
         });
 
         test('following update', () => {
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tbly388E8NA1CNhnF', 'activeViewId'],
-                    value: 'viw8v5XkLudbiCJfD',
+                    path: ['tablesById', 'tblDesignProjects', 'activeViewId'],
+                    value: 'viwPrjctCompleted',
                 },
             ]);
-            expect(cursor.activeViewId).toEqual('viw8v5XkLudbiCJfD');
+            expect(cursor.activeViewId).toEqual('viwPrjctCompleted');
         });
     });
 
@@ -171,7 +171,7 @@ describe('Base', () => {
 
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledTimes(1);
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledWith(
-                'tbly388E8NA1CNhnF',
+                'tblDesignProjects',
             );
         });
 
@@ -192,8 +192,8 @@ describe('Base', () => {
 
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledTimes(1);
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledWith(
-                'tbly388E8NA1CNhnF',
-                'viwqo8mFAqy2HYSCL',
+                'tblDesignProjects',
+                'viwPrjctIncmplt',
             );
         });
 
@@ -316,14 +316,14 @@ describe('Base', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['activeTableId'],
-                        value: 'tbly388E8NA1CNhnF',
+                        value: 'tblDesignProjects',
                     },
                 ]);
 
                 expect(activeTableMock).toHaveBeenCalledTimes(1);
                 expect(activeViewMock).toHaveBeenCalledTimes(0);
-                expect(cursor.activeTableId).toBe('tbly388E8NA1CNhnF');
-                expect(cursor.activeViewId).toBe('viwkNnS94RQAQQTMn');
+                expect(cursor.activeTableId).toBe('tblDesignProjects');
+                expect(cursor.activeViewId).toBe('viwPrjctAll');
             });
 
             test('null - updates activeTableId', async () => {
@@ -368,8 +368,8 @@ describe('Base', () => {
 
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tbly388E8NA1CNhnF', 'activeViewId'],
-                    value: 'viw8v5XkLudbiCJfD',
+                    path: ['tablesById', 'tblDesignProjects', 'activeViewId'],
+                    value: 'viwPrjctCompleted',
                 },
             ]);
 

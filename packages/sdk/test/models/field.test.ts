@@ -20,7 +20,7 @@ describe('Field', () => {
     const makeField = (fieldType: FieldType) => {
         const fieldId = 'fldTest';
         const baseData = mockAirtableInterface.sdkInitData.baseData;
-        const parentTable = baseData.tablesById.tbly388E8NA1CNhnF;
+        const parentTable = baseData.tablesById.tblDesignProjects;
         parentTable.fieldsById[fieldId] = {
             id: fieldId,
             name: 'Field 1',
@@ -30,7 +30,7 @@ describe('Field', () => {
             lock: null,
         };
 
-        const newField = new Field(baseData, sdk.base.getTableById('tbly388E8NA1CNhnF'), fieldId);
+        const newField = new Field(baseData, sdk.base.getTableById('tblDesignProjects'), fieldId);
 
         // field.type does a bunch of stuff to convert private field data into the public type
         // - we just mock it out completely for simplicity
@@ -63,7 +63,7 @@ describe('Field', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     id: 'fldTest',
                     config: {
                         type: FieldType.SINGLE_SELECT,
@@ -90,8 +90,8 @@ describe('Field', () => {
                         options: undefined,
                         type: 'foreignKey',
                     },
-                    id: 'fld3DvZllJtyaNYpm',
-                    tableId: 'tbly388E8NA1CNhnF',
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
                     type: 'updateSingleFieldConfig',
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -107,8 +107,8 @@ describe('Field', () => {
                         options: {foo: 'bar'},
                         type: 'foreignKey',
                     },
-                    id: 'fld3DvZllJtyaNYpm',
-                    tableId: 'tbly388E8NA1CNhnF',
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
                     type: 'updateSingleFieldConfig',
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -228,7 +228,7 @@ describe('Field', () => {
         test('affirmative', () => {
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tbly388E8NA1CNhnF', 'fieldsById', 'fld3DvZllJtyaNYpm'],
+                    path: ['tablesById', 'tblDesignProjects', 'fieldsById', 'fldPrjctClient'],
                     value: null,
                 },
             ]);
@@ -262,16 +262,16 @@ describe('Field', () => {
 
         test('options available', () => {
             expect(field.options).toStrictEqual({
-                foreignTableId: 'tblyt8B45wJQIx1c3',
+                foreignTableId: 'tblClients',
                 relationship: 'many',
-                symmetricColumnId: 'fld3nuJVc9ivC8IJF',
+                symmetricColumnId: 'fldClientProjects',
             });
         });
     });
 
     describe('#type', () => {
         test('lookup type', () => {
-            mockAirtableInterface.sdkInitData.baseData.tablesById.tbly388E8NA1CNhnF.fieldsById.fld3DvZllJtyaNYpm.type =
+            mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects.fieldsById.fldPrjctClient.type =
                 'lookup';
             expect(field.type).toBe(FieldType.MULTIPLE_LOOKUP_VALUES);
         });
@@ -304,9 +304,9 @@ describe('Field', () => {
                 {
                     path: [
                         'tablesById',
-                        'tbly388E8NA1CNhnF',
+                        'tblDesignProjects',
                         'fieldsById',
-                        'fld3DvZllJtyaNYpm',
+                        'fldPrjctClient',
                         'description',
                     ],
                     value: 'some other description',
@@ -325,9 +325,9 @@ describe('Field', () => {
                 {
                     path: [
                         'tablesById',
-                        'tbly388E8NA1CNhnF',
+                        'tblDesignProjects',
                         'fieldsById',
-                        'fld3DvZllJtyaNYpm',
+                        'fldPrjctClient',
                         'type',
                     ],
                     value: 'select',
@@ -346,9 +346,9 @@ describe('Field', () => {
                 {
                     path: [
                         'tablesById',
-                        'tbly388E8NA1CNhnF',
+                        'tblDesignProjects',
                         'fieldsById',
-                        'fld3DvZllJtyaNYpm',
+                        'fldPrjctClient',
                         'name',
                     ],
                     value: 'some other name',
@@ -367,9 +367,9 @@ describe('Field', () => {
                 {
                     path: [
                         'tablesById',
-                        'tbly388E8NA1CNhnF',
+                        'tblDesignProjects',
                         'fieldsById',
-                        'fld3DvZllJtyaNYpm',
+                        'fldPrjctClient',
                         'typeOptions',
                     ],
                     value: {},
@@ -388,9 +388,9 @@ describe('Field', () => {
                 {
                     path: [
                         'tablesById',
-                        'tbly388E8NA1CNhnF',
+                        'tblDesignProjects',
                         'fieldsById',
-                        'fld3DvZllJtyaNYpm',
+                        'fldPrjctClient',
                         'type',
                     ],
                     value: 'select',

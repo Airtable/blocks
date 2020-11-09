@@ -33,13 +33,7 @@ const mockVisibleFields = (fieldIds: Array<FieldId>, visibleFieldCount: number) 
 const reorderFields = (fieldIds: Array<FieldId>, visibleFieldCount: number) => {
     mockAirtableInterface.triggerModelUpdates([
         {
-            path: [
-                'tablesById',
-                'tbly388E8NA1CNhnF',
-                'viewsById',
-                'viwkNnS94RQAQQTMn',
-                'fieldOrder',
-            ],
+            path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll', 'fieldOrder'],
             value: {
                 fieldIds,
                 visibleFieldCount,
@@ -51,16 +45,11 @@ const reorderFields = (fieldIds: Array<FieldId>, visibleFieldCount: number) => {
 const deleteView = () => {
     mockAirtableInterface.triggerModelUpdates([
         {
-            path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
-            value: [
-                'viwqo8mFAqy2HYSCL',
-                'viw8v5XkLudbiCJfD',
-                'viwhz3PjFATSxaV5X',
-                'viwA4Tzw8IJcHHgul',
-            ],
+            path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
+            value: ['viwPrjctIncmplt', 'viwPrjctCompleted', 'viwPrjctCalendar', 'viwPrjctDueDates'],
         },
         {
-            path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewsById', 'viwkNnS94RQAQQTMn'],
+            path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll'],
             value: undefined,
         },
     ]);
@@ -84,25 +73,25 @@ describe('ViewMetadataQueryResult', () => {
         it('returns all fields', async () => {
             const result = view.selectMetadata();
 
-            mockVisibleFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 1);
+            mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry'], 1);
             await result.loadDataAsync();
 
             const ids = result.allFields.map(({id}) => id);
 
-            expect(ids).toEqual(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH']);
+            expect(ids).toEqual(['fldPrjctClient', 'fldPrjctCtgry']);
         });
 
         it('updates in response to messages from AirtableInterface', async () => {
             const result = view.selectMetadata();
 
-            mockVisibleFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 1);
+            mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry'], 1);
             await result.loadDataAsync();
 
-            reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 2);
+            reorderFields(['fldPrjctClient', 'fldPrjctCtgry'], 2);
 
             const ids = result.allFields.map(({id}) => id);
 
-            expect(ids).toEqual(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH']);
+            expect(ids).toEqual(['fldPrjctClient', 'fldPrjctCtgry']);
         });
 
         it('reports error for unloaded results', () => {
@@ -192,7 +181,7 @@ describe('ViewMetadataQueryResult', () => {
             const spy = jest.fn();
 
             result.watch('allFields', spy);
-            reorderFields(['fld3DvZllJtyaNYpm'], 1);
+            reorderFields(['fldPrjctClient'], 1);
 
             expect(spy).toHaveBeenCalledTimes(0);
         });
@@ -204,7 +193,7 @@ describe('ViewMetadataQueryResult', () => {
             const spy = jest.fn();
 
             result.watch('visibleFields', spy);
-            reorderFields(['fld3DvZllJtyaNYpm'], 1);
+            reorderFields(['fldPrjctClient'], 1);
 
             expect(spy).toHaveBeenCalledTimes(0);
         });
@@ -214,25 +203,25 @@ describe('ViewMetadataQueryResult', () => {
         it('returns visible fields only', async () => {
             const result = view.selectMetadata();
 
-            mockVisibleFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 1);
+            mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry'], 1);
             await result.loadDataAsync();
 
             const ids = result.visibleFields.map(({id}) => id);
 
-            expect(ids).toEqual(['fld3DvZllJtyaNYpm']);
+            expect(ids).toEqual(['fldPrjctClient']);
         });
 
         it('updates in response to messages from AirtableInterface', async () => {
             const result = view.selectMetadata();
 
-            mockVisibleFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 1);
+            mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry'], 1);
             await result.loadDataAsync();
 
-            reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 2);
+            reorderFields(['fldPrjctClient', 'fldPrjctCtgry'], 2);
 
             const ids = result.visibleFields.map(({id}) => id);
 
-            expect(ids).toEqual(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH']);
+            expect(ids).toEqual(['fldPrjctClient', 'fldPrjctCtgry']);
         });
 
         it('reports error for unloaded results', () => {
@@ -270,15 +259,12 @@ describe('ViewMetadataQueryResult', () => {
                 const spy = jest.fn();
                 const result = view.selectMetadata();
 
-                mockVisibleFields(
-                    ['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'],
-                    2,
-                );
+                mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 2);
                 await result.loadDataAsync();
 
                 result.watch('allFields', spy);
 
-                reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'], 1);
+                reorderFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 1);
                 expect(spy).toHaveBeenCalledTimes(1);
             });
 
@@ -286,15 +272,12 @@ describe('ViewMetadataQueryResult', () => {
                 const spy = jest.fn();
                 const result = view.selectMetadata();
 
-                mockVisibleFields(
-                    ['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'],
-                    2,
-                );
+                mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 2);
                 await result.loadDataAsync();
 
                 result.watch('allFields', spy);
 
-                reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 2);
+                reorderFields(['fldPrjctClient', 'fldPrjctCtgry'], 2);
                 expect(spy).toHaveBeenCalledTimes(1);
             });
         });
@@ -313,15 +296,12 @@ describe('ViewMetadataQueryResult', () => {
                 const spy = jest.fn();
                 const result = view.selectMetadata();
 
-                mockVisibleFields(
-                    ['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'],
-                    2,
-                );
+                mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 2);
                 await result.loadDataAsync();
 
                 result.watch('visibleFields', spy);
 
-                reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'], 1);
+                reorderFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 1);
                 expect(spy).toHaveBeenCalledTimes(1);
             });
 
@@ -330,15 +310,12 @@ describe('ViewMetadataQueryResult', () => {
                 const spy = jest.fn();
                 const result = view.selectMetadata();
 
-                mockVisibleFields(
-                    ['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH', 'fldHOlUIpjmlYj549'],
-                    2,
-                );
+                mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 2);
                 await result.loadDataAsync();
 
                 result.watch('visibleFields', spy);
 
-                reorderFields(['fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'], 2);
+                reorderFields(['fldPrjctClient', 'fldPrjctCtgry'], 2);
                 expect(spy).toHaveBeenCalledTimes(0);
             });
         });

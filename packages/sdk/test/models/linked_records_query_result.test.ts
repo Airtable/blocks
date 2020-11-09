@@ -916,7 +916,7 @@ describe('LinkedRecordQueryResult', () => {
                             'tablesById',
                             'tblSecond',
                             'viewsById',
-                            'viwWxkRmrDMhu7I8p',
+                            'viwTaskAll',
                             'colorsByRecordId',
                             'fldPrimary',
                         ],

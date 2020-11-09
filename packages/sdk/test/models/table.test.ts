@@ -17,9 +17,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 }));
 
 const deleteTable = (id: TableId) => {
-    const newOrder = ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'].filter(
-        other => other !== id,
-    );
+    const newOrder = ['tblDesignProjects', 'tblTasks', 'tblClients'].filter(other => other !== id);
 
     mockAirtableInterface.triggerModelUpdates([
         {path: ['tableOrder'], value: newOrder},
@@ -29,20 +27,20 @@ const deleteTable = (id: TableId) => {
 
 const deleteView = (id: ViewId) => {
     const newOrder = [
-        'viwkNnS94RQAQQTMn',
-        'viwqo8mFAqy2HYSCL',
-        'viw8v5XkLudbiCJfD',
-        'viwhz3PjFATSxaV5X',
-        'viwA4Tzw8IJcHHgul',
+        'viwPrjctAll',
+        'viwPrjctIncmplt',
+        'viwPrjctCompleted',
+        'viwPrjctCalendar',
+        'viwPrjctDueDates',
     ].filter(other => other !== id);
 
     mockAirtableInterface.triggerModelUpdates([
         {
-            path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+            path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
             value: newOrder,
         },
         {
-            path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewsById', id],
+            path: ['tablesById', 'tblDesignProjects', 'viewsById', id],
             value: undefined,
         },
     ]);
@@ -51,7 +49,7 @@ const deleteView = (id: ViewId) => {
 const deleteField = (id: FieldId) => {
     mockAirtableInterface.triggerModelUpdates([
         {
-            path: ['tablesById', 'tbly388E8NA1CNhnF', 'fieldsById', id],
+            path: ['tablesById', 'tblDesignProjects', 'fieldsById', id],
             value: undefined,
         },
     ]);
@@ -86,21 +84,21 @@ describe('Table', () => {
 
     describe('getFieldIfExists', () => {
         it('returns field by id', () => {
-            const field1 = table.getFieldIfExists('fldXaTPfxIVhAUYde') as Field;
-            const field2 = table.getFieldIfExists('fld3DvZllJtyaNYpm') as Field;
+            const field1 = table.getFieldIfExists('fldPrjctName') as Field;
+            const field2 = table.getFieldIfExists('fldPrjctClient') as Field;
             expect(field1).toBeInstanceOf(Field);
-            expect(field1.id).toBe('fldXaTPfxIVhAUYde');
+            expect(field1.id).toBe('fldPrjctName');
             expect(field2).toBeInstanceOf(Field);
-            expect(field2.id).toBe('fld3DvZllJtyaNYpm');
+            expect(field2.id).toBe('fldPrjctClient');
         });
 
         it('returns field by name', () => {
             const field1 = table.getFieldIfExists('Category') as Field;
             const field2 = table.getFieldIfExists('Complete') as Field;
             expect(field1).toBeInstanceOf(Field);
-            expect(field1.id).toBe('fldRljtoVpOt1IDYH');
+            expect(field1.id).toBe('fldPrjctCtgry');
             expect(field2).toBeInstanceOf(Field);
-            expect(field2.id).toBe('fldHOlUIpjmlYj549');
+            expect(field2.id).toBe('fldPrjctCmplt');
         });
 
         it('returns null when field not found', () => {
@@ -111,21 +109,21 @@ describe('Table', () => {
 
     describe('getField', () => {
         it('returns field by id', () => {
-            const field1 = table.getField('fldXaTPfxIVhAUYde');
-            const field2 = table.getField('fld3DvZllJtyaNYpm');
+            const field1 = table.getField('fldPrjctName');
+            const field2 = table.getField('fldPrjctClient');
             expect(field1).toBeInstanceOf(Field);
-            expect(field1.id).toBe('fldXaTPfxIVhAUYde');
+            expect(field1.id).toBe('fldPrjctName');
             expect(field2).toBeInstanceOf(Field);
-            expect(field2.id).toBe('fld3DvZllJtyaNYpm');
+            expect(field2.id).toBe('fldPrjctClient');
         });
 
         it('returns field by name', () => {
             const field1 = table.getField('Category');
             const field2 = table.getField('Complete');
             expect(field1).toBeInstanceOf(Field);
-            expect(field1.id).toBe('fldRljtoVpOt1IDYH');
+            expect(field1.id).toBe('fldPrjctCtgry');
             expect(field2).toBeInstanceOf(Field);
-            expect(field2.id).toBe('fldHOlUIpjmlYj549');
+            expect(field2.id).toBe('fldPrjctCmplt');
         });
 
         it('throws when field not found', () => {
@@ -140,21 +138,21 @@ describe('Table', () => {
 
     describe('getViewIfExists', () => {
         it('returns view by id', () => {
-            const view1 = table.getViewIfExists('viwkNnS94RQAQQTMn') as View;
-            const view2 = table.getViewIfExists('viwqo8mFAqy2HYSCL') as View;
+            const view1 = table.getViewIfExists('viwPrjctAll') as View;
+            const view2 = table.getViewIfExists('viwPrjctIncmplt') as View;
             expect(view1).toBeInstanceOf(View);
-            expect(view1.id).toBe('viwkNnS94RQAQQTMn');
+            expect(view1.id).toBe('viwPrjctAll');
             expect(view2).toBeInstanceOf(View);
-            expect(view2.id).toBe('viwqo8mFAqy2HYSCL');
+            expect(view2.id).toBe('viwPrjctIncmplt');
         });
 
         it('returns view by name', () => {
             const view1 = table.getViewIfExists('Completed projects') as View;
             const view2 = table.getViewIfExists('Project calendar') as View;
             expect(view1).toBeInstanceOf(View);
-            expect(view1.id).toBe('viw8v5XkLudbiCJfD');
+            expect(view1.id).toBe('viwPrjctCompleted');
             expect(view2).toBeInstanceOf(View);
-            expect(view2.id).toBe('viwhz3PjFATSxaV5X');
+            expect(view2.id).toBe('viwPrjctCalendar');
         });
 
         it('returns null when view not found', () => {
@@ -165,21 +163,21 @@ describe('Table', () => {
 
     describe('getView', () => {
         it('returns view by id', () => {
-            const view1 = table.getView('viwA4Tzw8IJcHHgul');
-            const view2 = table.getView('viwkNnS94RQAQQTMn');
+            const view1 = table.getView('viwPrjctDueDates');
+            const view2 = table.getView('viwPrjctAll');
             expect(view1).toBeInstanceOf(View);
-            expect(view1.id).toBe('viwA4Tzw8IJcHHgul');
+            expect(view1.id).toBe('viwPrjctDueDates');
             expect(view2).toBeInstanceOf(View);
-            expect(view2.id).toBe('viwkNnS94RQAQQTMn');
+            expect(view2.id).toBe('viwPrjctAll');
         });
 
         it('returns view by name', () => {
             const view1 = table.getView('Incomplete projects by leader');
             const view2 = table.getView('Completed projects');
             expect(view1).toBeInstanceOf(View);
-            expect(view1.id).toBe('viwqo8mFAqy2HYSCL');
+            expect(view1.id).toBe('viwPrjctIncmplt');
             expect(view2).toBeInstanceOf(View);
-            expect(view2.id).toBe('viw8v5XkLudbiCJfD');
+            expect(view2.id).toBe('viwPrjctCompleted');
         });
 
         it('throws when view not found', () => {
@@ -278,7 +276,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     id: undefined,
                     name: undefined,
                     config: undefined,
@@ -292,7 +290,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     id: undefined,
                     name: 'a name',
                     config: undefined,
@@ -306,7 +304,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     id: undefined,
                     name: undefined,
                     config: {
@@ -324,7 +322,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_SINGLE_FIELD,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     id: undefined,
                     name: undefined,
                     config: {
@@ -370,7 +368,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
@@ -383,16 +381,16 @@ describe('Table', () => {
         });
 
         it('correctly queries AirtableInterface when a field ID is provided', () => {
-            table.checkPermissionsForCreateRecord({fldXaTPfxIVhAUYde: 99});
+            table.checkPermissionsForCreateRecord({fldPrjctName: 99});
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
+                                fldPrjctName: 99,
                             },
                         },
                     ],
@@ -406,12 +404,12 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldY1QpPpkdkz9KZk: 99,
+                                fldPrjctImages: 99,
                             },
                         },
                     ],
@@ -421,12 +419,12 @@ describe('Table', () => {
         });
 
         it('throws when a deleted field ID is provided', () => {
-            deleteField('fldFJ3xHdu3VMMZII');
+            deleteField('fldPrjctNotes');
 
             expect(() => {
-                table.checkPermissionsForCreateRecord({fldFJ3xHdu3VMMZII: '86'});
+                table.checkPermissionsForCreateRecord({fldPrjctNotes: '86'});
             }).toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
@@ -462,7 +460,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -475,7 +473,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -488,7 +486,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
@@ -501,16 +499,16 @@ describe('Table', () => {
         });
 
         it('correctly queries AirtableInterface when only a field ID is provided', () => {
-            table.checkPermissionsForCreateRecords([{fields: {fldXaTPfxIVhAUYde: 99}}]);
+            table.checkPermissionsForCreateRecords([{fields: {fldPrjctName: 99}}]);
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
+                                fldPrjctName: 99,
                             },
                         },
                     ],
@@ -524,12 +522,12 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldY1QpPpkdkz9KZk: 99,
+                                fldPrjctImages: 99,
                             },
                         },
                     ],
@@ -540,26 +538,26 @@ describe('Table', () => {
 
         it('correctly queries AirtableInterface when multiple records and fields are provided', () => {
             table.checkPermissionsForCreateRecords([
-                {fields: {fldXaTPfxIVhAUYde: 99, fld3DvZllJtyaNYpm: 98}},
-                {fields: {fldRljtoVpOt1IDYH: 97, fldHOlUIpjmlYj549: 96}},
+                {fields: {fldPrjctName: 99, fldPrjctClient: 98}},
+                {fields: {fldPrjctCtgry: 97, fldPrjctCmplt: 96}},
             ]);
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
-                                fld3DvZllJtyaNYpm: 98,
+                                fldPrjctName: 99,
+                                fldPrjctClient: 98,
                             },
                         },
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldRljtoVpOt1IDYH: 97,
-                                fldHOlUIpjmlYj549: 96,
+                                fldPrjctCtgry: 97,
+                                fldPrjctCmplt: 96,
                             },
                         },
                     ],
@@ -569,12 +567,12 @@ describe('Table', () => {
         });
 
         it('throws when a deleted field ID is provided', () => {
-            deleteField('fldFJ3xHdu3VMMZII');
+            deleteField('fldPrjctNotes');
 
             expect(() => {
-                table.checkPermissionsForCreateRecords([{fields: {fldFJ3xHdu3VMMZII: '86'}}]);
+                table.checkPermissionsForCreateRecords([{fields: {fldPrjctNotes: '86'}}]);
             }).toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
@@ -610,7 +608,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -623,7 +621,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recQ'],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -637,7 +635,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recT'],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -676,7 +674,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -689,7 +687,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: [],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -702,7 +700,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recQ'],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -716,7 +714,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recT'],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -728,7 +726,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recG', 'recH'],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -767,7 +765,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
@@ -785,7 +783,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recQ',
@@ -804,7 +802,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recF',
@@ -817,16 +815,16 @@ describe('Table', () => {
         });
 
         it('correctly queries AirtableInterface when only a field ID is provided', () => {
-            table.checkPermissionsForUpdateRecord(undefined, {fldXaTPfxIVhAUYde: 99});
+            table.checkPermissionsForUpdateRecord(undefined, {fldPrjctName: 99});
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
+                                fldPrjctName: 99,
                             },
                         },
                     ],
@@ -840,12 +838,12 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldY1QpPpkdkz9KZk: 99,
+                                fldPrjctImages: 99,
                             },
                         },
                     ],
@@ -855,12 +853,12 @@ describe('Table', () => {
         });
 
         it('throws when a deleted field ID is provided', () => {
-            deleteField('fldFJ3xHdu3VMMZII');
+            deleteField('fldPrjctNotes');
 
             expect(() => {
-                table.checkPermissionsForUpdateRecord(undefined, {fldFJ3xHdu3VMMZII: '86'});
+                table.checkPermissionsForUpdateRecord(undefined, {fldPrjctNotes: '86'});
             }).toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
@@ -896,7 +894,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -909,7 +907,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [],
                 },
                 mockAirtableInterface.sdkInitData.baseData,
@@ -922,7 +920,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
@@ -940,7 +938,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recQ',
@@ -953,16 +951,16 @@ describe('Table', () => {
         });
 
         it('correctly queries AirtableInterface when only a field ID is provided', () => {
-            table.checkPermissionsForUpdateRecords([{fields: {fldXaTPfxIVhAUYde: 99}}]);
+            table.checkPermissionsForUpdateRecords([{fields: {fldPrjctName: 99}}]);
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
+                                fldPrjctName: 99,
                             },
                         },
                     ],
@@ -976,12 +974,12 @@ describe('Table', () => {
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: undefined,
                             cellValuesByFieldId: {
-                                fldY1QpPpkdkz9KZk: 99,
+                                fldPrjctImages: 99,
                             },
                         },
                     ],
@@ -992,26 +990,26 @@ describe('Table', () => {
 
         it('correctly queries AirtableInterface when multiple records and fields are provided', () => {
             table.checkPermissionsForUpdateRecords([
-                {id: 'recG', fields: {fldXaTPfxIVhAUYde: 99, fld3DvZllJtyaNYpm: 98}},
-                {id: 'recH', fields: {fldRljtoVpOt1IDYH: 97, fldHOlUIpjmlYj549: 96}},
+                {id: 'recG', fields: {fldPrjctName: 99, fldPrjctClient: 98}},
+                {id: 'recH', fields: {fldPrjctCtgry: 97, fldPrjctCmplt: 96}},
             ]);
             expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recG',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 99,
-                                fld3DvZllJtyaNYpm: 98,
+                                fldPrjctName: 99,
+                                fldPrjctClient: 98,
                             },
                         },
                         {
                             id: 'recH',
                             cellValuesByFieldId: {
-                                fldRljtoVpOt1IDYH: 97,
-                                fldHOlUIpjmlYj549: 96,
+                                fldPrjctCtgry: 97,
+                                fldPrjctCmplt: 96,
                             },
                         },
                     ],
@@ -1021,12 +1019,12 @@ describe('Table', () => {
         });
 
         it('throws when a deleted field ID is provided', () => {
-            deleteField('fldFJ3xHdu3VMMZII');
+            deleteField('fldPrjctNotes');
 
             expect(() => {
-                table.checkPermissionsForUpdateRecords([{fields: {fldFJ3xHdu3VMMZII: '86'}}]);
+                table.checkPermissionsForUpdateRecords([{fields: {fldPrjctNotes: '86'}}]);
             }).toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
@@ -1062,7 +1060,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
@@ -1081,7 +1079,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
@@ -1096,20 +1094,20 @@ describe('Table', () => {
 
         it('tolerates fields specified by ID', async () => {
             const result = await table.createRecordAsync({
-                fldXaTPfxIVhAUYde: 'foo',
-                fldFJ3xHdu3VMMZII: 'bar',
+                fldPrjctName: 'foo',
+                fldPrjctNotes: 'bar',
             });
 
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'foo',
-                                fldFJ3xHdu3VMMZII: 'bar',
+                                fldPrjctName: 'foo',
+                                fldPrjctNotes: 'bar',
                             },
                         },
                     ],
@@ -1128,13 +1126,13 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'spike',
-                                fldFJ3xHdu3VMMZII: 'porkchop',
+                                fldPrjctName: 'spike',
+                                fldPrjctNotes: 'porkchop',
                             },
                         },
                     ],
@@ -1151,7 +1149,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [],
                 },
                 {holdForMs: 100},
@@ -1165,7 +1163,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
@@ -1182,8 +1180,8 @@ describe('Table', () => {
             const result = await table.createRecordsAsync([
                 {
                     fields: {
-                        fldXaTPfxIVhAUYde: 'foo',
-                        fldFJ3xHdu3VMMZII: 'bar',
+                        fldPrjctName: 'foo',
+                        fldPrjctNotes: 'bar',
                     },
                 },
             ]);
@@ -1191,13 +1189,13 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'foo',
-                                fldFJ3xHdu3VMMZII: 'bar',
+                                fldPrjctName: 'foo',
+                                fldPrjctNotes: 'bar',
                             },
                         },
                     ],
@@ -1220,13 +1218,13 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recGeneratedMockId',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'spike',
-                                fldFJ3xHdu3VMMZII: 'porkchop',
+                                fldPrjctName: 'spike',
+                                fldPrjctNotes: 'porkchop',
                             },
                         },
                     ],
@@ -1260,7 +1258,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recA'],
                 },
                 {holdForMs: 100},
@@ -1275,7 +1273,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recK'],
                 },
                 {holdForMs: 100},
@@ -1300,7 +1298,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: [],
                 },
                 {holdForMs: 100},
@@ -1313,7 +1311,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recA', 'recB'],
                 },
                 {holdForMs: 100},
@@ -1328,7 +1326,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.DELETE_MULTIPLE_RECORDS,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     recordIds: ['recK'],
                 },
                 {holdForMs: 100},
@@ -1352,7 +1350,7 @@ describe('Table', () => {
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() => table.description).toThrowErrorMatchingInlineSnapshot(
                 `"Table has been deleted"`,
@@ -1362,25 +1360,23 @@ describe('Table', () => {
 
     describe('#getFieldById', () => {
         it('returns the requested field', () => {
-            expect(table.getFieldById('fld3DvZllJtyaNYpm')).toBe(table.fields[1]);
+            expect(table.getFieldById('fldPrjctClient')).toBe(table.fields[1]);
         });
 
         it('throws when field has been deleted', () => {
-            deleteField('fld3DvZllJtyaNYpm');
+            deleteField('fldPrjctClient');
 
-            expect(() =>
-                table.getFieldById('fld3DvZllJtyaNYpm'),
-            ).toThrowErrorMatchingInlineSnapshot(
-                `"No field with ID fld3DvZllJtyaNYpm in table 'Design projects'"`,
+            expect(() => table.getFieldById('fldPrjctClient')).toThrowErrorMatchingInlineSnapshot(
+                `"No field with ID fldPrjctClient in table 'Design projects'"`,
             );
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
-            expect(() =>
-                table.getFieldById('fld3DvZllJtyaNYpm'),
-            ).toThrowErrorMatchingInlineSnapshot(`"Table has been deleted"`);
+            expect(() => table.getFieldById('fldPrjctClient')).toThrowErrorMatchingInlineSnapshot(
+                `"Table has been deleted"`,
+            );
         });
     });
 
@@ -1390,7 +1386,7 @@ describe('Table', () => {
         });
 
         it('throws when field has been deleted', () => {
-            deleteField('fldRljtoVpOt1IDYH');
+            deleteField('fldPrjctCtgry');
 
             expect(() => table.getFieldByName('Category')).toThrowErrorMatchingInlineSnapshot(
                 `"No field named 'Category' in table 'Design projects'"`,
@@ -1398,7 +1394,7 @@ describe('Table', () => {
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() => table.getFieldByName('Category')).toThrowErrorMatchingInlineSnapshot(
                 `"Table has been deleted"`,
@@ -1459,21 +1455,21 @@ describe('Table', () => {
 
         describe('preferred view specified by ID', () => {
             it('returns matching preferred views', () => {
-                expect(table.getFirstViewOfType(ViewType.GRID, 'viwqo8mFAqy2HYSCL')).toBe(
+                expect(table.getFirstViewOfType(ViewType.GRID, 'viwPrjctIncmplt')).toBe(
                     table.views[1],
                 );
             });
 
             it('ignores non-matching preferred views', () => {
-                expect(table.getFirstViewOfType(ViewType.GRID, 'viw8v5XkLudbiCJfD')).toBe(
+                expect(table.getFirstViewOfType(ViewType.GRID, 'viwPrjctCompleted')).toBe(
                     table.views[0],
                 );
             });
 
             it('ignores deleted preferred views', () => {
-                deleteView('viwqo8mFAqy2HYSCL');
+                deleteView('viwPrjctIncmplt');
 
-                expect(table.getFirstViewOfType(ViewType.GRID, 'viwqo8mFAqy2HYSCL')).toBe(
+                expect(table.getFirstViewOfType(ViewType.GRID, 'viwPrjctIncmplt')).toBe(
                     table.views[0],
                 );
             });
@@ -1493,7 +1489,7 @@ describe('Table', () => {
             });
 
             it('ignores deleted preferred views', () => {
-                deleteView('viwqo8mFAqy2HYSCL');
+                deleteView('viwPrjctIncmplt');
 
                 expect(table.getFirstViewOfType(ViewType.GRID, table.views[1])).toBe(
                     table.views[0],
@@ -1504,21 +1500,21 @@ describe('Table', () => {
 
     describe('#getViewById', () => {
         it('returns the requested view', () => {
-            expect(table.getViewById('viwhz3PjFATSxaV5X')).toBe(table.views[3]);
+            expect(table.getViewById('viwPrjctCalendar')).toBe(table.views[3]);
         });
 
         it('throws when view has been deleted', () => {
-            deleteView('viwhz3PjFATSxaV5X');
+            deleteView('viwPrjctCalendar');
 
-            expect(() => table.getViewById('viwhz3PjFATSxaV5X')).toThrowErrorMatchingInlineSnapshot(
-                `"No view with ID viwhz3PjFATSxaV5X in table 'Design projects'"`,
+            expect(() => table.getViewById('viwPrjctCalendar')).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID viwPrjctCalendar in table 'Design projects'"`,
             );
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
-            expect(() => table.getViewById('viwhz3PjFATSxaV5X')).toThrowErrorMatchingInlineSnapshot(
+            expect(() => table.getViewById('viwPrjctCalendar')).toThrowErrorMatchingInlineSnapshot(
                 `"Table has been deleted"`,
             );
         });
@@ -1526,20 +1522,20 @@ describe('Table', () => {
 
     describe('#getViewByIdIfExists', () => {
         it('returns the requested view', () => {
-            expect(table.getViewByIdIfExists('viwhz3PjFATSxaV5X')).toBe(table.views[3]);
+            expect(table.getViewByIdIfExists('viwPrjctCalendar')).toBe(table.views[3]);
         });
 
         it('returns `null` when view has been deleted', () => {
-            deleteView('viwhz3PjFATSxaV5X');
+            deleteView('viwPrjctCalendar');
 
-            expect(table.getViewByIdIfExists('viwhz3PjFATSxaV5X')).toBe(null);
+            expect(table.getViewByIdIfExists('viwPrjctCalendar')).toBe(null);
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() =>
-                table.getViewByIdIfExists('viwhz3PjFATSxaV5X'),
+                table.getViewByIdIfExists('viwPrjctCalendar'),
             ).toThrowErrorMatchingInlineSnapshot(`"Table has been deleted"`);
         });
     });
@@ -1550,7 +1546,7 @@ describe('Table', () => {
         });
 
         it('throws when view has been deleted', () => {
-            deleteView('viw8v5XkLudbiCJfD');
+            deleteView('viwPrjctCompleted');
 
             expect(() =>
                 table.getViewByName('Completed projects'),
@@ -1560,7 +1556,7 @@ describe('Table', () => {
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() =>
                 table.getViewByName('Completed projects'),
@@ -1707,7 +1703,7 @@ describe('Table', () => {
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() => table.name).toThrowErrorMatchingInlineSnapshot(`"Table has been deleted"`);
         });
@@ -1719,7 +1715,7 @@ describe('Table', () => {
         });
 
         it('returns the parent base when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(table.parentBase).toBe(base);
         });
@@ -1731,7 +1727,7 @@ describe('Table', () => {
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() => table.primaryField).toThrowErrorMatchingInlineSnapshot(
                 `"Table has been deleted"`,
@@ -1747,7 +1743,7 @@ describe('Table', () => {
         });
 
         it('does not throw when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             table.selectRecords();
         });
@@ -1755,7 +1751,7 @@ describe('Table', () => {
         it('throws for invalid sorting directions', () => {
             expect(() => {
                 table.selectRecords({
-                    sorts: [{field: 'fld3DvZllJtyaNYpm', direction: 'ascending' as 'asc'}],
+                    sorts: [{field: 'fldPrjctClient', direction: 'ascending' as 'asc'}],
                 });
             }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: ascending"`);
         });
@@ -1806,7 +1802,7 @@ describe('Table', () => {
         });
 
         it('rejects when sort field belongs to another table', async () => {
-            const foreignField = base.getTableByName('Tasks').getFieldById('fldfu76MKFFh6x6IM');
+            const foreignField = base.getTableByName('Tasks').getFieldById('fldTaskName');
 
             await expect(
                 table.selectRecordsAsync({sorts: [{field: foreignField}]}),
@@ -1816,7 +1812,7 @@ describe('Table', () => {
         });
 
         it('rejects when sort field has been deleted', async () => {
-            const field = table.getFieldById('fld3DvZllJtyaNYpm');
+            const field = table.getFieldById('fldPrjctClient');
             deleteField(field.id);
 
             await expect(
@@ -1825,7 +1821,7 @@ describe('Table', () => {
         });
 
         it('rejects when limiting field belongs to another table', async () => {
-            const foreignField = base.getTableByName('Tasks').getFieldById('fldfu76MKFFh6x6IM');
+            const foreignField = base.getTableByName('Tasks').getFieldById('fldTaskName');
 
             await expect(
                 table.selectRecordsAsync({fields: [foreignField]}),
@@ -1835,7 +1831,7 @@ describe('Table', () => {
         });
 
         it('rejects when limiting field has been deleted', async () => {
-            const field = table.getFieldById('fld3DvZllJtyaNYpm');
+            const field = table.getFieldById('fldPrjctClient');
             deleteField(field.id);
 
             await expect(
@@ -1844,16 +1840,16 @@ describe('Table', () => {
         });
 
         it('does not throw when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             table.selectRecordsAsync();
         });
 
         it('rejects when table has been deleted', async () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             await expect(table.selectRecordsAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
-                `"model (tbly388E8NA1CNhnF-RecordStore) permanently deleted"`,
+                `"model (tblDesignProjects-RecordStore) permanently deleted"`,
             );
         });
     });
@@ -1865,7 +1861,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [{id: 'recA', cellValuesByFieldId: {}}],
                 },
                 {holdForMs: 100},
@@ -1873,18 +1869,18 @@ describe('Table', () => {
         });
 
         it('rejects deleted fields (specified by ID)', async () => {
-            const target = 'fldFJ3xHdu3VMMZII';
+            const target = 'fldPrjctNotes';
             deleteField(target);
 
             await expect(
                 table.updateRecordAsync('recA', {[target]: 'hello'}),
             ).rejects.toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
         it('rejects deleted fields (specified by name)', async () => {
-            deleteField('fldFJ3xHdu3VMMZII');
+            deleteField('fldPrjctNotes');
 
             await expect(
                 table.updateRecordAsync('recA', {Notes: 'hello'}),
@@ -1895,20 +1891,20 @@ describe('Table', () => {
 
         it('includes all field values (record by ID and fields by ID)', async () => {
             await table.updateRecordAsync('recA', {
-                fldXaTPfxIVhAUYde: 'one',
-                fldFJ3xHdu3VMMZII: 'two',
+                fldPrjctName: 'one',
+                fldPrjctNotes: 'two',
             });
 
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                     ],
@@ -1926,13 +1922,13 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                     ],
@@ -1945,20 +1941,20 @@ describe('Table', () => {
             const record = await loadEmptyRecordAsync('recB');
 
             await table.updateRecordAsync(record, {
-                fldXaTPfxIVhAUYde: 'one',
-                fldFJ3xHdu3VMMZII: 'two',
+                fldPrjctName: 'one',
+                fldPrjctNotes: 'two',
             });
 
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recB',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                     ],
@@ -1978,13 +1974,13 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recB',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                     ],
@@ -1997,12 +1993,12 @@ describe('Table', () => {
             const record = await loadEmptyRecordAsync('recC');
 
             await table.updateRecordAsync('recC', {
-                fldXaTPfxIVhAUYde: 'sasquatch',
-                fldFJ3xHdu3VMMZII: 'yeti',
+                fldPrjctName: 'sasquatch',
+                fldPrjctNotes: 'yeti',
             });
 
-            expect(record.getCellValue('fldXaTPfxIVhAUYde')).toBe('sasquatch');
-            expect(record.getCellValue('fldFJ3xHdu3VMMZII')).toBe('yeti');
+            expect(record.getCellValue('fldPrjctName')).toBe('sasquatch');
+            expect(record.getCellValue('fldPrjctNotes')).toBe('yeti');
         });
     });
 
@@ -2013,7 +2009,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [],
                 },
                 {holdForMs: 100},
@@ -2026,7 +2022,7 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [{id: 'recA', cellValuesByFieldId: {}}],
                 },
                 {holdForMs: 100},
@@ -2034,18 +2030,18 @@ describe('Table', () => {
         });
 
         it('rejects deleted fields (specified by ID)', async () => {
-            const target = 'fldFJ3xHdu3VMMZII';
+            const target = 'fldPrjctNotes';
             deleteField(target);
 
             await expect(
                 table.updateRecordsAsync([{id: 'recA', fields: {[target]: 'hello'}}]),
             ).rejects.toThrowErrorMatchingInlineSnapshot(
-                `"Field 'fldFJ3xHdu3VMMZII' does not exist in table 'Design projects'"`,
+                `"Field 'fldPrjctNotes' does not exist in table 'Design projects'"`,
             );
         });
 
         it('rejects deleted fields (specified by name)', async () => {
-            const target = 'fldFJ3xHdu3VMMZII';
+            const target = 'fldPrjctNotes';
             deleteField(target);
 
             await expect(
@@ -2060,15 +2056,15 @@ describe('Table', () => {
                 {
                     id: 'recA',
                     fields: {
-                        fldXaTPfxIVhAUYde: 'one',
-                        fldFJ3xHdu3VMMZII: 'two',
+                        fldPrjctName: 'one',
+                        fldPrjctNotes: 'two',
                     },
                 },
                 {
                     id: 'recB',
                     fields: {
-                        fldXaTPfxIVhAUYde: 'three',
-                        fldFJ3xHdu3VMMZII: 'four',
+                        fldPrjctName: 'three',
+                        fldPrjctNotes: 'four',
                     },
                 },
             ]);
@@ -2076,20 +2072,20 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                         {
                             id: 'recB',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'three',
-                                fldFJ3xHdu3VMMZII: 'four',
+                                fldPrjctName: 'three',
+                                fldPrjctNotes: 'four',
                             },
                         },
                     ],
@@ -2119,20 +2115,20 @@ describe('Table', () => {
             expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
                 {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-                    tableId: 'tbly388E8NA1CNhnF',
+                    tableId: 'tblDesignProjects',
                     records: [
                         {
                             id: 'recA',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'one',
-                                fldFJ3xHdu3VMMZII: 'two',
+                                fldPrjctName: 'one',
+                                fldPrjctNotes: 'two',
                             },
                         },
                         {
                             id: 'recB',
                             cellValuesByFieldId: {
-                                fldXaTPfxIVhAUYde: 'three',
-                                fldFJ3xHdu3VMMZII: 'four',
+                                fldPrjctName: 'three',
+                                fldPrjctNotes: 'four',
                             },
                         },
                     ],
@@ -2148,14 +2144,14 @@ describe('Table', () => {
                 {
                     id: 'recD',
                     fields: {
-                        fldXaTPfxIVhAUYde: 'bigfoot',
-                        fldFJ3xHdu3VMMZII: 'sasquatch again',
+                        fldPrjctName: 'bigfoot',
+                        fldPrjctNotes: 'sasquatch again',
                     },
                 },
             ]);
 
-            expect(record.getCellValue('fldXaTPfxIVhAUYde')).toBe('bigfoot');
-            expect(record.getCellValue('fldFJ3xHdu3VMMZII')).toBe('sasquatch again');
+            expect(record.getCellValue('fldPrjctName')).toBe('bigfoot');
+            expect(record.getCellValue('fldPrjctNotes')).toBe('sasquatch again');
         });
     });
 
@@ -2166,7 +2162,7 @@ describe('Table', () => {
             table.url;
 
             expect(mockAirtableInterface.urlConstructor.getTableUrl.mock.calls).toEqual([
-                ['tbly388E8NA1CNhnF'],
+                ['tblDesignProjects'],
             ]);
         });
 
@@ -2179,27 +2175,27 @@ describe('Table', () => {
     describe('#views', () => {
         it('returns all views in the correct order', () => {
             expect(table.views.map(({id}) => id)).toEqual([
-                'viwkNnS94RQAQQTMn',
-                'viwqo8mFAqy2HYSCL',
-                'viw8v5XkLudbiCJfD',
-                'viwhz3PjFATSxaV5X',
-                'viwA4Tzw8IJcHHgul',
+                'viwPrjctAll',
+                'viwPrjctIncmplt',
+                'viwPrjctCompleted',
+                'viwPrjctCalendar',
+                'viwPrjctDueDates',
             ]);
         });
 
         it('omits deleted views', () => {
-            deleteView('viwhz3PjFATSxaV5X');
+            deleteView('viwPrjctCalendar');
 
             expect(table.views.map(({id}) => id)).toEqual([
-                'viwkNnS94RQAQQTMn',
-                'viwqo8mFAqy2HYSCL',
-                'viw8v5XkLudbiCJfD',
-                'viwA4Tzw8IJcHHgul',
+                'viwPrjctAll',
+                'viwPrjctIncmplt',
+                'viwPrjctCompleted',
+                'viwPrjctDueDates',
             ]);
         });
 
         it('throws when table has been deleted', () => {
-            deleteTable('tbly388E8NA1CNhnF');
+            deleteTable('tblDesignProjects');
 
             expect(() => table.views).toThrowErrorMatchingInlineSnapshot(
                 `"Table has been deleted"`,
@@ -2217,7 +2213,7 @@ describe('Table', () => {
                     {
                         path: [
                             'tablesById',
-                            'tbly388E8NA1CNhnF',
+                            'tblDesignProjects',
                             'fieldsById',
                             'fldUnrecognized',
                             'name',
