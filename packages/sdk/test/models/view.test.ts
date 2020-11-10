@@ -288,7 +288,7 @@ describe('View', () => {
                         },
                     });
                 }).toThrowErrorMatchingInlineSnapshot(
-                    `"Unknown record coloring mode: [object Object]"`,
+                    `"Unknown record coloring mode type: cranberries"`,
                 );
             });
 

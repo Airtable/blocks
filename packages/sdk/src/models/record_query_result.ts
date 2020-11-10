@@ -225,6 +225,11 @@ export interface NormalizedRecordQueryResultOpts {
     recordStore: RecordStore;
 }
 
+/** @internal */
+interface UnknownColorMode {
+    type: never;
+}
+
 /**
  * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
  * contains a bunch of records, filtered to a useful subset of the records in the table. Those
@@ -422,10 +427,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
                 break;
             default:
-                // The record color mode object does not serialize to a
-                // meaningful string.
-                // TODO(jugglinmike): compute a more helpful error message
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         invariant(table.id === recordStore.tableId, 'record store and table must match');
@@ -561,7 +566,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .getRecordColor(record);
             // istanbul ignore next
             default:
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
     }
 
@@ -687,7 +695,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             }
             // istanbul ignore next
             default:
-                throw spawnError('Unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = handler;
@@ -731,7 +742,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             }
             // istanbul ignore next
             default:
-                throw spawnError('unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = null;
