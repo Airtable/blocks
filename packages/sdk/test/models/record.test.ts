@@ -32,21 +32,21 @@ describe('Record', () => {
     beforeEach(async () => {
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
             recordsById: {
-                recordA: {
-                    id: 'recordA',
+                recA: {
+                    id: 'recA',
                     cellValuesByFieldId: {
                         fldPrimary: 'Bonjour!',
-                        fldLinked1: {id: 'recordB'},
+                        fldLinked1: {id: 'recB'},
                         fldMockLookup: null,
                     },
                     commentCount: 0,
                     createdTime,
                 },
-                recordB: {
-                    id: 'recordB',
+                recB: {
+                    id: 'recB',
                     cellValuesByFieldId: {
                         fldPrimary: 'Hello!',
-                        fldLinked1: {id: 'recordC'},
+                        fldLinked1: {id: 'recC'},
                         fldMockLookup: {
                             linkedRecordIds: ['recLink1', 'recLink2', 'recLink3', 'recLink4'],
                             valuesByLinkedRecordId: {
@@ -60,11 +60,11 @@ describe('Record', () => {
                     commentCount: 0,
                     createdTime,
                 },
-                recordC: {
-                    id: 'recordC',
+                recC: {
+                    id: 'recC',
                     cellValuesByFieldId: {
                         fldPrimary: '¡Hola!',
-                        fldLinked1: {id: 'recordA'},
+                        fldLinked1: {id: 'recA'},
                         fldMockLookup: {
                             linkedRecordIds: ['recLink1', 'recLink2', 'recLink3', 'recLink4'],
                             valuesByLinkedRecordId: {
@@ -82,14 +82,14 @@ describe('Record', () => {
         });
 
         mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
-            visibleRecordIds: ['recordA', 'recordC'],
+            visibleRecordIds: ['recA', 'recC'],
             fieldOrder: {
                 fieldIds: ['fldPrimary', 'fldLinked1'],
                 visibleFieldCount: 2,
             },
             colorsByRecordId: {
-                recordA: 'purpleBright',
-                recordC: 'pinkBright',
+                recA: 'purpleBright',
+                recC: 'pinkBright',
             },
         });
 
@@ -105,22 +105,18 @@ describe('Record', () => {
         base = sdk.base;
         table = base.getTable('First Table');
         tableQueryResult = await table.selectRecordsAsync();
-        await tableQueryResult.loadDataAsync();
 
-        recordA = tableQueryResult.getRecordById('recordA');
-        recordB = tableQueryResult.getRecordById('recordB');
-        recordC = tableQueryResult.getRecordById('recordC');
+        recordA = tableQueryResult.getRecordById('recA');
+        recordB = tableQueryResult.getRecordById('recB');
+        recordC = tableQueryResult.getRecordById('recC');
 
         view = table.getViewById('viwPrjctAll');
         viewQueryResult = await view.selectRecordsAsync();
-        await viewQueryResult.loadDataAsync();
     });
 
     afterEach(() => {
         clearSdkForTest();
         mockAirtableInterface.reset();
-        tableQueryResult.unloadData();
-        viewQueryResult.unloadData();
     });
 
     describe('constructor', () => {
@@ -138,7 +134,7 @@ describe('Record', () => {
 
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'recordsById', 'recordA'],
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recA'],
                     value: undefined,
                 },
             ]);
@@ -184,7 +180,7 @@ describe('Record', () => {
 
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'recordsById', 'recordA', 'commentCount'],
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recA', 'commentCount'],
                     value: 20,
                 },
             ]);
@@ -202,14 +198,14 @@ describe('Record', () => {
             expect(recordA.createdTime.toISOString()).toBe(createdTime);
         });
         test('#id', () => {
-            expect(recordA.id).toBe('recordA');
+            expect(recordA.id).toBe('recA');
             expect(() => {
                 // @ts-ignore
                 recordA.id = 1;
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Cannot set property id of [object Object] which has only a getter"`,
             );
-            expect(recordA.id).toBe('recordA');
+            expect(recordA.id).toBe('recA');
         });
         test('#isDeleted', () => {
             expect(recordA.isDeleted).toBe(false);
@@ -223,7 +219,7 @@ describe('Record', () => {
 
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'recordsById', 'recordA'],
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recA'],
                     value: undefined,
                 },
             ]);
@@ -241,14 +237,14 @@ describe('Record', () => {
             expect(recordA.name).toBe('');
         });
         test('#url', () => {
-            expect(recordA.url).toBe('https://airtable.test/tblFirst/recordA');
+            expect(recordA.url).toBe('https://airtable.test/tblFirst/recA');
             expect(() => {
                 // @ts-ignore
                 recordA.url = 1;
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Cannot set property url of [object Object] which has only a getter"`,
             );
-            expect(recordA.url).toBe('https://airtable.test/tblFirst/recordA');
+            expect(recordA.url).toBe('https://airtable.test/tblFirst/recA');
         });
     });
 
@@ -258,9 +254,9 @@ describe('Record', () => {
                 expect(recordA.getCellValue(table.fields[0])).toBe('Bonjour!');
                 expect(recordB.getCellValue(table.fields[0])).toBe('Hello!');
                 expect(recordC.getCellValue(table.fields[0])).toBe('¡Hola!');
-                expect(recordA.getCellValue(table.fields[1])).toMatchObject({id: 'recordB'});
-                expect(recordB.getCellValue(table.fields[1])).toMatchObject({id: 'recordC'});
-                expect(recordC.getCellValue(table.fields[1])).toMatchObject({id: 'recordA'});
+                expect(recordA.getCellValue(table.fields[1])).toMatchObject({id: 'recB'});
+                expect(recordB.getCellValue(table.fields[1])).toMatchObject({id: 'recC'});
+                expect(recordC.getCellValue(table.fields[1])).toMatchObject({id: 'recA'});
                 expect(recordA.getCellValue(table.fields[2])).toBe(null);
                 expect(recordB.getCellValue(table.fields[2])).toMatchInlineSnapshot(`
                     Array [
@@ -334,9 +330,9 @@ describe('Record', () => {
                 expect(recordA.getCellValue(fldPrimary)).toBe('Bonjour!');
                 expect(recordB.getCellValue(fldPrimary)).toBe('Hello!');
                 expect(recordC.getCellValue(fldPrimary)).toBe('¡Hola!');
-                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recordB'});
-                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recordC'});
-                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recordA'});
+                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recB'});
+                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recC'});
+                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recA'});
                 expect(recordA.getCellValue(fldMockLookup)).toBe(null);
                 expect(recordB.getCellValue(fldMockLookup)).toMatchInlineSnapshot(`
                     Array [
@@ -410,9 +406,9 @@ describe('Record', () => {
                 expect(recordA.getCellValue(fldPrimary)).toBe('Bonjour!');
                 expect(recordB.getCellValue(fldPrimary)).toBe('Hello!');
                 expect(recordC.getCellValue(fldPrimary)).toBe('¡Hola!');
-                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recordB'});
-                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recordC'});
-                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recordA'});
+                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recB'});
+                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recC'});
+                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recA'});
                 expect(recordA.getCellValue(fldMockLookup)).toBe(null);
                 expect(recordB.getCellValue(fldMockLookup)).toMatchInlineSnapshot(`
                     Array [
@@ -584,7 +580,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                         ],
                         value: undefined,
@@ -601,7 +597,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                             'fldPrimary',
                         ],
@@ -618,7 +614,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                         ],
                         value: null,
@@ -635,7 +631,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                             'fldPrimary',
                         ],
@@ -833,7 +829,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                         ],
                         value: undefined,
@@ -849,7 +845,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                             'fldPrimary',
                         ],
@@ -866,7 +862,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                         ],
                         value: null,
@@ -883,7 +879,7 @@ describe('Record', () => {
                             'tablesById',
                             'tblFirst',
                             'recordsById',
-                            'recordA',
+                            'recA',
                             'cellValuesByFieldId',
                             'fldPrimary',
                         ],
@@ -917,24 +913,24 @@ describe('Record', () => {
 
         describe('#getColorInView()', () => {
             test('#getColorInView(viewOrViewIdOrViewName), View', async () => {
-                recordA = viewQueryResult.getRecordById('recordA');
-                recordC = viewQueryResult.getRecordById('recordC');
+                recordA = viewQueryResult.getRecordById('recA');
+                recordC = viewQueryResult.getRecordById('recC');
 
                 expect(recordA.getColorInView(view)).toBe('purpleBright');
                 expect(recordC.getColorInView(view)).toBe('pinkBright');
             });
 
             test('#getColorInView(viewOrViewIdOrViewName), ViewId', async () => {
-                recordA = viewQueryResult.getRecordById('recordA');
-                recordC = viewQueryResult.getRecordById('recordC');
+                recordA = viewQueryResult.getRecordById('recA');
+                recordC = viewQueryResult.getRecordById('recC');
 
                 expect(recordA.getColorInView(view.id)).toBe('purpleBright');
                 expect(recordC.getColorInView(view.id)).toBe('pinkBright');
             });
 
             test('#getColorInView(viewOrViewIdOrViewName), View Name', async () => {
-                recordA = viewQueryResult.getRecordById('recordA');
-                recordC = viewQueryResult.getRecordById('recordC');
+                recordA = viewQueryResult.getRecordById('recA');
+                recordC = viewQueryResult.getRecordById('recC');
 
                 expect(recordA.getColorInView(view.name)).toBe('purpleBright');
                 expect(recordC.getColorInView(view.name)).toBe('pinkBright');
@@ -953,7 +949,7 @@ describe('Record', () => {
 
             test('reports error when provided view is in another table', () => {
                 const otherTable = base.getTable('Second Table');
-                recordA = viewQueryResult.getRecordById('recordA');
+                recordA = viewQueryResult.getRecordById('recA');
 
                 expect(() => {
                     recordA.getColorInView(otherTable.views[0]);
@@ -963,7 +959,7 @@ describe('Record', () => {
             });
 
             test('reports error when specified view does not exist', () => {
-                recordA = viewQueryResult.getRecordById('recordA');
+                recordA = viewQueryResult.getRecordById('recA');
 
                 expect(() => {
                     recordA.getColorInView('non existent view');
@@ -973,7 +969,7 @@ describe('Record', () => {
             });
 
             test('reports error when specified view has been deleted', () => {
-                recordA = viewQueryResult.getRecordById('recordA');
+                recordA = viewQueryResult.getRecordById('recA');
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tablesById', 'tblFirst', 'viewsById', view.id],
@@ -989,8 +985,8 @@ describe('Record', () => {
 
         describe('#getColorHexInView()', () => {
             beforeEach(() => {
-                recordA = viewQueryResult.getRecordById('recordA');
-                recordC = viewQueryResult.getRecordById('recordC');
+                recordA = viewQueryResult.getRecordById('recA');
+                recordC = viewQueryResult.getRecordById('recC');
             });
 
             test('#getColorHexInView(viewOrViewIdOrViewName), View', async () => {
@@ -1150,12 +1146,12 @@ describe('Record', () => {
 
         describe('#toString()', () => {
             test('returns a debugging string', async () => {
-                expect(recordA.toString()).toMatchInlineSnapshot(`"[Record recordA]"`);
+                expect(recordA.toString()).toMatchInlineSnapshot(`"[Record recA]"`);
             });
         });
 
         describe('#watch()', () => {
-            const recordPath = ['tablesById', 'tblFirst', 'recordsById', 'recordA'];
+            const recordPath = ['tablesById', 'tblFirst', 'recordsById', 'recA'];
             const viewPath = [
                 'tablesById',
                 'tblFirst',
@@ -1189,7 +1185,7 @@ describe('Record', () => {
                     expect(fn).toHaveBeenCalledTimes(0);
 
                     trigger(
-                        'recordA',
+                        'recA',
                         [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
                         'Something else',
                     );
@@ -1204,7 +1200,7 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                     expect(fn).toHaveBeenCalledWith(
@@ -1220,7 +1216,7 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...viewPath, 'recordA'], 'pinkBright');
+                    trigger('recA', [...viewPath, 'recA'], 'pinkBright');
 
                     expect(fn).toHaveBeenCalledTimes(1);
                     expect(fn).toHaveBeenCalledWith(recordA, `colorInView:${view.id}`);
@@ -1232,7 +1228,7 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...recordPath, 'commentCount'], 2);
+                    trigger('recA', [...recordPath, 'commentCount'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                     expect(fn).toHaveBeenCalledWith(recordA, 'commentCount');
@@ -1241,7 +1237,7 @@ describe('Record', () => {
         });
 
         describe('#unwatch()', () => {
-            const recordPath = ['tablesById', 'tblFirst', 'recordsById', 'recordA'];
+            const recordPath = ['tablesById', 'tblFirst', 'recordsById', 'recA'];
             const viewPath = [
                 'tablesById',
                 'tblFirst',
@@ -1267,7 +1263,7 @@ describe('Record', () => {
                     expect(fn).toHaveBeenCalledTimes(0);
 
                     trigger(
-                        'recordA',
+                        'recA',
                         [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
                         'Something else',
                     );
@@ -1277,7 +1273,7 @@ describe('Record', () => {
                     recordA.unwatch('cellValues', fn);
 
                     trigger(
-                        'recordA',
+                        'recA',
                         [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
                         'Something else',
                     );
@@ -1291,13 +1287,13 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
 
                     recordA.unwatch('cellValueInField:fldPrimary', fn);
 
-                    trigger('recordA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 3);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 3);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                 });
@@ -1308,13 +1304,13 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...viewPath, 'recordA'], 'pinkBright');
+                    trigger('recA', [...viewPath, 'recA'], 'pinkBright');
 
                     expect(fn).toHaveBeenCalledTimes(1);
 
                     recordA.unwatch(`colorInView:${view.id}`, fn);
 
-                    trigger('recordA', [...viewPath, 'recordA'], 'pinkBright');
+                    trigger('recA', [...viewPath, 'recA'], 'pinkBright');
 
                     expect(fn).toHaveBeenCalledTimes(1);
                 });
@@ -1325,13 +1321,13 @@ describe('Record', () => {
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recordA', [...recordPath, 'commentCount'], 2);
+                    trigger('recA', [...recordPath, 'commentCount'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
 
                     recordA.unwatch('commentCount', fn);
 
-                    trigger('recordA', [...recordPath, 'commentCount'], 3);
+                    trigger('recA', [...recordPath, 'commentCount'], 3);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                 });
