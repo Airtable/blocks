@@ -1849,7 +1849,7 @@ describe('Table', () => {
             deleteTable('tblDesignProjects');
 
             await expect(table.selectRecordsAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
-                `"model (tblDesignProjects-RecordStore) permanently deleted"`,
+                `"RecordQueryResult's underlying table has been deleted"`,
             );
         });
 

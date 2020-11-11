@@ -401,6 +401,19 @@ describe('View', () => {
                 expect(queryResult.records[1].getColorInView(view)).toBe(null);
                 expect(queryResult.records[2].getColorInView(view)).toBe(null);
             });
+
+            test('rejects when table has been deleted', async () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblFirst'],
+                        value: undefined,
+                    },
+                ]);
+
+                await expect(table.selectRecordsAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"RecordQueryResult's underlying table has been deleted"`,
+                );
+            });
         });
 
         describe('#toString()', () => {

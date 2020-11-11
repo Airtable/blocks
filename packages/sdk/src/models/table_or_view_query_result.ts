@@ -351,6 +351,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         let sourceModelLoadPromise;
         let cellValuesInFieldsLoadPromise;
 
+        if (this._sourceModel.isDeleted) {
+            throw this._spawnErrorForDeletion();
+        }
+
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
             cellValuesInFieldsLoadPromise = this._recordStore.loadCellValuesInFieldIdsAsync(
                 Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields),
