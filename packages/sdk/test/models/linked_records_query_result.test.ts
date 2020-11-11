@@ -470,6 +470,19 @@ describe('LinkedRecordQueryResult', () => {
 
             linked.unloadData();
         });
+
+        it('tolerates unnecessary invocations', async () => {
+            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+            try {
+                expect(() => linked.unloadData()).not.toThrow();
+            } finally {
+                warnSpy.mockRestore();
+            }
+
+            await linked.loadDataAsync();
+        });
     });
 
     describe('#unwatch', () => {

@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
@@ -116,11 +115,13 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         return this._isDataLoaded;
     }
     /** @internal */
+    // istanbul ignore next
     _onChangeIsDataLoaded() {
         // Override this to get notified of changes to .isDataLoaded e.g to fire watch keys
         throw spawnAbstractMethodError();
     }
     /** @internal */
+    // istanbul ignore next
     async _loadDataAsync(): Promise<Array<WatchableKey>> {
         // Override this to fetch the data.
         // It should return an array of watchable keys that changed
@@ -128,6 +129,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         throw spawnAbstractMethodError();
     }
     /** @internal */
+    // istanbul ignore next
     _unloadData() {
         // Override this to unload the data.
         throw spawnAbstractMethodError();

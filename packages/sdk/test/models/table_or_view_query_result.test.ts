@@ -814,6 +814,19 @@ describe('TableOrViewQueryResult', () => {
                 await waitForWatchKeyAsync(result, 'isDataLoaded');
             });
 
+            it('tolerates unnecessary invocations', async () => {
+                const result = base.tables[0].selectRecords();
+                const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+                try {
+                    expect(() => result.unloadData()).not.toThrow();
+                } finally {
+                    warnSpy.mockRestore();
+                }
+
+                await result.loadDataAsync();
+            });
+
             describe('unsubscribing from cell values in fields', () => {
                 const whenUnsubscribed = () => {
                     return new Promise(resolve => {
@@ -874,6 +887,19 @@ describe('TableOrViewQueryResult', () => {
                 expect(() => result.records).toThrowErrorMatchingInlineSnapshot(
                     `"RecordQueryResult data is not loaded"`,
                 );
+            });
+
+            it('tolerates unnecessary invocations', async () => {
+                const result = base.tables[1].views[0].selectRecords();
+                const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+                try {
+                    expect(() => result.unloadData()).not.toThrow();
+                } finally {
+                    warnSpy.mockRestore();
+                }
+
+                await result.loadDataAsync();
             });
         });
     });
