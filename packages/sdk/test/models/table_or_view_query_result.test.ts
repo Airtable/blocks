@@ -706,6 +706,26 @@ describe('TableOrViewQueryResult', () => {
                 changeVisibleRecords(['recF']);
                 expect(result.hasRecord('recE')).toBe(false);
             });
+
+            it('gracefully handles when record color updates arrive before view data', () => {
+                const result = base.tables[1].views[0].selectRecords();
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            base.tables[1].id,
+                            'viewsById',
+                            base.tables[1].views[0].id,
+                            'colorsByRecordId',
+                            'recD',
+                        ],
+                        value: 'pinkBright',
+                    },
+                ]);
+
+                return result.loadDataAsync();
+            });
         });
     });
 

@@ -385,6 +385,22 @@ describe('View', () => {
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recC');
             });
+
+            test('partial data provided by AirtableInterface', async () => {
+                mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
+                    visibleRecordIds: ['recA', 'recB', 'recC'],
+                    fieldOrder: {
+                        fieldIds: ['fldPrimary', 'fldLinked1'],
+                        visibleFieldCount: 2,
+                    },
+                    colorsByRecordId: null,
+                });
+                const queryResult = await view.selectRecordsAsync();
+
+                expect(queryResult.records[0].getColorInView(view)).toBe(null);
+                expect(queryResult.records[1].getColorInView(view)).toBe(null);
+                expect(queryResult.records[2].getColorInView(view)).toBe(null);
+            });
         });
 
         describe('#toString()', () => {
