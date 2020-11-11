@@ -519,39 +519,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             // For a view model, we don't get updates sent with the onChange event,
             // so we need to manually generate updates based on the old and new
             // recordIds.
-            // The `else` branch is unreachable because the `_orderedRecordIds`
-            // property is set prior to the registration of this event handler,
-            // and it is only unset when this event handler is unregistered.
-            // TODO(jugglinmike): execute the body of the `if` statement
-            // unconditionally
-            // istanbul ignore else
-            if (this._orderedRecordIds) {
-                const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
-                    .visibleRecordIds;
-                const addedRecordIds = arrayDifference(
-                    visibleRecordIds,
-                    // This branch of the surrounding `if` statement is only
-                    // executed when the `_orderedRecordIds` instance property
-                    // is a truthy value. This makes the following "logical or"
-                    // expression superfluous.
-                    // TODO(jugglinmike): simplify the following expression
-                    // istanbul ignore next
-                    this._orderedRecordIds || [],
-                );
-                const removedRecordIds = arrayDifference(
-                    // This branch of the surrounding `if` statement is only
-                    // executed when the `_orderedRecordIds` instance property
-                    // is a truthy value. This makes the following "logical or"
-                    // expression superfluous.
-                    // TODO(jugglinmike): simplify the following expression
-                    // istanbul ignore next
-                    this._orderedRecordIds || [],
-                    visibleRecordIds,
-                );
-                updates = {addedRecordIds, removedRecordIds};
-            } else {
-                updates = null;
-            }
+            invariant(this._orderedRecordIds, '_orderedRecordIds unset');
+            const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
+                .visibleRecordIds;
+            const addedRecordIds = arrayDifference(visibleRecordIds, this._orderedRecordIds);
+            const removedRecordIds = arrayDifference(this._orderedRecordIds, visibleRecordIds);
+            updates = {addedRecordIds, removedRecordIds};
         }
 
         if (!updates) {
@@ -610,15 +583,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         const visList = this._visList;
         invariant(visList, 'No vis list');
 
-        // The following branch is unreachable because when the current event
-        // is created by the RecordStore model, the `fieldId` value cannot be
-        // set without a corresponding record ID.
-        // TODO(jugglinmike): remove the following branch
-        // istanbul ignore next
-        if (recordIds.length === 0) {
-            // Nothing actually changed, so just break out early.
-            return;
-        }
+        invariant(recordIds.length > 0, 'field ID set without a corresponding record ID');
 
         // Only move recordIds that are already in the visList.
         // It's possible to have recordId that is not currently in the visList since
@@ -685,11 +650,6 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             );
         }
 
-        // This branch is not reachable until the bug described above is
-        // corrected.
-        // TODO(jugglinmike): correct the bug and include this branch in code
-        // coverage analysis
-        // istanbul ignore if
         if (wereAnyFieldsCreatedOrDeleted) {
             // One of the fields we're relying on was deleted,
             this._replaceVisList();
