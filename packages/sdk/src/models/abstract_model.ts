@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {invariant, spawnError} from '../error_utils';
 import {BaseData} from '../types/base';
@@ -14,7 +13,15 @@ abstract class AbstractModel<DataType, WatchableKey extends string> extends Watc
 > {
     /** @internal */
     static _className = 'AbstractModel';
-    /** @internal */
+    /**
+     * This method is essentially abstract, but as of this writing, TypeScript
+     * does not support abstract static methods. This necessitates a concrete
+     * implementation which must be explicitly ignored by the test coverage
+     * tooling.
+     *
+     * @internal
+     */
+    // istanbul ignore next
     static _isWatchableKey(key: string): boolean {
         // Override to return whether `key` is a valid watchable key.
         return false;
