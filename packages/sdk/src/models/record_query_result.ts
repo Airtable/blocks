@@ -334,11 +334,7 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
     static _normalizeOpts(
         table: Table,
         recordStore: RecordStore,
-        // Every one of this method's three call sites force a value to be set
-        // for the `opts` parameter.
-        // TODO(jugglinmike): remove the default parameter value
-        // istanbul ignore next
-        opts: RecordQueryResultOpts = {},
+        opts: RecordQueryResultOpts,
     ): NormalizedRecordQueryResultOpts {
         const sorts = !opts.sorts
             ? null
@@ -632,16 +628,12 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
      * @internal
      */
     _watchRecordColorsIfNeeded() {
-        // This method is only invoked when the `watch` method has been
-        // called for the "recordColors" key. Due to this, the associated
-        // entry in the `_changeWatchersByKey` object will always be a
-        // truthy value, making the following logical "or" expression
-        // superfluous.
-        // TODO(jugglinmike): remove the logical "or" expression
-        // istanbul ignore next
-        const watchCount = (
-            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
-        ).length;
+        invariant(
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors],
+            'method may only be called when `recordColors` key has been watched',
+        );
+        const watchCount = this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors]
+            .length;
         if (!this._recordColorChangeHandler && watchCount >= 1) {
             this._watchRecordColors();
         }
