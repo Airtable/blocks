@@ -975,24 +975,42 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: cellValuesInField:{FIELD_ID}', () => {
-            // This test cannot currently pass due to a violated "invariant" in
-            // the source.
-            //
-            // TODO(jugglinmike): update the source and enable this test
-            it.skip('triggers loading', async () => {
+            it('triggers loading', async () => {
                 const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
-                await waitForWatchKeyAsync(linked2, 'cellValuesInField:fld2ndPrimary');
+                const result = await new Promise(resolve => {
+                    linked2.watch(
+                        'cellValuesInField:fld2ndPrimary',
+                        (...args: [LinkedRecordsQueryResult, string]) => resolve(args),
+                    );
+                });
 
                 expect(linked2.isDataLoaded).toBe(true);
+                expect(result).toEqual([linked2, 'cellValuesInField:fld2ndPrimary']);
             });
 
-            it('triggered by initial record loading', async () => {
+            it('all fields triggered by initial record loading', async () => {
                 const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
-                const spy = jest.fn();
-                linked2.watch('cellValuesInField:fld2ndPrimary', spy);
+                const isDataLoadeds: Array<boolean> = [];
+                const trackLoaded = () => {
+                    isDataLoadeds.push(linked2.isDataLoaded);
+                };
+
+                const spies: {[key: string]: jest.Mock} = {
+                    fld2ndPrimary: jest.fn().mockImplementation(trackLoaded),
+                    fld2ndSecondary: jest.fn().mockImplementation(trackLoaded),
+                    fld2ndLinked: jest.fn().mockImplementation(trackLoaded),
+                };
+                linked2.watch('cellValuesInField:fld2ndPrimary', spies.fld2ndPrimary);
+                linked2.watch('cellValuesInField:fld2ndSecondary', spies.fld2ndSecondary);
+                linked2.watch('cellValuesInField:fld2ndLinked', spies.fld2ndLinked);
+
                 await linked2.loadDataAsync();
-                expect(spy).toHaveBeenCalledTimes(1);
+
+                expect(spies.fld2ndPrimary).toHaveBeenCalledTimes(1);
+                expect(spies.fld2ndSecondary).toHaveBeenCalledTimes(1);
+                expect(spies.fld2ndLinked).toHaveBeenCalledTimes(1);
+                expect(isDataLoadeds).toEqual([true, true, true]);
             });
 
             it('referenced field', () => {
@@ -1016,6 +1034,11 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.recordColors).toHaveBeenCalledTimes(0);
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(1);
+                expect(mocks.cellValuesInField).toHaveBeenCalledWith(
+                    linked,
+                    'cellValuesInField:fld2ndSecondary',
+                    ['recB'],
+                );
             });
 
             it('unreferenced field', () => {

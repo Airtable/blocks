@@ -236,7 +236,16 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         this._invalidateComputedData();
 
-        return ['records', 'recordIds'];
+        const changedKeys = ['records', 'recordIds'];
+        const fieldIds =
+            this._normalizedOpts.fieldIdsOrNullIfAllFields ||
+            this.parentTable.fields.map(field => field.id);
+
+        for (const fieldId of fieldIds) {
+            changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
+        }
+
+        return changedKeys;
     }
 
     /** @internal */
@@ -453,6 +462,22 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
             ) => {
                 invariant(this.isValid, 'watch key change event whilst invalid');
 
+                // The linked record may finish loading before its parent. In
+                // that case, the appropriate events will be triggered by the
+                // `_loadDataAsync` method.
+                if (!this.isDataLoaded) {
+                    return;
+                }
+
+                // The `else` branch will only be reached when the underlying
+                // `RecordOrViewQueryResult` is loaded, unloaded, and then
+                // loaded again. Because that query result is not directly
+                // exposed to consumers, the condition can only be met when the
+                // SDK is misused (e.g. repeatedly freeing related query
+                // results). The `else` branch attempts to handle that
+                // situation in a logical way, but it is not tested because it
+                // is fundamentally invalid.
+                // istanbul ignore else
                 if (Array.isArray(recordIds)) {
                     const recordIdsSet = this._getOrGenerateRecordIdsSet();
                     const filteredRecordIds = recordIds.filter(

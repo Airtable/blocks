@@ -1677,6 +1677,27 @@ describe('TableOrViewQueryResult', () => {
                 mockRecordData('tblTasks', false);
             });
 
+            it('all fields triggered by initial record loading', async () => {
+                const result = base.tables[2].selectRecords();
+                const spies: {[key: string]: jest.Mock} = {
+                    fldClientName: jest.fn(),
+                    fldClientAbout: jest.fn(),
+                    fldClientLogo: jest.fn(),
+                    fldClientProjects: jest.fn(),
+                };
+                result.watch('cellValuesInField:fldClientName', spies.fldClientName);
+                result.watch('cellValuesInField:fldClientAbout', spies.fldClientAbout);
+                result.watch('cellValuesInField:fldClientLogo', spies.fldClientLogo);
+                result.watch('cellValuesInField:fldClientProjects', spies.fldClientProjects);
+
+                await result.loadDataAsync();
+
+                expect(spies.fldClientName).toHaveBeenCalledTimes(1);
+                expect(spies.fldClientAbout).toHaveBeenCalledTimes(1);
+                expect(spies.fldClientLogo).toHaveBeenCalledTimes(1);
+                expect(spies.fldClientProjects).toHaveBeenCalledTimes(1);
+            });
+
             it('notified for changes to specified field', async () => {
                 const result = await base.tables[1].selectRecordsAsync();
                 const spy = jest.fn();
