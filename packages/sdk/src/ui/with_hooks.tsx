@@ -145,6 +145,8 @@ export default function withHooks<InjectedProps, Props extends InjectedProps, In
             };
         }, [injectedRef, forwardedRef]);
 
-        return <Component ref={mergedRef} {...(props as any)} {...propsToInject} />;
+        // It's important that the ref prop comes at the end, so it overrides
+        // any 'ref's in props or propsToInject.
+        return <Component {...(props as any)} {...propsToInject} ref={mergedRef} />;
     }) as any;
 }
