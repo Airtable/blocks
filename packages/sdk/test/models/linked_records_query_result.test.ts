@@ -1,21 +1,22 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import Sdk from '../../src/sdk';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import {__reset, __sdk as sdk} from '../../src';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';
 import LinkedRecordsQueryResult from '../../src/models/linked_records_query_result';
 import {simulateTimersAndClearAfterEachTest, waitForWatchKeyAsync} from '../test_helpers';
 
-const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+        }
         return mockAirtableInterface;
     },
 }));
 
 describe('LinkedRecordQueryResult', () => {
-    let sdk: Sdk;
     let query: RecordQueryResult;
     let record: Record;
 
@@ -48,7 +49,6 @@ describe('LinkedRecordQueryResult', () => {
             selectedRecordIdSet: {},
             selectedFieldIdSet: {},
         });
-        sdk = getSdk();
         query = await sdk.base.tables[0].selectRecordsAsync();
         record = query.getRecordById('recA');
 
@@ -67,7 +67,7 @@ describe('LinkedRecordQueryResult', () => {
     afterEach(() => {
         query.unloadData();
         mockAirtableInterface.reset();
-        clearSdkForTest();
+        __reset();
     });
 
     describe('caching', () => {

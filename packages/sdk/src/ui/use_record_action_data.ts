@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: useRecordActionData */ /** */
-import getSdk from '../get_sdk';
 import {RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
 import {useLoadable, useWatchable} from './ui';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook to watch "open app" / "perform record action" events (from button field). Returns
@@ -56,7 +56,7 @@ import {useLoadable, useWatchable} from './ui';
  */
 
 export default function useRecordActionData(): RecordActionData | null {
-    const {performRecordAction} = getSdk();
+    const {performRecordAction} = useSdk();
 
     // Puts the block in suspense until the liveapp handler has been registered.
     useLoadable(performRecordAction);

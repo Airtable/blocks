@@ -1,17 +1,21 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import {ViewType} from '../../src/types/view';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
-import BlockSdk from '../../src/sdk';
+import {__reset, __sdk as sdk} from '../../src';
 import AbstractModel from '../../src/models/abstract_model';
 import Base from '../../src/models/base';
 import * as RecordColoring from '../../src/models/record_coloring';
 import Table from '../../src/models/table';
 import View from '../../src/models/view';
 
-const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
-    default: () => mockAirtableInterface,
+    default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+        }
+        return mockAirtableInterface;
+    },
 }));
 
 const recordsById = {
@@ -65,7 +69,6 @@ const deleteView = () => {
 };
 
 describe('View', () => {
-    let sdk: BlockSdk;
     let base: Base;
     let table: Table;
     let view: View;
@@ -96,15 +99,14 @@ describe('View', () => {
             selectedFieldIdSet: {},
         });
 
-        sdk = getSdk();
         base = sdk.base;
         table = base.getTable('First Table');
         view = table.getViewById('viwPrjctAll');
     });
 
     afterEach(() => {
-        clearSdkForTest();
         mockAirtableInterface.reset();
+        __reset();
     });
 
     describe('constructor', () => {

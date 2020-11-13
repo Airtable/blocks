@@ -2,8 +2,8 @@
 import * as React from 'react';
 import {isEnumValue, ObjectValues} from '../private_utils';
 import Watchable from '../watchable';
-import getSdk from '../get_sdk';
 import {baymax} from './baymax_utils';
+import {useSdk} from './sdk_context';
 
 const WatchableGlobalAlertKeys = Object.freeze({
     __alertInfo: '__alertInfo' as const,
@@ -15,6 +15,23 @@ type WatchableGlobalAlertKey = ObjectValues<typeof WatchableGlobalAlertKeys>;
 interface AlertInfo {
     content: React.ReactElement;
 }
+
+const GlobalAlertInfo = () => {
+    const sdk = useSdk();
+
+    return (
+        <span className={baymax('center line-height-4 quiet strong')}>
+            <span
+                className={baymax('pointer understroke link-unquiet')}
+                onClick={() => {
+                    sdk.reload();
+                }}
+            >
+                Please reload
+            </span>
+        </span>
+    );
+};
 
 /**
  * @hidden
@@ -46,18 +63,7 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     /** */
     showReloadPrompt() {
         this._alertInfo = {
-            content: (
-                <span className={baymax('center line-height-4 quiet strong')}>
-                    <span
-                        className={baymax('pointer understroke link-unquiet')}
-                        onClick={() => {
-                            getSdk().reload();
-                        }}
-                    >
-                        Please reload
-                    </span>
-                </span>
-            ),
+            content: <GlobalAlertInfo />,
         };
         this._onChange(WatchableGlobalAlertKeys.__alertInfo);
     }

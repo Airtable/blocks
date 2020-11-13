@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {FieldId} from '../types/field';
 import {
     has,
@@ -83,8 +83,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     _cellValueKeyWatchCounts: {[key: string]: number};
     /** @internal */
-    constructor(sourceModel: Table | View, normalizedOpts: NormalizedRecordQueryResultOpts) {
-        super(normalizedOpts, sourceModel.__baseData);
+    constructor(
+        sdk: Sdk,
+        sourceModel: Table | View,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
+    ) {
+        super(sdk, normalizedOpts);
 
         this._sourceModel = sourceModel;
         this._mostRecentSourceModelLoadPromise = null;
@@ -703,7 +707,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     _replaceVisList() {
         const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const appInterface = this._sdk.__appInterface;
 
         const recordDatas = this._sourceModelRecords.map(record => record._data);
         const fieldDatas = this._table.fields.map(field => field._data);

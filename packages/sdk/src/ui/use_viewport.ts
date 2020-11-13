@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useViewport */ /** */
-import getSdk from '../get_sdk';
 import Viewport from '../viewport';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Returns the current {@link Viewport} object and updates whenever the viewport size, constraints,
@@ -35,7 +35,7 @@ import useWatchable from './use_watchable';
  * @hook
  */
 export default function useViewport(): Viewport {
-    const viewport = getSdk().viewport;
+    const viewport = useSdk().viewport;
     useWatchable(viewport, ['isFullscreen', 'size', 'minSize', 'maxFullscreenSize']);
     return viewport;
 }

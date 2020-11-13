@@ -1,6 +1,5 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
-import BlockSdk from '../../src/sdk';
+import Sdk from '../../src/sdk';
 import AbstractModel from '../../src/models/abstract_model';
 import Base from '../../src/models/base';
 import Field from '../../src/models/field';
@@ -17,7 +16,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 }));
 
 describe('Record', () => {
-    let sdk: BlockSdk;
+    let sdk: Sdk;
     let base: Base;
     let table: Table;
     let tableQueryResult: RecordQueryResult;
@@ -101,7 +100,7 @@ describe('Record', () => {
             selectedFieldIdSet: {},
         });
 
-        sdk = getSdk();
+        sdk = new Sdk(mockAirtableInterface);
         base = sdk.base;
         table = base.getTable('First Table');
         tableQueryResult = await table.selectRecordsAsync();
@@ -115,7 +114,6 @@ describe('Record', () => {
     });
 
     afterEach(() => {
-        clearSdkForTest();
         mockAirtableInterface.reset();
     });
 

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import getSdk from '../get_sdk';
 import getAirtableInterface from '../injected/airtable_interface';
 import {isNullOrUndefinedOrEmpty, keyBy, uniqBy, FlowAnyObject, has} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
@@ -15,6 +14,7 @@ import Record from '../models/record';
 import View from '../models/view';
 import ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import colorUtils from '../color_utils';
+import Sdk from '../sdk';
 import {baymax} from './baymax_utils';
 import expandRecord, {ExpandRecordOpts} from './expand_record';
 import Box from './box';
@@ -37,6 +37,7 @@ import {
 } from './system';
 import {splitStyleProps} from './with_styled_system';
 import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
+import {useSdk} from './sdk_context';
 
 // Mirrored from client_server_shared_config_settings
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
@@ -162,6 +163,8 @@ interface RecordCardProps extends RecordCardStyleProps {
     viewMetadata: ViewMetadataQueryResult | null;
     /** Render function if provided and validation fails. */
     renderInvalidCellValue?: (cellValue: unknown, field: Field) => React.ReactElement;
+    /** @internal injected by withHooks */
+    sdk: Sdk;
 }
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
@@ -401,7 +404,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
             // TODO(emma): actually check this somehow.
             if (!field.isComputed) {
                 const airtableInterface = getAirtableInterface();
-                const appInterface = getSdk().__appInterface;
+                const appInterface = this.props.sdk.__appInterface;
 
                 const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                     appInterface,
@@ -462,7 +465,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         const widthAndFieldIdArray = [];
         let runningWidth = 0;
         const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const appInterface = this.props.sdk.__appInterface;
 
         for (const field of fieldsToUse) {
             const uiConfig = airtableInterface.fieldTypeProvider.getUiConfig(
@@ -680,12 +683,12 @@ export class RecordCard extends React.Component<RecordCardProps> {
 }
 
 export default withHooks<
-    {viewMetadata: ViewMetadataQueryResult | null},
+    {viewMetadata: ViewMetadataQueryResult | null; sdk: Sdk},
     RecordCardProps,
     RecordCard
 >(RecordCard, props => {
     const {styleProps, nonStyleProps} = splitStyleProps<
-        Omit<RecordCardProps, 'viewMetadata'>,
+        Omit<RecordCardProps, 'viewMetadata' | 'sdk'>,
         RecordCardStyleProps
     >(props, styleParser.propNames);
 
@@ -708,9 +711,11 @@ export default withHooks<
 
     // if a view is supplied, we need to load the field order to use it for rendering the card
     const viewMetadata = useViewMetadata(view);
+    const sdk = useSdk();
 
     return {
         viewMetadata,
         className: cx(classNameForStyledProps, className),
+        sdk,
     };
 });

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {FieldId} from '../types/field';
 import {invariant} from '../error_utils';
 import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../private_utils';
@@ -76,8 +76,8 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     readonly _viewDataStore: ViewDataStore;
 
     /** @internal */
-    constructor(baseData: BaseData, parentView: View, viewDataStore: ViewDataStore) {
-        super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
+    constructor(sdk: Sdk, parentView: View, viewDataStore: ViewDataStore) {
+        super(sdk, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;
         this._viewDataStore = viewDataStore;
     }

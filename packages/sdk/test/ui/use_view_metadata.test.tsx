@@ -4,7 +4,7 @@ import {act} from 'react-dom/test-utils';
 import useViewMetadata from '../../src/ui/use_view_metadata';
 
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
+import Sdk from '../../src/sdk';
 import ViewMetadataQueryResult from '../../src/models/view_metadata_query_result';
 import Table from '../../src/models/table';
 
@@ -18,8 +18,7 @@ describe('useViewMetadata', () => {
     let table: Table;
     beforeEach(() => {
         mockAirtableInterface.reset();
-        let base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
-        table = base.getTableByName('Design projects');
+        table = new Sdk(mockAirtableInterface).base.getTableByName('Design projects');
     });
 
     it('eventually returns metadata', async () => {

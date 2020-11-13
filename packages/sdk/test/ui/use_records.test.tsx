@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 import {useRecords} from '../../src/ui/use_records';
 
-import getSdk from '../../src/get_sdk';
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
+import Sdk from '../../src/sdk';
 import Record from '../../src/models/record';
 import Table from '../../src/models/table';
 import {TableId} from '../../src/types/table';
@@ -17,6 +16,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 }));
 
 describe('useRecords', () => {
+    let sdk: Sdk;
     let table: Table;
     const createdTime = new Date().toString();
     const recordsById = {
@@ -33,8 +33,8 @@ describe('useRecords', () => {
 
     beforeEach(() => {
         mockAirtableInterface.reset();
-        let base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
-        table = base.getTableByName('First Table');
+        sdk = new Sdk(mockAirtableInterface);
+        table = sdk.base.getTableByName('First Table');
     });
 
     it('eventually returns all records from a table', async () => {
@@ -112,7 +112,6 @@ describe('useRecords', () => {
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(impl);
         mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockImplementation(impl);
 
-        const sdk = getSdk();
         const query = await sdk.base.tables[0].selectRecordsAsync();
         const record = query.getRecordById('recA');
 

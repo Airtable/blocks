@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
@@ -73,8 +73,13 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     } = {};
 
     /** @internal */
-    constructor(record: Record, field: Field, normalizedOpts: NormalizedRecordQueryResultOpts) {
-        super(normalizedOpts, record.parentTable.__baseData);
+    constructor(
+        record: Record,
+        field: Field,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
+        sdk: Sdk,
+    ) {
+        super(sdk, normalizedOpts);
 
         invariant(
             record.parentTable === field.parentTable,
@@ -91,6 +96,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         // to make sure we unwatch everything from the old RecordQueryResult if e.g.
         // the field config changes to point at a different table
         this._linkedQueryResult = this._linkedTable.__tableOrViewQueryResultPool.getObjectForReuse(
+            this._sdk,
             this._linkedTable,
             normalizedOpts,
         );
@@ -227,8 +233,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         this._watchLinkedQueryResult();
 
         await Promise.all([
-            getSdk()
-                .base.__getRecordStore(this._record.parentTable.id)
+            this._sdk.base
+                .__getRecordStore(this._record.parentTable.id)
                 .loadCellValuesInFieldIdsAsync([this._field.id]),
             this._linkedQueryResult.loadDataAsync(),
             this._loadRecordColorsAsync(),
@@ -258,8 +264,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 
-            getSdk()
-                .base.__getRecordStore(this._record.parentTable.id)
+            this._sdk.base
+                .__getRecordStore(this._record.parentTable.id)
                 .unloadCellValuesInFieldIds([this._field.id]);
             this._linkedQueryResult.unloadData();
             this._unloadRecordColors();

@@ -1,13 +1,12 @@
-import getSdk from './dist/types/src/get_sdk';
-declare const sdk: ReturnType<typeof getSdk>;
+import Sdk from './dist/types/src/sdk';
 
-export const globalConfig: typeof sdk.globalConfig;
-export const base: typeof sdk.base;
-export const session: typeof sdk.session;
-export const installationId: typeof sdk.installationId;
-export const viewport: typeof sdk.viewport;
-export const runInfo: typeof sdk.runInfo;
-export const cursor: typeof sdk.cursor;
-export const settingsButton: typeof sdk.settingsButton;
-export const undoRedo: typeof sdk.undoRedo;
-export const reload: typeof sdk.reload;
+export const globalConfig: Sdk['globalConfig'];
+export const base: Sdk['base'];
+export const session: Sdk['session'];
+export const installationId: Sdk['installationId'];
+export const viewport: Sdk['viewport'];
+export const runInfo: Sdk['runInfo'];
+export const cursor: Sdk['cursor'];
+export const settingsButton: Sdk['settingsButton'];
+export const undoRedo: Sdk['undoRedo'];
+export const reload: Sdk['reload'];

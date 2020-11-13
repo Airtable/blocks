@@ -19,6 +19,12 @@ No changes.
     creation/deletion of sorted fields.
 -   Fixed a bug where deleting and undeleting a table that was already loaded caused the App to
     crash.
+-   **DEPRECATED:** importing the UI namespace from the main entrypoint, e.g.
+    `import {UI} from '@airtable/blocks';`. Use `import * as UI from '@airtable/blocks/ui/ui';`
+    instead.
+-   **DEPRECATED:** importing the models namespace from the main entrypoint, e.g.
+    `import {models} from '@airtable/blocks';`. Use
+    `import * as models from '@airtable/blocks/models/models';` instead.
 
 ## [1.2.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...@airtable/blocks@1.2.0) - 2020-10-23
 
