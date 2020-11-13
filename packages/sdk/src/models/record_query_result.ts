@@ -13,12 +13,7 @@ import {
     FlowAnyFunction,
     FlowAnyObject,
 } from '../private_utils';
-import {
-    spawnAbstractMethodError,
-    spawnUnknownSwitchCaseError,
-    spawnError,
-    invariant,
-} from '../error_utils';
+import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../error_utils';
 import Watchable from '../watchable';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';
@@ -278,7 +273,7 @@ interface UnknownColorMode {
  *
  * @docsPath models/query results/RecordQueryResult
  */
-class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
     WatchableRecordQueryResultKey
 > {
@@ -291,38 +286,26 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Throws if data is not loaded yet.
      * Can be watched.
      */
-    // istanbul ignore next
-    get recordIds(): Array<RecordId> {
-        throw spawnAbstractMethodError();
-    }
+    abstract get recordIds(): Array<RecordId>;
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      *
      * @internal
      */
-    // istanbul ignore next
-    _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void> {
-        throw spawnAbstractMethodError();
-    }
+    abstract _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void>;
     /**
      * The fields that were used to create this QueryResult.
      * Null if fields were not specified, which means the QueryResult
      * will load all fields in the table.
      */
-    // istanbul ignore next
-    get fields(): Array<Field> | null {
-        throw spawnAbstractMethodError();
-    }
+    abstract get fields(): Array<Field> | null;
 
     /**
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
-    // istanbul ignore next
-    get parentTable(): Table {
-        throw spawnAbstractMethodError();
-    }
+    abstract get parentTable(): Table;
 
     // provided properties + methods:
     /** @internal */

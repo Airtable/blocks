@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
-import {invariant, spawnAbstractMethodError} from '../error_utils';
+import {invariant} from '../error_utils';
 import AbstractModel from './abstract_model';
 
 /**
@@ -9,10 +9,10 @@ import AbstractModel from './abstract_model';
  *
  * @docsPath models/advanced/AbstractModelWithAsyncData
  */
-class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends AbstractModel<
+abstract class AbstractModelWithAsyncData<
     DataType,
-    WatchableKey
-> {
+    WatchableKey extends string
+> extends AbstractModel<DataType, WatchableKey> {
     /** @internal */
     static __DATA_UNLOAD_DELAY_MS = 1000;
     /** @internal */
@@ -115,25 +115,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         return this._isDataLoaded;
     }
     /** @internal */
-    // istanbul ignore next
-    _onChangeIsDataLoaded() {
-        // Override this to get notified of changes to .isDataLoaded e.g to fire watch keys
-        throw spawnAbstractMethodError();
-    }
+    abstract _onChangeIsDataLoaded(): void;
     /** @internal */
-    // istanbul ignore next
-    async _loadDataAsync(): Promise<Array<WatchableKey>> {
-        // Override this to fetch the data.
-        // It should return an array of watchable keys that changed
-        // as a result of loading data.
-        throw spawnAbstractMethodError();
-    }
+    abstract _loadDataAsync(): Promise<Array<WatchableKey>>;
     /** @internal */
-    // istanbul ignore next
-    _unloadData() {
-        // Override this to unload the data.
-        throw spawnAbstractMethodError();
-    }
+    abstract _unloadData(): void;
     // Override this method if your model is dependent on other models.
     // Do NOT load other models' data from _loadDataAsync, since it can lead to
     // unexpected behavior.
