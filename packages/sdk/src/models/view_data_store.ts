@@ -230,22 +230,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      *
      * @param recordOrRecordId the record/record id to get the color for
      */
-    getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
+    getRecordColor(record: Record): Color | null {
         invariant(this.isDataLoaded, 'View data is not loaded');
 
-        // This method has only one call site (in the RecordQueryResult model),
-        // and it specifies a Record instance as the first parameter. Because
-        // this method is not exposed to consumers, the internal call site is
-        // the only usage, making the alternate `RecordId` value type
-        // superfluous and the branch in the following ternary operator
-        // unreachable.
-        // TODO(jugglinmike): Remove the `RecordId` type from this method's
-        // signature, and remove the following ternary operator.
-        // istanbul ignore next
-        const recordId =
-            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
-
-        return this._data.colorsByRecordId?.[recordId] ?? null;
+        return this._data.colorsByRecordId?.[record.id] ?? null;
     }
 
     get allFieldIds(): Array<FieldId> {
