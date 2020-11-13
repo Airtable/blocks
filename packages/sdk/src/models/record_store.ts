@@ -30,8 +30,6 @@ export const WatchableRecordStoreKeys = Object.freeze({
     cellValues: 'cellValues' as const,
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
-const WatchableRecordIdsInViewKeyPrefix = 'recordIdsInView:';
-const WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:';
 
 /**
  * The string case is to accommodate prefix keys
@@ -51,17 +49,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
-            key.startsWith(WatchableCellValuesInFieldKeyPrefix) ||
-            // The following enum value is not referenced by the SDK internals,
-            // and cannot be used to watch this model by external code.
-            // TODO(jugglinmike): remove this condition
-            // istanbul ignore next
-            key.startsWith(WatchableRecordIdsInViewKeyPrefix) ||
-            // The following enum value is not referenced by the SDK internals,
-            // and cannot be used to watch this model by external code.
-            // TODO(jugglinmike): remove this condition
-            // istanbul ignore next
-            key.startsWith(WatchableRecordColorsInViewKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
     static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
