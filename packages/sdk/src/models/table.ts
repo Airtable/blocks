@@ -459,7 +459,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param opts Options for the query, such as sorts and fields.
      * @example
      * ```js
-     * import {useBase, useRecords} from '@airtable/blocks';
+     * import {useBase, useRecords} from '@airtable/blocks/ui';
      * import React from 'react';
      *
      * function TodoList() {
