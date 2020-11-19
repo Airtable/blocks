@@ -30,7 +30,7 @@
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
         "lint:quiet": "yarn run lint --quiet",
-        "jest": "jest",
+        "jest": "node --unhandled-rejections=strict ./node_modules/.bin/jest",
         "jest:watch": "jest --watch",
         "test": "yarn run jest",
         "test:coverage": "yarn run test --coverage",

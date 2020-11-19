@@ -79,6 +79,9 @@ describe('Table', () => {
                 },
             },
         });
+        mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue({
+            recordsById: {},
+        });
         return (await table.selectRecordsAsync()).getRecordById(id);
     };
 
@@ -1788,6 +1791,9 @@ describe('Table', () => {
             mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
                 recordsById: {},
             });
+            mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue({
+                recordsById: {},
+            });
         });
 
         it('returns a promise for a loaded query result', async () => {
@@ -1842,7 +1848,7 @@ describe('Table', () => {
         it('does not throw when table has been deleted', () => {
             deleteTable('tblDesignProjects');
 
-            table.selectRecordsAsync();
+            table.selectRecordsAsync().catch(() => {});
         });
 
         it('rejects when table has been deleted', async () => {
