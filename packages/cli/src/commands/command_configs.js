@@ -137,6 +137,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
                 hidden: true, // hide from --help output
             },
+            'upload-source-maps-to-rollbar': {
+                description:
+                    "Uploads the source map for the block's frontend bundle to the airtable-blocks rollbar project",
+                type: 'boolean',
+                default: false,
+                hidden: true,
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
     },

@@ -4,4 +4,5 @@ export type RemoteJson = {|
     baseId: string,
     server?: string,
     apiKeyName?: string,
+    bundleCdn?: string,
 |};

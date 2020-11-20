@@ -41,6 +41,7 @@ type DirectoryPath = string;
 
 type BuildPackagePaths = {|
     frontendBundlePath: FilePath,
+    frontendBundleSourceMapPath: FilePath | null,
     backendDeploymentPackagePath: FilePath | null,
 |};
 
@@ -93,6 +94,7 @@ class BlockBuilder {
     _browserifyCache: {[FilePath]: mixed};
     _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
     _ignoredGlobPatternsFromBlockJson: Array<string>;
+    _uploadSourceMapsToRollbar: boolean;
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
@@ -103,6 +105,7 @@ class BlockBuilder {
         enableLiveSdkReload: boolean,
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
+        uploadSourceMapsToRollbar: boolean,
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
@@ -112,6 +115,7 @@ class BlockBuilder {
         this._enableLiveSdkReload = args.enableLiveSdkReload;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || true;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
+        this._uploadSourceMapsToRollbar = args.uploadSourceMapsToRollbar;
         this._blockDirPath = getBlockDirPath();
 
         this._initialBuildResolveIfExists = null;
@@ -151,6 +155,7 @@ class BlockBuilder {
             blockJson: args.blockJson,
             remoteJson: args.remoteJson,
             transpileForAllBrowsers: args.transpileForAllBrowsers,
+            uploadSourceMapsToRollbar: false,
         });
     }
     static async createReleaseBlockBuilderAsync(args: {
@@ -159,6 +164,7 @@ class BlockBuilder {
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
+        uploadSourceMapsToRollbar: boolean,
     }): Promise<BlockBuilder> {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
@@ -170,6 +176,7 @@ class BlockBuilder {
             // RELEASE builds never use live SDK reloading
             enableLiveSdkReload: false,
             backendSdkBaseUrl: args.backendSdkBaseUrl,
+            uploadSourceMapsToRollbar: args.uploadSourceMapsToRollbar,
         });
     }
     static getBlockBuilderError(
@@ -450,7 +457,10 @@ class BlockBuilder {
             }
             case BlockBuildTypes.RELEASE:
                 nodeEnv = 'production';
-                this._browserify = browserify(clientWrapperFilePath);
+                // Debug is needed to keep source maps if we're uploading them
+                this._browserify = browserify(clientWrapperFilePath, {
+                    debug: this._uploadSourceMapsToRollbar,
+                });
                 break;
 
             default:
@@ -584,12 +594,16 @@ class BlockBuilder {
         }
         return RESULT_OK;
     }
-    _minify(bundle: Buffer): Result<Buffer, Error> {
+    _minify(bundle: Buffer): Result<{code: Buffer, map: Buffer}, Error> {
         const options = {
             mangle: false,
             keep_fnames: true,
             compress: {
                 drop_debugger: false,
+            },
+            sourceMap: {
+                // Needed for compiled typescript to work
+                content: 'inline',
             },
         };
         const bundleString = bundle.toString();
@@ -598,7 +612,10 @@ class BlockBuilder {
             return {err: result.error};
         }
         return {
-            value: Buffer.from(result.code),
+            value: {
+                code: Buffer.from(result.code),
+                map: Buffer.from(result.map),
+            },
         };
     }
     _replaceTranspiledFileExtension(srcFilePath: FilePath) {
@@ -930,6 +947,9 @@ class BlockBuilder {
             this._outputBuildArtifactsDirPath,
             blockCliConfigSettings.BUNDLE_FILE_NAME,
         );
+        const frontendBundleSourceMapPath = this._uploadSourceMapsToRollbar
+            ? frontendBundlePath + '.map'
+            : null;
         const frontendBundleFileBuffer = await fsUtils.readFileIfExistsAsync(frontendBundlePath);
         if (frontendBundleFileBuffer === null) {
             return {err: new Error('bundle file does not exist!')};
@@ -945,7 +965,16 @@ class BlockBuilder {
         if (minifiedFrontendBundleFileResult.err) {
             return minifiedFrontendBundleFileResult;
         }
-        await fsUtils.writeFileAsync(frontendBundlePath, minifiedFrontendBundleFileResult.value);
+        await fsUtils.writeFileAsync(
+            frontendBundlePath,
+            minifiedFrontendBundleFileResult.value.code,
+        );
+        if (this._uploadSourceMapsToRollbar) {
+            await fsUtils.writeFileAsync(
+                frontendBundleSourceMapPath,
+                minifiedFrontendBundleFileResult.value.map,
+            );
+        }
 
         // 6.Generate backend bundle.
         let backendDeploymentPackagePath = null;
@@ -961,6 +990,7 @@ class BlockBuilder {
         return {
             value: {
                 frontendBundlePath,
+                frontendBundleSourceMapPath,
                 backendDeploymentPackagePath,
             },
         };

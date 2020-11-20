@@ -1,5 +1,7 @@
 // @flow
 /* eslint-disable no-console */
+import {getGitHashAsync} from '../helpers/get_git_hash';
+
 const _ = require('lodash');
 const BlockBuilder = require('../builder/block_builder');
 const ApiClient = require('../api_client');
@@ -13,9 +15,11 @@ const FormData = require('form-data');
 const {promisify} = require('util');
 request.postAsync = promisify(request.post);
 const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
+const {ROLLBAR_ACCESS_TOKEN} = require('../config/block_cli_config_settings');
 
 import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
+import {getBlockDirPath} from '../helpers/get_block_dir_path';
 
 type BuildId = string;
 type DeployId = string;
@@ -69,6 +73,44 @@ async function _uploadViaSignedPostAsync(
     }
 }
 
+async function _uploadSourceMapToRollbarAsync(
+    frontendBundleSourceMapPath: string,
+    s3BundleKey: string,
+    gitHash: string,
+    bundleCdn: string,
+): Promise<{err: boolean, result: string}> {
+    const response = await request.postAsync({
+        url: 'https://api.rollbar.com/api/1/sourcemap',
+        headers: {
+            'content-type': 'multipart/form-data',
+        },
+        multipart: [
+            {
+                'Content-Disposition': 'form-data; name="access_token"',
+                body: ROLLBAR_ACCESS_TOKEN,
+            },
+            {
+                'Content-Disposition': 'form-data; name="version"',
+                body: gitHash,
+            },
+            {
+                'Content-Disposition': 'form-data; name="minified_url"',
+                body: `${bundleCdn}/${s3BundleKey}`,
+            },
+            {
+                'Content-Disposition':
+                    'form-data; name="source_map"; filename="thirdparty.min.map"',
+                body: await fsUtils.readFileAsync(frontendBundleSourceMapPath),
+            },
+        ],
+    });
+    const {body, statusCode} = response;
+    if (statusCode !== 200) {
+        throw new Error(body);
+    }
+    return body;
+}
+
 async function setTimeoutAsync(timeoutMs: number): Promise<void> {
     return new Promise((resolve, reject) => setTimeout(resolve, timeoutMs));
 }
@@ -100,13 +142,22 @@ async function _createDeployAndWaitUntilCompletionAsync(
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockBuilder: BlockBuilder,
-): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
+): Promise<{|
+    buildId: BuildId,
+    deployId: DeployId | null,
+    frontendBundleSourceMapPath: string | null,
+    s3BundleKey: string | null,
+|}> {
     const buildResult = await blockBuilder.buildForReleaseAsync();
     if (buildResult.err) {
         throw new Error(`${buildResult.err.message}
 Failed to build the block code!`);
     }
-    const {frontendBundlePath, backendDeploymentPackagePath} = buildResult.value;
+    const {
+        frontendBundlePath,
+        frontendBundleSourceMapPath,
+        backendDeploymentPackagePath,
+    } = buildResult.value;
 
     const hasBackend = !!backendDeploymentPackagePath;
     const {
@@ -141,7 +192,12 @@ Failed to build the block code!`);
         deployId = null;
     }
 
-    return {buildId, deployId};
+    return {
+        buildId,
+        deployId,
+        frontendBundleSourceMapPath,
+        s3BundleKey: frontendBundleS3UploadInfo.key,
+    };
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
@@ -166,6 +222,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     if (remoteName !== null) {
         outputRemotesBetaWarning();
     }
+    const uploadSourceMapsToRollbar = argv.uploadSourceMapsToRollbar || false;
+    invariant(
+        typeof uploadSourceMapsToRollbar === 'boolean',
+        'expects uploadSourceMapsToRollbar to be a boolean',
+    );
 
     const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
     if (parseRemoteResult.err) {
@@ -196,12 +257,37 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         enableDeprecatedAbsolutePathImport,
         enableIsolatedBuild,
         backendSdkBaseUrl,
+        uploadSourceMapsToRollbar,
     });
 
     try {
         console.log('building');
-        const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockBuilder);
+        const {
+            buildId,
+            deployId,
+            frontendBundleSourceMapPath,
+            s3BundleKey,
+        } = await _buildAndDeployAsync(apiClient, blockBuilder);
 
+        if (uploadSourceMapsToRollbar) {
+            const gitHash = await getGitHashAsync(getBlockDirPath());
+            const bundleCdn = remoteJson.bundleCdn;
+            // These are all required when uploading source maps
+            invariant(
+                typeof frontendBundleSourceMapPath === 'string',
+                'expected frontendBundleSourceMapPath to be string',
+            );
+            invariant(typeof s3BundleKey === 'string', 'expected s3BundleKey to be string');
+            invariant(typeof gitHash === 'string', 'expected gitHash to be string');
+            invariant(typeof bundleCdn === 'string', 'expected bundleCdn to be string');
+            console.log(`uploading source maps to rollbar for ${s3BundleKey}`);
+            await _uploadSourceMapToRollbarAsync(
+                frontendBundleSourceMapPath,
+                s3BundleKey,
+                gitHash,
+                bundleCdn,
+            );
+        }
         console.log('releasing');
         await apiClient.createReleaseAsync(buildId, deployId);
     } catch (err) {
