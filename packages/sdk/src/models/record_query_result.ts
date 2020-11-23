@@ -7,19 +7,13 @@ import {
     isEnumValue,
     assertEnumValue,
     getLocallyUniqueId,
-    isDeepEqual,
     ObjectValues,
     ObjectMap,
     cast,
     FlowAnyFunction,
     FlowAnyObject,
 } from '../private_utils';
-import {
-    spawnAbstractMethodError,
-    spawnUnknownSwitchCaseError,
-    spawnError,
-    invariant,
-} from '../error_utils';
+import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../error_utils';
 import Watchable from '../watchable';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';
@@ -29,6 +23,7 @@ import RecordStore from './record_store';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
+    serialize as serializeColorMode,
     RecordColorMode,
 } from './record_coloring';
 
@@ -224,6 +219,11 @@ export interface NormalizedRecordQueryResultOpts {
     recordStore: RecordStore;
 }
 
+/** @internal */
+interface UnknownColorMode {
+    type: never;
+}
+
 /**
  * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
  * contains a bunch of records, filtered to a useful subset of the records in the table. Those
@@ -272,7 +272,7 @@ export interface NormalizedRecordQueryResultOpts {
  *
  * @docsPath models/query results/RecordQueryResult
  */
-class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
     WatchableRecordQueryResultKey
 > {
@@ -284,34 +284,26 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Throws if data is not loaded yet.
      * Can be watched.
      */
-    get recordIds(): Array<RecordId> {
-        throw spawnAbstractMethodError();
-    }
+    abstract get recordIds(): Array<RecordId>;
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      *
      * @internal
      */
-    _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void> {
-        throw spawnAbstractMethodError();
-    }
+    abstract _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void>;
     /**
      * The fields that were used to create this QueryResult.
      * Null if fields were not specified, which means the QueryResult
      * will load all fields in the table.
      */
-    get fields(): Array<Field> | null {
-        throw spawnAbstractMethodError();
-    }
+    abstract get fields(): Array<Field> | null;
 
     /**
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
-    get parentTable(): Table {
-        throw spawnAbstractMethodError();
-    }
+    abstract get parentTable(): Table;
 
     /** @internal */
     static WatchableKeys = WatchableRecordQueryResultKeys;
@@ -339,7 +331,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     static _normalizeOpts(
         table: Table,
         recordStore: RecordStore,
-        opts: RecordQueryResultOpts = {},
+        opts: RecordQueryResultOpts,
     ): NormalizedRecordQueryResultOpts {
         const sorts = !opts.sorts
             ? null
@@ -409,7 +401,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
                 break;
             default:
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         invariant(table.id === recordStore.tableId, 'record store and table must match');
@@ -442,8 +437,13 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * @internal
      */
-    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {
-        return isDeepEqual(this._normalizedOpts, normalizedOpts);
+    get _serializedOpts() {
+        return JSON.stringify([
+            this._normalizedOpts.sorts,
+            this._normalizedOpts.fieldIdsOrNullIfAllFields,
+            this._normalizedOpts.table.id,
+            serializeColorMode(this._normalizedOpts.recordColorMode),
+        ]);
     }
 
     /**
@@ -539,7 +539,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .getViewDataStore(recordColorMode.view.id)
                     .getRecordColor(record);
             default:
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
     }
 
@@ -619,9 +622,12 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @internal
      */
     _watchRecordColorsIfNeeded() {
-        const watchCount = (
-            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
-        ).length;
+        invariant(
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors],
+            'method may only be called when `recordColors` key has been watched',
+        );
+        const watchCount = this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors]
+            .length;
         if (!this._recordColorChangeHandler && watchCount >= 1) {
             this._watchRecordColors();
         }
@@ -657,7 +663,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             }
             default:
-                throw spawnError('Unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = handler;
@@ -700,7 +709,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             }
             default:
-                throw spawnError('unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = null;

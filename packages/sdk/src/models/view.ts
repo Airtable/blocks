@@ -3,8 +3,9 @@ import {BaseData} from '../types/base';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
 import AbstractModel from './abstract_model';
+import ObjectPool from './object_pool';
 import Table from './table';
-import {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
@@ -36,6 +37,12 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     _parentTable: Table;
     /** @internal */
     _viewDataStore: ViewDataStore;
+    /** @internal */
+    __viewMetadataQueryResultPool: ObjectPool<
+        ViewMetadataQueryResult,
+        typeof ViewMetadataQueryResult
+    >;
+
     /**
      * @internal
      */
@@ -49,6 +56,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
 
         this._parentTable = parentTable;
         this._viewDataStore = viewDataStore;
+        this.__viewMetadataQueryResultPool = new ObjectPool(ViewMetadataQueryResult);
     }
 
     /**
@@ -147,18 +155,21 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     selectRecords(opts: RecordQueryResultOpts = {}): TableOrViewQueryResult {
-        const defaultedOpts = {
-            ...opts,
-            recordColorMode:
-                opts.recordColorMode === undefined
-                    ? RecordColoring.modes.byView(this)
-                    : opts.recordColorMode,
-        };
-
-        return TableOrViewQueryResult.__createOrReuseQueryResult(
-            this,
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
+            this.parentTable,
             this._viewDataStore.parentRecordStore,
-            defaultedOpts,
+            {
+                ...opts,
+                recordColorMode:
+                    opts.recordColorMode === undefined
+                        ? RecordColoring.modes.byView(this)
+                        : opts.recordColorMode,
+            },
+        );
+
+        return this.parentTable.__tableOrViewQueryResultPool.getObjectForReuse(
+            this,
+            normalizedOpts,
         );
     }
     /**
@@ -216,7 +227,11 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     selectMetadata(): ViewMetadataQueryResult {
-        return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);
+        return this.__viewMetadataQueryResultPool.getObjectForReuse(
+            this.__baseData,
+            this,
+            this._viewDataStore,
+        );
     }
     /**
      * Select and load the field order and visible fields from the view. Returns a

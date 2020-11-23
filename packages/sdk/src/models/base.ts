@@ -508,11 +508,17 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                     delete this._tableModelsById[tableId];
                 }
             }
+            for (const [tableId, recordStore] of entries(this._tableRecordStoresByTableId)) {
+                if (recordStore && recordStore.isDeleted) {
+                    recordStore.__onDataDeletion();
+                    delete this._tableRecordStoresByTableId[tableId];
+                }
+            }
         }
         const {tablesById} = changedPaths;
         if (tablesById) {
             for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
-                const table = this._tableModelsById[tableId];
+                const table = this.getTableByIdIfExists(tableId);
                 if (table && dirtyTablePaths) {
                     const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
                         dirtyTablePaths,

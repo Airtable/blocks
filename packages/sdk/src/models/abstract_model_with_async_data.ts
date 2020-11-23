@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
-import {invariant, spawnAbstractMethodError} from '../error_utils';
+import {invariant} from '../error_utils';
 import AbstractModel from './abstract_model';
 
 /**
@@ -9,10 +9,10 @@ import AbstractModel from './abstract_model';
  *
  * @docsPath models/advanced/AbstractModelWithAsyncData
  */
-class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends AbstractModel<
+abstract class AbstractModelWithAsyncData<
     DataType,
-    WatchableKey
-> {
+    WatchableKey extends string
+> extends AbstractModel<DataType, WatchableKey> {
     /** @internal */
     static __DATA_UNLOAD_DELAY_MS = 1000;
     /** @internal */
@@ -27,6 +27,18 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
     _dataRetainCount: number;
     /** @internal */
     _unloadDataTimeoutId: null | TimeoutId;
+    /**
+     * This flag is used to keep track of models that have been
+     * forced to unload (regardless of the retain count). The force
+     * unload happens via _forceUnload method and the only proper use
+     * of that function is when the underlying data gets deleted while
+     * the model is still active. e.g. when a table is deleted in the
+     * main app while an instance of record_store is still alive.
+     * NOTE: Once set to true, it never goes back to false.
+     *
+     * @internal
+     */
+    _isForceUnloaded: boolean = false;
     /** @hidden */
     constructor(baseData: BaseData, modelId: string) {
         super(baseData, modelId);
@@ -48,6 +60,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableKey> {
+        this._assertNotForceUnloaded();
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
             if (
@@ -80,22 +93,26 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         }
         return validKeys;
     }
+    /** @inheritdoc */
+    get isDeleted(): boolean {
+        if (this._isForceUnloaded) {
+            return true;
+        }
+        return super.isDeleted;
+    }
     /** */
     get isDataLoaded(): boolean {
+        if (this.isDeleted) {
+            return false;
+        }
         return this._isDataLoaded;
     }
     /** @internal */
-    _onChangeIsDataLoaded() {
-        throw spawnAbstractMethodError();
-    }
+    abstract _onChangeIsDataLoaded(): void;
     /** @internal */
-    async _loadDataAsync(): Promise<Array<WatchableKey>> {
-        throw spawnAbstractMethodError();
-    }
+    abstract _loadDataAsync(): Promise<Array<WatchableKey>>;
     /** @internal */
-    _unloadData() {
-        throw spawnAbstractMethodError();
-    }
+    abstract _unloadData(): void;
     /**
      * Will cause all the async data to be fetched and retained. Every call to
      * `loadDataAsync` should have a matching call to `unloadData`.
@@ -103,6 +120,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
      * Returns a Promise that will resolve once the data is loaded.
      */
     async loadDataAsync() {
+        this._assertNotForceUnloaded();
         if (this._unloadDataTimeoutId !== null) {
             clearTimeout(this._unloadDataTimeoutId);
             this._unloadDataTimeoutId = null;
@@ -130,6 +148,9 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
     }
     /** */
     unloadData() {
+        if (this._isForceUnloaded) {
+            return;
+        }
         this._dataRetainCount--;
 
         if (this._dataRetainCount < 0) {
@@ -148,6 +169,17 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
                 this._onChangeIsDataLoaded();
             }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
         }
+    }
+
+    _forceUnload() {
+        while (this._dataRetainCount > 0) {
+            this.unloadData();
+        }
+        this._isForceUnloaded = true;
+    }
+
+    _assertNotForceUnloaded() {
+        invariant(!this._isForceUnloaded, 'model (%s) permanently deleted', this.id);
     }
 }
 

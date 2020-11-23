@@ -10,64 +10,64 @@ const projectTracker: SdkInitData = {
     baseData: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Project tracker',
-        activeTableId: 'tbly388E8NA1CNhnF',
-        tableOrder: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+        activeTableId: 'tblDesignProjects',
+        tableOrder: ['tblDesignProjects', 'tblTasks', 'tblClients'],
         tablesById: {
-            tbly388E8NA1CNhnF: {
-                id: 'tbly388E8NA1CNhnF',
+            tblDesignProjects: {
+                id: 'tblDesignProjects',
                 name: 'Design projects',
-                primaryFieldId: 'fldXaTPfxIVhAUYde',
+                primaryFieldId: 'fldPrjctName',
                 fieldsById: {
-                    fldXaTPfxIVhAUYde: {
-                        id: 'fldXaTPfxIVhAUYde',
+                    fldPrjctName: {
+                        id: 'fldPrjctName',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fld3DvZllJtyaNYpm: {
-                        id: 'fld3DvZllJtyaNYpm',
+                    fldPrjctClient: {
+                        id: 'fldPrjctClient',
                         name: 'Client',
                         type: 'foreignKey',
                         typeOptions: {
-                            foreignTableId: 'tblyt8B45wJQIx1c3',
+                            foreignTableId: 'tblClients',
                             relationship: 'many',
-                            symmetricColumnId: 'fld3nuJVc9ivC8IJF',
+                            symmetricColumnId: 'fldClientProjects',
                         },
                         description: 'the project client',
                         lock: null,
                     },
-                    fldRljtoVpOt1IDYH: {
-                        id: 'fldRljtoVpOt1IDYH',
+                    fldPrjctCtgry: {
+                        id: 'fldPrjctCtgry',
                         name: 'Category',
-                        type: 'select',
+                        type: 'singleSelect',
                         typeOptions: {
                             choiceOrder: [
-                                'seljTTcI4KHd0jrta',
-                                'selGAW8wVsYjk1meo',
-                                'selPhAdTUB6zGdSwq',
-                                'selGKDGqQKrlpNDxu',
+                                'selPrjctBrand',
+                                'selPrjctIndstrl',
+                                'selPrjctHealth',
+                                'selPrjctTech',
                             ],
                             choices: {
-                                seljTTcI4KHd0jrta: {
+                                selPrjctBrand: {
                                     name: 'Brand identity',
-                                    id: 'seljTTcI4KHd0jrta',
+                                    id: 'selPrjctBrand',
                                     color: 'cyanDark',
                                 },
-                                selGAW8wVsYjk1meo: {
+                                selPrjctIndstrl: {
                                     name: 'Industrial design',
-                                    id: 'selGAW8wVsYjk1meo',
+                                    id: 'selPrjctIndstrl',
                                     color: 'redDark',
                                 },
-                                selPhAdTUB6zGdSwq: {
+                                selPrjctHealth: {
                                     name: 'Healthcare design',
-                                    id: 'selPhAdTUB6zGdSwq',
+                                    id: 'selPrjctHealth',
                                     color: 'yellowDark',
                                 },
-                                selGKDGqQKrlpNDxu: {
+                                selPrjctTech: {
                                     name: 'Technology design',
-                                    id: 'selGKDGqQKrlpNDxu',
+                                    id: 'selPrjctTech',
                                     color: 'greenDark',
                                 },
                             },
@@ -75,8 +75,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldHOlUIpjmlYj549: {
-                        id: 'fldHOlUIpjmlYj549',
+                    fldPrjctCmplt: {
+                        id: 'fldPrjctCmplt',
                         name: 'Complete',
                         type: 'checkbox',
                         typeOptions: {
@@ -86,20 +86,20 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fld509oRhgt1b3fVa: {
-                        id: 'fld509oRhgt1b3fVa',
+                    fldPrjctTasks: {
+                        id: 'fldPrjctTasks',
                         name: 'Tasks',
                         type: 'foreignKey',
                         typeOptions: {
-                            foreignTableId: 'tblcstEo50YXLJcK4',
+                            foreignTableId: 'tblTasks',
                             relationship: 'many',
-                            symmetricColumnId: 'fldxsrKD1DItS6Auv',
+                            symmetricColumnId: 'fldTaskProject',
                         },
                         description: '',
                         lock: null,
                     },
-                    fldOrCZn3PMpCWVnD: {
-                        id: 'fldOrCZn3PMpCWVnD',
+                    fldPrjctLead: {
+                        id: 'fldPrjctLead',
                         name: 'Project lead',
                         type: 'collaborator',
                         typeOptions: {
@@ -108,8 +108,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldaii0rqepLFGGTv: {
-                        id: 'fldaii0rqepLFGGTv',
+                    fldPrjctTeam: {
+                        id: 'fldPrjctTeam',
                         name: 'Project team',
                         type: 'multiCollaborator',
                         typeOptions: {
@@ -118,8 +118,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fld4SUsRIi5x5FlLs: {
-                        id: 'fld4SUsRIi5x5FlLs',
+                    fldPrjctDue: {
+                        id: 'fldPrjctDue',
                         name: 'Due date',
                         type: 'date',
                         typeOptions: {
@@ -129,8 +129,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldlPkIP0sfBJnS2U: {
-                        id: 'fldlPkIP0sfBJnS2U',
+                    fldPrjctKickoff: {
+                        id: 'fldPrjctKickoff',
                         name: 'Kickoff date',
                         type: 'date',
                         typeOptions: {
@@ -140,16 +140,16 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldFJ3xHdu3VMMZII: {
-                        id: 'fldFJ3xHdu3VMMZII',
+                    fldPrjctNotes: {
+                        id: 'fldPrjctNotes',
                         name: 'Notes',
                         type: 'multilineText',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldY1QpPpkdkz9KZk: {
-                        id: 'fldY1QpPpkdkz9KZk',
+                    fldPrjctImages: {
+                        id: 'fldPrjctImages',
                         name: 'Project images',
                         type: 'multipleAttachment',
                         typeOptions: null,
@@ -157,80 +157,80 @@ const projectTracker: SdkInitData = {
                         lock: null,
                     },
                 },
-                activeViewId: 'viwkNnS94RQAQQTMn',
+                activeViewId: 'viwPrjctAll',
                 viewOrder: [
-                    'viwkNnS94RQAQQTMn',
-                    'viwqo8mFAqy2HYSCL',
-                    'viw8v5XkLudbiCJfD',
-                    'viwhz3PjFATSxaV5X',
-                    'viwA4Tzw8IJcHHgul',
+                    'viwPrjctAll',
+                    'viwPrjctIncmplt',
+                    'viwPrjctCompleted',
+                    'viwPrjctCalendar',
+                    'viwPrjctDueDates',
                 ],
                 viewsById: {
-                    viwkNnS94RQAQQTMn: {
-                        id: 'viwkNnS94RQAQQTMn',
+                    viwPrjctAll: {
+                        id: 'viwPrjctAll',
                         name: 'All projects',
                         type: ViewType.GRID,
                     },
-                    viwqo8mFAqy2HYSCL: {
-                        id: 'viwqo8mFAqy2HYSCL',
+                    viwPrjctIncmplt: {
+                        id: 'viwPrjctIncmplt',
                         name: 'Incomplete projects by leader',
                         type: ViewType.GRID,
                     },
-                    viw8v5XkLudbiCJfD: {
-                        id: 'viw8v5XkLudbiCJfD',
+                    viwPrjctCompleted: {
+                        id: 'viwPrjctCompleted',
                         name: 'Completed projects',
-                        type: ViewType.GRID,
+                        type: ViewType.GALLERY,
                     },
-                    viwhz3PjFATSxaV5X: {
-                        id: 'viwhz3PjFATSxaV5X',
+                    viwPrjctCalendar: {
+                        id: 'viwPrjctCalendar',
                         name: 'Project calendar',
                         type: ViewType.CALENDAR,
                     },
-                    viwA4Tzw8IJcHHgul: {
-                        id: 'viwA4Tzw8IJcHHgul',
+                    viwPrjctDueDates: {
+                        id: 'viwPrjctDueDates',
                         name: 'Due dates only',
                         type: ViewType.CALENDAR,
                     },
                 },
-                description: '',
+                description: 'description for design projects table',
                 lock: null,
                 externalSyncById: null,
             },
-            tblcstEo50YXLJcK4: {
-                id: 'tblcstEo50YXLJcK4',
+            tblTasks: {
+                id: 'tblTasks',
                 name: 'Tasks',
-                primaryFieldId: 'fldfu76MKFFh6x6IM',
+                primaryFieldId: 'fldTaskName',
                 fieldsById: {
-                    fldfu76MKFFh6x6IM: {
-                        id: 'fldfu76MKFFh6x6IM',
+                    fldTaskName: {
+                        id: 'fldTaskName',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldij9kocxowfur16: {
-                        id: 'fldij9kocxowfur16',
+                    fldTaskNotes: {
+                        id: 'fldTaskNotes',
                         name: 'Notes',
                         type: 'multilineText',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldxsrKD1DItS6Auv: {
-                        id: 'fldxsrKD1DItS6Auv',
+                    fldTaskProject: {
+                        id: 'fldTaskProject',
                         name: 'Design project',
                         type: 'foreignKey',
                         typeOptions: {
-                            foreignTableId: 'tbly388E8NA1CNhnF',
-                            symmetricColumnId: 'fld509oRhgt1b3fVa',
+                            foreignTableId: 'tblDesignProjects',
+                            symmetricColumnId: 'fldPrjctTasks',
                             relationship: 'many',
                         },
                         description: '',
                         lock: null,
                     },
-                    fldSCh5AV7Z3056Vw: {
-                        id: 'fldSCh5AV7Z3056Vw',
+                    fldTaskTime: {
+                        id: 'fldTaskTime',
                         name: 'Time estimate (days)',
                         type: 'number',
                         typeOptions: {
@@ -242,8 +242,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldX2QXZGxsqj7YC0: {
-                        id: 'fldX2QXZGxsqj7YC0',
+                    fldTaskCompleted: {
+                        id: 'fldTaskCompleted',
                         name: 'Completed',
                         type: 'checkbox',
                         typeOptions: {
@@ -253,8 +253,8 @@ const projectTracker: SdkInitData = {
                         description: '',
                         lock: null,
                     },
-                    fldfxDIwSfAEb1wLI: {
-                        id: 'fldfxDIwSfAEb1wLI',
+                    fldTaskAssignee: {
+                        id: 'fldTaskAssignee',
                         name: 'Assignee',
                         type: 'collaborator',
                         typeOptions: {
@@ -265,10 +265,10 @@ const projectTracker: SdkInitData = {
                     },
                 },
                 activeViewId: null,
-                viewOrder: ['viwWxkRmrDMhu7I8p'],
+                viewOrder: ['viwTaskAll'],
                 viewsById: {
-                    viwWxkRmrDMhu7I8p: {
-                        id: 'viwWxkRmrDMhu7I8p',
+                    viwTaskAll: {
+                        id: 'viwTaskAll',
                         name: 'All tasks',
                         type: ViewType.GRID,
                     },
@@ -277,42 +277,42 @@ const projectTracker: SdkInitData = {
                 lock: null,
                 externalSyncById: null,
             },
-            tblyt8B45wJQIx1c3: {
-                id: 'tblyt8B45wJQIx1c3',
+            tblClients: {
+                id: 'tblClients',
                 name: 'Clients',
-                primaryFieldId: 'fldKd5ShNX97LVIMn',
+                primaryFieldId: 'fldClientName',
                 fieldsById: {
-                    fldKd5ShNX97LVIMn: {
-                        id: 'fldKd5ShNX97LVIMn',
+                    fldClientName: {
+                        id: 'fldClientName',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldzln1WXZvQ02aHK: {
-                        id: 'fldzln1WXZvQ02aHK',
+                    fldClientAbout: {
+                        id: 'fldClientAbout',
                         name: 'About',
                         type: 'multilineText',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldZV9DBddvUkt1DV: {
-                        id: 'fldZV9DBddvUkt1DV',
+                    fldClientLogo: {
+                        id: 'fldClientLogo',
                         name: 'Logo',
                         type: 'multipleAttachment',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fld3nuJVc9ivC8IJF: {
-                        id: 'fld3nuJVc9ivC8IJF',
+                    fldClientProjects: {
+                        id: 'fldClientProjects',
                         name: 'Projects',
                         type: 'foreignKey',
                         typeOptions: {
-                            foreignTableId: 'tbly388E8NA1CNhnF',
-                            symmetricColumnId: 'fld3DvZllJtyaNYpm',
+                            foreignTableId: 'tblDesignProjects',
+                            symmetricColumnId: 'fldPrjctClient',
                             relationship: 'many',
                         },
                         description: '',
@@ -320,10 +320,10 @@ const projectTracker: SdkInitData = {
                     },
                 },
                 activeViewId: null,
-                viewOrder: ['viwtbJNofZMnUD8sQ'],
+                viewOrder: ['viwClientAll'],
                 viewsById: {
-                    viwtbJNofZMnUD8sQ: {
-                        id: 'viwtbJNofZMnUD8sQ',
+                    viwClientAll: {
+                        id: 'viwClientAll',
                         name: 'All clients',
                         type: ViewType.GRID,
                     },
@@ -334,74 +334,74 @@ const projectTracker: SdkInitData = {
             },
         },
         permissionLevel: 'create',
-        currentUserId: 'usrcNLql3ByVkIjIe',
+        currentUserId: 'usrCurrent',
         enabledFeatureNames: [],
         collaboratorsById: {
-            usr3VLCpyqgcI46Sh: {
-                id: 'usr3VLCpyqgcI46Sh',
+            usrGalSamari: {
+                id: 'usrGalSamari',
                 email: 'collab10@example.com',
                 name: 'Gal Samari',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png',
             },
-            usr6hWARwVNgmt3WW: {
-                id: 'usr6hWARwVNgmt3WW',
+            usrSamEpps: {
+                id: 'usrSamEpps',
                 email: 'collab35@example.com',
                 name: 'Sam Epps',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/ybh33aqqTrKhPFYFj47K_headshot-orange-2.png',
             },
-            usr8e9aJ8jHSg29YV: {
-                id: 'usr8e9aJ8jHSg29YV',
+            usrParisFotiou: {
+                id: 'usrParisFotiou',
                 email: 'collab26@example.com',
                 name: 'Paris Fotiou',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/xoafD4NRXGRLcx3qilRg_Screen%20Shot%202019-01-17%20at%201.20.14%20PM.png',
             },
-            usrArxKAc5yNZQfxl: {
-                id: 'usrArxKAc5yNZQfxl',
+            usrBaileyMirza: {
+                id: 'usrBaileyMirza',
                 email: 'collab5@example.com',
                 name: 'Bailey Mirza',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/7pprdNqqQuSWWN7zeavM_headshot-pink-1.png',
             },
-            usrQjmKTBNxfXNmmR: {
-                id: 'usrQjmKTBNxfXNmmR',
+            usrJordanPeretz: {
+                id: 'usrJordanPeretz',
                 email: 'collab16@example.com',
                 name: 'Jordan Peretz',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/jCMoXFziQcD0XkHMxhwQ_Screen%20Shot%202019-01-17%20at%201.19.59%20PM.png',
             },
-            usrSdmrY5yGdbcZzg: {
-                id: 'usrSdmrY5yGdbcZzg',
+            usrLeslieWalker: {
+                id: 'usrLeslieWalker',
                 email: 'collab23@example.com',
                 name: 'Leslie Walker',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/zMyV7nBhTI0fwMiWOi6g_headshot-blue-1.png',
             },
-            usrTv3tPZmP3GYJ9K: {
-                id: 'usrTv3tPZmP3GYJ9K',
+            usrAshQuintana: {
+                id: 'usrAshQuintana',
                 email: 'collab4@example.com',
                 name: 'Ash Quintana',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png',
             },
-            usrpEyZytbTJ95a2L: {
-                id: 'usrpEyZytbTJ95a2L',
+            usrSkylerXu: {
+                id: 'usrSkylerXu',
                 email: 'collab37@example.com',
                 name: 'Skyler Xu',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/WB8Q1EQRTJW3YBfv403V_headshot-orange-1.png',
             },
-            usru7j5m2lcNhriKv: {
-                id: 'usru7j5m2lcNhriKv',
+            usrCameronToth: {
+                id: 'usrCameronToth',
                 email: 'collab7@example.com',
                 name: 'Cameron Toth',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/1Paw52jFSLa7vRHwxCRd_headshot-pink-2.png',
             },
         },
-        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrcNLql3ByVkIjIe'],
+        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrCurrent'],
         cursorData: null,
         billingPlanGrouping: 'pro',
         appInterface: {},

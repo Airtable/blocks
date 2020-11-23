@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Airtable Blocks SDK",
     "repository": {
         "type": "git",
@@ -23,20 +23,20 @@
         "unstable_private_utils.d.ts"
     ],
     "scripts": {
-        "airbuild": "yarn run build && yarn run docs && yarn run test:coverage",
+        "airbuild": "yarn run build && yarn run docs && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
         "lint:quiet": "yarn run lint --quiet",
-        "jest": "jest",
+        "jest": "node --unhandled-rejections=strict ./node_modules/.bin/jest",
         "jest:watch": "jest --watch",
         "test": "yarn run jest",
         "test:coverage": "yarn run test --coverage",
         "build:clean": "rm -rf dist",
         "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
-        "watch:babel": "yarn run build:babel --watch",
+        "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
         "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",

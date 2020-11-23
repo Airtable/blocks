@@ -30,8 +30,6 @@ export const WatchableRecordStoreKeys = Object.freeze({
     cellValues: 'cellValues' as const,
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
-const WatchableRecordIdsInViewKeyPrefix = 'recordIdsInView:';
-const WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:';
 
 /**
  * The string case is to accommodate prefix keys
@@ -51,9 +49,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
-            key.startsWith(WatchableCellValuesInFieldKeyPrefix) ||
-            key.startsWith(WatchableRecordIdsInViewKeyPrefix) ||
-            key.startsWith(WatchableRecordColorsInViewKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
     static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
@@ -192,6 +188,23 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         }
     }
 
+    __onDataDeletion(): void {
+        for (const fieldId of Object.keys(this._cellValuesRetainCountByFieldId)) {
+            while (
+                this._cellValuesRetainCountByFieldId[fieldId] &&
+                this._cellValuesRetainCountByFieldId[fieldId] > 0
+            ) {
+                this.unloadCellValuesInFieldIds([fieldId]);
+            }
+        }
+
+        this._forceUnload();
+
+        for (const viewDataStore of values(this._viewDataStoresByViewId)) {
+            viewDataStore.__onDataDeletion();
+        }
+    }
+
     /**
      * Record metadata means record IDs, createdTime, and commentCount are loaded.
      * Record metadata must be loaded before creating, deleting, or updating records.
@@ -219,6 +232,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
+        this._assertNotForceUnloaded();
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<FieldId> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableRecordStoreKey>>> = [];
         for (const fieldId of fieldIds) {
@@ -314,6 +328,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
+        if (this._isForceUnloaded) {
+            return;
+        }
         const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
             let fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
@@ -377,6 +394,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
             values(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
+
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;
@@ -464,6 +482,15 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             }
             for (const fieldId of fieldIds) {
                 this._onChange(WatchableCellValuesInFieldKeyPrefix + fieldId, recordIds, fieldId);
+            }
+        }
+
+        if (dirtyPaths.viewOrder) {
+            for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
+                if (viewDataStore.isDeleted) {
+                    viewDataStore.__onDataDeletion();
+                    delete this._viewDataStoresByViewId[viewId];
+                }
             }
         }
     }

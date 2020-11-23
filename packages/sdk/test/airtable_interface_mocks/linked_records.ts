@@ -48,11 +48,11 @@ const linkedRecords: SdkInitData = {
                         lock: null,
                     },
                 },
-                activeViewId: 'viwkNnS94RQAQQTMn',
-                viewOrder: ['viwkNnS94RQAQQTMn'],
+                activeViewId: 'viwPrjctAll',
+                viewOrder: ['viwPrjctAll'],
                 viewsById: {
-                    viwkNnS94RQAQQTMn: {
-                        id: 'viwkNnS94RQAQQTMn',
+                    viwPrjctAll: {
+                        id: 'viwPrjctAll',
                         name: 'All projects',
                         type: ViewType.GRID,
                     },
@@ -97,10 +97,10 @@ const linkedRecords: SdkInitData = {
                     },
                 },
                 activeViewId: null,
-                viewOrder: ['viwWxkRmrDMhu7I8p'],
+                viewOrder: ['viwTaskAll'],
                 viewsById: {
-                    viwWxkRmrDMhu7I8p: {
-                        id: 'viwWxkRmrDMhu7I8p',
+                    viwTaskAll: {
+                        id: 'viwTaskAll',
                         name: 'All tasks',
                         type: ViewType.GRID,
                     },
@@ -111,18 +111,18 @@ const linkedRecords: SdkInitData = {
             },
         },
         permissionLevel: 'create',
-        currentUserId: 'usrcNLql3ByVkIjIe',
+        currentUserId: 'usrCurrent',
         enabledFeatureNames: [],
         collaboratorsById: {
-            usr3VLCpyqgcI46Sh: {
-                id: 'usr3VLCpyqgcI46Sh',
+            usrGalSamari: {
+                id: 'usrGalSamari',
                 email: 'collab10@example.com',
                 name: 'Gal Samari',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png',
             },
         },
-        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrcNLql3ByVkIjIe'],
+        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrCurrent'],
         cursorData: null,
         billingPlanGrouping: 'pro',
         appInterface: {},

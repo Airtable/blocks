@@ -68,6 +68,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return this._isDataLoaded && this.parentRecordStore.isRecordMetadataLoaded;
     }
 
+    __onDataDeletion(): void {
+        this._forceUnload();
+    }
+
     async loadDataAsync() {
         const tableLoadPromise = this.parentRecordStore.loadRecordMetadataAsync();
         this._mostRecentTableLoadPromise = tableLoadPromise;
@@ -208,13 +212,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      *
      * @param recordOrRecordId the record/record id to get the color for
      */
-    getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
+    getRecordColor(record: Record): Color | null {
         invariant(this.isDataLoaded, 'View data is not loaded');
 
-        const recordId =
-            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
-
-        return this._data.colorsByRecordId?.[recordId] ?? null;
+        return this._data.colorsByRecordId?.[record.id] ?? null;
     }
 
     get allFieldIds(): Array<FieldId> {

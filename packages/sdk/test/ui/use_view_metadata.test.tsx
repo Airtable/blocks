@@ -36,7 +36,7 @@ describe('useViewMetadata', () => {
         };
         const visibleRecordIds = ['recA', 'recC'];
         const fieldOrder = {
-            fieldIds: ['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH'],
+            fieldIds: ['fldPrjctName', 'fldPrjctClient', 'fldPrjctCtgry'],
             visibleFieldCount: 3,
         };
 
@@ -62,6 +62,6 @@ describe('useViewMetadata', () => {
         });
 
         const ids = metadata.allFields.map(({id}) => id);
-        expect(ids).toStrictEqual(['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm', 'fldRljtoVpOt1IDYH']);
+        expect(ids).toStrictEqual(['fldPrjctName', 'fldPrjctClient', 'fldPrjctCtgry']);
     });
 });

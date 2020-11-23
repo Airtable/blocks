@@ -57,6 +57,16 @@ export type RecordColorMode =
     | BySelectFieldRecordColorMode
     | ByViewRecordColorMode;
 
+export const serialize = (mode: RecordColorMode) => {
+    let result = mode.type;
+    if (mode.type === ModeTypes.BY_SELECT_FIELD) {
+        result += `-${mode.selectField.id}`;
+    } else if (mode.type === ModeTypes.BY_VIEW) {
+        result += `-${mode.view.id}`;
+    }
+    return result;
+};
+
 /**
  * Record coloring config creators.
  *

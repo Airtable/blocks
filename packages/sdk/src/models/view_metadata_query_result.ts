@@ -3,7 +3,6 @@ import {BaseData} from '../types/base';
 import {FieldId} from '../types/field';
 import {invariant} from '../error_utils';
 import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../private_utils';
-import ObjectPool from './object_pool';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import ViewDataStore from './view_data_store';
 import View from './view';
@@ -28,15 +27,6 @@ interface ViewMetadata {
     visibleFieldIds: Array<FieldId> | null;
     allFieldIds: Array<FieldId> | null;
 }
-
-const viewMetadataQueryResultPool: ObjectPool<
-    ViewMetadataQueryResult,
-    {view: View}
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult.parentView.id,
-    getKeyFromObjectOptions: ({view}) => view.id,
-    canObjectBeReusedForOptions: () => true,
-});
 
 /**
  * Contains information about a view that isn't loaded by default e.g. field order and visible fields.
@@ -80,19 +70,6 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         );
     }
 
-    /** @internal */
-    static __createOrReuseQueryResult(
-        view: View,
-        viewDataStore: ViewDataStore,
-    ): ViewMetadataQueryResult {
-        const queryResult = viewMetadataQueryResultPool.getObjectForReuse({view});
-        if (queryResult) {
-            return queryResult;
-        }
-
-        return new ViewMetadataQueryResult(view.__baseData, view, viewDataStore);
-    }
-
     /** */
     readonly parentView: View;
     /** @internal */
@@ -103,8 +80,11 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;
         this._viewDataStore = viewDataStore;
+    }
 
-        viewMetadataQueryResultPool.registerObjectForReuseWeak(this);
+    /** @internal */
+    get __poolKey() {
+        return this.parentView.id;
     }
 
     /** @internal */

@@ -1,16 +1,31 @@
 import BlockSdk from '../src/sdk';
 import Table from '../src/models/table';
 import View from '../src/models/view';
+import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
+import getSdk, {clearSdkForTest} from '../src/get_sdk';
 import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+jest.mock('../src/injected/airtable_interface', () => ({
+    __esModule: true,
+    default() {
+        return mockAirtableInterface;
+    },
+}));
+
+jest.useFakeTimers();
 
 describe('sdk', () => {
     let sdk: BlockSdk;
 
     beforeEach(() => {
+        clearSdkForTest();
         mockAirtableInterface.reset();
-        sdk = new BlockSdk(mockAirtableInterface);
+        sdk = getSdk();
+    });
+
+    afterEach(() => {
+        mockAirtableInterface.reset();
     });
 
     describe('model updates', () => {
@@ -65,7 +80,7 @@ describe('sdk', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tblcstEo50YXLJcK4', 'tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblTasks', 'tblDesignProjects', 'tblClients'],
                     },
                 ]);
 
@@ -79,7 +94,7 @@ describe('sdk', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tblcstEo50YXLJcK4', 'tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblTasks', 'tblDesignProjects', 'tblClients'],
                     },
                 ]);
 
@@ -93,7 +108,7 @@ describe('sdk', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblDesignProjects', 'tblTasks', 'tblClients'],
                     },
                 ]);
 
@@ -107,7 +122,7 @@ describe('sdk', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblDesignProjects', 'tblTasks', 'tblClients'],
                     },
                 ]);
 
@@ -118,81 +133,132 @@ describe('sdk', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tblcstEo50YXLJcK4', 'tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblTasks', 'tblDesignProjects', 'tblClients'],
                     },
                 ]);
 
                 const ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tblcstEo50YXLJcK4',
-                    'tbly388E8NA1CNhnF',
-                    'tblyt8B45wJQIx1c3',
-                ]);
+                expect(ids).toStrictEqual(['tblTasks', 'tblDesignProjects', 'tblClients']);
             });
 
             it('updates internal state - removal', () => {
                 let ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tbly388E8NA1CNhnF',
-                    'tblcstEo50YXLJcK4',
-                    'tblyt8B45wJQIx1c3',
-                ]);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblDesignProjects', 'tblClients'],
                     },
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        path: ['tablesById', 'tblTasks'],
                         value: undefined,
                     },
                 ]);
 
                 ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblClients']);
             });
 
             it('updates internal state - removal and recreation', () => {
                 let ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tbly388E8NA1CNhnF',
-                    'tblcstEo50YXLJcK4',
-                    'tblyt8B45wJQIx1c3',
-                ]);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
                 const toRestore = sdk.base.getTableById(ids[1]);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblDesignProjects', 'tblClients'],
                     },
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        path: ['tablesById', 'tblTasks'],
                         value: undefined,
                     },
                 ]);
 
                 ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblClients']);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
-                        value: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+                        value: ['tblDesignProjects', 'tblTasks', 'tblClients'],
                     },
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        path: ['tablesById', 'tblTasks'],
                         value: toRestore,
                     },
                 ]);
 
                 ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tbly388E8NA1CNhnF',
-                    'tblcstEo50YXLJcK4',
-                    'tblyt8B45wJQIx1c3',
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
+            });
+
+            it('updates internal state - removal and recreation after loading records', async () => {
+                let ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
+
+                const tableToDelete = sdk.base.getTableById('tblTasks');
+                const deletedTableData = tableToDelete._data;
+                mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockReturnValue(
+                    Promise.resolve({recordsById: {}}),
+                );
+                mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockReturnValue(
+                    Promise.resolve({
+                        recordsById: {
+                            recA: {
+                                id: 'recA',
+                                cellValuesByFieldId: {},
+                                commentCount: 0,
+                                createdTime: new Date().toJSON(),
+                            },
+                        },
+                    }),
+                );
+                const query = await tableToDelete.selectRecordsAsync();
+                expect(() => query.records).not.toThrow();
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tblDesignProjects', 'tblClients'],
+                    },
+                    {
+                        path: ['tablesById', 'tblTasks'],
+                        value: undefined,
+                    },
                 ]);
+
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblClients']);
+                expect(query.isDeleted).toBe(true);
+                expect(query.isDataLoaded).toBe(false);
+
+                deletedTableData.recordsById = undefined;
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tblDesignProjects', 'tblTasks', 'tblClients'],
+                    },
+                    {
+                        path: ['tablesById', 'tblTasks'],
+                        value: deletedTableData,
+                    },
+                ]);
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
+
+                expect(query.isDeleted).toBe(true);
+                expect(query.isDataLoaded).toBe(false);
+
+                const restoredTable = sdk.base.getTableById('tblTasks');
+                const newQuery = await restoredTable.selectRecordsAsync();
+                expect(() => newQuery.records).not.toThrow();
+
+
+                expect(query._recordStore._isDataLoaded).toBe(true);
+                jest.advanceTimersByTime(AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
+                expect(query._recordStore._isDataLoaded).toBe(false);
             });
         });
 
@@ -203,7 +269,7 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'a new name',
                     },
                 ]);
@@ -214,13 +280,11 @@ describe('sdk', () => {
             it('notifies "schema" watchers', () => {
                 const mock = jest.fn();
 
-                sdk.base.tables;
-
                 sdk.base.watch('schema', mock);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'a new name',
                     },
                 ]);
@@ -231,13 +295,11 @@ describe('sdk', () => {
             it('does not notify "schema" watchers when new value matches current', () => {
                 const mock = jest.fn();
 
-                sdk.base.tables;
-
                 sdk.base.watch('schema', mock);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'Tasks',
                     },
                 ]);
@@ -248,7 +310,7 @@ describe('sdk', () => {
             it('updates internal state - modification', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'a new name',
                     },
                 ]);
@@ -266,31 +328,23 @@ describe('sdk', () => {
                 ]);
 
                 const ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tbly388E8NA1CNhnF',
-                    'tblcstEo50YXLJcK4',
-                    'tblyt8B45wJQIx1c3',
-                ]);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
             });
 
             it('handles multiple updates', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'first',
                     },
                     {
-                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        path: ['tablesById', 'tblTasks', 'name'],
                         value: 'second',
                     },
                 ]);
 
                 const ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual([
-                    'tbly388E8NA1CNhnF',
-                    'tblcstEo50YXLJcK4',
-                    'tblyt8B45wJQIx1c3',
-                ]);
+                expect(ids).toStrictEqual(['tblDesignProjects', 'tblTasks', 'tblClients']);
                 expect(sdk.base.tables[1].name).toStrictEqual('second');
             });
         });
@@ -299,7 +353,7 @@ describe('sdk', () => {
             let table: Table;
 
             beforeEach(() => {
-                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+                table = sdk.base.tables.find(({id}) => id === 'tblDesignProjects') as Table;
             });
 
             it('notifies base "schema" watchers', () => {
@@ -308,7 +362,7 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        path: ['tablesById', 'tblDesignProjects', 'name'],
                         value: 'Egon',
                     },
                 ]);
@@ -322,7 +376,7 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        path: ['tablesById', 'tblDesignProjects', 'name'],
                         value: 'Egon',
                     },
                 ]);
@@ -333,7 +387,7 @@ describe('sdk', () => {
             it('updates internal state', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        path: ['tablesById', 'tblDesignProjects', 'name'],
                         value: 'Egon',
                     },
                 ]);
@@ -346,7 +400,7 @@ describe('sdk', () => {
             let table: Table;
 
             beforeEach(() => {
-                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+                table = sdk.base.tables.find(({id}) => id === 'tblDesignProjects') as Table;
             });
 
             it('notifies base "schema" watchers', () => {
@@ -355,13 +409,13 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
                         value: [
-                            'viwqo8mFAqy2HYSCL',
-                            'viwkNnS94RQAQQTMn',
-                            'viw8v5XkLudbiCJfD',
-                            'viwhz3PjFATSxaV5X',
-                            'viwA4Tzw8IJcHHgul',
+                            'viwPrjctIncmplt',
+                            'viwPrjctAll',
+                            'viwPrjctCompleted',
+                            'viwPrjctCalendar',
+                            'viwPrjctDueDates',
                         ],
                     },
                 ]);
@@ -375,13 +429,13 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
                         value: [
-                            'viwqo8mFAqy2HYSCL',
-                            'viwkNnS94RQAQQTMn',
-                            'viw8v5XkLudbiCJfD',
-                            'viwhz3PjFATSxaV5X',
-                            'viwA4Tzw8IJcHHgul',
+                            'viwPrjctIncmplt',
+                            'viwPrjctAll',
+                            'viwPrjctCompleted',
+                            'viwPrjctCalendar',
+                            'viwPrjctDueDates',
                         ],
                     },
                 ]);
@@ -392,59 +446,59 @@ describe('sdk', () => {
             it('updates internal state - reordering', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
                         value: [
-                            'viwqo8mFAqy2HYSCL',
-                            'viwkNnS94RQAQQTMn',
-                            'viw8v5XkLudbiCJfD',
-                            'viwhz3PjFATSxaV5X',
-                            'viwA4Tzw8IJcHHgul',
+                            'viwPrjctIncmplt',
+                            'viwPrjctAll',
+                            'viwPrjctCompleted',
+                            'viwPrjctCalendar',
+                            'viwPrjctDueDates',
                         ],
                     },
                 ]);
 
                 const ids = table.views.map(({id}) => id);
                 expect(ids).toStrictEqual([
-                    'viwqo8mFAqy2HYSCL',
-                    'viwkNnS94RQAQQTMn',
-                    'viw8v5XkLudbiCJfD',
-                    'viwhz3PjFATSxaV5X',
-                    'viwA4Tzw8IJcHHgul',
+                    'viwPrjctIncmplt',
+                    'viwPrjctAll',
+                    'viwPrjctCompleted',
+                    'viwPrjctCalendar',
+                    'viwPrjctDueDates',
                 ]);
             });
 
             it('updates internal state - removal', () => {
                 let ids = table.views.map(({id}) => id);
                 expect(ids).toStrictEqual([
-                    'viwkNnS94RQAQQTMn',
-                    'viwqo8mFAqy2HYSCL',
-                    'viw8v5XkLudbiCJfD',
-                    'viwhz3PjFATSxaV5X',
-                    'viwA4Tzw8IJcHHgul',
+                    'viwPrjctAll',
+                    'viwPrjctIncmplt',
+                    'viwPrjctCompleted',
+                    'viwPrjctCalendar',
+                    'viwPrjctDueDates',
                 ]);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
                         value: [
-                            'viwkNnS94RQAQQTMn',
-                            'viwqo8mFAqy2HYSCL',
-                            'viwhz3PjFATSxaV5X',
-                            'viwA4Tzw8IJcHHgul',
+                            'viwPrjctAll',
+                            'viwPrjctIncmplt',
+                            'viwPrjctCalendar',
+                            'viwPrjctDueDates',
                         ],
                     },
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewsById', 'viw8v5XkLudbiCJfD'],
+                        path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctCompleted'],
                         value: undefined,
                     },
                 ]);
 
                 ids = table.views.map(({id}) => id);
                 expect(ids).toStrictEqual([
-                    'viwkNnS94RQAQQTMn',
-                    'viwqo8mFAqy2HYSCL',
-                    'viwhz3PjFATSxaV5X',
-                    'viwA4Tzw8IJcHHgul',
+                    'viwPrjctAll',
+                    'viwPrjctIncmplt',
+                    'viwPrjctCalendar',
+                    'viwPrjctDueDates',
                 ]);
             });
         });
@@ -454,11 +508,9 @@ describe('sdk', () => {
                 const mock = jest.fn();
                 sdk.base.watch('schema', mock);
 
-                sdk.base.tables;
-
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'lock'],
+                        path: ['tablesById', 'tblDesignProjects', 'lock'],
                         value: {foo: 'bar'},
                     },
                 ]);
@@ -474,11 +526,9 @@ describe('sdk', () => {
                 const mock = jest.fn();
                 sdk.base.watch('schema', mock);
 
-                sdk.base.tables;
-
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'externalSyncById'],
+                        path: ['tablesById', 'tblDesignProjects', 'externalSyncById'],
                         value: 'a value',
                     },
                 ]);
@@ -493,7 +543,7 @@ describe('sdk', () => {
             let table: Table;
 
             beforeEach(() => {
-                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+                table = sdk.base.tables.find(({id}) => id === 'tblDesignProjects') as Table;
             });
 
             it('notifies base "schema" watchers', () => {
@@ -502,7 +552,7 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        path: ['tablesById', 'tblDesignProjects', 'description'],
                         value: 'a value',
                     },
                 ]);
@@ -516,7 +566,7 @@ describe('sdk', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        path: ['tablesById', 'tblDesignProjects', 'description'],
                         value: 'a value',
                     },
                 ]);
@@ -527,7 +577,7 @@ describe('sdk', () => {
             it('updates internal state', () => {
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        path: ['tablesById', 'tblDesignProjects', 'description'],
                         value: 'a value',
                     },
                 ]);
@@ -541,8 +591,8 @@ describe('sdk', () => {
 
             beforeEach(() => {
                 view = (sdk.base.tables.find(
-                    ({id}) => id === 'tbly388E8NA1CNhnF',
-                ) as Table).views.find(({id}) => id === 'viw8v5XkLudbiCJfD') as View;
+                    ({id}) => id === 'tblDesignProjects',
+                ) as Table).views.find(({id}) => id === 'viwPrjctCompleted') as View;
             });
 
             it('notifies base "schema" watchers', () => {
@@ -553,9 +603,9 @@ describe('sdk', () => {
                     {
                         path: [
                             'tablesById',
-                            'tbly388E8NA1CNhnF',
+                            'tblDesignProjects',
                             'viewsById',
-                            'viw8v5XkLudbiCJfD',
+                            'viwPrjctCompleted',
                             'name',
                         ],
                         value: 'a new name',
@@ -573,9 +623,9 @@ describe('sdk', () => {
                     {
                         path: [
                             'tablesById',
-                            'tbly388E8NA1CNhnF',
+                            'tblDesignProjects',
                             'viewsById',
-                            'viw8v5XkLudbiCJfD',
+                            'viwPrjctCompleted',
                             'name',
                         ],
                         value: 'a new name',
@@ -590,9 +640,9 @@ describe('sdk', () => {
                     {
                         path: [
                             'tablesById',
-                            'tbly388E8NA1CNhnF',
+                            'tblDesignProjects',
                             'viewsById',
-                            'viw8v5XkLudbiCJfD',
+                            'viwPrjctCompleted',
                             'name',
                         ],
                         value: 'a new name',

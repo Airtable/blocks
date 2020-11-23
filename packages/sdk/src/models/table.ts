@@ -13,8 +13,9 @@ import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
 import Base, {ChangedPathsForType} from './base';
+import ObjectPool from './object_pool';
 import Record from './record';
-import {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import RecordStore from './record_store';
 
@@ -58,6 +59,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     _airtableInterface: AirtableInterface;
     /** @internal */
     _recordStore: RecordStore;
+    /** @internal */
+    __tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, typeof TableOrViewQueryResult>;
 
     /**
      * @internal
@@ -70,7 +73,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         airtableInterface: AirtableInterface,
     ) {
         super(baseData, tableId);
-
         this._parentBase = parentBase;
         this._recordStore = recordStore;
         this._viewModelsById = {}; 
@@ -78,6 +80,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         this._cachedFieldNamesById = null;
 
         this._airtableInterface = airtableInterface;
+
+        this.__tableOrViewQueryResultPool = new ObjectPool(TableOrViewQueryResult);
     }
 
     /**
@@ -449,7 +453,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param opts Options for the query, such as sorts and fields.
      * @example
      * ```js
-     * import {useBase, useRecords} from '@airtable/blocks';
+     * import {useBase, useRecords} from '@airtable/blocks/ui';
      * import React from 'react';
      *
      * function TodoList() {
@@ -472,11 +476,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
-        return TableOrViewQueryResult.__createOrReuseQueryResult(
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
             this,
             this._recordStore,
             opts || {},
         );
+        return this.__tableOrViewQueryResultPool.getObjectForReuse(this, normalizedOpts);
     }
     /**
      * Select and load records from the table. Returns a {@link RecordQueryResult} promise where

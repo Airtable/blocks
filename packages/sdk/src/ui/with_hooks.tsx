@@ -138,6 +138,6 @@ export default function withHooks<InjectedProps, Props extends InjectedProps, In
             };
         }, [injectedRef, forwardedRef]);
 
-        return <Component ref={mergedRef} {...(props as any)} {...propsToInject} />;
+        return <Component {...(props as any)} {...propsToInject} ref={mergedRef} />;
     }) as any;
 }

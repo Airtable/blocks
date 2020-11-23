@@ -1,3 +1,4 @@
+import {invariant} from './error_utils';
 import getSdk from './get_sdk';
 import {AirtableInterface} from './types/airtable_interface';
 import {RecordActionData, RecordActionDataCallback} from './types/record_action_data';
@@ -78,6 +79,18 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
     _handlePerformRecordAction(data: RecordActionData) {
         this.recordActionData = data;
         this._onChange(WatchablePerformRecordActionKeys.recordActionData, data);
+    }
+
+    /**
+     * This accessor method is defined solely to satisfy the contract of the
+     * AbstractModel class.
+     *
+     * @internal */
+    get _dataOrNullIfDeleted() {
+        return invariant(
+            false,
+            'The `data` property of PerformRecordAction should not be referenced',
+        ) as never;
     }
 
     /**

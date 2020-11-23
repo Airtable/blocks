@@ -198,18 +198,6 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @internal
      */
-    get __currentUserId(): UserId | null {
-        return this._sessionData.currentUserId;
-    }
-    /**
-     * @internal
-     */
-    get __rawPermissionLevel(): PermissionLevel {
-        return this._sessionData.permissionLevel;
-    }
-    /**
-     * @internal
-     */
     __isFeatureEnabled(featureName: string): boolean {
         return this._sessionData.enabledFeatureNames.includes(featureName);
     }

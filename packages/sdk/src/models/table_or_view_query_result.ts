@@ -17,11 +17,9 @@ import Table, {WatchableTableKeys} from './table';
 import View from './view';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
-    RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
     NormalizedSortConfig,
 } from './record_query_result';
-import ObjectPool from './object_pool';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 import Field from './field';
 import Record from './record';
@@ -32,20 +30,6 @@ import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 interface TableOrViewQueryResultData {
     recordIds: Array<string> | null; 
 }
-
-const tableOrViewQueryResultPool: ObjectPool<
-    TableOrViewQueryResult,
-    {
-        sourceModel: Table | View;
-        normalizedOpts: NormalizedRecordQueryResultOpts;
-    }
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult.__sourceModelId,
-    getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
-    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-        return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-    },
-});
 
 /**
  * Represents a set of records directly from a view or table. See {@link RecordQueryResult} for main
@@ -60,31 +44,6 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     static _className = 'TableOrViewQueryResult';
 
-    /** @internal */
-    static __createOrReuseQueryResult(
-        sourceModel: Table | View,
-        recordStore: RecordStore,
-        opts: RecordQueryResultOpts,
-    ) {
-        const tableModel = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, recordStore, opts);
-        return this.__createOrReuseQueryResultWithNormalizedOpts(sourceModel, normalizedOpts);
-    }
-    /** @internal */
-    static __createOrReuseQueryResultWithNormalizedOpts(
-        sourceModel: Table | View,
-        normalizedOpts: NormalizedRecordQueryResultOpts,
-    ) {
-        const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
-            sourceModel,
-            normalizedOpts,
-        });
-        if (queryResult) {
-            return queryResult;
-        } else {
-            return new TableOrViewQueryResult(sourceModel, normalizedOpts);
-        }
-    }
     /** @internal */
     _sourceModel: Table | View;
     /** @internal */
@@ -147,12 +106,11 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
         this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
 
-        tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
         Object.seal(this);
     }
     /** @internal */
     get _dataOrNullIfDeleted(): TableOrViewQueryResultData | null {
-        if (this._sourceModel.isDeleted) {
+        if (this._sourceModel.isDeleted || this._recordStore.isDeleted) {
             return null;
         }
 
@@ -163,6 +121,11 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     get __sourceModelId(): string {
         return this._sourceModel.id;
+    }
+
+    /** @internal */
+    get __poolKey(): string {
+        return `${this._serializedOpts}::${this._sourceModel.id}`;
     }
 
     /**
@@ -187,9 +150,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
      * Can be watched.
      */
     get recordIds(): Array<string> {
+        const {recordIds} = this._data; 
         invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
-        invariant(this._data.recordIds, 'No recordIds');
-        return this._data.recordIds;
+        invariant(recordIds, 'No recordIds');
+        return recordIds;
     }
     /**
      * The set of record IDs in this RecordQueryResult.
@@ -360,6 +324,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         let sourceModelLoadPromise;
         let cellValuesInFieldsLoadPromise;
 
+        if (this._sourceModel.isDeleted) {
+            throw this._spawnErrorForDeletion();
+        }
+
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
             cellValuesInFieldsLoadPromise = this._recordStore.loadCellValuesInFieldIdsAsync(
                 Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields),
@@ -390,7 +358,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
-        tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
@@ -502,7 +470,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         this._orderedRecordIds = null;
         this._recordIdsSet = null;
 
-        tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
     /** @internal */
     _addRecordIdsToVisList(recordIds: Array<string>) {
@@ -521,21 +489,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         updates?: {addedRecordIds: Array<string>; removedRecordIds: Array<string>} | null,
     ) {
         if (model instanceof ViewDataStore) {
-            if (this._orderedRecordIds) {
-                const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
-                    .visibleRecordIds;
-                const addedRecordIds = arrayDifference(
-                    visibleRecordIds,
-                    this._orderedRecordIds || [],
-                );
-                const removedRecordIds = arrayDifference(
-                    this._orderedRecordIds || [],
-                    visibleRecordIds,
-                );
-                updates = {addedRecordIds, removedRecordIds};
-            } else {
-                updates = null;
-            }
+            invariant(this._orderedRecordIds, '_orderedRecordIds unset');
+            const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
+                .visibleRecordIds;
+            const addedRecordIds = arrayDifference(visibleRecordIds, this._orderedRecordIds);
+            const removedRecordIds = arrayDifference(this._orderedRecordIds, visibleRecordIds);
+            updates = {addedRecordIds, removedRecordIds};
         }
 
         if (!updates) {
@@ -585,9 +544,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         const visList = this._visList;
         invariant(visList, 'No vis list');
 
-        if (recordIds.length === 0) {
-            return;
-        }
+        invariant(recordIds.length > 0, 'field ID set without a corresponding record ID');
 
         const visListRecordIdsSet = new Set(visList.getOrderedRecordIds());
         const recordIdsToMove = recordIds.filter(recordId => visListRecordIdsSet.has(recordId));
@@ -620,7 +577,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         let wereAnyFieldsCreatedOrDeleted = false;
         for (const fieldId of addedFieldIds) {
-            if (has(fieldIdsSet, fieldId)) {
+            if (fieldIdsSet.has(fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldByIdIfExists(fieldId);
                 invariant(field, 'Created field does not exist');
@@ -631,7 +588,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         if (!wereAnyFieldsCreatedOrDeleted) {
             wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
-                has(fieldIdsSet, fieldId),
+                fieldIdsSet.has(fieldId),
             );
         }
 

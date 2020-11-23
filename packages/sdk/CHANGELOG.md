@@ -9,9 +9,16 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.1...HEAD)
 
 No changes.
+
+## [1.2.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...@airtable/blocks@1.2.1) - 2020-11-23
+
+-   Fixed a bug that prevented TableOrViewQueryResult from notifying watchers about the
+    creation/deletion of sorted fields.
+-   Fixed a bug where deleting and undeleting a table that was already loaded caused the App to
+    crash.
 
 ## [1.2.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...@airtable/blocks@1.2.0) - 2020-10-23
 

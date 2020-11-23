@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {invariant, spawnAbstractMethodError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {BaseData} from '../types/base';
 import Watchable from '../watchable';
 
@@ -8,10 +8,19 @@ import Watchable from '../watchable';
  *
  * @docsPath models/advanced/AbstractModel
  */
-class AbstractModel<DataType, WatchableKey extends string> extends Watchable<WatchableKey> {
+abstract class AbstractModel<DataType, WatchableKey extends string> extends Watchable<
+    WatchableKey
+> {
     /** @internal */
     static _className = 'AbstractModel';
-    /** @internal */
+    /**
+     * This method is essentially abstract, but as of this writing, TypeScript
+     * does not support abstract static methods. This necessitates a concrete
+     * implementation which must be explicitly ignored by the test coverage
+     * tooling.
+     *
+     * @internal
+     */
     static _isWatchableKey(key: string): boolean {
         return false;
     }
@@ -43,9 +52,7 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
     /**
      * @internal
      */
-    get _dataOrNullIfDeleted(): DataType | null {
-        throw spawnAbstractMethodError();
-    }
+    abstract get _dataOrNullIfDeleted(): DataType | null;
     /**
      * @internal
      */

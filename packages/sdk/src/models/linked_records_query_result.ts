@@ -4,10 +4,8 @@ import getSdk from '../get_sdk';
 import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
-import ObjectPool from './object_pool';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
-    RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
 } from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
@@ -17,7 +15,7 @@ import Field from './field';
 import Record from './record';
 import RecordStore from './record_store';
 
-const getLinkedTableId = (field: Field): string => {
+export const getLinkedTableId = (field: Field): string => {
     const options = field.options;
     const linkedTableId = options && options.linkedTableId;
     invariant(typeof linkedTableId === 'string', 'linkedTableId must exist');
@@ -25,22 +23,8 @@ const getLinkedTableId = (field: Field): string => {
     return linkedTableId;
 };
 
-const pool: ObjectPool<
-    LinkedRecordsQueryResult,
-    {
-        field: Field;
-        record: Record;
-        normalizedOpts: NormalizedRecordQueryResultOpts;
-    }
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult._poolKey,
-    getKeyFromObjectOptions: ({field, record}) => {
-        return `${record.id}::${field.id}::${getLinkedTableId(field)}`;
-    },
-    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-        return queryResult.isValid && queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-    },
-});
+/** internal */
+interface LinkedRecordsQueryResultData {}
 
 /**
  * Represents a set of records from a LinkedRecord cell value. See {@link RecordQueryResult} for main
@@ -51,51 +35,14 @@ const pool: ObjectPool<
  *
  * @docsPath models/query results/LinkedRecordsQueryResult
  */
-class LinkedRecordsQueryResult extends RecordQueryResult {
+class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResultData> {
     /** @internal */
     static _className = 'LinkedRecordsQueryResult';
-
-    /** @internal */
-    static __createOrReuseQueryResult(
-        record: Record,
-        field: Field,
-        opts: RecordQueryResultOpts,
-    ): LinkedRecordsQueryResult {
-        invariant(
-            record.parentTable === field.parentTable,
-            'record and field must belong to the same table',
-        );
-
-        invariant(
-            field.type === FieldType.MULTIPLE_RECORD_LINKS,
-            'field must be MULTIPLE_RECORD_LINKS',
-        );
-
-        const linkedTableId = field.options && field.options.linkedTableId;
-        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
-
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
-        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
-
-        const normalizedOpts = TableOrViewQueryResult._normalizeOpts(
-            linkedTable,
-            linkedRecordStore,
-            opts,
-        );
-        const queryResult = pool.getObjectForReuse({record, field, normalizedOpts});
-        if (queryResult) {
-            return queryResult;
-        } else {
-            return new LinkedRecordsQueryResult(record, field, normalizedOpts);
-        }
-    }
 
     /** @internal */
     _record: Record;
     /** @internal */
     _field: Field;
-    /** @internal */
-    _poolKey: string;
     /** @internal */
     _linkedTable: Table;
     /** @internal */
@@ -126,14 +73,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         this._field = field;
         this._linkedTable = normalizedOpts.table;
         this._linkedRecordStore = normalizedOpts.recordStore;
-        this._poolKey = `${record.id}::${field.id}::${this._linkedTable.id}`;
 
-        this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResultWithNormalizedOpts(
+        this._linkedQueryResult = this._linkedTable.__tableOrViewQueryResultPool.getObjectForReuse(
             this._linkedTable,
             normalizedOpts,
         );
-
-        pool.registerObjectForReuseWeak(this);
     }
 
     /**
@@ -222,22 +166,24 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        const validKeys = super.unwatch(keys, callback, context);
+        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<
+            WatchableRecordQueryResultKey
+        >;
 
-        for (const key of validKeys) {
+        for (const key of arrayKeys) {
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
-                this._unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch();
+                this._unwatchLinkedQueryCellValuesIfPossibleBeforeUnwatch();
             }
 
             if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
                     RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
-                this._unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId);
+                this._unwatchLinkedQueryCellValuesInFieldIfPossibleBeforeUnwatch(fieldId);
             }
         }
 
-        return validKeys;
+        return super.unwatch(arrayKeys, callback, context);
     }
 
     /** @inheritdoc */
@@ -252,7 +198,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
-        pool.registerObjectForReuseStrong(this);
+        this._record.__linkedRecordsQueryResultPool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
 
@@ -272,7 +218,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     /** @internal */
     _unloadData() {
         if (this.isValid) {
-            pool.unregisterObjectForReuseStrong(this);
+            this._record.__linkedRecordsQueryResultPool.unregisterObjectForReuseStrong(this);
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 
@@ -284,6 +230,15 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
             this._invalidateComputedData();
         }
+    }
+
+    /**
+     * the key used to identify this query result in ObjectPool
+     *
+     * @hidden
+     */
+    get __poolKey() {
+        return `${this._serializedOpts}::${this._field.id}::${this._linkedTable.id}::${this.isValid}`;
     }
 
     /** @internal */
@@ -299,8 +254,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /** @internal */
-    _unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch() {
-        if (this._cellValuesWatchCount === 0 && this.isValid) {
+    _unwatchLinkedQueryCellValuesIfPossibleBeforeUnwatch() {
+        if (this._cellValuesWatchCount === 1 && this.isValid) {
             this._unwatchLinkedQueryCellValues();
         }
     }
@@ -315,7 +270,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             const fieldId = watchKey.slice(
                 RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
             );
-            countByFieldId[fieldId] = (this._changeWatchersByKey[watchKey] || []).length;
+            countByFieldId[fieldId] = this._changeWatchersByKey[watchKey].length;
         }
 
         return countByFieldId;
@@ -329,15 +284,14 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /** @internal */
-    _unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId: string) {
+    _unwatchLinkedQueryCellValuesInFieldIfPossibleBeforeUnwatch(fieldId: string) {
         invariant(
-            this._cellValueWatchCountByFieldId[fieldId] &&
-                this._cellValueWatchCountByFieldId[fieldId] > 0,
+            this._cellValueWatchCountByFieldId[fieldId],
             "cellValuesInField:%s over-free'd",
             fieldId,
         );
 
-        if (this._cellValueWatchCountByFieldId[fieldId] === 0 && this.isValid) {
+        if (this._cellValueWatchCountByFieldId[fieldId] === 1 && this.isValid) {
             this._unwatchLinkedQueryCellValuesInField(fieldId);
         }
     }
@@ -413,6 +367,22 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
         this._onChange('records');
         this._onChange('recordIds');
+    }
+
+    /**
+     * This model doesn't use the `_data` computed property it inherits from
+     * AbstractModel. It implements the following method only so that internal
+     * checks for model deletion behave appropriately (the data itself is
+     * inconsequential).
+     *
+     * @internal
+     */
+    get _dataOrNullIfDeleted(): LinkedRecordsQueryResultData | null {
+        if (this._record.isDeleted || this._linkedRecordStore.isDeleted) {
+            return null;
+        }
+
+        return {};
     }
 
     /** @internal */
@@ -506,9 +476,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             this._unwatchLinkedQueryCellValues();
         }
         for (const fieldId of Object.keys(this._cellValueWatchCountByFieldId)) {
-            if (this._cellValueWatchCountByFieldId[fieldId] > 0) {
-                this._unwatchLinkedQueryCellValuesInField(fieldId);
-            }
+            this._unwatchLinkedQueryCellValuesInField(fieldId);
         }
 
         this._isValid = false;

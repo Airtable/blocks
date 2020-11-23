@@ -1,5 +1,4 @@
 import {ReactWrapper} from 'enzyme';
-import ObjectPool from '../src/models/object_pool';
 import Watchable from '../src/watchable';
 
 /**
@@ -17,36 +16,6 @@ export function getComputedStylePropValue<Props extends {}>(
     return getComputedStyle(domNode).getPropertyValue(styleProp);
 }
 
-/**
- * Ensure that all instances of the ObjectPool class use the authentic
- * implementation.
- */
-export const enableObjectPool = () => {
-    const proto = ObjectPool.prototype;
-    const names = Object.getOwnPropertyNames(proto) as (keyof ObjectPool<any, any>)[];
-    for (const name of names) {
-        if (jest.isMockFunction(proto[name])) {
-            (proto[name] as jest.Mock).mockRestore();
-        }
-    }
-};
-
-/**
- * Replace the implementation of all instances of the ObjectPool class such
- * that they no longer provide caching of any sort.
- */
-export const disableObjectPool = () => {
-    enableObjectPool();
-    const proto = ObjectPool.prototype;
-    const names = Object.getOwnPropertyNames(proto) as (keyof ObjectPool<any, any>)[];
-
-    for (const name of names) {
-        if (typeof proto[name] === 'function') {
-            jest.spyOn(proto, name as any).mockImplementation(() => {});
-        }
-    }
-};
-
 export function waitForWatchKeyAsync<Key extends string>(
     model: Watchable<Key>,
     key: Key,
@@ -57,5 +26,25 @@ export function waitForWatchKeyAsync<Key extends string>(
             resolve();
         };
         model.watch(key, handler);
+    });
+}
+
+export function simulateTimersAndClearAfterEachTest(): void {
+    let automaticAdvancement: ReturnType<typeof setInterval>;
+
+    beforeAll(() => {
+        automaticAdvancement = setInterval(() => {
+            jest.advanceTimersByTime(20);
+        }, 20);
+
+        jest.useFakeTimers();
+    });
+
+    afterAll(() => {
+        clearInterval(automaticAdvancement);
+    });
+
+    afterEach(() => {
+        jest.clearAllTimers();
     });
 }

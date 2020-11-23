@@ -23,22 +23,22 @@ describe('Base', () => {
         it('lists all tables in the expected order', () => {
             expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
                 Array [
-                  "tbly388E8NA1CNhnF",
-                  "tblcstEo50YXLJcK4",
-                  "tblyt8B45wJQIx1c3",
+                  "tblDesignProjects",
+                  "tblTasks",
+                  "tblClients",
                 ]
             `);
         });
 
         it('omits tables which have no corresponding schema', async () => {
             const {tablesById} = mockAirtableInterface.sdkInitData.baseData;
-            delete tablesById.tbly388E8NA1CNhnF;
+            delete tablesById.tblDesignProjects;
             base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
 
             expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
                 Array [
-                  "tblcstEo50YXLJcK4",
-                  "tblyt8B45wJQIx1c3",
+                  "tblTasks",
+                  "tblClients",
                 ]
             `);
         });
@@ -46,12 +46,12 @@ describe('Base', () => {
 
     describe('getCollaboratorIfExists', () => {
         it('returns collaborator by id', () => {
-            const collaborator1 = base.getCollaboratorIfExists('usrTv3tPZmP3GYJ9K');
-            const collaborator2 = base.getCollaboratorIfExists('usr8e9aJ8jHSg29YV');
+            const collaborator1 = base.getCollaboratorIfExists('usrAshQuintana');
+            const collaborator2 = base.getCollaboratorIfExists('usrParisFotiou');
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab4@example.com",
-                  "id": "usrTv3tPZmP3GYJ9K",
+                  "id": "usrAshQuintana",
                   "name": "Ash Quintana",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
                 }
@@ -59,7 +59,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab26@example.com",
-                  "id": "usr8e9aJ8jHSg29YV",
+                  "id": "usrParisFotiou",
                   "name": "Paris Fotiou",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/xoafD4NRXGRLcx3qilRg_Screen%20Shot%202019-01-17%20at%201.20.14%20PM.png",
                 }
@@ -72,7 +72,7 @@ describe('Base', () => {
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab5@example.com",
-                  "id": "usrArxKAc5yNZQfxl",
+                  "id": "usrBaileyMirza",
                   "name": "Bailey Mirza",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7pprdNqqQuSWWN7zeavM_headshot-pink-1.png",
                 }
@@ -80,7 +80,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab10@example.com",
-                  "id": "usr3VLCpyqgcI46Sh",
+                  "id": "usrGalSamari",
                   "name": "Gal Samari",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png",
                 }
@@ -93,7 +93,7 @@ describe('Base', () => {
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab16@example.com",
-                  "id": "usrQjmKTBNxfXNmmR",
+                  "id": "usrJordanPeretz",
                   "name": "Jordan Peretz",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/jCMoXFziQcD0XkHMxhwQ_Screen%20Shot%202019-01-17%20at%201.19.59%20PM.png",
                 }
@@ -101,7 +101,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab4@example.com",
-                  "id": "usrTv3tPZmP3GYJ9K",
+                  "id": "usrAshQuintana",
                   "name": "Ash Quintana",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
                 }
@@ -161,12 +161,12 @@ describe('Base', () => {
         });
 
         it('returns collaborator by id', () => {
-            const collaborator1 = base.getCollaborator('usrTv3tPZmP3GYJ9K');
-            const collaborator2 = base.getCollaborator('usr8e9aJ8jHSg29YV');
+            const collaborator1 = base.getCollaborator('usrAshQuintana');
+            const collaborator2 = base.getCollaborator('usrParisFotiou');
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab4@example.com",
-                  "id": "usrTv3tPZmP3GYJ9K",
+                  "id": "usrAshQuintana",
                   "name": "Ash Quintana",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
                 }
@@ -174,7 +174,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab26@example.com",
-                  "id": "usr8e9aJ8jHSg29YV",
+                  "id": "usrParisFotiou",
                   "name": "Paris Fotiou",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/xoafD4NRXGRLcx3qilRg_Screen%20Shot%202019-01-17%20at%201.20.14%20PM.png",
                 }
@@ -187,7 +187,7 @@ describe('Base', () => {
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab5@example.com",
-                  "id": "usrArxKAc5yNZQfxl",
+                  "id": "usrBaileyMirza",
                   "name": "Bailey Mirza",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7pprdNqqQuSWWN7zeavM_headshot-pink-1.png",
                 }
@@ -195,7 +195,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab10@example.com",
-                  "id": "usr3VLCpyqgcI46Sh",
+                  "id": "usrGalSamari",
                   "name": "Gal Samari",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png",
                 }
@@ -208,7 +208,7 @@ describe('Base', () => {
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab16@example.com",
-                  "id": "usrQjmKTBNxfXNmmR",
+                  "id": "usrJordanPeretz",
                   "name": "Jordan Peretz",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/jCMoXFziQcD0XkHMxhwQ_Screen%20Shot%202019-01-17%20at%201.19.59%20PM.png",
                 }
@@ -216,7 +216,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab4@example.com",
-                  "id": "usrTv3tPZmP3GYJ9K",
+                  "id": "usrAshQuintana",
                   "name": "Ash Quintana",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
                 }
@@ -242,12 +242,12 @@ describe('Base', () => {
 
     describe('getCollaboratorById', () => {
         it('returns collaborator by id', () => {
-            const collaborator1 = base.getCollaboratorById('usrTv3tPZmP3GYJ9K');
-            const collaborator2 = base.getCollaboratorById('usr8e9aJ8jHSg29YV');
+            const collaborator1 = base.getCollaboratorById('usrAshQuintana');
+            const collaborator2 = base.getCollaboratorById('usrParisFotiou');
             expect(collaborator1).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab4@example.com",
-                  "id": "usrTv3tPZmP3GYJ9K",
+                  "id": "usrAshQuintana",
                   "name": "Ash Quintana",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
                 }
@@ -255,7 +255,7 @@ describe('Base', () => {
             expect(collaborator2).toMatchInlineSnapshot(`
                 Object {
                   "email": "collab26@example.com",
-                  "id": "usr8e9aJ8jHSg29YV",
+                  "id": "usrParisFotiou",
                   "name": "Paris Fotiou",
                   "profilePicUrl": "https://dl.airtable.com/profilePics/xoafD4NRXGRLcx3qilRg_Screen%20Shot%202019-01-17%20at%201.20.14%20PM.png",
                 }
@@ -273,21 +273,21 @@ describe('Base', () => {
 
     describe('getTableIfExists', () => {
         it('returns table by id', () => {
-            const table1 = base.getTableIfExists('tbly388E8NA1CNhnF');
-            const table2 = base.getTableIfExists('tblcstEo50YXLJcK4');
+            const table1 = base.getTableIfExists('tblDesignProjects');
+            const table2 = base.getTableIfExists('tblTasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1?.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1?.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2?.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2?.id).toBe('tblTasks');
         });
 
         it('returns table by name', () => {
             const table1 = base.getTableIfExists('Design projects');
             const table2 = base.getTableIfExists('Tasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1?.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1?.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2?.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2?.id).toBe('tblTasks');
         });
 
         it('returns null when not found', () => {
@@ -298,21 +298,21 @@ describe('Base', () => {
 
     describe('getTable', () => {
         it('returns table by id', () => {
-            const table1 = base.getTable('tbly388E8NA1CNhnF');
-            const table2 = base.getTable('tblcstEo50YXLJcK4');
+            const table1 = base.getTable('tblDesignProjects');
+            const table2 = base.getTable('tblTasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2.id).toBe('tblTasks');
         });
 
         it('returns table by name', () => {
             const table1 = base.getTable('Design projects');
             const table2 = base.getTable('Tasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2.id).toBe('tblTasks');
         });
 
         it('throws when not found', () => {
@@ -327,12 +327,12 @@ describe('Base', () => {
 
     describe('getTableById', () => {
         it('returns table', () => {
-            const table1 = base.getTableById('tbly388E8NA1CNhnF');
-            const table2 = base.getTableById('tblcstEo50YXLJcK4');
+            const table1 = base.getTableById('tblDesignProjects');
+            const table2 = base.getTableById('tblTasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2.id).toBe('tblTasks');
         });
 
         it('throws when not found', () => {
@@ -347,9 +347,9 @@ describe('Base', () => {
             const table1 = base.getTableByName('Design projects');
             const table2 = base.getTableByName('Tasks');
             expect(table1).toBeInstanceOf(Table);
-            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table1.id).toBe('tblDesignProjects');
             expect(table2).toBeInstanceOf(Table);
-            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+            expect(table2.id).toBe('tblTasks');
         });
 
         it('throws when not found', () => {

@@ -4,7 +4,7 @@ import getSdk, {clearSdkForTest} from '../../src/get_sdk';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';
 import LinkedRecordsQueryResult from '../../src/models/linked_records_query_result';
-import {enableObjectPool, disableObjectPool, waitForWatchKeyAsync} from '../test_helpers';
+import {simulateTimersAndClearAfterEachTest, waitForWatchKeyAsync} from '../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -19,8 +19,9 @@ describe('LinkedRecordQueryResult', () => {
     let query: RecordQueryResult;
     let record: Record;
 
+    simulateTimersAndClearAfterEachTest();
+
     beforeEach(async () => {
-        disableObjectPool();
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(tableId => {
             const first = tableId === 'tblFirst';
             const recId = first ? 'recA' : 'recB';
@@ -66,10 +67,6 @@ describe('LinkedRecordQueryResult', () => {
     });
 
     describe('caching', () => {
-        beforeEach(() => {
-            enableObjectPool();
-        });
-
         it('caches like requests', () => {
             const first = record.selectLinkedRecordsFromCell('fldLinked1');
             const second = record.selectLinkedRecordsFromCell('fldLinked1');
@@ -392,6 +389,38 @@ describe('LinkedRecordQueryResult', () => {
         });
     });
 
+    describe('#getRecordById', () => {
+        it('throws an error for unloaded records', () => {
+            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('throws an error for non-existent records', async () => {
+            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            expect(() =>
+                result.getRecordById('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"No record with ID not a record id in this query result"`,
+            );
+        });
+    });
+
+    describe('#getRecordByIdIfExists', () => {
+        it('throws an error for unloaded records', () => {
+            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            expect(() =>
+                result.getRecordByIdIfExists('not a record id'),
+            ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
+        });
+
+        it('returns `null` for non-existent records', async () => {
+            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            expect(result.getRecordByIdIfExists('not a record id')).toBe(null);
+        });
+    });
+
     describe('#loadDataAsync', () => {
         it('works for loaded instances', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
@@ -431,6 +460,19 @@ describe('LinkedRecordQueryResult', () => {
 
             linked.unloadData();
         });
+
+        it('tolerates unnecessary invocations', async () => {
+            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+            try {
+                expect(() => linked.unloadData()).not.toThrow();
+            } finally {
+                warnSpy.mockRestore();
+            }
+
+            await linked.loadDataAsync();
+        });
     });
 
     describe('#unwatch', () => {
@@ -457,6 +499,17 @@ describe('LinkedRecordQueryResult', () => {
                 linked.watch('recordIds', noop);
                 linked.unloadData();
                 linked.unwatch('recordIds', noop);
+
+                await waitForWatchKeyAsync(linked, 'isDataLoaded');
+
+                expect(linked.isDataLoaded).toBe(false);
+            });
+
+            it('triggers unloading (specified via array)', async () => {
+                const noop = () => {};
+                linked.watch('recordIds', noop);
+                linked.unloadData();
+                linked.unwatch(['recordIds'], noop);
 
                 await waitForWatchKeyAsync(linked, 'isDataLoaded');
 
@@ -494,7 +547,19 @@ describe('LinkedRecordQueryResult', () => {
                 ]);
             };
 
-            it.skip('triggers unloading', async () => {
+            it('reports error when over-freed', () => {
+                const noop = () => {};
+                linked.watch('cellValuesInField:fldSecondary', noop);
+                linked.unwatch('cellValuesInField:fldSecondary', noop);
+
+                expect(() => {
+                    linked.unwatch('cellValuesInField:fldSecondary', noop);
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"cellValuesInField:fldSecondary over-free'd"`,
+                );
+            });
+
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('cellValuesInField:fldSecondary', noop);
                 linked.unloadData();
@@ -503,6 +568,13 @@ describe('LinkedRecordQueryResult', () => {
                 await waitForWatchKeyAsync(linked, 'isDataLoaded');
 
                 expect(linked.isDataLoaded).toBe(false);
+
+                expect(mockAirtableInterface.unsubscribeFromCursorData.mock.calls.length).toBe(1);
+                expect(mockAirtableInterface.unsubscribeFromTableData.mock.calls.length).toBe(0);
+                expect(mockAirtableInterface.unsubscribeFromCellValuesInFields.mock.calls).toEqual([
+                    ['tblSecond', ['fldSecondary']],
+                ]);
+                expect(mockAirtableInterface.unsubscribeFromViewData.mock.calls.length).toBe(0);
             });
 
             it('does not alter other subscriptions', () => {
@@ -527,8 +599,11 @@ describe('LinkedRecordQueryResult', () => {
                 expect(spy3).toHaveBeenCalledTimes(2);
             });
 
-            it.skip('properly cleans up final subscription', () => {
+            it('properly cleans up final subscription', () => {
                 const spy = jest.fn();
+
+                linked.watch('cellValuesInField:fldSecondary', spy);
+                linked.unwatch('cellValuesInField:fldSecondary', spy);
                 linked.watch('cellValuesInField:fldSecondary', spy);
 
                 change('something else');
@@ -808,6 +883,7 @@ describe('LinkedRecordQueryResult', () => {
             it('triggers loading', async () => {
                 const view = sdk.base.tables[1].views[0];
                 const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {
+                    fields: [],
                     recordColorMode: {type: 'byView', view},
                 });
 
@@ -825,7 +901,7 @@ describe('LinkedRecordQueryResult', () => {
                             'tablesById',
                             'tblSecond',
                             'viewsById',
-                            'viwWxkRmrDMhu7I8p',
+                            'viwTaskAll',
                             'colorsByRecordId',
                             'fldPrimary',
                         ],
@@ -844,7 +920,7 @@ describe('LinkedRecordQueryResult', () => {
 
         describe('key: isDataLoaded', () => {
             it('does not trigger loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {fields: []});
                 const linked3 = record.selectLinkedRecordsFromCell('fldLinked1');
 
                 linked2.watch('isDataLoaded', () => {});
