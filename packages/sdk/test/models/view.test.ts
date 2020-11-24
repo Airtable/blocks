@@ -18,8 +18,8 @@ const recordsById = {
     recA: {
         id: 'recA',
         cellValuesByFieldId: {
-            fldPrimary: '1',
-            fldLinked1: {id: 'recB'},
+            fld1stPrimary: '1',
+            fld1stLinked: {id: 'recB'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:31:04.281Z',
@@ -27,8 +27,8 @@ const recordsById = {
     recB: {
         id: 'recB',
         cellValuesByFieldId: {
-            fldPrimary: '2',
-            fldLinked1: {id: 'recC'},
+            fld1stPrimary: '2',
+            fld1stLinked: {id: 'recC'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:32:04.281Z',
@@ -36,8 +36,8 @@ const recordsById = {
     recC: {
         id: 'recC',
         cellValuesByFieldId: {
-            fldPrimary: '3',
-            fldLinked1: {id: 'recA'},
+            fld1stPrimary: '3',
+            fld1stLinked: {id: 'recA'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:33:04.281Z',
@@ -78,7 +78,7 @@ describe('View', () => {
         mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
             visibleRecordIds: ['recA', 'recB', 'recC'],
             fieldOrder: {
-                fieldIds: ['fldPrimary', 'fldLinked1'],
+                fieldIds: ['fld1stPrimary', 'fld1stLinked'],
                 visibleFieldCount: 2,
             },
             colorsByRecordId: {
@@ -227,7 +227,7 @@ describe('View', () => {
 
             test('#selectRecords({ fields })', async () => {
                 const queryResult = view.selectRecords({
-                    fields: ['fldPrimary'],
+                    fields: ['fld1stPrimary'],
                 });
 
                 await queryResult.loadDataAsync();
@@ -241,8 +241,8 @@ describe('View', () => {
 
             test('#selectRecords({ fields, sorts })', async () => {
                 const queryResult = view.selectRecords({
-                    fields: ['fldPrimary'],
-                    sorts: [{field: 'fldPrimary', direction: 'desc'}],
+                    fields: ['fld1stPrimary'],
+                    sorts: [{field: 'fld1stPrimary', direction: 'desc'}],
                 });
 
                 await queryResult.loadDataAsync();
@@ -295,7 +295,7 @@ describe('View', () => {
             test('throws for invalid sorting directions', () => {
                 expect(() => {
                     view.selectRecords({
-                        sorts: [{field: 'fldPrimary', direction: 'descending' as 'desc'}],
+                        sorts: [{field: 'fld1stPrimary', direction: 'descending' as 'desc'}],
                     });
                 }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: descending"`);
             });
@@ -343,11 +343,11 @@ describe('View', () => {
 
             test('#selectRecordsAsync({ fields })', async () => {
                 const queryResult = await view.selectRecordsAsync({
-                    fields: ['fldPrimary'],
+                    fields: ['fld1stPrimary'],
                 });
 
                 expect(queryResult.fields!.length).toBe(1);
-                expect(queryResult.fields![0].id).toBe('fldPrimary');
+                expect(queryResult.fields![0].id).toBe('fld1stPrimary');
                 expect(queryResult.records![0].id).toBe('recA');
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recC');
@@ -355,12 +355,12 @@ describe('View', () => {
 
             test.skip('#selectRecordsAsync({ fields, sorts })', async () => {
                 const queryResult = await view.selectRecordsAsync({
-                    fields: ['fldPrimary'],
-                    sorts: [{field: 'fldPrimary', direction: 'desc'}],
+                    fields: ['fld1stPrimary'],
+                    sorts: [{field: 'fld1stPrimary', direction: 'desc'}],
                 });
 
                 expect(queryResult.fields!.length).toBe(1);
-                expect(queryResult.fields![0].id).toBe('fldPrimary');
+                expect(queryResult.fields![0].id).toBe('fld1stPrimary');
                 expect(queryResult.records![0].id).toBe('recC');
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recA');
@@ -390,7 +390,7 @@ describe('View', () => {
                 mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
                     visibleRecordIds: ['recA', 'recB', 'recC'],
                     fieldOrder: {
-                        fieldIds: ['fldPrimary', 'fldLinked1'],
+                        fieldIds: ['fld1stPrimary', 'fld1stLinked'],
                         visibleFieldCount: 2,
                     },
                     colorsByRecordId: null,

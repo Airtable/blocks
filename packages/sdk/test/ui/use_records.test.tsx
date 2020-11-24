@@ -93,14 +93,14 @@ describe('useRecords', () => {
         const impl = (tableId: TableId) => {
             const first = tableId === 'tblFirst';
             const recId = first ? 'recA' : 'recD';
-            const fieldId = first ? 'fldLinked1' : 'fldLinked2';
+            const fieldId = first ? 'fld1stLinked' : 'fld2ndLinked';
             const cellValues = [{id: first ? 'recD' : 'recA'}];
             return Promise.resolve({
                 recordsById: {
                     [recId]: {
                         id: recId,
                         cellValuesByFieldId: {
-                            fldPrimary: 'primary',
+                            fld1stPrimary: 'primary',
                             [fieldId]: cellValues,
                         },
                         commentCount: 0,
@@ -122,7 +122,7 @@ describe('useRecords', () => {
                 ReactDOM.render(
                     <Suspense fallback="">
                         <Component
-                            target={record.selectLinkedRecordsFromCell('fldLinked1')}
+                            target={record.selectLinkedRecordsFromCell('fld1stLinked')}
                             resolve={resolve}
                         />
                     </Suspense>,

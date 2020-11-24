@@ -35,8 +35,8 @@ describe('Record', () => {
                 recA: {
                     id: 'recA',
                     cellValuesByFieldId: {
-                        fldPrimary: 'Bonjour!',
-                        fldLinked1: {id: 'recB'},
+                        fld1stPrimary: 'Bonjour!',
+                        fld1stLinked: {id: 'recB'},
                         fldMockLookup: null,
                     },
                     commentCount: 0,
@@ -45,8 +45,8 @@ describe('Record', () => {
                 recB: {
                     id: 'recB',
                     cellValuesByFieldId: {
-                        fldPrimary: 'Hello!',
-                        fldLinked1: {id: 'recC'},
+                        fld1stPrimary: 'Hello!',
+                        fld1stLinked: {id: 'recC'},
                         fldMockLookup: {
                             linkedRecordIds: ['recLink1', 'recLink2', 'recLink3', 'recLink4'],
                             valuesByLinkedRecordId: {
@@ -63,8 +63,8 @@ describe('Record', () => {
                 recC: {
                     id: 'recC',
                     cellValuesByFieldId: {
-                        fldPrimary: '¡Hola!',
-                        fldLinked1: {id: 'recA'},
+                        fld1stPrimary: '¡Hola!',
+                        fld1stLinked: {id: 'recA'},
                         fldMockLookup: {
                             linkedRecordIds: ['recLink1', 'recLink2', 'recLink3', 'recLink4'],
                             valuesByLinkedRecordId: {
@@ -84,7 +84,7 @@ describe('Record', () => {
         mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
             visibleRecordIds: ['recA', 'recC'],
             fieldOrder: {
-                fieldIds: ['fldPrimary', 'fldLinked1'],
+                fieldIds: ['fld1stPrimary', 'fld1stLinked'],
                 visibleFieldCount: 2,
             },
             colorsByRecordId: {
@@ -323,16 +323,16 @@ describe('Record', () => {
             });
 
             test('#getCellValue(fieldOrFieldIdOrFieldName), FieldId', () => {
-                const fldPrimary = 'fldPrimary';
-                const fldLinked1 = 'fldLinked1';
+                const fld1stPrimary = 'fld1stPrimary';
+                const fld1stLinked = 'fld1stLinked';
                 const fldMockLookup = 'fldMockLookup';
 
-                expect(recordA.getCellValue(fldPrimary)).toBe('Bonjour!');
-                expect(recordB.getCellValue(fldPrimary)).toBe('Hello!');
-                expect(recordC.getCellValue(fldPrimary)).toBe('¡Hola!');
-                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recB'});
-                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recC'});
-                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recA'});
+                expect(recordA.getCellValue(fld1stPrimary)).toBe('Bonjour!');
+                expect(recordB.getCellValue(fld1stPrimary)).toBe('Hello!');
+                expect(recordC.getCellValue(fld1stPrimary)).toBe('¡Hola!');
+                expect(recordA.getCellValue(fld1stLinked)).toMatchObject({id: 'recB'});
+                expect(recordB.getCellValue(fld1stLinked)).toMatchObject({id: 'recC'});
+                expect(recordC.getCellValue(fld1stLinked)).toMatchObject({id: 'recA'});
                 expect(recordA.getCellValue(fldMockLookup)).toBe(null);
                 expect(recordB.getCellValue(fldMockLookup)).toMatchInlineSnapshot(`
                     Array [
@@ -399,16 +399,16 @@ describe('Record', () => {
             });
 
             test('#getCellValue(fieldOrFieldIdOrFieldName), string name', () => {
-                const fldPrimary = 'Name';
-                const fldLinked1 = 'linked records';
+                const fld1stPrimary = 'Name';
+                const fld1stLinked = 'linked records';
                 const fldMockLookup = 'lookup';
 
-                expect(recordA.getCellValue(fldPrimary)).toBe('Bonjour!');
-                expect(recordB.getCellValue(fldPrimary)).toBe('Hello!');
-                expect(recordC.getCellValue(fldPrimary)).toBe('¡Hola!');
-                expect(recordA.getCellValue(fldLinked1)).toMatchObject({id: 'recB'});
-                expect(recordB.getCellValue(fldLinked1)).toMatchObject({id: 'recC'});
-                expect(recordC.getCellValue(fldLinked1)).toMatchObject({id: 'recA'});
+                expect(recordA.getCellValue(fld1stPrimary)).toBe('Bonjour!');
+                expect(recordB.getCellValue(fld1stPrimary)).toBe('Hello!');
+                expect(recordC.getCellValue(fld1stPrimary)).toBe('¡Hola!');
+                expect(recordA.getCellValue(fld1stLinked)).toMatchObject({id: 'recB'});
+                expect(recordB.getCellValue(fld1stLinked)).toMatchObject({id: 'recC'});
+                expect(recordC.getCellValue(fld1stLinked)).toMatchObject({id: 'recA'});
                 expect(recordA.getCellValue(fldMockLookup)).toBe(null);
                 expect(recordB.getCellValue(fldMockLookup)).toMatchInlineSnapshot(`
                     Array [
@@ -557,7 +557,7 @@ describe('Record', () => {
                 ]);
 
                 expect(() => {
-                    recordA.getCellValue('fldPrimary');
+                    recordA.getCellValue('fld1stPrimary');
                 }).toThrowErrorMatchingInlineSnapshot(`"Table has been deleted"`);
             });
 
@@ -569,7 +569,7 @@ describe('Record', () => {
                     },
                 ]);
                 expect(() => {
-                    recordA.getCellValue('fldPrimary');
+                    recordA.getCellValue('fld1stPrimary');
                 }).toThrowErrorMatchingInlineSnapshot(`"Record data is not loaded"`);
             });
 
@@ -587,7 +587,7 @@ describe('Record', () => {
                     },
                 ]);
 
-                expect(recordA.getCellValue('fldPrimary')).toBe(null);
+                expect(recordA.getCellValue('fld1stPrimary')).toBe(null);
             });
 
             test('cellValuesByFieldId[id] is undefined', async () => {
@@ -599,12 +599,12 @@ describe('Record', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: undefined,
                     },
                 ]);
-                expect(recordA.getCellValue('fldPrimary')).toBe(null);
+                expect(recordA.getCellValue('fld1stPrimary')).toBe(null);
             });
 
             test('cellValuesByFieldId is null', async () => {
@@ -621,7 +621,7 @@ describe('Record', () => {
                     },
                 ]);
 
-                expect(recordA.getCellValue('fldPrimary')).toBe(null);
+                expect(recordA.getCellValue('fld1stPrimary')).toBe(null);
             });
 
             test('cellValuesByFieldId[id] is null', async () => {
@@ -633,12 +633,12 @@ describe('Record', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: null,
                     },
                 ]);
-                expect(recordA.getCellValue('fldPrimary')).toBe(null);
+                expect(recordA.getCellValue('fld1stPrimary')).toBe(null);
             });
         });
 
@@ -661,7 +661,7 @@ describe('Record', () => {
                         "Bonjour!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -673,7 +673,7 @@ describe('Record', () => {
                         "Hello!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -685,7 +685,7 @@ describe('Record', () => {
                         "¡Hola!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -697,9 +697,9 @@ describe('Record', () => {
             });
 
             test('#getCellValueAsString(fieldOrFieldIdOrFieldName), FieldId', async () => {
-                expect(recordA.getCellValueAsString('fldPrimary')).toBe('Bonjour!');
-                expect(recordB.getCellValueAsString('fldPrimary')).toBe('Hello!');
-                expect(recordC.getCellValueAsString('fldPrimary')).toBe('¡Hola!');
+                expect(recordA.getCellValueAsString('fld1stPrimary')).toBe('Bonjour!');
+                expect(recordB.getCellValueAsString('fld1stPrimary')).toBe('Hello!');
+                expect(recordC.getCellValueAsString('fld1stPrimary')).toBe('¡Hola!');
                 expect(mockAirtableInterface.fieldTypeProvider.convertCellValueToString.mock.calls)
                     .toMatchInlineSnapshot(`
                     Array [
@@ -708,7 +708,7 @@ describe('Record', () => {
                         "Bonjour!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -720,7 +720,7 @@ describe('Record', () => {
                         "Hello!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -732,7 +732,7 @@ describe('Record', () => {
                         "¡Hola!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -755,7 +755,7 @@ describe('Record', () => {
                         "Bonjour!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -767,7 +767,7 @@ describe('Record', () => {
                         "Hello!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -779,7 +779,7 @@ describe('Record', () => {
                         "¡Hola!",
                         Object {
                           "description": "",
-                          "id": "fldPrimary",
+                          "id": "fld1stPrimary",
                           "lock": null,
                           "name": "Name",
                           "type": "text",
@@ -806,7 +806,7 @@ describe('Record', () => {
                     },
                 ]);
                 expect(() => {
-                    recordA.getCellValueAsString('fldPrimary');
+                    recordA.getCellValueAsString('fld1stPrimary');
                 }).toThrowErrorMatchingInlineSnapshot(`"Table has been deleted"`);
             });
 
@@ -818,7 +818,7 @@ describe('Record', () => {
                     },
                 ]);
                 expect(() => {
-                    recordA.getCellValueAsString('fldPrimary');
+                    recordA.getCellValueAsString('fld1stPrimary');
                 }).toThrowErrorMatchingInlineSnapshot(`"Record data is not loaded"`);
             });
 
@@ -835,7 +835,7 @@ describe('Record', () => {
                         value: undefined,
                     },
                 ]);
-                expect(recordA.getCellValueAsString('fldPrimary')).toBe('');
+                expect(recordA.getCellValueAsString('fld1stPrimary')).toBe('');
             });
 
             test('cellValuesByFieldId[id] is undefined', async () => {
@@ -847,12 +847,12 @@ describe('Record', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: undefined,
                     },
                 ]);
-                expect(recordA.getCellValueAsString('fldPrimary')).toBe('');
+                expect(recordA.getCellValueAsString('fld1stPrimary')).toBe('');
             });
 
             test('cellValuesByFieldId is null', async () => {
@@ -869,7 +869,7 @@ describe('Record', () => {
                     },
                 ]);
 
-                expect(recordA.getCellValueAsString('fldPrimary')).toBe('');
+                expect(recordA.getCellValueAsString('fld1stPrimary')).toBe('');
             });
 
             test('cellValuesByFieldId[id] is null', async () => {
@@ -881,12 +881,12 @@ describe('Record', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: null,
                     },
                 ]);
-                expect(recordA.getCellValueAsString('fldPrimary')).toBe('');
+                expect(recordA.getCellValueAsString('fld1stPrimary')).toBe('');
             });
         });
 
@@ -1021,7 +1021,7 @@ describe('Record', () => {
             let linkedRecordsFromCell: LinkedRecordsQueryResult;
 
             beforeEach(async () => {
-                field = recordB.parentTable.getFieldById('fldLinked1');
+                field = recordB.parentTable.getFieldById('fld1stLinked');
             });
 
             test('#selectLinkedRecordsFromCell(fieldOrFieldIdOrFieldName), Field', async () => {
@@ -1063,7 +1063,7 @@ describe('Record', () => {
             test('throws for invalid sorting directions', () => {
                 expect(() => {
                     recordB.selectLinkedRecordsFromCell(field.name, {
-                        sorts: [{field: 'fldPrimary', direction: 'rowboatscending' as 'desc'}],
+                        sorts: [{field: 'fld2ndPrimary', direction: 'rowboatscending' as 'desc'}],
                     });
                 }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: rowboatscending"`);
             });
@@ -1100,7 +1100,7 @@ describe('Record', () => {
             let linkedRecordsFromCell: LinkedRecordsQueryResult;
 
             beforeEach(async () => {
-                field = recordB.parentTable.getFieldById('fldLinked1');
+                field = recordB.parentTable.getFieldById('fld1stLinked');
             });
 
             afterEach(async () => {
@@ -1186,27 +1186,27 @@ describe('Record', () => {
 
                     trigger(
                         'recA',
-                        [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
+                        [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'],
                         'Something else',
                     );
 
                     expect(fn).toHaveBeenCalledTimes(1);
-                    expect(fn).toHaveBeenCalledWith(recordA, 'cellValues', ['fldPrimary']);
+                    expect(fn).toHaveBeenCalledWith(recordA, 'cellValues', ['fld1stPrimary']);
                 });
 
                 test('#watch("cellValueInField")', () => {
                     const fn = jest.fn();
-                    recordA.watch('cellValueInField:fldPrimary', fn);
+                    recordA.watch('cellValueInField:fld1stPrimary', fn);
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                     expect(fn).toHaveBeenCalledWith(
                         recordA,
-                        'cellValueInField:fldPrimary',
-                        'fldPrimary',
+                        'cellValueInField:fld1stPrimary',
+                        'fld1stPrimary',
                     );
                 });
 
@@ -1264,7 +1264,7 @@ describe('Record', () => {
 
                     trigger(
                         'recA',
-                        [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
+                        [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'],
                         'Something else',
                     );
 
@@ -1274,7 +1274,7 @@ describe('Record', () => {
 
                     trigger(
                         'recA',
-                        [...recordPath, 'cellValuesByFieldId', 'fldPrimary'],
+                        [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'],
                         'Something else',
                     );
 
@@ -1283,17 +1283,17 @@ describe('Record', () => {
 
                 test('#unwatch("cellValueInField")', () => {
                     const fn = jest.fn();
-                    recordA.watch('cellValueInField:fldPrimary', fn);
+                    recordA.watch('cellValueInField:fld1stPrimary', fn);
 
                     expect(fn).toHaveBeenCalledTimes(0);
 
-                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 2);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'], 2);
 
                     expect(fn).toHaveBeenCalledTimes(1);
 
-                    recordA.unwatch('cellValueInField:fldPrimary', fn);
+                    recordA.unwatch('cellValueInField:fld1stPrimary', fn);
 
-                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fldPrimary'], 3);
+                    trigger('recA', [...recordPath, 'cellValuesByFieldId', 'fld1stPrimary'], 3);
 
                     expect(fn).toHaveBeenCalledTimes(1);
                 });
