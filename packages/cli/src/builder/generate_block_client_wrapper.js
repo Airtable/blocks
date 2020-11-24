@@ -4,9 +4,13 @@ const blockCliConfigSettings = require('../config/block_cli_config_settings');
 module.exports = function generateBlockClientWrapperCode(
     frontendEntryModulePath: string,
     isDevelopment: boolean,
+    gitHash: string | null,
 ): string {
     // NOTE: this must return ES5 (so no JSX!) since it won't get transpiled on the client.
     // This puts React on window so the block SDK can access it.
+    const addVersionToWindow = gitHash
+        ? `window['${blockCliConfigSettings.GLOBAL_BLOCK_CODE_VERSION_VARIABLE_NAME}'] = '${gitHash}';`
+        : ';';
     return `
 var ReactDOM = require('react-dom');
 var React = require('react');
@@ -15,7 +19,7 @@ var ReactDOMServer = require('react-dom/server');
 window['${blockCliConfigSettings.GLOBAL_REACT_VARIABLE_NAME}'] = React;
 window['${blockCliConfigSettings.GLOBAL_REACT_DOM_VARIABLE_NAME}'] = ReactDOM;
 window['${blockCliConfigSettings.GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME}'] = ReactDOMServer;
-
+${addVersionToWindow}
 var didRun = false;
 window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function runBlock() {
     if (didRun) {

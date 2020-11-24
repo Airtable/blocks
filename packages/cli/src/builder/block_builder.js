@@ -1,5 +1,7 @@
 // @flow
 /* eslint-disable no-console */
+import {getGitHashAsync} from '../helpers/get_git_hash';
+
 const archiver = require('archiver');
 const path = require('path');
 const fs = require('fs');
@@ -663,9 +665,11 @@ class BlockBuilder {
         );
 
         const isDevelopment = this._buildTypeMode === BlockBuildTypes.DEVELOPMENT;
+        const gitHash = await getGitHashAsync(this._blockDirPath);
         const clientWrapperCode = generateBlockClientWrapperCode(
             frontendEntryModulePath,
             isDevelopment,
+            gitHash,
         );
         await fsUtils.writeFileAsync(clientWrapperFilePath, clientWrapperCode);
     }
