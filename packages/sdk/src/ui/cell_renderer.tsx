@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
 import Sdk from '../sdk';
 import Record from '../models/record';
@@ -185,7 +184,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             return null;
         }
 
-        const airtableInterface = getAirtableInterface();
+        const airtableInterface = sdk.__airtableInterface;
         const appInterface = sdk.__appInterface;
 
         let cellValueToRender;

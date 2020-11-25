@@ -1,6 +1,4 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import getAirtableInterface from '../injected/airtable_interface';
-
 import {Color} from '../colors';
 import Sdk from '../sdk';
 import {RecordData, RecordId} from '../types/record';
@@ -170,7 +168,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             typeof cellValue === 'object' &&
             cellValue !== null &&
             field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
-            !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
+            !this._sdk.__airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
         ) {
             const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
             invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
@@ -222,7 +220,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         if (cellValue === null || cellValue === undefined) {
             return '';
         } else {
-            const airtableInterface = getAirtableInterface();
+            const airtableInterface = this._sdk.__airtableInterface;
             const appInterface = this._sdk.__appInterface;
             return airtableInterface.fieldTypeProvider.convertCellValueToString(
                 appInterface,
@@ -265,7 +263,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const airtableInterface = getAirtableInterface();
+        const airtableInterface = this._sdk.__airtableInterface;
         const appInterface = this._sdk.__appInterface;
         return airtableInterface.urlConstructor.getAttachmentClientUrl(
             appInterface,

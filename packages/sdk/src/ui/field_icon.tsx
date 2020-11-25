@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/ui: FieldIcon */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import getAirtableInterface from '../injected/airtable_interface';
 import Field from '../models/field';
 import Icon, {sharedIconPropTypes, SharedIconProps} from './icon';
 import {IconName} from './icon_config';
@@ -31,7 +30,7 @@ const FieldIcon = (props: FieldIconProps) => {
     const {field, ...restOfProps} = props;
     const sdk = useSdk();
 
-    const airtableInterface = getAirtableInterface();
+    const airtableInterface = sdk.__airtableInterface;
     const appInterface = sdk.__appInterface;
 
     const uiConfig = airtableInterface.fieldTypeProvider.getUiConfig(appInterface, field._data);

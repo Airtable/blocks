@@ -11,7 +11,6 @@ import {
 } from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import {VisList} from '../types/airtable_interface';
-import getAirtableInterface from '../injected/airtable_interface';
 import {RecordId} from '../types/record';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
@@ -706,7 +705,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     _replaceVisList() {
-        const airtableInterface = getAirtableInterface();
+        const airtableInterface = this._sdk.__airtableInterface;
         const appInterface = this._sdk.__appInterface;
 
         const recordDatas = this._sourceModelRecords.map(record => record._data);
