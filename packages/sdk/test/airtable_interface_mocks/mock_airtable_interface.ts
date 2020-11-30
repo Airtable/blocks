@@ -259,7 +259,10 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     ): Promise<{recordsById: {[recordId: string]: RecordData}}> {
         throw spawnError('fetchAndSubscribeToTableDataAsync unimplemented');
     }
-    fetchAndSubscribeToViewDataAsync(): Promise<PartialViewData> {
+    async fetchAndSubscribeToViewDataAsync(
+        tableId: string,
+        viewId: string,
+    ): Promise<PartialViewData> {
         throw spawnError('fetchAndSubscribeToViewDataAsync unimplemented');
     }
     fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {

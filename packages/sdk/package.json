@@ -125,7 +125,8 @@
             "<rootDir>/test/setup_enzyme.ts"
         ],
         "collectCoverageFrom": [
-            "src/models/**/*"
+            "src/models/**/*",
+            "test/airtable_interface_mocks/mock_airtable_interface_app.ts"
         ],
         "coverageThreshold": {
             "global": {
