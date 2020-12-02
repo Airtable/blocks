@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.60...HEAD)
 
-No changes.
+-   Fix initializing from a github repository.
 
 ## [0.0.60](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.59...@airtable/blocks-cli@0.0.60) - 2020-11-24
 
