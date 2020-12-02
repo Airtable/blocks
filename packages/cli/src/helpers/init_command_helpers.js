@@ -23,10 +23,9 @@ async function downloadTemplateAsync(blockDirPath: string, template: string): Pr
 
     let url;
     try {
-        ({url} = await octokit.repos.downloadArchive({
+        ({url} = await octokit.repos.downloadTarballArchive({
             owner,
             repo,
-            archive_format: 'tarball',
         }));
     } catch (e) {
         if (e.status === 404) {
