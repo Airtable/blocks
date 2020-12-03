@@ -231,6 +231,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         this._record.__linkedRecordsQueryResultPool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
+        const initiallyLoaded = this._linkedQueryResult.isDataLoaded;
 
         await Promise.all([
             this._sdk.base
@@ -242,7 +243,16 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         this._invalidateComputedData();
 
-        const changedKeys = ['records', 'recordIds'];
+        const changedKeys = ['records', 'recordIds', 'recordColors'];
+
+        // If the linked query result was not initially loaded, then the
+        // `cellValues` event will be emitted via `_onLinkedCellValuesChange`.
+        // Otherwise, it must be explicitly included here in order to promote
+        // consistency.
+        if (initiallyLoaded) {
+            changedKeys.push('cellValues');
+        }
+
         const fieldIds =
             this._normalizedOpts.fieldIdsOrNullIfAllFields ||
             this.parentTable.fields.map(field => field.id);

@@ -755,6 +755,21 @@ describe('LinkedRecordQueryResult', () => {
 
                 expect(linked2.isDataLoaded).toBe(true);
             });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('recordIds', spy);
+                // The event is expected to fire after the load operation
+                // completes but before the `isDataLoaded` event.
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'recordIds');
+            });
         });
 
         describe('key: records', () => {
@@ -764,6 +779,21 @@ describe('LinkedRecordQueryResult', () => {
                 await waitForWatchKeyAsync(linked2, 'records');
 
                 expect(linked2.isDataLoaded).toBe(true);
+            });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('records', spy);
+                // The event is expected to fire after the load operation
+                // completes but before the `isDataLoaded` event.
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'records');
             });
         });
 
@@ -897,6 +927,32 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(0);
             });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('cellValues', spy);
+                // The event is expected to fire after the load operation
+                // completes but before the `isDataLoaded` event.
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'cellValues');
+            });
+
+            it('is triggered when underlying record has previously been loaded', async () => {
+                const otherQuery = await sdk.base.tables[1].selectRecordsAsync();
+                const spy = jest.fn();
+
+                let lrqr = otherQuery.records[0].selectLinkedRecordsFromCell('fld2ndLinked');
+                lrqr.watch('cellValues', spy);
+                await lrqr.loadDataAsync();
+
+                expect(spy).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('key: recordColors', () => {
@@ -943,6 +999,21 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.recordColors).toHaveBeenCalledTimes(1);
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(0);
+            });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('recordColors', spy);
+                // The event is expected to fire after the load operation
+                // completes but before the `isDataLoaded` event.
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'recordColors');
             });
         });
 
