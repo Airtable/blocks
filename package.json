@@ -8,7 +8,8 @@
         ],
         "nohoist": [
             "{@airtable,@airtable-blocks-internal}/*/!(react|react-dom)",
-            "**/{@styled-system,@storybook,emotion,@emotion,csstype,@types}/*"
+            "**/{@styled-system,@storybook,emotion,@emotion,csstype,@types}/*",
+            "**/@oclif/**"
         ]
     },
     "devDependencies": {

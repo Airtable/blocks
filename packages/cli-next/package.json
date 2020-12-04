@@ -1,0 +1,81 @@
+{
+    "name": "@airtable/blocks-cli-next",
+    "description": "Airtable apps cli",
+    "version": "0.0.0",
+    "private": true,
+    "author": "Airtable",
+    "bin": {
+        "block": "bin/run"
+    },
+    "bugs": "https://github.com/packages/cli-next/issues",
+    "dependencies": {
+        "@oclif/command": "^1.8.0",
+        "@oclif/config": "^1.17.0",
+        "@oclif/plugin-help": "^3.2.0",
+        "cli-ux": "^5.5.1",
+        "debug": "^4.2.0",
+        "graceful-fs": "^4.2.4",
+        "tslib": "^1.14.1"
+    },
+    "devDependencies": {
+        "@airtable/eslint-plugin-blocks": "^1.0.2",
+        "@oclif/dev-cli": "^1.23.0",
+        "@oclif/test": "^1.2.7",
+        "@types/chai": "^4.2.14",
+        "@types/debug": "^4.1.5",
+        "@types/graceful-fs": "^4.1.4",
+        "@types/mocha": "^8.0.4",
+        "@types/node": "^14.14.7",
+        "@typescript-eslint/eslint-plugin": "^2.10.0",
+        "@typescript-eslint/parser": "^2.10.0",
+        "chai": "^4.2.0",
+        "eslint": "^7.13.0",
+        "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#fc6746d7",
+        "eslint-plugin-import": "^2.19.1",
+        "eslint-plugin-jsdoc": "^15.12.0",
+        "eslint-plugin-react": "^7.17.0",
+        "eslint-plugin-react-hooks": "^2.3.0",
+        "globby": "^11.0.1",
+        "mocha": "^5.2.0",
+        "nyc": "^15.1.0",
+        "ts-node": "^9.0.0",
+        "typescript": "^4.0.5"
+    },
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "files": [
+        "/bin",
+        "/lib",
+        "/npm-shrinkwrap.json",
+        "/oclif.manifest.json"
+    ],
+    "homepage": "https://github.com/packages/cli-next",
+    "keywords": [
+        "oclif"
+    ],
+    "license": "UNLICENSED",
+    "main": "lib/index.js",
+    "oclif": {
+        "commands": "./lib/commands",
+        "bin": "block",
+        "plugins": [
+            "@oclif/plugin-help"
+        ]
+    },
+    "repository": "packages/cli-next",
+    "scripts": {
+        "airbuild": "yarn run pack:typescript && yarn run posttest",
+        "pack:typescript": "rm -rf lib && tsc -b",
+        "postpack": "rm -f oclif.manifest.json",
+        "posttest": "eslint . --ext .ts --config .eslintrc.js",
+        "prepack": "yarn run pack:typescript && oclif-dev manifest && oclif-dev readme",
+        "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+        "test:cov-report": "nyc --reporter=text --reporter=html --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+        "version": "oclif-dev readme && git add README.md"
+    },
+    "types": "lib/index.d.ts",
+    "installConfig": {
+        "pnp": true
+    }
+}
