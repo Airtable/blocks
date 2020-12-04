@@ -9,6 +9,7 @@ type ChildProcessOptions = {|
     env?: ChildProcessEnv,
     cwd?: string,
     prefix?: string,
+    displayOutput?: boolean,
 |};
 
 const _formatAndConsoleLogWithPrefix = (chunk: mixed, prefix: string): void => {
@@ -126,7 +127,12 @@ function fork(
 function dangerouslyCrossSpawnAsync(
     filePath: string,
     args: Array<string>,
-    {env = process.env, cwd = process.cwd(), prefix = filePath}: ChildProcessOptions = {},
+    {
+        env = process.env,
+        cwd = process.cwd(),
+        prefix = filePath,
+        displayOutput = true,
+    }: ChildProcessOptions = {},
 ): Promise<{stdout: string, stderr: string}> {
     return new Promise((resolve, reject) => {
         const spawnResult = crossSpawn.sync(filePath, args, {stdio: 'pipe', env, cwd});
@@ -135,8 +141,10 @@ function dangerouslyCrossSpawnAsync(
         if (err) {
             reject(err);
         } else {
-            _formatAndConsoleLogWithPrefix(stdout, chalk.blue(`[${prefix}]`));
-            _formatAndConsoleLogWithPrefix(stderr, chalk.yellow(`[${prefix}]`));
+            if (displayOutput) {
+                _formatAndConsoleLogWithPrefix(stdout, chalk.blue(`[${prefix}]`));
+                _formatAndConsoleLogWithPrefix(stderr, chalk.yellow(`[${prefix}]`));
+            }
 
             if (status !== 0) {
                 reject(new Error(`${filePath} failed with exit status ${status}`));
