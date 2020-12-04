@@ -86,6 +86,44 @@ describe('LinkedRecordQueryResult', () => {
         });
     });
 
+    describe('#isDeleted', () => {
+        it('is initially false', () => {
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
+            expect(linked.isDeleted).toBe(false);
+        });
+
+        it('is false after loading', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+            expect(linked.isDeleted).toBe(false);
+        });
+
+        it('is true after record is deleted', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', record.id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isDeleted).toBe(true);
+        });
+
+        it('is true after table is deleted', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', sdk.base.tables[0].id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isDeleted).toBe(true);
+        });
+    });
+
     describe('#isValid', () => {
         it('initially true', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
@@ -154,6 +192,66 @@ describe('LinkedRecordQueryResult', () => {
             } finally {
                 await loadPromise.catch(() => {});
             }
+        });
+
+        it('false following deletion of "origin" record', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', record.id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(false);
+        });
+
+        it('true following deletion of unrelated record in origin table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recD'],
+                    value: {},
+                },
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recD'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(true);
+        });
+
+        it('false following deletion of linked field in "origin" table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stLinked'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(false);
+        });
+
+        it('true following deletion of unrelated field in "origin" table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stDoomed'],
+                    value: {},
+                },
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stDoomed'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(true);
         });
     });
 

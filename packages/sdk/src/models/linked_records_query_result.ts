@@ -48,6 +48,9 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     // the table we're linking to
     /** @internal */
     _linkedTable: Table;
+    // the records store for the origin table
+    /** @internal */
+    _originRecordStore: RecordStore;
     // the records store for the linked table
     /** @internal */
     _linkedRecordStore: RecordStore;
@@ -89,6 +92,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         this._record = record;
         this._field = field;
         this._linkedTable = normalizedOpts.table;
+        this._originRecordStore = this._sdk.base.__getRecordStore(this._record.parentTable.id);
         this._linkedRecordStore = normalizedOpts.recordStore;
 
         // we could rely on RecordQueryResult's reuse pool to make sure we get back
@@ -104,10 +108,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /**
      * Is the query result currently valid? This value always starts as 'true',
-     * but can become false if the field config changes to link to a different
-     * table or a type other than MULTIPLE_RECORD_LINKS. Once `isValid` has
-     * become false, it will never become true again. Many fields will throw on
-     * attempting to access them, and watches will no longer fire.
+     * but can become false if the record from which this result was created is
+     * deleted, if the field is deleted, if the field config changes to link to
+     * a different table, or if the field config changes to link to a type
+     * other than MULTIPLE_RECORD_LINKS. Once `isValid` has become false, it
+     * will never become true again. Many fields will throw on attempting to
+     * access them, and watches will no longer fire.
      */
     get isValid(): boolean {
         return this._isValid;
@@ -361,6 +367,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         // and potentially start watching a different table
         this._field.watch('type', this._onOriginFieldConfigChange, this);
         this._field.watch('options', this._onOriginFieldConfigChange, this);
+        // if the underlying record is deleted, we need to invalidate this
+        // result
+        this._originRecordStore.watch('recordIds', this._onOriginRecordsChange, this);
+        // if the linked field in the origin table is deleted, we need to
+        // invalidate this result
+        this._record.parentTable.watch('fields', this._onOriginFieldsChange, this);
     }
 
     /** @internal */
@@ -372,6 +384,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         );
         this._field.unwatch('type', this._onOriginFieldConfigChange, this);
         this._field.unwatch('options', this._onOriginFieldConfigChange, this);
+        this._originRecordStore.unwatch('recordIds', this._onOriginRecordsChange, this);
+        this._record.parentTable.unwatch('fields', this._onOriginFieldsChange, this);
     }
 
     /** @internal */
@@ -529,6 +543,20 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         // notify watchers that our set of linked records has changed
         this._onChange('records');
         this._onChange('recordIds');
+    }
+
+    /** @internal */
+    _onOriginRecordsChange() {
+        if (this._record.isDeleted) {
+            this._isValid = false;
+        }
+    }
+
+    /** @internal */
+    _onOriginFieldsChange() {
+        if (this._field.isDeleted) {
+            this._isValid = false;
+        }
     }
 
     /** @internal */
