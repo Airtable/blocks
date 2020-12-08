@@ -21,6 +21,7 @@ import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {PerformRecordAction} from './perform_record_action';
 import {AirtableInterface, AppInterface} from './types/airtable_interface';
+import {RequestJson, ResponseJson} from './types/backend_fetch_types';
 
 if (!(React as any).PropTypes) {
     (React as any).PropTypes = PropTypes;
@@ -141,6 +142,7 @@ export default class BlockSdk {
         // just the method, e.g.
         // import {reload} from '@airtable/blocks';
         this.reload = this.reload.bind(this);
+        this.unstable_fetchAsync = this.unstable_fetchAsync.bind(this);
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(this);
@@ -252,5 +254,10 @@ export default class BlockSdk {
      */
     get __appInterface(): AppInterface {
         return this.base._baseData.appInterface;
+    }
+
+    /** @hidden */
+    async unstable_fetchAsync(requestJson: RequestJson): Promise<ResponseJson> {
+        return await this.__airtableInterface.performBackendFetchAsync(requestJson);
     }
 }

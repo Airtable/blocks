@@ -4,6 +4,7 @@ import Table from '../src/models/table';
 import View from '../src/models/view';
 import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
 import {__reset, __sdk as sdk} from '../src';
+import {RequestJson} from '../src/types/backend_fetch_types';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../src/injected/airtable_interface', () => ({
@@ -744,6 +745,31 @@ describe('sdk', () => {
 
                 expect(mock).toHaveBeenCalledTimes(0);
             });
+        });
+    });
+    describe('unstable_fetchAsync', () => {
+        it('forwards arguments to airtable interface', async () => {
+            const mockResponse = {
+                body: '',
+                url: '',
+                status: 0,
+                headers: [],
+            };
+            mockAirtableInterface.performBackendFetchAsync.mockResolvedValue(mockResponse);
+            const requestJson: RequestJson = {
+                method: '',
+                url: '',
+                headers: [],
+                body: null,
+                redirect: 'error',
+                integrity: null,
+            };
+            const responseJson = await sdk.unstable_fetchAsync(requestJson);
+            expect(responseJson).toBe(mockResponse);
+            expect(mockAirtableInterface.performBackendFetchAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.performBackendFetchAsync).toHaveBeenCalledWith(
+                requestJson,
+            );
         });
     });
 });

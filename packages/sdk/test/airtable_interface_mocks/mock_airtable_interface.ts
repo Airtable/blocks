@@ -22,6 +22,7 @@ import {TableId} from '../../src/types/table';
 import {ViewId} from '../../src/types/view';
 import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
 import {NormalizedSortConfig} from '../../src/models/record_query_result';
+import {RequestJson, ResponseJson} from '../../src/types/backend_fetch_types';
 import {CursorData} from '../../src/types/cursor';
 import {RecordActionData} from '../../src/types/record_action_data';
 import projectTrackerData from './project_tracker';
@@ -320,6 +321,9 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     }
     sendStat() {
         throw spawnError('sendStat unimplemented');
+    }
+    performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson> {
+        throw spawnError('performBackendFetchAsync unimplemented');
     }
 }
 
