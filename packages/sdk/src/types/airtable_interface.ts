@@ -19,6 +19,7 @@ import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutatio
 import {TableId} from '../types/table';
 import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from '../types/view';
 import {NormalizedSortConfig} from '../models/record_query_result';
+import {RequestJson, ResponseJson} from './backend_fetch_types';
 
 /** @hidden */
 export interface PartialViewData {
@@ -257,6 +258,7 @@ export interface AirtableInterface {
     fetchAndSubscribeToPerformRecordActionAsync(
         callback: RecordActionDataCallback,
     ): Promise<RecordActionData | null>;
+    performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson>;
 
     /**
      * internal utils

@@ -1,12 +1,11 @@
-import getSdk from '../get_sdk';
 import {AirtableInterface} from '../types/airtable_interface';
-import getAirtableInterface from '../injected/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import {GlobalConfigUpdate} from '../types/global_config';
 import {FieldId} from '../types/field';
+import Sdk from '../sdk';
 import Session from './session';
 import Base from './base';
 import Field from './field';
@@ -29,6 +28,8 @@ class Mutations {
     /** @internal */
     _session: Session;
     /** @internal */
+    _sdk: Sdk;
+    /** @internal */
     _base: Base;
     /** @internal */
     _applyModelChanges: (arg1: Array<ModelChange>) => void;
@@ -37,14 +38,15 @@ class Mutations {
 
     /** @hidden */
     constructor(
-        airtableInterface: AirtableInterface,
+        sdk: Sdk,
         session: Session,
         base: Base,
         applyModelChanges: (arg1: ReadonlyArray<ModelChange>) => void,
         applyGlobalConfigUpdates: (arg1: ReadonlyArray<GlobalConfigUpdate>) => void,
     ) {
-        this._airtableInterface = airtableInterface;
+        this._airtableInterface = sdk.__airtableInterface;
         this._session = session;
+        this._sdk = sdk;
         this._base = base;
         this._applyModelChanges = applyModelChanges;
         this._applyGlobalConfigUpdates = applyGlobalConfigUpdates;
@@ -135,8 +137,7 @@ class Mutations {
     /** @internal */
     _assertMutationIsValid(mutation: Mutation) {
 
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const appInterface = this._sdk.__appInterface;
         const billingPlanGrouping = this._base.__billingPlanGrouping;
 
         switch (mutation.type) {
@@ -179,7 +180,7 @@ class Mutations {
                         }
 
                         if (existingRecord && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                            const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                            const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                                 appInterface,
                                 record.cellValuesByFieldId[fieldId],
                                 existingRecord._getRawCellValue(field),
@@ -246,7 +247,7 @@ class Mutations {
                             checkedFieldIds.add(fieldId);
                         }
 
-                        const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                        const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                             appInterface,
                             record.cellValuesByFieldId[fieldId],
                             null,
@@ -305,7 +306,7 @@ class Mutations {
                     );
                 }
 
-                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                     appInterface,
                     config,
                     null,
@@ -334,12 +335,12 @@ class Mutations {
                     throw spawnError("Can't update field: No field with id %s exists", id);
                 }
 
-                const currentConfig = airtableInterface.fieldTypeProvider.getConfig(
+                const currentConfig = this._airtableInterface.fieldTypeProvider.getConfig(
                     appInterface,
                     field._data,
                     field.parentTable.__getFieldNamesById(),
                 );
-                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                     appInterface,
                     config,
                     currentConfig,
@@ -418,7 +419,7 @@ class Mutations {
                     }
                     lowercaseFieldNames.add(lowercaseFieldName);
 
-                    const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                         appInterface,
                         field.config,
                         null,
@@ -437,7 +438,7 @@ class Mutations {
 
                 const primaryField = fields[0];
                 if (
-                    !airtableInterface.fieldTypeProvider.canBePrimary(
+                    !this._airtableInterface.fieldTypeProvider.canBePrimary(
                         appInterface,
                         primaryField.config,
                         billingPlanGrouping,

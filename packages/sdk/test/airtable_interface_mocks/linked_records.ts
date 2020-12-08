@@ -16,24 +16,24 @@ const linkedRecords: SdkInitData = {
             tblFirst: {
                 id: 'tblFirst',
                 name: 'First Table',
-                primaryFieldId: 'fldPrimary',
+                primaryFieldId: 'fld1stPrimary',
                 fieldsById: {
-                    fldPrimary: {
-                        id: 'fldPrimary',
+                    fld1stPrimary: {
+                        id: 'fld1stPrimary',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldLinked1: {
-                        id: 'fldLinked1',
+                    fld1stLinked: {
+                        id: 'fld1stLinked',
                         name: 'linked records',
                         type: 'multipleRecordLinks',
                         typeOptions: {
                             linkedTableId: 'tblSecond',
                             relationship: 'many',
-                            symmetricColumnId: 'fldLinked2',
+                            symmetricColumnId: 'fld2ndLinked',
                             unreversed: true,
                         },
                         description: '',
@@ -64,32 +64,32 @@ const linkedRecords: SdkInitData = {
             tblSecond: {
                 id: 'tblSecond',
                 name: 'Second Table',
-                primaryFieldId: 'fldPrimary',
+                primaryFieldId: 'fld2ndPrimary',
                 fieldsById: {
-                    fldPrimary: {
-                        id: 'fldPrimary',
+                    fld2ndPrimary: {
+                        id: 'fld2ndPrimary',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldSecondary: {
-                        id: 'fldSecondary',
+                    fld2ndSecondary: {
+                        id: 'fld2ndSecondary',
                         name: 'Name',
                         type: 'text',
                         typeOptions: null,
                         description: '',
                         lock: null,
                     },
-                    fldLinked2: {
-                        id: 'fldLinked2',
+                    fld2ndLinked: {
+                        id: 'fld2ndLinked',
                         name: 'linked records',
                         type: 'multipleRecordLinks',
                         typeOptions: {
                             linkedTableId: 'tblFirst',
                             relationship: 'many',
-                            symmetricColumnId: 'fldLinked1',
+                            symmetricColumnId: 'fld1stLinked',
                             unreversed: true,
                         },
                         description: '',

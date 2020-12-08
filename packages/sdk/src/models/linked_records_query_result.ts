@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
@@ -46,6 +46,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     /** @internal */
     _linkedTable: Table;
     /** @internal */
+    _originRecordStore: RecordStore;
+    /** @internal */
     _linkedRecordStore: RecordStore;
     /** @internal */
     _linkedQueryResult: TableOrViewQueryResult;
@@ -61,8 +63,13 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     } = {};
 
     /** @internal */
-    constructor(record: Record, field: Field, normalizedOpts: NormalizedRecordQueryResultOpts) {
-        super(normalizedOpts, record.parentTable.__baseData);
+    constructor(
+        record: Record,
+        field: Field,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
+        sdk: Sdk,
+    ) {
+        super(sdk, normalizedOpts);
 
         invariant(
             record.parentTable === field.parentTable,
@@ -72,9 +79,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         this._record = record;
         this._field = field;
         this._linkedTable = normalizedOpts.table;
+        this._originRecordStore = this._sdk.base.__getRecordStore(this._record.parentTable.id);
         this._linkedRecordStore = normalizedOpts.recordStore;
 
         this._linkedQueryResult = this._linkedTable.__tableOrViewQueryResultPool.getObjectForReuse(
+            this._sdk,
             this._linkedTable,
             normalizedOpts,
         );
@@ -82,10 +91,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /**
      * Is the query result currently valid? This value always starts as 'true',
-     * but can become false if the field config changes to link to a different
-     * table or a type other than MULTIPLE_RECORD_LINKS. Once `isValid` has
-     * become false, it will never become true again. Many fields will throw on
-     * attempting to access them, and watches will no longer fire.
+     * but can become false if the record from which this result was created is
+     * deleted, if the field is deleted, if the field config changes to link to
+     * a different table, or if the field config changes to link to a type
+     * other than MULTIPLE_RECORD_LINKS. Once `isValid` has become false, it
+     * will never become true again. Many fields will throw on attempting to
+     * access them, and watches will no longer fire.
      */
     get isValid(): boolean {
         return this._isValid;
@@ -201,10 +212,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         this._record.__linkedRecordsQueryResultPool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
+        const initiallyLoaded = this._linkedQueryResult.isDataLoaded;
 
         await Promise.all([
-            getSdk()
-                .base.__getRecordStore(this._record.parentTable.id)
+            this._sdk.base
+                .__getRecordStore(this._record.parentTable.id)
                 .loadCellValuesInFieldIdsAsync([this._field.id]),
             this._linkedQueryResult.loadDataAsync(),
             this._loadRecordColorsAsync(),
@@ -212,7 +224,21 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         this._invalidateComputedData();
 
-        return ['records', 'recordIds'];
+        const changedKeys = ['records', 'recordIds', 'recordColors'];
+
+        if (initiallyLoaded) {
+            changedKeys.push('cellValues');
+        }
+
+        const fieldIds =
+            this._normalizedOpts.fieldIdsOrNullIfAllFields ||
+            this.parentTable.fields.map(field => field.id);
+
+        for (const fieldId of fieldIds) {
+            changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
+        }
+
+        return changedKeys;
     }
 
     /** @internal */
@@ -222,8 +248,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 
-            getSdk()
-                .base.__getRecordStore(this._record.parentTable.id)
+            this._sdk.base
+                .__getRecordStore(this._record.parentTable.id)
                 .unloadCellValuesInFieldIds([this._field.id]);
             this._linkedQueryResult.unloadData();
             this._unloadRecordColors();
@@ -305,6 +331,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         );
         this._field.watch('type', this._onOriginFieldConfigChange, this);
         this._field.watch('options', this._onOriginFieldConfigChange, this);
+        this._originRecordStore.watch('recordIds', this._onOriginRecordsChange, this);
+        this._record.parentTable.watch('fields', this._onOriginFieldsChange, this);
     }
 
     /** @internal */
@@ -316,6 +344,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         );
         this._field.unwatch('type', this._onOriginFieldConfigChange, this);
         this._field.unwatch('options', this._onOriginFieldConfigChange, this);
+        this._originRecordStore.unwatch('recordIds', this._onOriginRecordsChange, this);
+        this._record.parentTable.unwatch('fields', this._onOriginFieldsChange, this);
     }
 
     /** @internal */
@@ -416,6 +446,10 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
             ) => {
                 invariant(this.isValid, 'watch key change event whilst invalid');
 
+                if (!this.isDataLoaded) {
+                    return;
+                }
+
                 if (Array.isArray(recordIds)) {
                     const recordIdsSet = this._getOrGenerateRecordIdsSet();
                     const filteredRecordIds = recordIds.filter(
@@ -447,6 +481,20 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         this._onChange('records');
         this._onChange('recordIds');
+    }
+
+    /** @internal */
+    _onOriginRecordsChange() {
+        if (this._record.isDeleted) {
+            this._isValid = false;
+        }
+    }
+
+    /** @internal */
+    _onOriginFieldsChange() {
+        if (this._field.isDeleted) {
+            this._isValid = false;
+        }
     }
 
     /** @internal */

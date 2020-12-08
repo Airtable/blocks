@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: initializeBlock */ /** */
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
+import Sdk from '../sdk';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;
@@ -48,10 +48,17 @@ function initializeBlock(getEntryElement: () => React.ReactNode) {
             "The first argument to initializeBlock didn't return a valid React element",
         );
     }
-    getSdk().__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+    sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
 
     const container = document.createElement('div');
     body.appendChild(container);
-    ReactDOM.render(<BlockWrapper>{entryElement}</BlockWrapper>, container);
+    ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
 }
+
+let sdk: Sdk;
+
+export function __injectSdkIntoInitializeBlock(_sdk: Sdk) {
+    sdk = _sdk;
+}
+
 export default initializeBlock;

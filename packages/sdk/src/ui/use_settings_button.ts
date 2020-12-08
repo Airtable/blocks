@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: useSettingsButton */ /** */
 import {useEffect} from 'react';
-import getSdk from '../get_sdk';
 import {FlowAnyFunction} from '../private_utils';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook for using the settings button that lives outside the app's viewport. It will show
@@ -32,15 +32,15 @@ import useWatchable from './use_watchable';
  * @hook
  */
 export default function useSettingsButton(onClickCallback: FlowAnyFunction) {
+    const {settingsButton} = useSdk();
+
     useEffect(() => {
-        const {settingsButton} = getSdk();
         settingsButton.show();
 
         return () => {
             settingsButton.hide();
         };
-    }, []); 
+    }, [settingsButton]); 
 
-    const {settingsButton} = getSdk();
     useWatchable(settingsButton, ['click'], onClickCallback);
 }

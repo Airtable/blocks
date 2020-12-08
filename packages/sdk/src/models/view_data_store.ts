@@ -7,7 +7,8 @@ import {
     ObjectMap,
 } from '../private_utils';
 import {invariant} from '../error_utils';
-import {BaseData, ModelChange} from '../types/base';
+import {ModelChange} from '../types/base';
+import Sdk from '../sdk';
 import {FieldId} from '../types/field';
 import {ViewData, ViewId} from '../types/view';
 import {RecordId} from '../types/record';
@@ -43,15 +44,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
     _mostRecentTableLoadPromise: Promise<FlowAnyExistential> | null;
     readonly _airtableInterface: AirtableInterface;
 
-    constructor(
-        baseData: BaseData,
-        parentRecordStore: RecordStore,
-        airtableInterface: AirtableInterface,
-        viewId: ViewId,
-    ) {
-        super(baseData, `${viewId}-ViewDataStore`);
+    constructor(sdk: Sdk, parentRecordStore: RecordStore, viewId: ViewId) {
+        super(sdk, `${viewId}-ViewDataStore`);
         this.parentRecordStore = parentRecordStore;
-        this._airtableInterface = airtableInterface;
+        this._airtableInterface = sdk.__airtableInterface;
         this._mostRecentTableLoadPromise = null;
         this.viewId = viewId;
     }

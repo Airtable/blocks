@@ -1,21 +1,22 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import Sdk from '../../src/sdk';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import {__reset, __sdk as sdk} from '../../src';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';
 import LinkedRecordsQueryResult from '../../src/models/linked_records_query_result';
 import {simulateTimersAndClearAfterEachTest, waitForWatchKeyAsync} from '../test_helpers';
 
-const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+        }
         return mockAirtableInterface;
     },
 }));
 
 describe('LinkedRecordQueryResult', () => {
-    let sdk: Sdk;
     let query: RecordQueryResult;
     let record: Record;
 
@@ -25,14 +26,14 @@ describe('LinkedRecordQueryResult', () => {
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(tableId => {
             const first = tableId === 'tblFirst';
             const recId = first ? 'recA' : 'recB';
-            const fieldId = first ? 'fldLinked1' : 'fldLinked2';
+            const fieldId = first ? 'fld1stLinked' : 'fld2ndLinked';
             const cellValues = [{id: first ? 'recB' : 'recA'}];
             return Promise.resolve({
                 recordsById: {
                     [recId]: {
                         id: recId,
                         cellValuesByFieldId: {
-                            fldPrimary: 'primary',
+                            fld1stPrimary: 'primary',
                             [fieldId]: cellValues,
                         },
                         commentCount: 0,
@@ -48,7 +49,6 @@ describe('LinkedRecordQueryResult', () => {
             selectedRecordIdSet: {},
             selectedFieldIdSet: {},
         });
-        sdk = getSdk();
         query = await sdk.base.tables[0].selectRecordsAsync();
         record = query.getRecordById('recA');
 
@@ -63,40 +63,78 @@ describe('LinkedRecordQueryResult', () => {
     afterEach(() => {
         query.unloadData();
         mockAirtableInterface.reset();
-        clearSdkForTest();
+        __reset();
     });
 
     describe('caching', () => {
         it('caches like requests', () => {
-            const first = record.selectLinkedRecordsFromCell('fldLinked1');
-            const second = record.selectLinkedRecordsFromCell('fldLinked1');
+            const first = record.selectLinkedRecordsFromCell('fld1stLinked');
+            const second = record.selectLinkedRecordsFromCell('fld1stLinked');
             expect(first).toBe(second);
         });
 
         it('does not cache dissimilar requests', () => {
-            const first = record.selectLinkedRecordsFromCell('fldLinked1');
-            const second = record.selectLinkedRecordsFromCell('fldLinked1', {
-                fields: ['fldLinked2'],
+            const first = record.selectLinkedRecordsFromCell('fld1stLinked');
+            const second = record.selectLinkedRecordsFromCell('fld1stLinked', {
+                fields: ['fld2ndLinked'],
             });
             expect(first).not.toBe(second);
         });
     });
 
+    describe('#isDeleted', () => {
+        it('is initially false', () => {
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
+            expect(linked.isDeleted).toBe(false);
+        });
+
+        it('is false after loading', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+            expect(linked.isDeleted).toBe(false);
+        });
+
+        it('is true after record is deleted', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', record.id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isDeleted).toBe(true);
+        });
+
+        it('is true after table is deleted', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', sdk.base.tables[0].id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isDeleted).toBe(true);
+        });
+    });
+
     describe('#isValid', () => {
         it('initially true', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             expect(linked.isValid).toBe(true);
         });
 
         it('true following change to non-critical type option', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
                     path: [
                         'tablesById',
                         'tblFirst',
                         'fieldsById',
-                        'fldLinked1',
+                        'fld1stLinked',
                         'typeOptions',
                         'unreversed',
                     ],
@@ -108,10 +146,10 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('false following change in field type (loaded)', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fldLinked1', 'type'],
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stLinked', 'type'],
                     value: 'text',
                 },
             ]);
@@ -120,7 +158,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('false following change in field type (unloaded)', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
                 linked.unloadData();
@@ -135,7 +173,7 @@ describe('LinkedRecordQueryResult', () => {
                             'tablesById',
                             'tblFirst',
                             'fieldsById',
-                            'fldLinked1',
+                            'fld1stLinked',
                             'typeOptions',
                             'linkedTableId',
                         ],
@@ -148,16 +186,76 @@ describe('LinkedRecordQueryResult', () => {
                 await loadPromise.catch(() => {});
             }
         });
+
+        it('false following deletion of "origin" record', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', record.id],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(false);
+        });
+
+        it('true following deletion of unrelated record in origin table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recD'],
+                    value: {},
+                },
+                {
+                    path: ['tablesById', 'tblFirst', 'recordsById', 'recD'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(true);
+        });
+
+        it('false following deletion of linked field in "origin" table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stLinked'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(false);
+        });
+
+        it('true following deletion of unrelated field in "origin" table', async () => {
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stDoomed'],
+                    value: {},
+                },
+                {
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stDoomed'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(linked.isValid).toBe(true);
+        });
     });
 
     it('#parentTable', async () => {
-        const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+        const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
         expect(linked.parentTable.id).toBe('tblSecond');
     });
 
     describe('#recordIds', () => {
         it('returns an array of the relevant record IDs', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.recordIds).toStrictEqual(['recB']);
         });
@@ -171,12 +269,12 @@ describe('LinkedRecordQueryResult', () => {
                         'recordsById',
                         'recA',
                         'cellValuesByFieldId',
-                        'fldLinked1',
+                        'fld1stLinked',
                     ],
                     value: null,
                 },
             ]);
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.recordIds).toStrictEqual([]);
         });
@@ -190,12 +288,12 @@ describe('LinkedRecordQueryResult', () => {
                         'recordsById',
                         'recA',
                         'cellValuesByFieldId',
-                        'fldLinked1',
+                        'fld1stLinked',
                     ],
                     value: [{id: 'recBogus'}],
                 },
             ]);
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.recordIds).toStrictEqual([]);
         });
@@ -208,8 +306,8 @@ describe('LinkedRecordQueryResult', () => {
                     value: {
                         id: 'recC',
                         cellValuesByFieldId: {
-                            fldPrimary: 'primary also',
-                            fldLinked2: [{id: 'recA'}],
+                            fld1stPrimary: 'primary also',
+                            fld2ndLinked: [{id: 'recA'}],
                         },
                     },
                 },
@@ -220,36 +318,36 @@ describe('LinkedRecordQueryResult', () => {
                         'recordsById',
                         'recA',
                         'cellValuesByFieldId',
-                        'fldLinked1',
+                        'fld1stLinked',
                     ],
                     value: [{id: 'recB'}, {id: 'recC'}],
                 },
             ]);
 
-            let linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            let linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.recordIds).toStrictEqual(['recB', 'recC']);
 
-            linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1', {
-                sorts: [{field: 'fldPrimary'}],
+            linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked', {
+                sorts: [{field: 'fld2ndPrimary'}],
             });
 
             expect(mockAirtableInterface.createVisList).toHaveBeenCalledTimes(1);
             expect(mockAirtableInterface.createVisList.mock.calls[0][3]).toStrictEqual([
-                {direction: 'asc', fieldId: 'fldPrimary'},
+                {direction: 'asc', fieldId: 'fld2ndPrimary'},
             ]);
             expect(linked.recordIds).toStrictEqual(['recB', 'recC']);
         });
 
         it('reports an error when the result has been invalidated', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
                     path: [
                         'tablesById',
                         'tblFirst',
                         'fieldsById',
-                        'fldLinked1',
+                        'fld1stLinked',
                         'typeOptions',
                         'linkedTableId',
                     ],
@@ -261,13 +359,13 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('reports an error when the result has not yet been loaded', async () => {
-            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
 
             expect(() => linked.recordIds).toThrow(Error);
         });
 
         it('reports an error when the result has been unloaded', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
 
@@ -280,21 +378,21 @@ describe('LinkedRecordQueryResult', () => {
 
     describe('#records', () => {
         it('returns an array of the relevant records', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.records.length).toBe(1);
             expect(linked.records[0].id).toBe('recB');
         });
 
         it('reports an error when the result has been invalidated', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
                     path: [
                         'tablesById',
                         'tblFirst',
                         'fieldsById',
-                        'fldLinked1',
+                        'fld1stLinked',
                         'typeOptions',
                         'linkedTableId',
                     ],
@@ -306,13 +404,13 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('reports an error when the result has not yet been loaded', async () => {
-            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
 
             expect(() => linked.records).toThrow(Error);
         });
 
         it('reports an error when the result has been unloaded', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
 
@@ -323,7 +421,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('reports an error when the origin record has been deleted', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             mockAirtableInterface.triggerModelUpdates([
                 {
@@ -336,11 +434,11 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('reports an error when the field has been deleted in the origin table', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fldLinked1'],
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stLinked'],
                     value: undefined,
                 },
             ]);
@@ -351,14 +449,14 @@ describe('LinkedRecordQueryResult', () => {
 
     describe('#fields', () => {
         it('returns null when no fields were initially specified', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             expect(linked.fields).toBe(null);
         });
 
         it('returns an array of the fields initially specified', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1', {
-                fields: ['fldLinked2'],
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked', {
+                fields: ['fld2ndLinked'],
             });
 
             if (linked.fields === null) {
@@ -366,18 +464,18 @@ describe('LinkedRecordQueryResult', () => {
             }
 
             expect(linked.fields.length).toBe(1);
-            expect(linked.fields[0].id).toBe('fldLinked2');
+            expect(linked.fields[0].id).toBe('fld2ndLinked');
         });
 
         it('reports an error when the result has been invalidated', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
                     path: [
                         'tablesById',
                         'tblFirst',
                         'fieldsById',
-                        'fldLinked1',
+                        'fld1stLinked',
                         'typeOptions',
                         'linkedTableId',
                     ],
@@ -391,14 +489,14 @@ describe('LinkedRecordQueryResult', () => {
 
     describe('#getRecordById', () => {
         it('throws an error for unloaded records', () => {
-            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            const result = record.selectLinkedRecordsFromCell('fld1stLinked');
             expect(() =>
                 result.getRecordById('not a record id'),
             ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
         });
 
         it('throws an error for non-existent records', async () => {
-            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const result = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             expect(() =>
                 result.getRecordById('not a record id'),
             ).toThrowErrorMatchingInlineSnapshot(
@@ -409,21 +507,21 @@ describe('LinkedRecordQueryResult', () => {
 
     describe('#getRecordByIdIfExists', () => {
         it('throws an error for unloaded records', () => {
-            const result = record.selectLinkedRecordsFromCell('fldLinked1');
+            const result = record.selectLinkedRecordsFromCell('fld1stLinked');
             expect(() =>
                 result.getRecordByIdIfExists('not a record id'),
             ).toThrowErrorMatchingInlineSnapshot(`"Record metadata is not loaded"`);
         });
 
         it('returns `null` for non-existent records', async () => {
-            const result = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const result = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             expect(result.getRecordByIdIfExists('not a record id')).toBe(null);
         });
     });
 
     describe('#loadDataAsync', () => {
         it('works for loaded instances', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
 
             await linked.loadDataAsync();
 
@@ -436,7 +534,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('works for unloaded instances', async () => {
-            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
 
             await linked.loadDataAsync();
 
@@ -450,10 +548,10 @@ describe('LinkedRecordQueryResult', () => {
 
     describe('#unloadData', () => {
         it('functions when field has been invalidated', async () => {
-            const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
+            const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
             mockAirtableInterface.triggerModelUpdates([
                 {
-                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fldLinked1', 'type'],
+                    path: ['tablesById', 'tblFirst', 'fieldsById', 'fld1stLinked', 'type'],
                     value: 'text',
                 },
             ]);
@@ -462,7 +560,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         it('tolerates unnecessary invocations', async () => {
-            const linked = record.selectLinkedRecordsFromCell('fldLinked1');
+            const linked = record.selectLinkedRecordsFromCell('fld1stLinked');
             const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
             try {
@@ -488,7 +586,7 @@ describe('LinkedRecordQueryResult', () => {
                 colorsByRecordId: {},
             });
             const view = sdk.base.tables[1].views[0];
-            linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1', {
+            linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked', {
                 recordColorMode: {type: 'byView', view},
             });
         });
@@ -540,7 +638,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldSecondary',
+                            'fld2ndSecondary',
                         ],
                         value,
                     },
@@ -549,21 +647,21 @@ describe('LinkedRecordQueryResult', () => {
 
             it('reports error when over-freed', () => {
                 const noop = () => {};
-                linked.watch('cellValuesInField:fldSecondary', noop);
-                linked.unwatch('cellValuesInField:fldSecondary', noop);
+                linked.watch('cellValuesInField:fld2ndSecondary', noop);
+                linked.unwatch('cellValuesInField:fld2ndSecondary', noop);
 
                 expect(() => {
-                    linked.unwatch('cellValuesInField:fldSecondary', noop);
+                    linked.unwatch('cellValuesInField:fld2ndSecondary', noop);
                 }).toThrowErrorMatchingInlineSnapshot(
-                    `"cellValuesInField:fldSecondary over-free'd"`,
+                    `"cellValuesInField:fld2ndSecondary over-free'd"`,
                 );
             });
 
             it('triggers unloading', async () => {
                 const noop = () => {};
-                linked.watch('cellValuesInField:fldSecondary', noop);
+                linked.watch('cellValuesInField:fld2ndSecondary', noop);
                 linked.unloadData();
-                linked.unwatch('cellValuesInField:fldSecondary', noop);
+                linked.unwatch('cellValuesInField:fld2ndSecondary', noop);
 
                 await waitForWatchKeyAsync(linked, 'isDataLoaded');
 
@@ -572,7 +670,7 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mockAirtableInterface.unsubscribeFromCursorData.mock.calls.length).toBe(1);
                 expect(mockAirtableInterface.unsubscribeFromTableData.mock.calls.length).toBe(0);
                 expect(mockAirtableInterface.unsubscribeFromCellValuesInFields.mock.calls).toEqual([
-                    ['tblSecond', ['fldSecondary']],
+                    ['tblSecond', ['fld2ndSecondary']],
                 ]);
                 expect(mockAirtableInterface.unsubscribeFromViewData.mock.calls.length).toBe(0);
             });
@@ -581,16 +679,16 @@ describe('LinkedRecordQueryResult', () => {
                 const spy1 = jest.fn();
                 const spy2 = jest.fn();
                 const spy3 = jest.fn();
-                linked.watch('cellValuesInField:fldSecondary', spy1);
-                linked.watch('cellValuesInField:fldSecondary', spy2);
-                linked.watch('cellValuesInField:fldSecondary', spy3);
+                linked.watch('cellValuesInField:fld2ndSecondary', spy1);
+                linked.watch('cellValuesInField:fld2ndSecondary', spy2);
+                linked.watch('cellValuesInField:fld2ndSecondary', spy3);
                 change('something else');
 
                 expect(spy1).toHaveBeenCalledTimes(1);
                 expect(spy2).toHaveBeenCalledTimes(1);
                 expect(spy3).toHaveBeenCalledTimes(1);
 
-                linked.unwatch('cellValuesInField:fldSecondary', spy2);
+                linked.unwatch('cellValuesInField:fld2ndSecondary', spy2);
 
                 change('something even differenter');
 
@@ -602,15 +700,15 @@ describe('LinkedRecordQueryResult', () => {
             it('properly cleans up final subscription', () => {
                 const spy = jest.fn();
 
-                linked.watch('cellValuesInField:fldSecondary', spy);
-                linked.unwatch('cellValuesInField:fldSecondary', spy);
-                linked.watch('cellValuesInField:fldSecondary', spy);
+                linked.watch('cellValuesInField:fld2ndSecondary', spy);
+                linked.unwatch('cellValuesInField:fld2ndSecondary', spy);
+                linked.watch('cellValuesInField:fld2ndSecondary', spy);
 
                 change('something else');
 
                 expect(spy).toHaveBeenCalledTimes(1);
 
-                linked.unwatch('cellValuesInField:fldSecondary', spy);
+                linked.unwatch('cellValuesInField:fld2ndSecondary', spy);
 
                 change('something even more different');
 
@@ -628,7 +726,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value,
                     },
@@ -712,7 +810,7 @@ describe('LinkedRecordQueryResult', () => {
                 colorsByRecordId: {},
             });
             const view = sdk.base.tables[1].views[0];
-            linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1', {
+            linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked', {
                 recordColorMode: {type: 'byView', view},
             });
             mocks = {
@@ -729,26 +827,52 @@ describe('LinkedRecordQueryResult', () => {
             linked.watch('cellValues', mocks.cellValues);
             linked.watch('recordColors', mocks.recordColors);
             linked.watch('isDataLoaded', mocks.isDataLoaded);
-            linked.watch('cellValuesInField:fldSecondary', mocks.cellValuesInField);
+            linked.watch('cellValuesInField:fld2ndSecondary', mocks.cellValuesInField);
         });
 
         describe('key: recordIds', () => {
             it('triggers loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
                 await waitForWatchKeyAsync(linked2, 'recordIds');
 
                 expect(linked2.isDataLoaded).toBe(true);
             });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('recordIds', spy);
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'recordIds');
+            });
         });
 
         describe('key: records', () => {
             it('triggers loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
                 await waitForWatchKeyAsync(linked2, 'records');
 
                 expect(linked2.isDataLoaded).toBe(true);
+            });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('records', spy);
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'records');
             });
         });
 
@@ -794,7 +918,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldLinked1',
+                            'fld1stLinked',
                         ],
                         value: 'tblFirst44',
                     },
@@ -809,7 +933,7 @@ describe('LinkedRecordQueryResult', () => {
             });
 
             it('origin cell value - not fired prior to load', () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
                 const recordsSpy = jest.fn();
                 const recordIdsSpy = jest.fn();
                 linked2.watch('records', recordsSpy);
@@ -823,7 +947,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recA',
                             'cellValuesByFieldId',
-                            'fldLinked1',
+                            'fld1stLinked',
                         ],
                         value: 'a value',
                     },
@@ -836,7 +960,7 @@ describe('LinkedRecordQueryResult', () => {
 
         describe('key: cellValues', () => {
             it('triggers loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
                 await waitForWatchKeyAsync(linked2, 'cellValues');
 
@@ -848,7 +972,7 @@ describe('LinkedRecordQueryResult', () => {
             });
 
             it('triggered by initial record loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
                 const spy = jest.fn();
                 linked2.watch('cellValues', spy);
                 await linked2.loadDataAsync();
@@ -864,7 +988,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: 'sdf',
                     },
@@ -877,12 +1001,36 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(0);
             });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('cellValues', spy);
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'cellValues');
+            });
+
+            it('is triggered when underlying record has previously been loaded', async () => {
+                const otherQuery = await sdk.base.tables[1].selectRecordsAsync();
+                const spy = jest.fn();
+
+                let lrqr = otherQuery.records[0].selectLinkedRecordsFromCell('fld2ndLinked');
+                lrqr.watch('cellValues', spy);
+                await lrqr.loadDataAsync();
+
+                expect(spy).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('key: recordColors', () => {
             it('triggers loading', async () => {
                 const view = sdk.base.tables[1].views[0];
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked', {
                     fields: [],
                     recordColorMode: {type: 'byView', view},
                 });
@@ -903,7 +1051,7 @@ describe('LinkedRecordQueryResult', () => {
                             'viewsById',
                             'viwTaskAll',
                             'colorsByRecordId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: 'blue... no, yell-aaaahhhh!',
                     },
@@ -916,12 +1064,25 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(0);
             });
+
+            it('is triggered by initial loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const spy = jest.fn();
+                linked2.watch('recordColors', spy);
+                await Promise.all([
+                    linked.loadDataAsync(),
+                    waitForWatchKeyAsync(linked2, 'isDataLoaded'),
+                ]);
+
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy).toHaveBeenCalledWith(linked2, 'recordColors');
+            });
         });
 
         describe('key: isDataLoaded', () => {
             it('does not trigger loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {fields: []});
-                const linked3 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked', {fields: []});
+                const linked3 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
                 linked2.watch('isDataLoaded', () => {});
                 await linked3.loadDataAsync();
@@ -930,7 +1091,7 @@ describe('LinkedRecordQueryResult', () => {
             });
 
             it('is alerted to changes', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
                 await Promise.all([
                     linked2.loadDataAsync(),
@@ -942,20 +1103,42 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: cellValuesInField:{FIELD_ID}', () => {
-            it.skip('triggers loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+            it('triggers loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
-                await waitForWatchKeyAsync(linked2, 'cellValuesInField:fldPrimary');
+                const result = await new Promise(resolve => {
+                    linked2.watch(
+                        'cellValuesInField:fld2ndPrimary',
+                        (...args: [LinkedRecordsQueryResult, string]) => resolve(args),
+                    );
+                });
 
                 expect(linked2.isDataLoaded).toBe(true);
+                expect(result).toEqual([linked2, 'cellValuesInField:fld2ndPrimary']);
             });
 
-            it('triggered by initial record loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
-                const spy = jest.fn();
-                linked2.watch('cellValuesInField:fldPrimary', spy);
+            it('all fields triggered by initial record loading', async () => {
+                const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
+                const isDataLoadeds: Array<boolean> = [];
+                const trackLoaded = () => {
+                    isDataLoadeds.push(linked2.isDataLoaded);
+                };
+
+                const spies: {[key: string]: jest.Mock} = {
+                    fld2ndPrimary: jest.fn().mockImplementation(trackLoaded),
+                    fld2ndSecondary: jest.fn().mockImplementation(trackLoaded),
+                    fld2ndLinked: jest.fn().mockImplementation(trackLoaded),
+                };
+                linked2.watch('cellValuesInField:fld2ndPrimary', spies.fld2ndPrimary);
+                linked2.watch('cellValuesInField:fld2ndSecondary', spies.fld2ndSecondary);
+                linked2.watch('cellValuesInField:fld2ndLinked', spies.fld2ndLinked);
+
                 await linked2.loadDataAsync();
-                expect(spy).toHaveBeenCalledTimes(1);
+
+                expect(spies.fld2ndPrimary).toHaveBeenCalledTimes(1);
+                expect(spies.fld2ndSecondary).toHaveBeenCalledTimes(1);
+                expect(spies.fld2ndLinked).toHaveBeenCalledTimes(1);
+                expect(isDataLoadeds).toEqual([true, true, true]);
             });
 
             it('referenced field', () => {
@@ -967,7 +1150,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldSecondary',
+                            'fld2ndSecondary',
                         ],
                         value: 'something else',
                     },
@@ -979,6 +1162,11 @@ describe('LinkedRecordQueryResult', () => {
                 expect(mocks.recordColors).toHaveBeenCalledTimes(0);
                 expect(mocks.isDataLoaded).toHaveBeenCalledTimes(0);
                 expect(mocks.cellValuesInField).toHaveBeenCalledTimes(1);
+                expect(mocks.cellValuesInField).toHaveBeenCalledWith(
+                    linked,
+                    'cellValuesInField:fld2ndSecondary',
+                    ['recB'],
+                );
             });
 
             it('unreferenced field', () => {
@@ -990,7 +1178,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: 'something else',
                     },
@@ -1013,7 +1201,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recG',
                             'cellValuesByFieldId',
-                            'fldSecondary',
+                            'fld2ndSecondary',
                         ],
                         value: 'something else',
                     },
@@ -1034,7 +1222,7 @@ describe('LinkedRecordQueryResult', () => {
                             'tablesById',
                             'tblFirst',
                             'fieldsById',
-                            'fldLinked1',
+                            'fld1stLinked',
                             'typeOptions',
                             'linkedTableId',
                         ],
@@ -1047,7 +1235,7 @@ describe('LinkedRecordQueryResult', () => {
                             'recordsById',
                             'recB',
                             'cellValuesByFieldId',
-                            'fldPrimary',
+                            'fld1stPrimary',
                         ],
                         value: 'something else',
                     },

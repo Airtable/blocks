@@ -1,6 +1,7 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
 import Mutations from '../../src/models/mutations';
+import Sdk from '../../src/sdk';
 import Session from '../../src/models/session';
 import {ModelChange} from '../../src/types/base';
 import {FieldType} from '../../src/types/field';
@@ -41,22 +42,14 @@ describe('Mutations', () => {
     let applyGlobalConfigUpdates: jest.Mock;
 
     beforeEach(() => {
-        base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+        const sdk = new Sdk(mockAirtableInterface);
+        base = sdk.base;
 
-        const session = new Session(
-            mockAirtableInterface.sdkInitData.baseData,
-            mockAirtableInterface,
-        );
+        const session = new Session(sdk);
         applyModelChanges = jest.fn();
         applyGlobalConfigUpdates = jest.fn();
 
-        mutations = new Mutations(
-            mockAirtableInterface,
-            session,
-            base,
-            applyModelChanges,
-            applyGlobalConfigUpdates,
-        );
+        mutations = new Mutations(sdk, session, base, applyModelChanges, applyGlobalConfigUpdates);
     });
 
     afterEach(() => {

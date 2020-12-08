@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useGlobalConfig */ /** */
-import getSdk from '../get_sdk';
 import GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Returns the app's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
@@ -32,7 +32,7 @@ import useWatchable from './use_watchable';
  * @hook
  */
 export default function useGlobalConfig(): GlobalConfig {
-    const {globalConfig, session} = getSdk();
+    const {globalConfig, session} = useSdk();
     useWatchable(session, ['permissionLevel']);
     useWatchable(globalConfig, ['*']);
     return globalConfig;

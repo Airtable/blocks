@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Table */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {TableData} from '../types/table';
 import {ViewType, ViewId} from '../types/view';
 import {FieldId, FieldType, FieldOptions} from '../types/field';
@@ -7,8 +7,6 @@ import {RecordId} from '../types/record';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
-import getSdk from '../get_sdk';
-import {AirtableInterface} from '../types/airtable_interface';
 import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
@@ -56,8 +54,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @internal */
     _cachedFieldNamesById: {[key: string]: string} | null;
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     _recordStore: RecordStore;
     /** @internal */
     __tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, typeof TableOrViewQueryResult>;
@@ -65,21 +61,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentBase: Base,
-        recordStore: RecordStore,
-        tableId: string,
-        airtableInterface: AirtableInterface,
-    ) {
-        super(baseData, tableId);
+    constructor(parentBase: Base, recordStore: RecordStore, tableId: string, sdk: Sdk) {
+        super(sdk, tableId);
         this._parentBase = parentBase;
         this._recordStore = recordStore;
         this._viewModelsById = {}; 
         this._fieldModelsById = {}; 
         this._cachedFieldNamesById = null;
-
-        this._airtableInterface = airtableInterface;
 
         this.__tableOrViewQueryResultPool = new ObjectPool(TableOrViewQueryResult);
     }
@@ -139,7 +127,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     get url(): string {
-        return this._airtableInterface.urlConstructor.getTableUrl(this.id);
+        return this._sdk.__airtableInterface.urlConstructor.getTableUrl(this.id);
     }
     /**
      * The table's primary field. Every table has exactly one primary
@@ -194,7 +182,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             return null;
         } else {
             if (!this._fieldModelsById[fieldId]) {
-                this._fieldModelsById[fieldId] = new Field(this._baseData, this, fieldId);
+                this._fieldModelsById[fieldId] = new Field(this._sdk, this, fieldId);
             }
             return this._fieldModelsById[fieldId];
         }
@@ -338,7 +326,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         } else {
             if (!this._viewModelsById[viewId]) {
                 this._viewModelsById[viewId] = new View(
-                    this._baseData,
+                    this._sdk,
                     this,
                     this._recordStore.getViewDataStore(viewId),
                     viewId,
@@ -481,7 +469,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             this._recordStore,
             opts || {},
         );
-        return this.__tableOrViewQueryResultPool.getObjectForReuse(this, normalizedOpts);
+        return this.__tableOrViewQueryResultPool.getObjectForReuse(this._sdk, this, normalizedOpts);
     }
     /**
      * Select and load records from the table. Returns a {@link RecordQueryResult} promise where
@@ -559,7 +547,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         view?: View | null;
     }): Promise<{[key: string]: unknown}> {
         const viewId = opts && opts.view ? opts.view.id : null;
-        const cellValuesByFieldId = await this._airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
+        const cellValuesByFieldId = await this._sdk.__airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
             this._id,
             viewId,
         );
@@ -848,7 +836,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             ),
         }));
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: recordsWithCellValuesByFieldId,
@@ -919,7 +907,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: records
@@ -1129,7 +1117,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
             recordIds,
@@ -1166,7 +1154,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     checkPermissionsForDeleteRecords(
         recordsOrRecordIds?: ReadonlyArray<Record | RecordId>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
             recordIds: recordsOrRecordIds
@@ -1433,12 +1421,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 );
             }
             return {
-                id: this._airtableInterface.idGenerator.generateRecordId(),
+                id: this._sdk.__airtableInterface.idGenerator.generateRecordId(),
                 cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(fields),
             };
         });
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: recordsToCreate,
@@ -1494,7 +1482,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: records
@@ -1594,7 +1582,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         type?: FieldType,
         options?: FieldOptions | null,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_SINGLE_FIELD,
             tableId: this.id,
             id: undefined, 
@@ -1695,9 +1683,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         type: FieldType,
         options?: FieldOptions | null,
     ): Promise<Field> {
-        const fieldId = this._airtableInterface.idGenerator.generateFieldId();
+        const fieldId = this._sdk.__airtableInterface.idGenerator.generateFieldId();
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_SINGLE_FIELD,
             tableId: this.id,
             id: fieldId,

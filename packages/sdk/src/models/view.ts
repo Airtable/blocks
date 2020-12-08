@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
 import AbstractModel from './abstract_model';
@@ -46,13 +46,8 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentTable: Table,
-        viewDataStore: ViewDataStore,
-        viewId: string,
-    ) {
-        super(baseData, viewId);
+    constructor(sdk: Sdk, parentTable: Table, viewDataStore: ViewDataStore, viewId: string) {
+        super(sdk, viewId);
 
         this._parentTable = parentTable;
         this._viewDataStore = viewDataStore;
@@ -114,7 +109,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     get url(): string {
-        return this.parentTable._airtableInterface.urlConstructor.getViewUrl(
+        return this._sdk.__airtableInterface.urlConstructor.getViewUrl(
             this.id,
             this.parentTable.id,
         );
@@ -168,6 +163,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
 
         return this.parentTable.__tableOrViewQueryResultPool.getObjectForReuse(
+            this._sdk,
             this,
             normalizedOpts,
         );
@@ -228,7 +224,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      */
     selectMetadata(): ViewMetadataQueryResult {
         return this.__viewMetadataQueryResultPool.getObjectForReuse(
-            this.__baseData,
+            this._sdk,
             this,
             this._viewDataStore,
         );

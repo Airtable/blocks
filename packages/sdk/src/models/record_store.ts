@@ -12,13 +12,12 @@ import {
     keys as objectKeys,
 } from '../private_utils';
 import {invariant} from '../error_utils';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
 import {RecordId, RecordData} from '../types/record';
 import {ViewId} from '../types/view';
 import {AirtableInterface} from '../types/airtable_interface';
-import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
@@ -69,10 +68,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     > = {};
     _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
 
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface, tableId: TableId) {
-        super(baseData, `${tableId}-RecordStore`);
+    constructor(sdk: Sdk, tableId: TableId) {
+        super(sdk, `${tableId}-RecordStore`);
 
-        this._airtableInterface = airtableInterface;
+        this._airtableInterface = sdk.__airtableInterface;
         this.tableId = tableId;
         this._primaryFieldId = this._data.primaryFieldId;
     }
@@ -82,12 +81,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             return this._viewDataStoresByViewId[viewId];
         }
         invariant(this._data.viewsById[viewId], 'view must exist');
-        const viewDataStore = new ViewDataStore(
-            this._baseData,
-            this,
-            this._airtableInterface,
-            viewId,
-        );
+        const viewDataStore = new ViewDataStore(this._sdk, this, viewId);
         this._viewDataStoresByViewId[viewId] = viewDataStore;
         return viewDataStore;
     }
@@ -178,9 +172,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 return this._recordModelsById[recordId];
             }
             const newRecord = new Record(
-                this._baseData,
+                this._sdk,
                 this,
-                getSdk().base.getTableById(this.tableId),
+                this._sdk.base.getTableById(this.tableId),
                 recordId,
             );
             this._recordModelsById[recordId] = newRecord;

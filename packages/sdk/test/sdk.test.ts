@@ -1,14 +1,18 @@
-import BlockSdk from '../src/sdk';
+// eslint-disable-next-line import/order
+import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
 import Table from '../src/models/table';
 import View from '../src/models/view';
 import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
-import getSdk, {clearSdkForTest} from '../src/get_sdk';
-import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
+import {__reset, __sdk as sdk} from '../src';
+import {RequestJson} from '../src/types/backend_fetch_types';
 
-const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+        }
         return mockAirtableInterface;
     },
 }));
@@ -16,12 +20,9 @@ jest.mock('../src/injected/airtable_interface', () => ({
 jest.useFakeTimers();
 
 describe('sdk', () => {
-    let sdk: BlockSdk;
-
     beforeEach(() => {
-        clearSdkForTest();
         mockAirtableInterface.reset();
-        sdk = getSdk();
+        __reset();
     });
 
     afterEach(() => {
@@ -731,6 +732,31 @@ describe('sdk', () => {
 
                 expect(mock).toHaveBeenCalledTimes(0);
             });
+        });
+    });
+    describe('unstable_fetchAsync', () => {
+        it('forwards arguments to airtable interface', async () => {
+            const mockResponse = {
+                body: '',
+                url: '',
+                status: 0,
+                headers: [],
+            };
+            mockAirtableInterface.performBackendFetchAsync.mockResolvedValue(mockResponse);
+            const requestJson: RequestJson = {
+                method: '',
+                url: '',
+                headers: [],
+                body: null,
+                redirect: 'error',
+                integrity: null,
+            };
+            const responseJson = await sdk.unstable_fetchAsync(requestJson);
+            expect(responseJson).toBe(mockResponse);
+            expect(mockAirtableInterface.performBackendFetchAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.performBackendFetchAsync).toHaveBeenCalledWith(
+                requestJson,
+            );
         });
     });
 });

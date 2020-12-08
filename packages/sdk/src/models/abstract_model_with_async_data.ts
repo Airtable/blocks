@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
 import {invariant} from '../error_utils';
 import AbstractModel from './abstract_model';
@@ -40,8 +40,8 @@ abstract class AbstractModelWithAsyncData<
      */
     _isForceUnloaded: boolean = false;
     /** @hidden */
-    constructor(baseData: BaseData, modelId: string) {
-        super(baseData, modelId);
+    constructor(sdk: Sdk, modelId: string) {
+        super(sdk, modelId);
 
         this._isDataLoaded = false;
         this._pendingDataLoadPromise = null;

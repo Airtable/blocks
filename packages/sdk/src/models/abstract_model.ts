@@ -1,5 +1,6 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {invariant, spawnError} from '../error_utils';
+import Sdk from '../sdk';
 import {BaseData} from '../types/base';
 import Watchable from '../watchable';
 
@@ -28,10 +29,12 @@ abstract class AbstractModel<DataType, WatchableKey extends string> extends Watc
     _baseData: BaseData;
     /** @internal */
     _id: string;
+    /** @internal */
+    _sdk: Sdk;
     /**
      * @internal
      */
-    constructor(baseData: BaseData, modelId: string) {
+    constructor(sdk: Sdk, modelId: string) {
         super();
 
         invariant(
@@ -40,7 +43,8 @@ abstract class AbstractModel<DataType, WatchableKey extends string> extends Watc
             (this.constructor as typeof AbstractModel)._className,
         );
 
-        this._baseData = baseData;
+        this._sdk = sdk;
+        this._baseData = sdk.__airtableInterface.sdkInitData.baseData;
         this._id = modelId;
     }
     /**
@@ -74,12 +78,6 @@ abstract class AbstractModel<DataType, WatchableKey extends string> extends Watc
      */
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;
-    }
-    /**
-     * @internal
-     */
-    get __baseData(): BaseData {
-        return this._baseData;
     }
     /**
      * @internal

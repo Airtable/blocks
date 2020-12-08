@@ -1,20 +1,21 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import Field from '../../src/models/field';
 import {FieldType} from '../../src/types/field';
-import Sdk from '../../src/sdk';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import {__reset, __sdk as sdk} from '../../src';
 import {MutationTypes} from '../../src/types/mutations';
 
-const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+        }
         return mockAirtableInterface;
     },
 }));
 
 describe('Field', () => {
-    let sdk: Sdk;
     let field: Field;
 
     const makeField = (fieldType: FieldType) => {
@@ -30,7 +31,7 @@ describe('Field', () => {
             lock: null,
         };
 
-        const newField = new Field(baseData, sdk.base.getTableById('tblDesignProjects'), fieldId);
+        const newField = new Field(sdk, sdk.base.getTableById('tblDesignProjects'), fieldId);
 
         Object.defineProperty(newField, 'type', {
             get: jest.fn(() => fieldType),
@@ -40,13 +41,12 @@ describe('Field', () => {
     };
 
     beforeEach(() => {
-        sdk = getSdk();
         field = sdk.base.tables[0].fields[1];
     });
 
     afterEach(() => {
         mockAirtableInterface.reset();
-        clearSdkForTest();
+        __reset();
     });
 
     describe('updateOptionsAsync', () => {

@@ -1,23 +1,23 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
-import Sdk from '../../src/sdk';
+import {__reset, __sdk} from '../../src';
 import Cursor from '../../src/models/cursor';
 
-const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+        }
         return mockAirtableInterface;
     },
 }));
 
-describe('Base', () => {
-    let sdk: Sdk;
+describe('Cursor', () => {
     let cursor: Cursor;
 
     beforeEach(() => {
-        sdk = getSdk();
-        cursor = sdk.cursor;
+        cursor = __sdk.cursor;
         mockAirtableInterface.fetchAndSubscribeToCursorDataAsync.mockReturnValue(
             Promise.resolve({
                 selectedFieldIdSet: {},
@@ -35,7 +35,7 @@ describe('Base', () => {
 
     afterEach(() => {
         mockAirtableInterface.reset();
-        clearSdkForTest();
+        __reset();
     });
 
     describe('model updates', () => {
@@ -52,15 +52,15 @@ describe('Base', () => {
 
     describe('constructor', () => {
         test('tolerates initialization data which does not designate an active table', () => {
-            const baseData = Object.assign({}, mockAirtableInterface.sdkInitData.baseData);
-            baseData.activeTableId = null;
-            new Cursor(baseData, mockAirtableInterface);
+            mockAirtableInterface.triggerModelUpdates([{path: ['activeTableId'], value: null}]);
+
+            new Cursor(__sdk);
         });
 
         test('tolerates initialization data whose table data has not yet populated', () => {
-            const baseData = Object.assign({}, mockAirtableInterface.sdkInitData.baseData);
-            baseData.tablesById = {};
-            new Cursor(baseData, mockAirtableInterface);
+            mockAirtableInterface.triggerModelUpdates([{path: ['tablesById'], value: {}}]);
+
+            new Cursor(__sdk);
         });
     });
 
@@ -139,7 +139,7 @@ describe('Base', () => {
                     value: {recA: true},
                 },
             ]);
-            const queryResult = await sdk.base
+            const queryResult = await __sdk.base
                 .getTableByName('Design projects')
                 .selectRecordsAsync();
             expect(cursor.isRecordSelected(queryResult.getRecordById('recA'))).toBe(true);
@@ -152,7 +152,7 @@ describe('Base', () => {
                     value: {recB: true},
                 },
             ]);
-            const queryResult = await sdk.base
+            const queryResult = await __sdk.base
                 .getTableByName('Design projects')
                 .selectRecordsAsync();
             expect(cursor.isRecordSelected(queryResult.getRecordById('recA'))).toBe(false);
@@ -161,7 +161,7 @@ describe('Base', () => {
 
     describe('#setActiveTable', () => {
         test('given a Table instance', () => {
-            cursor.setActiveTable(sdk.base.getTableByName('Design projects'));
+            cursor.setActiveTable(__sdk.base.getTableByName('Design projects'));
 
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledTimes(1);
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledWith(
@@ -180,8 +180,8 @@ describe('Base', () => {
     describe('#setActiveView', () => {
         test('given a Table instance and a View instance', () => {
             cursor.setActiveView(
-                sdk.base.getTableByName('Design projects'),
-                sdk.base.getTableByName('Design projects').views[1],
+                __sdk.base.getTableByName('Design projects'),
+                __sdk.base.getTableByName('Design projects').views[1],
             );
 
             expect(mockAirtableInterface.setActiveViewOrTable).toHaveBeenCalledTimes(1);

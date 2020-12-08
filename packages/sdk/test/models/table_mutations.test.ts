@@ -2,7 +2,7 @@ import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_int
 import Base from '../../src/models/base';
 import {MutationTypes} from '../../src/types/mutations';
 import warning from '../../src/warning';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import Sdk from '../../src/sdk';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -38,12 +38,11 @@ describe('Table', () => {
         };
 
         beforeEach(() => {
-            ({base} = getSdk());
+            ({base} = new Sdk(mockAirtableInterface));
             (warning as jest.Mock).mockClear();
         });
 
         afterEach(() => {
-            clearSdkForTest();
             mockAirtableInterface.reset();
         });
 

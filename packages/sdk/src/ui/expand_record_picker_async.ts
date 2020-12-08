@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
+import Sdk from '../sdk';
 import {invariant} from '../error_utils';
-import getSdk from '../get_sdk';
 import Record from '../models/record';
 import Field from '../models/field';
 
@@ -73,7 +73,6 @@ async function expandRecordPickerAsync(
               })
             : null;
 
-    const sdk = getSdk();
     const shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;
     const chosenRecordId = await sdk.__airtableInterface.expandRecordPickerAsync(
         tableId,
@@ -92,6 +91,12 @@ async function expandRecordPickerAsync(
     }
 
     return sdk.base.__getRecordStore(table.id).getRecordByIdIfExists(chosenRecordId);
+}
+
+let sdk: Sdk;
+
+export function __injectSdkIntoExpandRecordPickerAsync(_sdk: Sdk) {
+    sdk = _sdk;
 }
 
 export default expandRecordPickerAsync;

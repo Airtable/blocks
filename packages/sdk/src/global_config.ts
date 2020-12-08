@@ -1,6 +1,5 @@
 /** @module @airtable/blocks: globalConfig */ /** */
 import Watchable from './watchable';
-import getSdk from './get_sdk';
 import {AirtableInterface} from './types/airtable_interface';
 import {spawnError} from './error_utils';
 import {
@@ -15,6 +14,7 @@ import {
 } from './types/global_config';
 import {MutationTypes, PermissionCheckResult} from './types/mutations';
 import {getValueAtOwnPath} from './private_utils';
+import Sdk from './sdk';
 
 /**
  * You can watch any top-level key in global config. Use '*' to watch every change.
@@ -50,17 +50,20 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return true;
     }
     /** @internal */
+    _sdk: Sdk;
+    /** @internal */
     _kvStore: GlobalConfigData;
     /** @internal */
     _airtableInterface: AirtableInterface;
     /**
      * @internal
      */
-    constructor(initialKvValuesByKey: GlobalConfigData, airtableInterface: AirtableInterface) {
+    constructor(initialKvValuesByKey: GlobalConfigData, sdk: Sdk) {
         super();
 
         this._kvStore = initialKvValuesByKey;
-        this._airtableInterface = airtableInterface;
+        this._sdk = sdk;
+        this._airtableInterface = sdk.__airtableInterface;
     }
 
     /**
@@ -260,7 +263,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     checkPermissionsForSetPaths(
         updates?: ReadonlyArray<PartialGlobalConfigUpdate>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates: updates
                 ? updates.map(({path, value}) => ({path: path || undefined, value}))
@@ -345,14 +348,14 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             }
         }
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates,
         });
     }
     /**
      * @internal
-     * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
+     * this shouldn't be called directly - instead, use this._sdk.__applyGlobalConfigUpdates()
      */
     __setMultipleKvPaths(updates: ReadonlyArray<GlobalConfigUpdate>) {
         const {

@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {AirtableInterface} from '../types/airtable_interface';
-import {BaseData, ModelChange} from '../types/base';
+import {ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {PermissionLevel} from '../types/permission_levels';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
@@ -59,11 +59,15 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @internal
      */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, 'session');
-        this._airtableInterface = airtableInterface;
+    constructor(sdk: Sdk) {
+        super(sdk, 'session');
+        this._airtableInterface = sdk.__airtableInterface;
 
-        const {permissionLevel, currentUserId, enabledFeatureNames} = baseData;
+        const {
+            permissionLevel,
+            currentUserId,
+            enabledFeatureNames,
+        } = this._airtableInterface.sdkInitData.baseData;
         this._sessionData = {
             permissionLevel,
             currentUserId,
@@ -98,7 +102,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         if (!userId) {
             return null;
         } else {
-            const {base} = getSdk();
+            const {base} = this._sdk;
             return base.getCollaboratorByIdIfExists(userId);
         }
     }
@@ -120,7 +124,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * }
      */
     checkPermissionsForUpdateRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: undefined,
             records: undefined,
@@ -151,7 +155,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * }
      */
     checkPermissionsForCreateRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: undefined,
             records: undefined,
@@ -182,7 +186,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * }
      */
     checkPermissionsForDeleteRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: undefined,
             recordIds: undefined,

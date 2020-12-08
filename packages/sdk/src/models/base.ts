@@ -4,10 +4,9 @@ import {CollaboratorData, UserId} from '../types/collaborator';
 import {FieldType} from '../types/field';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
-import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -63,20 +62,18 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /** @internal */
     _tableRecordStoresByTableId: ObjectMap<TableId, RecordStore> = {};
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     __billingPlanGrouping: string;
     /** @internal */
     _collaboratorIdsByNameAndEmail: Map<string, string> | null = null;
     /**
      * @internal
      */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, baseData.id);
+    constructor(sdk: Sdk) {
+        super(sdk, sdk.__airtableInterface.sdkInitData.baseData.id);
 
         this._tableModelsById = {}; 
-        this._airtableInterface = airtableInterface;
-        this.__billingPlanGrouping = baseData.billingPlanGrouping;
+        this.__billingPlanGrouping =
+            sdk.__airtableInterface.sdkInitData.baseData.billingPlanGrouping;
     }
 
     /**
@@ -220,7 +217,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return this._tableRecordStoresByTableId[tableId];
         }
         invariant(this._data.tablesById[tableId], 'table must exist');
-        const newRecordStore = new RecordStore(this._baseData, this._airtableInterface, tableId);
+        const newRecordStore = new RecordStore(this._sdk, tableId);
         this._tableRecordStoresByTableId[tableId] = newRecordStore;
         return newRecordStore;
     }
@@ -241,11 +238,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         } else {
             if (!this._tableModelsById[tableId]) {
                 this._tableModelsById[tableId] = new Table(
-                    this._data,
                     this,
                     this.__getRecordStore(tableId),
                     tableId,
-                    this._airtableInterface,
+                    this._sdk,
                 );
             }
             return this._tableModelsById[tableId];
@@ -361,7 +357,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             options?: {[key: string]: unknown} | null;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_SINGLE_TABLE,
             id: undefined, 
             name: name,
@@ -470,9 +466,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             options?: {[key: string]: unknown} | null;
         }>,
     ): Promise<Table> {
-        const tableId = this._airtableInterface.idGenerator.generateTableId();
+        const tableId = this._sdk.__airtableInterface.idGenerator.generateTableId();
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             id: tableId,
             type: MutationTypes.CREATE_SINGLE_TABLE,
             name,

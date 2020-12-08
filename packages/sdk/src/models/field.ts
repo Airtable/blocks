@@ -1,12 +1,9 @@
 /** @module @airtable/blocks/models: Field */ /** */
-import getAirtableInterface from '../injected/airtable_interface';
-
 import {AggregatorKey} from '../types/aggregators';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {FieldData, FieldType, FieldOptions} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
-import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
 import {Aggregator} from './create_aggregators';
 import Table from './table';
@@ -54,8 +51,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     /**
      * @internal
      */
-    constructor(baseData: BaseData, parentTable: Table, fieldId: string) {
-        super(baseData, fieldId);
+    constructor(sdk: Sdk, parentTable: Table, fieldId: string) {
+        super(sdk, fieldId);
 
         this._parentTable = parentTable;
     }
@@ -103,8 +100,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get type(): FieldType {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
 
         const {type} = airtableInterface.fieldTypeProvider.getConfig(
             appInterface,
@@ -135,8 +132,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get options(): FieldOptions | null {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
 
         const {options} = airtableInterface.fieldTypeProvider.getConfig(
             appInterface,
@@ -169,7 +166,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
             id: this.id,
@@ -239,7 +236,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     async updateOptionsAsync(options: FieldOptions): Promise<void> {
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
             id: this.id,
@@ -263,7 +260,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get isComputed(): boolean {
-        const airtableInterface = getAirtableInterface();
+        const airtableInterface = this._sdk.__airtableInterface;
         return airtableInterface.fieldTypeProvider.isComputed(this._data);
     }
     /**
@@ -295,12 +292,13 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get availableAggregators(): Array<Aggregator> {
-        const airtableInterface = this._parentTable._airtableInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
         const availableAggregatorKeysSet = new Set(
             airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
 
-        return values(getSdk().models.aggregators).filter(aggregator => {
+        const {aggregators} = require('./models');
+        return values(aggregators).filter(aggregator => {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
@@ -325,7 +323,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     isAggregatorAvailable(aggregator: Aggregator | AggregatorKey): boolean {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
 
-        const airtableInterface = this._parentTable._airtableInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
         const availableAggregatorKeys = airtableInterface.aggregators.getAvailableAggregatorKeysForField(
             this._data,
         );
@@ -346,8 +344,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     convertStringToCellValue(string: string): unknown {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
 
         const cellValue = airtableInterface.fieldTypeProvider.convertStringToCellValue(
             appInterface,

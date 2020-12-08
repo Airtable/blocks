@@ -7,16 +7,15 @@ import {ModelChange} from './types/base';
 import GlobalConfig from './global_config';
 import {GlobalConfigUpdate} from './types/global_config';
 import Base from './models/base';
-import * as models from './models/models';
 import Session from './models/session';
 import Mutations from './models/mutations';
 import Cursor from './models/cursor';
 import Viewport from './viewport';
-import * as UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {PerformRecordAction} from './perform_record_action';
 import {AirtableInterface, AppInterface} from './types/airtable_interface';
+import {RequestJson, ResponseJson} from './types/backend_fetch_types';
 
 if (!(React as any).PropTypes) {
     (React as any).PropTypes = PropTypes;
@@ -59,14 +58,7 @@ export default class BlockSdk {
     /** @hidden */
     static VERSION = global.PACKAGE_VERSION;
 
-    /**
-     * NOTE: in most cases, we should pass the Airtable interface to models when we
-     * construct them (to reduce usage of getSdk). But in some cases, that isn't
-     * feasible (i.e. expandRecord, since that can be called directly from block code),
-     * so we allow accessing it through getSdk().__airtableInterface for convenience.
-     *
-     * @internal
-     */
+    /** @internal */
     __airtableInterface: AirtableInterface;
 
     /** Storage for this block installation's configuration. */
@@ -80,12 +72,6 @@ export default class BlockSdk {
 
     /** @internal */
     __mutations: Mutations;
-
-    /**
-     * Contains the model classes, field types, view types, and utilities for
-     * working with record coloring and record aggregation.
-     */
-    models: typeof models;
 
     /**
      * Returns the ID for the current block installation.
@@ -110,9 +96,6 @@ export default class BlockSdk {
     /** Returns information about the active table, active view, and selected records. */
     cursor: Cursor;
 
-    /** React components, hooks, and UI helpers. */
-    UI: typeof UI;
-
     /**
      * Controls the block's {@link settingsButton settings button}.
      */
@@ -133,27 +116,26 @@ export default class BlockSdk {
         airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
 
         const sdkInitData = airtableInterface.sdkInitData;
-        this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
-        this.base = new Base(sdkInitData.baseData, airtableInterface);
-        this.models = models;
+        this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, this);
+        this.base = new Base(this);
         this.installationId = sdkInitData.blockInstallationId;
 
         this.reload = this.reload.bind(this);
+        this.unstable_fetchAsync = this.unstable_fetchAsync.bind(this);
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
-        this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
-        this.session = new Session(sdkInitData.baseData, airtableInterface);
+        this.cursor = new Cursor(this);
+        this.session = new Session(this);
         this.__mutations = new Mutations(
-            airtableInterface,
+            this,
             this.session,
             this.base,
             changes => this.__applyModelChanges(changes),
             updates => this.__applyGlobalConfigUpdates(updates),
         );
-        this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
         this.undoRedo = new UndoRedo(airtableInterface);
-        this.performRecordAction = new PerformRecordAction(sdkInitData.baseData, airtableInterface);
+        this.performRecordAction = new PerformRecordAction(this, airtableInterface);
 
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,
@@ -243,5 +225,10 @@ export default class BlockSdk {
      */
     get __appInterface(): AppInterface {
         return this.base._baseData.appInterface;
+    }
+
+    /** @hidden */
+    async unstable_fetchAsync(requestJson: RequestJson): Promise<ResponseJson> {
+        return await this.__airtableInterface.performBackendFetchAsync(requestJson);
     }
 }

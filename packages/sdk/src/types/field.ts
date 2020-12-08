@@ -880,7 +880,7 @@ export enum FieldType {
      * **Field options**
      * ```js
      * {
-     *     durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h.mm.ss.SSS',
+     *     durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h:mm:ss.SSS',
      * }
      * ```
      */

@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/models: Cursor */ /** */
-import {BaseData, ModelChange} from '../types/base';
+import Sdk from '../sdk';
+import {ModelChange} from '../types/base';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
 import {FieldId} from '../types/field';
-import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -97,15 +97,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return true;
     }
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     _cursorData: CursorData;
 
     /** @internal */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, 'cursor');
-        this._airtableInterface = airtableInterface;
+    constructor(sdk: Sdk) {
+        super(sdk, 'cursor');
 
+        const baseData = sdk.__airtableInterface.sdkInitData.baseData;
         const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
         const selectedFieldIdSet = baseData.cursorData?.selectedFieldIdSet ?? null;
         const activeTableId = baseData.activeTableId;
@@ -138,7 +136,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @internal
      */
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
-        const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();
+        const cursorData = await this._sdk.__airtableInterface.fetchAndSubscribeToCursorDataAsync();
         this._cursorData.selectedRecordIdSet = cursorData.selectedRecordIdSet;
         this._cursorData.selectedFieldIdSet = cursorData.selectedFieldIdSet;
 
@@ -148,7 +146,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @internal
      */
     _unloadData() {
-        this._airtableInterface.unsubscribeFromCursorData();
+        this._sdk.__airtableInterface.unsubscribeFromCursorData();
         this._cursorData.selectedRecordIdSet = null;
         this._cursorData.selectedFieldIdSet = null;
     }
@@ -233,7 +231,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      */
     setActiveTable(tableOrTableId: Table | TableId): void {
         const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
-        this._airtableInterface.setActiveViewOrTable(tableId);
+        this._sdk.__airtableInterface.setActiveViewOrTable(tableId);
     }
     /**
      * Sets the specified view (and corresponding table) to active in the Airtable UI. If the apps
@@ -246,7 +244,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     setActiveView(tableOrTableId: Table | TableId, viewOrViewId: View | ViewId): void {
         const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
         const viewId = viewOrViewId instanceof View ? viewOrViewId.id : viewOrViewId;
-        this._airtableInterface.setActiveViewOrTable(tableId, viewId);
+        this._sdk.__airtableInterface.setActiveViewOrTable(tableId, viewId);
     }
 
     /**

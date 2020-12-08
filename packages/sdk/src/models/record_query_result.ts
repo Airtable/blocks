@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import Colors, {Color} from '../colors';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {
@@ -428,8 +428,8 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
     /**
      * @internal
      */
-    constructor(normalizedOpts: NormalizedRecordQueryResultOpts, baseData: BaseData) {
-        super(baseData, getLocallyUniqueId('RecordQueryResult'));
+    constructor(sdk: Sdk, normalizedOpts: NormalizedRecordQueryResultOpts) {
+        super(sdk, getLocallyUniqueId('RecordQueryResult'));
         this._normalizedOpts = normalizedOpts;
         this._recordStore = normalizedOpts.recordStore;
     }

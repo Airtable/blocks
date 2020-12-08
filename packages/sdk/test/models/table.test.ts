@@ -8,7 +8,7 @@ import {RecordId} from '../../src/types/record';
 import {ViewId, ViewType} from '../../src/types/view';
 import {FieldId, FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import Sdk from '../../src/sdk';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -56,15 +56,16 @@ const deleteField = (id: FieldId) => {
 };
 
 describe('Table', () => {
+    let sdk: Sdk;
     let base: Base;
     let table: Table;
     beforeEach(() => {
-        ({base} = getSdk());
+        sdk = new Sdk(mockAirtableInterface);
+        base = sdk.base;
         table = base.getTableByName('Design projects');
     });
 
     afterEach(() => {
-        clearSdkForTest();
         mockAirtableInterface.reset();
     });
 
@@ -201,7 +202,7 @@ describe('Table', () => {
             mockApplyMutationAsync = mockAirtableInterface.applyMutationAsync;
             mockGetFieldById = jest
                 .spyOn(table, 'getFieldById')
-                .mockImplementation(fieldId => new Field(base.__baseData, table, fieldId));
+                .mockImplementation(fieldId => new Field(sdk, table, fieldId));
         });
 
         it('accepts null field options and omits them from config', async () => {

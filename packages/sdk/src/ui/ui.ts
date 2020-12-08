@@ -1,5 +1,6 @@
 /** @ignore */
 import GlobalAlert from './global_alert';
+import '../';
 
 export {default as colors} from '../colors';
 export {default as colorUtils} from '../color_utils';
@@ -10,7 +11,6 @@ export {default as FieldPicker} from './field_picker';
 export {default as FieldPickerSynced} from './field_picker_synced';
 export {default as ViewPicker} from './view_picker';
 export {default as ViewPickerSynced} from './view_picker_synced';
-export {default as Input} from './input';
 export {default as InputSynced} from './input_synced';
 export {default as CellRenderer} from './cell_renderer';
 export {default as expandRecord} from './expand_record';
@@ -18,35 +18,14 @@ export {default as expandRecordList} from './expand_record_list';
 export {default as expandRecordPickerAsync} from './expand_record_picker_async';
 export {default as GlobalAlert} from './global_alert';
 export {default as FieldIcon} from './field_icon';
-export {default as Icon} from './icon';
-export {default as Loader} from './loader';
-export {default as Tooltip} from './tooltip';
-export {default as CollaboratorToken} from './collaborator_token';
-export {default as ChoiceToken} from './choice_token';
-export {default as ColorPalette} from './color_palette';
 export {default as ColorPaletteSynced} from './color_palette_synced';
 export {default as ProgressBar} from './progress_bar';
-export {default as Button} from './button';
 export {default as RecordCard} from './record_card';
 export {default as RecordCardList} from './record_card_list';
-export {default as Select} from './select';
 export {default as SelectSynced} from './select_synced';
-export {default as SelectButtons} from './select_buttons';
 export {default as SelectButtonsSynced} from './select_buttons_synced';
-export {default as Modal} from './modal';
-export {default as Dialog} from './dialog';
-export {default as ConfirmationDialog} from './confirmation_dialog';
-export {default as Switch} from './switch';
 export {default as SwitchSynced} from './switch_synced';
-export {default as Popover} from './popover';
 export {default as ViewportConstraint} from './viewport_constraint';
-export {default as Link} from './link';
-export {default as Box} from './box';
-export {default as Text} from './text';
-export {default as TextButton} from './text_button';
-export {default as Heading} from './heading';
-export {default as Label} from './label';
-export {default as FormField} from './form_field';
 export {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 export {default as initializeBlock} from './initialize_block';
 export {default as withHooks} from './with_hooks';
@@ -62,5 +41,7 @@ export {default as useGlobalConfig} from './use_global_config';
 export {default as useViewMetadata} from './use_view_metadata';
 export {default as useRecordActionData} from './use_record_action_data';
 export {registerRecordActionDataCallback} from '../perform_record_action';
+
+export * from './unstable_standalone_ui';
 
 export const globalAlert = new GlobalAlert();

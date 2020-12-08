@@ -1,12 +1,13 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import * as React from 'react';
-import getSdk from '../get_sdk';
 import Table from '../models/table';
 import {GlobalConfigKey} from '../types/global_config';
+import Sdk from '../sdk';
 import TablePicker, {sharedTablePickerPropTypes, SharedTablePickerProps} from './table_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Props for the {@link TablePickerSynced} component. Also accepts:
@@ -21,8 +22,8 @@ interface TablePickerSyncedProps extends SharedTablePickerProps {
 }
 
 /** @hidden */
-function _getTableFromGlobalConfigValue(tableId: unknown): Table | null {
-    return typeof tableId === 'string' ? getSdk().base.getTableByIdIfExists(tableId) : null;
+function _getTableFromGlobalConfigValue(sdk: Sdk, tableId: unknown): Table | null {
+    return typeof tableId === 'string' ? sdk.base.getTableByIdIfExists(tableId) : null;
 }
 
 /**
@@ -37,13 +38,14 @@ function _getTableFromGlobalConfigValue(tableId: unknown): Table | null {
 const TablePickerSynced = (props: TablePickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
     const [tableId, setTableId, canSetTableId] = useSynced(globalConfigKey);
-    useWatchable(getSdk().base, ['tables']);
+    const sdk = useSdk();
+    useWatchable(sdk.base, ['tables']);
 
     return (
         <TablePicker
             {...restOfProps}
             ref={ref}
-            table={_getTableFromGlobalConfigValue(tableId)}
+            table={_getTableFromGlobalConfigValue(sdk, tableId)}
             onChange={table => {
                 setTableId(table ? table.id : null);
                 if (onChange) {

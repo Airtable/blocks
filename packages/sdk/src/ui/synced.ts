@@ -2,9 +2,10 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import withHooks from './with_hooks';
+import {useSdk} from './sdk_context';
 
 /** @hidden */
 interface SyncedProps {
@@ -14,6 +15,8 @@ interface SyncedProps {
         canSetValue: boolean;
         setValue: (newValue: GlobalConfigValue | undefined) => void;
     }) => React.ReactElement;
+    /** @internal injected by withHooks */
+    sdk: Sdk;
 }
 
 /** @hidden */
@@ -31,11 +34,11 @@ export class Synced extends React.Component<SyncedProps> {
     }
     /** @internal */
     _setValue(newValue?: GlobalConfigValue | undefined) {
-        getSdk().globalConfig.setAsync(this.props.globalConfigKey, newValue);
+        this.props.sdk.globalConfig.setAsync(this.props.globalConfigKey, newValue);
     }
     /** @hidden */
     render() {
-        const {globalConfig} = getSdk();
+        const {globalConfig} = this.props.sdk;
         const value = globalConfig.get(this.props.globalConfigKey);
         const canSetValue = globalConfig.hasPermissionToSet(this.props.globalConfigKey);
         return this.props.render({
@@ -46,7 +49,9 @@ export class Synced extends React.Component<SyncedProps> {
     }
 }
 
-export default withHooks<{}, SyncedProps, Synced>(Synced, props => {
+export default withHooks<{sdk: Sdk}, SyncedProps, Synced>(Synced, props => {
     globalConfigSyncedComponentHelpers.useDefaultWatchesForSyncedComponent(props.globalConfigKey);
-    return {};
+    return {
+        sdk: useSdk(),
+    };
 });

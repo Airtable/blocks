@@ -1,9 +1,6 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import getAirtableInterface from '../injected/airtable_interface';
-
-import getSdk from '../get_sdk';
 import {Color} from '../colors';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {RecordData, RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
@@ -67,13 +64,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentRecordStore: RecordStore,
-        parentTable: Table,
-        recordId: string,
-    ) {
-        super(baseData, recordId);
+    constructor(sdk: Sdk, parentRecordStore: RecordStore, parentTable: Table, recordId: string) {
+        super(sdk, recordId);
 
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
@@ -167,7 +159,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             typeof cellValue === 'object' &&
             cellValue !== null &&
             field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
-            !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
+            !this._sdk.__airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
         ) {
             const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
             invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
@@ -219,8 +211,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         if (cellValue === null || cellValue === undefined) {
             return '';
         } else {
-            const airtableInterface = getAirtableInterface();
-            const appInterface = getSdk().__appInterface;
+            const airtableInterface = this._sdk.__airtableInterface;
+            const appInterface = this._sdk.__appInterface;
             return airtableInterface.fieldTypeProvider.convertCellValueToString(
                 appInterface,
                 cellValue,
@@ -262,8 +254,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
         return airtableInterface.urlConstructor.getAttachmentClientUrl(
             appInterface,
             attachmentId,
@@ -314,15 +306,20 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         const linkedTableId = field.options && field.options.linkedTableId;
         invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
-        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
+        const linkedTable = this._sdk.base.getTableById(linkedTableId);
+        const linkedRecordStore = this._sdk.base.__getRecordStore(linkedTableId);
 
         const normalizedOpts = RecordQueryResult._normalizeOpts(
             linkedTable,
             linkedRecordStore,
             opts,
         );
-        return this.__linkedRecordsQueryResultPool.getObjectForReuse(this, field, normalizedOpts);
+        return this.__linkedRecordsQueryResultPool.getObjectForReuse(
+            this,
+            field,
+            normalizedOpts,
+            this._sdk,
+        );
     }
     /**
      * Select and load records referenced in a `multipleRecordLinks` cell value. Returns a query result
@@ -352,7 +349,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     get url(): string {
-        return this.parentTable._airtableInterface.urlConstructor.getRecordUrl(
+        return this._sdk.__airtableInterface.urlConstructor.getRecordUrl(
             this.id,
             this.parentTable.id,
         );

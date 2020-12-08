@@ -2,6 +2,7 @@ import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_int
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import Base from '../../src/models/base';
+import Sdk from '../../src/sdk';
 import Table from '../../src/models/table';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
@@ -14,9 +15,12 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 
 describe('Base', () => {
     let base: Base;
+    let sdk: Sdk;
+
     beforeEach(() => {
         mockAirtableInterface.reset();
-        base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+        sdk = new Sdk(mockAirtableInterface);
+        base = sdk.base;
     });
 
     describe('tables', () => {
@@ -33,7 +37,7 @@ describe('Base', () => {
         it('omits tables which have no corresponding schema', async () => {
             const {tablesById} = mockAirtableInterface.sdkInitData.baseData;
             delete tablesById.tblDesignProjects;
-            base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+            base = new Sdk(mockAirtableInterface).base;
 
             expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
                 Array [
@@ -122,7 +126,7 @@ describe('Base', () => {
                 name: 'Gristle McThornbody',
                 profilePicUrl: 'https://example.com/fake2.jpg',
             };
-            base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+            base = new Sdk(mockAirtableInterface).base;
             expect(base.getCollaboratorIfExists('fake1@example.com')).toMatchInlineSnapshot(`
                 Object {
                   "email": "fake1@example.com",
@@ -154,10 +158,7 @@ describe('Base', () => {
 
     describe('getCollaborator', () => {
         beforeEach(() => {
-            base = new Base(
-                mockAirtableInterface.sdkInitData.baseData as any,
-                mockAirtableInterface,
-            );
+            base = new Sdk(mockAirtableInterface).base;
         });
 
         it('returns collaborator by id', () => {
@@ -494,9 +495,8 @@ describe('Base', () => {
 
         beforeEach(() => {
             mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
-                const airtableInterface = mockAirtableInterface as any;
                 const recordStore = undefined as any;
-                return new Table(base.__baseData, base, recordStore, tableId, airtableInterface);
+                return new Table(base, recordStore, tableId, sdk);
             });
         });
 

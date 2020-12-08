@@ -1,23 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {mount} from 'enzyme';
-import BlockWrapper from '../../src/ui/block_wrapper';
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import BlockWrapper from '../../src/ui/block_wrapper';
 import Sdk from '../../src/sdk';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
+import {__reset, __sdk as sdk} from '../../src';
 
-const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
     default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+        }
         return mockAirtableInterface;
     },
 }));
 
-const render = (): HTMLElement => {
+const render = (sdk_: Sdk): HTMLElement => {
     const div = document.createElement('div');
     ReactDOM.render(
-        <BlockWrapper>
+        <BlockWrapper sdk={sdk_}>
             <div></div>
         </BlockWrapper>,
         div,
@@ -26,19 +29,13 @@ const render = (): HTMLElement => {
 };
 
 describe('BlockWrapper', () => {
-    let sdk: Sdk;
-
-    beforeEach(() => {
-        sdk = getSdk();
-    });
-
     afterEach(() => {
-        clearSdkForTest();
+        __reset();
     });
 
     it('renders outside of a blocks context', () => {
         mount(
-            <BlockWrapper>
+            <BlockWrapper sdk={sdk}>
                 <div></div>
             </BlockWrapper>,
         );
@@ -49,7 +46,7 @@ describe('BlockWrapper', () => {
         mockAirtableInterface.enterFullscreen.mockImplementation(() => {});
         sdk.viewport.addMinSize({width: 2 ** 30});
 
-        expect(render().textContent).toMatch(/\bmake\s+this\s+block\s+bigger\b/i);
+        expect(render(sdk).textContent).toMatch(/\bmake\s+this\s+block\s+bigger\b/i);
     });
 
     it('prompts user to resize viewport ("app" terminology)', () => {
@@ -59,13 +56,12 @@ describe('BlockWrapper', () => {
                 value: ['blocks.appsRename'],
             },
         ]);
-        clearSdkForTest();
-        sdk = getSdk();
+        __reset();
 
         mockAirtableInterface.setFullscreenMaxSize.mockImplementation(() => {});
         mockAirtableInterface.enterFullscreen.mockImplementation(() => {});
         sdk.viewport.addMinSize({width: 2 ** 30});
 
-        expect(render().textContent).toMatch(/\bmake\s+this\s+app\s+bigger\b/i);
+        expect(render(sdk).textContent).toMatch(/\bmake\s+this\s+app\s+bigger\b/i);
     });
 });

@@ -1,25 +1,29 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import {ViewType} from '../../src/types/view';
-import getSdk, {clearSdkForTest} from '../../src/get_sdk';
-import BlockSdk from '../../src/sdk';
+import {__reset, __sdk as sdk} from '../../src';
 import AbstractModel from '../../src/models/abstract_model';
 import Base from '../../src/models/base';
 import * as RecordColoring from '../../src/models/record_coloring';
 import Table from '../../src/models/table';
 import View from '../../src/models/view';
 
-const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
-    default: () => mockAirtableInterface,
+    default() {
+        if (!mockAirtableInterface) {
+            mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
+        }
+        return mockAirtableInterface;
+    },
 }));
 
 const recordsById = {
     recA: {
         id: 'recA',
         cellValuesByFieldId: {
-            fldPrimary: '1',
-            fldLinked1: {id: 'recB'},
+            fld1stPrimary: '1',
+            fld1stLinked: {id: 'recB'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:31:04.281Z',
@@ -27,8 +31,8 @@ const recordsById = {
     recB: {
         id: 'recB',
         cellValuesByFieldId: {
-            fldPrimary: '2',
-            fldLinked1: {id: 'recC'},
+            fld1stPrimary: '2',
+            fld1stLinked: {id: 'recC'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:32:04.281Z',
@@ -36,8 +40,8 @@ const recordsById = {
     recC: {
         id: 'recC',
         cellValuesByFieldId: {
-            fldPrimary: '3',
-            fldLinked1: {id: 'recA'},
+            fld1stPrimary: '3',
+            fld1stLinked: {id: 'recA'},
         },
         commentCount: 0,
         createdTime: '2020-10-23T16:33:04.281Z',
@@ -65,7 +69,6 @@ const deleteView = () => {
 };
 
 describe('View', () => {
-    let sdk: BlockSdk;
     let base: Base;
     let table: Table;
     let view: View;
@@ -78,7 +81,7 @@ describe('View', () => {
         mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
             visibleRecordIds: ['recA', 'recB', 'recC'],
             fieldOrder: {
-                fieldIds: ['fldPrimary', 'fldLinked1'],
+                fieldIds: ['fld1stPrimary', 'fld1stLinked'],
                 visibleFieldCount: 2,
             },
             colorsByRecordId: {
@@ -96,15 +99,14 @@ describe('View', () => {
             selectedFieldIdSet: {},
         });
 
-        sdk = getSdk();
         base = sdk.base;
         table = base.getTable('First Table');
         view = table.getViewById('viwPrjctAll');
     });
 
     afterEach(() => {
-        clearSdkForTest();
         mockAirtableInterface.reset();
+        __reset();
     });
 
     describe('constructor', () => {
@@ -227,7 +229,7 @@ describe('View', () => {
 
             test('#selectRecords({ fields })', async () => {
                 const queryResult = view.selectRecords({
-                    fields: ['fldPrimary'],
+                    fields: ['fld1stPrimary'],
                 });
 
                 await queryResult.loadDataAsync();
@@ -241,8 +243,8 @@ describe('View', () => {
 
             test('#selectRecords({ fields, sorts })', async () => {
                 const queryResult = view.selectRecords({
-                    fields: ['fldPrimary'],
-                    sorts: [{field: 'fldPrimary', direction: 'desc'}],
+                    fields: ['fld1stPrimary'],
+                    sorts: [{field: 'fld1stPrimary', direction: 'desc'}],
                 });
 
                 await queryResult.loadDataAsync();
@@ -295,7 +297,7 @@ describe('View', () => {
             test('throws for invalid sorting directions', () => {
                 expect(() => {
                     view.selectRecords({
-                        sorts: [{field: 'fldPrimary', direction: 'descending' as 'desc'}],
+                        sorts: [{field: 'fld1stPrimary', direction: 'descending' as 'desc'}],
                     });
                 }).toThrowErrorMatchingInlineSnapshot(`"Invalid sort direction: descending"`);
             });
@@ -343,11 +345,11 @@ describe('View', () => {
 
             test('#selectRecordsAsync({ fields })', async () => {
                 const queryResult = await view.selectRecordsAsync({
-                    fields: ['fldPrimary'],
+                    fields: ['fld1stPrimary'],
                 });
 
                 expect(queryResult.fields!.length).toBe(1);
-                expect(queryResult.fields![0].id).toBe('fldPrimary');
+                expect(queryResult.fields![0].id).toBe('fld1stPrimary');
                 expect(queryResult.records![0].id).toBe('recA');
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recC');
@@ -355,12 +357,12 @@ describe('View', () => {
 
             test.skip('#selectRecordsAsync({ fields, sorts })', async () => {
                 const queryResult = await view.selectRecordsAsync({
-                    fields: ['fldPrimary'],
-                    sorts: [{field: 'fldPrimary', direction: 'desc'}],
+                    fields: ['fld1stPrimary'],
+                    sorts: [{field: 'fld1stPrimary', direction: 'desc'}],
                 });
 
                 expect(queryResult.fields!.length).toBe(1);
-                expect(queryResult.fields![0].id).toBe('fldPrimary');
+                expect(queryResult.fields![0].id).toBe('fld1stPrimary');
                 expect(queryResult.records![0].id).toBe('recC');
                 expect(queryResult.records![1].id).toBe('recB');
                 expect(queryResult.records![2].id).toBe('recA');
@@ -390,7 +392,7 @@ describe('View', () => {
                 mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
                     visibleRecordIds: ['recA', 'recB', 'recC'],
                     fieldOrder: {
-                        fieldIds: ['fldPrimary', 'fldLinked1'],
+                        fieldIds: ['fld1stPrimary', 'fld1stLinked'],
                         visibleFieldCount: 2,
                     },
                     colorsByRecordId: null,
