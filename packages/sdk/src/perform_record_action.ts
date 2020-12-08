@@ -94,6 +94,14 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
     }
 
     /**
+     * This accessor method is defined because the parent implementation uses _dataOrNullIfDeleted
+     *
+     * @inheritdoc */
+    get isDeleted(): boolean {
+        return false;
+    }
+
+    /**
      * AbstractModelWithAsyncData implementation
      */
 

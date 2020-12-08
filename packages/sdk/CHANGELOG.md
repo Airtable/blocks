@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.1...HEAD)
 
-No changes.
+-   Fixed a bug in useRecordActionData that caused it to crash on version 1.2.1
 
 ## [1.2.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...@airtable/blocks@1.2.1) - 2020-11-23
 

@@ -1,7 +1,8 @@
 /** @module @airtable/blocks/ui: useRecordActionData */ /** */
 import {RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
-import {useLoadable, useWatchable} from './ui';
+import useLoadable from './use_loadable';
+import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 
 /**
