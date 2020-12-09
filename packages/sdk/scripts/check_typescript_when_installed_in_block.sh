@@ -30,6 +30,7 @@ EOF
 
 cat - > source.ts <<'EOF'
 import * as sdk from '@airtable/blocks';
+import * as ui from '@airtable/blocks/ui';
 console.log(sdk);
 EOF
 

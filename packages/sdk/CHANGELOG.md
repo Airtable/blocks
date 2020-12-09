@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.2...HEAD)
 
-No changes.
+-   Stopped exporting an internal class that was causing typescript checking to fail on version
+    1.2.2
 
 ## [1.2.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.1...@airtable/blocks@1.2.2) - 2020-12-08
 
