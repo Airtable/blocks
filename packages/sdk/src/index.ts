@@ -12,13 +12,13 @@ export let base: Sdk['base'];
 export let cursor: Sdk['cursor'];
 export let globalConfig: Sdk['globalConfig'];
 export let installationId: Sdk['installationId'];
-export let performRecordAction: Sdk['performRecordAction'];
 export let reload: Sdk['reload'];
 export let runInfo: Sdk['runInfo'];
 export let session: Sdk['session'];
 export let settingsButton: Sdk['settingsButton'];
 export let undoRedo: Sdk['undoRedo'];
 export let viewport: Sdk['viewport'];
+export let unstable_fetchAsync: Sdk['unstable_fetchAsync'];
 
 Object.defineProperty(module.exports, 'UI', {
     enumerable: true,
@@ -51,13 +51,13 @@ export function __reset() {
         cursor,
         globalConfig,
         installationId,
-        performRecordAction,
         reload,
         runInfo,
         session,
         settingsButton,
         undoRedo,
         viewport,
+        unstable_fetchAsync,
     } = __sdk);
 
     __injectSdkIntoCreateAggregators(__sdk);
