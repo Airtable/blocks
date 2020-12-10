@@ -39,4 +39,7 @@ describe('ui entry point', () => {
     test('TextButton', () => run('TextButton'));
     test('Text', () => run('Text'));
     test('Tooltip', () => run('Tooltip'));
+    test('loadCSSFromString', () => run('loadCSSFromString'));
+    test('loadCSSFromURLAsync', () => run('loadCSSFromURLAsync'));
+    test('loadScriptFromURLAsync', () => run('loadScriptFromURLAsync'));
 });
