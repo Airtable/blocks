@@ -361,14 +361,106 @@ describe('MockAirtableInterface', () => {
         });
 
         describe('#convertCellValueToString', () => {
-            it('returns a simple string representation', () => {
-                expect(fieldTypeProvider.convertCellValueToString({}, 'a', fieldData)).toBe('a');
-                expect(fieldTypeProvider.convertCellValueToString({}, [1, 2, 3], fieldData)).toBe(
-                    '1,2,3',
-                );
-                expect(fieldTypeProvider.convertCellValueToString({}, {}, fieldData)).toBe(
-                    '[object Object]',
-                );
+            const fakeAppInterface = {};
+
+            it('returns the empty string for null values', () => {
+                const cellValue = null;
+
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        cellValue,
+                        fieldData,
+                    ),
+                ).toBe('');
+            });
+
+            it('returns the "name" property of object values which define a string value', () => {
+                const cellValue = {name: 'obadiah'};
+
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        cellValue,
+                        fieldData,
+                    ),
+                ).toBe('obadiah');
+            });
+
+            it('ignores the "name" property of object values which define a non-string value', () => {
+                const cellValue = {name: 49.0004};
+
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        cellValue,
+                        fieldData,
+                    ),
+                ).toBe('[object Object]');
+            });
+
+            it('returns a string representation of primitive values', () => {
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, 0, fieldData),
+                ).toBe('0');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, -0, fieldData),
+                ).toBe('0');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, 24601, fieldData),
+                ).toBe('24601');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, -24601, fieldData),
+                ).toBe('-24601');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, true, fieldData),
+                ).toBe('true');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(fakeAppInterface, false, fieldData),
+                ).toBe('false');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        undefined,
+                        fieldData,
+                    ),
+                ).toBe('undefined');
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        'already a string',
+                        fieldData,
+                    ),
+                ).toBe('already a string');
+            });
+
+            it('returns a comma-and-space-separated string for Array values', () => {
+                const cellValue = [null, '', {}, {name: 'sarah'}];
+                const expected = `${fieldTypeProvider.convertCellValueToString(
+                    fakeAppInterface,
+                    cellValue[0],
+                    fieldData,
+                )}, ${fieldTypeProvider.convertCellValueToString(
+                    fakeAppInterface,
+                    cellValue[1],
+                    fieldData,
+                )}, ${fieldTypeProvider.convertCellValueToString(
+                    fakeAppInterface,
+                    cellValue[2],
+                    fieldData,
+                )}, ${fieldTypeProvider.convertCellValueToString(
+                    fakeAppInterface,
+                    cellValue[3],
+                    fieldData,
+                )}`;
+
+                expect(
+                    fieldTypeProvider.convertCellValueToString(
+                        fakeAppInterface,
+                        cellValue,
+                        fieldData,
+                    ),
+                ).toBe(expected);
             });
         });
     });

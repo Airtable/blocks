@@ -3,9 +3,9 @@ import {BaseData, BaseId} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
 import {Mutation} from '../types/mutations';
 import {RecordData, RecordId} from '../types/record';
-import {keyBy, ObjectMap} from '../private_utils';
+import {has, keyBy, ObjectMap} from '../private_utils';
 import {TableId} from '../types/table';
-import {FieldId, FieldType} from '../types/field';
+import {FieldData, FieldId, FieldType} from '../types/field';
 import {ViewId, ViewType} from '../types/view';
 import Color from '../colors';
 import {spawnError} from '../error_utils';
@@ -238,7 +238,41 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         fieldTypeProvider.convertCellValueToString = (
             appInterface: AppInterface,
             cellValue: unknown,
-        ) => {
+            fieldData: FieldData,
+        ): string => {
+            if (cellValue === null) {
+                return '';
+            }
+
+            if (Array.isArray(cellValue)) {
+                return cellValue
+                    .map((item: unknown) => {
+                        return fieldTypeProvider.convertCellValueToString(
+                            appInterface,
+                            item,
+                            fieldData,
+                        );
+                    })
+                    .join(', ');
+            }
+
+            if (
+                typeof cellValue === 'object' &&
+                // The following condition is tautological in this case, but
+                // the TypeScript compiler requires it.
+                cellValue !== null &&
+                has(cellValue, 'name')
+            ) {
+                // In this code path, the TypeScript compiler interprets the
+                // type of `cellValue` to be "object". An explicit type cast is
+                // necessary in order to reference the `name` property.
+                const named = cellValue as {name: any};
+
+                if (typeof named.name === 'string') {
+                    return named.name;
+                }
+            }
+
             return String(cellValue);
         };
 
