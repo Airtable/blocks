@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 import useViewMetadata from '../../src/ui/use_view_metadata';
 
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import Sdk from '../../src/sdk';
 import ViewMetadataQueryResult from '../../src/models/view_metadata_query_result';
 import Table from '../../src/models/table';

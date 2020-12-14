@@ -1,12 +1,14 @@
-import {SdkInitData, PartialViewData} from '../../src/types/airtable_interface';
-import {BaseData, BaseId} from '../../src/types/base';
-import {CollaboratorData} from '../../src/types/collaborator';
-import {RecordData, RecordId} from '../../src/types/record';
-import {keyBy, ObjectMap} from '../../src/private_utils';
-import {TableId} from '../../src/types/table';
-import {FieldId, FieldType} from '../../src/types/field';
-import {ViewId, ViewType} from '../../src/types/view';
-import Color from '../../src/colors';
+import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
+import {BaseData, BaseId} from '../types/base';
+import {CollaboratorData} from '../types/collaborator';
+import {Mutation} from '../types/mutations';
+import {RecordData, RecordId} from '../types/record';
+import {keyBy, ObjectMap} from '../private_utils';
+import {TableId} from '../types/table';
+import {FieldId, FieldType} from '../types/field';
+import {ViewId, ViewType} from '../types/view';
+import Color from '../colors';
+import {spawnError} from '../error_utils';
 import MockAirtableInterface from './mock_airtable_interface';
 
 const unmodifiableSdkData = {
@@ -36,7 +38,12 @@ const unmodifiableFieldData = {
     lock: null,
 };
 
+/**
+ * A complete set of information necessary to initialize a simulated Airtable
+ * Base in automated test environments.
+ */
 export interface FixtureData {
+    /** A representation of the state of an Airtable Base */
     base: {
         id: BaseId;
         name: string;
@@ -45,46 +52,87 @@ export interface FixtureData {
     };
 }
 
+/** A representation of the state of a Table */
 interface TableFixtureData {
+    /** A unique identifier for the simulated Tbale */
     id: TableId;
+    /** The name to assign to the simulated Table */
     name: string;
+    /** The description to assign to the simulated Table */
     description: string | null;
+    /**
+     * Fixture data for the simulated Fields that should be present in the
+     * simulated Table when it is initialized.
+     */
     fields: Array<FieldFixtureData>;
+    /**
+     * Fixture data for the simulated Views that should be present in the
+     * simulated Table when it is initialized.
+     */
     views: Array<ViewFixtureData>;
+    /**
+     * Fixture data for the simulated Records that should be present in the
+     * simulated Table when it is initialized.
+     */
     records: Array<RecordFixtureData>;
 }
 
+/** A representation of the state of a Field */
 interface FieldFixtureData {
+    /** A unique identifier for the simulated Field */
     id: FieldId;
+    /** The name to assign to the simulated Field */
     name: string;
+    /** The description to assign to the simulated Field */
     description: string | null;
+    /** The type of the simulated Field */
     type: FieldType;
+    /** Options associated with the simulated Field */
     options: null | {[key: string]: unknown};
 }
 
+/** A representation of the state of a View */
 interface ViewFixtureData {
+    /** A unique identifier for the simulated View */
     id: ViewId;
+    /** The name to assign to the simulated View */
     name: string;
+    /** The type of the simulated view */
     type: ViewType;
+    /**
+     * A description of how simulated Fields should be sequenced within the
+     * simulated View
+     */
     fieldOrder: {
         fieldIds: Array<FieldId>;
         visibleFieldCount: number;
     };
+    /**
+     * A set of references to Records contained within the simulated view. This
+     * is distinct from the complete fixture data for the simulated Records.
+     */
     records: Array<ViewRecordFixtureData>;
 }
 
+/** @hidden */
 interface ViewRecordFixtureData {
     id: RecordId;
     color: typeof Color | null;
 }
 
+/** A representation of the state of a Record */
 interface RecordFixtureData {
+    /** A unique identifier for the simulated Record */
     id: RecordId;
+    /** The number of comments to assign to the simulated record */
     commentCount: number;
+    /** The time the simulated record should appear to have been created */
     createdTime: string;
+    /** A mapping of field identifiers to cell values */
     cellValuesByFieldId: ObjectMap<FieldId, unknown>;
 }
 
+/** @internal */
 interface RecordDataStore {
     tables: {
         [key: string]: {
@@ -100,7 +148,15 @@ interface RecordDataStore {
 
 const getId = ({id}: {id: string}) => id;
 
-export default class MockAirtableInterfaceApp extends MockAirtableInterface {
+/**
+ * An implementation of the MockAirtableInterface designed for use in automated
+ * test suites for Airtable Blocks maintained externally. Provides a more
+ * high-level constructor for specifying test fixture data and implements some
+ * features which approximate interactions with Hyperbase in production.
+ *
+ * @internal
+ */
+export default class MockAirtableInterfaceExternal extends MockAirtableInterface {
     _recordDataStore: RecordDataStore;
 
     constructor(fixtureData: FixtureData) {
@@ -110,19 +166,19 @@ export default class MockAirtableInterfaceApp extends MockAirtableInterface {
         };
         const tables = fixtureData.base.tables.map(table => {
             if (table.id in store.tables) {
-                throw new Error(`repeated table ID: ${table.id}`);
+                throw spawnError('repeated table ID: %s', table.id);
             }
             store.tables[table.id] = keyBy(table.records, getId);
             store.views[table.id] = {};
 
             for (const view of table.views) {
                 if (view.id in store.views[table.id]) {
-                    throw new Error(`repeated view ID: ${view.id}`);
+                    throw spawnError('repeated view ID: %s', view.id);
                 }
 
                 for (const record of view.records) {
                     if (!(record.id in store.tables[table.id])) {
-                        throw new Error(`record ${record.id} not present in table ${table.id}`);
+                        throw spawnError('record %s not present in table %s', record.id, table.id);
                     }
                 }
                 store.views[table.id][view.id] = {
@@ -172,17 +228,34 @@ export default class MockAirtableInterfaceApp extends MockAirtableInterface {
         this._recordDataStore = store;
     }
 
+    async applyMutationAsync(mutation: Mutation, opts?: {holdForMs?: number}): Promise<void> {
+        this.emit('mutation', mutation);
+    }
+
+    get fieldTypeProvider() {
+        const fieldTypeProvider = super.fieldTypeProvider;
+
+        fieldTypeProvider.convertCellValueToString = (
+            appInterface: AppInterface,
+            cellValue: unknown,
+        ) => {
+            return String(cellValue);
+        };
+
+        return fieldTypeProvider;
+    }
+
     async fetchAndSubscribeToCellValuesInFieldsAsync(
         tableId: TableId,
         fieldIds: Array<FieldId>,
     ): Promise<any> {
         if (!(tableId in this._recordDataStore.tables)) {
-            throw new Error(`table not present in fixture data: ${tableId}`);
+            throw spawnError('table not present in fixture data: %s', tableId);
         }
 
         for (const fieldId of fieldIds) {
             if (!(fieldId in this.sdkInitData.baseData.tablesById[tableId].fieldsById)) {
-                throw new Error(`field ${fieldId} not present in table ${tableId}`);
+                throw spawnError('field %s not present in table %s', fieldId, tableId);
             }
         }
 
@@ -205,7 +278,7 @@ export default class MockAirtableInterfaceApp extends MockAirtableInterface {
         tableId: string,
     ): Promise<{recordsById: {[recordId: string]: RecordData}}> {
         if (!(tableId in this._recordDataStore.tables)) {
-            throw new Error(`table not present in fixture data: ${tableId}`);
+            throw spawnError('table not present in fixture data: %s', tableId);
         }
 
         return {
@@ -218,12 +291,12 @@ export default class MockAirtableInterfaceApp extends MockAirtableInterface {
         viewId: string,
     ): Promise<PartialViewData> {
         if (!(tableId in this.sdkInitData.baseData.tablesById)) {
-            throw new Error(`table not present in fixture data: ${tableId}`);
+            throw spawnError('table not present in fixture data: %s', tableId);
         }
         const tableSchema = this.sdkInitData.baseData.tablesById[tableId];
 
         if (!(viewId in tableSchema.viewsById)) {
-            throw new Error(`view not present in fixture data: ${viewId}`);
+            throw spawnError('view not present in fixture data: %s', viewId);
         }
 
         const viewData = this._recordDataStore.views[tableId][viewId];

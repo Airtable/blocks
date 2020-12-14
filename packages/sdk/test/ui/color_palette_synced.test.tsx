@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import {ColorPaletteSynced} from '../../src/ui/ui';
 import {SdkContext} from '../../src/ui/sdk_context';
 import {__sdk as sdk} from '../../src';

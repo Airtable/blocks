@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import Field from '../../src/models/field';
 import {FieldType} from '../../src/types/field';
 import {__reset, __sdk as sdk} from '../../src';

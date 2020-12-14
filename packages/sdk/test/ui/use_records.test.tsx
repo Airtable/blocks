@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 import {useRecords} from '../../src/ui/use_records';
 
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import Sdk from '../../src/sdk';
 import Record from '../../src/models/record';
 import Table from '../../src/models/table';

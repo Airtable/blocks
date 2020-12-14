@@ -1,6 +1,8 @@
 import {FieldType} from '../../src/types/field';
 import {ViewType} from '../../src/types/view';
-import MockAirtableInterface, {FixtureData} from './mock_airtable_interface_app';
+import MockAirtableInterface, {
+    FixtureData,
+} from '../../src/testing/mock_airtable_interface_external';
 
 describe('MockAirtableInterface', () => {
     let smallBase: FixtureData['base'];
@@ -140,6 +142,50 @@ describe('MockAirtableInterface', () => {
             expect(
                 () => new MockAirtableInterface({base: smallBase}),
             ).toThrowErrorMatchingInlineSnapshot(`"record recd not present in table tblTable1"`);
+        });
+    });
+
+    describe('#applyMutationAsync', () => {
+        it('asynchronously emits a "mutation" event', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            const calls: Array<any> = [];
+
+            await new Promise(resolve => {
+                ai.on('mutation', (...args: Array<any>) => {
+                    calls.push(args);
+                    resolve();
+                });
+                ai.applyMutationAsync({
+                    type: 'createSingleTable',
+                    id: 'tblFAKE',
+                    name: 'fake table',
+                    fields: [],
+                });
+
+                // The synchronicity of internal method invocation (such as for
+                // `applyMutationAsync`) not a part of the SDK's formal API.
+                // Although this method may be invoked synchronously in
+                // response to some input, that detail is subject to change. If
+                // consumers wrote tests which relied on synchronous
+                // invocation, those tests would be at risk to fail following
+                // future releases of the SDK which were otherwise assumed to
+                // be non-breaking.
+                //
+                // Ensure the event is emitted asynchronously so that consumers
+                // cannot write tests which are vulnerable to such changes.
+                expect(calls).toEqual([]);
+            });
+
+            expect(calls).toEqual([
+                [
+                    {
+                        type: 'createSingleTable',
+                        id: 'tblFAKE',
+                        name: 'fake table',
+                        fields: [],
+                    },
+                ],
+            ]);
         });
     });
 
@@ -295,6 +341,34 @@ describe('MockAirtableInterface', () => {
                     visibleFieldCount: 1,
                 },
                 colorsByRecordId: {},
+            });
+        });
+    });
+
+    describe('#fieldTypeProvider', () => {
+        let fieldTypeProvider: MockAirtableInterface['fieldTypeProvider'];
+        const fieldData = {
+            id: 'fldFAKE',
+            name: 'fake name',
+            type: 'fake type',
+            typeOptions: {},
+            description: null,
+            lock: null,
+        };
+
+        beforeEach(() => {
+            ({fieldTypeProvider} = new MockAirtableInterface({base: smallBase}));
+        });
+
+        describe('#convertCellValueToString', () => {
+            it('returns a simple string representation', () => {
+                expect(fieldTypeProvider.convertCellValueToString({}, 'a', fieldData)).toBe('a');
+                expect(fieldTypeProvider.convertCellValueToString({}, [1, 2, 3], fieldData)).toBe(
+                    '1,2,3',
+                );
+                expect(fieldTypeProvider.convertCellValueToString({}, {}, fieldData)).toBe(
+                    '[object Object]',
+                );
             });
         });
     });

@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import Base from '../../src/models/base';
 import {MutationTypes} from '../../src/types/mutations';
 import warning from '../../src/warning';

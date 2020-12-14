@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/order
-import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface_internal';
 import Table from '../src/models/table';
 import View from '../src/models/view';
 import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';

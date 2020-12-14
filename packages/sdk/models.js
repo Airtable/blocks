@@ -1,2 +1,1 @@
-const sdk = require('./dist/cjs/index');
-module.exports = sdk.models;
+module.exports = require('./dist/cjs/models/models');
