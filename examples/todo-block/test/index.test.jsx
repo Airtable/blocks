@@ -143,7 +143,7 @@ describe('TodoApp', () => {
                     tableId: 'tblTable1',
                     records: [
                         {
-                            id: 'recGeneratedMockId',
+                            id: expect.anything(),
                             cellValuesByFieldId: {
                                 fldName: '',
                             },
@@ -154,7 +154,7 @@ describe('TodoApp', () => {
         );
     });
 
-    it('allows records to be created with a name', async () => {
+    it('allows multiple records to be created with a name', async () => {
         await openAsync('Groceries', 'Grid view', 'Purchased');
 
         const initialCount = readItems().length;
@@ -162,7 +162,7 @@ describe('TodoApp', () => {
         userEvent.type(screen.getByRole('textbox'), 'brash teenaged carrots');
         userEvent.click(screen.getByRole('button', {name: 'Add'}));
 
-        const items = readItems();
+        let items = readItems();
 
         expect(items.length).toBe(initialCount + 1);
         expect(items.pop()).toEqual({
@@ -178,9 +178,41 @@ describe('TodoApp', () => {
                     tableId: 'tblTable1',
                     records: [
                         {
-                            id: 'recGeneratedMockId',
+                            id: expect.anything(),
                             cellValuesByFieldId: {
                                 fldName: 'brash teenaged carrots',
+                            },
+                        },
+                    ],
+                },
+            ]),
+        );
+
+        mutations.length = 0;
+
+        userEvent.type(screen.getByRole('textbox'), 'parsnips');
+        userEvent.click(screen.getByRole('button', {name: 'Add'}));
+
+        items = readItems();
+
+        expect(items.length).toBe(initialCount + 2);
+
+        expect(items.pop()).toEqual({
+            checked: false,
+            text: 'parsnips',
+        });
+
+        await waitFor(() => expect(mutations.length).not.toBe(0));
+        expect(mutations).toEqual(
+            expect.arrayContaining([
+                {
+                    type: 'createMultipleRecords',
+                    tableId: 'tblTable1',
+                    records: [
+                        {
+                            id: expect.anything(),
+                            cellValuesByFieldId: {
+                                fldName: 'parsnips',
                             },
                         },
                     ],

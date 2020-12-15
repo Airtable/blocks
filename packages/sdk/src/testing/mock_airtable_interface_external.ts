@@ -58,6 +58,17 @@ function isReadonlyArray(value: any): value is ReadonlyArray<any> {
     return Array.isArray(value);
 }
 
+const alphanumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/**
+ * Select a random element from an array-like object.
+ *
+ * @internal
+ */
+function pick<T>(arraylike: {[key: number]: T; length: number}): T {
+    return arraylike[Math.floor(Math.random() * arraylike.length)];
+}
+
 /** @internal */
 function setGlobalConfigValue(
     target: GlobalConfigArray,
@@ -450,6 +461,25 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
             fieldOrder: viewData.fieldOrder,
             colorsByRecordId: {},
         };
+    }
+
+    get idGenerator() {
+        const idGenerator = super.idGenerator;
+
+        // At the time of writing, identifiers happen to exhibit some structure
+        // in production settings (e.g. fixed prefix and length), but the SDK
+        // does not commit to any particular characteristics. Use a less
+        // predictable format to reduce the likelihood that third-party App
+        // developers unintentionally write fragile tests by depending any
+        // structure in these identifiers.
+        idGenerator.generateRecordId = () => {
+            const length = 10 + Math.floor(Math.random() * 10);
+            return Array.from({length})
+                .map(() => pick(alphanumerics))
+                .join('');
+        };
+
+        return idGenerator;
     }
 
     on<Key extends keyof WatchableKeysAndArgs>(

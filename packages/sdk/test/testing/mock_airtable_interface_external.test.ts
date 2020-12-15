@@ -650,4 +650,18 @@ describe('MockAirtableInterface', () => {
             });
         });
     });
+
+    describe('#idGenerator', () => {
+        let idGenerator: MockAirtableInterface['idGenerator'];
+
+        beforeEach(() => {
+            ({idGenerator} = new MockAirtableInterface({base: smallBase}));
+        });
+
+        describe('#generateRecordId', () => {
+            it('returns an apparently unique string', () => {
+                expect(idGenerator.generateRecordId()).not.toEqual(idGenerator.generateRecordId());
+            });
+        });
+    });
 });

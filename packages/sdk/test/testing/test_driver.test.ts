@@ -173,7 +173,7 @@ describe('MockAirtableInterface', () => {
                 records: [
                     {
                         cellValuesByFieldId: {},
-                        id: 'recGeneratedMockId',
+                        id: expect.anything(),
                     },
                 ],
                 tableId: 'tblTable1',
@@ -233,7 +233,7 @@ describe('MockAirtableInterface', () => {
                     records: [
                         {
                             cellValuesByFieldId: {},
-                            id: 'recGeneratedMockId',
+                            id: expect.anything(),
                         },
                     ],
                     tableId: 'tblTable1',
