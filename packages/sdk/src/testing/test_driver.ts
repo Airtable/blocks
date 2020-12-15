@@ -1,5 +1,6 @@
 import React from 'react';
 import Sdk from '../sdk';
+import {Mutation} from '../types/mutations';
 import {SdkContext} from '../ui/sdk_context';
 import MockAirtableInterface, {
     FixtureData,
@@ -58,6 +59,15 @@ export default class TestDriver {
             {fallback},
             React.createElement(SdkContext.Provider, {value: this._sdk}, children),
         );
+    }
+
+    /**
+     * Specify the outcome of internal permission checks. This influences the
+     * behavior of not only explicit permission checks from Apps code but also
+     * the outcome of model operations such as {@link createRecordsAsync}.
+     */
+    simulatePermissionCheck(check: (mutation: Mutation) => boolean) {
+        this._airtableInterface.setUserPermissionCheck(check);
     }
 
     /**

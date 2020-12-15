@@ -1,7 +1,7 @@
 import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
 import {BaseData, BaseId} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
-import {Mutation} from '../types/mutations';
+import {Mutation, PermissionCheckResult} from '../types/mutations';
 import {RecordData, RecordId} from '../types/record';
 import {has, keyBy, ObjectMap} from '../private_utils';
 import {TableId} from '../types/table';
@@ -228,6 +228,7 @@ const getId = ({id}: {id: string}) => id;
  */
 export default class MockAirtableInterfaceExternal extends MockAirtableInterface {
     _recordDataStore: RecordDataStore;
+    _userPermissionCheck?: (mutation: Mutation) => boolean;
 
     constructor(fixtureData: FixtureData) {
         const store: RecordDataStore = {
@@ -300,6 +301,19 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
 
     async applyMutationAsync(mutation: Mutation, opts?: {holdForMs?: number}): Promise<void> {
         this.emit('mutation', mutation);
+    }
+
+    checkPermissionsForMutation(mutation: Mutation): PermissionCheckResult {
+        if (!this._userPermissionCheck || this._userPermissionCheck(mutation)) {
+            return {
+                hasPermission: true,
+            };
+        }
+        return {
+            hasPermission: false,
+            reasonDisplayString:
+                'The testing environment has been configured to deny this mutation.',
+        };
     }
 
     get globalConfigHelpers() {
@@ -450,5 +464,9 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         fn: (data: WatchableKeysAndArgs[Key]) => void,
     ) {
         super.off(key, fn);
+    }
+
+    setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
+        this._userPermissionCheck = check;
     }
 }

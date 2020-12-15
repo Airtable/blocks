@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import {FieldType} from '../../src/types/field';
+import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
 import Sdk from '../../src/sdk';
 import {useSdk} from '../../src/ui/sdk_context';
@@ -9,8 +10,8 @@ import TestDriver from '../../src/testing/test_driver';
 describe('MockAirtableInterface', () => {
     let testDriver: TestDriver;
 
-    const triggerMutation = () => {
-        testDriver.base.tables[0].createRecordsAsync([{fields: {}}]);
+    const triggerMutationAsync = () => {
+        return testDriver.base.tables[0].createRecordsAsync([{fields: {}}]);
     };
 
     beforeEach(() => {
@@ -156,23 +157,62 @@ describe('MockAirtableInterface', () => {
         });
     });
 
+    describe('#simulatePermissionCheck', () => {
+        it('provides an appropriate Mutation object', async () => {
+            const [mutation] = await Promise.all([
+                new Promise(resolve => {
+                    testDriver.simulatePermissionCheck((value: Mutation) => {
+                        resolve(value);
+                        return true;
+                    });
+                }),
+                triggerMutationAsync().catch(() => {}),
+            ]);
+
+            expect(mutation).toEqual({
+                records: [
+                    {
+                        cellValuesByFieldId: {},
+                        id: 'recGeneratedMockId',
+                    },
+                ],
+                tableId: 'tblTable1',
+                type: 'createMultipleRecords',
+            });
+        });
+
+        it('honors return value - true', async () => {
+            testDriver.simulatePermissionCheck(() => true);
+            await triggerMutationAsync();
+        });
+
+        it('honors return value - false', async () => {
+            testDriver.simulatePermissionCheck(() => false);
+            await expect(triggerMutationAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"Cannot apply createMultipleRecords mutation: The testing environment has been configured to deny this mutation."`,
+            );
+        });
+    });
+
     describe('#unwatch', () => {
         describe('key: mutation', () => {
             it('cancels subscription', async () => {
                 let counter = 0;
                 const increment = () => (counter += 1);
                 testDriver.watch('mutation', increment);
-                triggerMutation();
+                await triggerMutationAsync();
                 expect(counter).toBe(1);
-                triggerMutation();
+                await triggerMutationAsync();
                 expect(counter).toBe(2);
 
                 testDriver.unwatch('mutation', increment);
 
-                await new Promise(resolve => {
-                    testDriver.watch('mutation', resolve);
-                    triggerMutation();
-                });
+                await Promise.all([
+                    new Promise(resolve => {
+                        testDriver.watch('mutation', resolve);
+                    }),
+                    triggerMutationAsync(),
+                ]);
 
                 expect(counter).toBe(2);
             });
@@ -182,10 +222,12 @@ describe('MockAirtableInterface', () => {
     describe('#watch', () => {
         describe('key: mutation', () => {
             it('notifies subscribers', async () => {
-                const data = await new Promise(resolve => {
-                    testDriver.watch('mutation', resolve);
-                    triggerMutation();
-                });
+                const [data] = await Promise.all([
+                    new Promise(resolve => {
+                        testDriver.watch('mutation', resolve);
+                    }),
+                    triggerMutationAsync(),
+                ]);
 
                 expect(data).toEqual({
                     records: [

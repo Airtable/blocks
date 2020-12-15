@@ -85,7 +85,11 @@ describe('TodoApp', () => {
 
     // This test cannot be fully expressed using the capabilities currently
     // available in the SDK.
-    it.skip('renders a list of records (user without "write" permissions)', async () => {
+    it('renders a list of records (user without "write" permissions)', async () => {
+        testDriver.simulatePermissionCheck(mutation => {
+            return mutation.type === 'setMultipleGlobalConfigPaths';
+        });
+
         await openAsync('Groceries', 'Grid view', 'Purchased');
 
         expect(screen.getByRole('button', {name: 'Add'}).disabled).toBe(true);
@@ -100,18 +104,18 @@ describe('TodoApp', () => {
         expect(items.length).toBe(3);
 
         expect(items).toEqual([
-            {checked: false, text: 'carrots', checkboxDisabled: true, deleteButtonDistabled: true},
+            {checked: false, text: 'carrots', checkboxDisabled: true, deleteButtonDisabled: true},
             {
                 checked: true,
                 text: 'baby carrots',
                 checkboxDisabled: true,
-                deleteButtonDistabled: true,
+                deleteButtonDisabled: true,
             },
             {
                 checked: false,
                 text: 'elderly carrots',
                 checkboxDisabled: true,
-                deleteButtonDistabled: true,
+                deleteButtonDisabled: true,
             },
         ]);
     });
