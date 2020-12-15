@@ -1,10 +1,22 @@
 import {Server} from 'http';
 import {promisify} from 'util';
 
-import newApp, {Express} from 'express';
+import webpack, {Compiler} from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import typescript from 'typescript';
 
-import {RunTaskProducer, RunTaskConsumer, RunTaskProducerChannel} from '../tasks/run';
+import {
+    RunTaskProducer,
+    RunTaskConsumer,
+    RunTaskProducerChannel,
+    RunDevServerOptions,
+} from '../tasks/run';
 import {invariant} from '../helpers/error_utils';
+import {createSystem, System} from '../helpers/system';
+
+import {createWebpackCompilerConfig} from './webpack_config';
+import {createWebpackDevServerConfig} from './webpack_dev_server_config';
+import {createTypescriptAssetConfigAsync} from './typescript_config';
 
 class RunProducer implements RunTaskProducer {
     producerChannel: RunTaskProducerChannel;
@@ -19,47 +31,74 @@ class RunProducer implements RunTaskProducer {
 }
 
 class Run implements RunTaskConsumer {
-    app?: Express;
-    server?: Server;
-
     producer: RunTaskProducer;
+    system: System;
+
+    compilerConfig?: webpack.Configuration;
+    serverConfig?: WebpackDevServer.Configuration;
+    typescriptConfig?: typescript.CompilerOptions;
+
+    compiler?: Compiler;
+    webpackDevServer?: WebpackDevServer;
+    server?: Server;
 
     constructor(producer: RunTaskProducer) {
         this.producer = producer;
+        this.system = createSystem();
     }
 
-    async startDevServerAsync({
-        port,
-        mode,
-        entry,
-    }: {
-        port: number;
-        mode: 'development' | 'production';
-        entry: string;
-    }) {
-        [this.app, this.server] = await new Promise((resolve, reject) => {
-            const app = newApp();
-            app.get('/bundle.js', (req, res) => res.end('document.write("<h1>Hello World</h1>");'));
-            const server = app.listen(port, () => {
-                resolve([app, server]);
+    async startDevServerAsync({port, mode, context, entry}: RunDevServerOptions) {
+        this.compilerConfig = createWebpackCompilerConfig({
+            mode,
+            context,
+            entry,
+            assets: {
+                typescript: await createTypescriptAssetConfigAsync(this.system, context),
+            },
+        });
+
+        this.compiler = webpack(this.compilerConfig);
+
+        this.serverConfig = createWebpackDevServerConfig({port});
+
+        const webpackDevServer = (this.webpackDevServer = new WebpackDevServer(
+            this.compiler,
+            this.serverConfig,
+        ));
+        this.server = await new Promise((resolve, reject) => {
+            const httpServer = webpackDevServer.listen(port, err => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(httpServer);
+                }
             });
-            server.on('error', err => {
+
+            httpServer.once('listening', () => {
+                resolve(httpServer);
+            });
+            httpServer.once('error', err => {
                 reject(err);
             });
         });
 
-        invariant(this.server, 'dev server must start before getting ip port');
+        invariant(this.server, 'Server must start before getting ip port');
         const address = this.server.address();
         invariant(
             typeof address === 'object' && address !== null,
-            'dev server must be listening to an ip address',
+            'Server must be listening to an ip address',
         );
-        invariant(address.port === port, 'dev server must be listening to given port');
+        invariant(
+            address.port === port,
+            'dev server must be listening to given port (%s === %s)',
+            address.port,
+            port,
+        );
     }
 
     async teardownAsync() {
-        if (this.server) {
-            await promisify(this.server.close.bind(this.server))();
+        if (this.webpackDevServer) {
+            await promisify(this.webpackDevServer.close.bind(this.webpackDevServer))();
         }
     }
 }

@@ -120,6 +120,7 @@ export default class Run extends AirtableCommand {
         const entryPointPath = this.system.path.join(appTemporaryPath, 'index.js');
         const userEntryPoint = this.system.path.join(appRootPath, appConfig.frontendEntry);
         const entryPoint = await renderEntryPointAsync(this.system, {
+            mode: 'development',
             destination: entryPointPath,
             userEntryPoint,
         });
@@ -139,11 +140,11 @@ export default class Run extends AirtableCommand {
 
         // listen for port from bundler
         const bundlerPort = await findPortAsync(flags.bundlerPort);
-        // call entry with ipc api
         await task.startDevServerAsync({
             port: bundlerPort,
 
             mode: 'development',
+            context: appRootPath,
             entry: entryPointPath,
         });
         debug('started bundler dev server');

@@ -9,6 +9,7 @@ export type RunTaskProducerChannel = RequestChannel<RunTaskProducer>;
 export interface RunDevServerOptions {
     port: number;
     mode: 'development' | 'production';
+    context: string;
     entry: string;
 }
 

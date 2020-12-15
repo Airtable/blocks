@@ -5,7 +5,13 @@ import {cli} from 'cli-ux';
 
 import {invariant, spawnError} from './error_utils';
 
-export async function promptForPortAsync(usedPort: number) {
+interface FindPortOptions {
+    adjacentPorts?: number;
+    promptForPortAsync?(usedPort: number): Promise<string | number>;
+    bindPortAsync?(port: number): Promise<number>;
+}
+
+export async function defaultPromptForPortAsync(usedPort: number): Promise<string> {
     return await cli.prompt(
         `Port ${usedPort} is used. What port should the server listen on? [${usedPort + 2}]`,
         {
@@ -14,11 +20,7 @@ export async function promptForPortAsync(usedPort: number) {
     );
 }
 
-interface FindPortOptions {
-    adjacentPorts?: number;
-}
-
-async function bindPortAsync(port: number): Promise<number> {
+export async function defaultBindPortAsync(port: number): Promise<number> {
     // Try starting a server on this port.
     const server = new Server();
     await new Promise<void>((resolve, reject) => {
@@ -38,29 +40,33 @@ async function bindPortAsync(port: number): Promise<number> {
 }
 
 export async function findPortAsync(port: number, options: FindPortOptions = {}): Promise<number> {
-    const {adjacentPorts = 0} = options;
+    const {
+        adjacentPorts = 0,
+        promptForPortAsync = defaultPromptForPortAsync,
+        bindPortAsync = defaultBindPortAsync,
+    } = options;
 
     try {
         const resolvedPort = await bindPortAsync(port);
         if (adjacentPorts > 0) {
             await Promise.all(
                 Array.from({length: adjacentPorts}, (value, index) =>
-                    bindPortAsync(resolvedPort + index),
+                    bindPortAsync(resolvedPort + index + 1),
                 ),
             );
         }
 
-        return port;
+        return resolvedPort;
     } catch (err) {
         // If there was an error due to the port being taken, prompt for an
         // alternative port and try again.
         if (err.code === 'EADDRINUSE') {
             const result = await promptForPortAsync(port);
-            if (Number.isNaN(result.value) || typeof result.value !== 'number') {
+            port = Number(result);
+            if (Number.isNaN(port)) {
                 throw spawnError('Invalid port number');
             }
             // Set our port and re-enter the loop.
-            port = Number(result.value);
             return await findPortAsync(port, options);
         } else {
             // Rethrow the error.

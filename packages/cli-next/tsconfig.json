@@ -18,7 +18,13 @@
         "alwaysStrict": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "jsx": "react"
+        "jsx": "react",
+
+        // Some dependencies do not depend on up to date @types definition
+        // packages for versions of packages they use and mismatch with other
+        // dependencies. Due to normal hoisting (not workspace hoisting), errors
+        // are produced in a few libraries.
+        "skipLibCheck": true
     },
     "include": ["src/**/*"]
 }
