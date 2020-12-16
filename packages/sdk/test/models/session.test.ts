@@ -400,4 +400,13 @@ describe('Session', () => {
             });
         });
     });
+
+    describe('#__isFeatureEnabled', () => {
+        it('tracks exposure with AirtableInterface', () => {
+            const session = create({enabledFeatureNames: ['testFeature']});
+            session.__isFeatureEnabled('testFeature');
+            expect(mockAirtableInterface.trackExposure).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.trackExposure).toHaveBeenLastCalledWith('testFeature');
+        });
+    });
 });

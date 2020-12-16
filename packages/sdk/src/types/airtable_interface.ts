@@ -266,5 +266,6 @@ export interface AirtableInterface {
      * internal utils
      */
     trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown}): void;
+    trackExposure(featureName: string): void;
     sendStat(stat: Stat): void;
 }

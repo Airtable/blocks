@@ -303,6 +303,9 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     trackEvent() {
         throw spawnError('trackEvent unimplemented');
     }
+    trackExposure() {
+        // No-op to allow tests that happen to use session.__isFeatureEnabled to pass.
+    }
     sendStat() {
         throw spawnError('sendStat unimplemented');
     }
