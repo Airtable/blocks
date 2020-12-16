@@ -9,6 +9,13 @@ import {FieldData, FieldId, FieldType} from '../types/field';
 import {ViewId, ViewType} from '../types/view';
 import Color from '../colors';
 import {spawnError} from '../error_utils';
+import {
+    GlobalConfigUpdate,
+    GlobalConfigData,
+    GlobalConfigValue,
+    GlobalConfigArray,
+    GlobalConfigObject,
+} from '../types/global_config';
 import MockAirtableInterface from './mock_airtable_interface';
 
 const unmodifiableSdkData = {
@@ -37,6 +44,69 @@ const unmodifiableTableData = {
 const unmodifiableFieldData = {
     lock: null,
 };
+
+/**
+ * Prior to version 4.1, TypeScript's built-in type guard for the native
+ * `Array.isArray` did not function correctly for values of type
+ * `ReadonlyArray`. This helper provides the expected functionality for the
+ * purposes of `setGlobalConfigValue`.
+ * TODO: replace with `Array.isArray` in TypeScript 4.1 or later.
+ *
+ * @internal
+ */
+function isReadonlyArray(value: any): value is ReadonlyArray<any> {
+    return Array.isArray(value);
+}
+
+/** @internal */
+function setGlobalConfigValue(
+    target: GlobalConfigArray,
+    path: ReadonlyArray<string>,
+    value: GlobalConfigValue | undefined,
+): GlobalConfigArray;
+function setGlobalConfigValue(
+    target: GlobalConfigValue,
+    path: ReadonlyArray<string>,
+    value: GlobalConfigValue | undefined,
+): GlobalConfigObject;
+function setGlobalConfigValue(
+    target: GlobalConfigValue,
+    path: ReadonlyArray<string>,
+    value: GlobalConfigValue | undefined,
+): GlobalConfigObject | GlobalConfigArray {
+    if (isReadonlyArray(target)) {
+        const newTarget = target.slice();
+        const index = parseInt(path[0], 10);
+
+        if (path.length === 1) {
+            if (value === undefined) {
+                newTarget.splice(index, 1);
+            } else {
+                newTarget[index] = value;
+            }
+        } else {
+            newTarget[index] = setGlobalConfigValue(target[index] || {}, path.slice(1), value);
+        }
+        return newTarget;
+    }
+    const newTarget = typeof target === 'object' ? {...target} : {};
+
+    if (path.length === 1) {
+        if (value === undefined) {
+            delete newTarget[path[0]];
+        } else {
+            newTarget[path[0]] = value;
+        }
+    } else {
+        newTarget[path[0]] = setGlobalConfigValue(newTarget[path[0]] || {}, path.slice(1), value);
+    }
+    return newTarget;
+}
+
+/** @hidden */
+export interface WatchableKeysAndArgs {
+    mutation: Mutation;
+}
 
 /**
  * A complete set of information necessary to initialize a simulated Airtable
@@ -232,6 +302,33 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         this.emit('mutation', mutation);
     }
 
+    get globalConfigHelpers() {
+        const globalConfigHelpers = super.globalConfigHelpers;
+
+        globalConfigHelpers.validateAndApplyUpdates = (
+            updates: ReadonlyArray<GlobalConfigUpdate>,
+            store: GlobalConfigData,
+        ) => {
+            const changedTopLevelKeys = new Set<string>();
+            let newKvStore = {...store};
+            for (const update of updates) {
+                changedTopLevelKeys.add(update.path[0]);
+                newKvStore = setGlobalConfigValue(newKvStore, update.path, update.value);
+            }
+
+            return {
+                newKvStore,
+                changedTopLevelKeys: Array.from(changedTopLevelKeys),
+            };
+        };
+
+        return globalConfigHelpers;
+    }
+
+    emit<Key extends keyof WatchableKeysAndArgs>(key: Key, data: WatchableKeysAndArgs[Key]) {
+        super.emit(key, data);
+    }
+
     get fieldTypeProvider() {
         const fieldTypeProvider = super.fieldTypeProvider;
 
@@ -339,5 +436,19 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
             fieldOrder: viewData.fieldOrder,
             colorsByRecordId: {},
         };
+    }
+
+    on<Key extends keyof WatchableKeysAndArgs>(
+        key: Key,
+        fn: (data: WatchableKeysAndArgs[Key]) => void,
+    ) {
+        super.on(key, fn);
+    }
+
+    off<Key extends keyof WatchableKeysAndArgs>(
+        key: Key,
+        fn: (data: WatchableKeysAndArgs[Key]) => void,
+    ) {
+        super.off(key, fn);
     }
 }

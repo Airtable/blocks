@@ -464,4 +464,190 @@ describe('MockAirtableInterface', () => {
             });
         });
     });
+
+    describe('#globalConfigHelpers', () => {
+        let globalConfigHelpers: MockAirtableInterface['globalConfigHelpers'];
+
+        beforeEach(() => {
+            ({globalConfigHelpers} = new MockAirtableInterface({base: smallBase}));
+        });
+
+        describe('#validateAndApplyUpdates', () => {
+            it('modifies existing top-level values', () => {
+                const store = {a: 1, b: 2, c: 3};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [
+                        {path: ['a'], value: 2},
+                        {path: ['c'], value: 4},
+                    ],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['a', 'c']);
+                expect(result.newKvStore).toEqual({a: 2, b: 2, c: 4});
+            });
+
+            it('inserts new top-level values', () => {
+                const store = {a: 1, b: 2, c: 3};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['d'], value: 8}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys).toEqual(['d']);
+                expect(result.newKvStore).toEqual({a: 1, b: 2, c: 3, d: 8});
+            });
+
+            it('modifies existing values nested within objects', () => {
+                const store = {nest: {a: 1, b: 2, c: 3}};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [
+                        {path: ['nest', 'a'], value: 2},
+                        {path: ['nest', 'c'], value: 4},
+                    ],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nest']);
+                expect(result.newKvStore).toEqual({nest: {a: 2, b: 2, c: 4}});
+            });
+
+            it('inserts new values nested within objects', () => {
+                const store = {nest: {a: 1, b: 2, c: 3}};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['nest', 'd'], value: 43}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nest']);
+                expect(result.newKvStore).toEqual({nest: {a: 1, b: 2, c: 3, d: 43}});
+            });
+
+            it('modifies existing values nested within arrays', () => {
+                const store = {nested: [0, [1, 2, 3]]};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [
+                        {path: ['nested', '1', '0'], value: 2},
+                        {path: ['nested', '1', '2'], value: 4},
+                    ],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nested']);
+                expect(result.newKvStore).toEqual({
+                    nested: [0, [2, 2, 4]],
+                });
+            });
+
+            it('inserts new values nested within arrays', () => {
+                const store = {nested: [0, [1, 2, 3]]};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['nested', '1', '3'], value: 43}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nested']);
+                expect(result.newKvStore).toEqual({
+                    nested: [0, [1, 2, 3, 43]],
+                });
+            });
+
+            it('creates intermediate objects within objects', () => {
+                const store = {a: 1, c: null, d: 3};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [
+                        {path: ['b', 'also b'], value: 23},
+                        {path: ['c', 'also c'], value: 45},
+                    ],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['b', 'c']);
+                expect(result.newKvStore).toEqual({
+                    a: 1,
+                    b: {'also b': 23},
+                    c: {'also c': 45},
+                    d: 3,
+                });
+            });
+
+            it('creates intermediate objects within objects, overwriting primitives', () => {
+                const store = {a: 1, b: 8.9, c: null, d: 3};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [
+                        {path: ['b', 'also b'], value: 23},
+                        {path: ['c', 'also c'], value: 45},
+                    ],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['b', 'c']);
+                expect(result.newKvStore).toEqual({
+                    a: 1,
+                    b: {'also b': 23},
+                    c: {'also c': 45},
+                    d: 3,
+                });
+            });
+
+            it('creates intermediate objects within arrays', () => {
+                const store = {nested: [0]};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['nested', '1', 'highly specific'], value: 23}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nested']);
+                expect(result.newKvStore).toEqual({
+                    nested: [0, {'highly specific': 23}],
+                });
+            });
+
+            it('deletes values from objects', () => {
+                const store = {nested: {a: 1, b: 2, c: 3}};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['nested', 'b'], value: undefined}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nested']);
+                expect(result.newKvStore).toStrictEqual({nested: {a: 1, c: 3}});
+            });
+
+            it('deletes values from arrays', () => {
+                const store = {nested: [23, 45, 99]};
+
+                const result = globalConfigHelpers.validateAndApplyUpdates(
+                    [{path: ['nested', '1'], value: undefined}],
+                    store,
+                );
+
+                expect(Array.isArray(result.changedTopLevelKeys)).toBe(true);
+                expect(result.changedTopLevelKeys.sort()).toEqual(['nested']);
+                expect(result.newKvStore).toStrictEqual({
+                    nested: [23, 99],
+                });
+            });
+        });
+    });
 });

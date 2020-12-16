@@ -4,7 +4,8 @@
         "packages": [
             "packages/*",
             "tools/*",
-            "docs"
+            "docs",
+            "examples/todo-block"
         ],
         "nohoist": [
             "{@airtable,@airtable-blocks-internal}/*/!(react|react-dom)",
