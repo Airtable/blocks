@@ -4,6 +4,7 @@ import TableOrViewQueryResult from '../../src/models/table_or_view_query_result'
 import {FieldType} from '../../src/types/field';
 import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
+import {TestMutation} from '../../src/types/test_mutations';
 import Sdk from '../../src/sdk';
 import {useSdk} from '../../src/ui/sdk_context';
 import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
@@ -270,6 +271,15 @@ describe('MockAirtableInterface', () => {
             expect(testDriver.base.tables[0].fields.length).toBe(initialCount - 1);
         });
 
+        it('does not emit a corresponding mutation event', async () => {
+            const mutations: Array<TestMutation> = [];
+            testDriver.watch('mutation', mutation => mutations.push(mutation));
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            expect(mutations).toEqual([]);
+        });
+
         it('removes the specified field from the parent table (specified by name)', async () => {
             await testDriver.deleteFieldAsync('Table 1', 'Favorite ice cream');
 
@@ -530,6 +540,68 @@ describe('MockAirtableInterface', () => {
                     tableId: 'tblTable1',
                     type: 'createMultipleRecords',
                 });
+            });
+        });
+    });
+
+    describe('simulated backend', () => {
+        describe('table creation', () => {
+            const fieldsSpec = [
+                {name: 'laura', type: FieldType.SINGLE_LINE_TEXT},
+                {name: 'mark', type: FieldType.EMAIL},
+            ];
+
+            it('creates one table', async () => {
+                const {base} = testDriver;
+                await base.createTableAsync('new table', fieldsSpec);
+
+                const table = base.getTableByName('new table');
+                expect(base.getTableById(table.id)).toBe(table);
+            });
+
+            it('creates multiple fields', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const field1 = table.getFieldByName('laura');
+                expect(table.getFieldById(field1.id)).toBe(field1);
+                expect(field1.type).toBe(FieldType.SINGLE_LINE_TEXT);
+                const field2 = table.getFieldByName('mark');
+                expect(field2.type).toBe(FieldType.EMAIL);
+                expect(table.getFieldById(field2.id)).toBe(field2);
+
+                expect(table.primaryField).toBe(field1);
+            });
+
+            it('creates one view', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+                expect(table.views.length).toBe(1);
+                const viewMetadata = await table.views[0].selectMetadataAsync();
+
+                const allNames = viewMetadata.allFields.map(({name}) => name);
+                expect(allNames).toEqual(['laura', 'mark']);
+
+                const visibleNames = viewMetadata.visibleFields.map(({name}) => name);
+                expect(visibleNames).toEqual(['laura', 'mark']);
+            });
+
+            it('allows loading records from table', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const queryResult = await table.selectRecordsAsync();
+
+                expect(queryResult.records.length).toBe(0);
+            });
+
+            it('allows loading records from view', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const queryResult = await table.views[0].selectRecordsAsync();
+
+                expect(queryResult.records.length).toBe(0);
             });
         });
     });

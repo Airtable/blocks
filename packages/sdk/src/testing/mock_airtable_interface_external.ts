@@ -1,7 +1,7 @@
 import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
 import {BaseData, BaseId} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
-import {Mutation, PermissionCheckResult} from '../types/mutations';
+import {Mutation, MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TestMutation, TestMutationTypes} from '../types/test_mutations';
 import {RecordData, RecordId} from '../types/record';
 import {cloneDeep, has, keyBy, ObjectMap} from '../private_utils';
@@ -19,6 +19,8 @@ import {
     GlobalConfigObject,
 } from '../types/global_config';
 import MockAirtableInterface from './mock_airtable_interface';
+
+const MutationTypeValues: ReadonlyArray<string> = Object.freeze(Object.values(MutationTypes));
 
 const unmodifiableSdkData = {
     isDevelopmentMode: false,
@@ -230,6 +232,18 @@ interface RecordDataStore {
 
 const getId = ({id}: {id: string}) => id;
 
+// At the time of writing, identifiers happen to exhibit some structure in
+// production settings (e.g. fixed prefix and length), but the SDK does not
+// commit to any particular characteristics. Use a less predictable format to
+// reduce the likelihood that third-party App developers unintentionally write
+// fragile tests by depending any structure in these identifiers.
+const generateGenericId = () => {
+    const length = 10 + Math.floor(Math.random() * 10);
+    return Array.from({length})
+        .map(() => pick(alphanumerics))
+        .join('');
+};
+
 /**
  * An implementation of the MockAirtableInterface designed for use in automated
  * test suites for Airtable Blocks maintained externally. Provides a more
@@ -387,7 +401,57 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                 },
                 ...viewUpdates,
             ]);
-        } else {
+        } else if (mutation.type === TestMutationTypes.CREATE_SINGLE_TABLE) {
+            const fieldData = mutation.fields.map(field => {
+                return {
+                    id: this.idGenerator.generateFieldId(),
+                    name: field.name,
+                    description: '',
+                    type: field.config.type,
+                    typeOptions: field.config.options,
+                    ...unmodifiableFieldData,
+                };
+            });
+            const viewData = {
+                id: generateGenericId(),
+                name: 'Dynamically-generated Grid view',
+                type: ViewType.GRID,
+                fieldOrder: {
+                    fieldIds: fieldData.map(({id}) => id),
+                    visibleFieldCount: fieldData.length,
+                },
+            };
+
+            this.triggerModelUpdates([
+                {
+                    path: ['tablesById', mutation.id],
+                    value: {
+                        id: mutation.id,
+                        name: mutation.name,
+                        primaryFieldId: fieldData[0].id,
+                        viewOrder: [viewData.id],
+                        viewsById: {
+                            [viewData.id]: viewData,
+                        },
+                        fieldsById: keyBy(fieldData, getId),
+                        ...unmodifiableTableData,
+                    },
+                },
+                {
+                    path: ['tableOrder'],
+                    value: this.sdkInitData.baseData.tableOrder.concat(mutation.id),
+                },
+            ]);
+            this._recordDataStore.tables[mutation.id] = {};
+            this._recordDataStore.views[mutation.id] = {
+                [viewData.id]: {
+                    fieldOrder: viewData.fieldOrder,
+                    records: [],
+                },
+            };
+        }
+
+        if (MutationTypeValues.includes(mutation.type)) {
             this.emit('mutation', mutation);
         }
     }
@@ -560,18 +624,8 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     get idGenerator() {
         const idGenerator = super.idGenerator;
 
-        // At the time of writing, identifiers happen to exhibit some structure
-        // in production settings (e.g. fixed prefix and length), but the SDK
-        // does not commit to any particular characteristics. Use a less
-        // predictable format to reduce the likelihood that third-party App
-        // developers unintentionally write fragile tests by depending any
-        // structure in these identifiers.
-        idGenerator.generateRecordId = () => {
-            const length = 10 + Math.floor(Math.random() * 10);
-            return Array.from({length})
-                .map(() => pick(alphanumerics))
-                .join('');
-        };
+        idGenerator.generateRecordId = generateGenericId;
+        idGenerator.generateFieldId = generateGenericId;
 
         return idGenerator;
     }

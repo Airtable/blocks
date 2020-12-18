@@ -195,7 +195,7 @@ describe('MockAirtableInterface', () => {
                     type: 'createSingleTable',
                     id: 'tblFAKE',
                     name: 'fake table',
-                    fields: [],
+                    fields: [{name: 'fake email field', config: {type: FieldType.EMAIL}}],
                 });
 
                 // The synchronicity of internal method invocation (such as for
@@ -218,7 +218,14 @@ describe('MockAirtableInterface', () => {
                         type: 'createSingleTable',
                         id: 'tblFAKE',
                         name: 'fake table',
-                        fields: [],
+                        fields: [
+                            {
+                                name: 'fake email field',
+                                config: {
+                                    type: FieldType.EMAIL,
+                                },
+                            },
+                        ],
                     },
                 ],
             ]);
