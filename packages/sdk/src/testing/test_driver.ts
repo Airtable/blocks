@@ -115,6 +115,20 @@ export default class TestDriver {
     }
 
     /**
+     * Destroy a View in the simulated Base.
+     */
+    async deleteViewAsync(tableIdOrName: TableId | string, viewIdOrName: ViewId | string) {
+        const table = this.base.getTable(tableIdOrName);
+        const view = table.getView(viewIdOrName);
+
+        await this._airtableInterface.applyMutationAsync({
+            type: TestMutationTypes.DELETE_SINGLE_VIEW,
+            tableId: table.id,
+            id: view.id,
+        });
+    }
+
+    /**
      * Update the active Table and/or the active View of the App's {@link
      * Cursor}. Either `table` or `view` must be specified.
      *

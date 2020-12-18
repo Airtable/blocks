@@ -405,6 +405,60 @@ describe('TestDriver', () => {
         });
     });
 
+    describe('#deleteViewAsync', () => {
+        it('throws when the specified table is not present', async () => {
+            await expect(
+                testDriver.deleteViewAsync('tblNONEXISTENT', 'viwGridView'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNONEXISTENT' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('throws when the specified view is not present', async () => {
+            await expect(
+                testDriver.deleteViewAsync('tblTable1', 'viwNONEXISTENT'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwNONEXISTENT' in table 'Table 1'"`,
+            );
+        });
+
+        it('removes the specified view from the parent table (by IDs)', async () => {
+            await testDriver.deleteViewAsync('tblTable1', 'viwGridView');
+
+            const ids = testDriver.base.tables[0].views.map(({id}) => id);
+            expect(ids).toEqual(['viwForm']);
+        });
+
+        it('removes the specified view from the parent table (by names)', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Grid view');
+
+            const ids = testDriver.base.tables[0].views.map(({id}) => id);
+            expect(ids).toEqual(['viwForm']);
+        });
+
+        it('selects a new active view when the active view is deleted', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Grid view');
+
+            expect(getCursor(testDriver).activeViewId).toBe('viwForm');
+        });
+
+        it('retains the active view when an inactive view is deleted', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Form view');
+
+            expect(getCursor(testDriver).activeViewId).toBe('viwGridView');
+        });
+
+        it('rejects attempts to delete final view', async () => {
+            await testDriver.deleteViewAsync('tblTable1', 'viwForm');
+
+            await expect(
+                testDriver.deleteViewAsync('tblTable1', 'viwGridView'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"The view in a table with one view may not be deleted"`,
+            );
+        });
+    });
+
     describe('#setActiveCursorModels', () => {
         it('rejects attempts to set nothing', () => {
             expect(() => {

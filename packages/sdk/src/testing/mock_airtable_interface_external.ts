@@ -1,5 +1,5 @@
 import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
-import {BaseData, BaseId} from '../types/base';
+import {BaseData, BaseId, ModelChange} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
 import {Mutation, MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TestMutation, TestMutationTypes} from '../types/test_mutations';
@@ -450,6 +450,39 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                     records: [],
                 },
             };
+        } else if (mutation.type === TestMutationTypes.DELETE_SINGLE_VIEW) {
+            const tableData = this.sdkInitData.baseData.tablesById[mutation.tableId];
+
+            invariant(
+                tableData.viewOrder.length > 1,
+                'The view in a table with one view may not be deleted',
+            );
+
+            const newOrder = tableData.viewOrder.filter(id => id !== mutation.id);
+
+            delete this._recordDataStore.views[mutation.id];
+
+            const updates: Array<ModelChange> = [
+                {
+                    path: ['tablesById', mutation.tableId, 'viewOrder'],
+                    value: newOrder,
+                },
+                {
+                    path: ['tablesById', mutation.tableId, 'viewsById', mutation.id],
+                    value: undefined,
+                },
+            ];
+
+            if (
+                mutation.id === this.sdkInitData.baseData.tablesById[mutation.tableId].activeViewId
+            ) {
+                updates.push({
+                    path: ['tablesById', mutation.tableId, 'activeViewId'],
+                    value: newOrder[0],
+                });
+            }
+
+            this.triggerModelUpdates(updates);
         }
 
         if (MutationTypeValues.includes(mutation.type)) {

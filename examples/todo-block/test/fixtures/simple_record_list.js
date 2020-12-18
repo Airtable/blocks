@@ -49,6 +49,16 @@ export default {
                             },
                         ],
                     },
+                    {
+                        id: 'viwGridView2',
+                        name: 'Another grid view',
+                        type: ViewType.GRID,
+                        fieldOrder: {
+                            fieldIds: ['fldName'],
+                            visibleFieldCount: 1,
+                        },
+                        records: [],
+                    },
                 ],
                 records: [
                     {

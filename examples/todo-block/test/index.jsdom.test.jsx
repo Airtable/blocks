@@ -158,6 +158,38 @@ describe('TodoApp', () => {
         expect(screen.queryByLabelText('Field')).toBe(null);
     });
 
+    it('gracefully handles the deletion of views', async () => {
+        await openAsync('Groceries', 'Grid view', 'Purchased');
+
+        await act(() => testDriver.deleteViewAsync('tblTable1', 'viwGridView'));
+
+        const items = readItems();
+
+        expect(items).toEqual([]);
+
+        const tableOptions = getAllByRole(screen.getByLabelText('Table'), 'option');
+
+        expect(tableOptions.map(getNodeText)).toEqual([
+            'Pick a table...',
+            'Groceries',
+            'Porcelain dolls',
+        ]);
+
+        expect(tableOptions[1].selected).toBe(true);
+
+        const viewOptions = getAllByRole(screen.getByLabelText('View'), 'option');
+        expect(viewOptions.map(getNodeText)).toEqual(['Pick a view...', 'Another grid view']);
+        expect(viewOptions[0].selected).toBe(true);
+
+        const fieldOptions = getAllByRole(screen.getByLabelText('Field'), 'option');
+        expect(fieldOptions.map(getNodeText)).toEqual([
+            "Pick a 'done' field...",
+            'Name',
+            'Purchased',
+        ]);
+        expect(fieldOptions[2].selected).toBe(true);
+    });
+
     it('allows records to be created without a name', async () => {
         await openAsync('Groceries', 'Grid view', 'Purchased');
 
