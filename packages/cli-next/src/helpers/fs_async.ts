@@ -1,39 +1,33 @@
+// Import vanilla node fs to refer to types.
+import * as originalFs from 'fs';
 import {promisify} from 'util';
 
+// Import graceful-fs wrapper around fs for runtime use.
 import * as fs from 'graceful-fs';
 
-export type Callback<Result> = Result extends void
-    ? (error: Error) => void
-    : (error: Error, result: Result) => void;
+export type CallbackFS = Pick<
+    typeof fs,
+    'mkdir' | 'readdir' | 'readFile' | 'rename' | 'unlink' | 'writeFile'
+>;
 
-export interface CallbackFS {
-    mkdir(directoryPath: string, callback: Callback<void>): void;
-    readdir(directoryPath: string, callback: Callback<string[]>): void;
-    readFile(filepath: string, callback: Callback<Buffer>): void;
-    rename(oldpath: string, newpath: string, callback: Callback<void>): void;
-    unlink(path: string, callback: Callback<void>): void;
-    writeFile(path: string, content: Buffer, callback: Callback<void>): void;
-}
-
-/** AsyncFS methods follow the naming pattern exported by require('fs').promises
- * whose names also match require('fs'). */
+/** Add `*Async` suffix to fs functions. */
 export interface AsyncFS {
-    mkdirAsync(directoryPath: string): Promise<void>;
-    readdirAsync(directoryPath: string): Promise<string[]>;
-    readFileAsync(filepath: string): Promise<Buffer>;
-    renameAsync(oldpath: string, newpath: string): Promise<void>;
-    unlinkAsync(path: string): Promise<void>;
-    writeFileAsync(path: string, content: Buffer): Promise<void>;
+    mkdirAsync: typeof originalFs.promises['mkdir'];
+    readdirAsync: typeof originalFs.promises['readdir'];
+    readFileAsync: typeof originalFs.promises['readFile'];
+    renameAsync: typeof originalFs.promises['rename'];
+    unlinkAsync: typeof originalFs.promises['unlink'];
+    writeFileAsync: typeof originalFs.promises['writeFile'];
 }
 
 export function asyncify(callbackFs: CallbackFS): AsyncFS {
     return {
-        mkdirAsync: promisify(callbackFs.mkdir.bind(callbackFs)),
-        readdirAsync: promisify(callbackFs.readdir.bind(callbackFs)),
-        readFileAsync: promisify(callbackFs.readFile.bind(callbackFs)),
-        renameAsync: promisify(callbackFs.rename.bind(callbackFs)),
-        unlinkAsync: promisify(callbackFs.unlink.bind(callbackFs)),
-        writeFileAsync: promisify(callbackFs.writeFile.bind(callbackFs)),
+        mkdirAsync: promisify(callbackFs.mkdir.bind(callbackFs)) as any,
+        readdirAsync: promisify(callbackFs.readdir.bind(callbackFs)) as any,
+        readFileAsync: promisify(callbackFs.readFile.bind(callbackFs)) as any,
+        renameAsync: promisify(callbackFs.rename.bind(callbackFs)) as any,
+        unlinkAsync: promisify(callbackFs.unlink.bind(callbackFs)) as any,
+        writeFileAsync: promisify(callbackFs.writeFile.bind(callbackFs)) as any,
     };
 }
 

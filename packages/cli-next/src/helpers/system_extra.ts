@@ -14,6 +14,7 @@ export async function findAncestorDirIncludingNameAsync(
 ): Promise<string> {
     const pathRoot = path.parse(searchFrom).root;
     let checkDirectory = searchFrom;
+
     do {
         const names = await readdirAsync(checkDirectory);
         if (names.includes(name)) {
@@ -81,8 +82,8 @@ export function atomicify(sys: System): System {
         ...sys,
         fs: {
             ...sys.fs,
-            writeFileAsync: (filepath: string, content: Buffer) =>
-                writeFileAtomicallyAsync(sys, filepath, content),
+            writeFileAsync: (filepath, content) =>
+                writeFileAtomicallyAsync(sys, filepath.toString(), Buffer.from(content)),
         },
     };
 }
@@ -99,4 +100,21 @@ export async function readJsonIfExistsAsync(
         }
         throw err;
     }
+}
+
+export async function findExtensionAsync(
+    {fs: {readFileAsync}}: System,
+    name: string,
+    extensions: string[],
+) {
+    for (const ext of extensions) {
+        try {
+            await readFileAsync(`${name}${ext}`);
+            return `${name}${ext}`;
+        } catch (err) {
+            continue;
+        }
+    }
+
+    throw spawnError('Cannot find file %s with extensions %s', name, extensions);
 }

@@ -11,12 +11,12 @@ import {cast} from './private_utils';
 import {System} from './system';
 
 import {
-    findUserConfigUserPathAsync,
-    findUserConfigAppPathAsync,
-    readUserConfigUserPathAsync,
-    readUserConfigAppRootAsync,
-    writeUserConfigUserPathAsync,
-    writeUserConfigAppPathAsync,
+    findGlobalUserConfigAsync,
+    findAppDirectoryUserConfigAsync,
+    readGlobalUserConfigAsync,
+    readAppDirectoryUserConfigAsync,
+    writeGlobalUserConfigAsync,
+    writeAppDirectoryUserConfigAsync,
 } from './system_config';
 
 export enum ConfigLocation {
@@ -46,21 +46,21 @@ export async function findApiKeyConfigPathAsync(
 ): Promise<string> {
     switch (location) {
         case ConfigLocation.APP:
-            return await findUserConfigAppPathAsync(sys);
+            return await findAppDirectoryUserConfigAsync(sys);
         case ConfigLocation.USER:
-            return await findUserConfigUserPathAsync(sys);
+            return await findGlobalUserConfigAsync(sys);
         default:
             throw spawnError('Unknown user config location: %s', cast<never>(location));
     }
 }
 
 export async function readApiKeyAsync(sys: System): Promise<Result<string>> {
-    const appRootUserConfig = await readUserConfigAppRootAsync(sys);
+    const appRootUserConfig = await readAppDirectoryUserConfigAsync(sys);
     if (appRootUserConfig.value && userConfigHasApiKey(appRootUserConfig.value)) {
         return {value: userConfigGetApiKey(appRootUserConfig.value)};
     }
 
-    const userPathUserConfig = await readUserConfigUserPathAsync(sys);
+    const userPathUserConfig = await readGlobalUserConfigAsync(sys);
     if (userPathUserConfig.value && userConfigHasApiKey(userPathUserConfig.value)) {
         return {value: userConfigGetApiKey(userPathUserConfig.value)};
     }
@@ -76,13 +76,13 @@ export async function writeApiKeyAsync(
     let userConfig;
     switch (location) {
         case ConfigLocation.APP:
-            userConfig = (await readUserConfigAppRootAsync(sys)).value || createDefaultUserConfig();
-            await writeUserConfigAppPathAsync(sys, userConfigSetApiKey(userConfig, apiKey));
+            userConfig =
+                (await readAppDirectoryUserConfigAsync(sys)).value || createDefaultUserConfig();
+            await writeAppDirectoryUserConfigAsync(sys, userConfigSetApiKey(userConfig, apiKey));
             break;
         case ConfigLocation.USER:
-            userConfig =
-                (await readUserConfigUserPathAsync(sys)).value || createDefaultUserConfig();
-            await writeUserConfigUserPathAsync(sys, userConfigSetApiKey(userConfig, apiKey));
+            userConfig = (await readGlobalUserConfigAsync(sys)).value || createDefaultUserConfig();
+            await writeGlobalUserConfigAsync(sys, userConfigSetApiKey(userConfig, apiKey));
             break;
         default:
             throw spawnError('Unknown user config location %s', cast<never>(location));

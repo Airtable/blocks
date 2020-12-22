@@ -22,6 +22,12 @@ export default abstract class AirtableCommand extends Command {
     async run() {
         await this.runAsync();
     }
+
+    async finally(err: Error | undefined) {
+        if (this.finallyAsync) {
+            await this.finallyAsync(err);
+        }
+    }
     /* eslint-enable airtable/no-missing-async-suffix */
 
     async initAsync() {
@@ -33,4 +39,6 @@ export default abstract class AirtableCommand extends Command {
     }
 
     abstract runAsync(): Promise<void>;
+
+    async finallyAsync?(err: Error | undefined): Promise<void>;
 }

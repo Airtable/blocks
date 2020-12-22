@@ -94,7 +94,7 @@ module.exports = {
         'no-self-compare': 'error',
         'no-sequences': 'error',
         'no-shadow-restricted-names': 'error',
-        'no-shadow': 'error',
+        'no-shadow': 'off',
         'no-sparse-arrays': 'error',
         'no-template-curly-in-string': 'error',
         'no-throw-literal': 'error',
@@ -162,5 +162,6 @@ module.exports = {
 
         '@typescript-eslint/no-unused-vars': ['error', {vars: 'all', args: 'none'}],
         '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+        '@typescript-eslint/no-shadow': ['error'],
     },
 };

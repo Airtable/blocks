@@ -1,6 +1,6 @@
 import {expect} from '@oclif/test';
 
-import {test} from '../test';
+import {test} from '../mocks/test';
 
 describe('set-api-key', () => {
     test.stdout()
@@ -12,7 +12,7 @@ describe('set-api-key', () => {
 
     test.stdout()
         .stderr()
-        .answer('What is your Airtable', 'keyAPI1234')
+        .answer('What is your Airtable', {stdin: 'keyAPI1234'})
         .command(['set-api-key'])
         .wroteUserConfigFile({airtableApiKey: 'keyAPI1234'})
         .it('runs set-api-key', ctx => {

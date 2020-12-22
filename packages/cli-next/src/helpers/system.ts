@@ -1,4 +1,4 @@
-import {dirname, join, parse} from 'path';
+import {sep, dirname, join, parse, relative} from 'path';
 import {cwd, env} from 'process';
 import {platform, homedir} from 'os';
 
@@ -8,9 +8,11 @@ import {atomicify} from './system_extra';
 export {AsyncFS};
 
 export interface SystemPath {
+    sep: typeof sep;
     dirname: typeof dirname;
     join: typeof join;
     parse: typeof parse;
+    relative: typeof relative;
 }
 
 export interface SystemProcess {
@@ -32,7 +34,7 @@ export interface System {
 
 export function createSystem({
     fs = asyncFs,
-    path = {dirname, join, parse},
+    path = {sep, dirname, join, parse, relative},
     process = {cwd, env},
     os = {homedir, platform},
 }: Partial<System> = {}): System {

@@ -1,6 +1,8 @@
 import {BLOCK_FILE_NAME, USER_CONFIG_FILE_NAME} from '../settings';
+
 import {Result} from './result';
 
+import {AppConfig, validateAppConfig} from './config_app';
 import {validateUserConfig, UserConfig} from './config_user';
 import {
     findAncestorDirIncludingNameAsync,
@@ -21,30 +23,71 @@ async function getUserPathAsync({
     }
 }
 
-export async function findUserConfigUserPathAsync(sys: System): Promise<string> {
+export async function findGlobalUserConfigAsync(sys: System): Promise<string> {
     return sys.path.join(await getUserPathAsync(sys), USER_CONFIG_FILE_NAME);
 }
 
-async function findAppRootAsync(sys: System, dirpath: string): Promise<string> {
+export async function findAppDirectoryAsync(sys: System, dirpath: string): Promise<string> {
     return await findAncestorDirIncludingNameAsync(sys, dirpath, BLOCK_FILE_NAME);
 }
 
-export async function findUserConfigAppPathAsync(sys: System): Promise<string> {
-    const {
-        path,
-        process: {cwd},
-    } = sys;
+/**
+ * Find the path to a file in the App's root directory.
+ *
+ * @param sys Host system to search
+ * @param filename Name of the file in the App root directory
+ * @param workingdir Working directory function starts its search from
+ */
+async function findAppDirecotryFileAsync(
+    sys: System,
+    filename: string,
+    workingdir = sys.process.cwd(),
+): Promise<string> {
+    const {path} = sys;
 
-    const blockRoot = await findAppRootAsync(sys, cwd());
-    return path.join(blockRoot, USER_CONFIG_FILE_NAME);
+    const appRoot = await findAppDirectoryAsync(sys, workingdir);
+    return path.join(appRoot, filename);
 }
 
-export async function readUserConfigUserPathAsync(sys: System): Promise<Result<UserConfig>> {
-    return validateUserConfig(readJsonIfExistsAsync(sys, await findUserConfigUserPathAsync(sys)));
+/**
+ * Find the AppConfig file in the App's root directory.
+ *
+ * @param sys Host system to search
+ * @param workingdir Working directory function starts its search from
+ */
+export async function findAppConfigPathAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<string> {
+    return await findAppDirecotryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
 }
 
-export async function readUserConfigAppRootAsync(sys: System): Promise<Result<UserConfig>> {
-    return validateUserConfig(readJsonIfExistsAsync(sys, await findUserConfigAppPathAsync(sys)));
+export async function findAppDirectoryUserConfigAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<string> {
+    return await findAppDirecotryFileAsync(sys, USER_CONFIG_FILE_NAME, workingdir);
+}
+
+export async function readAppConfigAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<Result<AppConfig>> {
+    return validateAppConfig(
+        await readJsonIfExistsAsync(sys, await findAppConfigPathAsync(sys, workingdir)),
+    );
+}
+
+export async function readGlobalUserConfigAsync(sys: System): Promise<Result<UserConfig>> {
+    return validateUserConfig(
+        await readJsonIfExistsAsync(sys, await findGlobalUserConfigAsync(sys)),
+    );
+}
+
+export async function readAppDirectoryUserConfigAsync(sys: System): Promise<Result<UserConfig>> {
+    return validateUserConfig(
+        await readJsonIfExistsAsync(sys, await findAppDirectoryUserConfigAsync(sys)),
+    );
 }
 
 async function writeUserConfigAsync(
@@ -61,10 +104,13 @@ async function writeUserConfigAsync(
     await writeFileAsync(configPath, Buffer.from(JSON.stringify(config)));
 }
 
-export async function writeUserConfigUserPathAsync(sys: System, config: UserConfig): Promise<void> {
-    await writeUserConfigAsync(sys, await findUserConfigUserPathAsync(sys), config);
+export async function writeGlobalUserConfigAsync(sys: System, config: UserConfig): Promise<void> {
+    await writeUserConfigAsync(sys, await findGlobalUserConfigAsync(sys), config);
 }
 
-export async function writeUserConfigAppPathAsync(sys: System, config: UserConfig): Promise<void> {
-    await writeUserConfigAsync(sys, await findUserConfigAppPathAsync(sys), config);
+export async function writeAppDirectoryUserConfigAsync(
+    sys: System,
+    config: UserConfig,
+): Promise<void> {
+    await writeUserConfigAsync(sys, await findAppDirectoryUserConfigAsync(sys), config);
 }
