@@ -710,9 +710,11 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
                 recordColorMode.selectField.unwatch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                this._recordStore
-                    .getViewDataStore(recordColorMode.view.id)
-                    .unwatch('recordColors', handler);
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore
+                        .getViewDataStore(recordColorMode.view.id)
+                        .unwatch('recordColors', handler);
+                }
                 break;
             }
             // istanbul ignore next
@@ -763,7 +765,9 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
                 // handled as part of fieldIdsOrNullIfAllFields
                 return;
             case RecordColorModeTypes.BY_VIEW:
-                this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                }
                 break;
             // istanbul ignore next
             default:

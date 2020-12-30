@@ -454,7 +454,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
                 this._recordStore.unloadData();
             }
         } else {
-            this._recordStore.getViewDataStore(this._sourceModel.id).unloadData();
+            // If the view is deleted, we can't get a data store for it.
+            if (!this._sourceModel.isDeleted) {
+                this._recordStore.getViewDataStore(this._sourceModel.id).unloadData();
+            }
         }
 
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
@@ -476,9 +479,15 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
                 this,
             );
         } else {
-            this._recordStore
-                .getViewDataStore(this._sourceModel.id)
-                .unwatch(WatchableViewDataStoreKeys.visibleRecords, this._onRecordsChanged, this);
+            if (!this._sourceModel.isDeleted) {
+                this._recordStore
+                    .getViewDataStore(this._sourceModel.id)
+                    .unwatch(
+                        WatchableViewDataStoreKeys.visibleRecords,
+                        this._onRecordsChanged,
+                        this,
+                    );
+            }
         }
 
         this._recordStore.unwatch(
