@@ -5,8 +5,9 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "airbuild": "cd ../../packages/sdk && yarn build && cd - && yarn jest",
-        "lint": "eslint frontend"
+        "airbuild": "cd ../../packages/sdk && yarn build && cd - && yarn test",
+        "lint": "eslint frontend",
+        "test": "yarn lint && yarn jest"
     },
     "dependencies": {
         "@airtable/blocks": "^1.2.5",
