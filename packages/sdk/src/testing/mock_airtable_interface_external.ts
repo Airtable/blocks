@@ -2,13 +2,14 @@ import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_inte
 import {BaseData, BaseId} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
 import {Mutation, PermissionCheckResult} from '../types/mutations';
+import {TestMutation, TestMutationTypes} from '../types/test_mutations';
 import {RecordData, RecordId} from '../types/record';
 import {has, keyBy, ObjectMap} from '../private_utils';
 import {TableId} from '../types/table';
 import {FieldData, FieldId, FieldType} from '../types/field';
 import {ViewId, ViewType} from '../types/view';
 import Color from '../colors';
-import {spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
@@ -116,7 +117,7 @@ function setGlobalConfigValue(
 
 /** @hidden */
 export interface WatchableKeysAndArgs {
-    mutation: Mutation;
+    mutation: TestMutation;
 }
 
 /**
@@ -310,8 +311,50 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         this._recordDataStore = store;
     }
 
-    async applyMutationAsync(mutation: Mutation, opts?: {holdForMs?: number}): Promise<void> {
-        this.emit('mutation', mutation);
+    async applyMutationAsync(mutation: TestMutation, opts?: {holdForMs?: number}): Promise<void> {
+        if (mutation.type === TestMutationTypes.DELETE_SINGLE_FIELD) {
+            const tableData = this.sdkInitData.baseData.tablesById[mutation.tableId];
+
+            invariant(
+                tableData.primaryFieldId !== mutation.id,
+                "A table's primary field may not be deleted.",
+            );
+            const viewUpdates = Object.values(tableData.viewsById)
+                .filter(view => {
+                    return view.fieldOrder && view.fieldOrder.fieldIds.includes(mutation.id);
+                })
+                .map(view => {
+                    const fieldOrder = view.fieldOrder;
+                    invariant(fieldOrder, 'View must define a field ordering');
+                    const index = fieldOrder.fieldIds.indexOf(mutation.id);
+                    const fieldIds = fieldOrder.fieldIds.slice();
+                    fieldIds.splice(index, 1);
+                    const visibleFieldCount =
+                        index < fieldOrder.visibleFieldCount
+                            ? fieldOrder.visibleFieldCount - 1
+                            : fieldOrder.visibleFieldCount;
+                    return {
+                        path: ['tablesById', mutation.tableId, 'viewsById', view.id, 'fieldOrder'],
+                        value: {fieldIds, visibleFieldCount},
+                    };
+                });
+
+            viewUpdates.forEach(({path, value}) => {
+                const view = this._recordDataStore.views[path[1]][path[3]];
+                invariant(view, 'Internal update must reference existing view');
+                view.fieldOrder = value;
+            });
+
+            this.triggerModelUpdates([
+                {
+                    path: ['tablesById', mutation.tableId, 'fieldsById', mutation.id],
+                    value: undefined,
+                },
+                ...viewUpdates,
+            ]);
+        } else {
+            this.emit('mutation', mutation);
+        }
     }
 
     checkPermissionsForMutation(mutation: Mutation): PermissionCheckResult {

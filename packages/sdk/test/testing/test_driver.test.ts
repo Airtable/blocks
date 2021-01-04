@@ -39,6 +39,13 @@ describe('MockAirtableInterface', () => {
                                 type: FieldType.SINGLE_LINE_TEXT,
                                 options: null,
                             },
+                            {
+                                id: 'fldChord',
+                                name: 'Arrangement of musical notes',
+                                description: '',
+                                type: FieldType.SINGLE_LINE_TEXT,
+                                options: null,
+                            },
                         ],
                         views: [
                             {
@@ -46,7 +53,7 @@ describe('MockAirtableInterface', () => {
                                 name: 'Grid view',
                                 type: ViewType.GRID,
                                 fieldOrder: {
-                                    fieldIds: ['fldName', 'fldIceCream'],
+                                    fieldIds: ['fldName', 'fldIceCream', 'fldChord'],
                                     visibleFieldCount: 2,
                                 },
                                 records: [
@@ -92,6 +99,7 @@ describe('MockAirtableInterface', () => {
                                 cellValuesByFieldId: {
                                     fldName: 'a',
                                     fldIceCream: 'strawberry',
+                                    fldChord: 'c major',
                                 },
                             },
                             {
@@ -101,6 +109,7 @@ describe('MockAirtableInterface', () => {
                                 cellValuesByFieldId: {
                                     fldName: 'b',
                                     fldIceCream: 'pistachio',
+                                    fldChord: 'g sharp 7',
                                 },
                             },
                             {
@@ -110,6 +119,7 @@ describe('MockAirtableInterface', () => {
                                 cellValuesByFieldId: {
                                     fldName: 'c',
                                     fldIceCream: 'shoe leather',
+                                    fldChord: 'b flat minor',
                                 },
                             },
                         ],
@@ -154,6 +164,91 @@ describe('MockAirtableInterface', () => {
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
 
             expect(sdk).toBeInstanceOf(Sdk);
+        });
+    });
+
+    describe('#deleteFieldAsync', () => {
+        it('throws when the specified table is not present', async () => {
+            await expect(
+                testDriver.deleteFieldAsync('tblNONEXISTENT', 'fldIceCream'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNONEXISTENT' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('throws when the specified field is not present', async () => {
+            await expect(
+                testDriver.deleteFieldAsync('tblTable1', 'fldNONEXISTENT'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No field with ID or name 'fldNONEXISTENT' in table 'Table 1'"`,
+            );
+        });
+
+        it('removes the specified field from the parent table', async () => {
+            const initialCount = testDriver.base.tables[0].fields.length;
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            expect(testDriver.base.tables[0].fields.length).toBe(initialCount - 1);
+        });
+
+        it('removes the specified field from the parent table (specified by name)', async () => {
+            await testDriver.deleteFieldAsync('Table 1', 'Favorite ice cream');
+
+            const ids = testDriver.base.tables[0].fields.map(({id}) => id);
+            expect(ids).toEqual(['fldName', 'fldChord']);
+        });
+
+        it('removes the specified field from the parent view in the simulated backend', async () => {
+            const view = testDriver.base.tables[0].views[0];
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            const viewMetadata = await view.selectMetadataAsync();
+
+            const ids = viewMetadata.allFields.map(({id}) => id);
+            expect(ids).toEqual(['fldName', 'fldChord']);
+        });
+
+        it('removes the specified field from the parent view optimistically', async () => {
+            const view = testDriver.base.tables[0].views[0];
+
+            const viewMetadata = await view.selectMetadataAsync();
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            const ids = viewMetadata.allFields.map(({id}) => id);
+            expect(ids).toEqual(['fldName', 'fldChord']);
+        });
+
+        it('reduces the visible field count when deleted field is visible', async () => {
+            const view = testDriver.base.tables[0].views[0];
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            const viewMetadata = await view.selectMetadataAsync();
+
+            const ids = viewMetadata.visibleFields.map(({id}) => id);
+            expect(ids).toEqual(['fldName']);
+        });
+
+        it('persists the visible field count when deleted field is not visible', async () => {
+            const view = testDriver.base.tables[0].views[0];
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldChord');
+
+            const viewMetadata = await view.selectMetadataAsync();
+
+            const ids = viewMetadata.visibleFields.map(({id}) => id);
+            expect(ids).toEqual(['fldName', 'fldIceCream']);
+        });
+
+        it('rejects attempts to delete primary field', async () => {
+            await expect(
+                testDriver.deleteFieldAsync('tblTable1', 'fldName'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"A table's primary field may not be deleted."`,
+            );
         });
     });
 

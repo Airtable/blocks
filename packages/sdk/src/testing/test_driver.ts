@@ -1,5 +1,8 @@
 import React from 'react';
 import Sdk from '../sdk';
+import {TestMutationTypes} from '../types/test_mutations';
+import {FieldId} from '../types/field';
+import {TableId} from '../types/table';
 import {Mutation} from '../types/mutations';
 import {SdkContext} from '../ui/sdk_context';
 import MockAirtableInterface, {
@@ -59,6 +62,20 @@ export default class TestDriver {
             {fallback},
             React.createElement(SdkContext.Provider, {value: this._sdk}, children),
         );
+    }
+
+    /**
+     * Destroy a Field in the simulated Base.
+     */
+    async deleteFieldAsync(tableIdOrName: TableId | string, fieldIdOrName: FieldId | string) {
+        const table = this.base.getTable(tableIdOrName);
+        const field = table.getField(fieldIdOrName);
+
+        await this._airtableInterface.applyMutationAsync({
+            type: TestMutationTypes.DELETE_SINGLE_FIELD,
+            tableId: table.id,
+            id: field.id,
+        });
     }
 
     /**

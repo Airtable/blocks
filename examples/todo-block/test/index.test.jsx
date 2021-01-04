@@ -120,6 +120,16 @@ describe('TodoApp', () => {
         ]);
     });
 
+    it('gracefully handles the deletion of fields', async () => {
+        await openAsync('Groceries', 'Grid view', 'Purchased');
+
+        await act(() => testDriver.deleteFieldAsync('tblTable1', 'fldPurchased'));
+
+        const items = readItems();
+
+        expect(items).toEqual([]);
+    });
+
     it('allows records to be created without a name', async () => {
         await openAsync('Groceries', 'Grid view', 'Purchased');
 
