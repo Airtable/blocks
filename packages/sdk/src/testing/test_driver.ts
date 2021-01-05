@@ -1,9 +1,12 @@
 import React from 'react';
+import {invariant} from '../error_utils';
 import Sdk from '../sdk';
 import {TestMutationTypes} from '../types/test_mutations';
 import {FieldId} from '../types/field';
-import {TableId} from '../types/table';
 import {Mutation} from '../types/mutations';
+import {RecordId} from '../types/record';
+import {TableId} from '../types/table';
+import {ViewId} from '../types/view';
 import {SdkContext} from '../ui/sdk_context';
 import MockAirtableInterface, {
     FixtureData,
@@ -37,6 +40,13 @@ export default class TestDriver {
      */
     get base() {
         return this._sdk.base;
+    }
+
+    /**
+     * The Cursor associated with this instance's Base.
+     */
+    get cursor() {
+        return this._sdk.cursor;
     }
 
     /**
@@ -79,12 +89,97 @@ export default class TestDriver {
     }
 
     /**
+     * Update the active Table and/or the active View of the App's {@link
+     * Cursor}. Either `table` or `view` must be specified.
+     *
+     * @example
+     * ```js
+     * testDriver.setActiveCursorModels({view: 'My grid view'});
+     * ```
+     */
+    setActiveCursorModels({
+        table: tableIdOrName,
+        view: viewIdOrName,
+    }:
+        | {table: TableId | string; view?: ViewId | string}
+        | {table?: TableId | string; view: ViewId | string}) {
+        invariant(tableIdOrName || viewIdOrName, 'One of `table` or `view` must be specified.');
+
+        const tableId = tableIdOrName
+            ? this.base.getTable(tableIdOrName).id
+            : this.cursor.activeTableId;
+
+        invariant(typeof tableId === 'string', 'Cannot set cursor model when table is not loaded');
+
+        const viewId = viewIdOrName
+            ? this.base.getTable(tableId).getView(viewIdOrName).id
+            : this.cursor.activeViewId;
+
+        invariant(
+            !viewId || this.base.getTable(tableId).getViewIfExists(viewId),
+            'Cannot change active table to "%s" because active view ("%s") belongs to another table',
+            tableIdOrName,
+            viewId,
+        );
+
+        this._airtableInterface.triggerModelUpdates([
+            {
+                path: ['activeTableId'],
+                value: tableId,
+            },
+        ]);
+
+        if (viewIdOrName) {
+            this._airtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', tableId, 'activeViewId'],
+                    value: viewId,
+                },
+            ]);
+        }
+    }
+
+    /**
      * Specify the outcome of internal permission checks. This influences the
      * behavior of not only explicit permission checks from Apps code but also
      * the outcome of model operations such as {@link createRecordsAsync}.
      */
     simulatePermissionCheck(check: (mutation: Mutation) => boolean) {
         this._airtableInterface.setUserPermissionCheck(check);
+    }
+
+    /**
+     * Simulate a user visually selecting a set of Records in the active Table.
+     * This operation is unrelated to an App's programmatic "selection" of
+     * records via, e.g. {@link Table.selectRecords}. To deselect all records,
+     * invoke this method with an empty array.
+     */
+    userSelectRecords(recordIds: Array<RecordId>) {
+        const {baseData} = this._airtableInterface.sdkInitData;
+        const {activeTableId} = baseData;
+
+        invariant(activeTableId, 'Cannot select records when no table is active');
+
+        for (const recordId of recordIds) {
+            invariant(
+                this._airtableInterface.hasRecord(activeTableId, recordId),
+                'Record with ID "%s" is not present in active table "%s"',
+                recordId,
+                activeTableId,
+            );
+        }
+
+        const selectedRecordIdSet = recordIds.reduce((all, recordId) => {
+            all[recordId] = true;
+            return all;
+        }, {} as {[key: string]: boolean});
+
+        this._airtableInterface.triggerModelUpdates([
+            {
+                path: ['cursorData', 'selectedRecordIdSet'],
+                value: selectedRecordIdSet,
+            },
+        ]);
     }
 
     /**

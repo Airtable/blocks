@@ -5,6 +5,7 @@ import {Mutation, PermissionCheckResult} from '../types/mutations';
 import {TestMutation, TestMutationTypes} from '../types/test_mutations';
 import {RecordData, RecordId} from '../types/record';
 import {has, keyBy, ObjectMap} from '../private_utils';
+import {CursorData} from '../types/cursor';
 import {TableId} from '../types/table';
 import {FieldData, FieldId, FieldType} from '../types/field';
 import {ViewId, ViewType} from '../types/view';
@@ -30,7 +31,6 @@ const unmodifiableSdkData = {
 
 const unmodifiableBaseData = {
     enabledFeatureNames: [],
-    cursorData: null,
     billingPlanGrouping: 'pro',
     permissionLevel: 'create',
     appInterface: {},
@@ -300,6 +300,10 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                 tableOrder: tables.map(({id}) => id),
                 tablesById: keyBy(tables, getId),
                 currentUserId: fixtureData.base.collaborators[0].id,
+                cursorData: {
+                    selectedRecordIdSet: {},
+                    selectedFieldIdSet: {},
+                },
                 collaboratorsById: keyBy(fixtureData.base.collaborators, getId),
                 activeCollaboratorIds: fixtureData.base.collaborators
                     .filter(({isActive}) => isActive)
@@ -473,6 +477,16 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         return {recordsById};
     }
 
+    async fetchAndSubscribeToCursorDataAsync(): Promise<CursorData> {
+        const cursorData = this.sdkInitData.baseData.cursorData;
+        const selectedRecordIdSet = Object.assign({}, cursorData && cursorData.selectedRecordIdSet);
+
+        return {
+            selectedRecordIdSet,
+            selectedFieldIdSet: {},
+        };
+    }
+
     async fetchAndSubscribeToTableDataAsync(
         tableId: string,
     ): Promise<{recordsById: {[recordId: string]: RecordData}}> {
@@ -504,6 +518,12 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
             fieldOrder: viewData.fieldOrder,
             colorsByRecordId: {},
         };
+    }
+
+    hasRecord(tableId: TableId, recordId: RecordId): boolean {
+        const recordsById = this._recordDataStore.tables[tableId];
+
+        return recordsById && recordId in recordsById;
     }
 
     get idGenerator() {

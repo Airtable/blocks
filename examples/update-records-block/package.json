@@ -5,16 +5,22 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "lint": "eslint frontend"
+        "airbuild": "cd ../../packages/sdk && yarn build && cd - && yarn test",
+        "lint": "eslint frontend",
+        "test": "yarn lint && yarn jest"
     },
     "dependencies": {
-        "@airtable/blocks": "latest",
+        "@airtable/blocks": "^1.2.5",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
     },
     "devDependencies": {
+        "@testing-library/jest-dom": "^5.11.6",
+        "@testing-library/react": "^11.2.2",
+        "@testing-library/user-event": "^12.5.0",
         "eslint": "^6.3.0",
         "eslint-plugin-react": "^7.14.3",
-        "eslint-plugin-react-hooks": "^2.0.1"
+        "eslint-plugin-react-hooks": "^2.0.1",
+        "jest": "^26.6.3"
     }
 }

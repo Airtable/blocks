@@ -72,9 +72,9 @@ describe('MockAirtableInterface', () => {
                                 ],
                             },
                             {
-                                id: 'viwGrid2',
-                                name: 'Grid 2',
-                                type: ViewType.GRID,
+                                id: 'viwForm',
+                                name: 'Form view',
+                                type: ViewType.FORM,
                                 fieldOrder: {
                                     fieldIds: ['fldName'],
                                     visibleFieldCount: 1,
@@ -124,6 +124,47 @@ describe('MockAirtableInterface', () => {
                             },
                         ],
                     },
+                    {
+                        id: 'tblTable2',
+                        name: 'Table 2',
+                        description: '',
+                        fields: [
+                            {
+                                id: 'fldName2',
+                                name: 'Name 2',
+                                description: '',
+                                type: FieldType.SINGLE_LINE_TEXT,
+                                options: null,
+                            },
+                        ],
+                        views: [
+                            {
+                                id: 'viwGridView2',
+                                name: 'Grid view 2',
+                                type: ViewType.GRID,
+                                fieldOrder: {
+                                    fieldIds: ['fldName2'],
+                                    visibleFieldCount: 1,
+                                },
+                                records: [
+                                    {
+                                        id: 'recd',
+                                        color: null,
+                                    },
+                                ],
+                            },
+                        ],
+                        records: [
+                            {
+                                id: 'recd',
+                                commentCount: 1,
+                                createdTime: '2020-11-04T23:20:08.000Z',
+                                cellValuesByFieldId: {
+                                    fldName: 'd',
+                                },
+                            },
+                        ],
+                    },
                 ],
                 collaborators: [
                     {
@@ -164,6 +205,12 @@ describe('MockAirtableInterface', () => {
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
 
             expect(sdk).toBeInstanceOf(Sdk);
+        });
+    });
+
+    describe('#cursor', () => {
+        it('exposes properly-initialized cursor', async () => {
+            expect(testDriver.cursor.activeTableId).toBe('tblTable1');
         });
     });
 
@@ -252,6 +299,86 @@ describe('MockAirtableInterface', () => {
         });
     });
 
+    describe('#setActiveCursorModels', () => {
+        it('rejects attempts to set nothing', () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({} as any);
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"One of \`table\` or \`view\` must be specified."`,
+            );
+        });
+
+        it('rejects unrecognized Table references', () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({table: 'tblNonExistent'});
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNonExistent' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('rejects attempts to change table without changing view', async () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({table: 'tblTable2'});
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Cannot change active table to \\"tblTable2\\" because active view (\\"viwGridView\\") belongs to another table"`,
+            );
+        });
+
+        it('tolerates attempts to reset table to existing value', async () => {
+            testDriver.setActiveCursorModels({table: 'tblTable1'});
+
+            expect(testDriver.cursor.activeTableId).toBe('tblTable1');
+        });
+
+        it('updates cursor by Table ID', async () => {
+            testDriver.setActiveCursorModels({table: 'tblTable2', view: 'viwGridView2'});
+
+            expect(testDriver.cursor.activeTableId).toBe('tblTable2');
+        });
+
+        it('updates cursor by Table name', async () => {
+            testDriver.setActiveCursorModels({table: 'Table 2', view: 'viwGridView2'});
+
+            expect(testDriver.cursor.activeTableId).toBe('tblTable2');
+        });
+
+        it('rejects unrecognized View references', () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({view: 'viwNonExistent'});
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwNonExistent' in table 'Table 1'"`,
+            );
+        });
+
+        it('rejects attempts to set view of another table (active table inferred)', () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({view: 'viwGridView2'});
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwGridView2' in table 'Table 1'"`,
+            );
+        });
+
+        it('rejects attempts to set view of another table (active table specified)', () => {
+            expect(() => {
+                testDriver.setActiveCursorModels({table: 'tblTable2', view: 'viwGridView'});
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwGridView' in table 'Table 2'"`,
+            );
+        });
+
+        it('updates cursor by View ID', async () => {
+            testDriver.setActiveCursorModels({view: 'viwForm'});
+
+            expect(testDriver.cursor.activeViewId).toBe('viwForm');
+        });
+
+        it('updates cursor by View name', async () => {
+            testDriver.setActiveCursorModels({view: 'Form view'});
+
+            expect(testDriver.cursor.activeViewId).toBe('viwForm');
+        });
+    });
+
     describe('#simulatePermissionCheck', () => {
         it('provides an appropriate Mutation object', async () => {
             const [mutation] = await Promise.all([
@@ -286,6 +413,44 @@ describe('MockAirtableInterface', () => {
             await expect(triggerMutationAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
                 `"Cannot apply createMultipleRecords mutation: The testing environment has been configured to deny this mutation."`,
             );
+        });
+    });
+
+    describe('#userSelectRecords', () => {
+        it('rejects requests to select record in inactive tables', () => {
+            expect(() => {
+                testDriver.userSelectRecords(['reca', 'recd', 'recc']);
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Record with ID \\"recd\\" is not present in active table \\"tblTable1\\""`,
+            );
+        });
+
+        it('updates the cursor selection with the specified records', () => {
+            testDriver.userSelectRecords(['recb', 'recc']);
+
+            expect(testDriver.cursor.selectedRecordIds).toEqual(['recb', 'recc']);
+        });
+
+        it('persists update through model loading', async () => {
+            testDriver.userSelectRecords(['recb', 'recc']);
+
+            await testDriver.cursor.loadDataAsync();
+
+            expect(testDriver.cursor.selectedRecordIds).toEqual(['recb', 'recc']);
+        });
+
+        it('allows resetting', async () => {
+            testDriver.userSelectRecords(['reca', 'recc']);
+            testDriver.userSelectRecords(['recb']);
+
+            expect(testDriver.cursor.selectedRecordIds).toEqual(['recb']);
+        });
+
+        it('allows deselection', async () => {
+            testDriver.userSelectRecords(['reca', 'recc']);
+            testDriver.userSelectRecords([]);
+
+            expect(testDriver.cursor.selectedRecordIds).toEqual([]);
         });
     });
 
