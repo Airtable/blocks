@@ -7,6 +7,7 @@ import GlobalAlert from './global_alert';
 // instead importing `unstable_standalone_ui`.
 import '../';
 
+export {default as BaseProvider} from './base_provider';
 export {default as colors} from '../colors';
 export {default as colorUtils} from '../color_utils';
 export {default as Synced} from './synced';

@@ -23,6 +23,12 @@ describe('Base', () => {
         base = sdk.base;
     });
 
+    describe('__sdk', () => {
+        it('exposes its instance', () => {
+            expect(base.__sdk).toBe(sdk);
+        });
+    });
+
     describe('tables', () => {
         it('lists all tables in the expected order', () => {
             expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
