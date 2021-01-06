@@ -1,3 +1,4 @@
 {
-    "frontendEntry": "./frontend/index.js"
+    "frontendEntry": "./frontend/index.js",
+    "frontendTestingEntry": "./test/index.jsx"
 }

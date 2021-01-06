@@ -8,6 +8,7 @@ const LocalSdkBuilder = require('../local_sdk_builder');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
+const {Environments} = require('../types/block_json_type');
 
 import type {Argv} from 'yargs';
 
@@ -39,6 +40,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockDevCredentialsPath === null || typeof blockDevCredentialsPath === 'string',
         'expect blockDevCredentialsPath to be null or a string',
     );
+    const environment = argv.testing ? Environments.TESTING : Environments.DEVELOPMENT;
 
     if (remoteName !== null) {
         outputRemotesBetaWarning();
@@ -82,6 +84,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         backendSdkBaseUrl,
         shouldBackendSdkBypassCache,
         blockDevCredentialsPath,
+        environment,
     });
 
     let port = defaultPort;

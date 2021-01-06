@@ -29,10 +29,11 @@ const ErrorCodes = require('../types/error_codes');
 const {RESULT_OK} = require('../types/result');
 const {getBlockDirPath} = require('../helpers/get_block_dir_path');
 const hasBackendRoutes = require('../helpers/has_backend_routes');
+const {Environments} = require('../types/block_json_type');
 
 import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
-import type {BlockJson} from '../types/block_json_type';
+import type {BlockJson, Environment} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 import type {Result} from '../types/result';
 import type {PromiseResolveFunction} from '../types/promise_types';
@@ -653,11 +654,18 @@ class BlockBuilder {
 
         return RESULT_OK;
     }
-    async _writeFrontendClientWrapperFileAsync(): Promise<void> {
+    async _writeFrontendClientWrapperFileAsync(environment: Environment): Promise<void> {
+        const entryAttr =
+            environment === Environments.TESTING ? 'frontendTestingEntry' : 'frontendEntry';
         await fsUtils.mkdirPathAsync(this._outputUserTranspiledDirPath);
+        const entryFileName = this._blockJson[entryAttr];
+        invariant(
+            entryFileName,
+            `The ${entryAttr} attribute must be specified for ${environment} environments`,
+        );
         const frontendEntryModulePath = path.join(
             this._outputUserTranspiledDirPath,
-            this._replaceTranspiledFileExtension(this._blockJson.frontendEntry),
+            this._replaceTranspiledFileExtension(entryFileName),
         );
         const clientWrapperFilePath = path.join(
             this._outputUserTranspiledDirPath,
@@ -858,10 +866,10 @@ class BlockBuilder {
             await fsUtils.emptyDirAsync(outputBuildDirPath);
         }
     }
-    async _cleanAndPrepareBuildAsync(): Promise<void> {
+    async _cleanAndPrepareBuildAsync(environment: Environment): Promise<void> {
         await this._cleanupLegacyBuildDirectoryAsync();
         await this._cleanAndPrepareOutputDirectoriesAsync();
-        await this._writeFrontendClientWrapperFileAsync();
+        await this._writeFrontendClientWrapperFileAsync(environment);
     }
     async _waitForInitialBuildAsync(): Promise<void> {
         // This promise will be resolved outside of this function when the initial bundle triggered
@@ -884,11 +892,11 @@ class BlockBuilder {
         );
         return true;
     }
-    async buildAndWatchAsync(): Promise<void> {
+    async buildAndWatchAsync(environment: Environment): Promise<void> {
         if (this._buildTypeMode !== BlockBuildTypes.DEVELOPMENT) {
             throw new Error('Watch mode is only available for DEVELOPMENT mode');
         }
-        await this._cleanAndPrepareBuildAsync();
+        await this._cleanAndPrepareBuildAsync(environment);
         await this._writeLegacyAirtableBlockModuleAsync();
 
         this._startChokidarWatchAndStartBuildJobQueueConsumer({
@@ -900,7 +908,7 @@ class BlockBuilder {
         if (this._buildTypeMode !== BlockBuildTypes.RELEASE) {
             throw new Error('Build for release is only available for RELEASE mode');
         }
-        await this._cleanAndPrepareBuildAsync();
+        await this._cleanAndPrepareBuildAsync(Environments.PRODUCTION);
 
         if (this._enableIsolatedBuild) {
             // 1. Manually copy the package.json file even though BlockBuilderJobQueue will also copy it

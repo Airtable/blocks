@@ -105,6 +105,12 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'string',
                 hidden: true, // hide from --help output
             },
+            testing: {
+                description: 'Run in testing mode',
+                type: 'boolean',
+                default: false,
+                hidden: true, // hide from --help output
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
     },

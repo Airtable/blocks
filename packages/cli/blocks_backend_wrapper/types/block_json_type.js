@@ -19,6 +19,7 @@ export type BlockJson = {|
     //   and try to come up with some automated migration for files that are missing `version`.
     version?: '1.0',
     frontendEntry: string,
+    frontendTestingEntry?: string,
     routes?: Array<BackendRoute>,
     // Array of glob patterns for files/directories to ignore when building the block
     ignored?: Array<string>,

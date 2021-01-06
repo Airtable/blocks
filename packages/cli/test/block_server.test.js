@@ -2,6 +2,7 @@
 const BlockServer = require('../src/server/block_server');
 const BlockBuilder = require('../src/builder/block_builder');
 const BlockBuildTypes = require('../src/types/block_build_types');
+const {Environments} = require('../src/types/block_json_type');
 const sinon = require('sinon');
 const clipboardy = require('clipboardy');
 const path = require('path');
@@ -74,6 +75,7 @@ describe('BlockServer', function() {
                 apiKey: 'key123',
                 shouldBackendSdkBypassCache: false,
                 blockDevCredentialsPath: null,
+                environment: Environments.DEVELOPMENT,
             });
 
             sinon

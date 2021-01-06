@@ -22,9 +22,10 @@ const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_r
 const setRequestIdMiddleware = require('./set_request_id_middleware');
 const clipboardy = require('clipboardy');
 const BlockServerBackendProcessManager = require('./block_server_backend_process_manager');
+const {Environments} = require('../types/block_json_type');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
-import type {BlockJson} from '../types/block_json_type';
+import type {BlockJson, Environment} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {PromiseResolveFunction, PromiseRejectFunction} from '../types/promise_types';
@@ -50,6 +51,7 @@ class BlockServer {
     _blockServerUrlIfExists: string | null;
     _apiClient: ApiClient;
     _blockBuilder: BlockBuilder;
+    _environment: Environment;
     _backenedProcessManager: BlockServerBackendProcessManager;
 
     constructor(args: {
@@ -58,12 +60,14 @@ class BlockServer {
         blockDevCredentialsPath: string | null,
         shouldBackendSdkBypassCache: boolean,
         backendSdkBaseUrl?: string | null,
+        environment: Environment,
     }) {
         const {
             blockBuilder,
             apiKey,
             blockDevCredentialsPath,
             backendSdkBaseUrl,
+            environment,
             shouldBackendSdkBypassCache,
         } = args;
 
@@ -76,6 +80,7 @@ class BlockServer {
         this._blockJson = this._blockBuilder.blockJson;
         this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
+        this._environment = environment;
         this._backenedProcessManager = new BlockServerBackendProcessManager({
             blockJson: this._blockJson,
             remoteJson: this._remoteJson,
@@ -343,30 +348,38 @@ class BlockServer {
             type: () => true,
             limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT,
         });
+        const indexMarkup =
+            this._environment === Environments.TESTING
+                ? `
+            <!doctype html>
+            <head>
+                <script src="__runFrame/bundle.js"></script>
+            </head>
+            <body>
+                <script>${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}();</script>
+            </body>
+            `
+                : `
+            <!doctype html>
+            <body>
+                <style>
+                body {
+                    font-family: system-ui;
+                    padding: 24px;
+                    font-size: 18px;
+                }
+                </style>
+                <div style="font-size: 36px; margin: 0">🎉</div>
+                <p>Your block is running!</p>
+                <p>Go to your <a href="https://airtable.com/${this._remoteJson.baseId}">Airtable base</a> to build your block.</p>
+            </body>
+            `;
         // TODO(richsinn): Add URL to instructions or docs?
         this._expressApp.get(
             '/',
             textBodyParser,
             this._backenedProcessManager.tryForwardRequestToBackendProcessMiddleware(),
-            (req: $Request, res: $Response) => {
-                res.send(
-                    `
-                    <!doctype html>
-                    <body>
-                        <style>
-                        body {
-                            font-family: system-ui;
-                            padding: 24px;
-                            font-size: 18px;
-                        }
-                        </style>
-                        <div style="font-size: 36px; margin: 0">🎉</div>
-                        <p>Your block is running!</p>
-                        <p>Go to your <a href="https://airtable.com/${this._remoteJson.baseId}">Airtable base</a> to build your block.</p>
-                    </body>
-                `,
-                );
-            },
+            (req: $Request, res: $Response) => res.send(indexMarkup),
         );
         this._expressApp.all(
             '*',
@@ -375,6 +388,8 @@ class BlockServer {
         );
     }
     _validateBlockDirectory() {
+        const entryAttr =
+            this._environment === Environments.TESTING ? 'frontendTestingEntry' : 'frontendEntry';
         const blockDirPath = this._blockDirPath;
 
         // Check if the node_modules directory exists.
@@ -387,13 +402,23 @@ class BlockServer {
             process.exit(1);
         }
         // Get the block entry point filepath.
-        const frontendEntryFilePath = path.join(blockDirPath, this._blockJson.frontendEntry);
+        if (!(entryAttr in this._blockJson)) {
+            console.log(
+                `The '${entryAttr}' property is required by ${this._environment} environments, but it is not present in ${blockCliConfigSettings.BLOCK_FILE_NAME}`,
+            );
+        }
+        const entryFileName = this._blockJson[entryAttr];
+        invariant(
+            entryFileName,
+            `The ${entryAttr} attribute must be specified for ${this._environment} environments`,
+        );
+        const frontendEntryFilePath = path.join(blockDirPath, entryFileName);
 
         // Check if frontendEntryModule exists.
         const frontendEntryFileExists = fs.existsSync(frontendEntryFilePath);
         if (!frontendEntryFileExists) {
             console.log(
-                `The 'frontendEntry' file at ${frontendEntryFilePath} does not exist. Please check your 'frontendEntry' attribute in ${blockCliConfigSettings.BLOCK_FILE_NAME}`,
+                `The '${entryAttr}' file at ${frontendEntryFilePath} does not exist. Please check your '${entryAttr}' attribute in ${blockCliConfigSettings.BLOCK_FILE_NAME}`,
             );
             process.exit(1);
         }
@@ -425,7 +450,7 @@ class BlockServer {
         this._blockBuilder.blockBuilderJobQueue.on('error', err => {
             throw err;
         });
-        await this._blockBuilder.buildAndWatchAsync();
+        await this._blockBuilder.buildAndWatchAsync(this._environment);
         await this._backenedProcessManager.waitForRestartsAsync();
 
         console.log(chalk.bold(`\n✅ Your block is running locally at ${url} `));

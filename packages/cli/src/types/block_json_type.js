@@ -13,3 +13,11 @@
 //   keep blocks-backend-wrapper as independent as possible and keep any shared
 //   code in blocks-backend-wrapper.
 export * from '../../blocks_backend_wrapper/types/block_json_type';
+
+export const Environments = {
+    PRODUCTION: ('production': 'production'),
+    DEVELOPMENT: ('development': 'development'),
+    TESTING: ('testing': 'testing'),
+};
+
+export type Environment = $Values<typeof Environments>;
