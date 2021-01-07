@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.5...HEAD)
 
-No changes.
+-   Fix crash when deleting views.
+-   Add BaseProvider to allow rendering Components outside of the App's React tree
 
 ## [1.2.5](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.4...@airtable/blocks@1.2.5) - 2020-12-10
 
