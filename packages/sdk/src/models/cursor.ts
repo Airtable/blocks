@@ -57,7 +57,7 @@ interface CursorData {
  *
  *      return (
  *          <div>
- *              Active table: {cursor.activeTableId)}
+ *              Active table: {cursor.activeTableId}
  *              Active view: {cursor.activeViewId}
  *          </div>
  *      );
