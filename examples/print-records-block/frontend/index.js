@@ -98,7 +98,7 @@ function Record({record}) {
 
     return (
         <Box marginY={3}>
-            <Heading>{record.primaryCellValueAsString}</Heading>
+            <Heading>{record.name}</Heading>
             <table style={{borderCollapse: 'collapse', width: '100%'}}>
                 <thead>
                     <tr>
@@ -146,9 +146,7 @@ function Record({record}) {
                                     </Box>
                                 </td>
                                 <td style={{width: '50%'}}>
-                                    <Text marginRight={3}>
-                                        {linkedRecord.primaryCellValueAsString}
-                                    </Text>
+                                    <Text marginRight={3}>{linkedRecord.name}</Text>
                                 </td>
                                 <td style={{width: '50%'}}>
                                     <CellRenderer
