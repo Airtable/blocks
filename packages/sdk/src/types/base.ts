@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {AppInterface} from '../types/airtable_interface';
 import {ObjectMap} from '../private_utils';
+import {AppInterface} from './airtable_interface';
 import {PermissionLevel} from './permission_levels';
 import {TableData, TablePermissionData, TableId} from './table';
 import {CursorData} from './cursor';

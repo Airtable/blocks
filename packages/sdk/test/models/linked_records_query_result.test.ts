@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import {__reset, __sdk as sdk} from '../../src';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';

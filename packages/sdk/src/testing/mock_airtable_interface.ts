@@ -1,4 +1,4 @@
-import {AggregatorKey} from '../../src/types/aggregators';
+import {AggregatorKey} from '../types/aggregators';
 import {
     AggregatorConfig,
     Aggregators,
@@ -12,35 +12,22 @@ import {
     PartialViewData,
     IdGenerator,
     VisList,
-} from '../../src/types/airtable_interface';
-import {cloneDeep, ObjectMap} from '../../src/private_utils';
-import {spawnError} from '../../src/error_utils';
-import {FieldData, FieldId} from '../../src/types/field';
-import {ModelChange} from '../../src/types/base';
-import {RecordData, RecordId} from '../../src/types/record';
-import {TableId} from '../../src/types/table';
-import {ViewId} from '../../src/types/view';
-import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
-import {NormalizedSortConfig} from '../../src/models/record_query_result';
-import {RequestJson, ResponseJson} from '../../src/types/backend_fetch_types';
-import {CursorData} from '../../src/types/cursor';
-import {RecordActionData} from '../../src/types/record_action_data';
-import projectTrackerData from './project_tracker';
-import linkedRecordsData from './linked_records';
+} from '../types/airtable_interface';
+import {cloneDeep, ObjectMap} from '../private_utils';
+import {spawnError} from '../error_utils';
+import {FieldData, FieldId} from '../types/field';
+import {ModelChange} from '../types/base';
+import {RecordData, RecordId} from '../types/record';
+import {TableId} from '../types/table';
+import {ViewId} from '../types/view';
+import {Mutation, PermissionCheckResult} from '../types/mutations';
+import {NormalizedSortConfig} from '../models/record_query_result';
+import {RequestJson, ResponseJson} from '../types/backend_fetch_types';
+import {CursorData} from '../types/cursor';
+import {RecordActionData} from '../types/record_action_data';
 const EventEmitter = require('events');
 
-const resetSpies = (target: {[key: string]: any}, names: string[]) => {
-    for (const name of names) {
-        if (jest.isMockFunction(target[name])) {
-            target[name].mockRestore();
-        }
-
-        if (typeof target[name] === 'function') {
-            jest.spyOn(target as any, name);
-        }
-    }
-};
-
+/** @internal */
 const aggregators: Aggregators = {
     aggregate(
         appInterface: AppInterface,
@@ -73,6 +60,7 @@ const aggregators: Aggregators = {
     },
 };
 
+/** @internal */
 const fieldTypeProvider: FieldTypeProvider = {
     isComputed(fieldData: FieldData) {
         return false;
@@ -124,6 +112,7 @@ const fieldTypeProvider: FieldTypeProvider = {
     },
 };
 
+/** @internal */
 const urlConstructor: UrlConstructor = {
     getTableUrl(tableId) {
         return `https://airtable.test/${tableId}`;
@@ -139,6 +128,7 @@ const urlConstructor: UrlConstructor = {
     },
 };
 
+/** @internal */
 const globalConfigHelpers: GlobalConfigHelpers = {
     validatePath(path, store) {
         return {isValid: true};
@@ -148,18 +138,15 @@ const globalConfigHelpers: GlobalConfigHelpers = {
     },
 };
 
+/** @internal */
 const idGenerator: IdGenerator = {
     generateRecordId: () => 'recGeneratedMockId',
     generateFieldId: () => 'fldGeneratedMockId',
     generateTableId: () => 'tblGeneratedMockId',
 };
 
+/** @internal */
 class MockAirtableInterface extends EventEmitter implements AirtableInterface {
-    aggregators = aggregators as jest.Mocked<Aggregators>;
-    fieldTypeProvider = fieldTypeProvider as jest.Mocked<FieldTypeProvider>;
-    urlConstructor = urlConstructor as jest.Mocked<UrlConstructor>;
-    globalConfigHelpers = globalConfigHelpers as jest.Mocked<GlobalConfigHelpers>;
-    idGenerator = idGenerator as jest.Mocked<IdGenerator>;
     sdkInitData!: SdkInitData;
 
     private _initData: SdkInitData;
@@ -170,30 +157,35 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         this.reset();
     }
 
-    static projectTrackerExample() {
-        return new MockAirtableInterface(projectTrackerData) as jest.Mocked<MockAirtableInterface>;
-    }
-
-    static linkedRecordsExample() {
-        return new MockAirtableInterface(linkedRecordsData) as jest.Mocked<MockAirtableInterface>;
-    }
-
     /**
      * Revert the mock interface to its initial state. This includes:
      *
      * - removing all event listeners
      * - restoring the database schema
-     * - recreating the Jest "spies" for every instance method
      */
     reset() {
         this.removeAllListeners();
         this.sdkInitData = cloneDeep(this._initData);
+    }
 
-        resetSpies(this, Object.getOwnPropertyNames(MockAirtableInterface.prototype));
-        resetSpies(this.fieldTypeProvider, Object.keys(this.fieldTypeProvider));
-        resetSpies(this.urlConstructor, Object.keys(this.urlConstructor));
-        resetSpies(this.globalConfigHelpers, Object.keys(this.globalConfigHelpers));
-        resetSpies(this.idGenerator, Object.keys(this.idGenerator));
+    get aggregators() {
+        return aggregators;
+    }
+
+    get fieldTypeProvider() {
+        return fieldTypeProvider;
+    }
+
+    get urlConstructor() {
+        return urlConstructor;
+    }
+
+    get globalConfigHelpers() {
+        return globalConfigHelpers;
+    }
+
+    get idGenerator() {
+        return idGenerator;
     }
 
     assertAllowedSdkPackageVersion() {}
@@ -214,15 +206,13 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         fieldDatas: Array<FieldData>,
         sorts: Array<NormalizedSortConfig>,
     ): VisList {
-        const visList = ({
+        return {
             removeRecordIds(recordIds: Array<RecordId>) {},
             addRecordData(recordData: RecordData) {},
             getOrderedRecordIds() {
                 return recordDatas.map(({id}) => id);
             },
-        } as unknown) as jest.Mocked<VisList>;
-        resetSpies(visList, Object.keys(visList));
-        return visList;
+        };
     }
 
     subscribeToModelUpdates(fn: Function) {
@@ -275,7 +265,7 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     unsubscribeFromCellValuesInFields() {}
     unsubscribeFromViewData() {}
 
-    expandRecord() {
+    expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null) {
         throw spawnError('expandRecord unimplemented');
     }
     expandRecordList() {
@@ -307,6 +297,8 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     }
     trackEvent() {
         throw spawnError('trackEvent unimplemented');
+    }
+    trackExposure() {
     }
     sendStat() {
         throw spawnError('sendStat unimplemented');

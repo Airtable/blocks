@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,
@@ -37,4 +37,7 @@ describe('ui entry point', () => {
     test('TextButton', () => run('TextButton'));
     test('Text', () => run('Text'));
     test('Tooltip', () => run('Tooltip'));
+    test('loadCSSFromString', () => run('loadCSSFromString'));
+    test('loadCSSFromURLAsync', () => run('loadCSSFromURLAsync'));
+    test('loadScriptFromURLAsync', () => run('loadScriptFromURLAsync'));
 });

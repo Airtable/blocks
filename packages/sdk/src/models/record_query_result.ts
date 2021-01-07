@@ -703,9 +703,11 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
                 recordColorMode.selectField.unwatch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                this._recordStore
-                    .getViewDataStore(recordColorMode.view.id)
-                    .unwatch('recordColors', handler);
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore
+                        .getViewDataStore(recordColorMode.view.id)
+                        .unwatch('recordColors', handler);
+                }
                 break;
             }
             default:
@@ -751,7 +753,9 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
             case RecordColorModeTypes.BY_SELECT_FIELD:
                 return;
             case RecordColorModeTypes.BY_VIEW:
-                this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                }
                 break;
             default:
                 throw spawnUnknownSwitchCaseError(

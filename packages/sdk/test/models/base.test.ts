@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import Base from '../../src/models/base';
@@ -21,6 +21,12 @@ describe('Base', () => {
         mockAirtableInterface.reset();
         sdk = new Sdk(mockAirtableInterface);
         base = sdk.base;
+    });
+
+    describe('__sdk', () => {
+        it('exposes its instance', () => {
+            expect(base.__sdk).toBe(sdk);
+        });
     });
 
     describe('tables', () => {

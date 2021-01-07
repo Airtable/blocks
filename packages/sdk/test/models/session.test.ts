@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import {UserId} from '../../src/types/collaborator';
 import {PermissionLevel, PermissionLevels} from '../../src/types/permission_levels';
 import {
@@ -387,6 +387,15 @@ describe('Session', () => {
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy).toHaveBeenCalledWith(session, 'currentUser');
             });
+        });
+    });
+
+    describe('#__isFeatureEnabled', () => {
+        it('tracks exposure with AirtableInterface', () => {
+            const session = create({enabledFeatureNames: ['testFeature']});
+            session.__isFeatureEnabled('testFeature');
+            expect(mockAirtableInterface.trackExposure).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.trackExposure).toHaveBeenLastCalledWith('testFeature');
         });
     });
 });

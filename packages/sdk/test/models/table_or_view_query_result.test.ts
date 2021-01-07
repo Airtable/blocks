@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import Base from '../../src/models/base';
 import {waitForWatchKeyAsync} from '../test_helpers';
 import {__reset, __sdk as sdk} from '../../src';
@@ -884,6 +884,29 @@ describe('TableOrViewQueryResult', () => {
                 );
             });
 
+            it('unloads record data from deleted view', async () => {
+                const view = base.tables[1].views[0];
+                const result = await view.selectRecordsAsync();
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['viewOrder'],
+                        value: [],
+                    },
+                    {
+                        path: ['tablesById', 'tblTasks', 'viewsById', view.id],
+                        value: undefined,
+                    },
+                ]);
+                result.unloadData();
+
+                await waitForWatchKeyAsync(result, 'isDataLoaded');
+
+                expect(() => result.records).toThrowErrorMatchingInlineSnapshot(
+                    `"RecordQueryResult's underlying view has been deleted"`,
+                );
+            });
+
             it('tolerates unnecessary invocations', async () => {
                 const result = base.tables[1].views[0].selectRecords();
                 const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
@@ -983,6 +1006,18 @@ describe('TableOrViewQueryResult', () => {
                 changeByView(base.tables[0], view, 'red orange');
                 expect(spy.mock.calls.length).toBe(1);
 
+                result.unwatch('recordColors', spy);
+                result.watch('recordColors', spy);
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblDesignProjects', 'viewOrder'],
+                        value: [],
+                    },
+                    {
+                        path: ['tablesById', 'tblDesignProjects', 'viewsById', view.id],
+                        value: undefined,
+                    },
+                ]);
                 result.unwatch('recordColors', spy);
                 changeByView(base.tables[0], view, 'orange red');
 

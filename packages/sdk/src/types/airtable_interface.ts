@@ -1,24 +1,24 @@
 import {ObjectMap} from '../private_utils';
-import {Stat} from '../types/stat';
-import {AggregatorKey} from '../types/aggregators';
-import {BaseData, BasePermissionData, ModelChange} from '../types/base';
-import {BlockInstallationId} from '../types/block';
-import {CursorData} from '../types/cursor';
-import {FieldData, FieldId, FieldType} from '../types/field';
-import {RecordActionData, RecordActionDataCallback} from '../types/record_action_data';
+import {NormalizedSortConfig} from '../models/record_query_result';
+import {Stat} from './stat';
+import {AggregatorKey} from './aggregators';
+import {BaseData, BasePermissionData, ModelChange} from './base';
+import {BlockInstallationId} from './block';
+import {CursorData} from './cursor';
+import {FieldData, FieldId, FieldType} from './field';
+import {RecordActionData, RecordActionDataCallback} from './record_action_data';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
     GlobalConfigPath,
     GlobalConfigPathValidationResult,
-} from '../types/global_config';
-import {RecordData, RecordId} from '../types/record';
-import {UndoRedoMode} from '../types/undo_redo';
-import {ViewportSizeConstraint} from '../types/viewport';
-import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutations';
-import {TableId} from '../types/table';
-import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from '../types/view';
-import {NormalizedSortConfig} from '../models/record_query_result';
+} from './global_config';
+import {RecordData, RecordId} from './record';
+import {UndoRedoMode} from './undo_redo';
+import {ViewportSizeConstraint} from './viewport';
+import {Mutation, PartialMutation, PermissionCheckResult} from './mutations';
+import {TableId} from './table';
+import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from './view';
 import {RequestJson, ResponseJson} from './backend_fetch_types';
 
 /** @hidden */
@@ -264,5 +264,6 @@ export interface AirtableInterface {
      * internal utils
      */
     trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown}): void;
+    trackExposure(featureName: string): void;
     sendStat(stat: Stat): void;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
 import {initializeBlock} from '../../src/ui/ui';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;

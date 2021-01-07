@@ -200,9 +200,21 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         return this.checkPermissionsForDeleteRecords().hasPermission;
     }
     /**
+     * Returns true if `featureName` is enabled and automatically tracks an exposure.
+     *
      * @internal
      */
     __isFeatureEnabled(featureName: string): boolean {
+        this._airtableInterface.trackExposure(featureName);
+        return this.__peekIfFeatureIsEnabled(featureName);
+    }
+
+    /**
+     * Returns true if `featureName` is enabled; does not track an exposure.
+     *
+     * @internal
+     */
+    __peekIfFeatureIsEnabled(featureName: string): boolean {
         return this._sessionData.enabledFeatureNames.includes(featureName);
     }
 

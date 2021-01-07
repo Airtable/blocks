@@ -2,6 +2,7 @@
 import GlobalAlert from './global_alert';
 import '../';
 
+export {default as BaseProvider} from './base_provider';
 export {default as colors} from '../colors';
 export {default as colorUtils} from '../color_utils';
 export {default as Synced} from './synced';
@@ -31,6 +32,7 @@ export {default as withHooks} from './with_hooks';
 export {default as useLoadable} from './use_loadable';
 export {useRecordIds, useRecords, useRecordById} from './use_records';
 export {default as useBase} from './use_base';
+export {default as useCursor} from './use_cursor';
 export {default as useSession} from './use_session';
 export {default as useSettingsButton} from './use_settings_button';
 export {default as useSynced} from './use_synced';

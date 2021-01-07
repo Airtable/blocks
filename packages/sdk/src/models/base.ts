@@ -77,6 +77,15 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
+     * Aliased to communicate stability for internal use by Sdk code.
+     *
+     * @internal
+     */
+    get __sdk(): Sdk {
+        return this._sdk;
+    }
+
+    /**
      * @internal
      */
     get _dataOrNullIfDeleted(): BaseData | null {
