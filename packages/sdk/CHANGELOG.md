@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.3.0...HEAD)
 
-No changes.
+-   **DEPRECATED:** importing the Base's Cursor instance from the main entrypoint, e.g.
+    `import {cursor} from '@airtable/blocks';`. Use the `useCursor` React Hook instead.
+-   **DEPRECATED:** importing the Base's Session instance from the main entrypoint, e.g.
+    `import {session} from '@airtable/blocks';`. Use the `useSession` React Hook instead.
 
 ## [1.3.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.5...@airtable/blocks@1.3.0) - 2021-01-07
 

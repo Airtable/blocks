@@ -334,7 +334,7 @@ const projectTracker: SdkInitData = {
             },
         },
         permissionLevel: 'create',
-        currentUserId: 'usrCurrent',
+        currentUserId: 'usrGalSamari',
         enabledFeatureNames: [],
         collaboratorsById: {
             usrGalSamari: {
@@ -401,7 +401,7 @@ const projectTracker: SdkInitData = {
                     'https://dl.airtable.com/profilePics/1Paw52jFSLa7vRHwxCRd_headshot-pink-2.png',
             },
         },
-        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrCurrent'],
+        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrGalSamari'],
         cursorData: null,
         billingPlanGrouping: 'pro',
         appInterface: {},

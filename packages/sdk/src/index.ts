@@ -9,16 +9,44 @@ import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 /** @internal */
 export let __sdk: Sdk;
 export let base: Sdk['base'];
-export let cursor: Sdk['cursor'];
 export let globalConfig: Sdk['globalConfig'];
 export let installationId: Sdk['installationId'];
 export let reload: Sdk['reload'];
 export let runInfo: Sdk['runInfo'];
-export let session: Sdk['session'];
 export let settingsButton: Sdk['settingsButton'];
 export let undoRedo: Sdk['undoRedo'];
 export let viewport: Sdk['viewport'];
 export let unstable_fetchAsync: Sdk['unstable_fetchAsync'];
+
+// The `cursor` binding is declared on the following line solely as a signal to
+// the TypeScript compiler. The exported value is actually controlled by the
+// subsequent CommonJS module property descriptor.
+export let cursor: Sdk['cursor'];
+Object.defineProperty(module.exports, 'cursor', {
+    enumerable: true,
+    get() {
+        warn(
+            '`import {cursor} from "@airtable/blocks"` is deprecated. Use `import {useCursor} from "@airtable/blocks/ui"` instead.',
+        );
+
+        return __sdk.cursor;
+    },
+});
+
+// The `session` binding is declared on the following line solely as a signal
+// to the TypeScript compiler. The exported value is actually controlled by the
+// subsequent CommonJS module property descriptor.
+export let session: Sdk['session'];
+Object.defineProperty(module.exports, 'session', {
+    enumerable: true,
+    get() {
+        warn(
+            '`import {session} from "@airtable/blocks"` is deprecated. Use `import {useSession} from "@airtable/blocks/ui"` instead.',
+        );
+
+        return __sdk.session;
+    },
+});
 
 Object.defineProperty(module.exports, 'UI', {
     enumerable: true,
@@ -48,12 +76,10 @@ export function __reset() {
 
     ({
         base,
-        cursor,
         globalConfig,
         installationId,
         reload,
         runInfo,
-        session,
         settingsButton,
         undoRedo,
         viewport,
