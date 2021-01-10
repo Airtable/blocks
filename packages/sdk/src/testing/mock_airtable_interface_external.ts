@@ -1,4 +1,9 @@
-import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
+import {
+    AppInterface,
+    BlockRunContextType,
+    SdkInitData,
+    PartialViewData,
+} from '../types/airtable_interface';
 import {BaseData, BaseId, ModelChange} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
 import {Mutation, MutationTypes, PermissionCheckResult} from '../types/mutations';
@@ -355,6 +360,7 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                     .filter(({isActive}) => isActive)
                     .map(({id}) => id),
             },
+            runContext: {type: BlockRunContextType.DASHBOARD_APP},
         };
 
         super(sdkInitData);

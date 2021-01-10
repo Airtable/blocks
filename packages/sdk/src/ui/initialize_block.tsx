@@ -3,6 +3,8 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {spawnError} from '../error_utils';
 import Sdk from '../sdk';
+import getAirtableInterface from '../injected/airtable_interface';
+import {BlockRunContextType} from '../types/airtable_interface';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;
@@ -42,12 +44,22 @@ function initializeBlock(getEntryElement: () => React.ReactNode) {
             'The first argument to initializeBlock should be a function returning a React element',
         );
     }
+
+    const airtableInterface = getAirtableInterface();
+    if (airtableInterface.sdkInitData.runContext.type !== BlockRunContextType.DASHBOARD_APP) {
+        // If this is called within a View, or other context we will silently return, _not_
+        // throw, because it's legal to have both initializeBlock and initializeView in a single block
+        // and only the correct context will actually render onto the DOM.
+        return;
+    }
+
     const entryElement = getEntryElement();
     if (!React.isValidElement(entryElement)) {
         throw spawnError(
             "The first argument to initializeBlock didn't return a valid React element",
         );
     }
+
     sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
 
     const container = document.createElement('div');
