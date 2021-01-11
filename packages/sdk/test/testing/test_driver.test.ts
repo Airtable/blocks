@@ -1,13 +1,16 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import TableOrViewQueryResult from '../../src/models/table_or_view_query_result';
 import {FieldType} from '../../src/types/field';
 import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
 import Sdk from '../../src/sdk';
 import {useSdk} from '../../src/ui/sdk_context';
+import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
 import TestDriver from '../../src/testing/test_driver';
 
 describe('MockAirtableInterface', () => {
+    let fixtureData: FixtureData;
     let testDriver: TestDriver;
 
     const triggerMutationAsync = () => {
@@ -15,7 +18,7 @@ describe('MockAirtableInterface', () => {
     };
 
     beforeEach(() => {
-        testDriver = new TestDriver({
+        fixtureData = {
             base: {
                 id: 'appTestFixtureDat',
                 name: 'Test Fixture Data Generation',
@@ -176,7 +179,8 @@ describe('MockAirtableInterface', () => {
                     },
                 ],
             },
-        });
+        };
+        testDriver = new TestDriver(fixtureData);
     });
 
     describe('#Container', () => {
@@ -205,6 +209,33 @@ describe('MockAirtableInterface', () => {
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
 
             expect(sdk).toBeInstanceOf(Sdk);
+        });
+    });
+
+    describe('constructor', () => {
+        it('provides distinct records', async () => {
+            function read(result: TableOrViewQueryResult) {
+                return result.records.map(record => ({
+                    id: record.id,
+                    fldName: record.getCellValue('fldName'),
+                }));
+            }
+
+            // This test intentionally re-uses the same fixture data object to
+            // create a second TestDriver instance because doing so models how
+            // consumers are expected to use the library (e.g. by organizing
+            // the lengthy fixture data into dedicated JavaScript modules,
+            // importing them once, and reusing them multiple times).
+            const first = testDriver;
+            const second = new TestDriver(fixtureData);
+
+            const result1 = await first.base.getTable('Table 1').selectRecordsAsync();
+            await first.base.getTable('Table 1').updateRecordAsync('reca', {fldName: 'new value'});
+
+            expect(read(result1)[0]).toEqual({id: 'reca', fldName: 'new value'});
+
+            const result2 = await second.base.getTable('Table 1').selectRecordsAsync();
+            expect(read(result2)[0]).toEqual({id: 'reca', fldName: 'a'});
         });
     });
 

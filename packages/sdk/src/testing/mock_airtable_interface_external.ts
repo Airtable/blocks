@@ -4,7 +4,7 @@ import {CollaboratorData} from '../types/collaborator';
 import {Mutation, PermissionCheckResult} from '../types/mutations';
 import {TestMutation, TestMutationTypes} from '../types/test_mutations';
 import {RecordData, RecordId} from '../types/record';
-import {has, keyBy, ObjectMap} from '../private_utils';
+import {cloneDeep, has, keyBy, ObjectMap} from '../private_utils';
 import {CursorData} from '../types/cursor';
 import {TableId} from '../types/table';
 import {FieldData, FieldId, FieldType} from '../types/field';
@@ -242,7 +242,11 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     _recordDataStore: RecordDataStore;
     _userPermissionCheck?: (mutation: Mutation) => boolean;
 
-    constructor(fixtureData: FixtureData) {
+    constructor(unsafeFixtureData: FixtureData) {
+        // Cloning the input data ensures that each instance has a fully
+        // distinct internal state even when created with the same object
+        // value.
+        const fixtureData = cloneDeep(unsafeFixtureData);
         const store: RecordDataStore = {
             tables: {},
             views: {},
