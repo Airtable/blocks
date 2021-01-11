@@ -6,9 +6,14 @@
     "license": "MIT",
     "scripts": {
         "airbuild": "cd ../../packages/sdk && yarn build && cd - && yarn test",
-        "lint": "eslint frontend",
+        "cypress": "cypress run",
+        "lint": "eslint frontend test cypress",
         "start-testing": "../../packages/cli/bin/block run --testing",
-        "test": "yarn lint && yarn jest"
+        "test": "npm run lint && npm run test:jsdom",
+        "test:cypress": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000/__runFrame/bundle.js cypress",
+        "test:jsdom": "jest --testMatch '**/*.jsdom.test.jsx'",
+        "test:webdriver": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000/__runFrame/bundle.js webdriver",
+        "webdriver": "jest --env node --testMatch '**/*.webdriver.test.js'"
     },
     "dependencies": {
         "@airtable/blocks": "^1.2.5",
@@ -16,12 +21,19 @@
         "react-dom": "^16.9.0"
     },
     "devDependencies": {
+        "@testing-library/cypress": "^7.0.3",
+        "@testing-library/dom": "^7.29.0",
         "@testing-library/jest-dom": "^5.11.6",
         "@testing-library/react": "^11.2.2",
         "@testing-library/user-event": "^12.5.0",
+        "core-js": "^3.8.1",
+        "cypress": "^6.2.0",
         "eslint": "^6.3.0",
         "eslint-plugin-react": "^7.14.3",
         "eslint-plugin-react-hooks": "^2.0.1",
-        "jest": "^26.6.3"
+        "geckodriver": "^1.21.1",
+        "jest": "^26.6.3",
+        "selenium-webdriver": "^4.0.0-alpha.8",
+        "start-server-and-test": "^1.11.6"
     }
 }

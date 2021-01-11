@@ -5,7 +5,7 @@ import TestDriver from '@airtable/blocks/unstable_testing';
 import recordListFixture from './fixtures/simple_record_list';
 import TodoApp from '../frontend/todo-app';
 
-const testDriver = new TestDriver(recordListFixture);
+window.testDriver = new TestDriver(recordListFixture);
 
 ReactDOM.render(
     <testDriver.Container>
