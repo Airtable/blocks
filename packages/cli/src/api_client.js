@@ -142,6 +142,7 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
 
     async startBuildAsync(
         hasBackend: boolean,
+        originalRemoteJson: RemoteJson | null,
     ): Promise<{
         buildId: BuildId,
         frontendBundleUploadUrl: string,
@@ -155,7 +156,15 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
             },
-            body: {hasBackend},
+            body: {
+                hasBackend,
+                originalRemoteJson: !!originalRemoteJson
+                    ? {
+                          blockId: originalRemoteJson.blockId,
+                          baseId: originalRemoteJson.baseId,
+                      }
+                    : null,
+            },
             json: true,
         };
         const response = await request.postAsync(options);

@@ -20,6 +20,7 @@ const {ROLLBAR_ACCESS_TOKEN} = require('../config/block_cli_config_settings');
 import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
 import {getBlockDirPath} from '../helpers/get_block_dir_path';
+import type {RemoteJson} from '../types/remote_json_type';
 
 type BuildId = string;
 type DeployId = string;
@@ -142,6 +143,7 @@ async function _createDeployAndWaitUntilCompletionAsync(
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockBuilder: BlockBuilder,
+    originalRemoteJson: RemoteJson | null,
 ): Promise<{|
     buildId: BuildId,
     deployId: DeployId | null,
@@ -164,7 +166,7 @@ Failed to build the block code!`);
         buildId,
         frontendBundleS3UploadInfo,
         backendDeploymentPackageS3UploadInfo,
-    } = await apiClient.startBuildAsync(hasBackend);
+    } = await apiClient.startBuildAsync(hasBackend, originalRemoteJson);
 
     try {
         console.log('uploading build artifacts');
@@ -260,6 +262,18 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         uploadSourceMapsToRollbar,
     });
 
+    // Also parse the original remote json in order to log metrics
+    let originalRemoteJson = null;
+    if (remoteName !== null) {
+        const parseOriginalRemoteResult = await parseAndValidateRemoteJsonAsync(null);
+        // keeping the original remote file isn't required, so we treat this case as the current block being the original
+        if (parseOriginalRemoteResult.err) {
+            originalRemoteJson = remoteJson;
+        } else {
+            originalRemoteJson = parseOriginalRemoteResult.value;
+        }
+    }
+
     try {
         console.log('building');
         const {
@@ -267,7 +281,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             deployId,
             frontendBundleSourceMapPath,
             s3BundleKey,
-        } = await _buildAndDeployAsync(apiClient, blockBuilder);
+        } = await _buildAndDeployAsync(apiClient, blockBuilder, originalRemoteJson);
 
         if (uploadSourceMapsToRollbar) {
             const gitHash = await getGitHashAsync(getBlockDirPath());
