@@ -9,6 +9,7 @@
     },
     "scripts": {
         "airbuild": "yarn run test",
+        "ci": "yarn run test",
         "pretest": "flow",
         "test": "TZ=utc jest",
         "test:watch": "TZ=utc jest --watch"

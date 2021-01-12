@@ -6,6 +6,7 @@
     "private": true,
     "scripts": {
         "airbuild": "echo 'no airbuild configured'",
+        "ci": "echo 'no ci configured'",
         "test": "echo 'no tests configured'"
     },
     "devDependencies": {

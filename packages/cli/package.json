@@ -9,6 +9,7 @@
     "license": "UNLICENSED",
     "scripts": {
         "airbuild": "yarn run test",
+        "ci": "yarn run test",
         "lint": "eslint .",
         "flow": "flow",
         "clean": "rm -rf transpiled node_modules",

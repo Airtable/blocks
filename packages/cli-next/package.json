@@ -67,6 +67,7 @@
     "repository": "packages/cli-next",
     "scripts": {
         "airbuild": "yarn run pack:typescript && yarn run posttest",
+        "ci": "yarn run pack:typescript && yarn run posttest",
         "pack:typescript": "rm -rf lib && tsc -b",
         "postpack": "rm -f oclif.manifest.json",
         "posttest": "eslint . --ext .ts --config .eslintrc.js",

@@ -1,0 +1,133 @@
+
+pipeline {
+    agent {
+        docker {
+            image 'node:lts-buster'
+            // TODO(philip): Migrate to a different worker.
+            // FIXME_CICD
+            label 'master'
+        }
+    }
+
+    stages {
+        stage('Blocks-sdk tests') {
+            steps {
+                script {
+                    // Tells a lambda to post to a Phabricator diff, to set a link to this Jenkins job.
+                    postBackToPhabricatorIfNecessary("pending");
+                }
+                sshagent(['github2']) {
+                    sh '''
+                    set -eu
+                    printenv
+                    yarn --version
+                    node --version
+                    mkdir -p ~/.ssh
+                    echo github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ== >> ~/.ssh/known_hosts
+                    yarn install
+                    yarn ci
+                    '''
+                }
+            }
+            post {
+                unsuccessful {
+                    slackSend(
+                        // FIXME_CICD
+                        // channel: "#team-ecosystem-dev-feed",
+                        channel: "#doug-alerts",
+                        message: "Blocks-sdk CI build failed on branch ${env.GIT_BRANCH}. See <${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
+                        tokenCredentialId: 'slack-oauth-token2',
+                        color: 'danger',
+                    );
+                }
+                always {
+                    // Post status before doing any other processing, to get these updates out ASAP.
+                    postBackToPhabricatorIfNecessary(getTerminalResultForPhacilityAndSlack());
+                    // notifySlack();
+
+                    // FIXME_CICD If this is uncommented, the test blows up since the xml files don't exist.
+                    // Are there any other test results file that we want to do something with? 
+                    // junit testResults: "ci/test-results-*.xml", keepLongStdio: true;
+                    cleanWs();
+                }
+            }
+        }
+    }
+}
+
+
+def getTerminalResultForPhacilityAndSlack() {
+    def resultForPhacility = 'failed';
+    if (currentBuild.currentResult == 'SUCCESS' || currentBuild.currentResult == 'UNSTABLE') {
+        resultForPhacility = 'passed';
+    }
+    return resultForPhacility;
+}
+
+// FIXME_CICD do users of blocks-sdk want this customized logic?
+// def notifySlack() {
+//     def resultForPhacilityAndSlack = getTerminalResultForPhacilityAndSlack();
+//     try {
+//         def channelsToNotify = [];
+//         // Send a notification to a channel that Prod Eng (and other interested parties) can monitor.
+//         channelsToNotify.add('#jenkins-feed');
+//         // FIXME_CICD use some constants
+//         if (env.JOB_NAME == 'hyperbase-master' && resultForPhacilityAndSlack == 'failed') {
+//             // When master fails, send it to a channel that all of engineering is a member of.
+//             channelsToNotify.add('#dev-jenkins');
+//         }
+//         channelsToNotify.each {
+//             // In Slack, the Jenkins app configuration is here: https://h.slack.com/services/B01DK46MT5Y?added=1
+//             // In Jenkins, the configuration instructions are: https://www.baeldung.com/jenkins-slack-integration and https://plugins.jenkins.io/slack/
+//             def slackColor = resultForPhacilityAndSlack == 'passed' ? 'good' : 'danger';
+//             // Guard against commitSha not being set.
+//             def shaShort = commitSha.length() >= 8 ? commitSha[0..7] : commitSha;
+//             slackSend(
+//                 channel: "${it}",
+//                 message: "*Tests have ${resultForPhacilityAndSlack} on <https://github.com/Hyperbase/hyperbase/tree/${commitSha}|${branch} (${shaShort})> *\n<${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
+//                 color: slackColor,
+//                 tokenCredentialId: 'slack-oauth-token2'
+//             );
+//         }
+//     } catch (Exception e) {
+//         // This post block should continue processing even if there's a failure in this method.
+//         // FIXME_CID add stack trace to the output, otherwise it may be hard to determine which line threw it
+//         print "Suppressed error when posting to Slack: ${e}"
+//     }
+// }
+
+// Note: this script block runs on a Jenkins instance that does NOT have a checkout of a branch, so the logic needs to be contained in this Jenkinsfile as opposed to e.g. a script in the branch.
+// Note: this Jenkinsfile is called by at least three Jenkins jobs: "hyperbase-ad-hoc", "hyperbase-master", and "hyperbase-phacility"
+// Note: why didn't I use the Phabricator-Jenkins plugin (https://github.com/uber/phabricator-jenkins-plugin)? The main reason is that it doesn't support Groovy Pipelines out of the box
+//       (i.e. this type of job). I found some plausible set up instructions buried in a github thread: https://github.com/uber/phabricator-jenkins-plugin/issues/198#issuecomment-646132563
+//       but my intuition is that there will be other significant challenges to using the plugin. So I'm going to continue using our existing lambdas.
+//       Arguably continuing to use lambdas have worse tradeoffs (they're nearly impossible for engineers to inspect; they're very cumbersome to test and deploy)
+//       However, we can revisit this decision later, since this component can be swapped out.
+// FIXME_CICD: consider loading logic from separate Jenkins files, like in: https://github.com/ksuther/jenkins-jenkinsfile-include/blob/master/Jenkinsfile
+def postBackToPhabricatorIfNecessary(status) {
+    try {
+        // Report the build result to phacility.
+        // NOTE: this phid is the Harbormaster build target phid associated with this build run.
+        if (params.getOrDefault('PHID', false)) {
+            // Tells a lambda to post to a Phabricator diff, to set the status as of this job as "passed" or "failed"
+            sh """curl --silent --show-error --retry 4 --max-time 5 -XPOST 'https://airbuild.hyperbasedev.com/airbuildWebhook' \
+                    -H 'Content-Type: application/json' \
+                    -d '{
+                        \"sha\": \"${params.GIT_REF}\",
+                        \"automationSystem\": \"jenkins\",
+                        \"buildNumber\": ${currentBuild.number},
+                        \"failedBuildTailLogUrl\": null,
+                        \"diffId\": \"${params.DIFF_ID}\",
+                        \"phid\": \"${params.PHID}\",
+                        \"jenkinsJobName\": \"blocks-sdk-phabricator\",
+                        \"jenkinsStatus\": \"${status}\"
+                    }' \
+                    || echo 'Failed' to report to Phacility
+            """;        
+        }
+    } catch (Exception e) {
+        // This post block should continue processing even if there's a failure in this method
+        // FIXME_CID add stack trace to the output, otherwise it may be hard to determine which line threw it
+        print "Suppressed error when posting to Phacility: ${e}"
+    }
+}
