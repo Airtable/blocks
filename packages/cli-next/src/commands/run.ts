@@ -3,10 +3,14 @@ import _debug from 'debug';
 
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync} from '../manager/run';
+import {RunTaskConsumer} from '../tasks/run';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {findPortAsync} from '../helpers/find_port_async';
-import {createServer} from '../helpers/development_proxy_server';
+import {
+    createServerAsync,
+    DevelopmentProxyServerInterface,
+} from '../helpers/development_proxy_server';
 import {
     findAppConfigPathAsync,
     findAppDirectoryAsync,
@@ -17,11 +21,9 @@ import {mkdirpAsync} from '../helpers/system_extra';
 
 const debug = _debug('block-cli:command:run');
 
-type ResolvesTo<P extends Promise<any>> = P extends Promise<infer Value> ? Value : never;
-
 export default class Run extends AirtableCommand {
-    private _task?: ResolvesTo<ReturnType<typeof createRunTaskAsync>>;
-    private _devServer?: ReturnType<typeof createServer>;
+    private _task?: RunTaskConsumer;
+    private _devServer?: DevelopmentProxyServerInterface;
 
     static description = 'run the app locally';
 
@@ -64,15 +66,18 @@ export default class Run extends AirtableCommand {
         );
 
         // find our ports
-        const freePort = await findPortAsync(flags.port, {
+        const secureServerPort = await findPortAsync(flags.port, {
             adjacentPorts: 1,
         });
+        const serverPort = secureServerPort + 1;
 
         // start https server
-        const devServer = createServer();
+        const devServer = await createServerAsync({
+            serverPort,
+            secureServerPort,
+        });
         this._devServer = devServer;
-        const [port, securePort] = await devServer.listenAsync(freePort + 1, freePort);
-        debug('server bound to (http) %s and (https) %s', port, securePort);
+        debug('server bound to (http) %s and (https) %s', serverPort, secureServerPort);
 
         // fork runner process
         const task = await createRunTaskAsync(this.system);
@@ -117,10 +122,11 @@ export default class Run extends AirtableCommand {
         // get the port bundler is actually using
         const bundlerPort = await task.getDevServerPortAsync();
         // configure proxy
-        await devServer.proxyFrontendAsync(`localhost:${bundlerPort}`);
+        const devProxyServer = await devServer.proxyFrontendAsync(`localhost:${bundlerPort}`);
+        this._devServer = devProxyServer;
         debug('proxying to frontend bundler (http) %s', bundlerPort);
 
-        this.log(`Server listening at https://localhost:${securePort}`);
+        this.log(`Server listening at https://localhost:${secureServerPort}`);
 
         await new Promise<void>(resolve => {
             process.once('SIGINT', () => {

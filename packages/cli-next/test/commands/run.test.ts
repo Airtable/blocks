@@ -3,11 +3,12 @@ import {expect} from '@oclif/test';
 import * as findPortAsyncModule from '../../src/helpers/find_port_async';
 import * as developmentProxyServerModule from '../../src/helpers/development_proxy_server';
 import * as runModule from '../../src/manager/run';
+import {RunTaskConsumer} from '../../src/tasks/run';
 
 import {test} from '../mocks/test';
-import {RunTaskConsumer} from '../../lib/tasks/run';
 
-type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentProxyServerInterface;
+type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
+type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 
 async function stubCreateRunTaskAsync(): Promise<RunTaskConsumer> {
     let port: number;
@@ -26,11 +27,10 @@ async function stubCreateRunTaskAsync(): Promise<RunTaskConsumer> {
     };
 }
 
-class StubDevelopmentProxyServer implements DevelopmentProxyServerInterface {
-    async listenAsync(port: number, securePort: number): Promise<[number, number]> {
-        return [port, securePort];
+class StubDevelopmentProxyServer implements DevelopmentServerInterface {
+    async proxyFrontendAsync(remoteAddress: string): Promise<DevelopmentProxyServerInterface> {
+        return this;
     }
-    async proxyFrontendAsync(remoteAddress: string): Promise<void> {}
     async closeAsync() {}
 }
 
@@ -40,18 +40,10 @@ function stubCreateServer(): any {
 
 function stubFindPortAsync(stubOptions: {inUsePorts?: number[]; nextPort?: number} = {}): any {
     return async function(port?, portOptions?) {
-        if (stubOptions?.inUsePorts && stubOptions.inUsePorts.includes(port)) {
-            return stubOptions?.nextPort ?? 44444;
-        }
-        if (
-            portOptions &&
-            typeof portOptions.adjacentPorts === 'number' &&
-            portOptions.adjacentPorts > 0
-        ) {
-            for (let i = 0; i < portOptions.adjacentPorts; i++) {
-                if (stubOptions?.inUsePorts?.includes(port + i)) {
-                    return stubOptions?.nextPort ?? 55555;
-                }
+        const ports = Number(portOptions?.adjacentPorts) || 0;
+        for (let i = 0; i < ports + 1; i++) {
+            if (stubOptions?.inUsePorts?.includes(port + i)) {
+                return stubOptions?.nextPort ?? 44444;
             }
         }
         return port ?? 33333;
@@ -89,6 +81,19 @@ describe('run', () => {
         )
         .command(['run'])
         .it('finds next preferred port on checking in use port 9000', ctx => {
+            expect(ctx.stderr).to.contain('(https) 9002');
+            expect(ctx.stderr).to.contain('(http) 9003');
+        });
+
+    testRunCommand
+        .answer('Server listening', {signal: 'SIGINT'})
+        .stub(
+            findPortAsyncModule,
+            'findPortAsync',
+            stubFindPortAsync({inUsePorts: [9001], nextPort: 9002}),
+        )
+        .command(['run'])
+        .it('finds next preferred port on checking adjacent in use port 9001', ctx => {
             expect(ctx.stderr).to.contain('(https) 9002');
             expect(ctx.stderr).to.contain('(http) 9003');
         });
