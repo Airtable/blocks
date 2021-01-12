@@ -644,6 +644,12 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
         super.off(key, fn);
     }
 
+    /**
+     * This functionality is not relevant when testing outside of an authentic
+     * App frame. Expose a "no-op" to prevent runtime errors in call sites.
+     */
+    setFullscreenMaxSize() {}
+
     setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
         this._userPermissionCheck = check;
     }

@@ -707,4 +707,9 @@ describe('MockAirtableInterface', () => {
             });
         });
     });
+
+    it('#setFullscreenMaxSize', () => {
+        const ai = new MockAirtableInterface({base: smallBase});
+        expect(() => ai.setFullscreenMaxSize()).not.toThrowError();
+    });
 });
