@@ -10,7 +10,7 @@ import {useSdk} from '../../src/ui/sdk_context';
 import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
 import TestDriver from '../../src/testing/test_driver';
 
-describe('MockAirtableInterface', () => {
+describe('TestDriver', () => {
     let fixtureData: FixtureData;
     let testDriver: TestDriver;
 
