@@ -339,12 +339,14 @@ describe('TodoApp', () => {
         );
     });
 
-    // This test cannot pass because the SDK's `expandRecords` function relies
-    // on a global reference to AirtableInterface which cannot be controlled in
-    // the test environment.
-    it.skip('expands records upon click', async () => {
+    it('expands records upon click', async () => {
         await openAsync('Groceries', 'Grid view', 'Purchased');
+        const recordIds = [];
+        testDriver.watch('expandRecord', ({recordId}) => recordIds.push(recordId));
 
         userEvent.click(getItems()[0].link);
+        await waitFor(() => expect(recordIds.length).not.toBe(0));
+
+        expect(recordIds).toEqual(['reca']);
     });
 });

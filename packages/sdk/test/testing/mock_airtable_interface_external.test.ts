@@ -232,6 +232,30 @@ describe('MockAirtableInterface', () => {
         });
     });
 
+    describe('#expandRecord', () => {
+        it('emits an event with relevant data', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            const {recordId} = await new Promise(resolve => {
+                ai.on('expandRecord', resolve);
+                ai.expandRecord('tblTable1', 'recb', null);
+            });
+
+            expect(recordId).toBe('recb');
+        });
+
+        it('does not emit to function that has been unsubscribed', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            await new Promise((resolve, reject) => {
+                ai.on('expandRecord', reject);
+                ai.on('expandRecord', resolve);
+                ai.off('expandRecord', reject);
+                ai.expandRecord('tblTable1', 'recb', null);
+            });
+        });
+    });
+
     describe('#fetchAndSubscribeToCellValuesInFieldsAsync', () => {
         it('fails for unrecognized table IDs', async () => {
             const ai = new MockAirtableInterface({base: smallBase});

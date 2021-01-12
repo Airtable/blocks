@@ -120,6 +120,7 @@ function setGlobalConfigValue(
 /** @hidden */
 export interface WatchableKeysAndArgs {
     mutation: TestMutation;
+    expandRecord: {recordId: RecordId; recordIds: Array<RecordId> | null};
 }
 
 /**
@@ -494,6 +495,10 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
 
     emit<Key extends keyof WatchableKeysAndArgs>(key: Key, data: WatchableKeysAndArgs[Key]) {
         super.emit(key, data);
+    }
+
+    expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null) {
+        this.emit('expandRecord', {recordId, recordIds});
     }
 
     get fieldTypeProvider() {
