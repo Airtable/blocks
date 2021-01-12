@@ -348,9 +348,9 @@ class BlockServer {
             type: () => true,
             limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT,
         });
-        const indexMarkup =
-            this._environment === Environments.TESTING
-                ? `
+        const isTesting = this._environment === Environments.TESTING;
+        const indexMarkup = isTesting
+            ? `
             <!doctype html>
             <head>
                 <script src="__runFrame/bundle.js"></script>
@@ -359,7 +359,7 @@ class BlockServer {
                 <script>${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}();</script>
             </body>
             `
-                : `
+            : `
             <!doctype html>
             <body>
                 <style>
@@ -379,6 +379,10 @@ class BlockServer {
             '/',
             textBodyParser,
             this._backenedProcessManager.tryForwardRequestToBackendProcessMiddleware(),
+            // In testing environments, delay responses until the JavaScript
+            // bundle is ready. This allows consumers to use the availability
+            // of the index page as a signal to initiate automated tests.
+            ...(isTesting ? [this._ensureBundleIsReadyMiddleware()] : []),
             (req: $Request, res: $Response) => res.send(indexMarkup),
         );
         this._expressApp.all(

@@ -11,9 +11,9 @@
         "lint": "eslint frontend test cypress",
         "start-testing": "../../packages/cli/bin/block run --testing",
         "test": "npm run lint && npm run test:jsdom",
-        "test:cypress": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000/__runFrame/bundle.js cypress",
+        "test:cypress": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000 cypress",
         "test:jsdom": "jest --testMatch '**/*.jsdom.test.jsx'",
-        "test:webdriver": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000/__runFrame/bundle.js webdriver",
+        "test:webdriver": "START_SERVER_AND_TEST_INSECURE=1 start-server-and-test start-testing https://localhost:9000 webdriver",
         "webdriver": "jest --env node --testMatch '**/*.webdriver.test.js'"
     },
     "dependencies": {
