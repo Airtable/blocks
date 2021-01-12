@@ -1,7 +1,15 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
 import TestDriver from '@airtable/blocks/unstable_testing';
-import {render, screen, waitFor, getByRole, getByText} from '@testing-library/react';
+import {
+    render,
+    screen,
+    waitFor,
+    getByRole,
+    getAllByRole,
+    getByText,
+    getNodeText,
+} from '@testing-library/react';
 import recordListFixture from './fixtures/simple_record_list';
 import TodoApp from '../frontend/todo-app';
 import userEvent from '@testing-library/user-event';
@@ -128,6 +136,26 @@ describe('TodoApp', () => {
         const items = readItems();
 
         expect(items).toEqual([]);
+    });
+
+    it('gracefully handles the deletion of tables', async () => {
+        await openAsync('Groceries', 'Grid view', 'Purchased');
+
+        act(() => {
+            testDriver.deleteTable('tblTable1');
+        });
+
+        const items = readItems();
+
+        expect(items).toEqual([]);
+
+        const options = getAllByRole(screen.getByLabelText('Table'), 'option');
+
+        expect(options.map(getNodeText)).toEqual(['Pick a table...', 'Porcelain dolls']);
+
+        expect(options[0].selected).toBe(true);
+        expect(screen.queryByLabelText('View')).toBe(null);
+        expect(screen.queryByLabelText('Field')).toBe(null);
     });
 
     it('allows records to be created without a name', async () => {

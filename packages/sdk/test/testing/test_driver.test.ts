@@ -6,9 +6,28 @@ import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
 import {TestMutation} from '../../src/types/test_mutations';
 import Sdk from '../../src/sdk';
+import Cursor from '../../src/models/cursor';
 import {useSdk} from '../../src/ui/sdk_context';
+import useCursor from '../../src/ui/use_cursor';
 import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
 import TestDriver from '../../src/testing/test_driver';
+import {invariant} from '../../src/error_utils';
+
+function getCursor(testDriver: TestDriver): Cursor {
+    const div = document.createElement('div');
+    let cursor: Cursor | null = null;
+    const child = React.createElement(() => {
+        cursor = useCursor();
+        return null;
+    }, null);
+
+    ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
+    ReactDOM.unmountComponentAtNode(div);
+
+    invariant(cursor, '`useCursor` hook did not provide a Cursor instance');
+
+    return cursor;
+}
 
 describe('TestDriver', () => {
     let fixtureData: FixtureData;
@@ -336,6 +355,52 @@ describe('TestDriver', () => {
                 testDriver.deleteFieldAsync('tblTable1', 'fldName'),
             ).rejects.toThrowErrorMatchingInlineSnapshot(
                 `"A table's primary field may not be deleted."`,
+            );
+        });
+    });
+
+    describe('#deleteTable', () => {
+        it('throws when the specified table ID is not present', () => {
+            expect(() => {
+                testDriver.deleteTable('tblNONEXISTENT');
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNONEXISTENT' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('removes the table specified by ID', () => {
+            testDriver.deleteTable('tblTable2');
+
+            const ids = testDriver.base.tables.map(({id}) => id);
+            expect(ids).toEqual(['tblTable1']);
+        });
+
+        it('removes the table specified by name', () => {
+            testDriver.deleteTable('Table 2');
+
+            const ids = testDriver.base.tables.map(({id}) => id);
+            expect(ids).toEqual(['tblTable1']);
+        });
+
+        it('selects a new active table when the active table is deleted', () => {
+            testDriver.deleteTable('tblTable1');
+
+            expect(getCursor(testDriver).activeTableId).toBe('tblTable2');
+        });
+
+        it('retains the active table when an inactive table is deleted', () => {
+            testDriver.deleteTable('tblTable2');
+
+            expect(getCursor(testDriver).activeTableId).toBe('tblTable1');
+        });
+
+        it('throws when the specified table is the only table', () => {
+            testDriver.deleteTable('tblTable1');
+
+            expect(() => {
+                testDriver.deleteTable('tblTable2');
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Table with ID \\"tblTable2\\" may not be deleted because it is the only Table present in the Base"`,
             );
         });
     });

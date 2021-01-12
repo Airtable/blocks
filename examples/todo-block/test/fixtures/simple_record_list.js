@@ -80,6 +80,33 @@ export default {
                     },
                 ],
             },
+            {
+                id: 'tblTable2',
+                name: 'Porcelain dolls',
+                description: '',
+                fields: [
+                    {
+                        id: 'fldName2',
+                        name: 'Name of doll',
+                        description: '',
+                        type: FieldType.SINGLE_LINE_TEXT,
+                        options: null,
+                    },
+                ],
+                views: [
+                    {
+                        id: 'viwGridView2',
+                        name: 'Grid view',
+                        type: ViewType.GRID,
+                        fieldOrder: {
+                            fieldIds: ['fldName2'],
+                            visibleFieldCount: 1,
+                        },
+                        records: [],
+                    },
+                ],
+                records: [],
+            },
         ],
         collaborators: [
             {
