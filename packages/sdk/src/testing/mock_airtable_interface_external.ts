@@ -247,12 +247,39 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
             tables: {},
             views: {},
         };
+
+        if (!fixtureData.base.tables || !fixtureData.base.tables.length) {
+            throw spawnError('Fixture data must include at least one table');
+        }
+
         const tables = fixtureData.base.tables.map(table => {
             if (table.id in store.tables) {
                 throw spawnError('repeated table ID: %s', table.id);
             }
             store.tables[table.id] = keyBy(table.records, getId);
             store.views[table.id] = {};
+
+            if (!table.fields || !table.fields.length) {
+                throw spawnError(
+                    'Every table in fixture data must specify at least one field, but table "%s" specified zero fields',
+                    table.id,
+                );
+            }
+
+            table.fields
+                .map(({id}) => id)
+                .forEach((id, index, ids) => {
+                    if (ids.indexOf(id) !== index) {
+                        throw spawnError('repeated field ID: %s', id);
+                    }
+                });
+
+            if (!table.views || !table.views.length) {
+                throw spawnError(
+                    'Every table in fixture data must specify at least one view, but table "%s" specified zero views',
+                    table.id,
+                );
+            }
 
             for (const view of table.views) {
                 if (view.id in store.views[table.id]) {
