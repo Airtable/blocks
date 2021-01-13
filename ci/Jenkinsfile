@@ -1,3 +1,5 @@
+commitSha = '';
+branch = '';
 
 pipeline {
     agent {
@@ -15,6 +17,11 @@ pipeline {
                 script {
                     // Tells a lambda to post to a Phabricator diff, to set a link to this Jenkins job.
                     postBackToPhabricatorIfNecessary("pending");
+
+                    final scmInfo = checkout scm;
+                    commitSha = scmInfo.GIT_COMMIT;
+                    branch = scmInfo.GIT_BRANCH;
+                    echo "scm : ${scmInfo}";
                 }
                 sshagent(['github2']) {
                     sh '''
@@ -30,20 +37,10 @@ pipeline {
                 }
             }
             post {
-                unsuccessful {
-                    slackSend(
-                        // FIXME_CICD
-                        // channel: "#team-ecosystem-dev-feed",
-                        channel: "#doug-alerts",
-                        message: "Blocks-sdk CI build failed on branch ${env.GIT_BRANCH}. See <${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
-                        tokenCredentialId: 'slack-oauth-token2',
-                        color: 'danger',
-                    );
-                }
                 always {
                     // Post status before doing any other processing, to get these updates out ASAP.
                     postBackToPhabricatorIfNecessary(getTerminalResultForPhacilityAndSlack());
-                    // notifySlack();
+                    notifySlack();
 
                     // FIXME_CICD If this is uncommented, the test blows up since the xml files don't exist.
                     // Are there any other test results file that we want to do something with? 
@@ -64,37 +61,36 @@ def getTerminalResultForPhacilityAndSlack() {
     return resultForPhacility;
 }
 
-// FIXME_CICD do users of blocks-sdk want this customized logic?
-// def notifySlack() {
-//     def resultForPhacilityAndSlack = getTerminalResultForPhacilityAndSlack();
-//     try {
-//         def channelsToNotify = [];
-//         // Send a notification to a channel that Prod Eng (and other interested parties) can monitor.
-//         channelsToNotify.add('#jenkins-feed');
-//         // FIXME_CICD use some constants
-//         if (env.JOB_NAME == 'hyperbase-master' && resultForPhacilityAndSlack == 'failed') {
-//             // When master fails, send it to a channel that all of engineering is a member of.
-//             channelsToNotify.add('#dev-jenkins');
-//         }
-//         channelsToNotify.each {
-//             // In Slack, the Jenkins app configuration is here: https://h.slack.com/services/B01DK46MT5Y?added=1
-//             // In Jenkins, the configuration instructions are: https://www.baeldung.com/jenkins-slack-integration and https://plugins.jenkins.io/slack/
-//             def slackColor = resultForPhacilityAndSlack == 'passed' ? 'good' : 'danger';
-//             // Guard against commitSha not being set.
-//             def shaShort = commitSha.length() >= 8 ? commitSha[0..7] : commitSha;
-//             slackSend(
-//                 channel: "${it}",
-//                 message: "*Tests have ${resultForPhacilityAndSlack} on <https://github.com/Hyperbase/hyperbase/tree/${commitSha}|${branch} (${shaShort})> *\n<${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
-//                 color: slackColor,
-//                 tokenCredentialId: 'slack-oauth-token2'
-//             );
-//         }
-//     } catch (Exception e) {
-//         // This post block should continue processing even if there's a failure in this method.
-//         // FIXME_CID add stack trace to the output, otherwise it may be hard to determine which line threw it
-//         print "Suppressed error when posting to Slack: ${e}"
-//     }
-// }
+def notifySlack() {
+    def resultForPhacilityAndSlack = getTerminalResultForPhacilityAndSlack();
+    try {
+        def channelsToNotify = [];
+        // Send a notification to a channel that Prod Eng (and other interested parties) can monitor.
+        channelsToNotify.add('#jenkins-feed');
+        // FIXME_CICD use some constants
+        if (env.JOB_NAME == 'blocks-sdk-main' && resultForPhacilityAndSlack == 'failed') {
+            // When main fails, send it to a channel that all platform engineers are members of.
+            channelsToNotify.add('#team-ecosystem-dev-feed');
+        }
+        channelsToNotify.each {
+            // In Slack, the Jenkins app configuration is here: https://h.slack.com/services/B01DK46MT5Y?added=1
+            // In Jenkins, the configuration instructions are: https://www.baeldung.com/jenkins-slack-integration and https://plugins.jenkins.io/slack/
+            def slackColor = resultForPhacilityAndSlack == 'passed' ? 'good' : 'danger';
+            // Guard against commitSha not being set.
+            def shaShort = commitSha.length() >= 8 ? commitSha[0..7] : commitSha;
+            slackSend(
+                channel: "${it}",
+                message: "*Tests have ${resultForPhacilityAndSlack} on <https://github.com/Hyperbase/blocks-sdk/tree/${commitSha}|${branch} (${shaShort})> *\n<${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
+                color: slackColor,
+                tokenCredentialId: 'slack-oauth-token2'
+            );
+        }
+    } catch (Exception e) {
+        // This post block should continue processing even if there's a failure in this method.
+        // FIXME_CID add stack trace to the output, otherwise it may be hard to determine which line threw it
+        print "Suppressed error when posting to Slack: ${e}"
+    }
+}
 
 // Note: this script block runs on a Jenkins instance that does NOT have a checkout of a branch, so the logic needs to be contained in this Jenkinsfile as opposed to e.g. a script in the branch.
 // Note: this Jenkinsfile is called by at least three Jenkins jobs: "hyperbase-ad-hoc", "hyperbase-master", and "hyperbase-phacility"

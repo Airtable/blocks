@@ -2,7 +2,7 @@
     "phabricator.uri": "https://airtable.phacility.com/",
     "base": "git:merge-base(origin/master)",
     "arc.land.onto.default": "master",
-    "load": ["arc/arc-airtable-test-engine"],
+    "load": [],
     "unit.airtable": {
         "build": {}
     },
@@ -19,13 +19,7 @@
         "atstate": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atstate \"$@\""],
         "atdelete": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atdelete \"$@\""],
         "athelp": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" athelp \"$@\""],
-        "airdiff": [
-            "!branchname=`git branch  | grep '\\*' | cut -d' ' -f2`",
-            " && if [ \"$branchname\" == 'master' ]; then echo 'Refusing to \"arc airdiff\" on branch \"'$branchname'\".' > /dev/stderr; false; fi",
-            " && echo 'Pushing branch \"'$branchname'\"...'",
-            " && git push -u origin $branchname:$branchname",
-            " && arc diff --no-amend"
-        ],
-        "hdiff": ["!arc airdiff"]
+        "airdiff": ["!arc diff \"$@\""],
+        "hdiff": ["!arc diff \"$@\""]
     }
 }

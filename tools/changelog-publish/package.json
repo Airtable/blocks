@@ -8,7 +8,6 @@
         "changelog-publish": "./bin/changelog-publish"
     },
     "scripts": {
-        "airbuild": "yarn run test",
         "ci": "yarn run test",
         "pretest": "flow",
         "test": "TZ=utc jest",
