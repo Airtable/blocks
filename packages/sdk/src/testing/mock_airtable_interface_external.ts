@@ -456,6 +456,11 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                     records: [],
                 },
             };
+        } else if (mutation.type === TestMutationTypes.CREATE_MULTIPLE_RECORDS) {
+            Object.assign(
+                this._recordDataStore.tables[mutation.tableId],
+                keyBy(mutation.records, getId),
+            );
         } else if (mutation.type === TestMutationTypes.DELETE_SINGLE_VIEW) {
             const tableData = this.sdkInitData.baseData.tablesById[mutation.tableId];
 

@@ -723,5 +723,23 @@ describe('TestDriver', () => {
                 expect(queryResult.records.length).toBe(0);
             });
         });
+
+        describe('record creation', () => {
+            it('creates records prior to table being loaded', async () => {
+                const newId = await testDriver.base.tables[0].createRecordsAsync([
+                    {
+                        fields: {},
+                    },
+                ]);
+                const queryResult = await testDriver.base.tables[0].selectRecordsAsync();
+                expect(newId).toEqual([expect.anything()]);
+                expect(queryResult.records.map(({id}) => id)).toEqual([
+                    'reca',
+                    'recb',
+                    'recc',
+                    newId[0],
+                ]);
+            });
+        });
     });
 });
