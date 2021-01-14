@@ -52,7 +52,7 @@
         "@babel/preset-typescript": "^7.7.0",
         "@deboxsoft/cpx": "^1.5.0",
         "@octokit/rest": "^18.0.10",
-        "archiver": "2.0.0",
+        "archiver": "5.0.2",
         "babelify": "^10.0.0",
         "body-parser": "^1.18.3",
         "browserify": "^14.5.0",
