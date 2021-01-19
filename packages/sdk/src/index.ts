@@ -5,7 +5,6 @@ import Sdk from './sdk';
 import {__injectSdkIntoCreateAggregators} from './models/create_aggregators';
 import {__injectSdkIntoExpandRecordPickerAsync} from './ui/expand_record_picker_async';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
-import {__injectSdkIntoInitializeView} from './ui/initialize_view';
 
 /** @internal */
 export let __sdk: Sdk;
@@ -94,7 +93,6 @@ export function __reset() {
     __injectSdkIntoPerformRecordAction(__sdk);
     __injectSdkIntoExpandRecordPickerAsync(__sdk);
     __injectSdkIntoInitializeBlock(__sdk);
-    __injectSdkIntoInitializeView(__sdk);
     __injectSdkIntoWarning(__sdk);
 }
 
