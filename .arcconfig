@@ -1,7 +1,7 @@
 {
     "phabricator.uri": "https://airtable.phacility.com/",
-    "base": "git:merge-base(origin/master)",
-    "arc.land.onto.default": "master",
+    "base": "git:merge-base(origin/main)",
+    "arc.land.onto.default": "main",
     "load": [],
     "unit.airtable": {
         "build": {}

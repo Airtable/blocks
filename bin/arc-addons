@@ -4,7 +4,7 @@ set -euo pipefail
 # TODO: Maybe get these from a config file in the containing Git repo?
 land_remote="origin"
 push_remote="origin"
-default_land_branch="master"
+default_land_branch="main"
 derive_push_branch_name() {
     local_branch_name="$1"
     # TODO: Maybe get username from a config file?

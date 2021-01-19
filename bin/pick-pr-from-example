@@ -42,6 +42,8 @@ popd
 # Store each Git ref in a temporary location.
 #
 # [1] https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/checking-out-pull-requests-locally
+# FIXME_MAIN This references a public repo for a specific example block e.g. https://github.com/Airtable/apps-hello-world-typescript/ 
+# it'll be tricky to change, dDetails/discussion are in this doc: https://docs.google.com/document/d/10nzMV73L5pl2cXRu1GKTepSO4gMkWss4Hw3YWiDkBbg/edit#heading=h.urgi97elgt9t
 git fetch $remote master:refs/temp-base refs/pull/$2/head:refs/temp-source
 
 # Delete the temporary Git refs when the script completes regardless of the
