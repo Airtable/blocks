@@ -56,6 +56,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _parentRecordStore: RecordStore;
     /** @internal */
     _parentTable: Table;
+    /** @internal */
     __linkedRecordsQueryResultPool: ObjectPool<
         LinkedRecordsQueryResult,
         typeof LinkedRecordsQueryResult

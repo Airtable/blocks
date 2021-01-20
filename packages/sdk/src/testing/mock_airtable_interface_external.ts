@@ -1,10 +1,15 @@
-import {AppInterface, SdkInitData, PartialViewData} from '../types/airtable_interface';
-import {BaseData, BaseId} from '../types/base';
+import {
+    AppInterface,
+    BlockRunContextType,
+    SdkInitData,
+    PartialViewData,
+} from '../types/airtable_interface';
+import {BaseData, BaseId, ModelChange} from '../types/base';
 import {CollaboratorData} from '../types/collaborator';
-import {Mutation, PermissionCheckResult} from '../types/mutations';
+import {Mutation, MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TestMutation, TestMutationTypes} from '../types/test_mutations';
 import {RecordData, RecordId} from '../types/record';
-import {has, keyBy, ObjectMap} from '../private_utils';
+import {cloneDeep, has, keyBy, ObjectMap} from '../private_utils';
 import {CursorData} from '../types/cursor';
 import {TableId} from '../types/table';
 import {FieldData, FieldId, FieldType} from '../types/field';
@@ -19,6 +24,8 @@ import {
     GlobalConfigObject,
 } from '../types/global_config';
 import MockAirtableInterface from './mock_airtable_interface';
+
+const MutationTypeValues: ReadonlyArray<string> = Object.freeze(Object.values(MutationTypes));
 
 const unmodifiableSdkData = {
     isDevelopmentMode: false,
@@ -118,6 +125,7 @@ function setGlobalConfigValue(
 /** @hidden */
 export interface WatchableKeysAndArgs {
     mutation: TestMutation;
+    expandRecord: {recordId: RecordId; recordIds: Array<RecordId> | null};
 }
 
 /**
@@ -230,6 +238,13 @@ interface RecordDataStore {
 
 const getId = ({id}: {id: string}) => id;
 
+const generateGenericId = () => {
+    const length = 10 + Math.floor(Math.random() * 10);
+    return Array.from({length})
+        .map(() => pick(alphanumerics))
+        .join('');
+};
+
 /**
  * An implementation of the MockAirtableInterface designed for use in automated
  * test suites for Airtable Blocks maintained externally. Provides a more
@@ -242,17 +257,45 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     _recordDataStore: RecordDataStore;
     _userPermissionCheck?: (mutation: Mutation) => boolean;
 
-    constructor(fixtureData: FixtureData) {
+    constructor(unsafeFixtureData: FixtureData) {
+        const fixtureData = cloneDeep(unsafeFixtureData);
         const store: RecordDataStore = {
             tables: {},
             views: {},
         };
+
+        if (!fixtureData.base.tables || !fixtureData.base.tables.length) {
+            throw spawnError('Fixture data must include at least one table');
+        }
+
         const tables = fixtureData.base.tables.map(table => {
             if (table.id in store.tables) {
                 throw spawnError('repeated table ID: %s', table.id);
             }
             store.tables[table.id] = keyBy(table.records, getId);
             store.views[table.id] = {};
+
+            if (!table.fields || !table.fields.length) {
+                throw spawnError(
+                    'Every table in fixture data must specify at least one field, but table "%s" specified zero fields',
+                    table.id,
+                );
+            }
+
+            table.fields
+                .map(({id}) => id)
+                .forEach((id, index, ids) => {
+                    if (ids.indexOf(id) !== index) {
+                        throw spawnError('repeated field ID: %s', id);
+                    }
+                });
+
+            if (!table.views || !table.views.length) {
+                throw spawnError(
+                    'Every table in fixture data must specify at least one view, but table "%s" specified zero views',
+                    table.id,
+                );
+            }
 
             for (const view of table.views) {
                 if (view.id in store.views[table.id]) {
@@ -309,6 +352,7 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                     .filter(({isActive}) => isActive)
                     .map(({id}) => id),
             },
+            runContext: {type: BlockRunContextType.DASHBOARD_APP},
         };
 
         super(sdkInitData);
@@ -356,7 +400,90 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
                 },
                 ...viewUpdates,
             ]);
-        } else {
+        } else if (mutation.type === TestMutationTypes.CREATE_SINGLE_TABLE) {
+            const fieldData = mutation.fields.map(field => {
+                return {
+                    id: this.idGenerator.generateFieldId(),
+                    name: field.name,
+                    description: '',
+                    type: field.config.type,
+                    typeOptions: field.config.options,
+                    ...unmodifiableFieldData,
+                };
+            });
+            const viewData = {
+                id: generateGenericId(),
+                name: 'Dynamically-generated Grid view',
+                type: ViewType.GRID,
+                fieldOrder: {
+                    fieldIds: fieldData.map(({id}) => id),
+                    visibleFieldCount: fieldData.length,
+                },
+            };
+
+            this.triggerModelUpdates([
+                {
+                    path: ['tablesById', mutation.id],
+                    value: {
+                        id: mutation.id,
+                        name: mutation.name,
+                        primaryFieldId: fieldData[0].id,
+                        viewOrder: [viewData.id],
+                        viewsById: {
+                            [viewData.id]: viewData,
+                        },
+                        fieldsById: keyBy(fieldData, getId),
+                        ...unmodifiableTableData,
+                    },
+                },
+                {
+                    path: ['tableOrder'],
+                    value: this.sdkInitData.baseData.tableOrder.concat(mutation.id),
+                },
+            ]);
+            this._recordDataStore.tables[mutation.id] = {};
+            this._recordDataStore.views[mutation.id] = {
+                [viewData.id]: {
+                    fieldOrder: viewData.fieldOrder,
+                    records: [],
+                },
+            };
+        } else if (mutation.type === TestMutationTypes.DELETE_SINGLE_VIEW) {
+            const tableData = this.sdkInitData.baseData.tablesById[mutation.tableId];
+
+            invariant(
+                tableData.viewOrder.length > 1,
+                'The view in a table with one view may not be deleted',
+            );
+
+            const newOrder = tableData.viewOrder.filter(id => id !== mutation.id);
+
+            delete this._recordDataStore.views[mutation.id];
+
+            const updates: Array<ModelChange> = [
+                {
+                    path: ['tablesById', mutation.tableId, 'viewOrder'],
+                    value: newOrder,
+                },
+                {
+                    path: ['tablesById', mutation.tableId, 'viewsById', mutation.id],
+                    value: undefined,
+                },
+            ];
+
+            if (
+                mutation.id === this.sdkInitData.baseData.tablesById[mutation.tableId].activeViewId
+            ) {
+                updates.push({
+                    path: ['tablesById', mutation.tableId, 'activeViewId'],
+                    value: newOrder[0],
+                });
+            }
+
+            this.triggerModelUpdates(updates);
+        }
+
+        if (MutationTypeValues.includes(mutation.type)) {
             this.emit('mutation', mutation);
         }
     }
@@ -399,6 +526,10 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
 
     emit<Key extends keyof WatchableKeysAndArgs>(key: Key, data: WatchableKeysAndArgs[Key]) {
         super.emit(key, data);
+    }
+
+    expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null) {
+        this.emit('expandRecord', {recordId, recordIds});
     }
 
     get fieldTypeProvider() {
@@ -524,12 +655,8 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     get idGenerator() {
         const idGenerator = super.idGenerator;
 
-        idGenerator.generateRecordId = () => {
-            const length = 10 + Math.floor(Math.random() * 10);
-            return Array.from({length})
-                .map(() => pick(alphanumerics))
-                .join('');
-        };
+        idGenerator.generateRecordId = generateGenericId;
+        idGenerator.generateFieldId = generateGenericId;
 
         return idGenerator;
     }
@@ -547,6 +674,12 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     ) {
         super.off(key, fn);
     }
+
+    /**
+     * This functionality is not relevant when testing outside of an authentic
+     * App frame. Expose a "no-op" to prevent runtime errors in call sites.
+     */
+    setFullscreenMaxSize() {}
 
     setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
         this._userPermissionCheck = check;

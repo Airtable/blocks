@@ -128,12 +128,48 @@ describe('MockAirtableInterface', () => {
             ).toThrowErrorMatchingInlineSnapshot(`"repeated table ID: tblTable1"`);
         });
 
+        it('fails when no tables are specified', () => {
+            smallBase.tables.length = 0;
+
+            expect(
+                () => new MockAirtableInterface({base: smallBase}),
+            ).toThrowErrorMatchingInlineSnapshot(`"Fixture data must include at least one table"`);
+        });
+
+        it('fails for duplicate fields', () => {
+            smallBase.tables[0].fields.push(smallBase.tables[0].fields[0]);
+
+            expect(
+                () => new MockAirtableInterface({base: smallBase}),
+            ).toThrowErrorMatchingInlineSnapshot(`"repeated field ID: fldName"`);
+        });
+
+        it('fails when no fields are specified', () => {
+            smallBase.tables[0].fields.length = 0;
+
+            expect(
+                () => new MockAirtableInterface({base: smallBase}),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"Every table in fixture data must specify at least one field, but table \\"tblTable1\\" specified zero fields"`,
+            );
+        });
+
         it('fails for duplicate views', () => {
             smallBase.tables[0].views.push(smallBase.tables[0].views[0]);
 
             expect(
                 () => new MockAirtableInterface({base: smallBase}),
             ).toThrowErrorMatchingInlineSnapshot(`"repeated view ID: viwGridView"`);
+        });
+
+        it('fails when no views are specified', () => {
+            smallBase.tables[0].views.length = 0;
+
+            expect(
+                () => new MockAirtableInterface({base: smallBase}),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"Every table in fixture data must specify at least one view, but table \\"tblTable1\\" specified zero views"`,
+            );
         });
 
         it('fails for invalid record references in view data', () => {
@@ -159,7 +195,7 @@ describe('MockAirtableInterface', () => {
                     type: 'createSingleTable',
                     id: 'tblFAKE',
                     name: 'fake table',
-                    fields: [],
+                    fields: [{name: 'fake email field', config: {type: FieldType.EMAIL}}],
                 });
 
                 expect(calls).toEqual([]);
@@ -171,10 +207,41 @@ describe('MockAirtableInterface', () => {
                         type: 'createSingleTable',
                         id: 'tblFAKE',
                         name: 'fake table',
-                        fields: [],
+                        fields: [
+                            {
+                                name: 'fake email field',
+                                config: {
+                                    type: FieldType.EMAIL,
+                                },
+                            },
+                        ],
                     },
                 ],
             ]);
+        });
+    });
+
+    describe('#expandRecord', () => {
+        it('emits an event with relevant data', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            const {recordId} = await new Promise(resolve => {
+                ai.on('expandRecord', resolve);
+                ai.expandRecord('tblTable1', 'recb', null);
+            });
+
+            expect(recordId).toBe('recb');
+        });
+
+        it('does not emit to function that has been unsubscribed', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            await new Promise((resolve, reject) => {
+                ai.on('expandRecord', reject);
+                ai.on('expandRecord', resolve);
+                ai.off('expandRecord', reject);
+                ai.expandRecord('tblTable1', 'recb', null);
+            });
         });
     });
 
@@ -652,5 +719,10 @@ describe('MockAirtableInterface', () => {
                 expect(idGenerator.generateRecordId()).not.toEqual(idGenerator.generateRecordId());
             });
         });
+    });
+
+    it('#setFullscreenMaxSize', () => {
+        const ai = new MockAirtableInterface({base: smallBase});
+        expect(() => ai.setFullscreenMaxSize()).not.toThrowError();
     });
 });

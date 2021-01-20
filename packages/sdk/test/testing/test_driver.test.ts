@@ -1,13 +1,36 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import TableOrViewQueryResult from '../../src/models/table_or_view_query_result';
 import {FieldType} from '../../src/types/field';
 import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
+import {TestMutation} from '../../src/types/test_mutations';
 import Sdk from '../../src/sdk';
+import Cursor from '../../src/models/cursor';
 import {useSdk} from '../../src/ui/sdk_context';
+import useCursor from '../../src/ui/use_cursor';
+import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
 import TestDriver from '../../src/testing/test_driver';
+import {invariant} from '../../src/error_utils';
 
-describe('MockAirtableInterface', () => {
+function getCursor(testDriver: TestDriver): Cursor {
+    const div = document.createElement('div');
+    let cursor: Cursor | null = null;
+    const child = React.createElement(() => {
+        cursor = useCursor();
+        return null;
+    }, null);
+
+    ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
+    ReactDOM.unmountComponentAtNode(div);
+
+    invariant(cursor, '`useCursor` hook did not provide a Cursor instance');
+
+    return cursor;
+}
+
+describe('TestDriver', () => {
+    let fixtureData: FixtureData;
     let testDriver: TestDriver;
 
     const triggerMutationAsync = () => {
@@ -15,7 +38,7 @@ describe('MockAirtableInterface', () => {
     };
 
     beforeEach(() => {
-        testDriver = new TestDriver({
+        fixtureData = {
             base: {
                 id: 'appTestFixtureDat',
                 name: 'Test Fixture Data Generation',
@@ -176,7 +199,8 @@ describe('MockAirtableInterface', () => {
                     },
                 ],
             },
-        });
+        };
+        testDriver = new TestDriver(fixtureData);
     });
 
     describe('#Container', () => {
@@ -205,6 +229,28 @@ describe('MockAirtableInterface', () => {
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
 
             expect(sdk).toBeInstanceOf(Sdk);
+        });
+    });
+
+    describe('constructor', () => {
+        it('provides distinct records', async () => {
+            function read(result: TableOrViewQueryResult) {
+                return result.records.map(record => ({
+                    id: record.id,
+                    fldName: record.getCellValue('fldName'),
+                }));
+            }
+
+            const first = testDriver;
+            const second = new TestDriver(fixtureData);
+
+            const result1 = await first.base.getTable('Table 1').selectRecordsAsync();
+            await first.base.getTable('Table 1').updateRecordAsync('reca', {fldName: 'new value'});
+
+            expect(read(result1)[0]).toEqual({id: 'reca', fldName: 'new value'});
+
+            const result2 = await second.base.getTable('Table 1').selectRecordsAsync();
+            expect(read(result2)[0]).toEqual({id: 'reca', fldName: 'a'});
         });
     });
 
@@ -237,6 +283,15 @@ describe('MockAirtableInterface', () => {
             await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
 
             expect(testDriver.base.tables[0].fields.length).toBe(initialCount - 1);
+        });
+
+        it('does not emit a corresponding mutation event', async () => {
+            const mutations: Array<TestMutation> = [];
+            testDriver.watch('mutation', mutation => mutations.push(mutation));
+
+            await testDriver.deleteFieldAsync('tblTable1', 'fldIceCream');
+
+            expect(mutations).toEqual([]);
         });
 
         it('removes the specified field from the parent table (specified by name)', async () => {
@@ -295,6 +350,106 @@ describe('MockAirtableInterface', () => {
                 testDriver.deleteFieldAsync('tblTable1', 'fldName'),
             ).rejects.toThrowErrorMatchingInlineSnapshot(
                 `"A table's primary field may not be deleted."`,
+            );
+        });
+    });
+
+    describe('#deleteTable', () => {
+        it('throws when the specified table ID is not present', () => {
+            expect(() => {
+                testDriver.deleteTable('tblNONEXISTENT');
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNONEXISTENT' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('removes the table specified by ID', () => {
+            testDriver.deleteTable('tblTable2');
+
+            const ids = testDriver.base.tables.map(({id}) => id);
+            expect(ids).toEqual(['tblTable1']);
+        });
+
+        it('removes the table specified by name', () => {
+            testDriver.deleteTable('Table 2');
+
+            const ids = testDriver.base.tables.map(({id}) => id);
+            expect(ids).toEqual(['tblTable1']);
+        });
+
+        it('selects a new active table when the active table is deleted', () => {
+            testDriver.deleteTable('tblTable1');
+
+            expect(getCursor(testDriver).activeTableId).toBe('tblTable2');
+        });
+
+        it('retains the active table when an inactive table is deleted', () => {
+            testDriver.deleteTable('tblTable2');
+
+            expect(getCursor(testDriver).activeTableId).toBe('tblTable1');
+        });
+
+        it('throws when the specified table is the only table', () => {
+            testDriver.deleteTable('tblTable1');
+
+            expect(() => {
+                testDriver.deleteTable('tblTable2');
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Table with ID \\"tblTable2\\" may not be deleted because it is the only Table present in the Base"`,
+            );
+        });
+    });
+
+    describe('#deleteViewAsync', () => {
+        it('throws when the specified table is not present', async () => {
+            await expect(
+                testDriver.deleteViewAsync('tblNONEXISTENT', 'viwGridView'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID or name 'tblNONEXISTENT' in base 'Test Fixture Data Generation'"`,
+            );
+        });
+
+        it('throws when the specified view is not present', async () => {
+            await expect(
+                testDriver.deleteViewAsync('tblTable1', 'viwNONEXISTENT'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwNONEXISTENT' in table 'Table 1'"`,
+            );
+        });
+
+        it('removes the specified view from the parent table (by IDs)', async () => {
+            await testDriver.deleteViewAsync('tblTable1', 'viwGridView');
+
+            const ids = testDriver.base.tables[0].views.map(({id}) => id);
+            expect(ids).toEqual(['viwForm']);
+        });
+
+        it('removes the specified view from the parent table (by names)', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Grid view');
+
+            const ids = testDriver.base.tables[0].views.map(({id}) => id);
+            expect(ids).toEqual(['viwForm']);
+        });
+
+        it('selects a new active view when the active view is deleted', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Grid view');
+
+            expect(getCursor(testDriver).activeViewId).toBe('viwForm');
+        });
+
+        it('retains the active view when an inactive view is deleted', async () => {
+            await testDriver.deleteViewAsync('Table 1', 'Form view');
+
+            expect(getCursor(testDriver).activeViewId).toBe('viwGridView');
+        });
+
+        it('rejects attempts to delete final view', async () => {
+            await testDriver.deleteViewAsync('tblTable1', 'viwForm');
+
+            await expect(
+                testDriver.deleteViewAsync('tblTable1', 'viwGridView'),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"The view in a table with one view may not be deleted"`,
             );
         });
     });
@@ -499,6 +654,68 @@ describe('MockAirtableInterface', () => {
                     tableId: 'tblTable1',
                     type: 'createMultipleRecords',
                 });
+            });
+        });
+    });
+
+    describe('simulated backend', () => {
+        describe('table creation', () => {
+            const fieldsSpec = [
+                {name: 'laura', type: FieldType.SINGLE_LINE_TEXT},
+                {name: 'mark', type: FieldType.EMAIL},
+            ];
+
+            it('creates one table', async () => {
+                const {base} = testDriver;
+                await base.createTableAsync('new table', fieldsSpec);
+
+                const table = base.getTableByName('new table');
+                expect(base.getTableById(table.id)).toBe(table);
+            });
+
+            it('creates multiple fields', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const field1 = table.getFieldByName('laura');
+                expect(table.getFieldById(field1.id)).toBe(field1);
+                expect(field1.type).toBe(FieldType.SINGLE_LINE_TEXT);
+                const field2 = table.getFieldByName('mark');
+                expect(field2.type).toBe(FieldType.EMAIL);
+                expect(table.getFieldById(field2.id)).toBe(field2);
+
+                expect(table.primaryField).toBe(field1);
+            });
+
+            it('creates one view', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+                expect(table.views.length).toBe(1);
+                const viewMetadata = await table.views[0].selectMetadataAsync();
+
+                const allNames = viewMetadata.allFields.map(({name}) => name);
+                expect(allNames).toEqual(['laura', 'mark']);
+
+                const visibleNames = viewMetadata.visibleFields.map(({name}) => name);
+                expect(visibleNames).toEqual(['laura', 'mark']);
+            });
+
+            it('allows loading records from table', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const queryResult = await table.selectRecordsAsync();
+
+                expect(queryResult.records.length).toBe(0);
+            });
+
+            it('allows loading records from view', async () => {
+                const {base} = testDriver;
+                const table = await base.createTableAsync('new table', fieldsSpec);
+
+                const queryResult = await table.views[0].selectRecordsAsync();
+
+                expect(queryResult.records.length).toBe(0);
             });
         });
     });

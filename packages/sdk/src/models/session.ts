@@ -34,12 +34,16 @@ type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
  *
  * @example
  * ```js
- * import {session} from '@airtable/blocks';
+ * import {useSession} from '@airtable/blocks/ui';
  *
- * if (session.currentUser !== null) {
- *     console.log("The current user's name is", session.currentUser.name);
- * } else {
- *     console.log('This app is being viewed in a public share');
+ * function Username() {
+ *     const session = useSession();
+ *
+ *     if (session.currentUser !== null) {
+ *         return <span>The current user's name is {session.currentUser.name}</span>;
+ *     } else {
+ *         return <span>This app is being viewed in a public share</span>;
+ *     }
  * }
  * ```
  * @docsPath models/Session
@@ -89,11 +93,20 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
-     * if (session.currentUser) {
-     *     console.log(session.currentUser.id);
-     *     console.log(session.currentUser.email);
-     *     console.log(session.currentUser.name);
+     * import {useSession} from '@airtable/blocks/ui';
+     *
+     * function CurrentUser() {
+     *     const session = useSession();
+     *
+     *     if (!session.currentUser) {
+     *         return <div>This app is being used in a public share.</div>;
+     *     }
+     *
+     *     return <ul>
+     *         <li>ID: {session.currentUser.id}</li>
+     *         <li>E-mail: {session.currentUser.email}</li>
+     *         <li>Name: {session.currentUser.name}</li>
+     *     </ul>;
      * }
      * ```
      */
@@ -116,11 +129,21 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const updateRecordsCheckResult = session.checkPermissionsForUpdateRecords();
-     * if (!updateRecordsCheckResult.hasPermission) {
-     *     alert(updateRecordsCheckResult.reasonDisplayString);
+     * function UpdateButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForUpdateRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Update
+     *         </button>
+     *     </div>;
      * }
      */
     checkPermissionsForUpdateRecords(): PermissionCheckResult {
@@ -147,11 +170,21 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const createRecordsCheckResult = session.checkPermissionsForCreateRecords();
-     * if (!createRecordsCheckResult.hasPermission) {
-     *     alert(createRecordsCheckResult.reasonDisplayString);
+     * function CreateButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForCreateRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Create
+     *         </button>
+     *     </div>;
      * }
      */
     checkPermissionsForCreateRecords(): PermissionCheckResult {
@@ -178,12 +211,21 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const deleteRecordsCheckResult = session.checkPermissionsForDeleteRecords();
-     * if (!deleteRecordsCheckResult.hasPermission) {
-     *     alert(deleteRecordsCheckResult.reasonDisplayString);
-     * }
+     * function DeleteButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForDeleteRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Delete
+     *         </button>
+     *     </div>;
      */
     checkPermissionsForDeleteRecords(): PermissionCheckResult {
         return this._sdk.__mutations.checkPermissionsForMutation({

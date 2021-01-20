@@ -47,12 +47,10 @@ interface CursorData {
  * {@link useLoadable} to access them.
  *
  * ```js
- * import {cursor} from '@airtable/blocks';
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useWatchable} from '@airtable/blocks/ui';
  *
  *  function ActiveTableAndView() {
- *      // re-render whenever the active table or view changes
- *      useWatchable(cursor, ['activeTableId', 'activeViewId']);
+ *      const cursor = useCursor();
  *
  *      return (
  *          <div>
@@ -64,10 +62,10 @@ interface CursorData {
  * ```
  *
  * ```js
- * import {cursor} from '@airtable/blocks';
- * import {useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
  *
  *  function SelectedRecordAndFieldIds() {
+ *      const cursor = useCursor();
  *      // load selected records and fields
  *      useLoadable(cursor);
  *

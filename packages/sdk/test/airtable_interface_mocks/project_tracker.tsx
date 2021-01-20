@@ -1,4 +1,4 @@
-import {SdkInitData} from '../../src/types/airtable_interface';
+import {BlockRunContextType, SdkInitData} from '../../src/types/airtable_interface';
 import {ViewType} from '../../src/types/view';
 
 const projectTracker: SdkInitData = {
@@ -7,6 +7,7 @@ const projectTracker: SdkInitData = {
     isFirstRun: false,
     isFullscreen: false,
     initialKvValuesByKey: {},
+    runContext: {type: BlockRunContextType.DASHBOARD_APP},
     baseData: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Project tracker',
@@ -334,7 +335,7 @@ const projectTracker: SdkInitData = {
             },
         },
         permissionLevel: 'create',
-        currentUserId: 'usrCurrent',
+        currentUserId: 'usrGalSamari',
         enabledFeatureNames: [],
         collaboratorsById: {
             usrGalSamari: {
@@ -401,7 +402,7 @@ const projectTracker: SdkInitData = {
                     'https://dl.airtable.com/profilePics/1Paw52jFSLa7vRHwxCRd_headshot-pink-2.png',
             },
         },
-        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrCurrent'],
+        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrGalSamari'],
         cursorData: null,
         billingPlanGrouping: 'pro',
         appInterface: {},

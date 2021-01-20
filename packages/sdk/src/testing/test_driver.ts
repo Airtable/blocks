@@ -3,6 +3,7 @@ import {invariant} from '../error_utils';
 import Sdk from '../sdk';
 import {TestMutationTypes} from '../types/test_mutations';
 import {FieldId} from '../types/field';
+import {ModelChange} from '../types/base';
 import {Mutation} from '../types/mutations';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
@@ -85,6 +86,45 @@ export default class TestDriver {
             type: TestMutationTypes.DELETE_SINGLE_FIELD,
             tableId: table.id,
             id: field.id,
+        });
+    }
+
+    /**
+     * Destroy a Table in the simulated Base.
+     */
+    deleteTable(tableIdOrName: TableId | string) {
+        const table = this.base.getTable(tableIdOrName);
+        const newOrder = this.base.tables.filter(({id}) => table.id !== id).map(({id}) => id);
+
+        invariant(
+            newOrder.length > 0,
+            'Table with ID "%s" may not be deleted because it is the only Table present in the Base',
+            table.id,
+        );
+
+        const updates: Array<ModelChange> = [
+            {path: ['tableOrder'], value: newOrder},
+            {path: ['tablesById', table.id], value: undefined},
+        ];
+
+        if (table.id === this._airtableInterface.sdkInitData.baseData.activeTableId) {
+            updates.push({path: ['activeTableId'], value: newOrder[0]});
+        }
+
+        this._airtableInterface.triggerModelUpdates(updates);
+    }
+
+    /**
+     * Destroy a View in the simulated Base.
+     */
+    async deleteViewAsync(tableIdOrName: TableId | string, viewIdOrName: ViewId | string) {
+        const table = this.base.getTable(tableIdOrName);
+        const view = table.getView(viewIdOrName);
+
+        await this._airtableInterface.applyMutationAsync({
+            type: TestMutationTypes.DELETE_SINGLE_VIEW,
+            tableId: table.id,
+            id: view.id,
         });
     }
 

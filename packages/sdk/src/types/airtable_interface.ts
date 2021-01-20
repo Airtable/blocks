@@ -22,6 +22,27 @@ import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from './view';
 import {RequestJson, ResponseJson} from './backend_fetch_types';
 
 /** @hidden */
+export enum BlockRunContextType {
+    DASHBOARD_APP = 'dashboardApp',
+    VIEW = 'view',
+}
+
+/** @hidden */
+export interface BlockInstallationPageBlockRunContext {
+    type: BlockRunContextType.DASHBOARD_APP;
+}
+
+/** @hidden */
+export interface ViewBlockRunContext {
+    type: BlockRunContextType.VIEW;
+    tableId: TableId;
+    viewId: ViewId;
+}
+
+/** @hidden */
+export type BlockRunContext = BlockInstallationPageBlockRunContext | ViewBlockRunContext;
+
+/** @hidden */
 export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
@@ -38,6 +59,7 @@ export interface SdkInitData {
     isFirstRun: boolean;
     intentData: unknown;
     isUsingNewLookupCellValueFormat?: true | undefined;
+    runContext: BlockRunContext;
 }
 
 /** @hidden */

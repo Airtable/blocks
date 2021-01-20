@@ -59,10 +59,10 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- * import {cursor} from '@airtable/blocks';
- * import {useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
  *
  *  function SelectedRecordIds() {
+ *      const cursor = useCursor();
  *      // load selected records
  *      useLoadable(cursor);
  *

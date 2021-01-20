@@ -27,7 +27,7 @@ export {default as SelectSynced} from './select_synced';
 export {default as SelectButtonsSynced} from './select_buttons_synced';
 export {default as SwitchSynced} from './switch_synced';
 export {default as ViewportConstraint} from './viewport_constraint';
-export {default as initializeBlock} from './initialize_block';
+export {initializeBlock} from './initialize_block';
 export {default as withHooks} from './with_hooks';
 export {default as useLoadable} from './use_loadable';
 export {useRecordIds, useRecords, useRecordById} from './use_records';

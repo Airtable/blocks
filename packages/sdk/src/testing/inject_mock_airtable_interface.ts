@@ -1,4 +1,5 @@
 import {ViewType} from '../types/view';
+import {BlockRunContextType} from '../types/airtable_interface';
 import MockAirtableInterface from './mock_airtable_interface';
 
 const vacantAirtableInterface = new MockAirtableInterface({
@@ -52,6 +53,7 @@ const vacantAirtableInterface = new MockAirtableInterface({
         appInterface: {},
         isBlockDevelopmentRestrictionEnabled: false,
     },
+    runContext: {type: BlockRunContextType.DASHBOARD_APP},
     intentData: null,
 });
 

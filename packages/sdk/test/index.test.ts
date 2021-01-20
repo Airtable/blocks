@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/order
 import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface_internal';
-import * as sdk from '../src';
+import * as sdk from '../src/index';
 import * as models from '../src/models/models';
 import * as UI from '../src/ui/ui';
 
@@ -16,6 +16,32 @@ jest.mock('../src/injected/airtable_interface', () => ({
 }));
 
 describe('index', () => {
+    describe('legacy `cursor` property', () => {
+        test('value', () => {
+            expect(sdk.cursor.activeTableId).toBe('tblDesignProjects');
+        });
+
+        test('enumerability', () => {
+            expect(Object.keys(sdk).some(key => key === 'cursor')).toBe(true);
+        });
+    });
+
+    describe('legacy `session` property', () => {
+        test('value', () => {
+            expect(sdk.session.currentUser).toEqual({
+                email: 'collab10@example.com',
+                id: 'usrGalSamari',
+                name: 'Gal Samari',
+                profilePicUrl:
+                    'https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png',
+            });
+        });
+
+        test('enumerability', () => {
+            expect(Object.keys(sdk).some(key => key === 'session')).toBe(true);
+        });
+    });
+
     describe('legacy `UI` property', () => {
         test('value', () => {
             expect((sdk as any).UI).toBe(UI);

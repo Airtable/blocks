@@ -29,6 +29,8 @@ export enum ViewType {
     GALLERY = 'gallery',
     /** */
     KANBAN = 'kanban',
+    /** */
+    BLOCK = 'block',
 }
 
 /** @hidden */

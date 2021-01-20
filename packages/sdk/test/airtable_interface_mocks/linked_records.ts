@@ -1,4 +1,4 @@
-import {SdkInitData} from '../../src/types/airtable_interface';
+import {BlockRunContextType, SdkInitData} from '../../src/types/airtable_interface';
 import {ViewType} from '../../src/types/view';
 
 const linkedRecords: SdkInitData = {
@@ -7,6 +7,7 @@ const linkedRecords: SdkInitData = {
     isFirstRun: false,
     isFullscreen: false,
     initialKvValuesByKey: {},
+    runContext: {type: BlockRunContextType.DASHBOARD_APP},
     baseData: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Linked Records Table',
