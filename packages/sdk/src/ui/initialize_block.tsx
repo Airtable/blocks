@@ -62,8 +62,9 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
     let entryElement: React.ReactNode;
     // runContext can be undefined if running from an old version client version (before 01/2021)
     // TODO (SeanKeenan): Remove nullish coelescing once old clients are no longer a concern
-    const runContext =
-        airtableInterface.sdkInitData.runContext ?? BlockRunContextType.DASHBOARD_APP;
+    const runContext = airtableInterface.sdkInitData.runContext ?? {
+        type: BlockRunContextType.DASHBOARD_APP,
+    };
     switch (runContext.type) {
         case BlockRunContextType.DASHBOARD_APP: {
             if (entryPoints.dashboard === undefined) {
