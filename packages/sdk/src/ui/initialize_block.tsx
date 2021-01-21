@@ -60,8 +60,9 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
     const airtableInterface = getAirtableInterface();
 
     let entryElement: React.ReactNode;
-    const runContext =
-        airtableInterface.sdkInitData.runContext ?? BlockRunContextType.DASHBOARD_APP;
+    const runContext = airtableInterface.sdkInitData.runContext ?? {
+        type: BlockRunContextType.DASHBOARD_APP,
+    };
     switch (runContext.type) {
         case BlockRunContextType.DASHBOARD_APP: {
             if (entryPoints.dashboard === undefined) {
