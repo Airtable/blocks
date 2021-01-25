@@ -3,7 +3,7 @@ import _debug from 'debug';
 
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync} from '../manager/run';
-import {RunTaskConsumer} from '../tasks/run';
+import {RunTaskConsumer, RunTaskConsumerChannel, RunTaskProducer} from '../tasks/run';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {findPortAsync} from '../helpers/find_port_async';
@@ -18,8 +18,40 @@ import {
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {mkdirpAsync} from '../helpers/system_extra';
+import {Deferred} from '../helpers/deferred';
 
 const debug = _debug('block-cli:command:run');
+
+class RunProducer implements RunTaskProducer {
+    readyDefer = new Deferred<void>();
+
+    async readyAsync() {
+        this.readyDefer.resolve();
+    }
+}
+
+class RunConsumer implements RunTaskConsumer {
+    consumerChannel: RunTaskConsumerChannel;
+
+    constructor(consumerChannel: RunTaskConsumerChannel) {
+        this.consumerChannel = consumerChannel;
+    }
+
+    async startDevServerAsync(...args: Parameters<RunTaskConsumer['startDevServerAsync']>) {
+        await this.consumerChannel.requestAsync('startDevServerAsync', ...args);
+    }
+
+    async teardownAsync() {
+        try {
+            await this.consumerChannel.requestAsync('teardownAsync');
+        } catch (err) {
+            // It's ok if the channel closes while tearing down the task.
+            if (err && !err.message.includes('channel closed while waiting for response')) {
+                throw err;
+            }
+        }
+    }
+}
 
 export default class Run extends AirtableCommand {
     private _task?: RunTaskConsumer;
@@ -79,16 +111,6 @@ export default class Run extends AirtableCommand {
         this._devServer = devServer;
         debug('server bound to (http) %s and (https) %s', serverPort, secureServerPort);
 
-        // fork runner process
-        const task = await createRunTaskAsync(this.system);
-        this._task = task;
-        debug('created task');
-        // call entry with ipc api
-        await task.initAsync({
-            mode: 'development',
-        });
-        debug('initialized task');
-
         // pick a temporary directory to write the entry point to
         const appTemporaryPath = this.system.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
         await mkdirpAsync(this.system, appTemporaryPath);
@@ -107,20 +129,25 @@ export default class Run extends AirtableCommand {
             this.system.path.relative(this.system.process.cwd(), entryPointPath),
         );
 
-        // start bundling
-        await task.startBundlingAsync({
-            entry: entryPointPath,
-        });
-        debug('started bundler');
+        // fork runner process
+        const producer = new RunProducer();
+        const task = new RunConsumer(await createRunTaskAsync(this.system, producer));
+        this._task = task;
+
+        await producer.readyDefer;
+        debug('created task');
 
         // listen for port from bundler
-        const freeBundlerPort = await findPortAsync(flags.bundlerPort);
+        const bundlerPort = await findPortAsync(flags.bundlerPort);
+        // call entry with ipc api
         await task.startDevServerAsync({
-            port: freeBundlerPort,
-        });
+            port: bundlerPort,
 
-        // get the port bundler is actually using
-        const bundlerPort = await task.getDevServerPortAsync();
+            mode: 'development',
+            entry: entryPointPath,
+        });
+        debug('started bundler dev server');
+
         // configure proxy
         const devProxyServer = await devServer.proxyFrontendAsync(`localhost:${bundlerPort}`);
         this._devServer = devProxyServer;

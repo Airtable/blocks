@@ -3,8 +3,20 @@ import {promisify} from 'util';
 
 import newApp, {Express} from 'express';
 
-import {RunTaskProducer, RunTaskConsumer, RunTaskProducerMessage} from '../tasks/run';
+import {RunTaskProducer, RunTaskConsumer, RunTaskProducerChannel} from '../tasks/run';
 import {invariant} from '../helpers/error_utils';
+
+class RunProducer implements RunTaskProducer {
+    producerChannel: RunTaskProducerChannel;
+
+    constructor(producerChannel: RunTaskProducerChannel) {
+        this.producerChannel = producerChannel;
+    }
+
+    async readyAsync() {
+        await this.producerChannel.requestAsync('readyAsync');
+    }
+}
 
 class Run implements RunTaskConsumer {
     app?: Express;
@@ -16,14 +28,18 @@ class Run implements RunTaskConsumer {
         this.producer = producer;
     }
 
-    async initAsync() {}
-
-    async startBundlingAsync() {}
-
-    async startDevServerAsync({port}: {port: number}) {
+    async startDevServerAsync({
+        port,
+        mode,
+        entry,
+    }: {
+        port: number;
+        mode: 'development' | 'production';
+        entry: string;
+    }) {
         [this.app, this.server] = await new Promise((resolve, reject) => {
             const app = newApp();
-            app.get('/main.js', (req, res) => res.end('document.write("<h1>Hello World</h1>");'));
+            app.get('/bundle.js', (req, res) => res.end('document.write("<h1>Hello World</h1>");'));
             const server = app.listen(port, () => {
                 resolve([app, server]);
             });
@@ -31,16 +47,14 @@ class Run implements RunTaskConsumer {
                 reject(err);
             });
         });
-    }
 
-    async getDevServerPortAsync() {
         invariant(this.server, 'dev server must start before getting ip port');
         const address = this.server.address();
         invariant(
             typeof address === 'object' && address !== null,
             'dev server must be listening to an ip address',
         );
-        return address.port;
+        invariant(address.port === port, 'dev server must be listening to given port');
     }
 
     async teardownAsync() {
@@ -48,10 +62,8 @@ class Run implements RunTaskConsumer {
             await promisify(this.server.close.bind(this.server))();
         }
     }
-
-    update(message: RunTaskProducerMessage): void {}
 }
 
-export default async function(producer: RunTaskProducer) {
-    return new Run(producer);
+export default async function(producer: RunTaskProducerChannel) {
+    return new Run(new RunProducer(producer));
 }

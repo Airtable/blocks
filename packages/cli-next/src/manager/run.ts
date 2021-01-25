@@ -1,17 +1,17 @@
 import {RunTaskConsumer, RunTaskProducer} from '../tasks/run';
-import {findExtensionAsync} from '../helpers/system_extra';
-import {System} from '../helpers/system';
 
-function interop(module: any) {
-    return module.default || Object.values(module)[0] || module;
-}
+import {createTaskAsync, TaskProcess} from '../helpers/task';
+import {System} from '../helpers/system';
+import {RequestChannel} from '../helpers/task_channels';
 
 export async function createRunTaskAsync(
     sys: System,
-    manager: RunTaskProducer = {},
-): Promise<RunTaskConsumer> {
-    const entryBase = sys.path.join(__dirname, 'run_entry');
-    const entryPath = await findExtensionAsync(sys, entryBase, ['.ts', '.js']);
+    producer: RunTaskProducer,
+): Promise<RequestChannel<RunTaskConsumer>> {
+    const entryBase = sys.path.join(__dirname, '..', 'bundler', 'run');
 
-    return await interop(require(entryPath))(sys, manager);
+    return await createTaskAsync(sys, producer, {
+        process: TaskProcess.OUT_OF_PROCESS,
+        entryBase,
+    });
 }

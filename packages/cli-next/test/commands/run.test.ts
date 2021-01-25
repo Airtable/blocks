@@ -3,27 +3,30 @@ import {expect} from '@oclif/test';
 import * as findPortAsyncModule from '../../src/helpers/find_port_async';
 import * as developmentProxyServerModule from '../../src/helpers/development_proxy_server';
 import * as runModule from '../../src/manager/run';
-import {RunTaskConsumer} from '../../src/tasks/run';
+import {RunDevServerOptions, RunTaskConsumerChannel, RunTaskProducer} from '../../src/tasks/run';
 
 import {test} from '../mocks/test';
+import {System} from '../../src/helpers/system';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 
-async function stubCreateRunTaskAsync(): Promise<RunTaskConsumer> {
-    let port: number;
-    return {
-        async initAsync() {},
-        async startBundlingAsync() {},
-        async startDevServerAsync(options) {
-            port = options.port;
-        },
-        async getDevServerPortAsync() {
-            return port;
-        },
+async function stubCreateRunTaskAsync(
+    sys: System,
+    producer: RunTaskProducer,
+): Promise<RunTaskConsumerChannel> {
+    const consumer = {
+        async startDevServerAsync(options: RunDevServerOptions) {},
         async teardownAsync() {},
-
-        update() {},
+    };
+    (async () => {
+        await Promise.resolve();
+        await producer.readyAsync();
+    })();
+    return {
+        async requestAsync(method: any, ...args: any[]) {
+            return await (consumer as any)[method](...args);
+        },
     };
 }
 

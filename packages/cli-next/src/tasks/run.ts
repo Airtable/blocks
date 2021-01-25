@@ -1,17 +1,20 @@
-export type RunTaskProducerMessage = never;
+import {RequestChannel} from '../helpers/task_channels';
 
 export interface RunTaskProducer {
-    update?(message: RunTaskConsumerMessage): void;
+    readyAsync(): Promise<void>;
 }
 
-export type RunTaskConsumerMessage = never;
+export type RunTaskProducerChannel = RequestChannel<RunTaskProducer>;
+
+export interface RunDevServerOptions {
+    port: number;
+    mode: 'development' | 'production';
+    entry: string;
+}
 
 export interface RunTaskConsumer {
-    initAsync(options: {mode: 'development' | 'production'}): Promise<void>;
-    startBundlingAsync(options: {entry: string}): Promise<void>;
-    startDevServerAsync(options: {port: number}): Promise<void>;
-    getDevServerPortAsync(): Promise<number>;
+    startDevServerAsync(options: RunDevServerOptions): Promise<void>;
     teardownAsync(): Promise<void>;
-
-    update?(message: RunTaskProducerMessage): void;
 }
+
+export type RunTaskConsumerChannel = RequestChannel<RunTaskConsumer>;
