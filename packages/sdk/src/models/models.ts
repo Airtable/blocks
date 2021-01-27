@@ -13,6 +13,8 @@ export {default as RecordQueryResult} from './record_query_result';
 export {default as TableOrViewQueryResult} from './table_or_view_query_result';
 export {default as LinkedRecordsQueryResult} from './linked_records_query_result';
 export {default as ViewMetadataQueryResult} from './view_metadata_query_result';
+export {default as Session} from './session';
+export {default as Cursor} from './cursor';
 export {recordColoring};
 
 // HACK: aggregators need airtable_interface to initialize - really, they should be a property of

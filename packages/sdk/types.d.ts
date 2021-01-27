@@ -8,5 +8,8 @@ export {RecordId} from './dist/types/src/types/record';
 export {TableId} from './dist/types/src/types/table';
 export {ViewId} from './dist/types/src/types/view';
 export {GlobalConfigValue} from './dist/types/src/types/global_config';
+export {default as GlobalConfig} from './dist/types/src/global_config';
 export {Color} from './dist/types/src/colors';
 export {RecordActionData} from './dist/types/src/types/record_action_data';
+export {default as Watchable} from './dist/types/src/watchable';
+export {default as Viewport} from './dist/types/src/viewport';

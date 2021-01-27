@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.1...HEAD)
 
-No changes.
+-   Add type exports for `Cursor` & `Session` to `@airtable/blocks/models`
+-   Add type exports for `GlobalConfig`, `Watchable`, & `Viewport` to `@airtable/blocks/types`
 
 ## [1.4.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.0...@airtable/blocks@1.4.1) - 2021-01-21
 
