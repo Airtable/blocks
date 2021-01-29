@@ -2,7 +2,7 @@
 /** @ignore */ /** */
 import * as recordColoring from './record_coloring';
 import createAggregators from './create_aggregators';
-export {FieldType} from '../types/field';
+export {FieldType, FieldConfig} from '../types/field';
 export {ViewType} from '../types/view';
 export {default as Base} from './base';
 export {default as Table} from './table';
