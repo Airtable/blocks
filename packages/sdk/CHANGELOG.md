@@ -15,6 +15,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Add type exports for `GlobalConfig`, `Watchable`, & `Viewport` to `@airtable/blocks/types`
 -   Add `boltList`, `boltListMicro`, `contacts`, `contactsMicro`, `megaphone`, `megaphoneMicro`,
     `shareWithBolt` and `shareWithBoltMicro` icons
+-   Increase spacing between `label` and `description` nodes in `FormField`.
 
 ## [1.4.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.0...@airtable/blocks@1.4.1) - 2021-01-21
 
