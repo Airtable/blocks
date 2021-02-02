@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.61...HEAD)
 
-No changes.
+-   Bump dependency version for `archiver` package.
 
 ## [0.0.61](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.60...@airtable/blocks-cli@0.0.61) - 2020-12-02
 
