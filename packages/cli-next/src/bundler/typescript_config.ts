@@ -22,14 +22,16 @@ export async function findTypescriptConfigFileAsync(
     }
 }
 
-export function createCompilerOptions() {
-    // Types provided by the typescript library are for options passed to it
-    // directly but we are going to pass to ts-loader which expects
-    // tsconfig.json options.
+/**
+ * Return options for a typescript compiler as the command line tool would
+ * see in a json file. The typescript.CompilerOptions type is not what ts-loader
+ * is expecting.
+ */
+export function createCompilerOptions(): object {
     return {
         target: 'es2017',
 
-        module: 'commonjs',
+        module: 'es2015',
         sourceMap: true,
         allowSyntheticDefaultImports: true,
         jsx: 'react',

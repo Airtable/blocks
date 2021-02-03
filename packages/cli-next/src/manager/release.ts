@@ -1,13 +1,12 @@
-import {RunTaskConsumer, RunTaskProducer} from '../tasks/run';
+import {ReleaseTaskConsumerChannel, ReleaseTaskProducer} from '../tasks/release';
 
 import {createTaskAsync, TaskProcess} from '../helpers/task';
 import {System} from '../helpers/system';
-import {RequestChannel} from '../helpers/task_channels';
 
-export async function createRunTaskAsync(
+export async function createReleaseTaskAsync(
     sys: System,
-    producer: RunTaskProducer,
-): Promise<RequestChannel<RunTaskConsumer>> {
+    producer: ReleaseTaskProducer,
+): Promise<ReleaseTaskConsumerChannel> {
     const entryBase = sys.path.join(__dirname, '..', 'bundler', 'bundler');
 
     return await createTaskAsync(sys, producer, {

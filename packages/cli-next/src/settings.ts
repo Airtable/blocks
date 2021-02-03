@@ -1,6 +1,16 @@
+/** Application configuration. */
 export const BLOCK_FILE_NAME = 'block.json';
+
+/** Directory in Airtable application containing per application configuration. */
+export const BLOCK_CONFIG_DIR_NAME = '.block';
+
+export const REMOTE_JSON_BASE_FILE_PATH = 'remote.json';
+
+/** CLI user configuration file saved globally or per application. */
 export const USER_CONFIG_FILE_NAME = '.airtableblocksrc.json';
+
 export const INIT_DEFAULT_TEMPLATE_URL = 'https://github.com/Airtable/blocks-hello-world';
+
 export const APP_ROOT_TEMPORARY_DIR = '.tmp';
 
 export const APP_RELEASE_DIR = 'dist';

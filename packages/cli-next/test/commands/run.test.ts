@@ -7,14 +7,16 @@ import {RunDevServerOptions, RunTaskConsumerChannel, RunTaskProducer} from '../.
 
 import {test} from '../mocks/test';
 import {System} from '../../src/helpers/system';
+import {invariant} from '../../src/helpers/error_utils';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 
 async function stubCreateRunTaskAsync(
-    sys: System,
-    producer: RunTaskProducer,
+    sys?: System,
+    producer?: RunTaskProducer,
 ): Promise<RunTaskConsumerChannel> {
+    invariant(sys && producer, 'arguments sys and producer are passed in');
     const consumer = {
         async startDevServerAsync(options: RunDevServerOptions) {},
         async teardownAsync() {},

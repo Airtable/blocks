@@ -14,6 +14,8 @@ export interface WebpackSummaryOptions {
     context: string;
     /** Path to first module to execute in the produced bundle. */
     entry: string;
+    /** Path on disk to write files produced while bundling. */
+    outputPath?: string;
     /** Definitions of file types to include in the bundle and how. */
     assets: {
         typescript: TypeScriptConfigFile | TypeScriptCompilerOptions;
@@ -22,10 +24,11 @@ export interface WebpackSummaryOptions {
 
 export interface TypeScriptCompilerOptions {
     assetType: 'typescript';
+
     // Types provided by the typescript library are for options passed to it
     // directly but we are going to pass to ts-loader which expects
     // tsconfig.json options.
-    compilerOptions: any;
+    compilerOptions: object;
 }
 
 export interface TypeScriptConfigFile {
@@ -43,6 +46,7 @@ export function createWebpackCompilerConfig({
     mode,
     context,
     entry,
+    outputPath,
     assets: {
         typescript: {assetType: _, ...typescriptOptions},
     },
@@ -52,6 +56,7 @@ export function createWebpackCompilerConfig({
         context,
         entry,
         output: {
+            path: outputPath,
             filename: BUNDLE_FILE_NAME,
         },
         resolve: {

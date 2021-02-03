@@ -11,6 +11,12 @@ import {
     RunTaskProducerChannel,
     RunDevServerOptions,
 } from '../tasks/run';
+import {
+    ReleaseTaskProducer,
+    ReleaseTaskConsumer,
+    ReleaseBundleOptions,
+    ReleaseTaskProducerChannel,
+} from '../tasks/release';
 import {invariant} from '../helpers/error_utils';
 import {createSystem, System} from '../helpers/system';
 
@@ -18,10 +24,10 @@ import {createWebpackCompilerConfig} from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createTypescriptAssetConfigAsync} from './typescript_config';
 
-class RunProducer implements RunTaskProducer {
-    producerChannel: RunTaskProducerChannel;
+class BundlerProducer implements RunTaskProducer, ReleaseTaskProducer {
+    producerChannel: RunTaskProducerChannel | ReleaseTaskProducerChannel;
 
-    constructor(producerChannel: RunTaskProducerChannel) {
+    constructor(producerChannel: RunTaskProducerChannel | ReleaseTaskProducerChannel) {
         this.producerChannel = producerChannel;
     }
 
@@ -30,8 +36,8 @@ class RunProducer implements RunTaskProducer {
     }
 }
 
-class Run implements RunTaskConsumer {
-    producer: RunTaskProducer;
+class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
+    producer: RunTaskProducer | ReleaseTaskProducer;
     system: System;
 
     compilerConfig?: webpack.Configuration;
@@ -42,22 +48,42 @@ class Run implements RunTaskConsumer {
     webpackDevServer?: WebpackDevServer;
     server?: Server;
 
-    constructor(producer: RunTaskProducer) {
+    constructor(producer: RunTaskProducer | ReleaseTaskProducer) {
         this.producer = producer;
         this.system = createSystem();
     }
 
-    async startDevServerAsync({port, mode, context, entry}: RunDevServerOptions) {
+    async _configureCompilerAsync({
+        mode,
+        context,
+        entry,
+        outputPath,
+    }: Omit<ReleaseBundleOptions, 'outputPath'> &
+        Partial<Pick<ReleaseBundleOptions, 'outputPath'>>) {
         this.compilerConfig = createWebpackCompilerConfig({
             mode,
             context,
             entry,
+            outputPath,
             assets: {
                 typescript: await createTypescriptAssetConfigAsync(this.system, context),
             },
         });
 
         this.compiler = webpack(this.compilerConfig);
+    }
+
+    async bundleAsync(bundlingOptions: ReleaseBundleOptions) {
+        await this._configureCompilerAsync(bundlingOptions);
+        invariant(this.compiler, 'compiler must be configured to finish bundling');
+
+        await promisify(this.compiler.run.bind(this.compiler))();
+    }
+
+    async startDevServerAsync({port, ...bundlingOptions}: RunDevServerOptions) {
+        await this._configureCompilerAsync(bundlingOptions);
+
+        invariant(this.compiler, 'compiler must not be null');
 
         this.serverConfig = createWebpackDevServerConfig({port});
 
@@ -103,6 +129,6 @@ class Run implements RunTaskConsumer {
     }
 }
 
-export default async function(producer: RunTaskProducerChannel) {
-    return new Run(new RunProducer(producer));
+export default async function(producer: RunTaskProducerChannel | ReleaseTaskProducerChannel) {
+    return new Bundler(new BundlerProducer(producer));
 }

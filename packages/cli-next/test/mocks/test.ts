@@ -61,6 +61,7 @@ function withFiles(files: {[path: string]: Buffer | null}) {
         run(ctx: {system: System; systemVolume: SystemVolume}) {
             for (const [key, value] of Object.entries(files)) {
                 if (value) {
+                    ctx.systemVolume.mkdirpSync(ctx.system.path.dirname(key));
                     ctx.systemVolume.writeFileSync(key, value);
                 } else {
                     ctx.systemVolume.unlinkSync(key);

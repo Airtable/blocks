@@ -1,8 +1,14 @@
-import {BLOCK_FILE_NAME, USER_CONFIG_FILE_NAME} from '../settings';
+import {
+    BLOCK_CONFIG_DIR_NAME,
+    BLOCK_FILE_NAME,
+    REMOTE_JSON_BASE_FILE_PATH,
+    USER_CONFIG_FILE_NAME,
+} from '../settings';
 
 import {Result} from './result';
 
 import {AppConfig, validateAppConfig} from './config_app';
+import {RemoteConfig, validateRemoteConfig} from './config_remote';
 import {validateUserConfig, UserConfig} from './config_user';
 import {
     findAncestorDirIncludingNameAsync,
@@ -38,7 +44,7 @@ export async function findAppDirectoryAsync(sys: System, dirpath: string): Promi
  * @param filename Name of the file in the App root directory
  * @param workingdir Working directory function starts its search from
  */
-async function findAppDirecotryFileAsync(
+async function findAppDirectoryFileAsync(
     sys: System,
     filename: string,
     workingdir = sys.process.cwd(),
@@ -59,14 +65,24 @@ export async function findAppConfigPathAsync(
     sys: System,
     workingdir = sys.process.cwd(),
 ): Promise<string> {
-    return await findAppDirecotryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
+    return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
+}
+
+export async function findRemoteConfigPathAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<string> {
+    const {path} = sys;
+
+    const appRoot = await findAppDirectoryAsync(sys, workingdir);
+    return path.join(appRoot, BLOCK_CONFIG_DIR_NAME, REMOTE_JSON_BASE_FILE_PATH);
 }
 
 export async function findAppDirectoryUserConfigAsync(
     sys: System,
     workingdir = sys.process.cwd(),
 ): Promise<string> {
-    return await findAppDirecotryFileAsync(sys, USER_CONFIG_FILE_NAME, workingdir);
+    return await findAppDirectoryFileAsync(sys, USER_CONFIG_FILE_NAME, workingdir);
 }
 
 export async function readAppConfigAsync(
@@ -75,6 +91,15 @@ export async function readAppConfigAsync(
 ): Promise<Result<AppConfig>> {
     return validateAppConfig(
         await readJsonIfExistsAsync(sys, await findAppConfigPathAsync(sys, workingdir)),
+    );
+}
+
+export async function readRemoteConfigAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<Result<RemoteConfig>> {
+    return validateRemoteConfig(
+        await readJsonIfExistsAsync(sys, await findRemoteConfigPathAsync(sys, workingdir)),
     );
 }
 

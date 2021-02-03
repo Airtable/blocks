@@ -1,5 +1,5 @@
 import {sep, dirname, join, parse, relative} from 'path';
-import {cwd, env} from 'process';
+import {cwd, env, version} from 'process';
 import {platform, homedir} from 'os';
 
 import asyncFs, {AsyncFS} from './fs_async';
@@ -18,6 +18,7 @@ export interface SystemPath {
 export interface SystemProcess {
     cwd: typeof cwd;
     env: typeof env;
+    version: typeof version;
 }
 
 export interface SystemOS {
@@ -35,7 +36,7 @@ export interface System {
 export function createSystem({
     fs = asyncFs,
     path = {sep, dirname, join, parse, relative},
-    process = {cwd, env},
+    process = {cwd, env, version},
     os = {homedir, platform},
 }: Partial<System> = {}): System {
     return atomicify({
