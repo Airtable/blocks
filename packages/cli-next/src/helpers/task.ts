@@ -15,6 +15,10 @@ export interface HandshakeRequest {
     readyAsync(): Promise<void>;
 }
 
+export interface TeardownRequest {
+    teardownAsync(): Promise<void>;
+}
+
 /** Task creation options */
 interface Options {
     /** Should the task be run in the same process or an external process. */
@@ -32,7 +36,7 @@ interface Options {
  */
 export async function createTaskAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
-    Consumer extends ChannelMethods<Consumer>
+    Consumer extends ChannelMethods<Consumer> & TeardownRequest
 >(
     sys: System,
     producer: Producer,

@@ -1,7 +1,7 @@
 import _debug from 'debug';
 
 import {invariant} from './error_utils';
-import {HandshakeRequest} from './task';
+import {HandshakeRequest, TeardownRequest} from './task';
 import {
     ChannelMethods,
     createPipeChannel,
@@ -24,7 +24,7 @@ export interface UpdatableTask {
 
 export async function mainAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
-    Consumer extends ChannelMethods<Consumer>
+    Consumer extends ChannelMethods<Consumer> & TeardownRequest
 >(entryPoint: (producer: RequestChannel<Producer>) => Promise<Consumer> | Consumer) {
     debug('starting task host');
     invariant(has(process, 'send'), 'This process must be a forked child process.');
@@ -34,6 +34,16 @@ export async function mainAsync<
 
     const consumer = await entryPoint(requestChannel);
     const responseChannel = createResponseChannel(channel, consumer);
+
+    (async () => {
+        for await (const {method, result} of responseChannel) {
+            if (method === 'teardownAsync') {
+                await result;
+                break;
+            }
+        }
+        channel.close();
+    })();
 
     (async () => {
         await Promise.resolve();

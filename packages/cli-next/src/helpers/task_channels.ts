@@ -1,7 +1,11 @@
+import {EventEmitter} from 'events';
+
 import _debug from 'debug';
 
+import {Deferred} from './deferred';
 import {invariant, spawnError} from './error_utils';
 import {ObjectMap} from './private_utils';
+import {Result} from './result';
 
 const debug = _debug('block-cli:task:ipc:' + (process.send ? 'down' : 'up'));
 
@@ -16,6 +20,10 @@ interface PipeEnd<SendMessage, ReceiveMessage> {
 interface Channel<TX, RX> {
     send(message: TX): void;
     [Symbol.asyncIterator](): AsyncIterator<RX>;
+}
+
+interface Closeable {
+    close(): void;
 }
 
 const queueClosedSymbol = Symbol.for('queueClosed');
@@ -68,8 +76,9 @@ class QueueAsyncIterable<T> {
     }
 }
 
-class PipeChannelImplementation<TX, RX> {
+class PipeChannelImplementation<TX, RX> implements Closeable {
     pipe: PipeEnd<TX, RX>;
+    closedDefer = new Deferred<void>();
 
     constructor(pipe: PipeEnd<TX, RX>) {
         this.pipe = pipe;
@@ -78,6 +87,10 @@ class PipeChannelImplementation<TX, RX> {
     send(message: TX): void {
         debug('sending message', message);
         this.pipe.send(message);
+    }
+
+    close() {
+        this.closedDefer.resolve();
     }
 
     async *[Symbol.asyncIterator](): AsyncIterator<RX> {
@@ -95,6 +108,7 @@ class PipeChannelImplementation<TX, RX> {
         try {
             this.pipe.on('close', closeHandle);
             this.pipe.on('message', handle);
+            this.closedDefer.promise.then(closeHandle);
 
             yield* receiveQueue;
         } finally {
@@ -169,12 +183,14 @@ class ResponseChannelImplementation<
 > {
     private _inner: Channel<ResponseMessage<Local>, RequestMessage<Local>>;
     private _handles: Local;
+    private _observer: EventEmitter;
 
     channelClosedPromise: Promise<void>;
 
     constructor(inner: Channel<ResponseMessage<Local>, RequestMessage<Local>>, handles: Local) {
         this._inner = inner;
         this._handles = handles;
+        this._observer = new EventEmitter();
 
         this.channelClosedPromise = this._handleRequestsAsync();
     }
@@ -184,23 +200,47 @@ class ResponseChannelImplementation<
             if (received[0] === ApplicationMessageType.REQUEST) {
                 const [, id, method, args] = received;
                 debug('responding to request: ', method, args);
-                (async () => {
-                    try {
-                        this._inner.send([
-                            ApplicationMessageType.RESPONSE,
-                            id,
-                            await this._handles[method](...args),
-                        ]);
-                    } catch (err) {
-                        this._inner.send([ApplicationMessageType.ERROR, id, err]);
-                    }
-                })();
+                this._observer.emit('message', {
+                    method,
+                    args,
+                    result: (async () => {
+                        try {
+                            const response = await this._handles[method](...args);
+                            this._inner.send([ApplicationMessageType.RESPONSE, id, response]);
+                            return {value: response};
+                        } catch (err) {
+                            this._inner.send([ApplicationMessageType.ERROR, id, err]);
+                            return {err};
+                        }
+                    })(),
+                });
             }
+        }
+    }
+
+    async *[Symbol.asyncIterator](): AsyncIterator<{
+        method: keyof ChannelMethods<Local>;
+        args: RequestArgs<Local>;
+        result: Promise<Result<RequestResults<Local>>>;
+    }> {
+        const iterable = new QueueAsyncIterable<any>();
+        const closeHandle = () => iterable.close();
+        const handle = (message: any) => iterable.push(message);
+        try {
+            this._observer.addListener('message', handle);
+            this._observer.addListener('close', closeHandle);
+
+            yield* iterable;
+        } finally {
+            this._observer.removeListener('message', handle);
+            this._observer.removeListener('close', closeHandle);
         }
     }
 }
 
-export function createPipeChannel<TX = any, RX = any>(pipe: PipeEnd<TX, RX>): Channel<TX, RX> {
+export function createPipeChannel<TX = any, RX = any>(
+    pipe: PipeEnd<TX, RX>,
+): Channel<TX, RX> & Closeable {
     return new PipeChannelImplementation(pipe);
 }
 
