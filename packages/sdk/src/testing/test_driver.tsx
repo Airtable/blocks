@@ -8,7 +8,7 @@ import {Mutation} from '../types/mutations';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
-import {SdkContext} from '../ui/sdk_context';
+import BaseProvider from '../ui/base_provider';
 import MockAirtableInterface, {
     FixtureData,
     WatchableKeysAndArgs,
@@ -68,10 +68,10 @@ export default class TestDriver {
      */
     Container({children}: {children: React.ReactNode}) {
         const fallback = React.createElement('div', null);
-        return React.createElement(
-            React.Suspense,
-            {fallback},
-            React.createElement(SdkContext.Provider, {value: this._sdk}, children),
+        return (
+            <React.Suspense fallback={fallback}>
+                <BaseProvider value={this.base}>{children}</BaseProvider>
+            </React.Suspense>
         );
     }
 

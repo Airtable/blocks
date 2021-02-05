@@ -5,9 +5,9 @@ import {FieldType} from '../../src/types/field';
 import {Mutation} from '../../src/types/mutations';
 import {ViewType} from '../../src/types/view';
 import {TestMutation} from '../../src/types/test_mutations';
-import Sdk from '../../src/sdk';
+import Base from '../../src/models/base';
 import Cursor from '../../src/models/cursor';
-import {useSdk} from '../../src/ui/sdk_context';
+import useBase from '../../src/ui/use_base';
 import useCursor from '../../src/ui/use_cursor';
 import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
 import TestDriver from '../../src/testing/test_driver';
@@ -218,17 +218,18 @@ describe('TestDriver', () => {
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
         });
 
-        it('provides an SDK instance', () => {
+        it('provides a Base instance', () => {
             const div = document.createElement('div');
-            let sdk: Sdk | null = null;
+            let base: Base | null = null;
             const child = React.createElement(() => {
-                sdk = useSdk();
+                base = useBase();
                 return null;
             }, null);
 
             ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
 
-            expect(sdk).toBeInstanceOf(Sdk);
+            expect(base).toBeInstanceOf(Base);
+            expect(base!.id).toBe('appTestFixtureDat');
         });
     });
 
