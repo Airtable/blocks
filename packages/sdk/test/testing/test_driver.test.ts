@@ -266,6 +266,27 @@ describe('TestDriver', () => {
         });
     });
 
+    describe('#base', () => {
+        it('exposes properly-initialized base', async () => {
+            expect(testDriver.base.id).toBe('appTestFixtureDat');
+        });
+    });
+
+    describe('#globalConfig', () => {
+        it('exposes global config from SDK', async () => {
+            // TODO(alex): this shouldn't rely on a private field of test driver. once we've added
+            // globalConfig support to the fixture setup, we should test by attempting to retrieve
+            // a value like we do for base, session, and cursor.
+            expect(testDriver.globalConfig).toBe(testDriver._sdk.globalConfig);
+        });
+    });
+
+    describe('#session', () => {
+        it('exposes properly-initialized session', async () => {
+            expect(testDriver.session.currentUser!.id).toBe('usrPhilRath');
+        });
+    });
+
     describe('#deleteFieldAsync', () => {
         it('throws when the specified table is not present', async () => {
             await expect(

@@ -147,7 +147,7 @@ const idGenerator: IdGenerator = {
 };
 
 /** @internal */
-class MockAirtableInterface extends EventEmitter implements AirtableInterface {
+abstract class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     sdkInitData!: SdkInitData;
 
     private _initData: SdkInitData;
@@ -230,29 +230,19 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     subscribeToEnterFullScreen() {}
     subscribeToExitFullScreen() {}
     subscribeToFocus() {}
-    fetchAndSubscribeToCellValuesInFieldsAsync(
+    abstract fetchAndSubscribeToCellValuesInFieldsAsync(
         tableId: TableId,
         fieldIds: Array<FieldId>,
-    ): Promise<any> {
-        throw spawnError('fetchAndSubscribeToCellValuesInFieldsAsync unimplemented');
-    }
-    fetchAndSubscribeToCursorDataAsync(): Promise<CursorData> {
-        throw spawnError('fetchAndSubscribeToCursorDataAsync unimplemented');
-    }
-    fetchAndSubscribeToTableDataAsync(
+    ): Promise<any>;
+    abstract fetchAndSubscribeToCursorDataAsync(): Promise<CursorData>;
+    abstract fetchAndSubscribeToTableDataAsync(
         tableId: string,
-    ): Promise<{recordsById: {[recordId: string]: RecordData}}> {
-        throw spawnError('fetchAndSubscribeToTableDataAsync unimplemented');
-    }
-    async fetchAndSubscribeToViewDataAsync(
+    ): Promise<{recordsById: {[recordId: string]: RecordData}}>;
+    abstract fetchAndSubscribeToViewDataAsync(
         tableId: string,
         viewId: string,
-    ): Promise<PartialViewData> {
-        throw spawnError('fetchAndSubscribeToViewDataAsync unimplemented');
-    }
-    fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
-        throw spawnError('fetchDefaultCellValuesByFieldIdAsync unimplemented');
-    }
+    ): Promise<PartialViewData>;
+    abstract fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}>;
 
     triggerModelUpdates(changes: ReadonlyArray<ModelChange>) {
         this.emit('modelupdates', {changes});
@@ -270,48 +260,20 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     unsubscribeFromCellValuesInFields() {}
     unsubscribeFromViewData() {}
 
-    expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null) {
-        throw spawnError('expandRecord unimplemented');
-    }
-    expandRecordList() {
-        throw spawnError('expandRecordList unimplemented');
-    }
-    expandRecordPickerAsync(): Promise<string | null> {
-        throw spawnError('expandRecordPickerAsync unimplemented');
-    }
-    reloadFrame() {
-        throw spawnError('reloadFrame unimplemented');
-    }
-    setSettingsButtonVisibility() {
-        throw spawnError('setSettingsButtonVisibility unimplemented');
-    }
-    setUndoRedoMode() {
-        throw spawnError('setUndoRedoMode unimplemented');
-    }
-    setFullscreenMaxSize() {
-        throw spawnError('setFullscreenMaxSize unimplemented');
-    }
-    enterFullscreen() {
-        throw spawnError('enterFullscreen unimplemented');
-    }
-    exitFullscreen() {
-        throw spawnError('exitFullscreen unimplemented');
-    }
-    fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null> {
-        throw spawnError('fetchAndSubscribeToPerformRecordActionAsync unimplemented');
-    }
-    trackEvent() {
-        throw spawnError('trackEvent unimplemented');
-    }
-    trackExposure() {
-        // No-op to allow tests that happen to use session.__isFeatureEnabled to pass.
-    }
-    sendStat() {
-        throw spawnError('sendStat unimplemented');
-    }
-    performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson> {
-        throw spawnError('performBackendFetchAsync unimplemented');
-    }
+    abstract expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;
+    abstract expandRecordList(): void;
+    abstract expandRecordPickerAsync(): Promise<string | null>;
+    abstract reloadFrame(): void;
+    abstract setSettingsButtonVisibility(): void;
+    abstract setUndoRedoMode(): void;
+    abstract setFullscreenMaxSize(): void;
+    abstract enterFullscreen(): void;
+    abstract exitFullscreen(): void;
+    abstract fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null>;
+    abstract trackEvent(): void;
+    abstract trackExposure(): void;
+    abstract sendStat(): void;
+    abstract performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson>;
 }
 
 export default MockAirtableInterface;

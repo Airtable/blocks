@@ -1,61 +1,50 @@
 // istanbul ignore file
 import {ViewType} from '../types/view';
-import {BlockRunContextType} from '../types/airtable_interface';
-import MockAirtableInterface from './mock_airtable_interface';
+import {FieldType} from '../types/field';
+import MockAirtableInterfaceExternal from './mock_airtable_interface_external';
 
-const vacantAirtableInterface = new MockAirtableInterface({
-    isDevelopmentMode: false,
-    blockInstallationId: 'bliVACANTFORTESTING',
-    isFirstRun: false,
-    isFullscreen: false,
-    initialKvValuesByKey: {},
-    baseData: {
+const vacantAirtableInterface = new MockAirtableInterfaceExternal({
+    base: {
         id: 'appVACANTFORTESTING',
         name: 'Vacant Base intended for use in automated testing environments only',
-        activeTableId: 'tblVACANTFORTESTING',
-        tableOrder: ['tblVACANTFORTESTING'],
-        tablesById: {
-            tblVACANTFORTESTING: {
+        tables: [
+            {
                 id: 'tblVACANTFORTESTING',
                 name: 'Vacant table intended for use in automated testing environments only',
-                primaryFieldId: 'fldVACANTFORTESTING',
-                fieldsById: {
-                    fldVACANTFORTESTING: {
+                description: 'Vacant table intended for use in automated testing environments only',
+                fields: [
+                    {
                         id: 'fldVACANTFORTESTING',
                         name:
                             'Vacant field intended for use in automated testing environments only',
-                        type: 'text',
-                        typeOptions: null,
+                        type: FieldType.SINGLE_LINE_TEXT,
+                        options: null,
                         description: '',
-                        lock: null,
                     },
-                },
-                activeViewId: 'viwVACANTFORTESTING',
-                viewOrder: ['viwVACANTFORTESTING'],
-                viewsById: {
-                    viwVACANTFORTESTING: {
+                ],
+                views: [
+                    {
                         id: 'viwVACANTFORTESTING',
                         name: 'Vacant view intended for use in automated testing environments only',
                         type: ViewType.GRID,
+                        fieldOrder: {
+                            fieldIds: ['fldVACANTFORTESTING'],
+                            visibleFieldCount: 1,
+                        },
+                        records: [],
                     },
-                },
-                description: 'Vacant table intended for use in automated testing environments only',
-                lock: null,
-                externalSyncById: null,
+                ],
+                records: [],
             },
-        },
-        permissionLevel: 'create',
-        currentUserId: 'usrVACANTFORTESTING',
-        enabledFeatureNames: [],
-        collaboratorsById: {},
-        activeCollaboratorIds: [],
-        cursorData: null,
-        billingPlanGrouping: 'pro',
-        appInterface: {},
-        isBlockDevelopmentRestrictionEnabled: false,
+        ],
+        collaborators: [
+            {
+                id: 'usrVACANTFORTESTING',
+                email: 'vacant@airtable.test',
+                isActive: true,
+            },
+        ],
     },
-    runContext: {type: BlockRunContextType.DASHBOARD_APP},
-    intentData: null,
 });
 
 (window as any).__getAirtableInterfaceAtVersion = () => vacantAirtableInterface;

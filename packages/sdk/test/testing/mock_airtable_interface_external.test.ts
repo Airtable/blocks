@@ -736,4 +736,104 @@ describe('MockAirtableInterface', () => {
         const ai = new MockAirtableInterface({base: smallBase});
         expect(() => ai.setFullscreenMaxSize()).not.toThrowError();
     });
+
+    describe('#performBackendFetchAsync', () => {
+        it('returns a rejected promise', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            await expect(
+                ai.performBackendFetchAsync({
+                    method: 'GET',
+                    url: 'http://example.com',
+                    headers: [],
+                    body: null,
+                    integrity: null,
+                    redirect: 'manual',
+                }),
+            ).rejects.toThrowError();
+        });
+    });
+
+    describe('#fetchDefaultCellValuesByFieldIdAsync', () => {
+        it('returns an empty object', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(await ai.fetchDefaultCellValuesByFieldIdAsync()).toStrictEqual({});
+        });
+    });
+
+    describe('#expandRecordList', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.expandRecordList()).not.toThrowError();
+        });
+    });
+
+    describe('#expandRecordPickerAsync', () => {
+        it('returns null', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(await ai.expandRecordPickerAsync()).toBe(null);
+        });
+    });
+
+    describe('#reloadFrame', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.reloadFrame()).not.toThrowError();
+        });
+    });
+
+    describe('#setSettingsButtonVisibility', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.setSettingsButtonVisibility()).not.toThrowError();
+        });
+    });
+
+    describe('#setUndoRedoMode', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.setUndoRedoMode()).not.toThrowError();
+        });
+    });
+
+    describe('#enterFullscreen', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.enterFullscreen()).not.toThrowError();
+        });
+    });
+
+    describe('#exitFullscreen', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.exitFullscreen()).not.toThrowError();
+        });
+    });
+
+    describe('#fetchAndSubscribeToPerformRecordActionAsync', () => {
+        it('returns null', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(await ai.fetchAndSubscribeToPerformRecordActionAsync()).toBe(null);
+        });
+    });
+
+    describe('#trackEvent', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.trackEvent()).not.toThrowError();
+        });
+    });
+
+    describe('#trackExposure', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.trackExposure()).not.toThrowError();
+        });
+    });
+
+    describe('#sendStat', () => {
+        it('does not throw', () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+            expect(() => ai.sendStat()).not.toThrowError();
+        });
+    });
 });

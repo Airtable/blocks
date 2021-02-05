@@ -51,6 +51,20 @@ export default class TestDriver {
     }
 
     /**
+     * A session. This will correspond to the first collaborator in your fixture data.
+     */
+    get session() {
+        return this._sdk.session;
+    }
+
+    /**
+     * A simulated globalConfig. This always starts empty.
+     */
+    get globalConfig() {
+        return this._sdk.globalConfig;
+    }
+
+    /**
      * A React Component which may be used to wrap App Components, enabling
      * them to run outside of a production Apps environment.
      *
@@ -223,7 +237,7 @@ export default class TestDriver {
     }
 
     /**
-     * Regsiter a function to be invoked in response to a given internal event.
+     * Register a function to be invoked in response to a given internal event.
      */
     watch<Key extends keyof WatchableKeysAndArgs>(
         key: Key,
@@ -233,7 +247,7 @@ export default class TestDriver {
     }
 
     /**
-     * De-regsiter a function which was previously registered with {@link
+     * De-register a function which was previously registered with {@link
      * watch}.
      */
     unwatch<Key extends keyof WatchableKeysAndArgs>(

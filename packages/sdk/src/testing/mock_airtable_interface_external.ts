@@ -23,6 +23,8 @@ import {
     GlobalConfigArray,
     GlobalConfigObject,
 } from '../types/global_config';
+import {RecordActionData} from '../types/record_action_data';
+import {RequestJson, ResponseJson} from '../types/backend_fetch_types';
 import MockAirtableInterface from './mock_airtable_interface';
 
 const MutationTypeValues: ReadonlyArray<string> = Object.freeze(Object.values(MutationTypes));
@@ -702,4 +704,31 @@ export default class MockAirtableInterfaceExternal extends MockAirtableInterface
     setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
         this._userPermissionCheck = check;
     }
+
+    async performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson> {
+        throw spawnError(
+            'Backend fetch is not currently supported in the blocks testing environment.',
+        );
+    }
+
+    // no-op implementations so that apps that use these features can at least
+    // be tested in some way:
+    async fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
+        return {};
+    }
+    expandRecordList() {}
+    async expandRecordPickerAsync(): Promise<string | null> {
+        return null;
+    }
+    reloadFrame() {}
+    setSettingsButtonVisibility() {}
+    setUndoRedoMode() {}
+    enterFullscreen() {}
+    exitFullscreen() {}
+    async fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null> {
+        return null;
+    }
+    trackEvent() {}
+    trackExposure() {}
+    sendStat() {}
 }
