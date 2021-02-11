@@ -3,7 +3,13 @@ import _debug from 'debug';
 
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync} from '../manager/run';
-import {RunTaskConsumer, RunTaskConsumerChannel, RunTaskProducer} from '../tasks/run';
+import {
+    BuildState,
+    BuildStatus,
+    RunTaskConsumer,
+    RunTaskConsumerChannel,
+    RunTaskProducer,
+} from '../tasks/run';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {findPortAsync} from '../helpers/find_port_async';
@@ -25,8 +31,14 @@ const debug = _debug('block-cli:command:run');
 class RunProducer implements RunTaskProducer {
     readyDefer = new Deferred<void>();
 
+    buildState: BuildState = {status: BuildStatus.START};
+
     async readyAsync() {
         this.readyDefer.resolve();
+    }
+
+    async emitBuildStateAsync(buildState: BuildState) {
+        this.buildState = buildState;
     }
 }
 
@@ -97,6 +109,8 @@ export default class Run extends AirtableCommand {
             ),
         );
 
+        const producer = new RunProducer();
+
         // find our ports
         const secureServerPort = await findPortAsync(flags.port, {
             adjacentPorts: 1,
@@ -104,7 +118,10 @@ export default class Run extends AirtableCommand {
         const serverPort = secureServerPort + 1;
 
         // start https server
-        const devServer = await createServerAsync({
+        const devServer = await createServerAsync(this.system, {
+            frameRouteOptions: {
+                getBuildState: () => producer.buildState,
+            },
             serverPort,
             secureServerPort,
         });
@@ -123,6 +140,7 @@ export default class Run extends AirtableCommand {
             mode: 'development',
             destination: entryPointPath,
             userEntryPoint,
+            blockBaseUrl: `https://localhost:${secureServerPort}`,
         });
         await this.system.fs.writeFileAsync(entryPointPath, Buffer.from(entryPoint));
         debug(
@@ -131,7 +149,6 @@ export default class Run extends AirtableCommand {
         );
 
         // fork runner process
-        const producer = new RunProducer();
         const task = new RunConsumer(await createRunTaskAsync(this.system, producer));
         this._task = task;
 

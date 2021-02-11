@@ -27,3 +27,7 @@ export const GLOBAL_REACT_DOM_VARIABLE_NAME = '_airtableReactDOM';
 export const GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME = '_airtableReactDOMServer';
 export const GLOBAL_RUN_BLOCK_FUNCTION_NAME = '_airtableRunBlock';
 export const GLOBAL_BLOCK_CODE_VERSION_VARIABLE_NAME = '_airtableBlockCodeVersion';
+
+// Copied over from blockRouterConfigSettings.REQUEST_BODY_LIMIT in the
+// hyperbase codebase
+export const BLOCK_REQUEST_BODY_LIMIT = 5.2 * 1024 * 1024; // 5.2MB

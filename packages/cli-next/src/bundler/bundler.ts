@@ -6,10 +6,13 @@ import WebpackDevServer from 'webpack-dev-server';
 import typescript from 'typescript';
 
 import {
+    RequestChannel,
     RunTaskProducer,
     RunTaskConsumer,
     RunTaskProducerChannel,
     RunDevServerOptions,
+    BuildState,
+    BuildStatus,
 } from '../tasks/run';
 import {
     ReleaseTaskProducer,
@@ -25,14 +28,21 @@ import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createTypescriptAssetConfigAsync} from './typescript_config';
 
 class BundlerProducer implements RunTaskProducer, ReleaseTaskProducer {
-    producerChannel: RunTaskProducerChannel | ReleaseTaskProducerChannel;
+    producerChannel: RequestChannel<RunTaskProducer | ReleaseTaskProducer>;
 
-    constructor(producerChannel: RunTaskProducerChannel | ReleaseTaskProducerChannel) {
+    constructor(producerChannel: RequestChannel<RunTaskProducer | ReleaseTaskProducer>) {
         this.producerChannel = producerChannel;
     }
 
     async readyAsync() {
         await this.producerChannel.requestAsync('readyAsync');
+    }
+
+    async emitBuildStateAsync(buildState: BuildState) {
+        await (this.producerChannel as RunTaskProducerChannel).requestAsync(
+            'emitBuildStateAsync',
+            buildState,
+        );
     }
 }
 
@@ -86,6 +96,21 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         invariant(this.compiler, 'compiler must not be null');
 
         this.serverConfig = createWebpackDevServerConfig({port});
+
+        this.compiler.hooks.compilation.tap('AirtableCliStatusPlugin', () => {
+            (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.BUILDING});
+        });
+
+        this.compiler.hooks.emit.tap('AirtableCliStatusPlugin', () => {
+            (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.READY});
+        });
+
+        this.compiler.hooks.failed.tap('AirtableCliStatusPlugin', error => {
+            (this.producer as RunTaskProducer).emitBuildStateAsync({
+                status: BuildStatus.ERROR,
+                error,
+            });
+        });
 
         const webpackDevServer = (this.webpackDevServer = new WebpackDevServer(
             this.compiler,

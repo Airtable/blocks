@@ -62,7 +62,7 @@ describe('run', () => {
         .stderr()
         .enableDebug('block-cli*:run')
         .stub(findPortAsyncModule, 'findPortAsync', stubFindPortAsync())
-        .stub(developmentProxyServerModule, 'createServer', stubCreateServer)
+        .stub(developmentProxyServerModule, 'createServerAsync', stubCreateServer)
         .stub(runModule, 'createRunTaskAsync', stubCreateRunTaskAsync)
         .withFiles({
             '/home/projects/my-app/block.json': Buffer.from('{"frontendEntry":"index.js"}'),

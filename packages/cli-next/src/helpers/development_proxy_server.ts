@@ -3,11 +3,17 @@ import {createServer as createHTTPServer, Server as InsecureServer} from 'http';
 import {createServer as createHTTPSServer, Server as SecureServer} from 'https';
 import {promisify} from 'util';
 
-import {createCertificate} from 'pem';
 import createApp, {Express} from 'express';
 import {createProxyMiddleware} from 'http-proxy-middleware';
 
+import _debug from 'debug';
+
 import {invariant, spawnError} from './error_utils';
+import {System} from './system';
+import {Result} from './result';
+import {createRunFrameRoutes, RunFrameRouteOptions} from './development_run_frame_routes';
+
+const debug = _debug('blocks-cli:dev_server');
 
 function ipPort(value: AddressInfo | string | null) {
     if (typeof value === 'object' && value !== null) {
@@ -40,6 +46,7 @@ async function listenAsync<T extends InsecureServer | SecureServer>(
 }
 
 export interface DevelopmentProxyServerOptions {
+    frameRouteOptions: RunFrameRouteOptions;
     serverPort: number;
     secureServerPort: number;
 }
@@ -92,26 +99,66 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
     }
 }
 
-export async function createServerAsync({
-    serverPort,
-    secureServerPort,
-}: DevelopmentProxyServerOptions): Promise<DevelopmentServerInterface> {
+interface Keys {
+    key: any;
+    cert: any;
+}
+
+async function readPackageKeysAsync(sys: System): Promise<Result<Keys>> {
+    try {
+        const keysDir = sys.path.join(sys.path.dirname(sys.path.dirname(__dirname)), 'keys');
+        return {
+            value: {
+                key: (
+                    await sys.fs.readFileAsync(sys.path.join(keysDir, 'server.key'), 'utf8')
+                ).toString(),
+                cert: (
+                    await sys.fs.readFileAsync(sys.path.join(keysDir, 'server.crt'), 'utf8')
+                ).toString(),
+            },
+        };
+    } catch (err) {
+        return {err};
+    }
+}
+
+async function findKeysAsync(sys: System) {
+    const packageKeys = await readPackageKeysAsync(sys);
+    if (packageKeys.value) {
+        return {
+            ...packageKeys.value,
+            source: 'package',
+        };
+    }
+
+    throw packageKeys.err;
+}
+
+export async function createServerAsync(
+    sys: System,
+    {frameRouteOptions, serverPort, secureServerPort}: DevelopmentProxyServerOptions,
+): Promise<DevelopmentServerInterface> {
     let server = null;
     let secureServer = null;
     try {
         const app = createApp();
 
+        app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            next();
+        });
+
+        app.use('/__runFrame', createRunFrameRoutes(frameRouteOptions));
+
         // Start a HTTP server.
         server = await listenAsync(createHTTPServer(app), serverPort);
 
-        // Create self signed cryptography keys.
-        const keys = await (promisify(createCertificate) as any)({days: 1, selfSigned: true});
+        // Get cryptography keys.
+        const {source, ...keys} = await findKeysAsync(sys);
+        debug('using %s keys (%d, %d)', source, keys.key.length, keys.cert.length);
 
         // Start a HTTP over TLS Server
-        secureServer = await listenAsync(
-            createHTTPSServer({key: keys.clientKey, cert: keys.certificate}, app),
-            secureServerPort,
-        );
+        secureServer = await listenAsync(createHTTPSServer(keys, app), secureServerPort);
 
         return new DevelopmentProxyServer(app, server, secureServer);
     } catch (err) {

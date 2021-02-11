@@ -75,6 +75,7 @@ function runBundlerServerOnFixture() {
             const consumer = (ctx.bundlerConsumer = await run(
                 new RequestChannelAdapter<RunTaskProducer>({
                     async readyAsync() {},
+                    async emitBuildStateAsync() {},
                 }),
             ));
             await consumer.startDevServerAsync({

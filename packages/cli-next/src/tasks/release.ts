@@ -1,5 +1,7 @@
 import {RequestChannel} from '../helpers/task_channels';
 
+export {RequestChannel};
+
 export interface ReleaseTaskProducer {
     readyAsync(): Promise<void>;
 }

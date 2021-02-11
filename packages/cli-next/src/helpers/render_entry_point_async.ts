@@ -12,11 +12,12 @@ interface EntryPointOptions {
     destination: string;
     userEntryPoint: string;
     gitHash?: string;
+    blockBaseUrl?: string;
 }
 
 export async function renderEntryPointAsync(
     sys: System,
-    {mode, destination, userEntryPoint, gitHash}: EntryPointOptions,
+    {mode, destination, userEntryPoint, gitHash, blockBaseUrl}: EntryPointOptions,
 ): Promise<string> {
     const isDevelopment = mode === 'development';
     const ifDevelopmentMode = (tmpl: () => string) => (isDevelopment ? tmpl() : '');
@@ -51,7 +52,7 @@ window['${GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function runBlock() {
             // In development mode, make sure requests to relative paths get
             // routed to the local backend (instead of the block router).
             `
-    var blockUrl = process.env.BLOCK_BASE_URL;
+    var blockUrl = ${JSON.stringify(blockBaseUrl)};
 
     // Make requests to local backend.
     var baseTag = document.createElement('base');
