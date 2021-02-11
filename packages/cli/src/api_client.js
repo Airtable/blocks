@@ -176,6 +176,29 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         return body;
     }
 
+    async startV2BuildAsync(): Promise<{
+        buildId: BuildId,
+        frontendBundleS3UploadInfo: S3UploadInfo,
+    }> {
+        invariant(this._blockId, 'this._blockId');
+        const options = {
+            url: this._getUrl(`/v2/blocksV2/${this._blockId}/builds/start`),
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
+            },
+            body: {},
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = this._parseErrorMessages(statusCode, body);
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+
     async succeedBuildAsync(buildId: BuildId): Promise<void> {
         const options = {
             url: `${this._getBlockBaseUrl()}/builds/${buildId}/succeed`,
@@ -264,6 +287,32 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
             body: {
                 buildId,
                 deployId,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = this._parseErrorMessages(statusCode, body);
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+
+    async createV2ReleaseAsync(
+        buildId: BuildId,
+        developerComment: string,
+    ): Promise<{releaseId: ReleaseId}> {
+        invariant(this._blockId, 'this._blockId');
+        const options = {
+            url: this._getUrl(`/v2/blocksV2/${this._blockId}/releases/create`),
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
+            },
+            body: {
+                buildId,
+                developerComment,
             },
             json: true,
         };

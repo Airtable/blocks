@@ -150,6 +150,12 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
                 hidden: true,
             },
+            comment: {
+                description:
+                    'A string describing the changes in this release. Can be at most 1000 characters',
+                type: 'string',
+                hidden: true,
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
     },

@@ -80,4 +80,9 @@ module.exports = {
     BACKEND_WRAPPER_DIR: 'backend_wrapper',
 
     HELLO_WORLD_TEMPLATE_URL: 'https://github.com/Airtable/blocks-hello-world',
+
+    // V2 blocks don't have an application id, we store this value in the remote.json file instead
+    // to signal that it is a V2 block and allow development in any base. Most be kept in sync with
+    // V2_BLOCKS_APPLICATION_ID in block_frame.tsx in hyperbase
+    V2_BLOCKS_BASE_ID: 'NONE',
 };

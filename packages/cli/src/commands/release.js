@@ -21,6 +21,8 @@ import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
 import {getBlockDirPath} from '../helpers/get_block_dir_path';
 import type {RemoteJson} from '../types/remote_json_type';
+import {V2_BLOCKS_BASE_ID} from '../config/block_cli_config_settings';
+import inquirer from 'inquirer';
 
 type BuildId = string;
 type DeployId = string;
@@ -144,6 +146,7 @@ async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockBuilder: BlockBuilder,
     originalRemoteJson: RemoteJson | null,
+    isV2Block: boolean,
 ): Promise<{|
     buildId: BuildId,
     deployId: DeployId | null,
@@ -162,11 +165,19 @@ Failed to build the block code!`);
     } = buildResult.value;
 
     const hasBackend = !!backendDeploymentPackagePath;
-    const {
-        buildId,
-        frontendBundleS3UploadInfo,
-        backendDeploymentPackageS3UploadInfo,
-    } = await apiClient.startBuildAsync(hasBackend, originalRemoteJson);
+    let buildId, frontendBundleS3UploadInfo, backendDeploymentPackageS3UploadInfo;
+    if (isV2Block) {
+        if (hasBackend) {
+            throw new Error('V2 blocks cannot have backends');
+        }
+        ({buildId, frontendBundleS3UploadInfo} = await apiClient.startV2BuildAsync());
+    } else {
+        ({
+            buildId,
+            frontendBundleS3UploadInfo,
+            backendDeploymentPackageS3UploadInfo,
+        } = await apiClient.startBuildAsync(hasBackend, originalRemoteJson));
+    }
 
     try {
         console.log('uploading build artifacts');
@@ -182,10 +193,15 @@ Failed to build the block code!`);
         }
     } catch (err) {
         console.log('failed to upload build artifacts', err);
-        await apiClient.failBuildAsync(buildId);
+        // We don't update status for v2 blocks, we just make sure to not create a release if the upload failed.
+        if (!isV2Block) {
+            await apiClient.failBuildAsync(buildId);
+        }
         throw err;
     }
-    await apiClient.succeedBuildAsync(buildId);
+    if (!isV2Block) {
+        await apiClient.succeedBuildAsync(buildId);
+    }
 
     let deployId;
     if (hasBackend) {
@@ -235,6 +251,17 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         throw parseRemoteResult.err;
     }
     const remoteJson = parseRemoteResult.value;
+    const isV2Block = remoteJson.baseId === V2_BLOCKS_BASE_ID;
+    let developerComment = argv.comment;
+    if (isV2Block) {
+        if (typeof developerComment !== 'string' || developerComment.length === 0) {
+            ({developerComment} = await inquirer.prompt({
+                name: 'developerComment',
+                message: 'Enter a comment describing the changes in this release:',
+            }));
+            invariant(developerComment.length > 0, 'comment is required to be non-empty');
+        }
+    }
 
     const parseBlockPackageJsonResult = await parseBlockPackageJsonAsync();
     if (parseBlockPackageJsonResult.err) {
@@ -281,7 +308,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             deployId,
             frontendBundleSourceMapPath,
             s3BundleKey,
-        } = await _buildAndDeployAsync(apiClient, blockBuilder, originalRemoteJson);
+        } = await _buildAndDeployAsync(apiClient, blockBuilder, originalRemoteJson, isV2Block);
 
         if (uploadSourceMapsToRollbar) {
             const gitHash = await getGitHashAsync(getBlockDirPath());
@@ -303,7 +330,12 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             );
         }
         console.log('releasing');
-        await apiClient.createReleaseAsync(buildId, deployId);
+        if (isV2Block) {
+            invariant(typeof developerComment === 'string', 'expects comment to be a string');
+            await apiClient.createV2ReleaseAsync(buildId, developerComment);
+        } else {
+            await apiClient.createReleaseAsync(buildId, deployId);
+        }
     } catch (err) {
         throw err;
     } finally {
@@ -311,6 +343,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     console.log('✅ successfully released block!');
+    if (isV2Block) {
+        console.log('Note: updating all block installations may take up to 10 minutes');
+    }
 }
 
 module.exports = {runCommandAsync};
