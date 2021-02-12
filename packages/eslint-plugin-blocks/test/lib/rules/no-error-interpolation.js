@@ -18,12 +18,16 @@ ruleTester.run('no-error-interpolation', rule, {
     valid: [
         {code: 'invariant(null, "hello world")', options},
         {code: 'invariant(null, "hello %s", "world")', options},
+        {code: 'invariant(null, `hello\nworld`)', options},
         {code: 'spawnError("hello world")', options},
         {code: 'spawnError("hello %s", ["world"])', options},
+        {code: 'spawnError(`hello\nworld`)', options},
         {code: 'someNamespace.invariant(null, "hello world")', options},
         {code: 'someNamespace.invariant(null, "hello %s", "world")', options},
+        {code: 'someNamespace.invariant(null, `hello\nworld`)', options},
         {code: 'someNamespace.spawnError("hello world")', options},
         {code: 'someNamespace.spawnError("hello %s", ["world"])', options},
+        {code: 'someNamespace.spawnError(`hello\nworld`)', options},
     ],
     invalid: [
         {

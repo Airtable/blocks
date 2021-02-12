@@ -31,7 +31,8 @@ module.exports = {
                     if (
                         calleeName === errorFnName &&
                         node.arguments[messageArgumentIndex] &&
-                        node.arguments[messageArgumentIndex].type === 'TemplateLiteral'
+                        node.arguments[messageArgumentIndex].type === 'TemplateLiteral' &&
+                        node.arguments[messageArgumentIndex].quasis.length > 1
                     ) {
                         context.report({
                             node,
