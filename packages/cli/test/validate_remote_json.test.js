@@ -29,6 +29,14 @@ describe('validateRemoteJson', () => {
         assert.strictEqual(validationResult.pass, true);
     });
 
+    it('passes for a valid v2 remote', function() {
+        const validationResult = validateRemoteJson({
+            blockId: 'blk00000000000000',
+            baseId: 'NONE',
+        });
+        assert.strictEqual(validationResult.pass, true);
+    });
+
     it('fails for invalid remotes', function() {
         const testCases = [
             null,

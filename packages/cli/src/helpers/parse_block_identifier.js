@@ -1,5 +1,7 @@
 // @flow
 
+import {V2_BLOCKS_BASE_ID} from '../config/block_cli_config_settings';
+
 type ParseResult =
     | {|
           success: true,
@@ -17,7 +19,10 @@ function parseBlockIdentifier(blockIdentifier: string): ParseResult {
     const blockIdentifierSplit = blockIdentifier.split('/');
     if (
         blockIdentifierSplit.length !== 2 ||
-        !blockIdentifierSplit[0].startsWith('app') ||
+        !(
+            blockIdentifierSplit[0].startsWith('app') ||
+            blockIdentifierSplit[0] === V2_BLOCKS_BASE_ID
+        ) ||
         !blockIdentifierSplit[1].startsWith('blk')
     ) {
         return {
