@@ -385,8 +385,18 @@ export enum FieldType {
      * ```
      *
      * **Field options write format**
+     * ```js
+     * {
+     *     // The ID of the table this field links to
+     *     linkedTableId: TableId,
+     *     // The ID of the view in the linked table to use when showing
+     *     // a list of records to select from
+     *     viewIdForRecordSelection?: ViewId,
+     * }
+     * ```
      *
-     * Creating or updating `MULTIPLE_RECORD_LINKS` fields is not supported.
+     * Creating `MULTIPLE_RECORD_LINKS` fields is supported but updating options for existing
+     * `MULTIPLE_RECORD_LINKS` fields is not supported.
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
