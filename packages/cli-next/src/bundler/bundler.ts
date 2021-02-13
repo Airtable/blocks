@@ -25,7 +25,7 @@ import {createSystem, System} from '../helpers/system';
 
 import {createWebpackCompilerConfig} from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
-import {createTypescriptAssetConfigAsync} from './typescript_config';
+import {createJavascriptAssetConfigAsync} from './javascript_config';
 
 class BundlerProducer implements RunTaskProducer, ReleaseTaskProducer {
     producerChannel: RequestChannel<RunTaskProducer | ReleaseTaskProducer>;
@@ -76,7 +76,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
             entry,
             outputPath,
             assets: {
-                typescript: await createTypescriptAssetConfigAsync(this.system, context),
+                javascript: await createJavascriptAssetConfigAsync(this.system),
             },
         });
 

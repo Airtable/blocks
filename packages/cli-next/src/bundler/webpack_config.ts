@@ -18,22 +18,15 @@ export interface WebpackSummaryOptions {
     outputPath?: string;
     /** Definitions of file types to include in the bundle and how. */
     assets: {
-        typescript: TypeScriptConfigFile | TypeScriptCompilerOptions;
+        javascript: JavascriptAssetOptions;
     };
 }
 
-export interface TypeScriptCompilerOptions {
-    assetType: 'typescript';
+export interface JavascriptAssetOptions {
+    assetType: 'javascript';
 
-    // Types provided by the typescript library are for options passed to it
-    // directly but we are going to pass to ts-loader which expects
-    // tsconfig.json options.
-    compilerOptions: object;
-}
-
-export interface TypeScriptConfigFile {
-    assetType: 'typescript';
-    configFile: string;
+    transpiler: 'babel';
+    options: any;
 }
 
 /**
@@ -48,7 +41,7 @@ export function createWebpackCompilerConfig({
     entry,
     outputPath,
     assets: {
-        typescript: {assetType: _, ...typescriptOptions},
+        javascript: {options: babelOptions},
     },
 }: WebpackSummaryOptions): Configuration {
     return {
@@ -60,17 +53,32 @@ export function createWebpackCompilerConfig({
             filename: BUNDLE_FILE_NAME,
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+            extensions: ['.ts', '.tsx', '.mjs', '.mjsx', '.js', '.jsx'],
         },
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
-                    loader: require.resolve('ts-loader'),
-                    options: {
-                        transpileOnly: true,
-                        ...typescriptOptions,
+                    test: /\.(?:m?j|t)sx?$/,
+                    include: [/node_modules/],
+                    resolve: {
+                        // Modules in node_modules might have a package.json
+                        // stating "type": "module" (such as
+                        // @babel/runtime/helpers/esm). In such a case any
+                        // import statements are required to have mandatory file
+                        // extensions.
+                        //
+                        // See:
+                        // https://nodejs.org/api/esm.html#esm_mandatory_file_extensions
+                        //
+                        // To disable this set this resolution option to false.
+                        fullySpecified: false,
                     },
+                },
+                {
+                    test: /\.(?:m?j|t)sx?$/,
+                    exclude: [/node_modules/],
+                    loader: require.resolve('babel-loader'),
+                    options: babelOptions,
                 },
             ],
         },

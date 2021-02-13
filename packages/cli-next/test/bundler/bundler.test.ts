@@ -18,49 +18,76 @@ describe('run bundler', () => {
         .register('readServerBundle', readBundleFromServer)
         .register('runBundlerPass', runBundlerPassOnFixture)
         .register('readDiskBundle', readBundleFromDisk)
+        .register('bundleIncludes', bundleIncludes)
+        .register('bundleExcludes', bundleExcludes)
         .timeout(30000)
         .stdout()
         .stderr();
 
     testBundler
-        .prepareFixture('run_src_index_js')
-        .runBundlerServer()
-        .readServerBundle()
-        .it('bundles empty app with dev server', ({bundle}) => {
-            // Check directly instead of with expect. On failure expect will
-            // diff the normally long bundle.
-            expect(bundle.includes('javascript')).to.equal(true);
-        });
-
-    testBundler
-        .prepareFixture('run_src_index_ts')
-        .runBundlerServer()
-        .readServerBundle()
-        .it('bundles empty app with dev server', ({bundle}) => {
-            // Check directly instead of with expect. On failure expect will
-            // diff the normally long bundle.
-            expect(bundle.includes('typescript')).to.equal(true);
-        });
-
-    testBundler
-        .prepareFixture('run_src_index_js')
+        .prepareFixture('bundler_babel_transforms')
         .runBundlerPass()
         .readDiskBundle()
-        .it('bundles empty app to disk', ({bundle}) => {
-            // Check directly instead of with expect. On failure expect will
-            // diff the normally long bundle.
-            expect(bundle.includes('javascript')).to.equal(true);
-        });
+        .bundleExcludes('?.')
+        .bundleExcludes('??')
+        .bundleExcludes('name=')
+        .it('transforms newer js syntax to older syntax');
 
     testBundler
-        .prepareFixture('run_src_index_ts')
+        .prepareFixture('bundler_react_jsx')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react components with server');
+
+    testBundler
+        .prepareFixture('bundler_react_jsx')
         .runBundlerPass()
         .readDiskBundle()
-        .it('bundles empty app to disk', ({bundle}) => {
-            // Check directly instead of with expect. On failure expect will
-            // diff the normally long bundle.
-            expect(bundle.includes('typescript')).to.equal(true);
-        });
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react components to disk');
+
+    testBundler
+        .prepareFixture('bundler_src_index_js')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('javascript')
+        .it('bundles empty app with dev server');
+
+    testBundler
+        .prepareFixture('bundler_src_index_js')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('javascript')
+        .it('bundles empty app to disk');
+
+    testBundler
+        .prepareFixture('bundler_react_tsx')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react typescript components with server');
+
+    testBundler
+        .prepareFixture('bundler_react_tsx')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react typescript components to disk');
+
+    testBundler
+        .prepareFixture('bundler_src_index_ts')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('typescript')
+        .it('bundles empty app with dev server');
+
+    testBundler
+        .prepareFixture('bundler_src_index_ts')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('typescript')
+        .it('bundles empty app to disk');
 });
 
 function runBundlerServerOnFixture() {
@@ -140,4 +167,32 @@ function readBundleFromDisk() {
             expect(typeof ctx.bundle).to.equal('string');
         },
     });
+}
+
+function bundleIncludes(expectString: string) {
+    return {
+        run(ctx: {bundle: string}) {
+            // Check directly instead of with expect. On failure expect will
+            // diff the normally long bundle. Computing that difference can take
+            // a lot of time.
+            expect(ctx.bundle.includes(expectString)).to.equal(
+                true,
+                `bundle includes ${expectString}`,
+            );
+        },
+    };
+}
+
+function bundleExcludes(expectString: string) {
+    return {
+        run(ctx: {bundle: string}) {
+            // Check directly instead of with expect. On failure expect will
+            // diff the normally long bundle. Computing that difference can take
+            // a lot of time.
+            expect(ctx.bundle.includes(expectString)).to.equal(
+                false,
+                `bundle excludes ${expectString}`,
+            );
+        },
+    };
 }
