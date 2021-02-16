@@ -5,6 +5,8 @@ import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync} from '../manager/run';
 import {
     BuildState,
+    BuildStateBuilt,
+    BuildStateError,
     BuildStatus,
     RunTaskConsumer,
     RunTaskConsumerChannel,
@@ -25,6 +27,7 @@ import {
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {mkdirpAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
+import {spawnError} from '../helpers/error_utils';
 
 const debug = _debug('block-cli:command:run');
 
@@ -32,6 +35,7 @@ class RunProducer implements RunTaskProducer {
     readyDefer = new Deferred<void>();
 
     buildState: BuildState = {status: BuildStatus.START};
+    buildStateDefer = new Deferred<BuildState>();
 
     async readyAsync() {
         this.readyDefer.resolve();
@@ -39,6 +43,9 @@ class RunProducer implements RunTaskProducer {
 
     async emitBuildStateAsync(buildState: BuildState) {
         this.buildState = buildState;
+        const lastDefer = this.buildStateDefer;
+        this.buildStateDefer = new Deferred<BuildState>();
+        lastDefer.resolve(buildState);
     }
 }
 
@@ -117,11 +124,48 @@ export default class Run extends AirtableCommand {
         });
         const serverPort = secureServerPort + 1;
 
+        const frameRouteOptions = {
+            getBuildState: () => producer.buildState,
+            async getBuildStateResultAsync(): Promise<BuildStateBuilt | BuildStateError> {
+                if (
+                    producer.buildState.status === BuildStatus.READY ||
+                    producer.buildState.status === BuildStatus.ERROR
+                ) {
+                    return producer.buildState;
+                } else {
+                    await producer.buildStateDefer.promise;
+                    return await frameRouteOptions.getBuildStateResultAsync();
+                }
+            },
+        };
+
+        const logBuildState = () => {
+            const buildState = producer.buildState;
+            switch (buildState.status) {
+                case BuildStatus.BUILDING:
+                    this.log('Updating bundle...');
+                    break;
+                case BuildStatus.ERROR:
+                    this.log(buildState.error.message);
+                    break;
+                case BuildStatus.READY:
+                    this.log('Bundle updated');
+                    break;
+                case BuildStatus.START:
+                    break;
+                default:
+                    throw spawnError(
+                        'Tried logging unknown buildState: %s',
+                        (buildState as BuildState).status,
+                    );
+            }
+            producer.buildStateDefer.promise.then(logBuildState);
+        };
+        producer.buildStateDefer.promise.then(logBuildState);
+
         // start https server
         const devServer = await createServerAsync(this.system, {
-            frameRouteOptions: {
-                getBuildState: () => producer.buildState,
-            },
+            frameRouteOptions,
             serverPort,
             secureServerPort,
         });
@@ -159,6 +203,10 @@ export default class Run extends AirtableCommand {
         const bundlerPort = await findPortAsync(flags.bundlerPort);
         await task.startDevServerAsync({
             port: bundlerPort,
+            liveReload: {
+                https: true,
+                port: secureServerPort,
+            },
 
             mode: 'development',
             context: appRootPath,

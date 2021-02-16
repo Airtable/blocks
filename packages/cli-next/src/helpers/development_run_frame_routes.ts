@@ -1,12 +1,19 @@
 import express from 'express';
+import stripAnsi from 'strip-ansi';
+
 import {BLOCK_REQUEST_BODY_LIMIT} from '../settings';
-import {BuildState, BuildStatus} from '../tasks/run';
+import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
+import {spawnError} from './error_utils';
 
 export interface RunFrameRouteOptions {
     getBuildState(): BuildState;
+    getBuildStateResultAsync(): Promise<BuildStateBuilt | BuildStateError>;
 }
 
-export function createRunFrameRoutes({getBuildState}: RunFrameRouteOptions) {
+export function createRunFrameRoutes({
+    getBuildState,
+    getBuildStateResultAsync,
+}: RunFrameRouteOptions) {
     const runFrameRoutes = express.Router();
 
     // Use body parser for JSON payloads.
@@ -36,8 +43,22 @@ export function createRunFrameRoutes({getBuildState}: RunFrameRouteOptions) {
     });
 
     // Serve the bundle file if ready.
-    runFrameRoutes.get('/bundle.js', (req, res) => {
-        res.redirect('/bundle.js');
+    runFrameRoutes.get('/bundle.js', async (req, res) => {
+        const buildResult = await getBuildStateResultAsync();
+        switch (buildResult.status) {
+            case BuildStatus.READY:
+                res.redirect('/bundle.js');
+                break;
+            case BuildStatus.ERROR:
+                res.sendStatus(422);
+                break;
+            default:
+                throw spawnError('Unexpected build status: %s', (buildResult as any).status);
+        }
+    });
+
+    runFrameRoutes.get('/poll_script.js', async (req, res) => {
+        res.redirect('/poll_script.js');
     });
 
     /**
@@ -52,7 +73,7 @@ export function createRunFrameRoutes({getBuildState}: RunFrameRouteOptions) {
         const buildState = getBuildState();
         let stack = {};
         if (buildState.status === BuildStatus.ERROR) {
-            stack = {error: {stack: buildState.error.message}};
+            stack = {error: {stack: stripAnsi(buildState.error.message)}};
         }
 
         res.status(200).send({

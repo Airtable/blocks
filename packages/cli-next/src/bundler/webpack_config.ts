@@ -1,6 +1,6 @@
 import {Configuration} from 'webpack';
 
-import {BUNDLE_FILE_NAME} from '../settings';
+import {BUNDLE_NAME} from '../settings';
 
 /**
  * Serializable bundler configuration summary.
@@ -9,6 +9,7 @@ import {BUNDLE_FILE_NAME} from '../settings';
  * some values may be difficult or not able to be serialized to text.
  */
 export interface WebpackSummaryOptions {
+    /** Set high level configuration for the bundler. */
     mode: 'development' | 'production';
     /** Root context of source to bundle. */
     context: string;
@@ -16,6 +17,16 @@ export interface WebpackSummaryOptions {
     entry: string;
     /** Path on disk to write files produced while bundling. */
     outputPath?: string;
+    /** Configure live reload client. */
+    liveReload?: {
+        /**
+         * Connect the live reload client over an encrypted connection?
+         *
+         * @default true
+         */
+        https?: boolean;
+        port: number;
+    };
     /** Definitions of file types to include in the bundle and how. */
     assets: {
         javascript: JavascriptAssetOptions;
@@ -30,6 +41,27 @@ export interface JavascriptAssetOptions {
 }
 
 /**
+ * If the bundler is behind a proxy (it is), we need to manualy inject the client.
+ *
+ * @param entry Path to first module to execute in the produced bundle.
+ * @param liveReload Configure live reload client.
+ */
+function injectLiveReloadClient(entry: string, liveReload: WebpackSummaryOptions['liveReload']) {
+    let otherScripts = {};
+    if (liveReload) {
+        const clientPath = require.resolve('webpack-dev-server/client');
+        const protocol = liveReload.https ?? true ? 'https' : 'http';
+        otherScripts = {
+            poll_script: `${clientPath}?${protocol}://localhost:${liveReload.port}'`,
+        };
+    }
+    return {
+        [BUNDLE_NAME]: entry,
+        ...otherScripts,
+    };
+}
+
+/**
  * Syncronyously transform a serializable bundler configuration summary to
  * webpack configuration format.
  *
@@ -40,6 +72,7 @@ export function createWebpackCompilerConfig({
     context,
     entry,
     outputPath,
+    liveReload,
     assets: {
         javascript: {options: babelOptions},
     },
@@ -47,10 +80,9 @@ export function createWebpackCompilerConfig({
     return {
         mode,
         context,
-        entry,
+        entry: injectLiveReloadClient(entry, liveReload),
         output: {
             path: outputPath,
-            filename: BUNDLE_FILE_NAME,
         },
         resolve: {
             extensions: ['.ts', '.tsx', '.mjs', '.mjsx', '.js', '.jsx'],

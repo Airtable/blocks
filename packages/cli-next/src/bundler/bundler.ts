@@ -23,7 +23,7 @@ import {
 import {invariant} from '../helpers/error_utils';
 import {createSystem, System} from '../helpers/system';
 
-import {createWebpackCompilerConfig} from './webpack_config';
+import {createWebpackCompilerConfig, WebpackSummaryOptions} from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createJavascriptAssetConfigAsync} from './javascript_config';
 
@@ -63,18 +63,10 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         this.system = createSystem();
     }
 
-    async _configureCompilerAsync({
-        mode,
-        context,
-        entry,
-        outputPath,
-    }: Omit<ReleaseBundleOptions, 'outputPath'> &
-        Partial<Pick<ReleaseBundleOptions, 'outputPath'>>) {
+    async _configureCompilerAsync({context, ...options}: Omit<WebpackSummaryOptions, 'assets'>) {
         this.compilerConfig = createWebpackCompilerConfig({
-            mode,
             context,
-            entry,
-            outputPath,
+            ...options,
             assets: {
                 javascript: await createJavascriptAssetConfigAsync(this.system),
             },
@@ -101,8 +93,17 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
             (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.BUILDING});
         });
 
-        this.compiler.hooks.emit.tap('AirtableCliStatusPlugin', () => {
-            (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.READY});
+        this.compiler.hooks.done.tap('AirtableCliStatusPlugin', stats => {
+            if (stats.hasErrors()) {
+                const statsJson = stats.toJson({colors: false});
+                (this.producer as RunTaskProducer).emitBuildStateAsync({
+                    status: BuildStatus.ERROR,
+                    error: statsJson.errors[0],
+                });
+                this.webpackDevServer?.sockWrite(this.webpackDevServer.sockets, 'ok');
+            } else {
+                (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.READY});
+            }
         });
 
         this.compiler.hooks.failed.tap('AirtableCliStatusPlugin', error => {

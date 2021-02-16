@@ -13,7 +13,7 @@ import {System} from '../../src/helpers/system';
 import {test} from '../mocks/test';
 import {AIRTABLE_API_URL, BUNDLE_FILE_NAME} from '../../src/settings';
 import {invariant} from '../../src/helpers/error_utils';
-import {BlockUrlOptions} from '../../src/helpers/airtable_api_init';
+import {AirtableApiBlockOptions} from '../../src/helpers/airtable_api';
 import {RequestChannelAdapter} from '../../src/helpers/task_channels';
 
 const {
@@ -111,12 +111,10 @@ function createStubs() {
     class _UploadReleaseStub
         implements
             Pick<uploadReleaseModule.UploadRelease, 'buildUploadAsync' | 'createReleaseAsync'> {
-        private blockUrlOptions: BlockUrlOptions;
+        private blockUrlOptions: AirtableApiBlockOptions;
 
         constructor({
-            airtableInit,
             airtable,
-            s3Init,
             s3,
             ...blockUrlOptions
         }: ConstructorParameters<typeof uploadReleaseModule['UploadRelease']>[0]) {

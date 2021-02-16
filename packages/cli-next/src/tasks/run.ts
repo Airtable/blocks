@@ -37,6 +37,10 @@ export type RunTaskProducerChannel = RequestChannel<RunTaskProducer>;
 
 export interface RunDevServerOptions {
     port: number;
+    liveReload?: {
+        https?: boolean;
+        port: number;
+    };
     mode: 'development' | 'production';
     context: string;
     entry: string;
