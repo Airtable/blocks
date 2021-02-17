@@ -162,6 +162,15 @@ export interface WatchableKeysAndArgs {
      * Triggered when the maximum full screen size is modified.
      */
     setFullscreenMaxSize: ViewportSizeConstraint;
+    /**
+     * Triggered when the SDK has been induced to expand a list of Records in
+     * the user interface.
+     */
+    expandRecordList: {
+        tableId: string;
+        recordIds: Array<string>;
+        fieldIds: Array<string> | null;
+    };
 }
 
 /**
@@ -586,6 +595,14 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         this.emit('expandRecord', {recordId, recordIds});
     }
 
+    expandRecordList(
+        tableId: string,
+        recordIds: Array<string>,
+        fieldIds: Array<string> | null,
+    ): void {
+        this.emit('expandRecordList', {tableId, recordIds, fieldIds});
+    }
+
     get fieldTypeProvider() {
         const fieldTypeProvider = super.fieldTypeProvider;
 
@@ -753,7 +770,6 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
     async fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
         return {};
     }
-    expandRecordList() {}
     async expandRecordPickerAsync(): Promise<string | null> {
         return null;
     }

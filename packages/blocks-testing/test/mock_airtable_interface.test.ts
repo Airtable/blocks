@@ -253,6 +253,32 @@ describe('MockAirtableInterface', () => {
         });
     });
 
+    describe('#expandRecordList', () => {
+        it('emits an event with relevant data', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            const {tableId, recordIds, fieldIds} = await new Promise(resolve => {
+                ai.on('expandRecordList', resolve);
+                ai.expandRecordList('tblTable1', ['recb', 'recc'], ['fldIceCream']);
+            });
+
+            expect(tableId).toBe('tblTable1');
+            expect(recordIds).toStrictEqual(['recb', 'recc']);
+            expect(fieldIds).toStrictEqual(['fldIceCream']);
+        });
+
+        it('does not emit to function that has been unsubscribed', async () => {
+            const ai = new MockAirtableInterface({base: smallBase});
+
+            await new Promise((resolve, reject) => {
+                ai.on('expandRecordList', reject);
+                ai.on('expandRecordList', resolve);
+                ai.off('expandRecordList', reject);
+                ai.expandRecordList('tblTable1', ['recb', 'recc'], ['fldIceCream']);
+            });
+        });
+    });
+
     describe('#fetchAndSubscribeToCellValuesInFieldsAsync', () => {
         it('fails for unrecognized table IDs', async () => {
             const ai = new MockAirtableInterface({base: smallBase});
@@ -754,13 +780,6 @@ describe('MockAirtableInterface', () => {
         it('returns an empty object', async () => {
             const ai = new MockAirtableInterface({base: smallBase});
             expect(await ai.fetchDefaultCellValuesByFieldIdAsync()).toStrictEqual({});
-        });
-    });
-
-    describe('#expandRecordList', () => {
-        it('does not throw', () => {
-            const ai = new MockAirtableInterface({base: smallBase});
-            expect(() => ai.expandRecordList()).not.toThrowError();
         });
     });
 

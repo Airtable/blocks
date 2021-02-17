@@ -4,7 +4,7 @@ import React from 'react';
 import TestDriver from '../src';
 import {Viewport} from '@airtable/blocks/types';
 import {Base, Cursor, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
-import {useBase, useCursor, useViewport} from '@airtable/blocks/ui';
+import {expandRecord, expandRecordList, useBase, useCursor, useViewport} from '@airtable/blocks/ui';
 import {Mutation} from '@airtable/blocks/unstable_testing_utils';
 
 import {FixtureData} from '../src/mock_airtable_interface';
@@ -825,6 +825,56 @@ describe('TestDriver', () => {
                     'recc',
                     newId[0],
                 ]);
+            });
+        });
+
+        describe('record expansion', () => {
+            it('notifies when individual records are expanded', async () => {
+                const div = document.createElement('div');
+                let base: Base | null = null;
+                const child = React.createElement(() => {
+                    base = useBase();
+                    return null;
+                }, null);
+
+                ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
+                const result = await base!.tables[0].selectRecordsAsync();
+                const expandRecordSpy = jest.fn();
+                const expandRecordListSpy = jest.fn();
+
+                testDriver.watch('expandRecord', expandRecordSpy);
+                testDriver.watch('expandRecordList', expandRecordListSpy);
+
+                expandRecord(result.records[1]);
+
+                expect(expandRecordSpy).toHaveBeenCalledWith({recordId: 'recb', recordIds: null});
+                expect(expandRecordListSpy).toHaveBeenCalledTimes(0);
+            });
+
+            it('notifies when multiple records are expanded', async () => {
+                const div = document.createElement('div');
+                let base: Base | null = null;
+                const child = React.createElement(() => {
+                    base = useBase();
+                    return null;
+                }, null);
+
+                ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
+                const result = await base!.tables[0].selectRecordsAsync();
+                const expandRecordSpy = jest.fn();
+                const expandRecordListSpy = jest.fn();
+
+                testDriver.watch('expandRecord', expandRecordSpy);
+                testDriver.watch('expandRecordList', expandRecordListSpy);
+
+                expandRecordList([result.records[0], result.records[2]]);
+
+                expect(expandRecordSpy).toHaveBeenCalledTimes(0);
+                expect(expandRecordListSpy).toHaveBeenCalledWith({
+                    recordIds: ['reca', 'recc'],
+                    fieldIds: null,
+                    tableId: 'tblTable1',
+                });
             });
         });
     });

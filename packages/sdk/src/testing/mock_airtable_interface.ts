@@ -262,7 +262,11 @@ abstract class MockAirtableInterface extends EventEmitter implements AirtableInt
     unsubscribeFromViewData() {}
 
     abstract expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;
-    abstract expandRecordList(): void;
+    abstract expandRecordList(
+        tableId: string,
+        recordIds: Array<string>,
+        fieldIds: Array<string> | null,
+    ): void;
     abstract expandRecordPickerAsync(): Promise<string | null>;
     abstract reloadFrame(): void;
     abstract setSettingsButtonVisibility(): void;
