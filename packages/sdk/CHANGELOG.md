@@ -18,6 +18,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Increase spacing between `label` and `description` nodes in `FormField`.
 -   Support creating (but not updating) `MULTIPLE_RECORD_LINKS` fields using
     `table.createFieldAsync`
+-   Add `isCancelButtonDisabled` and `isConfirmButtonDisabled` props to `ConfirmationDialog`.
 
 ## [1.4.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.0...@airtable/blocks@1.4.1) - 2021-01-21
 

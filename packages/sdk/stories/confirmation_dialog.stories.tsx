@@ -18,6 +18,16 @@ function ConfirmationDialogExample() {
                     label: 'Is dangerous action',
                     defaultValue: false,
                 },
+                isCancelButtonDisabled: {
+                    type: 'switch',
+                    label: 'Is cancel button disabled',
+                    defaultValue: false,
+                },
+                isConfirmButtonDisabled: {
+                    type: 'switch',
+                    label: 'Is confirm button disabled',
+                    defaultValue: false,
+                },
             }}
             styleProps={Object.keys(dialogStylePropTypes)}
             renderCodeFn={values => {

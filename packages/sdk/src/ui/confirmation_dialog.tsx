@@ -37,6 +37,10 @@ interface ConfirmationDialogProps extends DialogStyleProps {
     onCancel: () => unknown;
     /** Confirm button event handler. Handles click events and Space/Enter keypress events. */
     onConfirm: () => unknown;
+    /** Whether the cancel button can be interacted with. Defaults to `false`. */
+    isCancelButtonDisabled?: boolean;
+    /** Whether the confirm button can be interacted with. Defaults to `false`. */
+    isConfirmButtonDisabled?: boolean;
 }
 
 /**
@@ -64,6 +68,8 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         backgroundStyle: PropTypes.object,
         onCancel: PropTypes.func.isRequired,
         onConfirm: PropTypes.func.isRequired,
+        isCancelButtonDisabled: PropTypes.bool,
+        isConfirmButtonDisabled: PropTypes.bool,
         ...dialogStylePropTypes,
     };
     /** @hidden */
@@ -71,6 +77,8 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         cancelButtonText: 'Cancel',
         confirmButtonText: 'Confirm',
         isConfirmActionDangerous: false,
+        isCancelButtonDisabled: false,
+        isConfirmButtonDisabled: false,
         width: '400px',
     };
     /** @internal */
@@ -95,6 +103,8 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
             backgroundStyle,
             onCancel,
             onConfirm,
+            isCancelButtonDisabled,
+            isConfirmButtonDisabled,
             ...restOfProps
         } = this.props;
 
@@ -122,10 +132,17 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                         ref={this._confirmButtonRef}
                         onClick={onConfirm}
                         variant={isConfirmActionDangerous ? 'danger' : 'primary'}
+                        disabled={isConfirmButtonDisabled}
                     >
                         {confirmButtonText}
                     </Button>
-                    <Button onClick={onCancel} variant="secondary" alignSelf="end" marginRight={2}>
+                    <Button
+                        onClick={onCancel}
+                        variant="secondary"
+                        alignSelf="end"
+                        marginRight={2}
+                        disabled={isCancelButtonDisabled}
+                    >
                         {cancelButtonText}
                     </Button>
                 </Box>
