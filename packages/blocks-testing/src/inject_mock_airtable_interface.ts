@@ -1,9 +1,8 @@
 // istanbul ignore file
-import {ViewType} from '../types/view';
-import {FieldType} from '../types/field';
-import MockAirtableInterfaceExternal from './mock_airtable_interface_external';
+import {FieldType, ViewType} from '@airtable/blocks/models';
+import MockAirtableInterface from './mock_airtable_interface';
 
-const vacantAirtableInterface = new MockAirtableInterfaceExternal({
+const vacantAirtableInterface = new MockAirtableInterface({
     base: {
         id: 'appVACANTFORTESTING',
         name: 'Vacant Base intended for use in automated testing environments only',

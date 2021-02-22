@@ -1,8 +1,5 @@
-import {FieldType} from '../../src/types/field';
-import {ViewType} from '../../src/types/view';
-import MockAirtableInterface, {
-    FixtureData,
-} from '../../src/testing/mock_airtable_interface_external';
+import {FieldType, ViewType} from '@airtable/blocks/models';
+import MockAirtableInterface, {FixtureData} from '../src/mock_airtable_interface';
 
 describe('MockAirtableInterface', () => {
     let smallBase: FixtureData['base'];

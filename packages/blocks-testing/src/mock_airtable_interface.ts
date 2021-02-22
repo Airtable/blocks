@@ -1,31 +1,40 @@
 import {
-    AppInterface,
-    BlockRunContextType,
-    SdkInitData,
-    PartialViewData,
-} from '../types/airtable_interface';
-import {BaseData, BaseId, ModelChange} from '../types/base';
-import {CollaboratorData} from '../types/collaborator';
-import {Mutation, MutationTypes, PermissionCheckResult} from '../types/mutations';
-import {TestMutation, TestMutationTypes} from '../types/test_mutations';
-import {RecordData, RecordId} from '../types/record';
-import {cloneDeep, has, keyBy, ObjectMap} from '../private_utils';
-import {CursorData} from '../types/cursor';
-import {TableId} from '../types/table';
-import {FieldData, FieldId, FieldType} from '../types/field';
-import {ViewId, ViewType} from '../types/view';
-import Color from '../colors';
-import {invariant, spawnError} from '../error_utils';
-import {
-    GlobalConfigUpdate,
-    GlobalConfigData,
+    BaseId,
+    CollaboratorData,
+    Color,
     GlobalConfigValue,
+    FieldId,
+    PermissionCheckResult,
+    RecordActionData,
+    RecordId,
+    TableId,
+    ViewId,
+} from '@airtable/blocks/types';
+import {
+    AbstractMockAirtableInterface,
+    AppInterface,
+    BaseData,
+    BlockRunContextType,
+    CursorData,
     GlobalConfigArray,
+    GlobalConfigData,
     GlobalConfigObject,
-} from '../types/global_config';
-import {RecordActionData} from '../types/record_action_data';
-import {RequestJson, ResponseJson} from '../types/backend_fetch_types';
-import MockAirtableInterface from './mock_airtable_interface';
+    GlobalConfigUpdate,
+    FieldData,
+    FieldType,
+    ModelChange,
+    Mutation,
+    MutationTypes,
+    PartialViewData,
+    RecordData,
+    RequestJson,
+    ResponseJson,
+    SdkInitData,
+    ViewType,
+} from '@airtable/blocks/unstable_testing_utils';
+import {TestMutation, TestMutationTypes} from './test_mutations';
+import {cloneDeep, has, keyBy, ObjectMap} from './private_utils';
+import {invariant, spawnError} from './error_utils';
 
 const MutationTypeValues: ReadonlyArray<string> = Object.freeze(Object.values(MutationTypes));
 
@@ -124,9 +133,21 @@ function setGlobalConfigValue(
     return newTarget;
 }
 
-/** @hidden */
+/**
+ * A mapping relating the names of event subscriptions available on
+ * `TestDriver` instances to the arguments that are provided when one of those
+ * events is triggered.
+ */
 export interface WatchableKeysAndArgs {
+    /**
+     * Triggered whenever the SDK has been induced to persist a change to the
+     * Base.
+     */
     mutation: TestMutation;
+    /**
+     * Triggered when the SDK has been induced to expand a Record in the user
+     * interface
+     */
     expandRecord: {recordId: RecordId; recordIds: Array<RecordId> | null};
 }
 
@@ -206,10 +227,15 @@ interface ViewFixtureData {
     records: Array<ViewRecordFixtureData>;
 }
 
-/** @hidden */
+/**
+ * A reference to Record contained within a simulated view. This is disctinct
+ * from the complete fixture data for the simulated Record.
+ */
 interface ViewRecordFixtureData {
+    /** A value which uniquely identifies a Record within a base. */
     id: RecordId;
-    color: typeof Color | null;
+    /** The color associated with a Record's membership in a View. */
+    color: Color | null;
 }
 
 /** A representation of the state of a Record */
@@ -224,7 +250,7 @@ interface RecordFixtureData {
     cellValuesByFieldId: ObjectMap<FieldId, unknown>;
 }
 
-/** @internal */
+/** @hidden */
 interface RecordDataStore {
     tables: {
         [key: string]: {
@@ -258,9 +284,9 @@ const generateGenericId = () => {
  * high-level constructor for specifying test fixture data and implements some
  * features which approximate interactions with Hyperbase in production.
  *
- * @internal
+ * @hidden
  */
-export default class MockAirtableInterfaceExternal extends MockAirtableInterface {
+export default class MockAirtableInterface extends AbstractMockAirtableInterface {
     _recordDataStore: RecordDataStore;
     _userPermissionCheck?: (mutation: Mutation) => boolean;
 

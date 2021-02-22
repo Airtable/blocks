@@ -1,17 +1,14 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import TableOrViewQueryResult from '../../src/models/table_or_view_query_result';
-import {FieldType} from '../../src/types/field';
-import {Mutation} from '../../src/types/mutations';
-import {ViewType} from '../../src/types/view';
-import {TestMutation} from '../../src/types/test_mutations';
-import Base from '../../src/models/base';
-import Cursor from '../../src/models/cursor';
-import useBase from '../../src/ui/use_base';
-import useCursor from '../../src/ui/use_cursor';
-import {FixtureData} from '../../src/testing/mock_airtable_interface_external';
-import TestDriver from '../../src/testing/test_driver';
-import {invariant} from '../../src/error_utils';
+// eslint-disable-next-line import/order
+import TestDriver from '../src';
+import {Base, Cursor, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
+import {useBase, useCursor} from '@airtable/blocks/ui';
+import {Mutation} from '@airtable/blocks/unstable_testing_utils';
+
+import {FixtureData} from '../src/mock_airtable_interface';
+import {invariant} from '../src/error_utils';
+import {TestMutation} from '../src/test_mutations';
 
 function getCursor(testDriver: TestDriver): Cursor {
     const div = document.createElement('div');

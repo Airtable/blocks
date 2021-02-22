@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestDriver from '@airtable/blocks/unstable_testing';
+import TestDriver from '@airtable/blocks-testing';
 
 import recordListFixture from './fixtures/simple_record_list';
 import TodoApp from '../frontend/todo-app';

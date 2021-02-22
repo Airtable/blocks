@@ -1,18 +1,14 @@
 import React from 'react';
-import {invariant} from '../error_utils';
-import Sdk from '../sdk';
-import {TestMutationTypes} from '../types/test_mutations';
-import {FieldId} from '../types/field';
-import {ModelChange} from '../types/base';
-import {Mutation} from '../types/mutations';
-import {RecordId} from '../types/record';
-import {TableId} from '../types/table';
-import {ViewId} from '../types/view';
-import BaseProvider from '../ui/base_provider';
-import MockAirtableInterface, {
+import {FieldId, RecordId, TableId, ViewId} from '@airtable/blocks/types';
+import {ModelChange, Mutation, Sdk} from '@airtable/blocks/unstable_testing_utils';
+import {BaseProvider} from '@airtable/blocks/ui';
+import {invariant} from './error_utils';
+import {
     FixtureData,
+    default as MockAirtableInterface,
     WatchableKeysAndArgs,
-} from './mock_airtable_interface_external';
+} from './mock_airtable_interface';
+import {TestMutationTypes} from './test_mutations';
 
 /**
  * A class designed to faciliate the automated testing of Airtable Apps outside

@@ -1,8 +1,14 @@
-import {ObjectValues} from '../private_utils';
-import {Mutation, MutationTypes} from './mutations';
-import {FieldId} from './field';
-import {TableId} from './table';
-import {ViewId} from './view';
+import {Mutation, MutationTypes} from '@airtable/blocks/unstable_testing_utils';
+import {FieldId, TableId, ViewId} from '@airtable/blocks/types';
+
+/**
+ * Get the type of all the values of an object.
+ *
+ * Same as the legacy Flow `$Values<T>` type.
+ *
+ * @hidden
+ */
+export type ObjectValues<T extends object> = T[keyof T];
 
 /** @hidden */
 export const TestMutationTypes = Object.freeze({

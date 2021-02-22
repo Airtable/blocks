@@ -146,7 +146,7 @@ const idGenerator: IdGenerator = {
     generateTableId: () => 'tblGeneratedMockId',
 };
 
-/** @internal */
+/** @hidden */
 abstract class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     sdkInitData!: SdkInitData;
 

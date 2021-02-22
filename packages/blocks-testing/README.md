@@ -67,8 +67,8 @@ as though it is receiving relevant messages in order to simulate production beha
 As of January 2021, Airtable Apps must be written using the React framework. These instructions take
 the presence of React for granted.
 
-Every test file must import TestDriver through the `@airtable/blocks/unstable_testing` module to
-ensure that the environment is correctly instrumented for automation.
+Every test file must import TestDriver through the `@airtable/blocks-testing` module to ensure that
+the environment is correctly instrumented for automation.
 
 Each test will typically perform the following steps:
 

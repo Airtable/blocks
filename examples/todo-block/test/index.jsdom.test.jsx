@@ -1,6 +1,6 @@
 import React from 'react';
 import {act} from 'react-dom/test-utils';
-import TestDriver from '@airtable/blocks/unstable_testing';
+import TestDriver from '@airtable/blocks-testing';
 import {
     render,
     screen,
