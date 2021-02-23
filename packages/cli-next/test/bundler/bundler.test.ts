@@ -88,6 +88,20 @@ describe('run bundler', () => {
         .readDiskBundle()
         .bundleIncludes('typescript')
         .it('bundles empty app to disk');
+
+    testBundler
+        .prepareFixture('bundler_react_flow')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react flow components with server');
+
+    testBundler
+        .prepareFixture('bundler_react_flow')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('createElement(ReactApp')
+        .it('bundles react flow components to disk');
 });
 
 function runBundlerServerOnFixture() {

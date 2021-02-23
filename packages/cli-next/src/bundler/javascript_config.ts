@@ -27,11 +27,22 @@ const presets = [
     '@babel/preset-typescript',
 ] as const;
 
+const plugins = ['@babel/plugin-transform-flow-strip-types'] as const;
+
 const babelOptions = {
     presets,
+    plugins,
     babelrc: false,
     configFile: false,
 };
+
+function resolveBabelDependency(dependency: string | readonly [string, ...any[]]) {
+    if (typeof dependency === 'string') {
+        return require.resolve(dependency);
+    } else {
+        return [require.resolve(dependency[0]), ...dependency.slice(1)];
+    }
+}
 
 export async function createJavascriptAssetConfigAsync({
     path,
@@ -42,13 +53,8 @@ export async function createJavascriptAssetConfigAsync({
         transpiler: 'babel',
         options: {
             ...babelOptions,
-            presets: presets.map(preset => {
-                if (typeof preset === 'string') {
-                    return require.resolve(preset);
-                } else {
-                    return [require.resolve(preset[0]), ...preset.slice(1)];
-                }
-            }),
+            presets: presets.map(resolveBabelDependency),
+            plugins: plugins.map(resolveBabelDependency),
         },
     };
 }
