@@ -30,6 +30,7 @@ import {
     RequestJson,
     ResponseJson,
     SdkInitData,
+    ViewportSizeConstraint,
     ViewType,
 } from '@airtable/blocks/unstable_testing_utils';
 import {TestMutation, TestMutationTypes} from './test_mutations';
@@ -149,6 +150,18 @@ export interface WatchableKeysAndArgs {
      * interface
      */
     expandRecord: {recordId: RecordId; recordIds: Array<RecordId> | null};
+    /**
+     * Triggered when the SDK has been induced to enter full screen mode.
+     */
+    enterFullscreen: null;
+    /**
+     * Triggered when the SDK has been induced to exit full screen mode.
+     */
+    exitFullscreen: null;
+    /**
+     * Triggered when the maximum full screen size is modified.
+     */
+    setFullscreenMaxSize: ViewportSizeConstraint;
 }
 
 /**
@@ -721,11 +734,9 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         super.off(key, fn);
     }
 
-    /**
-     * This functionality is not relevant when testing outside of an authentic
-     * App frame. Expose a "no-op" to prevent runtime errors in call sites.
-     */
-    setFullscreenMaxSize() {}
+    setFullscreenMaxSize(maxFullscreenSize: ViewportSizeConstraint) {
+        this.emit('setFullscreenMaxSize', maxFullscreenSize);
+    }
 
     setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
         this._userPermissionCheck = check;
@@ -749,12 +760,29 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
     reloadFrame() {}
     setSettingsButtonVisibility() {}
     setUndoRedoMode() {}
-    enterFullscreen() {}
-    exitFullscreen() {}
+
+    enterFullscreen() {
+        this.emit('enterFullscreen', null);
+    }
+
+    exitFullscreen() {
+        this.emit('exitFullscreen', null);
+    }
+
     async fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null> {
         return null;
     }
     trackEvent() {}
+
+    /**
+     * `trackExposure` cannot be invoked by any Apps (neither those authored by
+     * Airtable nor by other App developers). It should be implemented to
+     * satisfy the AirtableInterface contract, but the implementation should
+     * not throw because it must be successful for Apps to function. Likewise,
+     * it should not emit an event because test authors have no need to track
+     * its usage.
+     */
     trackExposure() {}
+
     sendStat() {}
 }

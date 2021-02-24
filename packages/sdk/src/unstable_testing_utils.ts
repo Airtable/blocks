@@ -17,6 +17,8 @@ export {FieldData, FieldType} from './types/field';
 
 export {ViewType} from './types/view';
 
+export {ViewportSizeConstraint} from './types/viewport';
+
 export {
     GlobalConfigUpdate,
     GlobalConfigData,

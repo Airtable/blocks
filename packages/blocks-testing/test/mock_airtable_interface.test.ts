@@ -731,7 +731,7 @@ describe('MockAirtableInterface', () => {
 
     it('#setFullscreenMaxSize', () => {
         const ai = new MockAirtableInterface({base: smallBase});
-        expect(() => ai.setFullscreenMaxSize()).not.toThrowError();
+        expect(() => ai.setFullscreenMaxSize({width: null, height: null})).not.toThrowError();
     });
 
     describe('#performBackendFetchAsync', () => {

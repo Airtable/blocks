@@ -21,6 +21,7 @@ import {ModelChange} from '../types/base';
 import {RecordData, RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
+import {ViewportSizeConstraint} from '../types/viewport';
 import {Mutation, PermissionCheckResult} from '../types/mutations';
 import {NormalizedSortConfig} from '../models/record_query_result';
 import {RequestJson, ResponseJson} from '../types/backend_fetch_types';
@@ -266,7 +267,7 @@ abstract class MockAirtableInterface extends EventEmitter implements AirtableInt
     abstract reloadFrame(): void;
     abstract setSettingsButtonVisibility(): void;
     abstract setUndoRedoMode(): void;
-    abstract setFullscreenMaxSize(): void;
+    abstract setFullscreenMaxSize(maxFullscreenSize: ViewportSizeConstraint): void;
     abstract enterFullscreen(): void;
     abstract exitFullscreen(): void;
     abstract fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null>;

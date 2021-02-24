@@ -2,8 +2,9 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 // eslint-disable-next-line import/order
 import TestDriver from '../src';
+import {Viewport} from '@airtable/blocks/types';
 import {Base, Cursor, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
-import {useBase, useCursor} from '@airtable/blocks/ui';
+import {useBase, useCursor, useViewport} from '@airtable/blocks/ui';
 import {Mutation} from '@airtable/blocks/unstable_testing_utils';
 
 import {FixtureData} from '../src/mock_airtable_interface';
@@ -24,6 +25,22 @@ function getCursor(testDriver: TestDriver): Cursor {
     invariant(cursor, '`useCursor` hook did not provide a Cursor instance');
 
     return cursor;
+}
+
+function getViewport(testDriver: TestDriver): Viewport {
+    const div = document.createElement('div');
+    let viewport: Viewport | null = null;
+    const child = React.createElement(() => {
+        viewport = useViewport();
+        return null;
+    }, null);
+
+    ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
+    ReactDOM.unmountComponentAtNode(div);
+
+    invariant(viewport, '`useViewport` hook did not provide a Viewport instance');
+
+    return viewport;
 }
 
 describe('TestDriver', () => {
@@ -683,6 +700,56 @@ describe('TestDriver', () => {
     });
 
     describe('simulated backend', () => {
+        describe('viewport requests', () => {
+            it('notifies on requests to enter full screen mode', () => {
+                const enterSpy = jest.fn();
+                const exitSpy = jest.fn();
+                const fullscreenSpy = jest.fn();
+
+                testDriver.watch('enterFullscreen', enterSpy);
+                testDriver.watch('exitFullscreen', exitSpy);
+                testDriver.watch('setFullscreenMaxSize', fullscreenSpy);
+                getViewport(testDriver).enterFullscreenIfPossible();
+
+                expect(enterSpy).toHaveBeenCalledTimes(1);
+                expect(enterSpy).toHaveBeenCalledWith(null);
+                expect(exitSpy).toHaveBeenCalledTimes(0);
+                expect(fullscreenSpy).toHaveBeenCalledTimes(0);
+            });
+
+            it('notifies on requests to exit full screen mode', () => {
+                const enterSpy = jest.fn();
+                const exitSpy = jest.fn();
+                const fullscreenSpy = jest.fn();
+
+                testDriver.watch('enterFullscreen', enterSpy);
+                testDriver.watch('exitFullscreen', exitSpy);
+                testDriver.watch('setFullscreenMaxSize', fullscreenSpy);
+                getViewport(testDriver).exitFullscreen();
+
+                expect(enterSpy).toHaveBeenCalledTimes(0);
+                expect(exitSpy).toHaveBeenCalledTimes(1);
+                expect(exitSpy).toHaveBeenCalledWith(null);
+                expect(fullscreenSpy).toHaveBeenCalledTimes(0);
+            });
+
+            it('notifies on requests to change max viewport size', () => {
+                const enterSpy = jest.fn();
+                const exitSpy = jest.fn();
+                const fullscreenSpy = jest.fn();
+
+                testDriver.watch('enterFullscreen', enterSpy);
+                testDriver.watch('exitFullscreen', exitSpy);
+                testDriver.watch('setFullscreenMaxSize', fullscreenSpy);
+                getViewport(testDriver).addMaxFullscreenSize({width: 1024, height: 768});
+
+                expect(enterSpy).toHaveBeenCalledTimes(0);
+                expect(exitSpy).toHaveBeenCalledTimes(0);
+                expect(fullscreenSpy).toHaveBeenCalledTimes(1);
+                expect(fullscreenSpy).toHaveBeenCalledWith({width: 1024, height: 768});
+            });
+        });
+
         describe('table creation', () => {
             const fieldsSpec = [
                 {name: 'laura', type: FieldType.SINGLE_LINE_TEXT},
