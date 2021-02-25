@@ -18,7 +18,13 @@ import {UndoRedoMode} from './undo_redo';
 import {ViewportSizeConstraint} from './viewport';
 import {Mutation, PartialMutation, PermissionCheckResult} from './mutations';
 import {TableId} from './table';
-import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from './view';
+import {
+    GroupData,
+    ViewColorsByRecordIdData,
+    ViewFieldOrderData,
+    ViewId,
+    GroupLevelData,
+} from './view';
 import {RequestJson, ResponseJson} from './backend_fetch_types';
 
 // BlockRunContextType, BlockInstallationPageBlockRunContext, ViewBlockRunContext, BlockRunContext
@@ -49,6 +55,20 @@ export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
     colorsByRecordId: ViewColorsByRecordIdData | null;
+    // Groups can be undefined if running against an old airtable client
+    groups?: Array<GroupData> | null;
+    groupLevels?: Array<GroupLevelData> | null;
+}
+
+// TODO: (SeanKeenan) Move NormalizedSortConfig from record_query_result here
+//       once/if we support setting the sort config for a view
+/** @hidden */
+export type NormalizedGroupLevel = GroupLevelData;
+
+/** @hidden */
+export interface NormalizedViewMetadata {
+    /** Group levels, can be null or unspecified (null to clear, unspecified to not overwrite) */
+    groupLevels?: Array<NormalizedGroupLevel> | null | undefined;
 }
 
 /** @hidden */
