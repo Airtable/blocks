@@ -110,7 +110,7 @@ export default class BlockSdk {
     /** @internal */
     _runWithUpdateBatching: UpdateBatcher = defaultUpdateBatcher;
 
-    /** @internal */
+    /** @hidden */
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
         airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);

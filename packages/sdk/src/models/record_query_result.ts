@@ -15,6 +15,7 @@ import {
 } from '../private_utils';
 import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../error_utils';
 import Watchable from '../watchable';
+import {NormalizedGroupLevel} from '../types/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';
 import Field from './field';
@@ -32,6 +33,8 @@ const WatchableRecordQueryResultKeys = Object.freeze({
     recordIds: 'recordIds' as const,
     cellValues: 'cellValues' as const,
     recordColors: 'recordColors' as const,
+    groups: 'groups' as const,
+    groupLevels: 'groupLevels' as const,
     isDataLoaded: 'isDataLoaded' as const,
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
@@ -61,6 +64,28 @@ interface SortConfig {
 export interface NormalizedSortConfig {
     fieldId: string;
     direction: 'asc' | 'desc';
+}
+
+/**
+ * NormalizedGroupLevel is in airtable_interface
+ *
+ * @hidden
+ */
+export interface GroupLevelForUpdate {
+    /** A field, field id, or field name. */
+    field: Field | FieldId | string;
+    /** The order to sort this group in. Defaults to asc. */
+    direction?: 'asc' | 'desc' | undefined;
+}
+
+/**
+ * View Config that can be set by developer
+ *
+ * @hidden
+ */
+export interface ViewMetadataForUpdate {
+    /** Groups config that can be set by developer; null will clear it, undefined will skip it*/
+    groupLevels?: Array<GroupLevelForUpdate> | null | undefined;
 }
 
 /**
@@ -225,6 +250,37 @@ interface UnknownColorMode {
 }
 
 /**
+ * @internal
+ */
+function _normalizeSortOrGroup(table: Table, sortOrGroup: SortConfig | GroupLevelForUpdate) {
+    const field = table.__getFieldMatching(sortOrGroup.field);
+    if (
+        sortOrGroup.direction !== undefined &&
+        sortOrGroup.direction !== 'asc' &&
+        sortOrGroup.direction !== 'desc'
+    ) {
+        throw spawnError('Invalid sort direction: %s', sortOrGroup.direction);
+    }
+    return {
+        fieldId: field.id,
+        direction: sortOrGroup.direction ?? 'asc',
+    };
+}
+
+/**
+ * @internal
+ */
+export function normalizeSortsOrGroups(
+    table: Table,
+    sortsOrGroups: Array<SortConfig | GroupLevelForUpdate> | null | undefined,
+): Array<NormalizedGroupLevel | NormalizedSortConfig> | null | undefined {
+    if (sortsOrGroups === undefined || sortsOrGroups === null) {
+        return sortsOrGroups;
+    }
+    return sortsOrGroups.map(sortOrGroup => _normalizeSortOrGroup(table, sortOrGroup));
+}
+
+/**
  * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
  * contains a bunch of records, filtered to a useful subset of the records in the table. Those
  * records can be sorted according to your specification, and they can be colored by a select field
@@ -323,6 +379,8 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
             key === RecordQueryResult.WatchableKeys.recordIds ||
             key === RecordQueryResult.WatchableKeys.cellValues ||
             key === RecordQueryResult.WatchableKeys.recordColors ||
+            key === RecordQueryResult.WatchableKeys.groups ||
+            key === RecordQueryResult.WatchableKeys.groupLevels ||
             key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)
         );
     }
@@ -333,22 +391,7 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
         recordStore: RecordStore,
         opts: RecordQueryResultOpts,
     ): NormalizedRecordQueryResultOpts {
-        const sorts = !opts.sorts
-            ? null
-            : opts.sorts.map(sort => {
-                  const field = table.__getFieldMatching(sort.field);
-                  if (
-                      sort.direction !== undefined &&
-                      sort.direction !== 'asc' &&
-                      sort.direction !== 'desc'
-                  ) {
-                      throw spawnError('Invalid sort direction: %s', sort.direction);
-                  }
-                  return {
-                      fieldId: field.id,
-                      direction: sort.direction || 'asc',
-                  };
-              });
+        const sorts = normalizeSortsOrGroups(table, opts.sorts) ?? null;
 
         let fieldIdsOrNullIfAllFields = null;
         if (opts.fields) {

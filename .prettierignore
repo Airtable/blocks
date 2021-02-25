@@ -7,3 +7,4 @@
 /docs/public/
 /examples/*/build
 /packages/sdk/docs/*
+/packages/blocks-testing/docs/*

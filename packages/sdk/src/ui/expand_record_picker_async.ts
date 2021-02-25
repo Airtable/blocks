@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
-import Sdk from '../sdk';
 import {invariant} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
@@ -54,6 +53,7 @@ async function expandRecordPickerAsync(
     }
 
     const tableId = records[0].parentTable.id;
+    const sdk = records[0].parentTable.parentBase.__sdk;
 
     const recordIds = records.map(record => {
         invariant(record.parentTable.id === tableId, 'all records must belong to the same table');
@@ -91,12 +91,6 @@ async function expandRecordPickerAsync(
     }
 
     return sdk.base.__getRecordStore(table.id).getRecordByIdIfExists(chosenRecordId);
-}
-
-let sdk: Sdk;
-
-export function __injectSdkIntoExpandRecordPickerAsync(_sdk: Sdk) {
-    sdk = _sdk;
 }
 
 export default expandRecordPickerAsync;

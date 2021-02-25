@@ -1,4 +1,4 @@
-import {AirtableInterface} from '../types/airtable_interface';
+import {AirtableInterface, BlockRunContextType} from '../types/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
@@ -453,6 +453,29 @@ class Mutations {
 
                 return;
             }
+            case MutationTypes.UPDATE_VIEW_METADATA: {
+                const {tableId, viewId} = mutation;
+                const {runContext} = this._airtableInterface.sdkInitData;
+
+                if (runContext.type !== BlockRunContextType.VIEW) {
+                    throw spawnError('Setting view metadata is only valid for views');
+                }
+
+                if (runContext.viewId !== viewId || runContext.tableId !== tableId) {
+                    throw spawnError('Custom views can only set view metadata on themselves');
+                }
+
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update metadata: No table with id %s exists", tableId);
+                }
+
+                const view = table.getViewByIdIfExists(viewId);
+                if (!view) {
+                    throw spawnError("Can't update metadata: No view with id %s exists", viewId);
+                }
+                return;
+            }
 
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', mutation, 'type');
@@ -571,6 +594,7 @@ class Mutations {
 
             case MutationTypes.CREATE_SINGLE_FIELD:
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.UPDATE_VIEW_METADATA:
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 return [];
             }

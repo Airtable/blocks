@@ -1,9 +1,10 @@
 /** @module @airtable/blocks: mutations */ /** */
 import {ObjectValues, ObjectMap} from '../private_utils';
-import {FieldTypeConfig} from './airtable_interface';
+import {FieldTypeConfig, NormalizedViewMetadata} from './airtable_interface';
 import {GlobalConfigUpdate, GlobalConfigValue} from './global_config';
 import {TableId} from './table';
 import {FieldId} from './field';
+import {ViewId} from './view';
 import {RecordId} from './record';
 
 /** @hidden */
@@ -15,6 +16,7 @@ export const MutationTypes = Object.freeze({
     CREATE_SINGLE_FIELD: 'createSingleField' as const,
     UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
     CREATE_SINGLE_TABLE: 'createSingleTable' as const,
+    UPDATE_VIEW_METADATA: 'updateViewMetadata' as const,
 });
 
 /** @hidden */
@@ -155,6 +157,22 @@ export interface PartialCreateSingleTableMutation {
 }
 
 /** @hidden */
+export interface UpdateViewMetadataMutation {
+    readonly type: typeof MutationTypes.UPDATE_VIEW_METADATA;
+    readonly tableId: TableId;
+    readonly viewId: ViewId;
+    readonly metadata: NormalizedViewMetadata;
+}
+
+/** @hidden */
+export interface PartialUpdateViewMetadataMutation {
+    readonly type: typeof MutationTypes.UPDATE_VIEW_METADATA;
+    readonly tableId: TableId | undefined;
+    readonly viewId: ViewId | undefined;
+    readonly metadata: NormalizedViewMetadata | undefined;
+}
+
+/** @hidden */
 export type Mutation =
     | SetMultipleRecordsCellValuesMutation
     | DeleteMultipleRecordsMutation
@@ -162,7 +180,8 @@ export type Mutation =
     | SetMultipleGlobalConfigPathsMutation
     | CreateSingleFieldMutation
     | UpdateSingleFieldConfigMutation
-    | CreateSingleTableMutation;
+    | CreateSingleTableMutation
+    | UpdateViewMetadataMutation;
 
 /** @hidden */
 export type PartialMutation =
@@ -172,7 +191,8 @@ export type PartialMutation =
     | PartialSetMultipleGlobalConfigPathsMutation
     | PartialCreateSingleFieldMutation
     | PartialUpdateSingleFieldConfigMutation
-    | PartialCreateSingleTableMutation;
+    | PartialCreateSingleTableMutation
+    | PartialUpdateViewMetadataMutation;
 
 /** */
 export interface SuccessfulPermissionCheckResult {

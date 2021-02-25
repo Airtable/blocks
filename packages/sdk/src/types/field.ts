@@ -1,4 +1,8 @@
 /** @module @airtable/blocks/models: Field */ /** */
+import {Color} from '../colors';
+import {TableId} from './table';
+import {ViewId} from './view';
+
 /** */
 export type FieldId = string;
 /** @hidden */
@@ -381,8 +385,18 @@ export enum FieldType {
      * ```
      *
      * **Field options write format**
+     * ```js
+     * {
+     *     // The ID of the table this field links to
+     *     linkedTableId: TableId,
+     *     // The ID of the view in the linked table to use when showing
+     *     // a list of records to select from
+     *     viewIdForRecordSelection?: ViewId,
+     * }
+     * ```
      *
-     * Creating or updating `MULTIPLE_RECORD_LINKS` fields is not supported.
+     * Creating `MULTIPLE_RECORD_LINKS` fields is supported but updating options for existing
+     * `MULTIPLE_RECORD_LINKS` fields is not supported.
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
@@ -1055,7 +1069,322 @@ export interface FieldPermissionData {
 }
 
 /** @hidden */
-
 export interface FieldOptions {
     [key: string]: unknown;
 }
+
+/** @hidden */
+interface NumericFieldOptions {
+    precision: number;
+}
+
+/** @hidden */
+interface CurrencyFieldOptions extends NumericFieldOptions {
+    symbol: string;
+}
+
+/** @hidden */
+interface SelectFieldOptions {
+    choices: Array<{
+        id: string;
+        name: string;
+        color?: Color;
+    }>;
+}
+
+/** @hidden */
+interface CollaboratorFieldOptions {
+    choices: Array<{
+        id: string;
+        email: string;
+        name?: string;
+        profilePicUrl?: string;
+    }>;
+}
+
+/** @hidden */
+interface LinkedRecordFieldOptions {
+    linkedTableId: TableId;
+    inverseLinkFieldId?: FieldId;
+    viewIdForRecordSelection?: ViewId;
+    isReversed: boolean;
+}
+
+/** @hidden */
+interface DateFieldOptions {
+    dateFormat: {
+        name: 'local' | 'friendly' | 'us' | 'european' | 'iso';
+        format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD';
+    };
+}
+
+/** @hidden */
+interface DateTimeFieldOptions extends DateFieldOptions {
+    timeFormat: {
+        name: '12hour' | '24hour';
+        format: 'h:mma' | 'HH:mm';
+    };
+    timeZone: 'utc' | 'client';
+}
+
+/** @hidden */
+interface AttachmentsFieldOptions {
+    isReversed: boolean;
+}
+
+/** @hidden */
+interface CheckboxFieldOptions {
+    icon: 'check' | 'star' | 'heart' | 'thumbsUp' | 'flag';
+    color:
+        | 'yellowBright'
+        | 'orangeBright'
+        | 'redBright'
+        | 'pinkBright'
+        | 'purpleBright'
+        | 'blueBright'
+        | 'cyanBright'
+        | 'tealBright'
+        | 'greenBright'
+        | 'grayBright';
+}
+
+/** @hidden */
+interface FormulaFieldOptions {
+    isValid: boolean;
+    referencedFieldIds: Array<FieldId>;
+    result: FieldConfig;
+}
+
+/** @hidden */
+interface CreatedTimeFieldOptions {
+    result: DateFieldConfig | DateTimeFieldConfig;
+}
+
+/** @hidden */
+interface RollupFieldOptions extends FormulaFieldOptions {
+    recordLinkFieldId: FieldId;
+    fieldIdInLinkedTable: FieldId;
+}
+
+/** @hidden */
+interface CountFieldOptions {
+    isValid: boolean;
+    recordLinkFieldId: FieldId;
+}
+
+/** @hidden */
+type LookupFieldOptions =
+    | {
+          isValid: true;
+          recordLinkFieldId: FieldId;
+          fieldIdInLinkedTable: FieldId | null;
+          result: FieldConfig;
+      }
+    | {
+          isValid: false;
+          recordLinkFieldId: FieldId;
+          fieldIdInLinkedTable: FieldId | null;
+          result: undefined;
+      };
+
+/** @hidden */
+interface RatingFieldOptions {
+    icon: 'star' | 'heart' | 'thumbsUp' | 'flag';
+    max: number;
+    color:
+        | 'yellowBright'
+        | 'orangeBright'
+        | 'redBright'
+        | 'pinkBright'
+        | 'purpleBright'
+        | 'blueBright'
+        | 'cyanBright'
+        | 'tealBright'
+        | 'greenBright'
+        | 'grayBright';
+}
+
+/** @hidden */
+interface DurationFieldOptions {
+    durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h:mm:ss.SSS';
+}
+
+/** @hidden */
+interface LastModifiedTimeFieldOptions {
+    isValid: boolean;
+    referencedFieldIds: Array<FieldId>;
+    result: DateFieldConfig | DateTimeFieldConfig;
+}
+
+/** @hidden */
+interface CreatedByFieldOptions extends CollaboratorFieldOptions {}
+
+/** @hidden */
+interface LastModifiedByFieldOptions extends CreatedByFieldOptions {
+    referencedFieldIds: Array<FieldId>;
+}
+
+/** @hidden */
+interface OptionlessFieldConfig {
+    type:
+        | FieldType.SINGLE_LINE_TEXT
+        | FieldType.EMAIL
+        | FieldType.URL
+        | FieldType.MULTILINE_TEXT
+        | FieldType.PHONE_NUMBER
+        | FieldType.AUTO_NUMBER
+        | FieldType.BARCODE
+        | FieldType.RICH_TEXT
+        | FieldType.BUTTON;
+    options: null;
+}
+
+/** @hidden */
+interface NumericFieldConfig {
+    type: FieldType.NUMBER | FieldType.PERCENT;
+    options: NumericFieldOptions;
+}
+
+/** @hidden */
+interface CurrencyFieldConfig {
+    type: FieldType.CURRENCY;
+    options: CurrencyFieldOptions;
+}
+
+/** @hidden */
+interface SelectFieldConfig {
+    type: FieldType.SINGLE_SELECT | FieldType.MULTIPLE_SELECTS;
+    options: SelectFieldOptions;
+}
+
+/** @hidden */
+interface CollaboratorFieldConfig {
+    type: FieldType.SINGLE_COLLABORATOR | FieldType.MULTIPLE_COLLABORATORS | FieldType.CREATED_BY;
+    options: CollaboratorFieldOptions;
+}
+
+/** @hidden */
+interface LinkedRecordFieldConfig {
+    type: FieldType.MULTIPLE_RECORD_LINKS;
+    options: LinkedRecordFieldOptions;
+}
+
+/** @hidden */
+interface DateFieldConfig {
+    type: FieldType.DATE;
+    options: DateFieldOptions;
+}
+
+/** @hidden */
+interface DateTimeFieldConfig {
+    type: FieldType.DATE_TIME;
+    options: DateTimeFieldOptions;
+}
+
+/** @hidden */
+interface AttachmentsFieldConfig {
+    type: FieldType.MULTIPLE_ATTACHMENTS;
+    options: AttachmentsFieldOptions;
+}
+
+/** @hidden */
+interface CheckboxFieldConfig {
+    type: FieldType.CHECKBOX;
+    options: CheckboxFieldOptions;
+}
+
+/** @hidden */
+interface FormulaFieldConfig {
+    type: FieldType.FORMULA;
+    options: FormulaFieldOptions;
+}
+
+/** @hidden */
+interface CreatedTimeFieldConfig {
+    type: FieldType.CREATED_TIME;
+    options: CreatedTimeFieldOptions;
+}
+
+/** @hidden */
+interface RollupFieldConfig {
+    type: FieldType.ROLLUP;
+    options: RollupFieldOptions;
+}
+
+/** @hidden */
+interface CountFieldConfig {
+    type: FieldType.COUNT;
+    options: CountFieldOptions;
+}
+
+/** @hidden */
+interface LookupFieldConfig {
+    type: FieldType.MULTIPLE_LOOKUP_VALUES;
+    options: LookupFieldOptions;
+}
+
+/** @hidden */
+interface RatingFieldConfig {
+    type: FieldType.RATING;
+    options: RatingFieldOptions;
+}
+
+/** @hidden */
+interface DurationFieldConfig {
+    type: FieldType.DURATION;
+    options: DurationFieldOptions;
+}
+
+/** @hidden */
+interface LastModifiedTimeFieldConfig {
+    type: FieldType.LAST_MODIFIED_TIME;
+    options: LastModifiedTimeFieldOptions;
+}
+
+/** @hidden */
+interface CreatedByFieldConfig {
+    type: FieldType.CREATED_BY;
+    options: CreatedByFieldOptions;
+}
+
+/** @hidden */
+interface LastModifiedByFieldConfig {
+    type: FieldType.LAST_MODIFIED_BY;
+    options: LastModifiedByFieldOptions;
+}
+
+/**
+ * A type for use with Field objects to make type narrowing FieldOptions easier.
+ *
+ * @example
+ * const fieldConfig = field.config;
+ * if (fieldConfig.type === FieldType.SINGLE_SELECT) {
+ *     return fieldConfig.options.choices;
+ * } else if (fieldConfig.type === FieldType.MULTIPLE_LOOKUP_VALUES && fieldConfig.options.isValid) {
+ *     if (fieldConfig.options.result.type === FieldType.SINGLE_SELECT) {
+ *         return fieldConfig.options.result.options.choices;
+ *     }
+ * }
+ * return DEFAULT_CHOICES;
+ */
+export type FieldConfig =
+    | OptionlessFieldConfig
+    | NumericFieldConfig
+    | CurrencyFieldConfig
+    | SelectFieldConfig
+    | CollaboratorFieldConfig
+    | LinkedRecordFieldConfig
+    | DateFieldConfig
+    | DateTimeFieldConfig
+    | AttachmentsFieldConfig
+    | CheckboxFieldConfig
+    | FormulaFieldConfig
+    | CreatedTimeFieldConfig
+    | RollupFieldConfig
+    | CountFieldConfig
+    | LookupFieldConfig
+    | RatingFieldConfig
+    | DurationFieldConfig
+    | LastModifiedTimeFieldConfig
+    | CreatedByFieldConfig
+    | LastModifiedByFieldConfig;

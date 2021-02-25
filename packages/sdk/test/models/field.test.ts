@@ -279,6 +279,21 @@ describe('Field', () => {
         });
     });
 
+    describe('#config', () => {
+        test('lookup config', () => {
+            mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects.fieldsById.fldPrjctClient.type =
+                'lookup';
+            expect(field.config).toStrictEqual({
+                type: FieldType.MULTIPLE_LOOKUP_VALUES,
+                options: {
+                    foreignTableId: 'tblClients',
+                    relationship: 'many',
+                    symmetricColumnId: 'fldClientProjects',
+                },
+            });
+        });
+    });
+
     describe('#watch', () => {
         let mocks: {[key: string]: jest.Mock};
 

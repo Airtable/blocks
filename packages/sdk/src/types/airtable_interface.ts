@@ -18,7 +18,13 @@ import {UndoRedoMode} from './undo_redo';
 import {ViewportSizeConstraint} from './viewport';
 import {Mutation, PartialMutation, PermissionCheckResult} from './mutations';
 import {TableId} from './table';
-import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from './view';
+import {
+    GroupData,
+    ViewColorsByRecordIdData,
+    ViewFieldOrderData,
+    ViewId,
+    GroupLevelData,
+} from './view';
 import {RequestJson, ResponseJson} from './backend_fetch_types';
 
 /** @hidden */
@@ -47,6 +53,17 @@ export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
     colorsByRecordId: ViewColorsByRecordIdData | null;
+    groups?: Array<GroupData> | null;
+    groupLevels?: Array<GroupLevelData> | null;
+}
+
+/** @hidden */
+export type NormalizedGroupLevel = GroupLevelData;
+
+/** @hidden */
+export interface NormalizedViewMetadata {
+    /** Group levels, can be null or unspecified (null to clear, unspecified to not overwrite) */
+    groupLevels?: Array<NormalizedGroupLevel> | null | undefined;
 }
 
 /** @hidden */

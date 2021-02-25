@@ -3,7 +3,6 @@ import warn, {__injectSdkIntoWarning} from './warning';
 import getAirtableInterface from './injected/airtable_interface';
 import Sdk from './sdk';
 import {__injectSdkIntoCreateAggregators} from './models/create_aggregators';
-import {__injectSdkIntoExpandRecordPickerAsync} from './ui/expand_record_picker_async';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 
 /** @internal */
@@ -82,7 +81,6 @@ export function __reset() {
 
     __injectSdkIntoCreateAggregators(__sdk);
     __injectSdkIntoPerformRecordAction(__sdk);
-    __injectSdkIntoExpandRecordPickerAsync(__sdk);
     __injectSdkIntoInitializeBlock(__sdk);
     __injectSdkIntoWarning(__sdk);
 }

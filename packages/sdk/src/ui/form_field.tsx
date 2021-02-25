@@ -118,7 +118,7 @@ const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
 
     let optionalLabelProps;
     if (description) {
-        optionalLabelProps = {margin: 0};
+        optionalLabelProps = {marginBottom: 1};
     }
     return (
         <Box
@@ -159,7 +159,7 @@ ForwardedRefFormField.propTypes = {
     style: PropTypes.object,
     label: PropTypes.node,
     htmlFor: PropTypes.string,
-    description: PropTypes.string,
+    description: PropTypes.node,
     children: PropTypes.node,
     ...formFieldStylePropTypes,
 };

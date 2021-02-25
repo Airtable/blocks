@@ -10,7 +10,7 @@ import {invariant} from '../error_utils';
 import {ModelChange} from '../types/base';
 import Sdk from '../sdk';
 import {FieldId} from '../types/field';
-import {ViewData, ViewId} from '../types/view';
+import {GroupData, GroupLevelData, ViewData, ViewId} from '../types/view';
 import {RecordId} from '../types/record';
 import {AirtableInterface} from '../types/airtable_interface';
 import {Color} from '../colors';
@@ -21,6 +21,8 @@ import Record from './record';
 export const WatchableViewDataStoreKeys = Object.freeze({
     visibleRecords: 'visibleRecords' as const,
     visibleRecordIds: 'visibleRecordIds' as const,
+    groups: 'groups' as const,
+    groupLevels: 'groupLevels' as const,
     recordColors: 'recordColors' as const,
     allFieldIds: 'allFieldIds' as const,
     visibleFieldIds: 'visibleFieldIds' as const,
@@ -90,6 +92,8 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
 
         this._data.visibleRecordIds = viewData.visibleRecordIds;
         this._data.fieldOrder = viewData.fieldOrder;
+        this._data.groups = viewData.groups;
+        this._data.groupLevels = viewData.groupLevels;
         this._data.colorsByRecordId = viewData.colorsByRecordId;
 
         if (this._data.colorsByRecordId) {
@@ -104,6 +108,8 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
             WatchableViewDataStoreKeys.visibleRecords,
             WatchableViewDataStoreKeys.visibleRecordIds,
             WatchableViewDataStoreKeys.allFieldIds,
+            WatchableViewDataStoreKeys.groups,
+            WatchableViewDataStoreKeys.groupLevels,
             WatchableViewDataStoreKeys.visibleFieldIds,
             WatchableViewDataStoreKeys.recordColors,
         ];
@@ -122,6 +128,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         );
         if (!this.isDeleted) {
             this._data.visibleRecordIds = undefined;
+            this._data.groups = undefined;
             this._data.colorsByRecordId = undefined;
         }
     }
@@ -203,6 +210,31 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
     }
 
     /**
+     * Gets the groups in a view, can be watched to be notified if a record changes groups,
+     * if a record is changed/deleted/created, if sort order of groups changes, grouping
+     * heirarchy changes, or grouping field changes.
+     *
+     * @hidden
+     */
+    get groups(): Array<GroupData> | null {
+        invariant(this.parentRecordStore.isRecordMetadataLoaded, 'Table data is not loaded');
+
+        const groups = this._data.groups;
+        return groups ?? null;
+    }
+
+    /**
+     * Gets the group config for this view, can be watched to know when groupLevels
+     * changes (reorder, groups deleted, groups changed, grouped field changes)
+     */
+    get groupLevels(): Array<GroupLevelData> | null {
+        invariant(this.parentRecordStore.isRecordMetadataLoaded, 'Table data is not loaded');
+
+        const groupLevels = this._data.groupLevels;
+        return groupLevels ?? null;
+    }
+
+    /**
      * Get the color name for the specified record in this view, or null if no
      * color is available. Watch with 'recordColors'
      *
@@ -235,6 +267,12 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         if (dirtyPaths.fieldOrder) {
             this._onChange(WatchableViewDataStoreKeys.allFieldIds);
             this._onChange(WatchableViewDataStoreKeys.visibleFieldIds);
+        }
+        if (dirtyPaths.groups || dirtyPaths.groupLevels) {
+            this._onChange(WatchableViewDataStoreKeys.groups);
+        }
+        if (dirtyPaths.groupLevels) {
+            this._onChange(WatchableViewDataStoreKeys.groupLevels);
         }
         if (dirtyPaths.colorsByRecordId) {
             const changedRecordIds = dirtyPaths.colorsByRecordId._isDirty

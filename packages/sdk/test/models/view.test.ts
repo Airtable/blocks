@@ -6,6 +6,8 @@ import Base from '../../src/models/base';
 import * as RecordColoring from '../../src/models/record_coloring';
 import Table from '../../src/models/table';
 import View from '../../src/models/view';
+import {MutationTypes} from '../../src/types/mutations';
+import {BlockRunContextType} from '../../src/types/airtable_interface';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -198,6 +200,148 @@ describe('View', () => {
                 expect(() => {
                     viewMetadata.visibleFields;
                 }).toThrowErrorMatchingInlineSnapshot(`"ViewMetadataQueryResult has been deleted"`);
+            });
+        });
+
+        describe('#updateMetadataAsync()', () => {
+            test('handles empty object', async () => {
+                mockAirtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    tableId: 'tblFirst',
+                    viewId: 'viwPrjctAll',
+                };
+
+                await view.updateMetadataAsync({});
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {},
+                    },
+                    {holdForMs: 100},
+                );
+            });
+            test('handles null group metadata', async () => {
+                mockAirtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    tableId: 'tblFirst',
+                    viewId: 'viwPrjctAll',
+                };
+
+                await view.updateMetadataAsync({groupLevels: null});
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: null},
+                    },
+                    {holdForMs: 100},
+                );
+            });
+            test('handles group metadata with field as an object', async () => {
+                mockAirtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    tableId: 'tblFirst',
+                    viewId: 'viwPrjctAll',
+                };
+
+                const field = view.parentTable.fields[0];
+                await view.updateMetadataAsync({groupLevels: [{field, direction: 'asc'}]});
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: [{fieldId: field.id, direction: 'asc'}]},
+                    },
+                    {holdForMs: 100},
+                );
+            });
+            test('handles group metadata with field as an id', async () => {
+                mockAirtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    tableId: 'tblFirst',
+                    viewId: 'viwPrjctAll',
+                };
+
+                const field = view.parentTable.fields[0];
+                await view.updateMetadataAsync({
+                    groupLevels: [{field: field.id, direction: 'asc'}],
+                });
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: [{fieldId: field.id, direction: 'asc'}]},
+                    },
+                    {holdForMs: 100},
+                );
+            });
+        });
+
+        describe('#checkPermissionsForUpdateMetadata()', () => {
+            test('correctly queries AirtableInterface when nothing is provided', async () => {
+                view.checkPermissionsForUpdateMetadata({});
+
+                expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {},
+                    },
+                    mockAirtableInterface.sdkInitData.baseData,
+                );
+            });
+            test('handles null group metadata', async () => {
+                view.checkPermissionsForUpdateMetadata({groupLevels: null});
+
+                expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: null},
+                    },
+                    mockAirtableInterface.sdkInitData.baseData,
+                );
+            });
+            test('handles group metadata with field as an object', async () => {
+                const field = view.parentTable.fields[0];
+                view.checkPermissionsForUpdateMetadata({groupLevels: [{field, direction: 'asc'}]});
+
+                expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: [{fieldId: field.id, direction: 'asc'}]},
+                    },
+                    mockAirtableInterface.sdkInitData.baseData,
+                );
+            });
+            test('handles group metadata with field as an id', async () => {
+                const field = view.parentTable.fields[0];
+                view.checkPermissionsForUpdateMetadata({
+                    groupLevels: [{field: field.id, direction: 'asc'}],
+                });
+
+                expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {groupLevels: [{fieldId: field.id, direction: 'asc'}]},
+                    },
+                    mockAirtableInterface.sdkInitData.baseData,
+                );
             });
         });
 

@@ -5,6 +5,7 @@ import {FieldId} from '../../src/types/field';
 import View from '../../src/models/view';
 import ViewMetadataQueryResult from '../../src/models/view_metadata_query_result';
 import {waitForWatchKeyAsync} from '../test_helpers';
+import {NormalizedGroupLevel} from '../../src/types/airtable_interface';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -17,7 +18,11 @@ jest.mock('../../src/injected/airtable_interface', () => ({
     },
 }));
 
-const mockVisibleFields = (fieldIds: Array<FieldId>, visibleFieldCount: number) => {
+const mockVisibleFields = (
+    fieldIds: Array<FieldId>,
+    visibleFieldCount: number,
+    groupLevels?: Array<NormalizedGroupLevel>,
+) => {
     mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
         visibleRecordIds: [],
         fieldOrder: {
@@ -25,6 +30,7 @@ const mockVisibleFields = (fieldIds: Array<FieldId>, visibleFieldCount: number) 
             visibleFieldCount,
         },
         colorsByRecordId: {},
+        groupLevels: groupLevels,
     });
 
     mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue({
@@ -53,6 +59,15 @@ const deleteView = () => {
         {
             path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll'],
             value: undefined,
+        },
+    ]);
+};
+
+const changeGroupLevels = (groupLevels: Array<NormalizedGroupLevel>) => {
+    mockAirtableInterface.triggerModelUpdates([
+        {
+            path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll', 'groupLevels'],
+            value: groupLevels,
         },
     ]);
 };
@@ -244,6 +259,79 @@ describe('ViewMetadataQueryResult', () => {
         });
     });
 
+    describe('#groupLevels', () => {
+        it('returns null if provided nothing', async () => {
+            const result = view.selectMetadata();
+
+            mockVisibleFields(['fldPrjctClient'], 1);
+            await result.loadDataAsync();
+
+            expect(result.groupLevels).toEqual(null);
+        });
+
+        it('returns empty by default', async () => {
+            const result = view.selectMetadata();
+
+            mockVisibleFields(['fldPrjctClient'], 1, []);
+            await result.loadDataAsync();
+
+            expect(result.groupLevels).toEqual([]);
+        });
+
+        it('returns initial value by default', async () => {
+            const result = view.selectMetadata();
+
+            mockVisibleFields(['fldPrjctClient'], 1, [
+                {fieldId: 'fldPrjctClient', direction: 'asc'},
+            ]);
+            await result.loadDataAsync();
+
+            expect(result.groupLevels?.length).toEqual(1);
+            expect(result.groupLevels?.[0].fieldId).toEqual('fldPrjctClient');
+            expect(result.groupLevels?.[0].direction).toEqual('asc');
+            expect(result.groupLevels?.[0].field.id).toEqual('fldPrjctClient');
+        });
+
+        it('updates in response to messages from AirtableInterface', async () => {
+            const result = view.selectMetadata();
+
+            mockVisibleFields(['fldPrjctClient'], 1);
+            await result.loadDataAsync();
+
+            changeGroupLevels([
+                {fieldId: 'fldPrjctClient', direction: 'asc'},
+                {fieldId: 'fldPrjctCtgry', direction: 'asc'},
+            ]);
+
+            expect(result.groupLevels?.length).toEqual(2);
+            expect(result.groupLevels?.[0].fieldId).toEqual('fldPrjctClient');
+            expect(result.groupLevels?.[0].direction).toEqual('asc');
+            expect(result.groupLevels?.[0].field.id).toEqual('fldPrjctClient');
+            expect(result.groupLevels?.[1].fieldId).toEqual('fldPrjctCtgry');
+            expect(result.groupLevels?.[1].direction).toEqual('asc');
+            expect(result.groupLevels?.[1].field.id).toEqual('fldPrjctCtgry');
+        });
+
+        it('reports error for unloaded results', () => {
+            expect(() => view.selectMetadata().visibleFields).toThrowErrorMatchingInlineSnapshot(
+                `"view meta data is not loaded"`,
+            );
+        });
+
+        it('reports error for deleted views', async () => {
+            const result = view.selectMetadata();
+
+            mockVisibleFields([], 0);
+            await result.loadDataAsync();
+
+            deleteView();
+
+            expect(() => result.visibleFields).toThrowErrorMatchingInlineSnapshot(
+                `"ViewMetadataQueryResult has been deleted"`,
+            );
+        });
+    });
+
     describe('#watch', () => {
         describe('key: allFields', () => {
             it('triggers model loading', async () => {
@@ -316,6 +404,33 @@ describe('ViewMetadataQueryResult', () => {
 
                 reorderFields(['fldPrjctClient', 'fldPrjctCtgry'], 2);
                 expect(spy).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('key: groupLevels', () => {
+            it('triggers model loading', async () => {
+                const result = view.selectMetadata();
+
+                mockVisibleFields([], 0);
+                await waitForWatchKeyAsync(result, 'groupLevels');
+
+                expect(result.isDataLoaded).toBe(true);
+            });
+
+            it('notifies when a groupLevels changes', async () => {
+                const spy = jest.fn();
+                const result = view.selectMetadata();
+
+                mockVisibleFields(['fldPrjctClient', 'fldPrjctCtgry', 'fldPrjctCmplt'], 2);
+                await result.loadDataAsync();
+
+                result.watch('groupLevels', spy);
+
+                changeGroupLevels([
+                    {fieldId: 'fldPrjctClient', direction: 'asc'},
+                    {fieldId: 'fldPrjctCtgry', direction: 'asc'},
+                ]);
+                expect(spy).toHaveBeenCalledTimes(1);
             });
         });
     });

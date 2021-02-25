@@ -8,6 +8,7 @@ import {RecordData} from '../../src/types/record';
 import Table from '../../src/models/table';
 import Field from '../../src/models/field';
 import View from '../../src/models/view';
+import {GroupData, GroupLevelData} from '../../src/types/view';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -31,7 +32,12 @@ const recordEntry = (id: string, valuesByFieldId: {[key: string]: CellValue}) =>
     },
 });
 
-const mockRecordData = (tableId: 'tblDesignProjects' | 'tblTasks', includeView: boolean) => {
+const mockRecordData = (
+    tableId: 'tblDesignProjects' | 'tblTasks',
+    includeView: boolean,
+    groups?: Array<GroupData>,
+    groupLevels?: Array<GroupLevelData>,
+) => {
     let recordsById: {[key: string]: RecordData};
 
     if (tableId === 'tblDesignProjects') {
@@ -79,6 +85,8 @@ const mockRecordData = (tableId: 'tblDesignProjects' | 'tblTasks', includeView: 
                 visibleFieldCount: 0,
             },
             colorsByRecordId: {},
+            groups,
+            groupLevels,
         });
     }
 
@@ -197,6 +205,311 @@ describe('TableOrViewQueryResult', () => {
             expect(() => result.recordIds).toThrowErrorMatchingInlineSnapshot(
                 `"RecordQueryResult's underlying view has been deleted"`,
             );
+        });
+    });
+
+    describe('#groups', () => {
+        it('rejects requests for unloaded results', () => {
+            const result = base.tables[0].selectRecords();
+            expect(() => result.groups).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult data is not loaded"`,
+            );
+        });
+
+        it('returns null groups for tables', async () => {
+            mockRecordData('tblTasks', false);
+            const result = await base.tables[1].selectRecordsAsync();
+            expect(result.groups).toStrictEqual(null);
+        });
+
+        it('rejects requests when source table has been deleted', async () => {
+            mockRecordData('tblTasks', false);
+            const result = await base.tables[1].selectRecordsAsync();
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tableOrder'],
+                    value: ['tblDesignProjects', 'tblClients'],
+                },
+                {
+                    path: ['tablesById', 'tblTasks'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(() => result.groups).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult's underlying table has been deleted"`,
+            );
+        });
+
+        it('rejects requests when source view has been deleted', async () => {
+            mockRecordData(
+                'tblDesignProjects',
+                true,
+                [{groups: null, visibleRecordIds: ['recA', 'recB', 'recC']}],
+                [{fieldId: 'fldTaskName', direction: 'asc'}],
+            );
+            const result = await base.tables[0].views[0].selectRecordsAsync();
+            const singleGroup = result.groups?.[0];
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['viewOrder'],
+                    value: [
+                        'viwPrjctIncmplt',
+                        'viwPrjctCompleted',
+                        'viwPrjctCalendar',
+                        'viwPrjctDueDates',
+                    ],
+                },
+                {
+                    path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(() => result.groups).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult's underlying view has been deleted"`,
+            );
+
+            expect(() => singleGroup?.fieldId).toThrowErrorMatchingInlineSnapshot(
+                `"GroupedRecordQueryResult has been deleted"`,
+            );
+        });
+
+        it('returns groups for view', async () => {
+            mockRecordData(
+                'tblTasks',
+                true,
+                [
+                    {groups: null, visibleRecordIds: ['recD']},
+                    {groups: null, visibleRecordIds: ['recE']},
+                    {groups: null, visibleRecordIds: ['recF']},
+                ],
+                [{fieldId: 'fldTaskName', direction: 'asc'}],
+            );
+            const result = await base.tables[1].views[0].selectRecordsAsync({fields: ['Name']});
+            expect(result.groups?.[0].recordIds).toStrictEqual(['recD']);
+            expect(result.groups?.[1].recordIds).toStrictEqual(['recE']);
+            expect(result.groups?.[2].recordIds).toStrictEqual(['recF']);
+
+            expect(result.groups?.[1].hasRecord('recE')).toStrictEqual(true);
+            expect(result.groups?.[1].hasRecord('recD')).toStrictEqual(false);
+
+            expect(result.groups?.[0].fieldId).toStrictEqual('fldTaskName');
+            expect(result.groups?.[1].fieldId).toStrictEqual('fldTaskName');
+            expect(result.groups?.[2].fieldId).toStrictEqual('fldTaskName');
+
+            expect(result.groups?.[0].field?.id).toStrictEqual('fldTaskName');
+
+            expect(result.groups?.[0].fields?.[0].id).toStrictEqual('fldTaskName');
+        });
+
+        it('returns nested groups for view', async () => {
+            mockRecordData(
+                'tblTasks',
+                true,
+                [
+                    {groups: [{groups: null, visibleRecordIds: ['recD']}], visibleRecordIds: null},
+                    {
+                        groups: [
+                            {groups: null, visibleRecordIds: ['recE']},
+                            {groups: null, visibleRecordIds: ['recF']},
+                        ],
+                        visibleRecordIds: null,
+                    },
+                ],
+                [
+                    {fieldId: 'fldTaskName', direction: 'asc'},
+                    {fieldId: 'fldTaskNotes', direction: 'asc'},
+                ],
+            );
+            const result = await base.tables[1].views[0].selectRecordsAsync();
+            expect(result.groups?.[0].recordIds).toStrictEqual(['recD']);
+            expect(result.groups?.[1].recordIds).toStrictEqual(['recE', 'recF']);
+
+            expect(result.groups?.[0].fieldId).toStrictEqual('fldTaskName');
+            expect(result.groups?.[1].fieldId).toStrictEqual('fldTaskName');
+
+            expect(result.groups?.[0].groups?.[0].recordIds).toStrictEqual(['recD']);
+            expect(result.groups?.[1].groups?.[0].recordIds).toStrictEqual(['recE']);
+            expect(result.groups?.[1].groups?.[1].recordIds).toStrictEqual(['recF']);
+            expect(result.groups?.[0].groups?.[0].fieldId).toStrictEqual('fldTaskNotes');
+
+            expect(result.groups?.[0].field?.id).toStrictEqual('fldTaskName');
+
+            result.groups?.[0].unloadData();
+        });
+
+        it('checks that deleting a field in a group causes group to error on field fetch', async () => {
+            mockRecordData(
+                'tblTasks',
+                true,
+                [
+                    {groups: null, visibleRecordIds: ['recD']},
+                    {groups: null, visibleRecordIds: ['recE']},
+                    {groups: null, visibleRecordIds: ['recF']},
+                ],
+                [{fieldId: 'fldTaskNotes', direction: 'asc'}],
+            );
+            const result = await base.tables[1].views[0].selectRecordsAsync({
+                fields: ['Notes'],
+            });
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblTasks', 'fieldsById', 'fldTaskNotes'],
+                    value: null,
+                },
+            ]);
+
+            expect(result.groups?.[0].recordIds).toStrictEqual(['recD']);
+            expect(() => result.groups?.[0].field).toThrowErrorMatchingInlineSnapshot(
+                `"No field with ID fldTaskNotes in table 'Tasks'"`,
+            );
+        });
+
+        it('checks that watch updates trigger', async () => {
+            mockRecordData(
+                'tblTasks',
+                true,
+                [{groups: null, visibleRecordIds: ['recD']}],
+                [{fieldId: 'fldTaskName', direction: 'asc'}],
+            );
+
+            const result = await base.tables[1].views[0].selectRecordsAsync({
+                fields: ['Name'],
+            });
+
+            const group = result.groups?.[0]!;
+            const visibleRecordId = result.recordIds[0];
+            const spy = jest.fn();
+
+            group.watch('cellValues', spy);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblTasks',
+                        'recordsById',
+                        visibleRecordId,
+                        'cellValuesByFieldId',
+                        'fldTaskName',
+                    ],
+                    value: 'value 1',
+                },
+            ]);
+
+            expect(spy.mock.calls.length).toBe(1);
+
+            group.unwatch('cellValues', spy);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblTasks',
+                        'recordsById',
+                        visibleRecordId,
+                        'cellValuesByFieldId',
+                        'fldTaskName',
+                    ],
+                    value: 'value 2',
+                },
+            ]);
+
+            expect(spy.mock.calls.length).toBe(1);
+        });
+    });
+
+    describe('#groupLevels', () => {
+        it('rejects requests for unloaded results', () => {
+            const result = base.tables[0].selectRecords();
+            expect(() => result.groupLevels).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult data is not loaded"`,
+            );
+        });
+
+        it('returns null groupLevels for tables', async () => {
+            mockRecordData('tblDesignProjects', false);
+            const result = await base.tables[0].selectRecordsAsync();
+            expect(result.groupLevels).toStrictEqual(null);
+        });
+
+        it('rejects requests when source table has been deleted', async () => {
+            mockRecordData('tblDesignProjects', false);
+            const result = await base.tables[0].selectRecordsAsync();
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tableOrder'],
+                    value: ['tblTasks', 'tblClients'],
+                },
+                {
+                    path: ['tablesById', 'tblDesignProjects'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(() => result.groupLevels).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult's underlying table has been deleted"`,
+            );
+        });
+
+        it('rejects requests when source view has been deleted', async () => {
+            mockRecordData('tblDesignProjects', true);
+            const result = await base.tables[0].views[0].selectRecordsAsync();
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['viewOrder'],
+                    value: [
+                        'viwPrjctIncmplt',
+                        'viwPrjctCompleted',
+                        'viwPrjctCalendar',
+                        'viwPrjctDueDates',
+                    ],
+                },
+                {
+                    path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll'],
+                    value: undefined,
+                },
+            ]);
+
+            expect(() => result.groupLevels).toThrowErrorMatchingInlineSnapshot(
+                `"RecordQueryResult's underlying view has been deleted"`,
+            );
+        });
+
+        it('checks that realtime updates of groupLevels works', async () => {
+            mockRecordData('tblDesignProjects', true, [], []);
+            const result = await base.tables[0].views[0].selectRecordsAsync();
+
+            expect(result.groupLevels?.length).toStrictEqual(0);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblDesignProjects',
+                        'viewsById',
+                        'viwPrjctAll',
+                        'groupLevels',
+                    ],
+                    value: [{fieldId: 'fldPrjctName', direction: 'asc'}],
+                },
+                {
+                    path: ['tablesById', 'tblDesignProjects', 'viewsById', 'viwPrjctAll', 'groups'],
+                    value: [
+                        {groups: null, visibleRecordIds: ['recD']},
+                        {groups: null, visibleRecordIds: ['recE']},
+                        {groups: null, visibleRecordIds: ['recF']},
+                    ],
+                },
+            ]);
+
+            expect(result.groupLevels?.length).toStrictEqual(1);
+            expect(result.groupLevels?.[0].fieldId).toStrictEqual('fldPrjctName');
+            expect(result.groupLevels?.[0].field.id).toStrictEqual('fldPrjctName');
+            expect(result.groupLevels?.[0].direction).toStrictEqual('asc');
         });
     });
 

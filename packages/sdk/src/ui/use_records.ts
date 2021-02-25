@@ -20,6 +20,37 @@ type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 /** */
 type TableOrViewOrQueryResult = Table | View | AnyQueryResult;
 
+/**
+ * Common code to all useRecordQueryResults, returns a RecordQueryResult and loads it - but does
+ * not watch any properties on it.
+ *
+ * @param tableOrViewOrQueryResult
+ * @param functionNameForErrors
+ * @param opts
+ * @internal
+ */
+function _useUnwatchedRecordQueryResult(
+    tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
+    functionNameForErrors: string,
+    opts?: RecordQueryResultOpts,
+): RecordQueryResult | null {
+    let queryResult;
+    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
+        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
+    } else {
+        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
+            throw spawnError(
+                '%s does not support passing both a queryResult and opts.',
+                functionNameForErrors,
+            );
+        }
+        queryResult = tableOrViewOrQueryResult;
+    }
+
+    useLoadable(queryResult);
+    return queryResult;
+}
+
 /** */
 export function useRecordIds(
     tableOrView: Table | View,
@@ -68,21 +99,20 @@ export function useRecordIds(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordIdQueryResultOpts,
 ): Array<RecordId> | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords({
-            fields: [],
-            recordColorMode: RecordColoring.modes.none(),
-            sorts: opts ? opts.sorts : undefined,
-        });
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecordIds does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
+    const generatedOpts =
+        tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View
+            ? {
+                  fields: [],
+                  recordColorMode: RecordColoring.modes.none(),
+                  sorts: opts ? opts.sorts : undefined,
+              }
+            : opts;
 
-    useLoadable(queryResult);
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordIds',
+        generatedOpts,
+    );
     useWatchable(queryResult, ['recordIds']);
     return queryResult ? queryResult.recordIds : null;
 }
@@ -172,17 +202,12 @@ export function useRecords(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordQueryResultOpts,
 ): Array<Record> | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecords does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecords',
+        opts,
+    );
 
-    useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
     return queryResult ? queryResult.records : null;
 }
@@ -250,19 +275,33 @@ export function useRecordById(
     recordId: RecordId,
     opts?: SingleRecordQueryResultOpts,
 ): Record | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecordById does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
-
-    useLoadable(queryResult);
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordById',
+        opts,
+    );
     useWatchable(queryResult, ['records', 'recordColors']);
     const record = queryResult ? queryResult.getRecordByIdIfExists(recordId) : null;
     useWatchable(record, ['cellValues']);
     return record;
+}
+
+/**
+ * Docs: TODO(SeanKeenan)
+ *
+ * @docsPath UI/hooks/useRecordQueryResult
+ * @hidden
+ * @hook
+ */
+export function useRecordQueryResult(
+    tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
+    opts?: RecordQueryResultOpts,
+): RecordQueryResult | null {
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordQueryResult',
+        opts,
+    );
+    useWatchable(queryResult, ['records', 'cellValues', 'recordColors', 'groups']);
+    return queryResult;
 }

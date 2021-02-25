@@ -13,3 +13,6 @@ npm-debug.log
 
 # Node diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.json
+
+# cli-next package testing space
+/packages/cli-next/.test-tmp

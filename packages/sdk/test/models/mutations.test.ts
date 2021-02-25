@@ -6,7 +6,7 @@ import Session from '../../src/models/session';
 import {ModelChange} from '../../src/types/base';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
-import {FieldTypeConfig} from '../../src/types/airtable_interface';
+import {BlockRunContextType, FieldTypeConfig} from '../../src/types/airtable_interface';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -468,6 +468,74 @@ describe('Mutations', () => {
                     },
                     'pro',
                 );
+            });
+        });
+
+        describe('UPDATE_VIEW_METADATA', () => {
+            it('Setting view metadata is only valid for views', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctAll',
+                        tableId: 'tblDesignProjects',
+                        metadata: {},
+                    });
+                }).toThrow('Setting view metadata is only valid for views');
+            });
+            it('checks that the table and view are same as block view', () => {
+                mutations._airtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblDesignProjects',
+                };
+
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctAll',
+                        tableId: 'tblTasks',
+                        metadata: {},
+                    });
+                }).toThrow('Custom views can only set view metadata on themselves');
+
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctIncmplt',
+                        tableId: 'tblDesignProjects',
+                        metadata: {},
+                    });
+                }).toThrow('Custom views can only set view metadata on themselves');
+            });
+            it('checks that the table exists', () => {
+                mutations._airtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblNonExistentTableId',
+                };
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctAll',
+                        tableId: 'tblNonExistentTableId',
+                        metadata: {},
+                    });
+                }).toThrow("Can't update metadata: No table with id tblNonExistentTableId exists");
+            });
+            it('checks that the view exists', () => {
+                mutations._airtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    viewId: 'viwNonExistentViewId',
+                    tableId: 'tblDesignProjects',
+                };
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwNonExistentViewId',
+                        tableId: 'tblDesignProjects',
+                        metadata: {},
+                    });
+                }).toThrow("Can't update metadata: No view with id viwNonExistentViewId exists");
             });
         });
     });
@@ -1070,6 +1138,63 @@ Mock reason"
                         },
                     ],
                 });
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+        });
+
+        describe('UPDATE_VIEW_METADATA', () => {
+            it('succeeds when input is empty, but valid', async () => {
+                mutations._airtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblDesignProjects',
+                };
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.UPDATE_VIEW_METADATA,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblDesignProjects',
+                    metadata: {},
+                });
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctAll',
+                        tableId: 'tblDesignProjects',
+                        metadata: {},
+                    },
+                    {holdForMs: 100},
+                );
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+            it('succeeds when input is valid', async () => {
+                mutations._airtableInterface.sdkInitData.runContext = {
+                    type: BlockRunContextType.VIEW,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblDesignProjects',
+                };
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.UPDATE_VIEW_METADATA,
+                    viewId: 'viwPrjctAll',
+                    tableId: 'tblDesignProjects',
+                    metadata: {
+                        groupLevels: [{fieldId: 'fldPrjctName', direction: 'asc'}],
+                    },
+                });
+
+                expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        viewId: 'viwPrjctAll',
+                        tableId: 'tblDesignProjects',
+                        metadata: {
+                            groupLevels: [{fieldId: 'fldPrjctName', direction: 'asc'}],
+                        },
+                    },
+                    {holdForMs: 100},
+                );
 
                 expect(applyModelChanges.mock.calls.length).toBe(0);
             });

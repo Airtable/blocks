@@ -2,7 +2,7 @@
 import {AggregatorKey} from '../types/aggregators';
 import Sdk from '../sdk';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
-import {FieldData, FieldType, FieldOptions} from '../types/field';
+import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import AbstractModel from './abstract_model';
 import {Aggregator} from './create_aggregators';
@@ -142,6 +142,28 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         );
 
         return options ? cloneDeep(options) : null;
+    }
+
+    /**
+     * The type and options of the field to make type narrowing `FieldOptions` easier.
+     *
+     * @see {@link FieldConfig}
+     * @example
+     * const fieldConfig = field.config;
+     * if (fieldConfig.type === FieldType.SINGLE_SELECT) {
+     *     return fieldConfig.options.choices;
+     * } else if (fieldConfig.type === FieldType.MULTIPLE_LOOKUP_VALUES && fieldConfig.options.isValid) {
+     *     if (fieldConfig.options.result.type === FieldType.SINGLE_SELECT) {
+     *         return fieldConfig.options.result.options.choices;
+     *     }
+     * }
+     * return DEFAULT_CHOICES;
+     */
+    get config(): FieldConfig {
+        return {
+            type: this.type,
+            options: this.options,
+        } as FieldConfig;
     }
     /**
      * _Beta feature with unstable API. May have breaking changes before release._

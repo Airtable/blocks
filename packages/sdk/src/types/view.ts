@@ -42,6 +42,31 @@ export interface ViewFieldOrderData {
 /** @hidden */
 export type ViewColorsByRecordIdData = ObjectMap<RecordId, Color | null | undefined>;
 
+/**
+ * Data provided by airtable for groups, only available on views or grouped queries
+ *
+ * @hidden
+ */
+export type GroupData =
+    | {
+          visibleRecordIds: Array<RecordId>;
+          groups: null;
+      }
+    | {
+          visibleRecordIds: null;
+          groups: Array<GroupData>;
+      };
+
+/**
+ * GroupLevel provided by airtable - matches NormalizedGroupLevel
+ *
+ * @hidden
+ */
+export interface GroupLevelData {
+    fieldId: FieldId;
+    direction: 'asc' | 'desc';
+}
+
 /** @hidden */
 export interface ViewData {
     id: ViewId;
@@ -50,4 +75,6 @@ export interface ViewData {
     visibleRecordIds?: Array<RecordId>;
     fieldOrder?: ViewFieldOrderData;
     colorsByRecordId?: ViewColorsByRecordIdData;
+    groups?: Array<GroupData> | null;
+    groupLevels?: Array<GroupLevelData> | null;
 }

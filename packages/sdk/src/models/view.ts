@@ -2,10 +2,15 @@
 import Sdk from '../sdk';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
+import {MutationTypes} from '../types/mutations';
 import AbstractModel from './abstract_model';
 import ObjectPool from './object_pool';
 import Table from './table';
-import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {
+    normalizeSortsOrGroups,
+    RecordQueryResultOpts,
+    ViewMetadataForUpdate,
+} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
@@ -258,6 +263,43 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         const queryResult = this.selectMetadata();
         await queryResult.loadDataAsync();
         return queryResult;
+    }
+
+    /**
+     * Checks whether the current user has permission to update view metadata.
+     *
+     * @param viewMetadata
+     * @hidden
+     */
+    checkPermissionsForUpdateMetadata(viewMetadata: ViewMetadataForUpdate) {
+        const metadata = {
+            groupLevels: normalizeSortsOrGroups(this.parentTable, viewMetadata.groupLevels),
+        };
+        return this._sdk.__mutations.checkPermissionsForMutation({
+            type: MutationTypes.UPDATE_VIEW_METADATA,
+            tableId: this.parentTable.id,
+            viewId: this.id,
+            metadata,
+        });
+    }
+
+    /**
+     * Updates view metadata, this is currently only supported from block views
+     * altering their own view's grouping config.
+     *
+     * @param ViewMetadataForUpdate
+     * @hidden
+     */
+    async updateMetadataAsync(viewMetadata: ViewMetadataForUpdate) {
+        const metadata = {
+            groupLevels: normalizeSortsOrGroups(this.parentTable, viewMetadata.groupLevels),
+        };
+        await this._sdk.__mutations.applyMutationAsync({
+            type: MutationTypes.UPDATE_VIEW_METADATA,
+            tableId: this.parentTable.id,
+            viewId: this.id,
+            metadata,
+        });
     }
 
     /**
