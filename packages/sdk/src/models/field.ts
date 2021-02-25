@@ -150,7 +150,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * The type and options of the field to make type narrowing FieldOptions easier.
+     * The type and options of the field to make type narrowing `FieldOptions` easier.
      *
      * @see {@link FieldConfig}
      * @example
