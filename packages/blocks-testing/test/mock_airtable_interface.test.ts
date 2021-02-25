@@ -783,13 +783,6 @@ describe('MockAirtableInterface', () => {
         });
     });
 
-    describe('#expandRecordPickerAsync', () => {
-        it('returns null', async () => {
-            const ai = new MockAirtableInterface({base: smallBase});
-            expect(await ai.expandRecordPickerAsync()).toBe(null);
-        });
-    });
-
     describe('#reloadFrame', () => {
         it('does not throw', () => {
             const ai = new MockAirtableInterface({base: smallBase});

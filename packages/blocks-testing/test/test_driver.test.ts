@@ -4,7 +4,14 @@ import React from 'react';
 import TestDriver from '../src';
 import {Viewport} from '@airtable/blocks/types';
 import {Base, Cursor, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
-import {expandRecord, expandRecordList, useBase, useCursor, useViewport} from '@airtable/blocks/ui';
+import {
+    expandRecord,
+    expandRecordList,
+    expandRecordPickerAsync,
+    useBase,
+    useCursor,
+    useViewport,
+} from '@airtable/blocks/ui';
 import {Mutation} from '@airtable/blocks/unstable_testing_utils';
 
 import {FixtureData} from '../src/mock_airtable_interface';
@@ -608,6 +615,35 @@ describe('TestDriver', () => {
             testDriver.simulatePermissionCheck(() => false);
             await expect(triggerMutationAsync()).rejects.toThrowErrorMatchingInlineSnapshot(
                 `"Cannot apply createMultipleRecords mutation: The testing environment has been configured to deny this mutation."`,
+            );
+        });
+    });
+
+    describe('#simulateExpandedRecordSelection', () => {
+        it('invokes the provided function with the appropriate arguments', async () => {
+            const {records} = await testDriver.base.tables[0].selectRecordsAsync();
+            const spy = jest.fn(() => 'reca');
+
+            testDriver.simulateExpandedRecordSelection(spy);
+
+            await expandRecordPickerAsync(records);
+
+            expect(spy).toHaveBeenCalledWith('tblTable1', ['reca', 'recb', 'recc'], null, false);
+        });
+
+        it('honors the return value of the provided function', async () => {
+            const {records} = await testDriver.base.tables[0].selectRecordsAsync();
+
+            testDriver.simulateExpandedRecordSelection(() => 'recc');
+
+            expect(await expandRecordPickerAsync(records)).toBe(records[2]);
+        });
+
+        it('reports an error when not used', async () => {
+            const {records} = await testDriver.base.tables[0].selectRecordsAsync();
+
+            expect(expandRecordPickerAsync(records)).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"Unable to simulate user record selection for \`expandRecordPickerAsync\`. The test environment must be configured with the record to select before this method is called."`,
             );
         });
     });

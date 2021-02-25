@@ -6,6 +6,7 @@ import {invariant} from './error_utils';
 import {
     FixtureData,
     default as MockAirtableInterface,
+    PickRecord,
     WatchableKeysAndArgs,
 } from './mock_airtable_interface';
 import {TestMutationTypes} from './test_mutations';
@@ -196,6 +197,41 @@ export default class TestDriver {
      */
     simulatePermissionCheck(check: (mutation: Mutation) => boolean) {
         this._airtableInterface.setUserPermissionCheck(check);
+    }
+
+    /**
+     * Specify the outcome of a request for the user to select a record in the
+     * UI created by `expandRecordPickerAsync`.
+     *
+     * @example
+     * ```js
+     * import MyCustomApp from '../src/my_custom_app';
+     * import {render, screen} from '@testing-library/react';
+     * import userEvent from '@testing-library/user-event';
+     * import TestDriver from '@airtable/blocks-testing';
+     *
+     * const testDriver = new TestDriver(fixtureData);
+     *
+     * testDriver.simulateExpandedRecordSelection((tableId, recordIds) => {
+     *     return recordIds[1];
+     * });
+     *
+     * render(
+     *     <testDriver.Container>
+     *         <MyCustomApp />
+     *     </testDriver.Container>
+     * );
+     *
+     * // Simulate a user clicking on a button in MyCustomApp labeled with the
+     * // text "Choose record". If MyCustomApp reacts to this event by invoking
+     * // the SDK's `expandRecordPickerAsync`, then it will receive the second
+     * // available record due to the function that is provided to
+     * // `simulateExpandedRecordSelection` above.
+     * userEvent.click(screen.getByLabelText('Choose record'));
+     * ```
+     */
+    simulateExpandedRecordSelection(pickRecord: PickRecord) {
+        this._airtableInterface.setPickRecord(pickRecord);
     }
 
     /**

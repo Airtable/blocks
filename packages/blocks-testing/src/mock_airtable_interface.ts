@@ -286,6 +286,20 @@ interface RecordDataStore {
     };
 }
 
+/**
+ * A callback function allowing tests to simulate user interaction with the
+ * expanded record picker UI. The testing library will invoke this function
+ * whenever the App under test uses the `expandRecordPickerAsync` API, and the
+ * return value of this function will be provided to the App under test as the
+ * Record that the simulated user selected.
+ */
+export type PickRecord = (
+    tableId: string,
+    recordIds: Array<string>,
+    fieldIds: Array<string> | null,
+    shouldAllowCreatingRecord: boolean,
+) => RecordId | null;
+
 const getId = ({id}: {id: string}) => id;
 
 // At the time of writing, identifiers happen to exhibit some structure in
@@ -311,6 +325,7 @@ const generateGenericId = () => {
 export default class MockAirtableInterface extends AbstractMockAirtableInterface {
     _recordDataStore: RecordDataStore;
     _userPermissionCheck?: (mutation: Mutation) => boolean;
+    _pickRecord?: PickRecord;
 
     constructor(unsafeFixtureData: FixtureData) {
         // Cloning the input data ensures that each instance has a fully
@@ -603,6 +618,21 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         this.emit('expandRecordList', {tableId, recordIds, fieldIds});
     }
 
+    async expandRecordPickerAsync(
+        tableId: string,
+        recordIds: Array<string>,
+        fieldIds: Array<string> | null,
+        shouldAllowCreatingRecord: boolean,
+    ): Promise<string | null> {
+        if (!this._pickRecord) {
+            throw spawnError(
+                'Unable to simulate user record selection for `expandRecordPickerAsync`. The test environment must be configured with the record to select before this method is called.',
+            );
+        }
+
+        return this._pickRecord(tableId, recordIds, fieldIds, shouldAllowCreatingRecord);
+    }
+
     get fieldTypeProvider() {
         const fieldTypeProvider = super.fieldTypeProvider;
 
@@ -755,6 +785,10 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         this.emit('setFullscreenMaxSize', maxFullscreenSize);
     }
 
+    setPickRecord(pickRecord: PickRecord) {
+        this._pickRecord = pickRecord;
+    }
+
     setUserPermissionCheck(check: (mutation: Mutation) => boolean) {
         this._userPermissionCheck = check;
     }
@@ -769,9 +803,6 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
     // be tested in some way:
     async fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
         return {};
-    }
-    async expandRecordPickerAsync(): Promise<string | null> {
-        return null;
     }
     reloadFrame() {}
     setSettingsButtonVisibility() {}
