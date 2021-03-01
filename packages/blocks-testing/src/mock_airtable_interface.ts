@@ -44,7 +44,6 @@ const unmodifiableSdkData = {
     blockInstallationId: 'bliTESTING',
     isFirstRun: false,
     isFullscreen: false,
-    initialKvValuesByKey: {},
     intentData: null,
 };
 
@@ -178,6 +177,12 @@ export interface WatchableKeysAndArgs {
  * Base in automated test environments.
  */
 export interface FixtureData {
+    /**
+     * An optional object describing the initial state of the globalConfig
+     * which is associated with the simulated Base. If omitted, the Base's
+     * globalConfig will be initially empty.
+     */
+    globalConfig?: GlobalConfigData;
     /** A representation of the state of an Airtable Base */
     base: {
         id: BaseId;
@@ -408,6 +413,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
 
         const sdkInitData: SdkInitData = {
             ...unmodifiableSdkData,
+            initialKvValuesByKey: fixtureData.globalConfig || {},
             baseData: {
                 ...(unmodifiableBaseData as Pick<BaseData, keyof typeof unmodifiableBaseData>),
                 id: fixtureData.base.id,

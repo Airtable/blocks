@@ -2,14 +2,14 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 // eslint-disable-next-line import/order
 import TestDriver from '../src';
-import {Viewport} from '@airtable/blocks/types';
-import {Base, Cursor, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
+import {Base, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
 import {
     expandRecord,
     expandRecordList,
     expandRecordPickerAsync,
     useBase,
     useCursor,
+    useGlobalConfig,
     useViewport,
 } from '@airtable/blocks/ui';
 import {Mutation} from '@airtable/blocks/unstable_testing_utils';
@@ -18,37 +18,28 @@ import {FixtureData} from '../src/mock_airtable_interface';
 import {invariant} from '../src/error_utils';
 import {TestMutation} from '../src/test_mutations';
 
-function getCursor(testDriver: TestDriver): Cursor {
+function getHookValue<HookValue extends any>(
+    testDriver: TestDriver,
+    hook: () => HookValue,
+): HookValue {
     const div = document.createElement('div');
-    let cursor: Cursor | null = null;
+    let value: HookValue | null = null;
     const child = React.createElement(() => {
-        cursor = useCursor();
+        value = hook();
         return null;
     }, null);
 
     ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
     ReactDOM.unmountComponentAtNode(div);
 
-    invariant(cursor, '`useCursor` hook did not provide a Cursor instance');
+    invariant(value, 'React hook did not provide a model instance');
 
-    return cursor;
+    return value;
 }
-
-function getViewport(testDriver: TestDriver): Viewport {
-    const div = document.createElement('div');
-    let viewport: Viewport | null = null;
-    const child = React.createElement(() => {
-        viewport = useViewport();
-        return null;
-    }, null);
-
-    ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
-    ReactDOM.unmountComponentAtNode(div);
-
-    invariant(viewport, '`useViewport` hook did not provide a Viewport instance');
-
-    return viewport;
-}
+const getBase = (testDriver: TestDriver) => getHookValue(testDriver, useBase);
+const getCursor = (testDriver: TestDriver) => getHookValue(testDriver, useCursor);
+const getGlobalConfig = (testDriver: TestDriver) => getHookValue(testDriver, useGlobalConfig);
+const getViewport = (testDriver: TestDriver) => getHookValue(testDriver, useViewport);
 
 describe('TestDriver', () => {
     let fixtureData: FixtureData;
@@ -242,6 +233,9 @@ describe('TestDriver', () => {
         it('provides a Base instance', () => {
             const div = document.createElement('div');
             let base: Base | null = null;
+            // This test intentionally re-creates the `getBase` helper function
+            // because the implementation details of `getBase` are central to
+            // the behavior under test.
             const child = React.createElement(() => {
                 base = useBase();
                 return null;
@@ -279,6 +273,46 @@ describe('TestDriver', () => {
             const result2 = await second.base.getTable('Table 1').selectRecordsAsync();
             expect(read(result2)[0]).toEqual({id: 'reca', fldName: 'a'});
         });
+
+        it('maintains globalConfig values at the top-level', () => {
+            fixtureData.globalConfig = {foo: 'bar'};
+            const globalConfig = getGlobalConfig(new TestDriver(fixtureData));
+
+            expect(globalConfig.get('foo')).toBe('bar');
+        });
+
+        it('maintains globalConfig values nested within the top-level', () => {
+            fixtureData.globalConfig = {
+                foo: {
+                    bar: 'baz',
+                },
+            };
+            const globalConfig = getGlobalConfig(new TestDriver(fixtureData));
+
+            expect(globalConfig.get(['foo', 'bar'])).toBe('baz');
+        });
+
+        it('maintains distinct globalConfig stores for each instance (initial state provided)', async () => {
+            fixtureData.globalConfig = {foo: 'bar'};
+            const globalConfig1 = getGlobalConfig(new TestDriver(fixtureData));
+            const globalConfig2 = getGlobalConfig(new TestDriver(fixtureData));
+
+            await globalConfig1.setAsync('foo', 'baz');
+
+            expect(globalConfig1.get('foo')).toBe('baz');
+            expect(globalConfig2.get('foo')).toBe('bar');
+        });
+
+        it('maintains distinct globalConfig stores for each instance (initial state omitted)', async () => {
+            delete fixtureData.globalConfig;
+            const globalConfig1 = getGlobalConfig(new TestDriver(fixtureData));
+            const globalConfig2 = getGlobalConfig(new TestDriver(fixtureData));
+
+            await globalConfig1.setAsync('foo', 'baz');
+
+            expect(globalConfig1.get('foo')).toBe('baz');
+            expect(globalConfig2.get('foo')).toBe(undefined);
+        });
     });
 
     describe('#cursor', () => {
@@ -295,10 +329,7 @@ describe('TestDriver', () => {
 
     describe('#globalConfig', () => {
         it('exposes global config from SDK', async () => {
-            // TODO(alex): this shouldn't rely on a private field of test driver. once we've added
-            // globalConfig support to the fixture setup, we should test by attempting to retrieve
-            // a value like we do for base, session, and cursor.
-            expect(testDriver.globalConfig).toBe(testDriver._sdk.globalConfig);
+            expect(testDriver.globalConfig).toBe(getGlobalConfig(testDriver));
         });
     });
 
@@ -777,7 +808,10 @@ describe('TestDriver', () => {
                 testDriver.watch('enterFullscreen', enterSpy);
                 testDriver.watch('exitFullscreen', exitSpy);
                 testDriver.watch('setFullscreenMaxSize', fullscreenSpy);
-                getViewport(testDriver).addMaxFullscreenSize({width: 1024, height: 768});
+                getViewport(testDriver).addMaxFullscreenSize({
+                    width: 1024,
+                    height: 768,
+                });
 
                 expect(enterSpy).toHaveBeenCalledTimes(0);
                 expect(exitSpy).toHaveBeenCalledTimes(0);
@@ -866,15 +900,8 @@ describe('TestDriver', () => {
 
         describe('record expansion', () => {
             it('notifies when individual records are expanded', async () => {
-                const div = document.createElement('div');
-                let base: Base | null = null;
-                const child = React.createElement(() => {
-                    base = useBase();
-                    return null;
-                }, null);
-
-                ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
-                const result = await base!.tables[0].selectRecordsAsync();
+                const base = getBase(testDriver);
+                const result = await base.tables[0].selectRecordsAsync();
                 const expandRecordSpy = jest.fn();
                 const expandRecordListSpy = jest.fn();
 
@@ -888,15 +915,8 @@ describe('TestDriver', () => {
             });
 
             it('notifies when multiple records are expanded', async () => {
-                const div = document.createElement('div');
-                let base: Base | null = null;
-                const child = React.createElement(() => {
-                    base = useBase();
-                    return null;
-                }, null);
-
-                ReactDOM.render(React.createElement(testDriver.Container, null, child), div);
-                const result = await base!.tables[0].selectRecordsAsync();
+                const base = getBase(testDriver);
+                const result = await base.tables[0].selectRecordsAsync();
                 const expandRecordSpy = jest.fn();
                 const expandRecordListSpy = jest.fn();
 
