@@ -8,7 +8,7 @@ const loadAsync = async () => {
 };
 
 describe('package.json', () => {
-    it('defines the same dependency on the Blocks CLI for development and for consumers', async () => {
+    it('defines the same dependency on the Blocks SDK for development and for consumers', async () => {
         const packageJson = await loadAsync();
 
         expect(packageJson.devDependencies['@airtable/blocks']).toBeTruthy();
