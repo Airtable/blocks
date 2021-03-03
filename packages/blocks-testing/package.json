@@ -40,7 +40,7 @@
     "license": "UNLICENSED",
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
-        "@airtable/blocks": "^1.4.1",
+        "@airtable/blocks": "^1.5.0",
         "@babel/cli": "^7.7.5",
         "@babel/core": "^7.7.5",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
@@ -91,7 +91,7 @@
     "peerDependencies": {
         "react": "^16.8.0",
         "react-dom": "^16.8.0",
-        "@airtable/blocks": "^1.4.1"
+        "@airtable/blocks": "^1.5.0"
     },
     "jest": {
         "setupFiles": [],
