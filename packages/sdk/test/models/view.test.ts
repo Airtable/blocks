@@ -345,6 +345,22 @@ describe('View', () => {
             });
         });
 
+        describe('#hasPermissionToUpdateMetadata()', () => {
+            test('correctly queries AirtableInterface when nothing is provided', async () => {
+                view.hasPermissionToUpdateMetadata({});
+
+                expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                    {
+                        type: MutationTypes.UPDATE_VIEW_METADATA,
+                        tableId: 'tblFirst',
+                        viewId: 'viwPrjctAll',
+                        metadata: {},
+                    },
+                    mockAirtableInterface.sdkInitData.baseData,
+                );
+            });
+        });
+
         describe('#selectRecords()', () => {
             test('returns TableOrViewQueryResult', async () => {
                 const queryResult = view.selectRecords();

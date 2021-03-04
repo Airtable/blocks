@@ -2,7 +2,7 @@
 import Sdk from '../sdk';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
-import {MutationTypes} from '../types/mutations';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import AbstractModel from './abstract_model';
 import ObjectPool from './object_pool';
 import Table from './table';
@@ -271,7 +271,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @param viewMetadata
      * @hidden
      */
-    checkPermissionsForUpdateMetadata(viewMetadata: ViewMetadataForUpdate) {
+    checkPermissionsForUpdateMetadata(viewMetadata: ViewMetadataForUpdate): PermissionCheckResult {
         const metadata = {
             groupLevels: normalizeSortsOrGroups(this.parentTable, viewMetadata.groupLevels),
         };
@@ -281,6 +281,18 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
             viewId: this.id,
             metadata,
         });
+    }
+
+    /**
+     * An alias for `checkPermissionsForUpdateMetadata(viewMetadata).hasPermission`.
+     *
+     * Checks whether the current user has permission to update view metadata.
+     *
+     * @param viewMetadata
+     * @hidden
+     */
+    hasPermissionToUpdateMetadata(viewMetadata: ViewMetadataForUpdate): boolean {
+        return this.checkPermissionsForUpdateMetadata(viewMetadata).hasPermission;
     }
 
     /**

@@ -262,7 +262,12 @@ abstract class MockAirtableInterface extends EventEmitter implements AirtableInt
         recordIds: Array<string>,
         fieldIds: Array<string> | null,
     ): void;
-    abstract expandRecordPickerAsync(): Promise<string | null>;
+    abstract expandRecordPickerAsync(
+        tableId: string,
+        recordIds: Array<string>,
+        fieldIds: Array<string> | null,
+        shouldAllowCreatingRecord: boolean,
+    ): Promise<string | null>;
     abstract reloadFrame(): void;
     abstract setSettingsButtonVisibility(): void;
     abstract setUndoRedoMode(): void;
