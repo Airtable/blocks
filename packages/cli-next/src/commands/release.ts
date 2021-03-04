@@ -108,12 +108,12 @@ export default class Release extends AirtableCommand {
             ),
         );
 
-        const apiKeyResult = await readApiKeyAsync(sys);
+        const apiKeyResult = await readApiKeyAsync(sys, remoteConfig.apiKeyName);
         if (apiKeyResult.err) {
             this.error(apiKeyResult.err);
         }
         const apiKey = apiKeyResult.value;
-        debug('loaded apiKey');
+        debug('loaded apiKey %s', remoteConfig.apiKeyName ?? 'default');
 
         const userAgent = await createUserAgentAsync(sys);
         debug('connecting to Airtable with user agent: %s', userAgent);

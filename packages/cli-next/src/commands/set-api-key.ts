@@ -4,7 +4,7 @@ import {flags as commandFlags} from '@oclif/command';
 import AirtableCommand from '../helpers/airtable_command';
 
 import {
-    castLocation,
+    ConfigLocation,
     findApiKeyConfigPathAsync,
     isValidApiKey,
     writeApiKeyAsync,
@@ -23,18 +23,22 @@ $ block set-api-key --location app APIKEY
     static flags = {
         help: commandFlags.help({char: 'h'}),
 
-        location: commandFlags.string({options: ['user', 'app'], default: 'user'}),
+        location: commandFlags.enum<ConfigLocation>({
+            options: Object.values(ConfigLocation),
+            default: ConfigLocation.USER,
+        }),
+
+        'api-key-name': commandFlags.string({
+            description: 'The name of the API key to set',
+            hidden: true,
+        }),
     };
 
     static args = [{name: 'apiKey'}];
 
     async runAsync() {
         const {args, flags} = this.parse(SetApiKey);
-
-        const location = castLocation(flags.location);
-        if (location.err) {
-            this.error(location.err.message, {exit: 1});
-        }
+        const apiKeyName = flags['api-key-name'];
 
         let {apiKey} = args;
 
@@ -45,11 +49,11 @@ $ block set-api-key --location app APIKEY
             });
         }
 
-        const locationPath = await findApiKeyConfigPathAsync(this.system, location.value);
+        const locationPath = await findApiKeyConfigPathAsync(this.system, flags.location);
         this.log(`Saving API Key to: ${locationPath}`);
 
-        await writeApiKeyAsync(this.system, location.value, apiKey);
+        await writeApiKeyAsync(this.system, flags.location, apiKey, apiKeyName);
 
-        this.log(`API Key saved.`);
+        this.log(`API Key${apiKeyName ? ` '${apiKeyName}'` : ''} saved.`);
     }
 }
