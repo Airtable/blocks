@@ -16,12 +16,12 @@
         "webdriver": "jest --env node --testMatch '**/*.webdriver.test.js'"
     },
     "dependencies": {
-        "@airtable/blocks": "^1.2.5",
+        "@airtable/blocks": "^1.5.1",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
     },
     "devDependencies": {
-        "@airtable/blocks-testing": "^0.0.1",
+        "@airtable/blocks-testing": "^0.0.3",
         "@testing-library/cypress": "^7.0.3",
         "@testing-library/dom": "^7.29.0",
         "@testing-library/jest-dom": "^5.11.6",
