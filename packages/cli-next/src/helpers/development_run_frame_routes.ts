@@ -3,7 +3,7 @@ import stripAnsi from 'strip-ansi';
 
 import {BLOCK_REQUEST_BODY_LIMIT} from '../settings';
 import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
-import {spawnError} from './error_utils';
+import {spawnUnexpectedError} from './error_utils';
 
 export interface RunFrameRouteOptions {
     getBuildState(): BuildState;
@@ -53,7 +53,10 @@ export function createRunFrameRoutes({
                 res.sendStatus(422);
                 break;
             default:
-                throw spawnError('Unexpected build status: %s', (buildResult as any).status);
+                throw spawnUnexpectedError(
+                    'Unexpected build status: %s',
+                    (buildResult as any).status,
+                );
         }
     });
 

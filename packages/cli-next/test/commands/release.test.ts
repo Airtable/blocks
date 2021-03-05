@@ -12,14 +12,22 @@ import {System} from '../../src/helpers/system';
 
 import {test} from '../mocks/test';
 import {AIRTABLE_API_URL, BUNDLE_FILE_NAME} from '../../src/settings';
-import {invariant} from '../../src/helpers/error_utils';
-import {AirtableApiBlockOptions} from '../../src/helpers/airtable_api';
+import {invariant, spawnUserError} from '../../src/helpers/error_utils';
+import {
+    AirtableApiBlockOptions,
+    AirtableApiErrorName,
+    AirtableApiErrorInfo,
+} from '../../src/helpers/airtable_api';
 import {RequestChannelAdapter} from '../../src/helpers/task_channels';
+import {AppConfigErrorName} from '../../src/helpers/config_app';
+import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
+import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
 
 const {
     stubCreateReleaseTaskAsync,
-    UploadReleaseStub: AppUploadStub,
-    UploadReleaseStubAltApiBaseUrl: AppUploadStubAltApiBaseUrl,
+    UploadReleaseStub,
+    UploadReleaseStubAltApiBaseUrl,
+    UploadReleaseStubMissingBase,
 } = createStubs();
 
 describe('release', () => {
@@ -29,7 +37,7 @@ describe('release', () => {
         .stderr()
         .enableDebug('block-cli*:release')
         .stub(releaseModule, 'createReleaseTaskAsync', stubCreateReleaseTaskAsync)
-        .stub(uploadReleaseModule, 'UploadRelease', AppUploadStub as any)
+        .stub(uploadReleaseModule, 'UploadRelease', UploadReleaseStub as any)
         .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0')
         .withFiles({
             '/home/.config/.airtableblocksrc.json': Buffer.from('{"airtableApiKey":"key1234"}'),
@@ -54,7 +62,7 @@ describe('release', () => {
                 '{"baseId":"abcd","blockId":"1234","server":"http://example.com"}',
             ),
         })
-        .stub(uploadReleaseModule, 'AppUpload', AppUploadStubAltApiBaseUrl as any)
+        .stub(uploadReleaseModule, 'UploadRelease', UploadReleaseStubAltApiBaseUrl as any)
         .command(['release'])
         .it('releases to alternative stated airtable server');
 
@@ -63,7 +71,7 @@ describe('release', () => {
             '/home/projects/my-app/block.json': Buffer.from('{}'),
         })
         .command(['release'])
-        .catch('"block.json".frontendEntry should be a string')
+        .catch(new RegExp(AppConfigErrorName.APP_CONFIG_IS_NOT_VALID))
         .it('validates block.json');
 
     testReleaseCommand
@@ -71,7 +79,7 @@ describe('release', () => {
             '/home/projects/my-app/.block/remote.json': Buffer.from('{}'),
         })
         .command(['release'])
-        .catch('"remote.json".blockId should be a string')
+        .catch(new RegExp(RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID))
         .it('validates remote.json');
 
     testReleaseCommand
@@ -79,8 +87,14 @@ describe('release', () => {
             '/home/.config/.airtableblocksrc.json': Buffer.from('{}'),
         })
         .command(['release'])
-        .catch('No available airtableApiKey from configuration files')
+        .catch(new RegExp(SystemApiKeyErrorName.SYSTEM_API_KEY_NOT_FOUND))
         .it('ensures there is an airtableApiKey');
+
+    testReleaseCommand
+        .stub(uploadReleaseModule, 'UploadRelease', UploadReleaseStubMissingBase as any)
+        .command(['release'])
+        .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND))
+        .it('throws base not found error');
 });
 
 function createStubs() {
@@ -148,9 +162,18 @@ function createStubs() {
         }
     }
 
+    class _UploadReleaseStubMissingBase extends _UploadReleaseStub {
+        async buildUploadAsync(): Promise<never> {
+            throw spawnUserError<AirtableApiErrorInfo>({
+                type: AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND,
+            });
+        }
+    }
+
     return {
         stubCreateReleaseTaskAsync: _stubCreateReleaseTaskAsync,
         UploadReleaseStub: _UploadReleaseStub,
         UploadReleaseStubAltApiBaseUrl: _UploadReleaseStubAltApiBaseUrl,
+        UploadReleaseStubMissingBase: _UploadReleaseStubMissingBase,
     };
 }

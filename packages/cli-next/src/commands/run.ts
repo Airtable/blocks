@@ -27,7 +27,7 @@ import {
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {mkdirpAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
-import {spawnError} from '../helpers/error_utils';
+import {spawnUnexpectedError} from '../helpers/error_utils';
 
 const debug = _debug('block-cli:command:run');
 
@@ -154,7 +154,7 @@ export default class Run extends AirtableCommand {
                 case BuildStatus.START:
                     break;
                 default:
-                    throw spawnError(
+                    throw spawnUnexpectedError(
                         'Tried logging unknown buildState: %s',
                         (buildState as BuildState).status,
                     );

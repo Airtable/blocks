@@ -3,7 +3,18 @@ import {promisify} from 'util';
 
 import {cli} from 'cli-ux';
 
-import {invariant, spawnError} from './error_utils';
+import {invariant, spawnUserError} from './error_utils';
+
+export enum FindPortErrorName {
+    FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER = 'findPortAsyncPortIsNotNumber',
+}
+
+export interface FindPortErrorPortIsNotNumber {
+    type: FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER;
+    port: string;
+}
+
+export type FindPortErrorInfo = FindPortErrorPortIsNotNumber;
 
 interface FindPortOptions {
     adjacentPorts?: number;
@@ -64,7 +75,10 @@ export async function findPortAsync(port: number, options: FindPortOptions = {})
             const result = await promptForPortAsync(port);
             port = Number(result);
             if (Number.isNaN(port)) {
-                throw spawnError('Invalid port number');
+                throw spawnUserError<FindPortErrorInfo>({
+                    type: FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER,
+                    port: result as string,
+                });
             }
             // Set our port and re-enter the loop.
             return await findPortAsync(port, options);

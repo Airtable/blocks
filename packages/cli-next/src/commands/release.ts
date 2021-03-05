@@ -62,6 +62,7 @@ class ReleaseConsumer implements ReleaseTaskConsumer {
 
 export default class Release extends AirtableCommand {
     private _task?: ReleaseTaskConsumer;
+    private _teardownAction?: (() => void) | null;
 
     static description = 'release a build to an Airtable base';
 
@@ -149,6 +150,10 @@ export default class Release extends AirtableCommand {
         debug('created build directory');
 
         cli.action.start('Bundling');
+        this._teardownAction = () => {
+            this._teardownAction = null;
+            cli.action.stop('Incomplete');
+        };
 
         // write entry point to disk
         const entryPointPath = sys.path.join(appTemporaryPath, 'index.js');
@@ -195,9 +200,13 @@ export default class Release extends AirtableCommand {
         await upload.createReleaseAsync(build);
 
         cli.action.stop();
+        this._teardownAction = null;
     }
 
     async finallyAsync() {
-        await Promise.all([this._task ? this._task.teardownAsync() : null]);
+        await Promise.all([
+            this._task ? this._task.teardownAsync() : null,
+            this._teardownAction ? this._teardownAction() : null,
+        ]);
     }
 }

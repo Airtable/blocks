@@ -1,5 +1,6 @@
 // If errorOriginFn is specified, all frames above and including the call to errorOriginFn
 // will be omitted from the stack trace.
+
 /**
  * @internal
  */
@@ -37,21 +38,54 @@ function spawnErrorWithOriginOmittedFromStackTrace(
 }
 
 /**
+ * Spawn an error replacing %s in format string with other arguments.
+ *
  * @hidden
  */
-export function spawnError(
+export function spawnUnexpectedError(
     errorMessageFormat: string,
     ...errorMessageArgs: ReadonlyArray<unknown>
 ) {
     return spawnErrorWithOriginOmittedFromStackTrace(
         errorMessageFormat,
         errorMessageArgs,
-        spawnError,
+        spawnUnexpectedError,
     );
+}
+
+export interface UserError<T extends {type: string}> extends Error {
+    __userInfo: T;
+}
+
+/**
+ * Spawn an error with an object with error info to render to the user.
+ *
+ * @hidden
+ */
+export function spawnUserError<T extends {type: string}>(errorInfo: T): UserError<T> {
+    const err = spawnErrorWithOriginOmittedFromStackTrace(
+        `UserError: ${errorInfo.type}`,
+        null,
+        spawnUserError,
+    );
+
+    Object.defineProperty(err, '__userInfo', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: errorInfo,
+    });
+
+    return (err as unknown) as UserError<T>;
 }
 
 /**
  * An alternative to facebook's invariant that's safe to use with base data
+ *
+ * If the first argument after the format string may be used to look up a way to
+ * format the arguments into a more human digestible message that can include
+ * links, styling, or emojis. See {@link verbose_message.ts} and
+ * {@link airtable_api.ts} for examples.
  *
  * @hidden
  */

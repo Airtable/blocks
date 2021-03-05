@@ -8,6 +8,7 @@ import {RunDevServerOptions, RunTaskConsumerChannel, RunTaskProducer} from '../.
 import {test} from '../mocks/test';
 import {System} from '../../src/helpers/system';
 import {invariant} from '../../src/helpers/error_utils';
+import {AppConfigErrorName} from '../../src/helpers/config_app';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
@@ -125,6 +126,6 @@ describe('run', () => {
             '/home/projects/my-app/block.json': Buffer.from('{}'),
         })
         .command(['run'])
-        .catch('"block.json".frontendEntry should be a string')
+        .catch(new RegExp(AppConfigErrorName.APP_CONFIG_IS_NOT_VALID))
         .it('validates block.json');
 });

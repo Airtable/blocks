@@ -1,5 +1,17 @@
-import {spawnError} from './error_utils';
+import {spawnUserError, UserError} from './error_utils';
 import {Result} from './result';
+
+export enum UserConfigErrorName {
+    USER_CONFIG_IS_NOT_VALID = 'userConfigIsNotValid',
+}
+
+export interface UserConfigErrorInvalid {
+    type: UserConfigErrorName.USER_CONFIG_IS_NOT_VALID;
+    file?: string;
+    message: string;
+}
+
+export type UserConfigErrorInfo = UserConfigErrorInvalid;
 
 export interface UserConfigApiKeyMap {
     [key: string]: string;
@@ -9,30 +21,49 @@ export interface UserConfig {
     readonly airtableApiKey?: string | UserConfigApiKeyMap;
 }
 
-export function validateUserConfig(value: unknown): Result<UserConfig> {
+export function validateUserConfig(
+    value: unknown,
+): Result<UserConfig, UserError<UserConfigErrorInfo>> {
     if (typeof value !== 'object' || value === null) {
-        return {err: spawnError('UserConfig must be an object.')};
+        return {
+            err: spawnUserError({
+                type: UserConfigErrorName.USER_CONFIG_IS_NOT_VALID,
+                message: 'should be a non-null object.',
+            }),
+        };
     }
     if (Array.isArray(value)) {
-        return {err: spawnError('UserConfig must be a non-array object.')};
+        return {
+            err: spawnUserError({
+                type: UserConfigErrorName.USER_CONFIG_IS_NOT_VALID,
+                message: 'should be a non-array object.',
+            }),
+        };
     }
 
     const config = value as UserConfig;
     const airtableApiKey = config.airtableApiKey;
     if (typeof airtableApiKey === 'object') {
-        const badApiKeyEntry = Object.values(airtableApiKey).find(
+        const badApiKeyEntry = Object.entries(airtableApiKey).find(
             ([key, apiKey]) => typeof apiKey !== 'string',
         );
         if (badApiKeyEntry) {
             return {
-                err: spawnError(
-                    'UserConfig.airtableApiKey["%s"] must be a string.',
-                    badApiKeyEntry[0],
-                ),
+                err: spawnUserError({
+                    type: UserConfigErrorName.USER_CONFIG_IS_NOT_VALID,
+                    message: `airtableApiKey[${JSON.stringify(
+                        badApiKeyEntry[0],
+                    )}] should be a string.`,
+                }),
             };
         }
     } else if (typeof airtableApiKey !== 'string') {
-        return {err: spawnError('UserConfig.airtableApiKey must be a string.')};
+        return {
+            err: spawnUserError({
+                type: UserConfigErrorName.USER_CONFIG_IS_NOT_VALID,
+                message: 'airtableApiKey should be a string or object of strings.',
+            }),
+        };
     }
     return {value: config};
 }

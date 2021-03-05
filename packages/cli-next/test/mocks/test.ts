@@ -1,18 +1,23 @@
 import _debug from 'debug';
 import {Volume} from 'memfs';
+import chai from 'chai';
+import {jestSnapshotPlugin} from 'mocha-chai-jest-snapshot';
+import chalk from 'chalk';
 
 import * as Config from '@oclif/config';
-import {expect, test as _test} from '@oclif/test';
+import {test as _test} from '@oclif/test';
 import {loadConfig} from '@oclif/test/lib/load-config';
 
 import {UserConfig} from '../../src/helpers/config_user';
 import {System} from '../../src/helpers/system';
+import {RenderMessage} from '../../src/helpers/render_message';
+import {MessageName, Messages} from '../../src/helpers/verbose_message';
+import {ObjectMap} from '../../src/helpers/private_utils';
+import {ConfigSystem, ConfigMessages, ConfigChalk} from '../../src/helpers/airtable_command';
 
 import {createSystem} from './system';
 import {answer} from './answer';
 import {prepareFixtureTempCopy} from './fixture';
-
-export const debug = _debug('block-cli:test');
 
 type ConstructorReturnType<T extends new (...args: any[]) => any> = T extends new (
     ...args: any[]
@@ -22,7 +27,34 @@ type ConstructorReturnType<T extends new (...args: any[]) => any> = T extends ne
 
 type SystemVolume = ConstructorReturnType<typeof Volume>;
 
+export const debug = _debug('block-cli:test');
+
+export const expect = chai.use(jestSnapshotPlugin()).expect;
+
 export const test = _test
+    .register('_fancyTestContextTestWorkaround', () => {
+        // Workaround how fancy test calls `it` to create a test. Its system
+        // works fine in many cases, but if we want for example to have mocha
+        // list the correct file path for each test, we need to call the copy of
+        // it while that file is first being executed and not the copy of it
+        // when this test mock module is first loaded.
+        return {
+            init(context) {
+                context.test = Object.assign((title: any, fn?: any) => global.it(title, fn), {
+                    only(title: any, fn?: any) {
+                        return global.it.only(title, fn);
+                    },
+                    skip(title: any, fn?: any) {
+                        return global.it.skip(title, fn);
+                    },
+                    retries(n: number) {
+                        return global.it.retries(n);
+                    },
+                }) as typeof context.test;
+            },
+        };
+    })
+    ._fancyTestContextTestWorkaround()
     .do(initMockSystemAsync)
     .register('withFiles', withFiles)
     .register('enableDebug', enableDebug)
@@ -33,9 +65,10 @@ export const test = _test
     .register('prepareFixture', prepareFixtureTempCopy);
 
 async function initMockSystemAsync(ctx: {
-    config: Config.IConfig & {createSystem?: () => System};
+    config: Config.IConfig & Partial<ConfigSystem & ConfigMessages & ConfigChalk>;
     system: System;
     systemVolume: SystemVolume;
+    messages: Messages;
 }) {
     if (!ctx.config) {
         ctx.config = (await loadConfig().run({} as any)) as Config.IConfig;
@@ -51,8 +84,21 @@ async function initMockSystemAsync(ctx: {
 
     ctx.system = createSystem({volume: ctx.systemVolume});
 
+    const messages = new RenderMessage() as Messages;
+    for (const key of Object.values(MessageName)) {
+        messages[key] = (info: any) => JSON.stringify(info);
+    }
+
+    ctx.messages = messages;
+
     if (!ctx.config.createSystem) {
         ctx.config.createSystem = () => ctx.system;
+    }
+    if (!ctx.config.createMessages) {
+        ctx.config.createMessages = () => ctx.messages;
+    }
+    if (!ctx.config.createChalk) {
+        ctx.config.createChalk = () => new chalk.Instance();
     }
 }
 
@@ -73,7 +119,7 @@ function withFiles(files: {[path: string]: Buffer | null}) {
 
 function enableDebug(pattern: string) {
     return {
-        run(ctx: {debugEnabledPatterns: Record<string, string>}) {
+        run(ctx: {debugEnabledPatterns: ObjectMap<string, string>}) {
             if (!ctx.debugEnabledPatterns) {
                 ctx.debugEnabledPatterns = {};
             }
@@ -81,7 +127,7 @@ function enableDebug(pattern: string) {
             ctx.debugEnabledPatterns[pattern] = currentState;
             _debug.enable(`${currentState},${pattern}`);
         },
-        finally(ctx) {
+        finally(ctx: {debugEnabledPatterns: ObjectMap<string, string>}) {
             _debug.enable(ctx.debugEnabledPatterns[pattern]);
         },
     };

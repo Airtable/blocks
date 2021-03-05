@@ -28,6 +28,8 @@ class MockOS implements SystemOS {
 class MockProcess implements SystemProcess {
     env = {};
 
+    version = '10.0.0';
+
     cwd() {
         return '/home/projects/my-app';
     }

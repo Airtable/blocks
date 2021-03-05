@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`verbose_message formats airtableApiBaseNotFound 1`] = `"❌ The base could not be found. Make sure you have access to the base in which this block was created."`;
+
+exports[`verbose_message formats airtableApiErrorStatusAndMessages 1`] = `
+"Airtable server responded with status 400:
+
+[]"
+`;
+
+exports[`verbose_message formats airtableApiErrorStatusAndMessages 2`] = `
+"Airtable server responded with status 400:
+
+[{\\"code\\":\\"SOMETHING_WRONG\\",\\"message\\":\\"Something went wrong.\\"}]"
+`;
+
+exports[`verbose_message formats airtableApiMultipleErrors 1`] = `
+"Airtable server responded with multiple errors:
+
+"
+`;
+
+exports[`verbose_message formats airtableApiMultipleErrors 2`] = `
+"Airtable server responded with multiple errors:
+
+❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it.
+❌ Airtable server returned an error.
+Something went wrong."
+`;
+
+exports[`verbose_message formats airtableApiUnexpectedError 1`] = `
+"❌ Airtable server returned an error.
+Something went wrong."
+`;
+
+exports[`verbose_message formats airtableApiUnsupportedBlocksCliVersion 1`] = `
+"❌ Please update @airtable/blocks-cli.
+
+Run {cyan.bold npm i -g @airtable/blocks} to update.
+"
+`;
+
+exports[`verbose_message formats airtableApiWithInvalidApiKey 1`] = `"❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it."`;
+
+exports[`verbose_message formats appConfigIsNotValid 1`] = `"❌ block.json should be a non-null object"`;
+
+exports[`verbose_message formats appConfigIsNotValid 2`] = `"❌ ../block.json should be a non-null object"`;
+
+exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port {underline asdf}. {underline asdf} is not a number."`;
+
+exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats remoteConfigIsNotValid 2`] = `"❌ ../.block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not upload bundle. The bundle's size is too big."`;
+
+exports[`verbose_message formats s3ApiFailed 1`] = `"❌ Could not upload bundle. Failed to upload."`;
+
+exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use {cyan.bold block set-api-key} to set it."`;
+
+exports[`verbose_message formats userConfigIsNotValid 1`] = `"❌ .airtableblocksrc.json should be a non-null object"`;
+
+exports[`verbose_message formats userConfigIsNotValid 2`] = `"❌ ../../../.config/.airtableblocksrc.json should be a non-null object"`;

@@ -1,8 +1,12 @@
-import {expect, test} from '@oclif/test';
-import {spawnError} from '../../src/helpers/error_utils';
+import {expect} from '@oclif/test';
 
+import {spawnUnexpectedError} from '../../src/helpers/error_utils';
 import * as findPortAsyncModule from '../../src/helpers/find_port_async';
+
+import {test} from '../mocks/test';
 import {mapFancyTestAsyncPlugin} from '../mocks/FancyTestAsync';
+
+const FindPortErrorName = findPortAsyncModule.FindPortErrorName;
 
 describe('find_port_async', () => {
     const testFindPortAsync = test.register('findPortAsync', findPortAsyncPlugin);
@@ -59,7 +63,7 @@ describe('find_port_async', () => {
             bindPortAsync: stubBindPort({usedPorts: [9000]}),
             promptForPortAsync: stubPromptForPort('string'),
         })
-        .catch('Invalid port number')
+        .catch(new RegExp(FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER))
         .it('throws on non-number string from user');
 });
 
@@ -68,7 +72,7 @@ function stubPromptForPort<T>(response: T) {
 }
 
 async function stubPromptForPortThrowsAsync(): Promise<never> {
-    throw spawnError('promptForPortAsync should not be called');
+    throw spawnUnexpectedError('promptForPortAsync should not be called');
 }
 
 function stubBindPort({
@@ -80,7 +84,7 @@ function stubBindPort({
             return randomPort;
         }
         if (usedPorts.includes(port)) {
-            throw Object.assign(spawnError('EADDRINUSE'), {code: 'EADDRINUSE'});
+            throw Object.assign(spawnUnexpectedError('EADDRINUSE'), {code: 'EADDRINUSE'});
         }
         return port;
     };

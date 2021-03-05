@@ -3,7 +3,7 @@ import {EventEmitter} from 'events';
 import _debug from 'debug';
 
 import {Deferred} from './deferred';
-import {invariant, spawnError} from './error_utils';
+import {invariant, spawnUnexpectedError} from './error_utils';
 import {ObjectMap} from './private_utils';
 import {Result} from './result';
 
@@ -174,7 +174,7 @@ class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
             }
         }
 
-        throw spawnError('channel closed while waiting for response');
+        throw spawnUnexpectedError('channel closed while waiting for response');
     }
 }
 

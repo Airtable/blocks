@@ -7,15 +7,26 @@ import {
 
 import {Result} from './result';
 
-import {AppConfig, validateAppConfig} from './config_app';
-import {RemoteConfig, validateRemoteConfig} from './config_remote';
-import {validateUserConfig, UserConfig} from './config_user';
+import {AppConfig, AppConfigErrorInfo, AppConfigErrorName, validateAppConfig} from './config_app';
+import {
+    RemoteConfig,
+    RemoteConfigErrorInfo,
+    RemoteConfigErrorName,
+    validateRemoteConfig,
+} from './config_remote';
+import {
+    validateUserConfig,
+    UserConfig,
+    UserConfigErrorName,
+    UserConfigErrorInfo,
+} from './config_user';
 import {
     findAncestorDirIncludingNameAsync,
     mkdirpAsync,
     readJsonIfExistsAsync,
 } from './system_extra';
 import {System} from './system';
+import {UserError} from './error_utils';
 
 async function getUserPathAsync({
     path,
@@ -88,31 +99,44 @@ export async function findAppDirectoryUserConfigAsync(
 export async function readAppConfigAsync(
     sys: System,
     workingdir = sys.process.cwd(),
-): Promise<Result<AppConfig>> {
-    return validateAppConfig(
-        await readJsonIfExistsAsync(sys, await findAppConfigPathAsync(sys, workingdir)),
-    );
+): Promise<Result<AppConfig, UserError<AppConfigErrorInfo>>> {
+    const file = await findAppConfigPathAsync(sys, workingdir);
+    const result = validateAppConfig(await readJsonIfExistsAsync(sys, file));
+    if (result.err?.__userInfo?.type === AppConfigErrorName.APP_CONFIG_IS_NOT_VALID) {
+        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), file);
+    }
+    return result;
 }
 
 export async function readRemoteConfigAsync(
     sys: System,
     workingdir = sys.process.cwd(),
-): Promise<Result<RemoteConfig>> {
-    return validateRemoteConfig(
-        await readJsonIfExistsAsync(sys, await findRemoteConfigPathAsync(sys, workingdir)),
-    );
+): Promise<Result<RemoteConfig, UserError<RemoteConfigErrorInfo>>> {
+    const file = await findRemoteConfigPathAsync(sys, workingdir);
+    const result = validateRemoteConfig(await readJsonIfExistsAsync(sys, file));
+    if (result.err?.__userInfo?.type === RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID) {
+        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), file);
+    }
+    return result;
+}
+
+async function readUserConfigAsync(
+    sys: System,
+    file: string,
+): Promise<Result<UserConfig, UserError<UserConfigErrorInfo>>> {
+    const result = validateUserConfig(await readJsonIfExistsAsync(sys, file));
+    if (result.err?.__userInfo?.type === UserConfigErrorName.USER_CONFIG_IS_NOT_VALID) {
+        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), file);
+    }
+    return result;
 }
 
 export async function readGlobalUserConfigAsync(sys: System): Promise<Result<UserConfig>> {
-    return validateUserConfig(
-        await readJsonIfExistsAsync(sys, await findGlobalUserConfigAsync(sys)),
-    );
+    return await readUserConfigAsync(sys, await findGlobalUserConfigAsync(sys));
 }
 
 export async function readAppDirectoryUserConfigAsync(sys: System): Promise<Result<UserConfig>> {
-    return validateUserConfig(
-        await readJsonIfExistsAsync(sys, await findAppDirectoryUserConfigAsync(sys)),
-    );
+    return await readUserConfigAsync(sys, await findAppDirectoryUserConfigAsync(sys));
 }
 
 async function writeUserConfigAsync(

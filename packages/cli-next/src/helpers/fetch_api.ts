@@ -10,7 +10,7 @@ export abstract class FetchApi {
         response: Response,
     ): Promise<void>;
 
-    private async _fetchAsync(fullInit: FetchInit) {
+    protected async _fetchAsync(fullInit: FetchInit) {
         const {url = '', body: _body, ...init} = fullInit;
         const body =
             typeof _body === 'object' && !Buffer.isBuffer(_body) ? JSON.stringify(_body) : _body;

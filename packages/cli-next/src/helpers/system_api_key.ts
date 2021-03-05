@@ -1,7 +1,7 @@
 import {Result} from './result';
 import {userConfigGetApiKey, userConfigSetApiKey} from './config_user';
 
-import {spawnError} from './error_utils';
+import {spawnUnexpectedError, spawnUserError} from './error_utils';
 import {cast} from './private_utils';
 import {System} from './system';
 
@@ -13,6 +13,16 @@ import {
     writeGlobalUserConfigAsync,
     writeAppDirectoryUserConfigAsync,
 } from './system_config';
+
+export enum SystemApiKeyErrorName {
+    SYSTEM_API_KEY_NOT_FOUND = 'systemApiKeyNotFound',
+}
+
+export interface SystemApiKeyErrorNotFound {
+    type: SystemApiKeyErrorName.SYSTEM_API_KEY_NOT_FOUND;
+}
+
+export type SystemApiKeyErrorInfo = SystemApiKeyErrorNotFound;
 
 export enum ConfigLocation {
     USER = 'user',
@@ -31,7 +41,7 @@ export function castLocation(location: string): Result<ConfigLocation> {
         case ConfigLocation.APP:
             return {value: l};
         default:
-            return {err: spawnError('Unknown user config location: %s', cast<never>(l))};
+            return {err: spawnUnexpectedError('Unknown user config location: %s', cast<never>(l))};
     }
 }
 
@@ -45,7 +55,7 @@ export async function findApiKeyConfigPathAsync(
         case ConfigLocation.USER:
             return await findGlobalUserConfigAsync(sys);
         default:
-            throw spawnError('Unknown user config location: %s', cast<never>(location));
+            throw spawnUnexpectedError('Unknown user config location: %s', cast<never>(location));
     }
 }
 
@@ -59,7 +69,7 @@ export async function readGlobalApiKeyAsync(
         return {value: userApiKey};
     }
 
-    return {err: spawnError('No available airtableApiKey from configuration files')};
+    return {err: spawnUserError({type: SystemApiKeyErrorName.SYSTEM_API_KEY_NOT_FOUND})};
 }
 
 export async function readApiKeyAsync(
@@ -98,6 +108,6 @@ export async function writeApiKeyAsync(
             );
             break;
         default:
-            throw spawnError('Unknown user config location %s', cast<never>(location));
+            throw spawnUnexpectedError('Unknown user config location %s', cast<never>(location));
     }
 }

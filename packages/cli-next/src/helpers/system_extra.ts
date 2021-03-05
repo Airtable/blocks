@@ -1,5 +1,5 @@
 import _debug from 'debug';
-import {spawnError} from './error_utils';
+import {spawnUnexpectedError} from './error_utils';
 
 import {System} from './system';
 
@@ -22,7 +22,7 @@ export async function findAncestorDirIncludingNameAsync(
         }
         checkDirectory = path.dirname(checkDirectory);
     } while (checkDirectory !== pathRoot);
-    throw spawnError('Could not find directory that includes a %s entry.', name);
+    throw spawnUnexpectedError('Could not find directory that includes a %s entry.', name);
 }
 
 export async function mkdirpAsync(sys: System, directoryPath: string): Promise<void> {
@@ -116,5 +116,5 @@ export async function findExtensionAsync(
         }
     }
 
-    throw spawnError('Cannot find file %s with extensions %s', name, extensions);
+    throw spawnUnexpectedError('Cannot find file %s with extensions %s', name, extensions);
 }

@@ -1,7 +1,22 @@
 import FormData from 'form-data';
 
-import {invariant, spawnError} from './error_utils';
+import {invariant, spawnUserError} from './error_utils';
 import {FetchApi, FetchInit, Response} from './fetch_api';
+
+export enum S3ApiErrorName {
+    S3_API_BUNDLE_TOO_LARGE = 's3ApiBundleTooLarge',
+    S3_API_FAILED = 's3ApiFailed',
+}
+
+export interface S3ApiErrorBundleTooLarge {
+    type: S3ApiErrorName.S3_API_BUNDLE_TOO_LARGE;
+}
+
+export interface S3ApiErrorFailed {
+    type: S3ApiErrorName.S3_API_FAILED;
+}
+
+export type S3ApiErrorInfo = S3ApiErrorBundleTooLarge | S3ApiErrorFailed;
 
 export interface S3SignedUploadInfo {
     endpointUrl: string;
@@ -28,9 +43,11 @@ export class S3Api extends FetchApi {
             // exceed the maximum allowed object size.
             // See https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ErrorCodeList
             if (status === 400 && responseBody.includes('EntityTooLarge')) {
-                throw spawnError('Bundle size is too big.');
+                throw spawnUserError<S3ApiErrorInfo>({
+                    type: S3ApiErrorName.S3_API_BUNDLE_TOO_LARGE,
+                });
             } else {
-                throw spawnError('Failed to upload.');
+                throw spawnUserError<S3ApiErrorInfo>({type: S3ApiErrorName.S3_API_FAILED});
             }
         }
     }

@@ -8,7 +8,7 @@ import {createProxyMiddleware} from 'http-proxy-middleware';
 
 import _debug from 'debug';
 
-import {invariant, spawnError} from './error_utils';
+import {invariant, spawnUnexpectedError} from './error_utils';
 import {System} from './system';
 import {Result} from './result';
 import {createRunFrameRoutes, RunFrameRouteOptions} from './development_run_frame_routes';
@@ -19,7 +19,7 @@ function ipPort(value: AddressInfo | string | null) {
     if (typeof value === 'object' && value !== null) {
         return value.port;
     }
-    throw spawnError('Server must be bound to an Internet Protocol address');
+    throw spawnUnexpectedError('Server must be bound to an Internet Protocol address');
 }
 
 async function closeAsync(server: InsecureServer | SecureServer | null): Promise<void> {
