@@ -19,9 +19,11 @@ import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins/CommentPlugin';
 import {ContainerReflection} from 'typedoc/dist/lib/models/reflections/container';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 
+import {spawnError} from './error_utils';
+
 function assertExists<T>(value: T | null | undefined): T {
     if (value === null || value === undefined) {
-        throw new Error('Value should exist');
+        throw spawnError('Value should exist');
     }
     return value;
 }
@@ -86,14 +88,14 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
             let comment = getRawComment(node);
             if (comment) {
                 // Look for @module
-                let match = /@module\s+([\w\u4e00-\u9fa5\.\-_/@: "]+)/.exec(comment);
+                let match = /@module\s+([\w\u4e00-\u9fa5.\-_/@: "]+)/.exec(comment);
                 if (match) {
                     // Look for @preferred
                     let preferred = /@preferred/.exec(comment);
                     // Set up a list of renames operations to perform when the resolve phase starts
                     this.moduleRenames.push({
                         renameTo: match[1].trim(),
-                        preferred: preferred != null,
+                        preferred: preferred !== null,
                         reflection: reflection as ContainerReflection,
                     });
                 }
@@ -181,11 +183,15 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
 
             // If @preferred was found on the current item, update the mergeTarget's comment
             // with comment from the renaming module
-            if (item.preferred) mergeTarget.comment = renaming.comment;
+            if (item.preferred) {
+                mergeTarget.comment = renaming.comment;
+            }
 
             // Now that all the children have been relocated to the mergeTarget, delete the empty module
             // Make sure the module being renamed doesn't have children, or they will be deleted
-            if (renaming.children) renaming.children.length = 0;
+            if (renaming.children) {
+                renaming.children.length = 0;
+            }
             CommentPlugin.removeReflection(context.project, renaming);
 
             // Remove @module and @preferred from the comment, if found.

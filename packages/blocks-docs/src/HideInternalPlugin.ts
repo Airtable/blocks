@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as ts from 'typescript';
 import {ConverterComponent, Component} from 'typedoc/dist/lib/converter/components';
 import {Converter, Context} from 'typedoc/dist/lib/converter';
@@ -10,6 +9,8 @@ import {
 } from 'typedoc/dist/lib/models';
 import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
+
+import {spawnError} from './error_utils';
 
 const internalTags = ['internal', 'hidden', 'ignore'];
 const defaultReflectionNames = ['__type', '__call', '__get', '__set', '__index'];
@@ -39,7 +40,7 @@ class HideInternalPlugin extends ConverterComponent {
 
     private onBegin() {
         if (!this.owner.application.options.getValue('src-dir-path')) {
-            throw new Error('Option src-dir-path is required.');
+            throw spawnError('Option src-dir-path is required.');
         }
 
         this.reflectionsToExclude = [];
@@ -63,6 +64,7 @@ class HideInternalPlugin extends ConverterComponent {
 
             const uniqueLines = new Set(lines);
 
+            // eslint-disable-next-line no-console
             console.log(
                 [
                     'Nodes missing explicit annotations:',
@@ -195,7 +197,7 @@ class HideInternalPlugin extends ConverterComponent {
             return this.findExternalModule(reflection.parent);
         }
 
-        throw new Error('Cannot find external module');
+        throw spawnError('Cannot find external module');
     }
 
     private isModuleLevel(reflection: Reflection): boolean {

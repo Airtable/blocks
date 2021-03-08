@@ -1,0 +1,51 @@
+// If errorOriginFn is specified, all frames above and including the call to errorOriginFn
+// will be omitted from the stack trace.
+/**
+ * @internal
+ */
+function spawnErrorWithOriginOmittedFromStackTrace(
+    errorMessageFormat: string,
+    errorMessageArgs: ReadonlyArray<unknown> | null | undefined,
+    errorOriginFn: (...args: Array<any>) => unknown,
+): Error {
+    const safeMessage = errorMessageFormat;
+    let argIndex = 0;
+    const formattedMessage = errorMessageFormat.replace(/%s/g, () => {
+        const arg = errorMessageArgs ? errorMessageArgs[argIndex] : undefined;
+        argIndex++;
+        return String(arg);
+    });
+
+    const err = new Error(formattedMessage);
+
+    // captureStackTrace is only available on v8. It captures the current stack trace
+    // and sets the .stack property of the first argument. It will omit all frames above
+    // and including "errorOriginFn", which is useful for hiding implementation details of our
+    // error throwing helpers (e.g. assert and spawn variants).
+    if (Error.captureStackTrace && errorOriginFn) {
+        Error.captureStackTrace(err, errorOriginFn);
+    }
+
+    Object.defineProperty(err as any, '__safeMessage', {
+        configurable: false,
+        enumerable: false,
+        value: safeMessage,
+        writable: false,
+    });
+
+    return err;
+}
+
+/**
+ * @hidden
+ */
+export function spawnError(
+    errorMessageFormat: string,
+    ...errorMessageArgs: ReadonlyArray<unknown>
+) {
+    return spawnErrorWithOriginOmittedFromStackTrace(
+        errorMessageFormat,
+        errorMessageArgs,
+        spawnError,
+    );
+}

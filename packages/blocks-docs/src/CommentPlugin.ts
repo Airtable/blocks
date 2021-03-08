@@ -18,6 +18,9 @@ import {parseComment, getRawComment} from 'typedoc/dist/lib/converter/factories/
 import {Converter} from 'typedoc/dist/lib/converter/converter';
 import {Context} from 'typedoc/dist/lib/converter/context';
 
+import {spawnError} from './error_utils';
+import {has} from './private_utils';
+
 /**
  * Structure used by [[ContainerCommentHandler]] to store discovered module comments.
  */
@@ -237,7 +240,7 @@ export default class CommentPlugin extends ConverterComponent {
      */
     private onBeginResolve(context: Context) {
         for (const id in this.comments) {
-            if (!this.comments.hasOwnProperty(id)) {
+            if (!has(this.comments, id)) {
                 continue;
             }
 
@@ -353,7 +356,7 @@ export default class CommentPlugin extends ConverterComponent {
 
         for (const key in project.symbolMapping) {
             if (
-                project.symbolMapping.hasOwnProperty(key) &&
+                has(project.symbolMapping, key) &&
                 deletedIds.includes(project.symbolMapping[key])
             ) {
                 delete project.symbolMapping[key];
@@ -430,6 +433,8 @@ export default class CommentPlugin extends ConverterComponent {
                             }
                         }
                         break;
+                    default:
+                        throw spawnError('Unrecognized property: %s', property);
                 }
             }
         });
@@ -442,10 +447,7 @@ export default class CommentPlugin extends ConverterComponent {
             deletedIds.push(id);
         } else {
             for (const key in project.symbolMapping) {
-                if (
-                    project.symbolMapping.hasOwnProperty(key) &&
-                    project.symbolMapping[key] === id
-                ) {
+                if (has(project.symbolMapping, key) && project.symbolMapping[key] === id) {
                     delete project.symbolMapping[key];
                 }
             }
