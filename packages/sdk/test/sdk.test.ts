@@ -3,6 +3,7 @@ import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_inte
 import Table from '../src/models/table';
 import View from '../src/models/view';
 import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
+import Sdk from '../src/sdk';
 import {__reset, __sdk as sdk} from '../src';
 import {RequestJson} from '../src/types/backend_fetch_types';
 
@@ -27,6 +28,12 @@ describe('sdk', () => {
 
     afterEach(() => {
         mockAirtableInterface.reset();
+    });
+
+    describe('VERSION', () => {
+        it('defines a non-empty value', () => {
+            expect(Sdk.VERSION).toBeTruthy();
+        });
     });
 
     describe('model updates', () => {

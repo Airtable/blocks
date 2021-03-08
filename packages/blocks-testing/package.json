@@ -13,7 +13,7 @@
         "dist"
     ],
     "scripts": {
-        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run docs && yarn run test:coverage",
+        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run docs && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
@@ -55,6 +55,7 @@
         "@typescript-eslint/parser": "^2.10.0",
         "babel-eslint": "^11.0.0-beta.0",
         "babel-loader": "^8.0.6",
+        "babel-plugin-transform-define": "^2.0.0",
         "concurrently": "^5.0.0",
         "eslint": "6.7.2",
         "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01fef1f",
@@ -75,8 +76,10 @@
         "@types/prettier": "^1.19.0",
         "@types/prop-types": "^15.7.3",
         "@types/react": "^16.9.5",
+        "@types/semver": "^7.3.4",
         "@types/styled-system": "^5.1.4",
-        "core-js": "^3.4.8"
+        "core-js": "^3.4.8",
+        "semver": "^7.3.4"
     },
     "airtable_comments": {
         "@airtabel/blocks": [
