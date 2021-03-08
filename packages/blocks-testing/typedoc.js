@@ -19,5 +19,6 @@ module.exports = {
     excludeProtected: true,
     exclude: [...dirsToExclude, '**/node_modules/**', './*.js'],
     readme: './src/api-readme.md',
+    'src-dir-path': path.resolve('./src'),
     'sourcefile-url-prefix': `https://github.com/airtable/blocks/blob/${releaseTag}/packages/blocks-testing/`,
 };

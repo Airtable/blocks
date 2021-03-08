@@ -1,20 +1,21 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
-        "target": "es2017",
+        "target": "es2019",
         "module": "commonjs",
         "esModuleInterop": true,
-        // Typedoc has some implicit anys in it's declaration files, so we can't turn this on :(
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "strictNullChecks": true,
         "strictFunctionTypes": true,
         "strictBindCallApply": true,
         "strictPropertyInitialization": true,
         "noImplicitThis": true,
         "alwaysStrict": true,
-        "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
+        "allowJs": true,
+        "checkJs": true,
+        "jsx": "react",
+        "typeRoots": ["./types", "./node_modules/@types"],
         "experimentalDecorators": true,
         "outDir": "./lib"
     },

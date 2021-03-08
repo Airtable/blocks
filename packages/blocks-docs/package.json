@@ -1,0 +1,25 @@
+{
+    "name": "@airtable/blocks-docs",
+    "private": true,
+    "version": "1.0.0",
+    "description": "A service to generate the data file which powers developer-facing API documentation on airtable.com. It is used by the \"sdk\" package and the \"blocks-testing\" package",
+    "main": "minify-docs-json.js",
+    "bin": {
+        "blocks-docs": "bin/blocks-docs"
+    },
+    "scripts": {
+        "ci": "yarn test",
+        "build": "tsc -b ./tsconfig.json",
+        "test": "yarn types",
+        "types": "tsc"
+    },
+    "dependencies": {
+        "@types/node": "^14.14.31",
+        "typedoc": "0.15.4",
+        "typedoc-plugin-no-inherit": "~1.1.10",
+        "typescript": "~3.7.5"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "UNLICENSED"
+}

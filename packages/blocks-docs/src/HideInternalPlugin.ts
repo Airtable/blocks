@@ -14,8 +14,6 @@ import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 const internalTags = ['internal', 'hidden', 'ignore'];
 const defaultReflectionNames = ['__type', '__call', '__get', '__set', '__index'];
 
-const srcDirPath = path.resolve(__dirname, '../../src');
-
 @Component({name: 'HideInternalPlugin'})
 class HideInternalPlugin extends ConverterComponent {
     private reflectionsToExclude: Array<Reflection> = [];
@@ -24,6 +22,12 @@ class HideInternalPlugin extends ConverterComponent {
     private reflectionsMissingExplicitAnnotations: Set<Reflection> = new Set();
 
     initialize() {
+        this.owner.application.options.addDeclaration({
+            name: 'src-dir-path',
+            help:
+                'a filesystem path; files placed outside of this directory will be considered "external" and hidden from the output',
+        });
+
         this.listenTo(this.owner, {
             [Converter.EVENT_BEGIN]: this.onBegin,
             [Converter.EVENT_CREATE_DECLARATION]: this.onCreateDeclarationOrSignature,
@@ -34,6 +38,10 @@ class HideInternalPlugin extends ConverterComponent {
     }
 
     private onBegin() {
+        if (!this.owner.application.options.getValue('src-dir-path')) {
+            throw new Error('Option src-dir-path is required.');
+        }
+
         this.reflectionsToExclude = [];
         this.modulesWithoutDocumentation = new Set();
         this.visitedModules = new Set();
@@ -169,7 +177,12 @@ class HideInternalPlugin extends ConverterComponent {
 
     private isFromExternalLibrary(reflection: Reflection): boolean {
         return reflection.sources
-            ? reflection.sources.every(source => !source.fileName.startsWith(srcDirPath))
+            ? reflection.sources.every(
+                  source =>
+                      !source.fileName.startsWith(
+                          this.owner.application.options.getValue('src-dir-path'),
+                      ),
+              )
             : false;
     }
 
