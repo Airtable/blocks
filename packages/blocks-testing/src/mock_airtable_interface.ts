@@ -77,6 +77,17 @@ function isReadonlyArray(value: any): value is ReadonlyArray<any> {
     return Array.isArray(value);
 }
 
+/**
+ * Determine whether a given Mutation is defined by the Blocks SDK (and used in
+ * production scenarios) or defined by the blocks-testing library (and used
+ * purely for simulation purposes).
+ *
+ * @internal
+ */
+function isAuthenticMutation(mutation: TestMutation): mutation is Mutation {
+    return MutationTypeValues.includes(mutation.type);
+}
+
 const alphanumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /**
@@ -143,7 +154,7 @@ export interface WatchableKeysAndArgs {
      * Triggered whenever the SDK has been induced to persist a change to the
      * Base.
      */
-    mutation: TestMutation;
+    mutation: Mutation;
     /**
      * Triggered when the SDK has been induced to expand a Record in the user
      * interface
@@ -567,7 +578,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
             this.triggerModelUpdates(updates);
         }
 
-        if (MutationTypeValues.includes(mutation.type)) {
+        if (isAuthenticMutation(mutation)) {
             this.emit('mutation', mutation);
         }
     }
