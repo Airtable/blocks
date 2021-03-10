@@ -2,15 +2,18 @@
     "name": "@airtable/blocks-docs",
     "private": true,
     "version": "1.0.0",
-    "description": "A service to generate the data file which powers developer-facing API documentation on airtable.com. It is used by the \"sdk\" package and the \"blocks-testing\" package",
+    "description": "A service to generate the data file which powers developer-facing API documentation on airtable.com. It uses the source code in the \"sdk\" package and the \"blocks-testing\" package as input.",
     "main": "minify-docs-json.js",
     "bin": {
         "blocks-docs": "bin/blocks-docs"
     },
     "scripts": {
-        "ci": "yarn test",
-        "build": "tsc -b ./tsconfig.json",
+        "ci": "yarn test && (cd ../sdk && yarn build) && yarn build",
+        "build:docs": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/typedoc-plugin.js\" --json docs.json ..",
+        "build:plugins": "tsc -b ./tsconfig.json",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src",
+        "minify": "node ./minify-docs-json.js docs.json",
+        "build": "yarn run build:plugins && yarn run build:docs && yarn run minify",
         "test": "yarn lint && yarn types",
         "types": "tsc"
     },

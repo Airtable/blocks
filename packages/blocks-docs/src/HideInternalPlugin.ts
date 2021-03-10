@@ -177,14 +177,19 @@ class HideInternalPlugin extends ConverterComponent {
         return this.isMemberOfInternalApi(reflection.parent, node ? node.parent : undefined);
     }
 
+    private isInSrcDir(source: {fileName: string}): boolean {
+        return (
+            this.owner.application.options
+                .getValue('src-dir-path')
+                // Split on un-escaped colon characters
+                .split(/(?<=[^\\](?:\\\\)*):/)
+                .some((dirName: string) => source.fileName.startsWith(dirName))
+        );
+    }
+
     private isFromExternalLibrary(reflection: Reflection): boolean {
         return reflection.sources
-            ? reflection.sources.every(
-                  source =>
-                      !source.fileName.startsWith(
-                          this.owner.application.options.getValue('src-dir-path'),
-                      ),
-              )
+            ? reflection.sources.every(source => !this.isInSrcDir(source))
             : false;
     }
 

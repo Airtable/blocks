@@ -27,9 +27,9 @@
         "unstable_testing_utils.d.ts"
     ],
     "scripts": {
-        "ci": "yarn run build && yarn run docs && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
+        "ci": "yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
+        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
@@ -43,9 +43,6 @@
         "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
-        "docs": "yarn run docs:clean && yarn run docs:build",
-        "docs:build": "yarn build && blocks-docs ./docs/docs-$npm_package_version.json",
-        "docs:clean": "rm -rf ./lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",
@@ -56,7 +53,6 @@
     "license": "UNLICENSED",
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
-        "@airtable/blocks-docs": "^1.0.0",
         "@babel/cli": "^7.7.5",
         "@babel/core": "^7.7.5",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
