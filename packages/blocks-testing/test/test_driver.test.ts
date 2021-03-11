@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 // eslint-disable-next-line import/order
-import TestDriver from '../src';
+import TestDriver, {MutationTypes} from '../src';
 import {Base, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
 import {
     expandRecord,
@@ -633,7 +633,7 @@ describe('TestDriver', () => {
                     },
                 ],
                 tableId: 'tblTable1',
-                type: 'createMultipleRecords',
+                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             });
         });
 
@@ -760,7 +760,7 @@ describe('TestDriver', () => {
                         },
                     ],
                     tableId: 'tblTable1',
-                    type: 'createMultipleRecords',
+                    type: MutationTypes.CREATE_MULTIPLE_RECORDS,
                 });
             });
         });

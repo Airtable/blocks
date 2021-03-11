@@ -4,6 +4,7 @@ import './inject_mock_airtable_interface';
 import {invariant} from './error_utils';
 
 export {default} from './test_driver';
+export {MutationTypes} from '@airtable/blocks/unstable_testing_utils';
 
 invariant(
     semver.satisfies(Sdk.VERSION, global.COMPATIBLE_SDK_VERSIONS),

@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks-testing/compare/@airtable/blocks-testing@0.0.3...HEAD)
 
-No changes.
+-   Export `MutationTypes` for use with APIs like `TestDriver#watch` and
+    `TestDriver#simulatePermissionCheck`
 
 ## [0.0.3](https://github.com/airtable/blocks-testing/releases/tag/@airtable/blocks-testing@0.0.3) - 2021-03-05
 
