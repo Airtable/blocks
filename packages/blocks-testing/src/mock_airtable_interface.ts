@@ -146,8 +146,8 @@ function setGlobalConfigValue(
 
 /**
  * A mapping relating the names of event subscriptions available on
- * `TestDriver` instances to the arguments that are provided when one of those
- * events is triggered.
+ * {@link TestDriver} instances to the arguments that are provided when one of
+ * those events is triggered.
  */
 export interface WatchableKeysAndArgs {
     /**
@@ -305,9 +305,9 @@ interface RecordDataStore {
 /**
  * A callback function allowing tests to simulate user interaction with the
  * expanded record picker UI. The testing library will invoke this function
- * whenever the App under test uses the `expandRecordPickerAsync` API, and the
- * return value of this function will be provided to the App under test as the
- * Record that the simulated user selected.
+ * whenever the App under test uses the {@link expandRecordPickerAsync}
+ * function, and the return value of this function will be provided to the App
+ * under test as the {@link Record} that the simulated user selected.
  */
 export type PickRecord = (
     tableId: string,
