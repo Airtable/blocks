@@ -5,21 +5,8 @@ import webpack, {Compiler} from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import typescript from 'typescript';
 
-import {
-    RequestChannel,
-    RunTaskProducer,
-    RunTaskConsumer,
-    RunTaskProducerChannel,
-    RunDevServerOptions,
-    BuildState,
-    BuildStatus,
-} from '../tasks/run';
-import {
-    ReleaseTaskProducer,
-    ReleaseTaskConsumer,
-    ReleaseBundleOptions,
-    ReleaseTaskProducerChannel,
-} from '../tasks/release';
+import {RunTaskConsumer, RunDevServerOptions, BuildStatus, RunDevServerMethods} from '../tasks/run';
+import {ReleaseTaskConsumer, ReleaseBundleOptions} from '../tasks/release';
 import {invariant} from '../helpers/error_utils';
 import {createSystem, System} from '../helpers/system';
 
@@ -27,27 +14,7 @@ import {createWebpackCompilerConfig, WebpackSummaryOptions} from './webpack_conf
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createJavascriptAssetConfigAsync} from './javascript_config';
 
-class BundlerProducer implements RunTaskProducer, ReleaseTaskProducer {
-    producerChannel: RequestChannel<RunTaskProducer | ReleaseTaskProducer>;
-
-    constructor(producerChannel: RequestChannel<RunTaskProducer | ReleaseTaskProducer>) {
-        this.producerChannel = producerChannel;
-    }
-
-    async readyAsync() {
-        await this.producerChannel.requestAsync('readyAsync');
-    }
-
-    async emitBuildStateAsync(buildState: BuildState) {
-        await (this.producerChannel as RunTaskProducerChannel).requestAsync(
-            'emitBuildStateAsync',
-            buildState,
-        );
-    }
-}
-
 class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
-    producer: RunTaskProducer | ReleaseTaskProducer;
     system: System;
 
     compilerConfig?: webpack.Configuration;
@@ -58,8 +25,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
     webpackDevServer?: WebpackDevServer;
     server?: Server;
 
-    constructor(producer: RunTaskProducer | ReleaseTaskProducer) {
-        this.producer = producer;
+    constructor() {
         this.system = createSystem();
     }
 
@@ -81,7 +47,11 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         await promisify(this.compiler.run.bind(this.compiler))();
     }
 
-    async startDevServerAsync({port, ...bundlingOptions}: RunDevServerOptions) {
+    async startDevServerAsync({
+        port,
+        emitBuildState,
+        ...bundlingOptions
+    }: RunDevServerOptions & RunDevServerMethods) {
         await this._configureCompilerAsync(bundlingOptions);
 
         invariant(this.compiler, 'compiler must not be null');
@@ -89,24 +59,24 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         this.serverConfig = createWebpackDevServerConfig({port});
 
         this.compiler.hooks.compilation.tap('AirtableCliStatusPlugin', () => {
-            (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.BUILDING});
+            emitBuildState({status: BuildStatus.BUILDING});
         });
 
         this.compiler.hooks.done.tap('AirtableCliStatusPlugin', stats => {
             if (stats.hasErrors()) {
                 const statsJson = stats.toJson({colors: false});
-                (this.producer as RunTaskProducer).emitBuildStateAsync({
+                emitBuildState({
                     status: BuildStatus.ERROR,
                     error: statsJson.errors[0],
                 });
                 this.webpackDevServer?.sockWrite(this.webpackDevServer.sockets, 'ok');
             } else {
-                (this.producer as RunTaskProducer).emitBuildStateAsync({status: BuildStatus.READY});
+                emitBuildState({status: BuildStatus.READY});
             }
         });
 
         this.compiler.hooks.failed.tap('AirtableCliStatusPlugin', error => {
-            (this.producer as RunTaskProducer).emitBuildStateAsync({
+            emitBuildState({
                 status: BuildStatus.ERROR,
                 error,
             });
@@ -148,6 +118,6 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
     }
 }
 
-export default async function(producer: RunTaskProducerChannel | ReleaseTaskProducerChannel) {
-    return new Bundler(new BundlerProducer(producer));
+export default async function() {
+    return new Bundler();
 }

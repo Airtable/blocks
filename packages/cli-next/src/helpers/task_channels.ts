@@ -282,17 +282,19 @@ export type ChannelArg =
 /**
  * A function with argument and return types that can be sent over a channel.
  */
-export type ChannelFunction<T extends (...args: any[]) => Promise<any>> = T extends (
+export type ChannelFunction<T extends (...args: any[]) => any> = T extends (
     ...args: infer Args
 ) => infer Return
-    ? (...args: Extract<Args, ChannelArg[]>) => Extract<Return, Promise<ChannelArg | void>>
+    ? (
+          ...args: Extract<Args, ChannelArg[]>
+      ) => Extract<Return, Promise<ChannelArg | void> | ChannelArg | void>
     : never;
 
 /**
  * Keys of an object whose values are anything except never.
  */
 type CallableKeys<T> = {
-    [key in Extract<keyof T, string>]: T[key] extends (...args: any[]) => Promise<any>
+    [key in Extract<keyof T, string>]: T[key] extends (...args: any[]) => any
         ? T[key] extends ChannelFunction<T[key]>
             ? key
             : never
@@ -317,7 +319,7 @@ export interface RequestChannel<T extends ChannelMethods<T>> {
     >(
         method: N,
         ...args: Parameters<F>
-    ): Promise<R extends Promise<infer P> ? P : never>;
+    ): Promise<R extends Promise<infer P> ? P : R>;
 }
 
 export class RequestChannelAdapter<T extends ChannelMethods<T>> implements RequestChannel<T> {

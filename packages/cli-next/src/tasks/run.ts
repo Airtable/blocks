@@ -1,7 +1,3 @@
-import {RequestChannel} from '../helpers/task_channels';
-
-export {RequestChannel};
-
 export enum BuildStatus {
     START = 'start',
     BUILDING = 'building',
@@ -27,14 +23,6 @@ export interface BuildStateError {
 
 export type BuildState = BuildStateStart | BuildStateBuilding | BuildStateBuilt | BuildStateError;
 
-export interface RunTaskProducer {
-    readyAsync(): Promise<void>;
-
-    emitBuildStateAsync(buildState: BuildState): Promise<void>;
-}
-
-export type RunTaskProducerChannel = RequestChannel<RunTaskProducer>;
-
 export interface RunDevServerOptions {
     port: number;
     liveReload?: {
@@ -46,9 +34,11 @@ export interface RunDevServerOptions {
     entry: string;
 }
 
-export interface RunTaskConsumer {
-    startDevServerAsync(options: RunDevServerOptions): Promise<void>;
-    teardownAsync(): Promise<void>;
+export interface RunDevServerMethods {
+    emitBuildState(buildState: BuildState): void;
 }
 
-export type RunTaskConsumerChannel = RequestChannel<RunTaskConsumer>;
+export interface RunTaskConsumer {
+    startDevServerAsync(options: RunDevServerOptions & RunDevServerMethods): Promise<void>;
+    teardownAsync(): Promise<void>;
+}

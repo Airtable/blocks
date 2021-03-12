@@ -18,17 +18,27 @@ function has<O, K extends keyof O>(o: O, key: K): o is Defines<O, K> {
     return o[key] !== undefined;
 }
 
+const bridgePath = process.argv[2];
+const entryPath = process.argv[3];
+mainAsync(require(bridgePath).default, createEntryLoadAndCreate(entryPath));
+
 export async function mainAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
     Consumer extends ChannelMethods<Consumer> & TeardownRequest
->(entryPoint: (producer: RequestChannel<Producer>) => Promise<Consumer> | Consumer) {
+>(
+    bridgeEntry: (
+        producerChannel: RequestChannel<Producer>,
+        consumerEntry: () => Promise<Consumer> | Consumer,
+    ) => Promise<Consumer>,
+    entryPoint: () => Promise<Consumer> | Consumer,
+) {
     debug('starting task host');
     invariant(has(process, 'send'), 'This process must be a forked child process.');
     const channel = createEventEmitterChannel(process);
 
     const requestChannel = createRequestChannel<Producer>(channel);
 
-    const consumer = await entryPoint(requestChannel);
+    const consumer = await bridgeEntry(requestChannel, entryPoint);
     const responseChannel = createResponseChannel(channel, consumer);
 
     (async () => {
@@ -50,4 +60,14 @@ export async function mainAsync<
     await responseChannel.channelClosedPromise;
 }
 
-mainAsync(require(process.argv[2]).default);
+function createEntryLoadAndCreate(_entryPath: string) {
+    return async () => {
+        const _module = require(_entryPath);
+        invariant(
+            typeof _module.default === 'function',
+            '%s must export a default function',
+            _entryPath,
+        );
+        return await _module.default();
+    };
+}

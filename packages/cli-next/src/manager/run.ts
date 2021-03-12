@@ -1,17 +1,32 @@
-import {RunTaskConsumer, RunTaskProducer} from '../tasks/run';
+import {BuildState} from '../tasks/run';
 
-import {createTaskAsync, TaskProcess} from '../helpers/task';
+import {
+    createTaskAsync,
+    HandshakeRequest,
+    resolveBuiltinModuleAsync,
+    TaskProcess,
+} from '../helpers/task';
 import {System} from '../helpers/system';
-import {RequestChannel} from '../helpers/task_channels';
+import {RunTaskAdapter, RunTaskConsumerAdapter} from './run_adapter';
+import {AppBundlerContext, resolveBundlerModuleAsync} from './bundler';
+
+export interface RunTaskProducer extends HandshakeRequest {
+    emitBuildState(buildState: BuildState): void;
+}
 
 export async function createRunTaskAsync(
     sys: System,
+    bundlerContext: AppBundlerContext,
     producer: RunTaskProducer,
-): Promise<RequestChannel<RunTaskConsumer>> {
-    const entryBase = sys.path.join(__dirname, '..', 'bundler', 'bundler');
+): Promise<RunTaskConsumerAdapter> {
+    const bridgePath = await resolveBuiltinModuleAsync(sys, __dirname, 'run_bridge');
+    const entryPath = await resolveBundlerModuleAsync(sys, bundlerContext);
 
-    return await createTaskAsync(sys, producer, {
-        process: TaskProcess.OUT_OF_PROCESS,
-        entryBase,
-    });
+    return new RunTaskAdapter(
+        await createTaskAsync(sys, producer, {
+            process: TaskProcess.OUT_OF_PROCESS,
+            bridgePath,
+            entryPath,
+        }),
+    );
 }

@@ -3,11 +3,10 @@ import fetch from 'node-fetch';
 
 import run from '../../src/bundler/bundler';
 import {System} from '../../src/helpers/system';
-import {RunTaskConsumer, RunTaskProducer} from '../../src/tasks/run';
-import {ReleaseTaskConsumer, ReleaseTaskProducer} from '../../src/tasks/release';
+import {RunTaskConsumer} from '../../src/tasks/run';
+import {ReleaseTaskConsumer} from '../../src/tasks/release';
 import {invariant} from '../../src/helpers/error_utils';
 import {findPortAsync} from '../../src/helpers/find_port_async';
-import {RequestChannelAdapter} from '../../src/helpers/task_channels';
 
 import {test} from '../mocks/test';
 import {mapFancyTestAsyncPlugin} from '../mocks/FancyTestAsync';
@@ -113,17 +112,14 @@ function runBundlerServerOnFixture() {
             bundlerPort?: number;
         }) {
             const bundlerPort = (ctx.bundlerPort = await findPortAsync(0));
-            const consumer = (ctx.bundlerConsumer = await run(
-                new RequestChannelAdapter<RunTaskProducer>({
-                    async readyAsync() {},
-                    async emitBuildStateAsync() {},
-                }),
-            ));
+            const consumer = (ctx.bundlerConsumer = await run());
             await consumer.startDevServerAsync({
                 port: bundlerPort,
                 mode: 'development',
                 context: ctx.tmpPath,
                 entry: ctx.realSystem.path.join(ctx.tmpPath, 'index'),
+
+                emitBuildState() {},
             });
         },
         async finallyAsync(ctx) {
@@ -152,11 +148,7 @@ function runBundlerPassOnFixture() {
             realSystem: System;
             bundlerConsumer?: ReleaseTaskConsumer;
         }) {
-            const consumer = (ctx.bundlerConsumer = await run(
-                new RequestChannelAdapter<ReleaseTaskProducer>({
-                    async readyAsync() {},
-                }),
-            ));
+            const consumer = (ctx.bundlerConsumer = await run());
             await consumer.bundleAsync({
                 mode: 'development',
                 context: ctx.tmpPath,

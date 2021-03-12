@@ -3,11 +3,7 @@ import {expect} from '@oclif/test';
 import * as releaseModule from '../../src/manager/release';
 import * as userAgentModule from '../../src/helpers/user_agent';
 import * as uploadReleaseModule from '../../src/helpers/upload_release';
-import {
-    ReleaseTaskConsumer,
-    ReleaseTaskConsumerChannel,
-    ReleaseTaskProducer,
-} from '../../src/tasks/release';
+import {ReleaseTaskConsumer} from '../../src/tasks/release';
 import {System} from '../../src/helpers/system';
 
 import {test} from '../mocks/test';
@@ -18,10 +14,10 @@ import {
     AirtableApiErrorName,
     AirtableApiErrorInfo,
 } from '../../src/helpers/airtable_api';
-import {RequestChannelAdapter} from '../../src/helpers/task_channels';
 import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
 import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
+import {AppBundlerContext} from '../../src/manager/bundler';
 
 const {
     stubCreateReleaseTaskAsync,
@@ -109,9 +105,13 @@ describe('release', () => {
 function createStubs() {
     async function _stubCreateReleaseTaskAsync(
         sys?: System,
-        producer?: ReleaseTaskProducer,
-    ): Promise<ReleaseTaskConsumerChannel> {
-        invariant(sys && producer, 'Arguments sys and producer must be passed in');
+        context?: AppBundlerContext,
+        producer?: releaseModule.ReleaseTaskProducer,
+    ): Promise<ReleaseTaskConsumer> {
+        invariant(
+            sys && context && producer,
+            'Arguments sys, context, and producer must be passed in',
+        );
 
         (async () => {
             await Promise.resolve();
@@ -119,7 +119,7 @@ function createStubs() {
         })();
 
         let _outputPath: string;
-        return new RequestChannelAdapter<ReleaseTaskConsumer>({
+        return {
             async bundleAsync({outputPath}) {
                 _outputPath = outputPath;
                 await sys.fs.writeFileAsync(
@@ -128,7 +128,7 @@ function createStubs() {
                 );
             },
             async teardownAsync() {},
-        });
+        };
     }
 
     class _UploadReleaseStub

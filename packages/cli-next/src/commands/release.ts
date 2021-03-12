@@ -9,7 +9,7 @@ import {
     APP_ROOT_TEMPORARY_DIR,
     BUNDLE_FILE_NAME,
 } from '../settings';
-import {createReleaseTaskAsync} from '../manager/release';
+import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {
@@ -26,12 +26,7 @@ import {S3Api} from '../helpers/s3_api';
 import {UploadRelease} from '../helpers/upload_release';
 import {readApiKeyAsync} from '../helpers/system_api_key';
 import {createUserAgentAsync} from '../helpers/user_agent';
-import {
-    ReleaseBundleOptions,
-    ReleaseTaskConsumer,
-    ReleaseTaskConsumerChannel,
-    ReleaseTaskProducer,
-} from '../tasks/release';
+import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 
 const debug = _debug('block-cli:command:release');
@@ -41,22 +36,6 @@ class ReleaseProducer implements ReleaseTaskProducer {
 
     async readyAsync() {
         this.readyDefer.resolve();
-    }
-}
-
-class ReleaseConsumer implements ReleaseTaskConsumer {
-    consumerChannel: ReleaseTaskConsumerChannel;
-
-    constructor(consumerChannel: ReleaseTaskConsumerChannel) {
-        this.consumerChannel = consumerChannel;
-    }
-
-    async bundleAsync(options: ReleaseBundleOptions) {
-        await this.consumerChannel.requestAsync('bundleAsync', options);
-    }
-
-    async teardownAsync() {
-        await this.consumerChannel.requestAsync('teardownAsync');
     }
 }
 
@@ -140,7 +119,11 @@ export default class Release extends AirtableCommand {
 
         // fork bundler process
         const producer = new ReleaseProducer();
-        const task = new ReleaseConsumer(await createReleaseTaskAsync(sys, producer));
+        const task = await createReleaseTaskAsync(
+            sys,
+            {module: appConfig.bundler?.module, workingdir: appRootPath},
+            producer,
+        );
         this._task = task;
         debug('initialized task');
 

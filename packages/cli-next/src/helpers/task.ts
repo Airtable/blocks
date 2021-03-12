@@ -2,6 +2,7 @@ import {System} from './system';
 import {findExtensionAsync} from './system_extra';
 import {ChannelMethods, RequestChannel, RequestChannelAdapter} from './task_channels';
 import {forkTaskAsync} from './fork_task_async';
+import {Bridge} from './task_bridge';
 
 /** Should the task be run in the same or a different process. */
 export enum TaskProcess {
@@ -23,8 +24,21 @@ export interface TeardownRequest {
 interface Options {
     /** Should the task be run in the same process or an external process. */
     process: TaskProcess;
+    /**
+     * Absolute path without file extension to the a file that injects methods
+     * into data sent by producer.
+     */
+    bridgePath: string;
     /** Absolute path without file extension to the entry to the task consumer. */
-    entryBase: string;
+    entryPath: string;
+}
+
+export async function resolveBuiltinModuleAsync(
+    sys: System,
+    workingdir: string,
+    ...modulePath: string[]
+) {
+    return await findExtensionAsync(sys, sys.path.join(workingdir, ...modulePath), ['.ts', '.js']);
 }
 
 /**
@@ -40,10 +54,8 @@ export async function createTaskAsync<
 >(
     sys: System,
     producer: Producer,
-    {process, entryBase}: Options,
+    {process, bridgePath, entryPath}: Options,
 ): Promise<RequestChannel<Consumer>> {
-    const entryPath = await findExtensionAsync(sys, entryBase, ['.ts', '.js']);
-
     if (process === TaskProcess.IN_PROCESS) {
         const producerAdapter = new RequestChannelAdapter(producer);
         (async () => {
@@ -51,10 +63,11 @@ export async function createTaskAsync<
             await (producerAdapter as RequestChannel<HandshakeRequest>).requestAsync('readyAsync');
         })();
 
-        const entryPoint = require(entryPath).default;
-        const consumer: Consumer = await entryPoint(producerAdapter);
+        const bridge = require(bridgePath).default as Bridge<Producer, Consumer>;
+        const createEntry = async () => await require(entryPath).default();
+        const consumer: Consumer = await bridge(producerAdapter, createEntry);
         return new RequestChannelAdapter(consumer);
     } else {
-        return await forkTaskAsync(sys, producer, entryPath);
+        return await forkTaskAsync(sys, producer, bridgePath, entryPath);
     }
 }

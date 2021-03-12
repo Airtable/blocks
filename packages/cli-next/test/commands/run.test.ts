@@ -3,21 +3,23 @@ import {expect} from '@oclif/test';
 import * as findPortAsyncModule from '../../src/helpers/find_port_async';
 import * as developmentProxyServerModule from '../../src/helpers/development_proxy_server';
 import * as runModule from '../../src/manager/run';
-import {RunDevServerOptions, RunTaskConsumerChannel, RunTaskProducer} from '../../src/tasks/run';
+import {RunDevServerOptions, RunTaskConsumer} from '../../src/tasks/run';
 
 import {test} from '../mocks/test';
 import {System} from '../../src/helpers/system';
 import {invariant} from '../../src/helpers/error_utils';
 import {AppConfigErrorName} from '../../src/helpers/config_app';
+import {AppBundlerContext} from '../../src/manager/bundler';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 
 async function stubCreateRunTaskAsync(
     sys?: System,
-    producer?: RunTaskProducer,
-): Promise<RunTaskConsumerChannel> {
-    invariant(sys && producer, 'arguments sys and producer are passed in');
+    context?: AppBundlerContext,
+    producer?: runModule.RunTaskProducer,
+): Promise<RunTaskConsumer> {
+    invariant(sys && context && producer, 'Arguments sys, context, and producer are passed in');
     const consumer = {
         async startDevServerAsync(options: RunDevServerOptions) {},
         async teardownAsync() {},
@@ -26,11 +28,7 @@ async function stubCreateRunTaskAsync(
         await Promise.resolve();
         await producer.readyAsync();
     })();
-    return {
-        async requestAsync(method: any, ...args: any[]) {
-            return await (consumer as any)[method](...args);
-        },
-    };
+    return consumer;
 }
 
 class StubDevelopmentProxyServer implements DevelopmentServerInterface {

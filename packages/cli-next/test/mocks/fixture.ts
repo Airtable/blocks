@@ -33,7 +33,7 @@ async function copyRecursivelyAsync(sys: System, src: string, dest: string) {
 
 export function prepareFixtureTempCopy(fixtureName: string, tempName: string = fixtureName) {
     return mapFancyTestAsyncPlugin({
-        async runAsync(ctx: {realSystem?: System; fixtureName?: string; tmpPath?: string}) {
+        async runAsync(ctx: {realSystem: System; fixtureName: string; tmpPath: string}) {
             if (!ctx.realSystem) {
                 ctx.realSystem = createSystem();
             }

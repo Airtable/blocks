@@ -1,23 +1,23 @@
-import {RequestChannel} from '../helpers/task_channels';
-
-export {RequestChannel};
-
-export interface ReleaseTaskProducer {
-    readyAsync(): Promise<void>;
+export enum BundleMode {
+    DEVELOPMENT = 'development',
+    PRODUCTION = 'production',
 }
-
-export type ReleaseTaskProducerChannel = RequestChannel<ReleaseTaskProducer>;
 
 export interface ReleaseBundleOptions {
     mode: 'development' | 'production';
+    /** Absolute directory path to the root of the package to bundle. */
     context: string;
     entry: string;
+    /** Absolute directory path to write the produced bundle to. */
     outputPath: string;
 }
 
 export interface ReleaseTaskConsumer {
+    /**
+     * Bundle the specified directory starting with entry and resolve the
+     * promise when complete.
+     */
     bundleAsync(options: ReleaseBundleOptions): Promise<void>;
+    /** Instruction to clean up. Shared with {@link RunTaskConsumer}. */
     teardownAsync(): Promise<void>;
 }
-
-export type ReleaseTaskConsumerChannel = RequestChannel<ReleaseTaskConsumer>;

@@ -2,16 +2,8 @@ import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
-import {createRunTaskAsync} from '../manager/run';
-import {
-    BuildState,
-    BuildStateBuilt,
-    BuildStateError,
-    BuildStatus,
-    RunTaskConsumer,
-    RunTaskConsumerChannel,
-    RunTaskProducer,
-} from '../tasks/run';
+import {createRunTaskAsync, RunTaskProducer} from '../manager/run';
+import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {findPortAsync} from '../helpers/find_port_async';
@@ -28,6 +20,7 @@ import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
 import {spawnUnexpectedError} from '../helpers/error_utils';
+import {RunTaskConsumerAdapter} from '../manager/run_adapter';
 
 const debug = _debug('block-cli:command:run');
 
@@ -41,7 +34,7 @@ class RunProducer implements RunTaskProducer {
         this.readyDefer.resolve();
     }
 
-    async emitBuildStateAsync(buildState: BuildState) {
+    emitBuildState(buildState: BuildState) {
         this.buildState = buildState;
         const lastDefer = this.buildStateDefer;
         this.buildStateDefer = new Deferred<BuildState>();
@@ -49,31 +42,8 @@ class RunProducer implements RunTaskProducer {
     }
 }
 
-class RunConsumer implements RunTaskConsumer {
-    consumerChannel: RunTaskConsumerChannel;
-
-    constructor(consumerChannel: RunTaskConsumerChannel) {
-        this.consumerChannel = consumerChannel;
-    }
-
-    async startDevServerAsync(...args: Parameters<RunTaskConsumer['startDevServerAsync']>) {
-        await this.consumerChannel.requestAsync('startDevServerAsync', ...args);
-    }
-
-    async teardownAsync() {
-        try {
-            await this.consumerChannel.requestAsync('teardownAsync');
-        } catch (err) {
-            // It's ok if the channel closes while tearing down the task.
-            if (err && !err.message.includes('channel closed while waiting for response')) {
-                throw err;
-            }
-        }
-    }
-}
-
 export default class Run extends AirtableCommand {
-    private _task?: RunTaskConsumer;
+    private _task?: RunTaskConsumerAdapter;
     private _devServer?: DevelopmentProxyServerInterface;
     /**
      * A file system path describing the location where a temporary directory
@@ -198,7 +168,11 @@ export default class Run extends AirtableCommand {
         );
 
         // fork runner process
-        const task = new RunConsumer(await createRunTaskAsync(this.system, producer));
+        const task = await createRunTaskAsync(
+            this.system,
+            {module: appConfig.bundler?.module, workingdir: appRootPath},
+            producer,
+        );
         this._task = task;
 
         await producer.readyDefer;
