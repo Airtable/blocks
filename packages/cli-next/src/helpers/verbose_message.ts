@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 import {
     BLOCK_CONFIG_DIR_NAME,
     BLOCK_FILE_NAME,
@@ -5,23 +7,45 @@ import {
     USER_CONFIG_FILE_NAME,
 } from '../settings';
 
+import {
+    InitCommandMessageName,
+    InitCommandErrorName,
+    InitCommandErrorInfo,
+    InitCommandMessageInfo,
+} from '../commands/init';
+
 import * as renderMessage from './render_message';
 
 import {AirtableApiErrorName, AirtableApiErrorInfo} from './airtable_api';
+import {AppConfigErrorInfo, AppConfigErrorName} from './config_app';
+import {BlockIdentifierErrorInfo, BlockIdentifierErrorName} from './block_identifier';
 import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
+import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
 import {SystemApiKeyErrorName, SystemApiKeyErrorInfo} from './system_api_key';
-import {AppConfigErrorInfo, AppConfigErrorName} from './config_app';
 import {UserConfigErrorInfo, UserConfigErrorName} from './config_user';
-import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 
 export {
     AirtableApiErrorInfo,
     AirtableApiErrorName,
+    AppConfigErrorInfo,
+    AppConfigErrorName,
+    BlockIdentifierErrorInfo,
+    BlockIdentifierErrorName,
     FindPortErrorInfo,
     FindPortErrorName,
+    InitCommandErrorInfo,
+    InitCommandErrorName,
+    InitCommandMessageInfo,
+    InitCommandMessageName,
+    RemoteConfigErrorInfo,
+    RemoteConfigErrorName,
     S3ApiErrorInfo,
     S3ApiErrorName,
+    SystemApiKeyErrorInfo,
+    SystemApiKeyErrorName,
+    UserConfigErrorInfo,
+    UserConfigErrorName,
 };
 
 // Merge the message name enums into one. MessageName is a value and a type like
@@ -29,20 +53,27 @@ export {
 export const MessageName = {
     ...AirtableApiErrorName,
     ...AppConfigErrorName,
+    ...BlockIdentifierErrorName,
     ...FindPortErrorName,
+    ...InitCommandErrorName,
+    ...InitCommandMessageName,
     ...RemoteConfigErrorName,
     ...S3ApiErrorName,
     ...SystemApiKeyErrorName,
     ...UserConfigErrorName,
 } as const;
-/* eslint-disable no-redeclare */
+
+/* eslint-disable @typescript-eslint/no-redeclare */
 export type MessageName = typeof MessageName[keyof typeof MessageName];
-/* eslint-enable no-redeclare */
+/* eslint-enable @typescript-eslint/no-redeclare */
 
 export type MessageInfo =
     | AirtableApiErrorInfo
     | AppConfigErrorInfo
+    | BlockIdentifierErrorInfo
     | FindPortErrorInfo
+    | InitCommandErrorInfo
+    | InitCommandMessageInfo
     | RemoteConfigErrorInfo
     | S3ApiErrorInfo
     | SystemApiKeyErrorInfo
@@ -50,59 +81,113 @@ export type MessageInfo =
 
 export type Messages = renderMessage.Messages<MessageInfo>;
 
-export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo>({
-    // airtable_api.ts
-    airtableApiBaseNotFound() {
-        return '❌ The base could not be found. Make sure you have access to the base in which this block was created.';
-    },
-    airtableApiErrorStatusAndMessages({status, errors}) {
-        return `Airtable server responded with status ${status}:\n\n${JSON.stringify(errors)}`;
-    },
-    airtableApiMultipleErrors({errors}) {
-        return `Airtable server responded with multiple errors:\n\n${errors
-            .map(this.renderMessage, this)
-            .join('\n')}`;
-    },
-    airtableApiUnsupportedBlocksCliVersion(info) {
-        return `❌ ${info.serverMessage}\n\nRun {cyan.bold npm i -g @airtable/blocks} to update.\n`;
-    },
-    airtableApiWithInvalidApiKey() {
-        return '❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it.';
-    },
-    airtableApiUnexpectedError({serverMessage}) {
-        return `❌ Airtable server returned an error.\n${serverMessage}`;
-    },
+export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {chalk: chalk.Chalk}>(
+    {
+        // airtable_api.ts
+        airtableApiBaseNotFound() {
+            return this.util
+                .chalk`❌ The base could not be found. Make sure you have access to the base in which this block was created.`;
+        },
+        airtableApiErrorStatusAndMessages({status, errors}) {
+            return this.util
+                .chalk`Airtable server responded with status ${status}:\n\n${JSON.stringify(
+                errors,
+            )}`;
+        },
+        airtableApiMultipleErrors({errors}) {
+            return this.util.chalk`Airtable server responded with multiple errors:\n\n${errors
+                .map(this.renderMessage, this)
+                .join('\n')}`;
+        },
+        airtableApiUnsupportedBlocksCliVersion(info) {
+            return this.util
+                .chalk`❌ ${info.serverMessage}\n\nRun {cyan.bold npm i -g @airtable/blocks} to update.\n`;
+        },
+        airtableApiWithInvalidApiKey() {
+            return this.util
+                .chalk`❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it.`;
+        },
+        airtableApiUnexpectedError({serverMessage}) {
+            return this.util.chalk`❌ Airtable server returned an error.\n${serverMessage}`;
+        },
 
-    // config_app.ts
-    appConfigIsNotValid({message, file}) {
-        return `❌ ${file ?? BLOCK_FILE_NAME} ${message}`;
-    },
+        // config_app.ts
+        appConfigIsNotValid({message, file}) {
+            return this.util.chalk`❌ ${file ?? BLOCK_FILE_NAME} ${message}`;
+        },
 
-    // find_port_async.ts
-    findPortAsyncPortIsNotNumber(info) {
-        return `❌ Cannot listen to port {underline ${info.port}}. {underline ${info.port}} is not a number.`;
-    },
+        blockIdentifierInvalidFormat() {
+            return this.util.chalk`Block identifier must be in the format <baseId>/<blockId>.`;
+        },
+        blockIdentifierInvalidBaseId() {
+            return this.util.chalk`Block identifier\'s must start with "app".`;
+        },
+        blockIdentifierInvalidBlockId() {
+            return this.util.chalk`Block identifier\'s must start with "blk" after "/".`;
+        },
 
-    // config_remote.ts
-    remoteConfigIsNotValid({message, file}) {
-        return `❌ ${file ?? `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`} ${message}`;
-    },
+        // find_port_async.ts
+        findPortAsyncPortIsNotNumber(info) {
+            return this.util
+                .chalk`❌ Cannot listen to port {underline ${info.port}}. {underline ${info.port}} is not a number.`;
+        },
 
-    // s3_api.ts
-    s3ApiBundleTooLarge() {
-        return `❌ Could not upload bundle. The bundle's size is too big.`;
-    },
-    s3ApiFailed() {
-        return '❌ Could not upload bundle. Failed to upload.';
-    },
+        initCommandReady({blockDirPath, platform}) {
+            let blockRunMessage;
+            if (platform === 'win32') {
+                // In Windows, chaining commands differ between PowerShell and
+                // CMD.exe. There is neither a canonical nor simple way to detect if
+                // this process is being run in PowerShell or CMD.exe so we present
+                // a generic message for Windows.
+                blockRunMessage = this.util
+                    .chalk`{cyan.bold cd ${blockDirPath}} then {cyan.bold block run}`;
+            } else {
+                blockRunMessage = this.util.chalk`{cyan.bold cd ${blockDirPath} && block run}`;
+            }
 
-    // system_api_key.ts
-    systemApiKeyNotFound() {
-        return '❌ An airtable api key is not set. Please use {cyan.bold block set-api-key} to set it.';
-    },
+            return this.util
+                .chalk`✅ Your block is ready! ${blockRunMessage} to start developing, and {cyan.bold npm run lint} to lint.`;
+        },
+        initCommandDirectoryExists({blockDirPath}) {
+            return this.util.chalk`A directory already exists at ${blockDirPath}.`;
+        },
+        initCommandTemplateMissing({template}) {
+            return this.util
+                .chalk`Could not get template ${template} - please check you entered the name correctly.`;
+        },
+        initCommandTemplateNoBlockJson({template}) {
+            return this.util.chalk`${template} does not seem to be a block template.`;
+        },
+        initCommandUnknownError() {
+            return this.util.chalk`❌ Something failed! Cleaning up...`;
+        },
+        initCommandInstalledSdkNoVersion() {
+            return this.util.chalk`Installed @airtable/blocks dependency has no version.`;
+        },
 
-    // config_user.ts
-    userConfigIsNotValid({message, file}) {
-        return `❌ ${file ?? USER_CONFIG_FILE_NAME} ${message}`;
+        // config_remote.ts
+        remoteConfigIsNotValid({message, file}) {
+            return this.util.chalk`❌ ${file ??
+                `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`} ${message}`;
+        },
+
+        // s3_api.ts
+        s3ApiBundleTooLarge() {
+            return this.util.chalk`❌ Could not upload bundle. The bundle's size is too big.`;
+        },
+        s3ApiFailed() {
+            return this.util.chalk`❌ Could not upload bundle. Failed to upload.`;
+        },
+
+        // system_api_key.ts
+        systemApiKeyNotFound() {
+            return this.util
+                .chalk`❌ An airtable api key is not set. Please use {cyan.bold block set-api-key} to set it.`;
+        },
+
+        // config_user.ts
+        userConfigIsNotValid({message, file}) {
+            return this.util.chalk`❌ ${file ?? `~/.config/${USER_CONFIG_FILE_NAME}`} ${message}`;
+        },
     },
-});
+);

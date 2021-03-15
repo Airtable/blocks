@@ -1,5 +1,6 @@
 import cli from 'cli-ux';
 import {flags as commandFlags} from '@oclif/command';
+import * as Parser from '@oclif/parser';
 
 import AirtableCommand from '../helpers/airtable_command';
 
@@ -34,7 +35,7 @@ $ block set-api-key --location app APIKEY
         }),
     };
 
-    static args = [{name: 'apiKey'}];
+    static args: Parser.args.Input = [{name: 'apiKey', required: false}];
 
     async runAsync() {
         const {args, flags} = this.parse(SetApiKey);

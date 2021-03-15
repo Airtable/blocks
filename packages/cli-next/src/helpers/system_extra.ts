@@ -25,6 +25,28 @@ export async function findAncestorDirIncludingNameAsync(
     throw spawnUnexpectedError('Could not find directory that includes a %s entry.', name);
 }
 
+export async function copyAsync(sys: System, sourcePath: string, destinationPath: string) {
+    const {fs, path} = sys;
+
+    try {
+        await fs.copyFileAsync(sourcePath, destinationPath);
+    } catch (err) {
+        try {
+            const entries = await fs.readdirAsync(sourcePath);
+            await mkdirpAsync(sys, destinationPath);
+            for (const entry of entries) {
+                await copyAsync(
+                    sys,
+                    path.join(sourcePath, entry),
+                    path.join(destinationPath, entry),
+                );
+            }
+        } catch (err2) {
+            throw err;
+        }
+    }
+}
+
 export async function mkdirpAsync(sys: System, directoryPath: string): Promise<void> {
     const {
         fs: {mkdirAsync},
@@ -40,6 +62,25 @@ export async function mkdirpAsync(sys: System, directoryPath: string): Promise<v
             await mkdirpAsync(sys, dirname(directoryPath));
             await mkdirAsync(directoryPath);
         } else {
+            throw err;
+        }
+    }
+}
+
+export async function rmdirAsync(sys: System, directoryPath: string): Promise<void> {
+    const {fs, path} = sys;
+
+    try {
+        await fs.rmdirAsync(directoryPath);
+    } catch (err) {
+        if (err.code === 'ENOTEMPTY') {
+            for (const entry of await fs.readdirAsync(directoryPath)) {
+                await rmdirAsync(sys, path.join(directoryPath, entry));
+            }
+            await rmdirAsync(sys, directoryPath);
+        } else if (err.code === 'ENOTDIR') {
+            await fs.unlinkAsync(directoryPath);
+        } else if (err.code !== 'ENOENT') {
             throw err;
         }
     }
@@ -100,6 +141,10 @@ export async function readJsonIfExistsAsync(
         }
         throw err;
     }
+}
+
+export async function writeFormattedJsonAsync(sys: System, path: string, data: any) {
+    await sys.fs.writeFileAsync(path, JSON.stringify(data, null, 4) + '\n');
 }
 
 export async function findExtensionAsync(

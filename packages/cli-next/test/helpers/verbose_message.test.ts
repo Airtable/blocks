@@ -1,29 +1,30 @@
+import chalk from 'chalk';
+
 import {test, expect} from '../mocks/test';
 
 import {
     AirtableApiErrorName,
+    AppConfigErrorName,
+    BlockIdentifierErrorName,
     FindPortErrorName,
-    S3ApiErrorName,
-    MessageName,
+    InitCommandErrorName,
+    InitCommandMessageName,
     MessageInfo,
+    MessageName,
+    RemoteConfigErrorName,
+    S3ApiErrorName,
+    SystemApiKeyErrorName,
+    UserConfigErrorName,
     VerboseMessage,
 } from '../../src/helpers/verbose_message';
 import {SelectMessage} from '../../src/helpers/render_message';
-import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
-import {AppConfigErrorName} from '../../src/helpers/config_app';
-import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
-import {UserConfigErrorName} from '../../src/helpers/config_user';
 import {
     BLOCK_CONFIG_DIR_NAME,
     BLOCK_FILE_NAME,
+    INIT_DEFAULT_TEMPLATE_URL,
     REMOTE_JSON_BASE_FILE_PATH,
     USER_CONFIG_FILE_NAME,
 } from '../../src/settings';
-
-type RequiredKeys<T> = {[key in keyof T]: T[key] extends undefined ? never : key}[any];
-type OptionalKeys<T> = {[key in keyof T]: T[key] extends undefined ? key : never}[any];
-type ExcludeKey<T, K extends keyof T> = {[key in Exclude<RequiredKeys<T>, K>]: T[key]} &
-    {[key in Exclude<OptionalKeys<T>, K>]?: T[key]};
 
 describe('verbose_message', function() {
     test.it('at least one test per message type', () => {
@@ -38,7 +39,10 @@ describe('verbose_message', function() {
         for (const info of typeSuite) {
             test.it(`formats ${type}`, () => {
                 expect(
-                    new VerboseMessage().renderMessage({type: type as any, ...info}),
+                    new VerboseMessage({chalk: new chalk.Instance({level: 3})}).renderMessage({
+                        type: type as any,
+                        ...info,
+                    }),
                 ).to.matchSnapshot();
             });
         }
@@ -46,7 +50,7 @@ describe('verbose_message', function() {
 });
 
 function testMessages(): {
-    [key in MessageName]: ExcludeKey<SelectMessage<MessageInfo, key>, 'type'>[];
+    [key in MessageName]: Omit<SelectMessage<MessageInfo, key>, 'type'>[];
 } {
     return {
         [AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND]: [{}],
@@ -82,7 +86,43 @@ function testMessages(): {
             {file: `../${BLOCK_FILE_NAME}`, message: 'should be a non-null object'},
         ],
 
+        [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_BASE_ID]: [{}],
+        [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_BLOCK_ID]: [{}],
+        [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_FORMAT]: [{}],
+
         [FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER]: [{port: 'asdf'}],
+
+        [InitCommandErrorName.INIT_COMMAND_DIRECTORY_EXISTS]: [
+            {
+                blockDirPath: 'my-app',
+            },
+        ],
+        [InitCommandErrorName.INIT_COMMAND_INSTALLED_SDK_NO_VERSION]: [{}],
+        [InitCommandErrorName.INIT_COMMAND_TEMPLATE_MISSING]: [
+            {
+                template: INIT_DEFAULT_TEMPLATE_URL,
+            },
+        ],
+        [InitCommandErrorName.INIT_COMMAND_TEMPLATE_NO_BLOCK_JSON]: [
+            {
+                template: INIT_DEFAULT_TEMPLATE_URL,
+            },
+        ],
+        [InitCommandErrorName.INIT_COMMAND_UNKNOWN_ERROR]: [{}],
+        [InitCommandMessageName.INIT_COMMAND_READY]: [
+            {
+                blockDirPath: 'my-app',
+                platform: 'win32',
+            },
+            {
+                blockDirPath: 'my-app',
+                platform: 'darwin',
+            },
+            {
+                blockDirPath: 'my-app',
+                platform: 'linux',
+            },
+        ],
 
         [RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID]: [
             {message: 'should be a non-null object'},

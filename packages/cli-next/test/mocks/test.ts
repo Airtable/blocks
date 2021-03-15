@@ -14,10 +14,12 @@ import {RenderMessage} from '../../src/helpers/render_message';
 import {MessageName, Messages} from '../../src/helpers/verbose_message';
 import {ObjectMap} from '../../src/helpers/private_utils';
 import {ConfigSystem, ConfigMessages, ConfigChalk} from '../../src/helpers/airtable_command';
+import {rmdirAsync} from '../../src/helpers/system_extra';
 
 import {createSystem} from './system';
 import {answer} from './answer';
 import {prepareFixtureTempCopy} from './fixture';
+import {mapFancyTestAsyncPlugin} from './FancyTestAsync';
 
 type ConstructorReturnType<T extends new (...args: any[]) => any> = T extends new (
     ...args: any[]
@@ -84,7 +86,7 @@ async function initMockSystemAsync(ctx: {
 
     ctx.system = createSystem({volume: ctx.systemVolume});
 
-    const messages = new RenderMessage() as Messages;
+    const messages = new RenderMessage(undefined) as Messages;
     for (const key of Object.values(MessageName)) {
         messages[key] = (info: any) => JSON.stringify(info);
     }
@@ -103,18 +105,18 @@ async function initMockSystemAsync(ctx: {
 }
 
 function withFiles(files: {[path: string]: Buffer | null}) {
-    return {
-        run(ctx: {system: System; systemVolume: SystemVolume}) {
+    return mapFancyTestAsyncPlugin({
+        async runAsync(ctx: {system: System; systemVolume: SystemVolume}) {
             for (const [key, value] of Object.entries(files)) {
                 if (value) {
                     ctx.systemVolume.mkdirpSync(ctx.system.path.dirname(key));
                     ctx.systemVolume.writeFileSync(key, value);
                 } else {
-                    ctx.systemVolume.unlinkSync(key);
+                    await rmdirAsync(ctx.system, key);
                 }
             }
         },
-    };
+    });
 }
 
 function enableDebug(pattern: string) {
@@ -140,13 +142,10 @@ function wroteUserConfigFile(expectConfig: Partial<UserConfig>) {
     );
 }
 
-function wroteJsonFile(
-    path: string | ((sys: System) => string),
-    expectConfig: Partial<UserConfig>,
-) {
+function wroteJsonFile(path: string | ((sys: System) => string), expectJson: any) {
     return wroteFile(path, expectContent => {
-        const actualConfig = JSON.parse(expectContent.toString());
-        expect(actualConfig).deep.equal(expectConfig);
+        const actualJson = JSON.parse(expectContent.toString());
+        expect(actualJson).deep.equal(expectJson);
     });
 }
 

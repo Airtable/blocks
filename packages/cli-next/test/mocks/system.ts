@@ -26,18 +26,24 @@ class MockOS implements SystemOS {
 }
 
 class MockProcess implements SystemProcess {
+    _cwd: string = '/home/projects/my-app';
+
     env = {};
 
     version = '10.0.0';
 
+    chdir(dirpath: string) {
+        this._cwd = pathModule.posix.resolve(this._cwd, dirpath);
+    }
+
     cwd() {
-        return '/home/projects/my-app';
+        return this._cwd;
     }
 }
 
 export function createSystem({volume}: {volume: SystemVolume}) {
     const path = pathModule.posix;
-    const fs = asyncify(createFsFromVolume(volume) as CallbackFS);
+    const fs = asyncify((createFsFromVolume(volume) as unknown) as CallbackFS);
     const os = new MockOS();
     const process = new MockProcess();
     return {

@@ -163,3 +163,14 @@ export async function writeAppDirectoryUserConfigAsync(
 ): Promise<void> {
     await writeUserConfigAsync(sys, await findAppDirectoryUserConfigAsync(sys), config);
 }
+
+export async function writeRemoteConfigAsync(
+    sys: System,
+    configPath: string,
+    config: RemoteConfig,
+): Promise<void> {
+    const {fs, path} = sys;
+
+    await mkdirpAsync(sys, path.dirname(configPath));
+    await fs.writeFileAsync(configPath, Buffer.from(JSON.stringify(config)));
+}

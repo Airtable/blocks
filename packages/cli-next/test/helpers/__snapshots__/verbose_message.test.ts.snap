@@ -23,7 +23,7 @@ exports[`verbose_message formats airtableApiMultipleErrors 1`] = `
 exports[`verbose_message formats airtableApiMultipleErrors 2`] = `
 "Airtable server responded with multiple errors:
 
-❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it.
+❌ Your Airtable API key is invalid. Please use [36m[1mblock set-api-key[22m[39m to update it.
 ❌ Airtable server returned an error.
 Something went wrong."
 `;
@@ -36,17 +36,39 @@ Something went wrong."
 exports[`verbose_message formats airtableApiUnsupportedBlocksCliVersion 1`] = `
 "❌ Please update @airtable/blocks-cli.
 
-Run {cyan.bold npm i -g @airtable/blocks} to update.
+Run [36m[1mnpm i -g @airtable/blocks[22m[39m to update.
 "
 `;
 
-exports[`verbose_message formats airtableApiWithInvalidApiKey 1`] = `"❌ Your Airtable API key is invalid. Please use {cyan.bold block set-api-key} to update it."`;
+exports[`verbose_message formats airtableApiWithInvalidApiKey 1`] = `"❌ Your Airtable API key is invalid. Please use [36m[1mblock set-api-key[22m[39m to update it."`;
 
 exports[`verbose_message formats appConfigIsNotValid 1`] = `"❌ block.json should be a non-null object"`;
 
 exports[`verbose_message formats appConfigIsNotValid 2`] = `"❌ ../block.json should be a non-null object"`;
 
-exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port {underline asdf}. {underline asdf} is not a number."`;
+exports[`verbose_message formats blockIdentifierInvalidBaseId 1`] = `"Block identifier's must start with \\"app\\"."`;
+
+exports[`verbose_message formats blockIdentifierInvalidBlockId 1`] = `"Block identifier's must start with \\"blk\\" after \\"/\\"."`;
+
+exports[`verbose_message formats blockIdentifierInvalidFormat 1`] = `"Block identifier must be in the format <baseId>/<blockId>."`;
+
+exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port [4masdf[24m. [4masdf[24m is not a number."`;
+
+exports[`verbose_message formats initCommandDirectoryExists 1`] = `"A directory already exists at my-app."`;
+
+exports[`verbose_message formats initCommandInstalledSdkNoVersion 1`] = `"Installed @airtable/blocks dependency has no version."`;
+
+exports[`verbose_message formats initCommandReady 1`] = `"✅ Your block is ready! [36m[1mcd my-app[22m[39m then [36m[1mblock run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandReady 2`] = `"✅ Your block is ready! [36m[1mcd my-app && block run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandReady 3`] = `"✅ Your block is ready! [36m[1mcd my-app && block run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandTemplateMissing 1`] = `"Could not get template https://github.com/Airtable/apps-hello-world - please check you entered the name correctly."`;
+
+exports[`verbose_message formats initCommandTemplateNoBlockJson 1`] = `"https://github.com/Airtable/apps-hello-world does not seem to be a block template."`;
+
+exports[`verbose_message formats initCommandUnknownError 1`] = `"❌ Something failed! Cleaning up..."`;
 
 exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
 
@@ -56,8 +78,8 @@ exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not uploa
 
 exports[`verbose_message formats s3ApiFailed 1`] = `"❌ Could not upload bundle. Failed to upload."`;
 
-exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use {cyan.bold block set-api-key} to set it."`;
+exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use [36m[1mblock set-api-key[22m[39m to set it."`;
 
-exports[`verbose_message formats userConfigIsNotValid 1`] = `"❌ .airtableblocksrc.json should be a non-null object"`;
+exports[`verbose_message formats userConfigIsNotValid 1`] = `"❌ ~/.config/.airtableblocksrc.json should be a non-null object"`;
 
 exports[`verbose_message formats userConfigIsNotValid 2`] = `"❌ ../../../.config/.airtableblocksrc.json should be a non-null object"`;
