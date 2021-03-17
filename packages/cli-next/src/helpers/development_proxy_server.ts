@@ -71,6 +71,13 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         this.secureServer = secureServer;
     }
 
+    /**
+     * Determine whether logging messages should be discarded.
+     */
+    get isSilenced() {
+        return this.server === null;
+    }
+
     async proxyFrontendAsync(remoteAddress: string): Promise<DevelopmentProxyServerInterface> {
         const {app, server, secureServer} = this;
         this.app = null;
@@ -81,6 +88,22 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         const proxy = createProxyMiddleware(`http://${remoteAddress}`, {
             ws: true,
             logLevel: 'error',
+
+            // Messages from the proxy provided by `http-proxy-middleware`
+            // should be ignored once the shutdown operation has begun (see
+            // this class's `closeAsync` method), but that  module does not
+            // offer an API for dynamically modifying its logging level. Wrap
+            // each logging function with a version that is sensitive to the
+            // state of this class.
+            logProvider: provider => {
+                return {
+                    log: this.wrapLogFn(provider.log),
+                    debug: this.wrapLogFn(provider.debug),
+                    info: this.wrapLogFn(provider.info),
+                    warn: this.wrapLogFn(provider.warn),
+                    error: this.wrapLogFn(provider.error),
+                };
+            },
         });
         invariant(proxy.upgrade, 'http proxy must have an upgrade handler');
         app.use(proxy);
@@ -88,6 +111,26 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         secureServer.on('upgrade', proxy.upgrade);
 
         return this;
+    }
+
+    /**
+     * Given a logging function, create a second function which only calls the
+     * first if this instance has not been "silenced."
+     */
+    private wrapLogFn(logFn?: (...args: Array<any>) => void) {
+        const that = this;
+
+        if (!logFn) {
+            return () => {};
+        }
+
+        return function(this: any, ...args: Array<any>) {
+            if (that.isSilenced) {
+                return;
+            }
+
+            logFn.apply(this, args);
+        };
     }
 
     async closeAsync() {
