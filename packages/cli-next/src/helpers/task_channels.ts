@@ -76,7 +76,7 @@ class QueueAsyncIterable<T> {
     }
 }
 
-class PipeChannelImplementation<TX, RX> implements Closeable {
+class PipeChannelImplementation<TX, RX> implements Channel<TX, RX>, Closeable {
     pipe: PipeEnd<TX, RX>;
     closedDefer = new Deferred<void>();
 
