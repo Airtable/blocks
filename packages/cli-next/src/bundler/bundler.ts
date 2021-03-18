@@ -117,13 +117,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
             this.serverConfig,
         ));
         this.server = await new Promise((resolve, reject) => {
-            const httpServer = webpackDevServer.listen(port, err => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(httpServer);
-                }
-            });
+            const httpServer = webpackDevServer.listen(port);
 
             httpServer.once('listening', () => {
                 resolve(httpServer);
