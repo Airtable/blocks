@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.62...HEAD)
 
-No changes.
+-   Adds a new optional argument "--http" to `block run`, which will server your block from an HTTP
+    server instead of the default HTTPS server.
 
 ## [0.0.62](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.61...@airtable/blocks-cli@0.0.62) - 2021-02-23
 

@@ -437,8 +437,8 @@ class BlockServer {
             }),
         );
     }
-    async startAsync(port: number): Promise<void> {
-        const url = await this.startLocalAsync(port);
+    async startAsync(port: number, opts: {useHttp: boolean}): Promise<void> {
+        const url = await this.startLocalAsync(port, opts);
         this._blockServerUrlIfExists = url;
         this.setEnvironmentVariablesForBundle(url);
 
@@ -465,7 +465,7 @@ class BlockServer {
             // This can fail, especially on Linux. If it does, we don't really care.
         }
     }
-    async startLocalAsync(port: number): Promise<string> {
+    async startLocalAsync(port: number, opts: {useHttp: boolean}): Promise<string> {
         // Read certs
         const [key, cert] = await Promise.all([
             fsUtils.readFileAsync(
@@ -478,44 +478,55 @@ class BlockServer {
             ),
         ]);
 
-        // We create both an HTTP and an HTTPS server. The web client will try
-        // loading /__runFrame/ping.gif on both http and https.
-        // This lets it detect if localhost certs are blocked so
-        // we can show a helpful error message.
-        // TODO: maybe don't expose other routes on http?
-        // flow-disable-next-line because flow confuses Socket types for createServer
-        const httpsServer = https.createServer({cert, key}, this._expressApp);
-        const httpServer = http.createServer(this._expressApp);
-        const stopServers = () => {
-            if (httpsServer.listening) {
-                httpsServer.close();
+        // We use either an HTTPS (default) or HTTP server for local block development,
+        // depending on the presence of the --http arg.
+
+        // When developing against HTTPS, we also need to spin up a secondary http server at
+        // (PORT + 1). This is exclusively used for differentiating between connection
+        // failures caused by an untrusted cert vs. server not running at all. We don't need
+        // to spin this up if the user has opted into HTTP.
+        let mainServer;
+        let secondaryServer;
+        if (opts.useHttp) {
+            mainServer = http.createServer(this._expressApp);
+        } else {
+            // flow-disable-next-line because flow confuses Socket types for createServer
+            mainServer = https.createServer({cert, key}, this._expressApp);
+            secondaryServer = http.createServer(this._expressApp);
+        }
+        const stopServer = () => {
+            if (mainServer.listening) {
+                mainServer.close();
             }
-            if (httpServer.listening) {
-                httpServer.close();
+            if (secondaryServer && secondaryServer.listening) {
+                secondaryServer.close();
             }
         };
 
         await new Promise((resolve, reject) => {
-            httpServer
-                .listen(port + 1)
-                .on('error', err => {
-                    stopServers();
-                    reject(err);
-                })
-                .on('listening', resolve);
-        });
-
-        await new Promise((resolve, reject) => {
-            httpsServer
+            mainServer
                 .listen(port)
                 .on('error', err => {
-                    stopServers();
+                    stopServer();
                     reject(err);
                 })
                 .on('listening', resolve);
         });
+        await new Promise((resolve, reject) => {
+            if (secondaryServer) {
+                secondaryServer
+                    .listen(port + 1)
+                    .on('error', err => {
+                        stopServer();
+                        reject(err);
+                    })
+                    .on('listening', resolve);
+            } else {
+                resolve();
+            }
+        });
 
-        return `https://localhost:${port}`;
+        return `http${opts.useHttp ? '' : 's'}://localhost:${port}`;
     }
     _resolveLongPollPromises(blockBuilderStateData: BlockBuilderStateData): void {
         switch (blockBuilderStateData.status) {

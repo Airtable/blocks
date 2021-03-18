@@ -13,8 +13,9 @@ const {Environments} = require('../types/block_json_type');
 import type {Argv} from 'yargs';
 
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const {transpileAll, sdkRepo, defaultPort} = argv;
+    const {transpileAll, sdkRepo, defaultPort, http: useHttp} = argv;
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
+    invariant(typeof useHttp === 'boolean', 'expects http to be a boolean');
     const remoteName = argv.remote || null;
     invariant(
         remoteName === null || typeof remoteName === 'string',
@@ -93,7 +94,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     while (true) {
         try {
             // Try starting the server on this port.
-            await blockServer.startAsync(port);
+            await blockServer.startAsync(port, {useHttp});
 
             // Ran successfully, so break out of our loop.
             break;

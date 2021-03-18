@@ -78,6 +78,11 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'number',
                 default: 9000,
             },
+            http: {
+                description: 'Use HTTP protocol instead of HTTPS for local development server',
+                type: 'boolean',
+                default: false,
+            },
             remote: {
                 description: '[Beta] Configure which remote to use',
                 type: 'string',

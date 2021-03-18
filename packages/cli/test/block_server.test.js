@@ -80,19 +80,19 @@ describe('BlockServer', function() {
 
             sinon
                 .stub(blockServer, 'startLocalAsync')
-                .callsFake(port => 'https://localhost:' + port);
+                .callsFake((port, opts) => `http${opts.useHttp ? '' : 's'}://localhost:${port}`);
             sinon.stub(clipboardy, 'write').resolves();
         });
 
         it('copies the server URL to the clipboard in local mode', async function() {
-            await blockServer.startAsync(1234);
+            await blockServer.startAsync(1234, {useHttp: false});
 
             sinon.assert.calledOnce(clipboardy.write);
             sinon.assert.calledWithExactly(clipboardy.write, 'https://localhost:1234');
         });
 
         it('calls BlockBuilder#buildAndWatchAsync once', async function() {
-            await blockServer.startAsync(3333);
+            await blockServer.startAsync(3333, {useHttp: false});
             sinon.assert.calledOnce(blockBuilder.buildAndWatchAsync);
         });
     });
