@@ -30,6 +30,8 @@ type TableAndOrView =
  * description of the presumed behavior for that App. Consumers of this library
  * will work with their own Apps whose behavior differs from these examples, so
  * their tests will be distinct in this regard.
+ *
+ * @docsPath testing/TestDriver
  */
 // The documentation for this class makes heavy use of the `@link` feature of
 // TypeDoc. Although that tool's built-in type tracking would normally make

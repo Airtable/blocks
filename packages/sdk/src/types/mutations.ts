@@ -26,7 +26,6 @@ export type MutationType = ObjectValues<typeof MutationTypes>;
  * The Mutation emitted when the App modifies one or more {@link Record|Records}.
  *
  * @docsPath testing/mutations/SetMultipleRecordsCellValuesMutation
- * @hidden
  */
 export interface SetMultipleRecordsCellValuesMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -56,7 +55,6 @@ export interface PartialSetMultipleRecordsCellValuesMutation {
  * The Mutation emitted when the App deletes one or more {@link Record|Records}.
  *
  * @docsPath testing/mutations/DeleteMultipleRecordsMutation
- * @hidden
  */
 export interface DeleteMultipleRecordsMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -78,7 +76,6 @@ export interface PartialDeleteMultipleRecordsMutation {
  * The Mutation emitted when the App creates one or more {@link Record|Records}.
  *
  * @docsPath testing/mutations/CreateMultipleRecordsMutation
- * @hidden
  */
 export interface CreateMultipleRecordsMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -109,7 +106,6 @@ export interface PartialCreateMultipleRecordsMutation {
  * {@link GlobalConfig}.
  *
  * @docsPath testing/mutations/SetMultipleGlobalConfigPathsMutation
- * @hidden
  */
 export interface SetMultipleGlobalConfigPathsMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -133,7 +129,6 @@ export interface PartialSetMultipleGlobalConfigPathsMutation {
  * The Mutation emitted when the App creates a {@link Field}.
  *
  * @docsPath testing/mutations/CreateSingleFieldMutation
- * @hidden
  */
 export interface CreateSingleFieldMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -161,7 +156,6 @@ export interface PartialCreateSingleFieldMutation {
  * The Mutation emitted when the App modifies a {@link Field}.
  *
  * @docsPath testing/mutations/UpdateSingleFieldConfigMutation
- * @hidden
  */
 // note: while this accepts both type and options in config, we enforce liveapp-side that type
 // is not changed.
@@ -188,7 +182,6 @@ export interface PartialUpdateSingleFieldConfigMutation {
  * The Mutation emitted when the App creates a {@link Table}
  *
  * @docsPath testing/mutations/CreateSingleTableMutation
- * @hidden
  */
 export interface CreateSingleTableMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
@@ -221,7 +214,6 @@ export interface PartialCreateSingleTableMutation {
  * The Mutation emitted when the App modifies a {@link View}.
  *
  * @docsPath testing/mutations/UpdateViewMetadataMutation
- * @hidden
  */
 export interface UpdateViewMetadataMutation {
     /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
