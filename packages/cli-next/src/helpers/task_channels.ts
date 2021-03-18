@@ -17,6 +17,10 @@ interface PipeEnd<SendMessage, ReceiveMessage> {
     removeListener(event: 'message', handle: (message: ReceiveMessage) => void): this;
 }
 
+/**
+ * A communication link between two concurrent operations which may be
+ * executing in separate operating system processes.
+ */
 interface Channel<TX, RX> {
     send(message: TX): void;
     [Symbol.asyncIterator](): AsyncIterator<RX>;
@@ -178,6 +182,11 @@ class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
     }
 }
 
+/**
+ * An object that receives requests to invoke methods (by receiving "request"
+ * messages) and sends the result (by transmitting "response" and "error"
+ * messages).
+ */
 class ResponseChannelImplementation<
     Local extends {[key: string]: (...args: any[]) => Promise<any>}
 > {
@@ -296,8 +305,9 @@ type CallableKeys<T> = {
 export type ChannelMethods<T> = {[key in CallableKeys<T>]: T[key]};
 
 /**
- * An object that can request methods be called on the remote side and their
- * value eventually returned.
+ * An object that can request the remote invocation of methods (by transmitting
+ * "request" messages) and receive the result (by receiving "response" and
+ * "error" messages).
  */
 export interface RequestChannel<T extends ChannelMethods<T>> {
     requestAsync<
