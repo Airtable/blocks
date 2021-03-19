@@ -63,9 +63,8 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         this.system = createSystem();
     }
 
-    async _configureCompilerAsync({context, ...options}: Omit<WebpackSummaryOptions, 'assets'>) {
+    async _configureCompilerAsync(options: Omit<WebpackSummaryOptions, 'assets'>) {
         this.compilerConfig = createWebpackCompilerConfig({
-            context,
             ...options,
             assets: {
                 javascript: await createJavascriptAssetConfigAsync(this.system),
