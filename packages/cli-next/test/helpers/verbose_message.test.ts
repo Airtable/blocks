@@ -11,9 +11,13 @@ import {
     InitCommandMessageName,
     MessageInfo,
     MessageName,
+    RemoteCommandErrorName,
+    RemoteCommandMessageName,
     RemoteConfigErrorName,
     S3ApiErrorName,
     SystemApiKeyErrorName,
+    SystemConfigErrorName,
+    SystemExtraErrorName,
     UserConfigErrorName,
     VerboseMessage,
 } from '../../src/helpers/verbose_message';
@@ -124,6 +128,12 @@ function testMessages(): {
             },
         ],
 
+        [RemoteCommandErrorName.REMOTE_COMMAND_CONFIG_EXISTS]: [{remoteName: 'newremote'}],
+        [RemoteCommandMessageName.REMOTE_COMMAND_ADDED_NEW]: [
+            {remoteFile: '.block/newremote.remote.json'},
+            {remoteFile: '../.block/newremote.remote.json'},
+        ],
+
         [RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID]: [
             {message: 'should be a non-null object'},
             {
@@ -136,6 +146,11 @@ function testMessages(): {
         [S3ApiErrorName.S3_API_FAILED]: [{}],
 
         [SystemApiKeyErrorName.SYSTEM_API_KEY_NOT_FOUND]: [{}],
+
+        [SystemConfigErrorName.SYSTEM_CONFIG_INVALID_REMOTE_NAME]: [{name: '@remotename'}],
+        [SystemConfigErrorName.SYSTEM_CONFIG_APP_DIRECTORY_NOT_FOUND]: [{}],
+
+        [SystemExtraErrorName.SYSTEM_EXTRA_DIR_WITH_FILE_NOT_FOUND]: [{file: 'block.json'}],
 
         [UserConfigErrorName.USER_CONFIG_IS_NOT_VALID]: [
             {message: 'should be a non-null object'},

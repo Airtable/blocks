@@ -24,9 +24,28 @@ import {
     findAncestorDirIncludingNameAsync,
     mkdirpAsync,
     readJsonIfExistsAsync,
+    SystemExtraErrorName,
 } from './system_extra';
 import {System} from './system';
-import {UserError} from './error_utils';
+import {spawnUserError, UserError} from './error_utils';
+
+export enum SystemConfigErrorName {
+    SYSTEM_CONFIG_INVALID_REMOTE_NAME = 'systemConfigInvalidRemoteName',
+    SYSTEM_CONFIG_APP_DIRECTORY_NOT_FOUND = 'systemConfigAppDirectoryNotFound',
+}
+
+export interface SystemConfigInvalidRemoteNameError {
+    type: SystemConfigErrorName.SYSTEM_CONFIG_INVALID_REMOTE_NAME;
+    name: string;
+}
+
+export interface SystemConfigAppDirectoryNotFoundError {
+    type: SystemConfigErrorName.SYSTEM_CONFIG_APP_DIRECTORY_NOT_FOUND;
+}
+
+export type SystemConfigErrorInfo =
+    | SystemConfigInvalidRemoteNameError
+    | SystemConfigAppDirectoryNotFoundError;
 
 async function getUserPathAsync({
     path,
@@ -45,7 +64,16 @@ export async function findGlobalUserConfigAsync(sys: System): Promise<string> {
 }
 
 export async function findAppDirectoryAsync(sys: System, dirpath: string): Promise<string> {
-    return await findAncestorDirIncludingNameAsync(sys, dirpath, BLOCK_FILE_NAME);
+    try {
+        return await findAncestorDirIncludingNameAsync(sys, dirpath, BLOCK_FILE_NAME);
+    } catch (err) {
+        if (err?.__userInfo?.type === SystemExtraErrorName.SYSTEM_EXTRA_DIR_WITH_FILE_NOT_FOUND) {
+            throw spawnUserError({
+                type: SystemConfigErrorName.SYSTEM_CONFIG_APP_DIRECTORY_NOT_FOUND,
+            });
+        }
+        throw err;
+    }
 }
 
 /**
@@ -79,14 +107,16 @@ export async function findAppConfigPathAsync(
     return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
 }
 
-export async function findRemoteConfigPathAsync(
+export async function findRemoteConfigPathByNameAsync(
     sys: System,
-    workingdir = sys.process.cwd(),
-): Promise<string> {
-    const {path} = sys;
-
-    const appRoot = await findAppDirectoryAsync(sys, workingdir);
-    return path.join(appRoot, BLOCK_CONFIG_DIR_NAME, REMOTE_JSON_BASE_FILE_PATH);
+    workingdir?: string,
+    remoteName?: string,
+) {
+    const remoteFile = remoteName
+        ? `${remoteName}.${REMOTE_JSON_BASE_FILE_PATH}`
+        : REMOTE_JSON_BASE_FILE_PATH;
+    const appRoot = await findAppDirectoryAsync(sys, workingdir ?? sys.process.cwd());
+    return sys.path.join(appRoot, BLOCK_CONFIG_DIR_NAME, remoteFile);
 }
 
 export async function findAppDirectoryUserConfigAsync(
@@ -110,12 +140,11 @@ export async function readAppConfigAsync(
 
 export async function readRemoteConfigAsync(
     sys: System,
-    workingdir = sys.process.cwd(),
+    remotePath: string,
 ): Promise<Result<RemoteConfig, UserError<RemoteConfigErrorInfo>>> {
-    const file = await findRemoteConfigPathAsync(sys, workingdir);
-    const result = validateRemoteConfig(await readJsonIfExistsAsync(sys, file));
+    const result = validateRemoteConfig(await readJsonIfExistsAsync(sys, remotePath));
     if (result.err?.__userInfo?.type === RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID) {
-        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), file);
+        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), remotePath);
     }
     return result;
 }
@@ -150,7 +179,7 @@ async function writeUserConfigAsync(
     } = sys;
 
     await mkdirpAsync(sys, path.dirname(configPath));
-    await writeFileAsync(configPath, Buffer.from(JSON.stringify(config)));
+    await writeFileAsync(configPath, Buffer.from(JSON.stringify(config, null, '    ')));
 }
 
 export async function writeGlobalUserConfigAsync(sys: System, config: UserConfig): Promise<void> {
@@ -172,5 +201,19 @@ export async function writeRemoteConfigAsync(
     const {fs, path} = sys;
 
     await mkdirpAsync(sys, path.dirname(configPath));
-    await fs.writeFileAsync(configPath, Buffer.from(JSON.stringify(config)));
+    await fs.writeFileAsync(configPath, Buffer.from(JSON.stringify(config, null, '    ')));
+}
+
+const VALID_REMOTE_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+
+export function validateRemoteName(name: string): Result<string> {
+    if (VALID_REMOTE_NAME_REGEX.test(name)) {
+        return {value: name};
+    }
+    return {
+        err: spawnUserError({
+            type: SystemConfigErrorName.SYSTEM_CONFIG_INVALID_REMOTE_NAME,
+            name,
+        }),
+    };
 }

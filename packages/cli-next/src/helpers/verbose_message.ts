@@ -12,7 +12,14 @@ import {
     InitCommandErrorName,
     InitCommandErrorInfo,
     InitCommandMessageInfo,
-} from '../commands/init';
+} from './init_messages';
+
+import {
+    RemoteCommandErrorName,
+    RemoteCommandErrorInfo,
+    RemoteCommandMessageName,
+    RemoteCommandMessageInfo,
+} from './remote_messages';
 
 import * as renderMessage from './render_message';
 
@@ -23,6 +30,8 @@ import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
 import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
 import {SystemApiKeyErrorName, SystemApiKeyErrorInfo} from './system_api_key';
+import {SystemConfigErrorInfo, SystemConfigErrorName} from './system_config';
+import {SystemExtraErrorInfo, SystemExtraErrorName} from './system_extra';
 import {UserConfigErrorInfo, UserConfigErrorName} from './config_user';
 
 export {
@@ -38,12 +47,20 @@ export {
     InitCommandErrorName,
     InitCommandMessageInfo,
     InitCommandMessageName,
+    RemoteCommandErrorInfo,
+    RemoteCommandErrorName,
+    RemoteCommandMessageInfo,
+    RemoteCommandMessageName,
     RemoteConfigErrorInfo,
     RemoteConfigErrorName,
     S3ApiErrorInfo,
     S3ApiErrorName,
     SystemApiKeyErrorInfo,
     SystemApiKeyErrorName,
+    SystemConfigErrorInfo,
+    SystemConfigErrorName,
+    SystemExtraErrorInfo,
+    SystemExtraErrorName,
     UserConfigErrorInfo,
     UserConfigErrorName,
 };
@@ -57,9 +74,13 @@ export const MessageName = {
     ...FindPortErrorName,
     ...InitCommandErrorName,
     ...InitCommandMessageName,
+    ...RemoteCommandErrorName,
+    ...RemoteCommandMessageName,
     ...RemoteConfigErrorName,
     ...S3ApiErrorName,
     ...SystemApiKeyErrorName,
+    ...SystemConfigErrorName,
+    ...SystemExtraErrorName,
     ...UserConfigErrorName,
 } as const;
 
@@ -74,9 +95,13 @@ export type MessageInfo =
     | FindPortErrorInfo
     | InitCommandErrorInfo
     | InitCommandMessageInfo
+    | RemoteCommandErrorInfo
+    | RemoteCommandMessageInfo
     | RemoteConfigErrorInfo
     | S3ApiErrorInfo
     | SystemApiKeyErrorInfo
+    | SystemConfigErrorInfo
+    | SystemExtraErrorInfo
     | UserConfigErrorInfo;
 
 export type Messages = renderMessage.Messages<MessageInfo>;
@@ -165,6 +190,15 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
             return this.util.chalk`Installed @airtable/blocks dependency has no version.`;
         },
 
+        // remote_messages.ts
+        remoteCommandAddedNew({remoteFile}) {
+            return this.util.chalk`✅ Successfully added a new remote at ${remoteFile}!`;
+        },
+        remoteCommandConfigExists({remoteName}) {
+            return this.util.chalk`❌ The {bold ${remoteName}} remote already exists!
+If you want to update the remote, please run {cyan.bold block remove-remote ${remoteName}} and re-run {cyan.bold block add-remote}!`;
+        },
+
         // config_remote.ts
         remoteConfigIsNotValid({message, file}) {
             return this.util.chalk`❌ ${file ??
@@ -183,6 +217,21 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         systemApiKeyNotFound() {
             return this.util
                 .chalk`❌ An airtable api key is not set. Please use {cyan.bold block set-api-key} to set it.`;
+        },
+
+        // system_config.ts
+        systemConfigInvalidRemoteName() {
+            return this.util
+                .chalk`❌ Incorrect characters for the name! Only alphanumeric, -, or _ characters are allowed`;
+        },
+        systemConfigAppDirectoryNotFound() {
+            return this.util
+                .chalk`❌ Could not find the root of an Airtable project. Please run again from an Airtable project.`;
+        },
+
+        // system_extra.ts
+        systemExtraDirWithFileNotFound({file}) {
+            return this.util.chalk`❌ Could not find directory that includes a ${file} entry.`;
         },
 
         // config_user.ts

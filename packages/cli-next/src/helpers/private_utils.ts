@@ -22,3 +22,19 @@ export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
 export function cast<T>(x: T): T {
     return x;
 }
+
+/**
+ * Omit keys with values that are undefined.
+ *
+ * @param obj map of keys to undefined members and non-undefined values
+ * @returns map of keys only mapping to non-undefined values
+ */
+export function omitUndefinedValues<T>(obj: T): T {
+    const value = {} as T;
+    for (const key of Object.keys(obj) as (keyof T)[]) {
+        if (obj[key] !== undefined) {
+            value[key] = obj[key];
+        }
+    }
+    return value;
+}

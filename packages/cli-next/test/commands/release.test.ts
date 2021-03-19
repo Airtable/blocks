@@ -73,6 +73,17 @@ describe('release', () => {
 
     testReleaseCommand
         .withFiles({
+            '/home/projects/my-app/.block/newremote.remote.json': Buffer.from(
+                JSON.stringify({baseId: 'app123', blockId: 'blk5678'}),
+            ),
+        })
+        .command(['release', '--remote', 'newremote'])
+        .it('releases with newremote remote', ctx => {
+            expect(ctx.stderr).to.contain('/newremote.remote.json');
+        });
+
+    testReleaseCommand
+        .withFiles({
             '/home/projects/my-app/block.json': Buffer.from('{}'),
         })
         .command(['release'])

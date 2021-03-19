@@ -4,6 +4,8 @@ import _debug from 'debug';
 
 import cli from 'cli-ux';
 
+import AirtableCommand from '../helpers/airtable_command';
+
 import {
     BLOCK_CONFIG_DIR_NAME,
     BLOCK_FILE_NAME,
@@ -14,8 +16,6 @@ import {
     REMOTE_JSON_BASE_FILE_PATH,
     SDK_PACKAGE_NAME,
 } from '../settings';
-
-import AirtableCommand from '../helpers/airtable_command';
 
 import {
     copyAsync,
@@ -32,56 +32,11 @@ import * as appTemplateUtils from '../helpers/app_template_utils';
 import {System} from '../helpers/system';
 import {writeRemoteConfigAsync} from '../helpers/system_config';
 import * as npm from '../helpers/npm_async';
-
-export enum InitCommandMessageName {
-    INIT_COMMAND_READY = 'initCommandReady',
-}
-
-export enum InitCommandErrorName {
-    INIT_COMMAND_DIRECTORY_EXISTS = 'initCommandDirectoryExists',
-    INIT_COMMAND_TEMPLATE_MISSING = 'initCommandTemplateMissing',
-    INIT_COMMAND_TEMPLATE_NO_BLOCK_JSON = 'initCommandTemplateNoBlockJson',
-    INIT_COMMAND_UNKNOWN_ERROR = 'initCommandUnknownError',
-    INIT_COMMAND_INSTALLED_SDK_NO_VERSION = 'initCommandInstalledSdkNoVersion',
-}
-
-export interface InitCommandReadyInfo {
-    type: InitCommandMessageName.INIT_COMMAND_READY;
-    blockDirPath: string;
-    platform: string;
-}
-
-export type InitCommandMessageInfo = InitCommandReadyInfo;
-
-export interface InitCommandDirectoryExistsInfo {
-    type: InitCommandErrorName.INIT_COMMAND_DIRECTORY_EXISTS;
-    blockDirPath: string;
-}
-
-export interface InitCommandTemplateMissingInfo {
-    type: InitCommandErrorName.INIT_COMMAND_TEMPLATE_MISSING;
-    template: string;
-}
-
-export interface InitCommandTemplateNoBlockJsonInfo {
-    type: InitCommandErrorName.INIT_COMMAND_TEMPLATE_NO_BLOCK_JSON;
-    template: string;
-}
-
-export interface InitCommandUnknownErrorInfo {
-    type: InitCommandErrorName.INIT_COMMAND_UNKNOWN_ERROR;
-}
-
-export interface InitCommandInstalledSdkVersionInfo {
-    type: InitCommandErrorName.INIT_COMMAND_INSTALLED_SDK_NO_VERSION;
-}
-
-export type InitCommandErrorInfo =
-    | InitCommandDirectoryExistsInfo
-    | InitCommandTemplateMissingInfo
-    | InitCommandTemplateNoBlockJsonInfo
-    | InitCommandUnknownErrorInfo
-    | InitCommandInstalledSdkVersionInfo;
+import {
+    InitCommandErrorInfo,
+    InitCommandErrorName,
+    InitCommandMessageName,
+} from '../helpers/init_messages';
 
 const debug = _debug('block-cli:command:init');
 

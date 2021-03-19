@@ -3,6 +3,7 @@ import _debug from 'debug';
 
 import cli from 'cli-ux';
 
+import AirtableCommand from '../helpers/airtable_command';
 import {
     AIRTABLE_API_URL,
     APP_RELEASE_DIR,
@@ -11,13 +12,13 @@ import {
 } from '../settings';
 import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
 
-import AirtableCommand from '../helpers/airtable_command';
 import {
     findAppConfigPathAsync,
     findAppDirectoryAsync,
-    findRemoteConfigPathAsync,
+    findRemoteConfigPathByNameAsync,
     readAppConfigAsync,
     readRemoteConfigAsync,
+    validateRemoteName,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
@@ -28,6 +29,7 @@ import {readApiKeyAsync} from '../helpers/system_api_key';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
+import {unwrapResultFunctor} from '../helpers/result';
 
 const debug = _debug('block-cli:command:release');
 
@@ -57,10 +59,14 @@ export default class Release extends AirtableCommand {
 
     static flags = {
         help: commandFlags.help({char: 'h'}),
+        remote: commandFlags.string({
+            description: 'Configure which remote to use',
+            parse: unwrapResultFunctor(validateRemoteName),
+        }),
     };
 
     async runAsync() {
-        this.parse(Release);
+        const {flags} = this.parse(Release);
 
         const sys = this.system;
 
@@ -79,19 +85,18 @@ export default class Release extends AirtableCommand {
             ),
         );
 
-        const remoteConfigResult = await readRemoteConfigAsync(sys);
+        const remoteConfigPath = await findRemoteConfigPathByNameAsync(
+            sys,
+            sys.process.cwd(),
+            flags.remote,
+        );
+        const remoteConfigResult = await readRemoteConfigAsync(sys, remoteConfigPath);
         if (remoteConfigResult.err) {
             this.error(remoteConfigResult.err);
         }
         const remoteConfig = remoteConfigResult.value;
         const {baseId, blockId} = remoteConfig;
-        debug(
-            'loaded remote config at %s',
-            sys.path.relative(
-                sys.process.cwd(),
-                await findRemoteConfigPathAsync(sys, sys.process.cwd()),
-            ),
-        );
+        debug('loaded remote config at %s', sys.path.relative(sys.process.cwd(), remoteConfigPath));
 
         const apiKeyResult = await readApiKeyAsync(sys, remoteConfig.apiKeyName);
         if (apiKeyResult.err) {

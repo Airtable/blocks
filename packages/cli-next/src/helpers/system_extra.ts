@@ -1,7 +1,18 @@
 import _debug from 'debug';
-import {spawnUnexpectedError} from './error_utils';
+import {spawnUnexpectedError, spawnUserError} from './error_utils';
 
 import {System} from './system';
+
+export enum SystemExtraErrorName {
+    SYSTEM_EXTRA_DIR_WITH_FILE_NOT_FOUND = 'systemExtraDirWithFileNotFound',
+}
+
+export interface SystemExtraDirWithFileNotFoundError {
+    type: SystemExtraErrorName.SYSTEM_EXTRA_DIR_WITH_FILE_NOT_FOUND;
+    file: string;
+}
+
+export type SystemExtraErrorInfo = SystemExtraDirWithFileNotFoundError;
 
 const debug = _debug('block-cli:system');
 
@@ -22,7 +33,10 @@ export async function findAncestorDirIncludingNameAsync(
         }
         checkDirectory = path.dirname(checkDirectory);
     } while (checkDirectory !== pathRoot);
-    throw spawnUnexpectedError('Could not find directory that includes a %s entry.', name);
+    throw spawnUserError({
+        type: SystemExtraErrorName.SYSTEM_EXTRA_DIR_WITH_FILE_NOT_FOUND,
+        file: name,
+    });
 }
 
 export async function copyAsync(sys: System, sourcePath: string, destinationPath: string) {

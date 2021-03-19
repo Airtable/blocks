@@ -2,11 +2,11 @@ import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 import clipboardy from 'clipboardy';
 
+import AirtableCommand from '../helpers/airtable_command';
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync, RunTaskProducer} from '../manager/run';
 import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
 
-import AirtableCommand from '../helpers/airtable_command';
 import {findPortAsync} from '../helpers/find_port_async';
 import {
     createServerAsync,

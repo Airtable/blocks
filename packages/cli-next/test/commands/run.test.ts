@@ -129,7 +129,7 @@ describe('run', () => {
             '/home/projects/my-app/block.json': null,
         })
         .command(['run'])
-        .catch('Could not find directory that includes a block.json entry.')
+        .catch(/systemConfigAppDirectoryNotFound/)
         .it('errors when it cannot find the application root');
 
     testRunCommand

@@ -70,6 +70,15 @@ exports[`verbose_message formats initCommandTemplateNoBlockJson 1`] = `"https://
 
 exports[`verbose_message formats initCommandUnknownError 1`] = `"❌ Something failed! Cleaning up..."`;
 
+exports[`verbose_message formats remoteCommandAddedNew 1`] = `"✅ Successfully added a new remote at .block/newremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandAddedNew 2`] = `"✅ Successfully added a new remote at ../.block/newremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandConfigExists 1`] = `
+"❌ The [1mnewremote[22m remote already exists!
+If you want to update the remote, please run [36m[1mblock remove-remote newremote[22m[39m and re-run [36m[1mblock add-remote[22m[39m!"
+`;
+
 exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
 
 exports[`verbose_message formats remoteConfigIsNotValid 2`] = `"❌ ../.block/remote.json should be a non-null object"`;
@@ -79,6 +88,12 @@ exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not uploa
 exports[`verbose_message formats s3ApiFailed 1`] = `"❌ Could not upload bundle. Failed to upload."`;
 
 exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use [36m[1mblock set-api-key[22m[39m to set it."`;
+
+exports[`verbose_message formats systemConfigAppDirectoryNotFound 1`] = `"❌ Could not find the root of an Airtable project. Please run again from an Airtable project."`;
+
+exports[`verbose_message formats systemConfigInvalidRemoteName 1`] = `"❌ Incorrect characters for the name! Only alphanumeric, -, or _ characters are allowed"`;
+
+exports[`verbose_message formats systemExtraDirWithFileNotFound 1`] = `"❌ Could not find directory that includes a block.json entry."`;
 
 exports[`verbose_message formats userConfigIsNotValid 1`] = `"❌ ~/.config/.airtableblocksrc.json should be a non-null object"`;
 
