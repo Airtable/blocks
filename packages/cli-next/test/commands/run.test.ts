@@ -73,10 +73,23 @@ describe('run', () => {
     testRunCommand
         .answer('Server listening', {signal: 'SIGINT'})
         .command(['run'])
-        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
         .it('runs', ctx => {
             expect(ctx.stdout).to.contain('Server listening');
         });
+
+    testRunCommand
+        .stubDirectoryRemoval()
+        .answer('Server listening', {signal: 'SIGINT'})
+        .command(['run'])
+        .filePresence('/home/projects/my-app/.tmp/index.js', true)
+        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
+        .it('creates an entry point');
+
+    testRunCommand
+        .answer('Server listening', {signal: 'SIGINT'})
+        .command(['run'])
+        .filePresence('/home/projects/my-app/.tmp/index.js', false)
+        .it('removes the entry point following successful shutdown');
 
     testRunCommand
         .answer('Server listening', {signal: 'SIGINT'})

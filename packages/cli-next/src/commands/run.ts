@@ -25,7 +25,7 @@ import {
     readAppConfigAsync,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {mkdirpAsync} from '../helpers/system_extra';
+import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
 import {spawnUnexpectedError} from '../helpers/error_utils';
 
@@ -75,6 +75,11 @@ class RunConsumer implements RunTaskConsumer {
 export default class Run extends AirtableCommand {
     private _task?: RunTaskConsumer;
     private _devServer?: DevelopmentProxyServerInterface;
+    /**
+     * A file system path describing the location where a temporary directory
+     * should be created to store the generated file(s).
+     */
+    private _appTemporaryPath?: string;
 
     static description = 'run the app locally';
 
@@ -173,12 +178,12 @@ export default class Run extends AirtableCommand {
         debug('server bound to (http) %s and (https) %s', serverPort, secureServerPort);
 
         // pick a temporary directory to write the entry point to
-        const appTemporaryPath = this.system.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
-        await mkdirpAsync(this.system, appTemporaryPath);
+        this._appTemporaryPath = this.system.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
+        await mkdirpAsync(this.system, this._appTemporaryPath);
         debug('created temporary directory');
 
         // write entry point to disk
-        const entryPointPath = this.system.path.join(appTemporaryPath, 'index.js');
+        const entryPointPath = this.system.path.join(this._appTemporaryPath, 'index.js');
         const userEntryPoint = this.system.path.join(appRootPath, appConfig.frontendEntry);
         const entryPoint = await renderEntryPointAsync(this.system, {
             mode: 'development',
@@ -230,6 +235,7 @@ export default class Run extends AirtableCommand {
 
     async finallyAsync() {
         await Promise.all([
+            this._appTemporaryPath ? rmdirAsync(this.system, this._appTemporaryPath) : null,
             this._task ? this._task.teardownAsync() : null,
             this._devServer ? this._devServer.closeAsync() : null,
         ]);

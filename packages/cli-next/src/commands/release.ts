@@ -20,7 +20,7 @@ import {
     readRemoteConfigAsync,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {mkdirpAsync} from '../helpers/system_extra';
+import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {AirtableApi} from '../helpers/airtable_api';
 import {S3Api} from '../helpers/s3_api';
 import {UploadRelease} from '../helpers/upload_release';
@@ -63,6 +63,11 @@ class ReleaseConsumer implements ReleaseTaskConsumer {
 export default class Release extends AirtableCommand {
     private _task?: ReleaseTaskConsumer;
     private _teardownAction?: (() => void) | null;
+    /**
+     * A file system path describing the location where a temporary directory
+     * should be created to store the generated file(s).
+     */
+    private _appTemporaryPath?: string;
 
     static description = 'release a build to an Airtable base';
 
@@ -140,12 +145,12 @@ export default class Release extends AirtableCommand {
         debug('initialized task');
 
         // pick a temporary directory to write the entry point to
-        const appTemporaryPath = sys.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
-        await mkdirpAsync(sys, appTemporaryPath);
+        this._appTemporaryPath = sys.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
+        await mkdirpAsync(sys, this._appTemporaryPath);
         debug('created temporary directory');
 
         // pick a output build directory to write the bundle to
-        const appBuildPath = sys.path.join(appTemporaryPath, APP_RELEASE_DIR);
+        const appBuildPath = sys.path.join(this._appTemporaryPath, APP_RELEASE_DIR);
         await mkdirpAsync(sys, appBuildPath);
         debug('created build directory');
 
@@ -156,7 +161,7 @@ export default class Release extends AirtableCommand {
         };
 
         // write entry point to disk
-        const entryPointPath = sys.path.join(appTemporaryPath, 'index.js');
+        const entryPointPath = sys.path.join(this._appTemporaryPath, 'index.js');
         const userEntryPoint = sys.path.join(appRootPath, appConfig.frontendEntry);
         const entryPoint = await renderEntryPointAsync(sys, {
             mode: 'production',
@@ -205,6 +210,7 @@ export default class Release extends AirtableCommand {
 
     async finallyAsync() {
         await Promise.all([
+            this._appTemporaryPath ? rmdirAsync(this.system, this._appTemporaryPath) : null,
             this._task ? this._task.teardownAsync() : null,
             this._teardownAction ? this._teardownAction() : null,
         ]);

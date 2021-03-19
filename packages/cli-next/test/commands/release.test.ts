@@ -49,12 +49,21 @@ describe('release', () => {
             '/home/projects/my-app/index.js': Buffer.from('// hello world'),
         });
 
+    testReleaseCommand.command(['release']).it('releases', ctx => {
+        expect(ctx.stderr).to.contain('Releasing');
+    });
+
+    testReleaseCommand
+        .stubDirectoryRemoval()
+        .command(['release'])
+        .filePresence('/home/projects/my-app/.tmp/index.js', true)
+        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
+        .it('creates an entry point');
+
     testReleaseCommand
         .command(['release'])
-        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
-        .it('releases', ctx => {
-            expect(ctx.stderr).to.contain('Releasing');
-        });
+        .filePresence('/home/projects/my-app/.tmp/index.js', false)
+        .it('removes the entry point following completion');
 
     testReleaseCommand
         .withFiles({

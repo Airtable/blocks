@@ -64,7 +64,9 @@ export const test = _test
     .register('wroteJsonFile', wroteJsonFile)
     .register('wroteUserConfigFile', wroteUserConfigFile)
     .register('answer', answer)
-    .register('prepareFixture', prepareFixtureTempCopy);
+    .register('prepareFixture', prepareFixtureTempCopy)
+    .register('stubDirectoryRemoval', stubDirectoryRemoval)
+    .register('filePresence', filePresence);
 
 async function initMockSystemAsync(ctx: {
     config: Config.IConfig & Partial<ConfigSystem & ConfigMessages & ConfigChalk>;
@@ -157,6 +159,28 @@ function wroteFile(
         run(ctx: {system: System; systemVolume: SystemVolume}) {
             const filePath = typeof path === 'string' ? path : path(ctx.system);
             expectContent(ctx.systemVolume.readFileSync(filePath, 'buffer') as Buffer);
+        },
+    };
+}
+
+/**
+ * Configure the simulated system to ignore requests to remove directories.
+ */
+function stubDirectoryRemoval() {
+    return {
+        run({system}) {
+            system.fs.rmdirAsync = () => Promise.resolve();
+        },
+    };
+}
+
+/**
+ * Assert that a file is present or absent.
+ */
+function filePresence(path: string, isPresent: boolean) {
+    return {
+        run(ctx: {systemVolume: SystemVolume}) {
+            expect(ctx.systemVolume.existsSync(path)).equal(isPresent);
         },
     };
 }
