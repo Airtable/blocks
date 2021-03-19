@@ -18,10 +18,6 @@ function has<O, K extends keyof O>(o: O, key: K): o is Defines<O, K> {
     return o[key] !== undefined;
 }
 
-export interface UpdatableTask {
-    update(message: any): void;
-}
-
 export async function mainAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
     Consumer extends ChannelMethods<Consumer> & TeardownRequest
