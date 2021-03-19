@@ -4,7 +4,7 @@ import {invariant} from './error_utils';
 import {HandshakeRequest, TeardownRequest} from './task';
 import {
     ChannelMethods,
-    createPipeChannel,
+    createEventEmitterChannel,
     createRequestChannel,
     createResponseChannel,
     RequestChannel,
@@ -24,7 +24,7 @@ export async function mainAsync<
 >(entryPoint: (producer: RequestChannel<Producer>) => Promise<Consumer> | Consumer) {
     debug('starting task host');
     invariant(has(process, 'send'), 'This process must be a forked child process.');
-    const channel = createPipeChannel(process);
+    const channel = createEventEmitterChannel(process);
 
     const requestChannel = createRequestChannel<Producer>(channel);
 

@@ -9,7 +9,7 @@ import {Result} from './result';
 
 const debug = _debug('block-cli:task:ipc:' + (process.send ? 'down' : 'up'));
 
-interface PipeEnd<SendMessage, ReceiveMessage> {
+interface EventEmitterTransport<SendMessage, ReceiveMessage> {
     send(message: SendMessage): void;
     on(event: 'close', handle: () => void): this;
     on(event: 'message', handle: (message: ReceiveMessage) => void): this;
@@ -80,17 +80,17 @@ class QueueAsyncIterable<T> {
     }
 }
 
-class PipeChannelImplementation<TX, RX> implements Channel<TX, RX>, Closeable {
-    pipe: PipeEnd<TX, RX>;
+class EventEmitterChannelImplementation<TX, RX> implements Channel<TX, RX>, Closeable {
+    transport: EventEmitterTransport<TX, RX>;
     closedDefer = new Deferred<void>();
 
-    constructor(pipe: PipeEnd<TX, RX>) {
-        this.pipe = pipe;
+    constructor(transport: EventEmitterTransport<TX, RX>) {
+        this.transport = transport;
     }
 
     send(message: TX): void {
         debug('sending message', message);
-        this.pipe.send(message);
+        this.transport.send(message);
     }
 
     close() {
@@ -110,14 +110,14 @@ class PipeChannelImplementation<TX, RX> implements Channel<TX, RX>, Closeable {
         };
 
         try {
-            this.pipe.on('close', closeHandle);
-            this.pipe.on('message', handle);
+            this.transport.on('close', closeHandle);
+            this.transport.on('message', handle);
             this.closedDefer.promise.then(closeHandle);
 
             yield* receiveQueue;
         } finally {
-            this.pipe.removeListener('close', closeHandle);
-            this.pipe.removeListener('message', handle);
+            this.transport.removeListener('close', closeHandle);
+            this.transport.removeListener('message', handle);
         }
     }
 }
@@ -247,10 +247,10 @@ class ResponseChannelImplementation<
     }
 }
 
-export function createPipeChannel<TX = any, RX = any>(
-    pipe: PipeEnd<TX, RX>,
+export function createEventEmitterChannel<TX = any, RX = any>(
+    transport: EventEmitterTransport<TX, RX>,
 ): Channel<TX, RX> & Closeable {
-    return new PipeChannelImplementation(pipe);
+    return new EventEmitterChannelImplementation(transport);
 }
 
 export function createRequestChannel<H extends ChannelMethods<H>>(

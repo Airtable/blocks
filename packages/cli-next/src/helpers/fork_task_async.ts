@@ -3,7 +3,7 @@ import {System} from './system';
 import {HandshakeRequest} from './task';
 import {
     ChannelMethods,
-    createPipeChannel,
+    createEventEmitterChannel,
     createRequestChannel,
     createResponseChannel,
 } from './task_channels';
@@ -13,7 +13,7 @@ export async function forkTaskAsync<
     Consumer extends ChannelMethods<Consumer>
 >(sys: System, producer: Producer, entryPath: string) {
     const taskHost = fork(sys.path.join(__dirname, 'task_tshost.js'), [entryPath]);
-    const channel = createPipeChannel(taskHost);
+    const channel = createEventEmitterChannel(taskHost);
 
     const requestChannel = createRequestChannel<Consumer>(channel);
     createResponseChannel(channel, producer);
