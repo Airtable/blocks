@@ -61,6 +61,12 @@ describe('run bundler', () => {
         .it('bundles empty app to disk');
 
     testBundler
+        .prepareFixture('bundler_src_invalid_js')
+        .runBundlerPass()
+        .catch(/SyntaxError/)
+        .it('reports error');
+
+    testBundler
         .prepareFixture('bundler_react_tsx')
         .runBundlerServer()
         .readServerBundle()

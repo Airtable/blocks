@@ -44,7 +44,11 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         await this._configureCompilerAsync(bundlingOptions);
         invariant(this.compiler, 'compiler must be configured to finish bundling');
 
-        await promisify(this.compiler.run.bind(this.compiler))();
+        const stats = await promisify(this.compiler.run.bind(this.compiler))();
+
+        if (stats?.hasErrors()) {
+            throw stats.toJson().errors[0];
+        }
     }
 
     async startDevServerAsync({

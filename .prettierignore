@@ -7,3 +7,4 @@
 /docs/public/
 /examples/*/build
 /packages/blocks-docs/docs.json
+/packages/cli-next/test/fixtures/
