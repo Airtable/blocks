@@ -50,6 +50,18 @@ describe('release', () => {
     });
 
     testReleaseCommand
+        .stub(releaseModule, 'createReleaseTaskAsync', async (...args: any) => {
+            await stubCreateReleaseTaskAsync(...args);
+            return {
+                bundleAsync: () => Promise.reject(new Error('Bundle failure')),
+                async teardownAsync() {},
+            };
+        })
+        .command(['release'])
+        .catch('Bundle failure')
+        .it('reports bundling failures');
+
+    testReleaseCommand
         .stubDirectoryRemoval()
         .command(['release'])
         .filePresence('/home/projects/my-app/.tmp/index.js', true)
