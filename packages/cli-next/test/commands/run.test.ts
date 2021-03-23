@@ -117,11 +117,10 @@ describe('run', () => {
 
     testRunCommand
         .answer('Server listening', {signal: 'SIGINT'})
-        .command(['run', '--port=1234', '--bundlerPort=2345'])
+        .command(['run', '--port=1234'])
         .it('uses ports provided in flags', ctx => {
             expect(ctx.stderr).to.contain('(https) 1234');
             expect(ctx.stderr).to.contain('(http) 1235');
-            expect(ctx.stderr).to.contain('(http) 2345');
         });
 
     testRunCommand

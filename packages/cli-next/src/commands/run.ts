@@ -67,11 +67,6 @@ export default class Run extends AirtableCommand {
                 'HTTPS port the server listens on. The server will listen for HTTP on PORT + 1.',
             default: 9000,
         }),
-
-        bundlerPort: commandFlags.integer({
-            description: "Port the bundler's server listens on.",
-            default: 9090,
-        }),
     };
 
     async runAsync() {
@@ -180,7 +175,8 @@ export default class Run extends AirtableCommand {
         debug('created task');
 
         // listen for port from bundler
-        const bundlerPort = await findPortAsync(flags.bundlerPort);
+        // `findPortAsync` selects a random port when invoked with `0`
+        const bundlerPort = await findPortAsync(0);
         await task.startDevServerAsync({
             port: bundlerPort,
             liveReload: {
