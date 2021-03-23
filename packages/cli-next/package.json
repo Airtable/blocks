@@ -23,6 +23,7 @@
         "babel-loader": "^8.2.2",
         "chalk": "^4.1.0",
         "cli-ux": "^5.5.1",
+        "clipboardy": "^2.3.0",
         "cross-spawn": "^7.0.3",
         "debug": "^4.2.0",
         "express": "^4.17.1",

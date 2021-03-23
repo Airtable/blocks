@@ -1,5 +1,6 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
+import clipboardy from 'clipboardy';
 
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
 import {createRunTaskAsync, RunTaskProducer} from '../manager/run';
@@ -199,6 +200,9 @@ export default class Run extends AirtableCommand {
         debug('proxying to frontend bundler (http) %s', bundlerPort);
 
         this.log(`Server listening at https://localhost:${secureServerPort}`);
+
+        await clipboardy.write(`https://localhost:${secureServerPort}`);
+        this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
 
         await new Promise<void>(resolve => {
             process.once('SIGINT', () => {
