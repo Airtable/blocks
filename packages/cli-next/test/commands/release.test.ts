@@ -129,12 +129,10 @@ function createStubs() {
             await producer.readyAsync();
         })();
 
-        let _outputPath: string;
         return {
             async bundleAsync({outputPath}) {
-                _outputPath = outputPath;
                 await sys.fs.writeFileAsync(
-                    sys.path.join(_outputPath, BUNDLE_FILE_NAME),
+                    sys.path.join(outputPath, BUNDLE_FILE_NAME),
                     '// bundled source',
                 );
             },
