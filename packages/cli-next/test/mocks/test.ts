@@ -1,7 +1,7 @@
 import _debug from 'debug';
 import {Volume} from 'memfs';
 import chai from 'chai';
-import {jestSnapshotPlugin} from 'mocha-chai-jest-snapshot';
+import {initSnapshotManager} from 'mocha-chai-jest-snapshot';
 import chalk from 'chalk';
 
 import * as Config from '@oclif/config';
@@ -31,7 +31,7 @@ type SystemVolume = ConstructorReturnType<typeof Volume>;
 
 export const debug = _debug('block-cli:test');
 
-export const expect = chai.use(jestSnapshotPlugin()).expect;
+export const expect = chai.use(initSnapshotManager).expect;
 
 export const test = _test
     .register('_fancyTestContextTestWorkaround', () => {
@@ -168,7 +168,7 @@ function wroteFile(
  */
 function stubDirectoryRemoval() {
     return {
-        run({system}) {
+        run({system}: {system: System}) {
             system.fs.rmdirAsync = () => Promise.resolve();
         },
     };

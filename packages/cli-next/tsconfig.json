@@ -1,31 +1,9 @@
 {
+    "extends": "./tsconfig-common",
     "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "importHelpers": true,
-        "target": "es2017",
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "outDir": "lib",
-        "rootDir": "src",
-
-        "allowJs": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "strictBindCallApply": true,
-        "strictPropertyInitialization": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "jsx": "react",
-
-        // Some dependencies do not depend on up to date @types definition
-        // packages for versions of packages they use and mismatch with other
-        // dependencies. Due to normal hoisting (not workspace hoisting), errors
-        // are produced in a few libraries.
-        "skipLibCheck": true
+        "rootDir": ".",
+        "noEmit": true
     },
-    "include": ["src/**/*"]
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["test/fixtures/**/*"]
 }

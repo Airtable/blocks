@@ -30,9 +30,6 @@ describe('UpdateRecordsApp', () => {
     async function clickUpdate(button) {
         await act(async () => {
             userEvent.click(button);
-            if (!button.disabled) {
-                await waitFor(() => expect(button.disabled).toBe(true));
-            }
             await waitFor(() => expect(button.disabled).toBe(false), {timeout: 3000});
         });
     }

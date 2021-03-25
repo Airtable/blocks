@@ -1,0 +1,31 @@
+// TypeScript must be configured slightly differently for use in development
+// contexts and for use during release. This file describes the configuration
+// settings that are common to both contexts; it is used indirectly by both via
+// the "extends" setting in dedicated configuration files.
+{
+    "compilerOptions": {
+        "composite": true,
+        "importHelpers": true,
+        "target": "es2017",
+        "module": "commonjs",
+        "esModuleInterop": true,
+
+        "allowJs": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "jsx": "react",
+
+        // Some dependencies do not depend on up to date @types definition
+        // packages for versions of packages they use and mismatch with other
+        // dependencies. Due to normal hoisting (not workspace hoisting), errors
+        // are produced in a few libraries.
+        "skipLibCheck": true
+    }
+}
