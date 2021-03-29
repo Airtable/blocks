@@ -1,9 +1,0 @@
-{
-    "extends": "./tsconfig-common",
-    "compilerOptions": {
-        "declaration": true,
-        "outDir": "lib",
-        "rootDir": "src"
-    },
-    "include": ["src/**/*"]
-}

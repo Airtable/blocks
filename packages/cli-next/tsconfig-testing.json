@@ -1,0 +1,51 @@
+// This file configures the TypeScript compiler to verify types for the source
+// code of both the application and the automated tests. It is distinct from
+// the configuration used when compiling the project for release (see
+// `tsconfig.json`) so that the published output can be optimized.
+//
+// The two configuration files share many of the same settings, and this parity
+// should be preserved in the future. Although the TypeScript compiler offers
+// a setting called "extends" as a way to reduce duplication, it cannot be used
+// due to a bug in the OCLIF tool:
+//
+// > tsconfig "extends" entry not respected
+// > https://github.com/oclif/oclif/issues/488
+//
+// To assist maintenance of the duplication, both files are annotated with
+// comments delimiting the settings which make them distinct.
+{
+    "compilerOptions": {
+        // begin distinctive configuration for test environment
+        "rootDir": ".",
+        "noEmit": true,
+        // end distinctive configuration for test environment
+
+        "composite": true,
+        "importHelpers": true,
+        "target": "es2017",
+        "module": "commonjs",
+        "esModuleInterop": true,
+
+        "allowJs": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "jsx": "react",
+
+        // Some dependencies do not depend on up to date @types definition
+        // packages for versions of packages they use and mismatch with other
+        // dependencies. Due to normal hoisting (not workspace hoisting), errors
+        // are produced in a few libraries.
+        "skipLibCheck": true
+    },
+    // begin distinctive configuration for test environment
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["test/fixtures/**/*"]
+    // end distinctive configuration for test environment
+}
