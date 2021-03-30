@@ -7,3 +7,5 @@ function ReactApp() {
 export function Root() {
     return <ReactApp />;
 }
+
+initialzeApp(Root());

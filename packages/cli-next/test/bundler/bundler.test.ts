@@ -47,6 +47,24 @@ describe('run bundler', () => {
         .it('bundles react components to disk');
 
     testBundler
+        .prepareFixture('bundler_react_jsx')
+        .add('compilerMode', () => 'production')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('Hello World')
+        .bundleExcludes('ReactApp')
+        .it('bundles react components with server (production mode)');
+
+    testBundler
+        .prepareFixture('bundler_react_jsx')
+        .add('compilerMode', () => 'production')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('Hello World')
+        .bundleExcludes('ReactApp')
+        .it('bundles react components to disk (production mode)');
+
+    testBundler
         .prepareFixture('bundler_src_index_js')
         .runBundlerServer()
         .readServerBundle()
@@ -116,12 +134,13 @@ function runBundlerServerOnFixture() {
             realSystem: System;
             bundlerConsumer?: RunTaskConsumer;
             bundlerPort?: number;
+            compilerMode?: 'development' | 'production';
         }) {
             const bundlerPort = (ctx.bundlerPort = await findPortAsync(0));
             const consumer = (ctx.bundlerConsumer = await run());
             await consumer.startDevServerAsync({
                 port: bundlerPort,
-                mode: 'development',
+                mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
                 entry: ctx.realSystem.path.join(ctx.tmpPath, 'index'),
 
@@ -153,10 +172,11 @@ function runBundlerPassOnFixture() {
             tmpPath: string;
             realSystem: System;
             bundlerConsumer?: ReleaseTaskConsumer;
+            compilerMode?: 'development' | 'production';
         }) {
             const consumer = (ctx.bundlerConsumer = await run());
             await consumer.bundleAsync({
-                mode: 'development',
+                mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
                 entry: ctx.realSystem.path.join(ctx.tmpPath, 'index'),
                 outputPath: ctx.realSystem.path.join(ctx.tmpPath, 'dist'),

@@ -77,8 +77,15 @@ export function createWebpackCompilerConfig({
         javascript: {options: babelOptions},
     },
 }: WebpackSummaryOptions): Configuration {
+    let devtool;
+
+    if (mode === 'development') {
+        devtool = 'inline-cheap-module-source-map';
+    }
+
     return {
         mode,
+        devtool,
         context,
         entry: injectLiveReloadClient(entry, liveReload),
         output: {
