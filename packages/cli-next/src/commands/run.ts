@@ -197,14 +197,20 @@ export default class Run extends AirtableCommand {
 
         this.log(`Server listening at https://localhost:${secureServerPort}`);
 
-        await clipboardy.write(`https://localhost:${secureServerPort}`);
-        this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
-
-        await new Promise<void>(resolve => {
+        // Bind to the signal prior to writing to the system clipboard. This
+        // ensures that the system receives signals that are sent while it is
+        // writing to the clipboard (a case which is unlikely in real-world
+        // settings but highly likely during automated testing).
+        const sigintPromise = new Promise<void>(resolve => {
             process.once('SIGINT', () => {
                 resolve();
             });
         });
+
+        await clipboardy.write(`https://localhost:${secureServerPort}`);
+        this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
+
+        await sigintPromise;
     }
 
     async finallyAsync() {
