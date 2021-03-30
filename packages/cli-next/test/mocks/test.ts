@@ -59,6 +59,7 @@ export const test = _test
     ._fancyTestContextTestWorkaround()
     .do(initMockSystemAsync)
     .register('withFiles', withFiles)
+    .register('withJSON', withJSON)
     .register('enableDebug', enableDebug)
     .register('wroteFile', wroteFile)
     .register('wroteJsonFile', wroteJsonFile)
@@ -119,6 +120,15 @@ function withFiles(files: {[path: string]: Buffer | null}) {
             }
         },
     });
+}
+
+function withJSON<T>(data: {[path: string]: T}) {
+    return withFiles(
+        Object.entries(data).reduce((carry, [key, value]) => {
+            carry[key] = Buffer.from(JSON.stringify(value));
+            return carry;
+        }, {} as {[key in keyof typeof data]: Buffer}),
+    );
 }
 
 function enableDebug(pattern: string) {

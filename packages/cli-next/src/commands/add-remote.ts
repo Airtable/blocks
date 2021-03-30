@@ -20,7 +20,7 @@ import {omitUndefinedValues} from '../helpers/private_utils';
 const debug = _debug('block-cli:command:add-remote');
 
 export default class AddRemote extends AirtableCommand {
-    static description = 'Add a new remote configuration';
+    static description = '[Beta] Add a new remote configuration';
 
     static examples = [
         `$ block add-remote app12345678/blk12345678 new-remote
@@ -62,6 +62,8 @@ export default class AddRemote extends AirtableCommand {
             },
             flags: {server, 'api-key-name': apiKeyName},
         } = this.parse(AddRemote);
+
+        this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
 
         // load app config
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());

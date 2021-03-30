@@ -30,6 +30,7 @@ import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
+import {RemoteCommandMessageName} from '../helpers/remote_messages';
 
 const debug = _debug('block-cli:command:release');
 
@@ -60,7 +61,7 @@ export default class Release extends AirtableCommand {
     static flags = {
         help: commandFlags.help({char: 'h'}),
         remote: commandFlags.string({
-            description: 'Configure which remote to use',
+            description: '[Beta] Configure which remote to use',
             parse: unwrapResultFunctor(validateRemoteName),
         }),
     };
@@ -84,6 +85,10 @@ export default class Release extends AirtableCommand {
                 await findAppConfigPathAsync(sys, sys.process.cwd()),
             ),
         );
+
+        if (flags.remote) {
+            this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
+        }
 
         const remoteConfigPath = await findRemoteConfigPathByNameAsync(
             sys,

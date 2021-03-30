@@ -129,9 +129,16 @@ function testMessages(): {
         ],
 
         [RemoteCommandErrorName.REMOTE_COMMAND_CONFIG_EXISTS]: [{remoteName: 'newremote'}],
+        [RemoteCommandErrorName.REMOTE_COMMAND_CONFIG_MISSING]: [{remoteName: 'oldremote'}],
+        [RemoteCommandErrorName.REMOTE_COMMAND_NO_CONFIGS]: [{}],
         [RemoteCommandMessageName.REMOTE_COMMAND_ADDED_NEW]: [
             {remoteFile: '.block/newremote.remote.json'},
             {remoteFile: '../.block/newremote.remote.json'},
+        ],
+        [RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING]: [{}],
+        [RemoteCommandMessageName.REMOTE_COMMAND_REMOVED_EXISTING]: [
+            {remoteFile: '.block/oldremote.remote.json'},
+            {remoteFile: '../.block/oldremote.remote.json'},
         ],
 
         [RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID]: [

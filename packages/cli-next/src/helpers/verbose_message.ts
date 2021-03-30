@@ -194,9 +194,22 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         remoteCommandAddedNew({remoteFile}) {
             return this.util.chalk`✅ Successfully added a new remote at ${remoteFile}!`;
         },
+        remoteCommandBetaWarning() {
+            return this.util.chalk`{yellowBright Note:} The remotes feature is still in beta.\n`;
+        },
         remoteCommandConfigExists({remoteName}) {
             return this.util.chalk`❌ The {bold ${remoteName}} remote already exists!
 If you want to update the remote, please run {cyan.bold block remove-remote ${remoteName}} and re-run {cyan.bold block add-remote}!`;
+        },
+        remoteCommandConfigMissing({remoteName}) {
+            return this.util.chalk`❌ The {bold ${remoteName}} remote does not exist.`;
+        },
+        remoteCommandNoConfigs() {
+            return this.util
+                .chalk`❌ This project has no remotes. Use {bold block add-remote} to add one.`;
+        },
+        remoteCommandRemovedExisting({remoteFile}) {
+            return this.util.chalk`✅ Successfully removed the remote from ${remoteFile}!`;
         },
 
         // config_remote.ts

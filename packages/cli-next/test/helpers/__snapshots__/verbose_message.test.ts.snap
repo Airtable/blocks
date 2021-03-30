@@ -74,10 +74,23 @@ exports[`verbose_message formats remoteCommandAddedNew 1`] = `"✅ Successfully 
 
 exports[`verbose_message formats remoteCommandAddedNew 2`] = `"✅ Successfully added a new remote at ../.block/newremote.remote.json!"`;
 
+exports[`verbose_message formats remoteCommandBetaWarning 1`] = `
+"[93mNote:[39m The remotes feature is still in beta.
+"
+`;
+
 exports[`verbose_message formats remoteCommandConfigExists 1`] = `
 "❌ The [1mnewremote[22m remote already exists!
 If you want to update the remote, please run [36m[1mblock remove-remote newremote[22m[39m and re-run [36m[1mblock add-remote[22m[39m!"
 `;
+
+exports[`verbose_message formats remoteCommandConfigMissing 1`] = `"❌ The [1moldremote[22m remote does not exist."`;
+
+exports[`verbose_message formats remoteCommandNoConfigs 1`] = `"❌ This project has no remotes. Use [1mblock add-remote[22m to add one."`;
+
+exports[`verbose_message formats remoteCommandRemovedExisting 1`] = `"✅ Successfully removed the remote from .block/oldremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandRemovedExisting 2`] = `"✅ Successfully removed the remote from ../.block/oldremote.remote.json!"`;
 
 exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
 
