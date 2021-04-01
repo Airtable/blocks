@@ -19,7 +19,7 @@ import {
     validateRemoteName,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
+import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {AirtableApi} from '../helpers/airtable_api';
 import {S3Api} from '../helpers/s3_api';
 import {UploadRelease} from '../helpers/upload_release';
@@ -28,6 +28,8 @@ import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
+import {spawnUserError} from '../helpers/error_utils';
+import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
 
@@ -72,6 +74,14 @@ export default class Release extends AirtableCommand {
 
         // load app config
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
+        const nodeModulesPath = this.system.path.join(appRootPath, 'node_modules');
+        if (!(await dirExistsAsync(this.system, nodeModulesPath))) {
+            throw spawnUserError<BuildErrorInfo>({
+                type: BuildErrorName.BUILD_NODE_MODULES_ABSENT,
+                appRootPath: sys.path.relative(sys.process.cwd(), appRootPath),
+            });
+        }
+
         const appConfigResult = await readAppConfigAsync(sys);
         if (appConfigResult.err) {
             this.error(appConfigResult.err);

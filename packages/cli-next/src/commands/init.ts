@@ -17,6 +17,7 @@ import {
 } from '../settings';
 
 import {
+    dirExistsAsync,
     copyAsync,
     mkdirpAsync,
     readJsonIfExistsAsync,
@@ -89,12 +90,7 @@ export default class Init extends AirtableCommand {
         debug('initializing %s', destinationPath);
 
         // Continue if the destination path does not exist.
-        if (
-            await sys.fs
-                .readdirAsync(destinationPath)
-                .then(() => true)
-                .catch(({code}) => code !== 'ENOENT')
-        ) {
+        if (await dirExistsAsync(sys, destinationPath)) {
             throw spawnUserError<InitCommandErrorInfo>({
                 type: InitCommandErrorName.INIT_COMMAND_DIRECTORY_EXISTS,
                 blockDirPath: relativeDestinationPath,
@@ -143,12 +139,7 @@ export default class Init extends AirtableCommand {
 
         // Continue if the template directory exists and a block.json file
         // is inside.
-        if (
-            await sys.fs
-                .readdirAsync(cacheTemplatePath)
-                .then(() => false)
-                .catch(() => true)
-        ) {
+        if (!(await dirExistsAsync(sys, cacheTemplatePath))) {
             throw spawnUserError<InitCommandErrorInfo>({
                 type: InitCommandErrorName.INIT_COMMAND_TEMPLATE_MISSING,
                 template: flags.template,

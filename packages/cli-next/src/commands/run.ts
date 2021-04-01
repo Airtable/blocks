@@ -18,10 +18,11 @@ import {
     readAppConfigAsync,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
+import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
-import {spawnUnexpectedError} from '../helpers/error_utils';
+import {spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
 import {RunTaskConsumerAdapter} from '../manager/run_adapter';
+import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 
 const debug = _debug('block-cli:command:run');
 
@@ -74,6 +75,14 @@ export default class Run extends AirtableCommand {
 
         // load app config
         const appRootPath = await findAppDirectoryAsync(this.system, this.system.process.cwd());
+        const nodeModulesPath = this.system.path.join(appRootPath, 'node_modules');
+        if (!(await dirExistsAsync(this.system, nodeModulesPath))) {
+            throw spawnUserError<BuildErrorInfo>({
+                type: BuildErrorName.BUILD_NODE_MODULES_ABSENT,
+                appRootPath: this.system.path.relative(this.system.process.cwd(), appRootPath),
+            });
+        }
+
         const appConfigResult = await readAppConfigAsync(this.system);
         if (appConfigResult.err) {
             this.error(appConfigResult.err);

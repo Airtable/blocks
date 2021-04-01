@@ -10,6 +10,7 @@ import {System} from '../../src/helpers/system';
 import {invariant} from '../../src/helpers/error_utils';
 import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {AppBundlerContext} from '../../src/manager/bundler';
+import {BuildErrorName} from '../../src/helpers/build_messages';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
@@ -64,6 +65,9 @@ describe('run', () => {
         .stub(developmentProxyServerModule, 'createServerAsync', stubCreateServer)
         .stub(runModule, 'createRunTaskAsync', stubCreateRunTaskAsync)
         .withFiles({
+            '/home/projects/my-app/node_modules/fake-dependency/index.js': Buffer.from(
+                '// fake dependency',
+            ),
             '/home/projects/my-app/block.json': Buffer.from('{"frontendEntry":"index.js"}'),
             '/home/projects/my-app/index.js': Buffer.from('// hello world'),
         });
@@ -138,4 +142,12 @@ describe('run', () => {
         .command(['run'])
         .catch(new RegExp(AppConfigErrorName.APP_CONFIG_IS_NOT_VALID))
         .it('validates block.json');
+
+    testRunCommand
+        .withFiles({
+            '/home/projects/my-app/node_modules': null,
+        })
+        .command(['run'])
+        .catch(new RegExp(BuildErrorName.BUILD_NODE_MODULES_ABSENT))
+        .it('fails in the absence of a directory named "node_modules"');
 });

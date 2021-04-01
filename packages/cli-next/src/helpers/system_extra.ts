@@ -177,3 +177,19 @@ export async function findExtensionAsync(
 
     throw spawnUnexpectedError('Cannot find file %s with extensions %s', name, extensions);
 }
+
+/**
+ * Determine whether a directory exists in a given system on a given path.
+ */
+export async function dirExistsAsync(sys: System, path: string): Promise<boolean> {
+    try {
+        await sys.fs.readdirAsync(path);
+        return true;
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return false;
+        }
+
+        throw error;
+    }
+}

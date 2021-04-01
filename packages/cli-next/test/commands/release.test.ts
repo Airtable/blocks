@@ -18,6 +18,7 @@ import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
 import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
 import {AppBundlerContext} from '../../src/manager/bundler';
+import {BuildErrorName} from '../../src/helpers/build_messages';
 
 const {
     stubCreateReleaseTaskAsync,
@@ -37,6 +38,9 @@ describe('release', () => {
         .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0')
         .withFiles({
             '/home/.config/.airtableblocksrc.json': Buffer.from('{"airtableApiKey":"key1234"}'),
+            '/home/projects/my-app/node_modules/fake-dependency/index.js': Buffer.from(
+                '// fake dependency',
+            ),
             '/home/projects/my-app/.block/remote.json': Buffer.from(
                 '{"baseId":"abcd","blockId":"1234"}',
             ),
@@ -123,6 +127,14 @@ describe('release', () => {
         .command(['release'])
         .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND))
         .it('throws base not found error');
+
+    testReleaseCommand
+        .withFiles({
+            '/home/projects/my-app/node_modules': null,
+        })
+        .command(['release'])
+        .catch(new RegExp(BuildErrorName.BUILD_NODE_MODULES_ABSENT))
+        .it('fails in the absence of a directory named "node_modules"');
 });
 
 function createStubs() {

@@ -26,6 +26,7 @@ import * as renderMessage from './render_message';
 import {AirtableApiErrorName, AirtableApiErrorInfo} from './airtable_api';
 import {AppConfigErrorInfo, AppConfigErrorName} from './config_app';
 import {BlockIdentifierErrorInfo, BlockIdentifierErrorName} from './block_identifier';
+import {BuildErrorInfo, BuildErrorName} from './build_messages';
 import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
 import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
@@ -41,6 +42,8 @@ export {
     AppConfigErrorName,
     BlockIdentifierErrorInfo,
     BlockIdentifierErrorName,
+    BuildErrorName,
+    BuildErrorInfo,
     FindPortErrorInfo,
     FindPortErrorName,
     InitCommandErrorInfo,
@@ -71,6 +74,7 @@ export const MessageName = {
     ...AirtableApiErrorName,
     ...AppConfigErrorName,
     ...BlockIdentifierErrorName,
+    ...BuildErrorName,
     ...FindPortErrorName,
     ...InitCommandErrorName,
     ...InitCommandMessageName,
@@ -92,6 +96,7 @@ export type MessageInfo =
     | AirtableApiErrorInfo
     | AppConfigErrorInfo
     | BlockIdentifierErrorInfo
+    | BuildErrorInfo
     | FindPortErrorInfo
     | InitCommandErrorInfo
     | InitCommandMessageInfo
@@ -149,6 +154,11 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         },
         blockIdentifierInvalidBlockId() {
             return this.util.chalk`Block identifier\'s must start with "blk" after "/".`;
+        },
+
+        buildNodeModulesAbsent({appRootPath}) {
+            return this.util
+                .chalk`Please run {cyan.bold npm install} in ${appRootPath} to install packages before running.`;
         },
 
         // find_port_async.ts
