@@ -60,8 +60,15 @@ export function createRunFrameRoutes({
         }
     });
 
+    /**
+     * Code in Hyperbase causes the frame to request a file named
+     * `poll_script.js` to initiate "live reloading." That functionality is
+     * provided by a script which is generated alongside the bundle of the App
+     * being run in development. Redirect the request to the location where the
+     * development server exposes that script.
+     */
     runFrameRoutes.get('/poll_script.js', async (req, res) => {
-        res.redirect('/poll_script.js');
+        res.redirect('/live-reload-and-report-disconnection.js');
     });
 
     /**
