@@ -1,7 +1,7 @@
 import {Server} from 'net';
 import {promisify} from 'util';
 
-import {cli} from 'cli-ux';
+import {cli} from './cli_ux';
 
 import {invariant, spawnUserError} from './error_utils';
 

@@ -89,6 +89,7 @@ module.exports = {
         'no-prototype-builtins': 'error',
         'no-redeclare': 'off',
         'no-regex-spaces': 'error',
+        'no-restricted-imports': ['error', 'cli-ux'],
         'no-script-url': 'error',
         'no-self-assign': 'error',
         'no-self-compare': 'error',

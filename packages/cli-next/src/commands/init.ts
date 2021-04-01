@@ -2,9 +2,8 @@ import {flags as commandFlags} from '@oclif/command';
 import * as Parser from '@oclif/parser';
 import _debug from 'debug';
 
-import cli from 'cli-ux';
-
 import AirtableCommand from '../helpers/airtable_command';
+import cli from '../helpers/cli_ux';
 
 import {
     BLOCK_CONFIG_DIR_NAME,

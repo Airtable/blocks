@@ -207,8 +207,12 @@ export default class Run extends AirtableCommand {
             });
         });
 
-        await clipboardy.write(`https://localhost:${secureServerPort}`);
-        this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
+        try {
+            await clipboardy.write(`https://localhost:${secureServerPort}`);
+            this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
+        } catch (error) {
+            debug(`failed to write to clipboard: ${error}`);
+        }
 
         await sigintPromise;
     }

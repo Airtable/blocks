@@ -1,8 +1,6 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 
-import cli from 'cli-ux';
-
 import AirtableCommand from '../helpers/airtable_command';
 import {
     AIRTABLE_API_URL,
@@ -31,6 +29,7 @@ import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
+import cli from '../helpers/cli_ux';
 
 const debug = _debug('block-cli:command:release');
 

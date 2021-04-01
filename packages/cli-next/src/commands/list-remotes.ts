@@ -1,5 +1,4 @@
 import _debug from 'debug';
-import cli, {Table} from 'cli-ux';
 
 import {flags as commandFlags} from '@oclif/command';
 
@@ -9,6 +8,7 @@ import {BLOCK_CONFIG_DIR_NAME, REMOTE_JSON_BASE_FILE_PATH} from '../settings';
 import {RemoteConfig} from '../helpers/config_remote';
 import {spawnUserError} from '../helpers/error_utils';
 import {RemoteCommandErrorName, RemoteCommandMessageName} from '../helpers/remote_messages';
+import cli, {Table} from '../helpers/cli_ux';
 
 const debug = _debug('block-cli:command:list-remotes');
 
@@ -72,17 +72,17 @@ export default class ListRemotes extends AirtableCommand {
         const columns: Table.table.Columns<RemoteConfig & {name: string}> = {
             name: {},
             'Block identifier': {
-                get: remote => `${remote.baseId}/${remote.blockId}`,
+                get: (remote: RemoteConfig) => `${remote.baseId}/${remote.blockId}`,
             },
         };
         if (remoteConfigs.some(remote => Boolean(remote.server))) {
             columns.server = {
-                get: remote => remote.server ?? '',
+                get: (remote: RemoteConfig) => remote.server ?? '',
             };
         }
         if (remoteConfigs.some(remote => Boolean(remote.apiKeyName))) {
             columns['Api key name'] = {
-                get: remote => remote.apiKeyName ?? '',
+                get: (remote: RemoteConfig) => remote.apiKeyName ?? '',
             };
         }
 
