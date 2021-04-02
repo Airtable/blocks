@@ -34,6 +34,12 @@ import {SystemApiKeyErrorName, SystemApiKeyErrorInfo} from './system_api_key';
 import {SystemConfigErrorInfo, SystemConfigErrorName} from './system_config';
 import {SystemExtraErrorInfo, SystemExtraErrorName} from './system_extra';
 import {UserConfigErrorInfo, UserConfigErrorName} from './config_user';
+import {
+    ReleaseCommandErrorInfo,
+    ReleaseCommandErrorName,
+    ReleaseCommandMessageInfo,
+    ReleaseCommandMessageName,
+} from './release_messages';
 
 export {
     AirtableApiErrorInfo,
@@ -50,6 +56,10 @@ export {
     InitCommandErrorName,
     InitCommandMessageInfo,
     InitCommandMessageName,
+    ReleaseCommandErrorInfo,
+    ReleaseCommandErrorName,
+    ReleaseCommandMessageInfo,
+    ReleaseCommandMessageName,
     RemoteCommandErrorInfo,
     RemoteCommandErrorName,
     RemoteCommandMessageInfo,
@@ -78,6 +88,8 @@ export const MessageName = {
     ...FindPortErrorName,
     ...InitCommandErrorName,
     ...InitCommandMessageName,
+    ...ReleaseCommandErrorName,
+    ...ReleaseCommandMessageName,
     ...RemoteCommandErrorName,
     ...RemoteCommandMessageName,
     ...RemoteConfigErrorName,
@@ -100,6 +112,8 @@ export type MessageInfo =
     | FindPortErrorInfo
     | InitCommandErrorInfo
     | InitCommandMessageInfo
+    | ReleaseCommandErrorInfo
+    | ReleaseCommandMessageInfo
     | RemoteCommandErrorInfo
     | RemoteCommandMessageInfo
     | RemoteConfigErrorInfo
@@ -202,6 +216,18 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         },
         initCommandInstalledSdkNoVersion() {
             return this.util.chalk`Installed @airtable/blocks dependency has no version.`;
+        },
+
+        // release_messages.ts
+        releaseCommandBlock1CommentUnsupported() {
+            return this.util
+                .chalk`❌ This block cannot be released with a comment. Run {cyan.bold block release} without {cyan.bold --comment}.`;
+        },
+        releaseCommandBlock2BackendUnsupported() {
+            return this.util.chalk`❌ V2 blocks does not support backend routes.`;
+        },
+        releaseCommandDeveloperCommentPrompt() {
+            return this.util.chalk`Enter a comment describing the changes in this release`;
         },
 
         // remote_messages.ts

@@ -82,37 +82,7 @@ export interface AirtableApiOptions {
     apiBaseUrl: string;
 }
 
-export interface AirtableApiBlockOptions extends AirtableApiOptions {
-    baseId: string;
-    blockId: string;
-}
-
-export interface AirtableApiBuildStartOptions {
-    hasBackend: boolean;
-}
-
-export interface AirtableApiBlockInstallationOptions extends AirtableApiOptions {
-    baseId: string;
-    blockInstallationId: string;
-}
-
-export interface AirtableApiBlockBuildOptions extends AirtableApiBlockOptions {
-    buildId: string;
-}
-
-interface AirtableApiBlockDeployOptions extends AirtableApiBlockOptions {
-    deployId: string | null;
-}
-
-export interface AirtableApiBlockReleaseOptions
-    extends AirtableApiBlockBuildOptions,
-        AirtableApiBlockDeployOptions {}
-
-export interface AirtableApiBlockCodeUploadOptions extends AirtableApiBlockOptions {
-    codeUploadId: string;
-}
-
-function airtableFetchInit(
+export function airtableFetchInit(
     {apiKey, userAgent, apiBaseUrl}: AirtableApiOptions,
     {url, ...init}: FetchInit,
 ): FetchInit {
@@ -126,16 +96,6 @@ function airtableFetchInit(
             'Content-Type': 'application/json',
         },
     };
-}
-
-function airtableBlockFetchInit(
-    {baseId, blockId, ...urlOptions}: AirtableApiBlockOptions,
-    {url, ...init}: FetchInit,
-): FetchInit {
-    return airtableFetchInit(urlOptions, {
-        url: `/v2/bases/${baseId}/blocks/${blockId}${url}`,
-        ...init,
-    });
 }
 
 function createAirtableApiError({
@@ -193,91 +153,5 @@ export class AirtableApi extends FetchApi {
         } else {
             throw spawnUnexpectedError('Request to Airtable failed with status code %s', status);
         }
-    }
-
-    async blockAccessPolicyAsync({
-        baseId,
-        blockInstallationId,
-        ...urlOptions
-    }: AirtableApiBlockInstallationOptions) {
-        return await this.fetchJsonAsync(
-            airtableFetchInit(urlOptions, {
-                url: `/v2/meta/${baseId}/blockInstallations/${blockInstallationId}/accessPolicy`,
-            }),
-        );
-    }
-
-    async blockBuildStartAsync({
-        hasBackend,
-        ...urlOptions
-    }: AirtableApiBlockOptions & AirtableApiBuildStartOptions) {
-        return await this.fetchJsonAsync(
-            airtableBlockFetchInit(urlOptions, {url: '/builds/start', body: {hasBackend}}),
-        );
-    }
-
-    async blockBuildSucceededAsync({buildId, ...urlOptions}: AirtableApiBlockBuildOptions) {
-        return await this.fetchVoidAsync(
-            airtableBlockFetchInit(urlOptions, {url: `/builds/${buildId}/succeed`}),
-        );
-    }
-
-    async blockBuildFailedAsync({buildId, ...urlOptions}: AirtableApiBlockBuildOptions) {
-        return await this.fetchVoidAsync(
-            airtableBlockFetchInit(urlOptions, {url: `/builds/${buildId}/fail`}),
-        );
-    }
-
-    async blockCreateDeployAsync({buildId, ...urlOptions}: AirtableApiBlockBuildOptions) {
-        return await this.fetchVoidAsync(
-            airtableBlockFetchInit(urlOptions, {
-                url: '/deploys/create',
-                body: {
-                    buildId,
-                },
-            }),
-        );
-    }
-
-    async blockDeployStatusAsync({deployId, ...urlOptions}: AirtableApiBlockDeployOptions) {
-        return await this.fetchJsonAsync(
-            airtableBlockFetchInit(urlOptions, {url: `/deploys/${deployId}/status`}),
-        );
-    }
-
-    async blockCreateReleaseAsync({
-        buildId,
-        deployId,
-        ...urlOptions
-    }: AirtableApiBlockReleaseOptions) {
-        return await this.fetchVoidAsync(
-            airtableBlockFetchInit(urlOptions, {
-                url: '/releases/create',
-                body: {
-                    buildId,
-                    deployId,
-                },
-            }),
-        );
-    }
-
-    async blockCreateCodeUploadAsync(urlOptions: AirtableApiBlockOptions) {
-        return await this.fetchJsonAsync(
-            airtableBlockFetchInit(urlOptions, {url: '/codeUpload/create'}),
-        );
-    }
-
-    async blockFinalizeCodeUploadAsync({
-        codeUploadId,
-        ...urlOptions
-    }: AirtableApiBlockCodeUploadOptions) {
-        return await this.fetchVoidAsync(
-            airtableBlockFetchInit(urlOptions, {
-                url: '/codeUpload/finalize',
-                body: {
-                    codeUploadId,
-                },
-            }),
-        );
     }
 }

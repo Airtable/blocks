@@ -12,6 +12,8 @@ import {
     InitCommandMessageName,
     MessageInfo,
     MessageName,
+    ReleaseCommandErrorName,
+    ReleaseCommandMessageName,
     RemoteCommandErrorName,
     RemoteCommandMessageName,
     RemoteConfigErrorName,
@@ -131,6 +133,10 @@ function testMessages(): {
                 platform: 'linux',
             },
         ],
+
+        [ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK1_COMMENT_UNSUPPORTED]: [{}],
+        [ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK2_BACKEND_UNSUPPORTED]: [{}],
+        [ReleaseCommandMessageName.RELEASE_COMMAND_DEVELOPER_COMMENT_PROMPT]: [{}],
 
         [RemoteCommandErrorName.REMOTE_COMMAND_CONFIG_EXISTS]: [{remoteName: 'newremote'}],
         [RemoteCommandErrorName.REMOTE_COMMAND_CONFIG_MISSING]: [{remoteName: 'oldremote'}],

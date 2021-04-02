@@ -1,8 +1,8 @@
-import {AirtableApi, AirtableApiBlockOptions} from './airtable_api';
+import {AirtableBlock1Api, AirtableBlock1ApiBaseOptions} from './airtable_block1_api';
 import {S3Api, S3SignedUploadInfo} from './s3_api';
 import {invariant} from './error_utils';
 
-interface AppBuildResponseJson {
+export interface AppBlock1BuildResponseJson {
     buildId: string;
     frontendBundleUploadUrl: string;
     backendDeploymentPackageUploadUrl: string | null;
@@ -10,20 +10,30 @@ interface AppBuildResponseJson {
     backendDeploymentPackageS3UploadInfo: S3SignedUploadInfo | null;
 }
 
-interface AppDeployResponseJson {
-    deployId: string;
+export interface UploadBlock1ReleaseConstructorOptions {
+    api: {
+        airtable: AirtableBlock1Api;
+        s3: S3Api;
+    };
+    blockUrlOptions: AirtableBlock1ApiBaseOptions;
 }
 
-export class UploadRelease {
-    private airtable: AirtableApi;
-    private s3: S3Api;
-    private blockUrlOptions: AirtableApiBlockOptions;
+export interface UploadBlock1ReleaseUploadOptions {
+    frontendBundle: Buffer;
+    backendBundle: Buffer | null;
+}
 
-    constructor({
-        airtable,
-        s3,
-        ...blockUrlOptions
-    }: {airtable: AirtableApi; s3: S3Api} & AirtableApiBlockOptions) {
+export interface UploadBlock1ReleaseCreateReleaseOptions {
+    buildId: string;
+    deployId?: string;
+}
+
+export class UploadBlock1Release {
+    private airtable: AirtableBlock1Api;
+    private s3: S3Api;
+    private blockUrlOptions: AirtableBlock1ApiBaseOptions;
+
+    constructor({api: {airtable, s3}, blockUrlOptions}: UploadBlock1ReleaseConstructorOptions) {
         this.airtable = airtable;
         this.s3 = s3;
 
@@ -33,10 +43,7 @@ export class UploadRelease {
     async buildUploadAsync({
         frontendBundle,
         backendBundle,
-    }: {
-        frontendBundle: Buffer;
-        backendBundle: Buffer | null;
-    }): Promise<AppBuildResponseJson> {
+    }: UploadBlock1ReleaseUploadOptions): Promise<AppBlock1BuildResponseJson> {
         const build = await this.airtable.blockBuildStartAsync({
             ...this.blockUrlOptions,
             hasBackend: backendBundle !== null,
@@ -76,7 +83,7 @@ export class UploadRelease {
     async createReleaseAsync({
         buildId,
         deployId,
-    }: AppBuildResponseJson & Partial<AppDeployResponseJson>): Promise<void> {
+    }: UploadBlock1ReleaseCreateReleaseOptions): Promise<void> {
         await this.airtable.blockCreateReleaseAsync({
             ...this.blockUrlOptions,
             buildId,

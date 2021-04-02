@@ -7,6 +7,7 @@ import {
     APP_RELEASE_DIR,
     APP_ROOT_TEMPORARY_DIR,
     BUNDLE_FILE_NAME,
+    V2_BLOCKS_BASE_ID,
 } from '../settings';
 import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
 
@@ -20,16 +21,19 @@ import {
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
-import {AirtableApi} from '../helpers/airtable_api';
+import {AirtableBlock1Api} from '../helpers/airtable_block1_api';
+import {AirtableBlock2Api} from '../helpers/airtable_block2_api';
 import {S3Api} from '../helpers/s3_api';
-import {UploadRelease} from '../helpers/upload_release';
+import {UploadBlock1Release} from '../helpers/upload_block1_release';
+import {UploadBlock2Release} from '../helpers/upload_block2_release';
 import {readApiKeyAsync} from '../helpers/system_api_key';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
-import {spawnUserError} from '../helpers/error_utils';
+import {invariant, spawnUserError} from '../helpers/error_utils';
 import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
+import {ReleaseCommandErrorName, ReleaseCommandMessageName} from '../helpers/release_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
 
@@ -64,6 +68,11 @@ export default class Release extends AirtableCommand {
         remote: commandFlags.string({
             description: '[Beta] Configure which remote to use',
             parse: unwrapResultFunctor(validateRemoteName),
+        }),
+        comment: commandFlags.string({
+            description:
+                'A string describing the changes in this release. Can be at most 1000 characters',
+            hidden: true,
         }),
     };
 
@@ -104,7 +113,7 @@ export default class Release extends AirtableCommand {
             this.error(remoteConfigResult.err);
         }
         const remoteConfig = remoteConfigResult.value;
-        const {baseId, blockId} = remoteConfig;
+        const {baseId, blockId, server: apiBaseUrl = AIRTABLE_API_URL} = remoteConfig;
         debug('loaded remote config at %s', sys.path.relative(sys.process.cwd(), remoteConfigPath));
 
         const apiKeyResult = await readApiKeyAsync(sys, remoteConfig.apiKeyName);
@@ -117,19 +126,56 @@ export default class Release extends AirtableCommand {
         const userAgent = await createUserAgentAsync(sys);
         debug('connecting to Airtable with user agent: %s', userAgent);
 
-        const api = {
-            airtable: new AirtableApi(),
-            s3: new S3Api(),
-        };
-        const upload = new UploadRelease({
-            ...api,
+        let upload;
+        if (baseId === V2_BLOCKS_BASE_ID) {
+            let developerComment = flags.comment;
+            if (!developerComment) {
+                developerComment = await cli.prompt(
+                    this.messages.renderMessage({
+                        type: ReleaseCommandMessageName.RELEASE_COMMAND_DEVELOPER_COMMENT_PROMPT,
+                    }),
+                );
+                invariant(developerComment, 'prompt must return a value');
+            }
 
-            baseId,
-            blockId,
-            apiKey,
-            userAgent,
-            apiBaseUrl: remoteConfig.server ?? AIRTABLE_API_URL,
-        });
+            const api = {
+                airtable: new AirtableBlock2Api(),
+                s3: new S3Api(),
+            };
+            upload = new UploadBlock2Release({
+                api,
+
+                developerComment,
+
+                blockUrlOptions: {
+                    blockId,
+                    apiKey,
+                    userAgent,
+                    apiBaseUrl,
+                },
+            });
+        } else {
+            if (flags.comment) {
+                throw spawnUserError({
+                    type: ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK1_COMMENT_UNSUPPORTED,
+                });
+            }
+
+            const api = {
+                airtable: new AirtableBlock1Api(),
+                s3: new S3Api(),
+            };
+            upload = new UploadBlock1Release({
+                api,
+                blockUrlOptions: {
+                    baseId,
+                    blockId,
+                    apiKey,
+                    userAgent,
+                    apiBaseUrl,
+                },
+            });
+        }
 
         // fork bundler process
         const producer = new ReleaseProducer();

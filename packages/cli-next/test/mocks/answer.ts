@@ -9,6 +9,10 @@ type SimulatedResponse =
     | {signal: 'SIGINT'}
     | {filename: string; contents: Buffer | null};
 
+interface PromptTest {
+    (value: string): boolean;
+}
+
 /**
  * An iterable queue that iterates once over values pushed into it.
  */
@@ -82,14 +86,14 @@ function spyStreamWrites(stream: Writable) {
  * value includes some substring.
  *
  * @param dataIterable Async Iterable over strings
- * @param needle the value to search for within the iterated strings
+ * @param predicate True when the desired content is present
  */
-async function waitForAsync(dataIterable: IterableAsyncQueue<string>, needle: string) {
+async function waitForAsync(dataIterable: IterableAsyncQueue<string>, predicate: PromptTest) {
     let data = '';
 
     for await (const chunk of dataIterable) {
         data += chunk;
-        if (data.includes(needle)) {
+        if (predicate(data)) {
             break;
         }
     }
@@ -134,7 +138,7 @@ function spyNewListeners(realEmitter: EventEmitter) {
  * @param prompt
  * @param response
  */
-function answerThread(prompt: string, response: SimulatedResponse) {
+function answerThread(prompt: PromptTest, response: SimulatedResponse) {
     return async (ctx: {system: System}) => {
         debug('binding answerer for: %s', prompt);
 
@@ -210,14 +214,24 @@ function testPluginFrom(
     });
 }
 
+function castPromptTest(prompt: string | RegExp): PromptTest {
+    if (typeof prompt === 'string') {
+        return data => data.includes(prompt);
+    }
+    return data => prompt.test(data);
+}
+
 /**
  * Answer a message written by the process.
  *
  * @param prompt Message to watch for in stdout and stderr
  * @param response Reaction to send when message appears
  */
-export function answer(prompt: string, response: SimulatedResponse): Plugin<{error?: any}> {
+export function answer(
+    prompt: string | RegExp,
+    response: SimulatedResponse,
+): Plugin<{error?: any}> {
     debug('will answer: %s', prompt);
 
-    return testPluginFrom(answerThread(prompt, response));
+    return testPluginFrom(answerThread(castPromptTest(prompt), response));
 }
