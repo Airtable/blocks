@@ -11,7 +11,7 @@ import {
 import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
 
 import {
-    findAppConfigPathAsync,
+    findAppConfigAsync,
     findAppDirectoryAsync,
     findRemoteConfigPathByNameAsync,
     readAppConfigAsync,
@@ -82,18 +82,13 @@ export default class Release extends AirtableCommand {
             });
         }
 
-        const appConfigResult = await readAppConfigAsync(sys);
+        const appConfigLocation = await findAppConfigAsync(sys);
+        const appConfigResult = await readAppConfigAsync(sys, appConfigLocation);
         if (appConfigResult.err) {
             this.error(appConfigResult.err);
         }
         const appConfig = appConfigResult.value;
-        debug(
-            'loaded app config at %s',
-            sys.path.relative(
-                sys.process.cwd(),
-                await findAppConfigPathAsync(sys, sys.process.cwd()),
-            ),
-        );
+        debug('loaded app config at %s', sys.path.relative(sys.process.cwd(), appConfigLocation));
 
         if (flags.remote) {
             this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});

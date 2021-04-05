@@ -1,7 +1,13 @@
 import {EventEmitter} from 'events';
 import {Writable} from 'stream';
+import {System} from '../../src/helpers/system';
 import {Plugin, mapFancyTestAsyncPlugin} from './FancyTestAsync';
 import {debug} from './test';
+
+type SimulatedResponse =
+    | {stdin: string}
+    | {signal: 'SIGINT'}
+    | {filename: string; contents: Buffer | null};
 
 /**
  * An iterable queue that iterates once over values pushed into it.
@@ -128,8 +134,8 @@ function spyNewListeners(realEmitter: EventEmitter) {
  * @param prompt
  * @param response
  */
-function answerThread(prompt: string, response: {stdin: string} | {signal: 'SIGINT'}) {
-    return async (donePromise: Promise<unknown>) => {
+function answerThread(prompt: string, response: SimulatedResponse) {
+    return async (ctx: {system: System}) => {
         debug('binding answerer for: %s', prompt);
 
         let realEmitter: EventEmitter;
@@ -141,10 +147,23 @@ function answerThread(prompt: string, response: {stdin: string} | {signal: 'SIGI
                 emitter.emit('data', response.stdin);
                 emitter.emit('data', '\n');
             };
-        } else {
+        } else if ('signal' in response) {
             realEmitter = process;
             simulate = (emitter: EventEmitter) => {
                 emitter.emit(response.signal);
+            };
+        } else {
+            // Simulating file operations does not require spying on any event
+            // emitters. Create a new emitter to satisfy the code paths shared
+            // with the other types of SimulatedResponse.
+            realEmitter = new EventEmitter();
+            simulate = () => {
+                const {contents, filename} = response;
+                if (!contents) {
+                    ctx.system.fs.unlinkAsync(filename);
+                } else {
+                    ctx.system.fs.writeFileAsync(filename, contents);
+                }
             };
         }
 
@@ -169,22 +188,15 @@ function answerThread(prompt: string, response: {stdin: string} | {signal: 'SIGI
  * in parallel with other FancyTest Plugins.
  */
 function testPluginFrom(
-    threadAsync: (donePromise: Promise<any>) => Promise<any>,
-): Plugin<{error?: any}> {
-    let resolveDone = () => {};
+    threadAsync: (ctx: {system: System}) => Promise<any>,
+): Plugin<{error?: any; system: System}> {
     let threadPromise: Promise<void>;
 
     return mapFancyTestAsyncPlugin({
         run(ctx) {
-            const donePromise = new Promise<void>(resolve => {
-                resolveDone = () => resolve();
-            });
-
-            threadPromise = threadAsync(donePromise);
+            threadPromise = threadAsync(ctx);
         },
         async finallyAsync(ctx) {
-            resolveDone();
-
             try {
                 // If an error occured, throw here.
                 await threadPromise;
@@ -204,10 +216,7 @@ function testPluginFrom(
  * @param prompt Message to watch for in stdout and stderr
  * @param response Reaction to send when message appears
  */
-export function answer(
-    prompt: string,
-    response: {stdin: string} | {signal: 'SIGINT'},
-): Plugin<{error?: any}> {
+export function answer(prompt: string, response: SimulatedResponse): Plugin<{error?: any}> {
     debug('will answer: %s', prompt);
 
     return testPluginFrom(answerThread(prompt, response));

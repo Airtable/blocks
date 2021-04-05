@@ -1,5 +1,10 @@
 export enum BuildErrorName {
+    BUILD_APP_CONFIG_MODIFIED = 'buildAppConfigModified',
     BUILD_NODE_MODULES_ABSENT = 'buildNodeModulesAbsent',
+}
+
+export interface AppConfigModifiedInfo {
+    type: BuildErrorName.BUILD_APP_CONFIG_MODIFIED;
 }
 
 export interface NodeModulesAbsentInfo {
@@ -7,4 +12,4 @@ export interface NodeModulesAbsentInfo {
     appRootPath: string;
 }
 
-export type BuildErrorInfo = NodeModulesAbsentInfo;
+export type BuildErrorInfo = AppConfigModifiedInfo | NodeModulesAbsentInfo;

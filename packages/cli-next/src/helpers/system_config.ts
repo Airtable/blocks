@@ -98,13 +98,9 @@ async function findAppDirectoryFileAsync(
  * Find the AppConfig file in the App's root directory.
  *
  * @param sys Host system to search
- * @param workingdir Working directory function starts its search from
  */
-export async function findAppConfigPathAsync(
-    sys: System,
-    workingdir = sys.process.cwd(),
-): Promise<string> {
-    return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
+export async function findAppConfigAsync(sys: System): Promise<string> {
+    return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, sys.process.cwd());
 }
 
 export async function findRemoteConfigPathByNameAsync(
@@ -128,12 +124,11 @@ export async function findAppDirectoryUserConfigAsync(
 
 export async function readAppConfigAsync(
     sys: System,
-    workingdir = sys.process.cwd(),
+    appConfigPath: string,
 ): Promise<Result<AppConfig, UserError<AppConfigErrorInfo>>> {
-    const file = await findAppConfigPathAsync(sys, workingdir);
-    const result = validateAppConfig(await readJsonIfExistsAsync(sys, file));
+    const result = validateAppConfig(await readJsonIfExistsAsync(sys, appConfigPath));
     if (result.err?.__userInfo?.type === AppConfigErrorName.APP_CONFIG_IS_NOT_VALID) {
-        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), file);
+        result.err.__userInfo.file = sys.path.relative(sys.process.cwd(), appConfigPath);
     }
     return result;
 }

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import _debug from 'debug';
 import {spawnUnexpectedError, spawnUserError} from './error_utils';
 
@@ -192,4 +193,78 @@ export async function dirExistsAsync(sys: System, path: string): Promise<boolean
 
         throw error;
     }
+}
+
+async function hashFileAsync(sys: System, path: string): Promise<string> {
+    const hash = crypto.createHash('sha256');
+    hash.update(await sys.fs.readFileAsync(path));
+    return hash.digest('hex');
+}
+
+interface WhenModified {
+    whenModified: Promise<void>;
+}
+
+/**
+ * Wait for the modification or deletion of a file located on a given System
+ * and at a given path.
+ *
+ * To promote cross-platform consistency (and to tolerate certain kinds of file
+ * operations), this function detects change by reading the watched file's
+ * contents. This heuristic may make the function unsuitable for use with large
+ * files.
+ */
+export async function watchFileAsync(sys: System, path: string): Promise<WhenModified> {
+    const initialHash = await hashFileAsync(sys, path);
+    const hasChanged = async () => {
+        const hash = await hashFileAsync(sys, path).catch(() => null);
+        return hash !== initialHash;
+    };
+    let isWatching = false;
+
+    const viaFsWatch = new Promise<void>(resolve => {
+        let watcher: ReturnType<typeof sys.fs.watch>;
+        const handler = async () => {
+            if (!(await hasChanged())) {
+                return;
+            }
+
+            watcher.close();
+            resolve();
+        };
+        try {
+            watcher = sys.fs.watch(path, {persistent: false}, handler);
+            isWatching = true;
+        } catch (error) {
+            // continue regardless of error
+        }
+    });
+
+    if (isWatching) {
+        return {whenModified: viaFsWatch};
+    }
+
+    // From the Node.js documentation on the `fs.watch` method:
+    //
+    // > If the underlying functionality is not available for some reason, then
+    // > `fs.watch()` will not be able to function and may thrown an exception.
+    // > For example, watching files or directories can be unreliable, and in
+    // > some cases impossible, on network file systems (NFS, SMB, etc) or host
+    // > file systems when using virtualization software such as Vagrant or
+    // > Docker.
+    //
+    // https://nodejs.org/dist/latest-v14.x/docs/api/fs.html
+    const viaFsWatchFile = new Promise<void>(resolve => {
+        const listener = async () => {
+            if (!(await hasChanged())) {
+                return;
+            }
+
+            sys.fs.unwatchFile(path, listener);
+            resolve();
+        };
+        sys.fs.watchFile(path, {persistent: false, interval: 1000}, listener);
+    });
+
+    return {whenModified: viaFsWatchFile};
 }

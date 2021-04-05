@@ -95,6 +95,7 @@ function testMessages(): {
         [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_BLOCK_ID]: [{}],
         [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_FORMAT]: [{}],
 
+        [BuildErrorName.BUILD_APP_CONFIG_MODIFIED]: [{}],
         [BuildErrorName.BUILD_NODE_MODULES_ABSENT]: [{appRootPath: 'an-adorable-penguin'}],
 
         [FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER]: [{port: 'asdf'}],

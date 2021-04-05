@@ -13,12 +13,12 @@ import {
     DevelopmentProxyServerInterface,
 } from '../helpers/development_proxy_server';
 import {
-    findAppConfigPathAsync,
+    findAppConfigAsync,
     findAppDirectoryAsync,
     readAppConfigAsync,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
+import {dirExistsAsync, mkdirpAsync, rmdirAsync, watchFileAsync} from '../helpers/system_extra';
 import {Deferred} from '../helpers/deferred';
 import {spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
 import {RunTaskConsumerAdapter} from '../manager/run_adapter';
@@ -83,18 +83,23 @@ export default class Run extends AirtableCommand {
             });
         }
 
-        const appConfigResult = await readAppConfigAsync(this.system);
+        const appConfigLocation = await findAppConfigAsync(this.system);
+        const appConfigResult = await readAppConfigAsync(this.system, appConfigLocation);
         if (appConfigResult.err) {
             this.error(appConfigResult.err);
         }
         const appConfig = appConfigResult.value;
         debug(
             'loaded app config at %s',
-            this.system.path.relative(
-                this.system.process.cwd(),
-                await findAppConfigPathAsync(this.system, this.system.process.cwd()),
-            ),
+            this.system.path.relative(this.system.process.cwd(), appConfigLocation),
         );
+        const appConfigModifiedPromise = (
+            await watchFileAsync(this.system, appConfigLocation)
+        ).whenModified.then(() => {
+            throw spawnUserError<BuildErrorInfo>({
+                type: BuildErrorName.BUILD_APP_CONFIG_MODIFIED,
+            });
+        });
 
         const producer = new RunProducer();
 
@@ -223,7 +228,7 @@ export default class Run extends AirtableCommand {
             debug(`failed to write to clipboard: ${error}`);
         }
 
-        await sigintPromise;
+        await Promise.race([appConfigModifiedPromise, sigintPromise]);
     }
 
     async finallyAsync() {

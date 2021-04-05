@@ -1,4 +1,5 @@
 import pathModule from 'path';
+import * as originalFs from 'fs';
 
 import {createFsFromVolume, Volume} from 'memfs';
 
@@ -43,7 +44,13 @@ class MockProcess implements SystemProcess {
 
 export function createSystem({volume}: {volume: SystemVolume}) {
     const path = pathModule.posix;
-    const fs = asyncify((createFsFromVolume(volume) as unknown) as CallbackFS);
+    const volumeFs = createFsFromVolume(volume);
+    const fs = {
+        ...asyncify((volumeFs as unknown) as CallbackFS),
+        unwatchFile: (volumeFs.unwatchFile as unknown) as typeof originalFs.unwatchFile,
+        watch: (volumeFs.watch as unknown) as typeof originalFs.watch,
+        watchFile: (volumeFs.watchFile as unknown) as typeof originalFs.watchFile,
+    };
     const os = new MockOS();
     const process = new MockProcess();
     return {

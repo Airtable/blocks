@@ -156,6 +156,10 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
             return this.util.chalk`Block identifier\'s must start with "blk" after "/".`;
         },
 
+        buildAppConfigModified() {
+            return this.util
+                .chalk`Detected changes to '${BLOCK_FILE_NAME}' file. Please restart {cyan.bold block run}.`;
+        },
         buildNodeModulesAbsent({appRootPath}) {
             return this.util
                 .chalk`Please run {cyan.bold npm install} in ${appRootPath} to install packages before running.`;

@@ -144,6 +144,21 @@ describe('run', () => {
         .it('validates block.json');
 
     testRunCommand
+        .answer('Server listening', {
+            filename: '/home/projects/my-app/block.json',
+            contents: Buffer.from('{"frontendEntry":"index2.js"}'),
+        })
+        .command(['run'])
+        .catch(new RegExp(BuildErrorName.BUILD_APP_CONFIG_MODIFIED))
+        .it('fails when Block config file is modified');
+
+    testRunCommand
+        .answer('Server listening', {filename: '/home/projects/my-app/block.json', contents: null})
+        .command(['run'])
+        .catch(new RegExp(BuildErrorName.BUILD_APP_CONFIG_MODIFIED))
+        .it('fails when Block config file is deleted');
+
+    testRunCommand
         .withFiles({
             '/home/projects/my-app/node_modules': null,
         })
