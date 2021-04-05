@@ -11,6 +11,7 @@
         "README.md",
         "package.json",
         "yarn.lock",
-        "packages/sdk/**/*"
+        "packages/sdk/**/*",
+        "packages/blocks-testing/**/*"
     ]
 }
