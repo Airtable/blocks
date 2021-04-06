@@ -1,51 +1,79 @@
 commitSha = '';
 branch = '';
+final personOrSystemThatTriggeredBuild = params.getOrDefault('AUTHOR_NAME', env.AUTHOR_NAME ?: 'jenkins');
+final branchNameForDisplayOnly = params.getOrDefault('BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT', env.BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT ?: 'Branch name is unknown');
+
+stashedDirectories = [];
 
 pipeline {
-    agent {
-        docker {
-            image 'node:lts-buster'
-            // TODO(philip): Migrate to a different worker.
-            // FIXME_CICD
-            label 'master'
-        }
+    options {
+        timestamps();
     }
 
+    // Let each individual stage determine the host (and possibly container) where it is run
+    agent none;
+
     stages {
-        stage('Blocks-sdk tests') {
+        stage('Report progress Phabricator') {
             steps {
                 script {
-                    // Tells a lambda to post to a Phabricator diff, to set a link to this Jenkins job.
-                    postBackToPhabricatorIfNecessary("pending");
+                    // Run on the master node, to report back immediately to Phabricator without possibly waiting for a new EC2 worker to be provisioned.
+                    node('master') {
+                        // Tells a lambda to post to a Phabricator diff, to set a link to this Jenkins job.
+                        postBackToPhabricatorIfNecessary("pending");
 
-                    final scmInfo = checkout scm;
-                    commitSha = scmInfo.GIT_COMMIT;
-                    branch = scmInfo.GIT_BRANCH;
-                    echo "scm : ${scmInfo}";
+                        // This build description is optimized for the Jenkins job that is triggered by Phacility diffs.
+                        def revisionId = params.get('REVISION_ID')
+                        def revisionUrl = "https://airtable.phacility.com/D${revisionId}?id=${params.get('DIFF_ID')}";
+                        def revisionLink = params.getOrDefault('REVISION_ID', false) ? "<a href=\"${revisionUrl}\">D${revisionId}</a><br/>" : "";
+                        def gitRefOrDefault = params.getOrDefault('GIT_REF', scm.branches[0].name);
+                        def gitRefOrDefaultLink = "<a href=\"https://github.com/Hyperbase/hyperbase/tree/${gitRefOrDefault}\">${gitRefOrDefault}</a>";
+                        def displayBranchLink = "The branch is <a href=\"https://github.com/hyperbase/hyperbase/tree/${branchNameForDisplayOnly}\">${branchNameForDisplayOnly}</a>";
+                        def feedbackLink = "<a href=\"https://airtable.com/shr9LjyNcD6rUUFAN\">Submit feedback to the Production Engineering team here</a>";
+                        def playbookLink = "How should you interpret this page? <a href=\"https://docs.google.com/document/d/1xzPmMYLrI0MtNiqSewZwu90X_paM_9aod9DcoV6Tihs/edit#heading=h.h83xxogp9l2b\">Read this playbook</a>";
+                        // NOTE: revisionLink and gitRefOrDefaultLink intentionally have the URL as the first part of the line, so that the job summaries that Jenkins
+                        // shows on the the left side of the homepage will include the URL (rather than generic text).
+                        currentBuild.description = "${revisionLink}${gitRefOrDefaultLink} for ${personOrSystemThatTriggeredBuild}<br/>${displayBranchLink}<br/>${playbookLink}<br/>${feedbackLink}<br/>";
+                    }
                 }
-                sshagent(['github2']) {
-                    sh '''
-                    set -eu
-                    printenv
-                    yarn --version
-                    node --version
-                    mkdir -p ~/.ssh
-                    echo github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ== >> ~/.ssh/known_hosts
-                    yarn install
-                    yarn ci
-                    '''
+            }
+        }
+        stage('Blocks-sdk tests') {
+            agent {
+                docker {
+                    image 'node:12.20.1-buster'
+                    // The label indicates which EC2 configuration to use, which are configured in https://jenkins.hyperbasedev.com/configureClouds/
+                    label 'jenkins-worker-for-blocks-tests'
+                }
+            }
+            steps {
+                script {
+                    sshagent(['github2']) {
+                        sh '''#!/bin/bash
+                        set -euo pipefail
+                        set -x
+                        printenv
+                        yarn --version
+                        node --version
+                        mkdir -p ~/.ssh
+                        echo github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ== >> ~/.ssh/known_hosts
+                        yarn install
+                        yarn ci
+                        '''
+                    }
                 }
             }
             post {
                 always {
-                    // Post status before doing any other processing, to get these updates out ASAP.
-                    postBackToPhabricatorIfNecessary(getTerminalResultForPhacilityAndSlack());
-                    notifySlack();
+                    script {
+                        currentBuild.description += "The build took ${currentBuild.duration/60000} minutes";
 
-                    // FIXME_CICD If this is uncommented, the test blows up since the xml files don't exist.
-                    // Are there any other test results file that we want to do something with? 
-                    // junit testResults: "ci/test-results-*.xml", keepLongStdio: true;
-                    cleanWs();
+                        // Post status before doing any other processing, to get these updates out ASAP.
+                        postBackToPhabricatorIfNecessary(getTerminalResultForPhacilityAndSlack());
+                        notifySlack();
+
+                        cleanWs();
+                    }
                 }
             }
         }
@@ -115,7 +143,7 @@ def postBackToPhabricatorIfNecessary(status) {
                         \"failedBuildTailLogUrl\": null,
                         \"diffId\": \"${params.DIFF_ID}\",
                         \"phid\": \"${params.PHID}\",
-                        \"jenkinsJobName\": \"blocks-sdk-phabricator\",
+                        \"jenkinsJobName\": \"${env.JOB_NAME}\",
                         \"jenkinsStatus\": \"${status}\"
                     }' \
                     || echo 'Failed' to report to Phacility
