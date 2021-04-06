@@ -93,20 +93,28 @@ export default class Run extends AirtableCommand {
             'loaded app config at %s',
             this.system.path.relative(this.system.process.cwd(), appConfigLocation),
         );
-        const appConfigModifiedPromise = (
-            await watchFileAsync(this.system, appConfigLocation)
-        ).whenModified.then(() => {
+
+        // Every await expression in this function scope needs to race against
+        // this promise. When it errors in newer versions of node it may be
+        // treated as an uncaught exception it the error is not handled.
+        const appConfigModifiedPromise = (async () => {
+            const {whenModified} = await watchFileAsync(this.system, appConfigLocation);
+            await whenModified;
+
             throw spawnUserError<BuildErrorInfo>({
                 type: BuildErrorName.BUILD_APP_CONFIG_MODIFIED,
             });
-        });
+        })();
 
         const producer = new RunProducer();
 
         // find our ports
-        const secureServerPort = await findPortAsync(flags.port, {
-            adjacentPorts: 1,
-        });
+        const secureServerPort = await Promise.race([
+            findPortAsync(flags.port, {
+                adjacentPorts: 1,
+            }),
+            appConfigModifiedPromise,
+        ]);
         const serverPort = secureServerPort + 1;
 
         const frameRouteOptions = {
@@ -149,63 +157,84 @@ export default class Run extends AirtableCommand {
         producer.buildStateDefer.promise.then(logBuildState);
 
         // start https server
-        const devServer = await createServerAsync(this.system, {
-            frameRouteOptions,
-            serverPort,
-            secureServerPort,
-        });
+        const devServer = await Promise.race([
+            createServerAsync(this.system, {
+                frameRouteOptions,
+                serverPort,
+                secureServerPort,
+            }),
+            appConfigModifiedPromise,
+        ]);
         this._devServer = devServer;
         debug('server bound to (http) %s and (https) %s', serverPort, secureServerPort);
 
         // pick a temporary directory to write the entry point to
         this._appTemporaryPath = this.system.path.join(appRootPath, APP_ROOT_TEMPORARY_DIR);
-        await mkdirpAsync(this.system, this._appTemporaryPath);
+        await Promise.race([
+            mkdirpAsync(this.system, this._appTemporaryPath),
+            appConfigModifiedPromise,
+        ]);
         debug('created temporary directory');
 
         // write entry point to disk
         const entryPointPath = this.system.path.join(this._appTemporaryPath, 'index.js');
         const userEntryPoint = this.system.path.join(appRootPath, appConfig.frontendEntry);
-        const entryPoint = await renderEntryPointAsync(this.system, {
-            mode: 'development',
-            destination: entryPointPath,
-            userEntryPoint,
-            blockBaseUrl: `https://localhost:${secureServerPort}`,
-        });
-        await this.system.fs.writeFileAsync(entryPointPath, Buffer.from(entryPoint));
+        const entryPoint = await Promise.race([
+            renderEntryPointAsync(this.system, {
+                mode: 'development',
+                destination: entryPointPath,
+                userEntryPoint,
+                blockBaseUrl: `https://localhost:${secureServerPort}`,
+            }),
+            appConfigModifiedPromise,
+        ]);
+        await Promise.race([
+            this.system.fs.writeFileAsync(entryPointPath, Buffer.from(entryPoint)),
+            appConfigModifiedPromise,
+        ]);
         debug(
             'wrote generated entry file at %s',
             this.system.path.relative(this.system.process.cwd(), entryPointPath),
         );
 
         // fork runner process
-        const task = await createRunTaskAsync(
-            this.system,
-            {module: appConfig.bundler?.module, workingdir: appRootPath},
-            producer,
-        );
+        const task = await Promise.race([
+            createRunTaskAsync(
+                this.system,
+                {module: appConfig.bundler?.module, workingdir: appRootPath},
+                producer,
+            ),
+            appConfigModifiedPromise,
+        ]);
         this._task = task;
 
-        await producer.readyDefer;
+        await Promise.race([producer.readyDefer, appConfigModifiedPromise]);
         debug('created task');
 
         // listen for port from bundler
         // `findPortAsync` selects a random port when invoked with `0`
-        const bundlerPort = await findPortAsync(0);
-        await task.startDevServerAsync({
-            port: bundlerPort,
-            liveReload: {
-                https: true,
-                port: secureServerPort,
-            },
+        const bundlerPort = await Promise.race([findPortAsync(0), appConfigModifiedPromise]);
+        await Promise.race([
+            task.startDevServerAsync({
+                port: bundlerPort,
+                liveReload: {
+                    https: true,
+                    port: secureServerPort,
+                },
 
-            mode: 'development',
-            context: appRootPath,
-            entry: entryPointPath,
-        });
+                mode: 'development',
+                context: appRootPath,
+                entry: entryPointPath,
+            }),
+            appConfigModifiedPromise,
+        ]);
         debug('started bundler dev server');
 
         // configure proxy
-        const devProxyServer = await devServer.proxyFrontendAsync(`localhost:${bundlerPort}`);
+        const devProxyServer = await Promise.race([
+            devServer.proxyFrontendAsync(`localhost:${bundlerPort}`),
+            appConfigModifiedPromise,
+        ]);
         this._devServer = devProxyServer;
         debug('proxying to frontend bundler (http) %s', bundlerPort);
 
@@ -222,13 +251,16 @@ export default class Run extends AirtableCommand {
         });
 
         try {
-            await clipboardy.write(`https://localhost:${secureServerPort}`);
+            await Promise.race([
+                clipboardy.write(`https://localhost:${secureServerPort}`),
+                appConfigModifiedPromise,
+            ]);
             this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);
         } catch (error) {
             debug(`failed to write to clipboard: ${error}`);
         }
 
-        await Promise.race([appConfigModifiedPromise, sigintPromise]);
+        await Promise.race([sigintPromise, appConfigModifiedPromise]);
     }
 
     async finallyAsync() {
