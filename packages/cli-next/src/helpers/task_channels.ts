@@ -279,6 +279,14 @@ export type ChannelArg =
           [key: string]: ChannelArg;
       };
 
+type ChannelReturn = Promise<ChannelArg | void> | ChannelArg | void;
+
+type Anonymize<T> = T extends Promise<infer P>
+    ? Promise<Anonymize<P>>
+    : T extends ObjectMap<any, any>
+    ? {[key in keyof T]: Anonymize<T[key]>}
+    : T;
+
 /**
  * A function with argument and return types that can be sent over a channel.
  */
@@ -286,8 +294,8 @@ export type ChannelFunction<T extends (...args: any[]) => any> = T extends (
     ...args: infer Args
 ) => infer Return
     ? (
-          ...args: Extract<Args, ChannelArg[]>
-      ) => Extract<Return, Promise<ChannelArg | void> | ChannelArg | void>
+          ...args: Extract<Anonymize<Args>, [] | ChannelArg[]>
+      ) => Extract<Anonymize<Return>, ChannelReturn>
     : never;
 
 /**
@@ -319,7 +327,7 @@ export interface RequestChannel<T extends ChannelMethods<T>> {
     >(
         method: N,
         ...args: Parameters<F>
-    ): Promise<R extends Promise<infer P> ? P : R>;
+    ): Promise<R extends Promise<infer P> ? P : never>;
 }
 
 export class RequestChannelAdapter<T extends ChannelMethods<T>> implements RequestChannel<T> {

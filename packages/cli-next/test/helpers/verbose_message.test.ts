@@ -18,6 +18,8 @@ import {
     RemoteCommandMessageName,
     RemoteConfigErrorName,
     S3ApiErrorName,
+    SubmitCommandErrorName,
+    SubmitCommandMessageName,
     SystemApiKeyErrorName,
     SystemConfigErrorName,
     SystemExtraErrorName,
@@ -161,6 +163,10 @@ function testMessages(): {
 
         [S3ApiErrorName.S3_API_BUNDLE_TOO_LARGE]: [{}],
         [S3ApiErrorName.S3_API_FAILED]: [{}],
+
+        [SubmitCommandErrorName.SUBMIT_COMMAND_WINDOWS_MULTIPLE_DISKS]: [{}],
+        [SubmitCommandMessageName.SUBMIT_COMMAND_PACKAGED_CONTINUE_PROMPT]: [{}],
+        [SubmitCommandMessageName.SUBMIT_COMMAND_STOP_AFTER_PACKAGING]: [{}],
 
         [SystemApiKeyErrorName.SYSTEM_API_KEY_NOT_FOUND]: [{}],
 

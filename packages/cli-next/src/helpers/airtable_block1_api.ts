@@ -29,6 +29,7 @@ export interface AirtableBlock1ApiReleaseOptions
 
 export interface AirtableBlock1ApiCodeUploadOptions extends AirtableBlock1ApiBaseOptions {
     codeUploadId: string;
+    status: 'uploaded' | 'failed';
 }
 
 function airtableBlock1FetchInit(
@@ -39,6 +40,15 @@ function airtableBlock1FetchInit(
         url: `/v2/bases/${baseId}/blocks/${blockId}${url}`,
         ...init,
     });
+}
+
+interface AirtableBlock1CodeUploadResponse {
+    codeUploadId: string;
+    presignedUploadUrl: string;
+}
+
+interface AirtableBlock1FinalizeCodeUploadResponse {
+    message: string;
 }
 
 export class AirtableBlock1Api extends AirtableApi {
@@ -108,7 +118,9 @@ export class AirtableBlock1Api extends AirtableApi {
         );
     }
 
-    async blockCreateCodeUploadAsync(urlOptions: AirtableBlock1ApiBaseOptions) {
+    async blockCreateCodeUploadAsync(
+        urlOptions: AirtableBlock1ApiBaseOptions,
+    ): Promise<AirtableBlock1CodeUploadResponse> {
         return await this.fetchJsonAsync(
             airtableBlock1FetchInit(urlOptions, {url: '/codeUpload/create'}),
         );
@@ -116,13 +128,15 @@ export class AirtableBlock1Api extends AirtableApi {
 
     async blockFinalizeCodeUploadAsync({
         codeUploadId,
+        status,
         ...urlOptions
-    }: AirtableBlock1ApiCodeUploadOptions) {
-        return await this.fetchVoidAsync(
+    }: AirtableBlock1ApiCodeUploadOptions): Promise<AirtableBlock1FinalizeCodeUploadResponse> {
+        return await this.fetchJsonAsync(
             airtableBlock1FetchInit(urlOptions, {
                 url: '/codeUpload/finalize',
                 body: {
                     codeUploadId,
+                    status,
                 },
             }),
         );

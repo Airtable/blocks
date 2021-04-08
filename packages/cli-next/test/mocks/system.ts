@@ -5,6 +5,7 @@ import {createFsFromVolume, Volume} from 'memfs';
 
 import {System} from '../../src/helpers/system';
 import {asyncify, CallbackFS} from '../../src/helpers/fs_async';
+import {StreamFS, streamify} from '../../src/helpers/fs_stream';
 
 type SystemOS = System['os'];
 type SystemProcess = System['process'];
@@ -50,6 +51,7 @@ export function createSystem({volume}: {volume: SystemVolume}) {
         unwatchFile: (volumeFs.unwatchFile as unknown) as typeof originalFs.unwatchFile,
         watch: (volumeFs.watch as unknown) as typeof originalFs.watch,
         watchFile: (volumeFs.watchFile as unknown) as typeof originalFs.watchFile,
+        ...streamify((volumeFs as unknown) as StreamFS),
     };
     const os = new MockOS();
     const process = new MockProcess();

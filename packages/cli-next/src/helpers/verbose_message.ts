@@ -21,6 +21,20 @@ import {
     RemoteCommandMessageInfo,
 } from './remote_messages';
 
+import {
+    ReleaseCommandErrorInfo,
+    ReleaseCommandErrorName,
+    ReleaseCommandMessageInfo,
+    ReleaseCommandMessageName,
+} from './release_messages';
+
+import {
+    SubmitCommandErrorInfo,
+    SubmitCommandErrorName,
+    SubmitCommandMessageInfo,
+    SubmitCommandMessageName,
+} from './submit_messages';
+
 import * as renderMessage from './render_message';
 
 import {AirtableApiErrorName, AirtableApiErrorInfo} from './airtable_api';
@@ -34,12 +48,6 @@ import {SystemApiKeyErrorName, SystemApiKeyErrorInfo} from './system_api_key';
 import {SystemConfigErrorInfo, SystemConfigErrorName} from './system_config';
 import {SystemExtraErrorInfo, SystemExtraErrorName} from './system_extra';
 import {UserConfigErrorInfo, UserConfigErrorName} from './config_user';
-import {
-    ReleaseCommandErrorInfo,
-    ReleaseCommandErrorName,
-    ReleaseCommandMessageInfo,
-    ReleaseCommandMessageName,
-} from './release_messages';
 
 export {
     AirtableApiErrorInfo,
@@ -68,6 +76,10 @@ export {
     RemoteConfigErrorName,
     S3ApiErrorInfo,
     S3ApiErrorName,
+    SubmitCommandErrorInfo,
+    SubmitCommandErrorName,
+    SubmitCommandMessageInfo,
+    SubmitCommandMessageName,
     SystemApiKeyErrorInfo,
     SystemApiKeyErrorName,
     SystemConfigErrorInfo,
@@ -94,6 +106,8 @@ export const MessageName = {
     ...RemoteCommandMessageName,
     ...RemoteConfigErrorName,
     ...S3ApiErrorName,
+    ...SubmitCommandErrorName,
+    ...SubmitCommandMessageName,
     ...SystemApiKeyErrorName,
     ...SystemConfigErrorName,
     ...SystemExtraErrorName,
@@ -118,6 +132,8 @@ export type MessageInfo =
     | RemoteCommandMessageInfo
     | RemoteConfigErrorInfo
     | S3ApiErrorInfo
+    | SubmitCommandErrorInfo
+    | SubmitCommandMessageInfo
     | SystemApiKeyErrorInfo
     | SystemConfigErrorInfo
     | SystemExtraErrorInfo
@@ -264,6 +280,18 @@ If you want to update the remote, please run {cyan.bold block remove-remote ${re
         },
         s3ApiFailed() {
             return this.util.chalk`❌ Could not upload bundle. Failed to upload.`;
+        },
+
+        // submit_message.ts
+        submitCommandPackagedContinuePrompt() {
+            return this.util
+                .chalk`\nThe project source code has been packaged for review by Airtable.\nAre you ready to submit it for review? (Enter {cyan.bold y} to continue)`;
+        },
+        submitCommandStopAfterPackaging() {
+            return this.util.chalk`Quitting. If you want to submit later run this command again.`;
+        },
+        submitCommandWindowsMultipleDisks() {
+            return this.util.chalk`Dependencies cannot be on multiple disks.`;
         },
 
         // system_api_key.ts

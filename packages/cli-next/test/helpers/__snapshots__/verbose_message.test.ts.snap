@@ -110,6 +110,16 @@ exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not uploa
 
 exports[`verbose_message formats s3ApiFailed 1`] = `"❌ Could not upload bundle. Failed to upload."`;
 
+exports[`verbose_message formats submitCommandPackagedContinuePrompt 1`] = `
+"
+The project source code has been packaged for review by Airtable.
+Are you ready to submit it for review? (Enter [36m[1my[22m[39m to continue)"
+`;
+
+exports[`verbose_message formats submitCommandStopAfterPackaging 1`] = `"Quitting. If you want to submit later run this command again."`;
+
+exports[`verbose_message formats submitCommandWindowsMultipleDisks 1`] = `"Dependencies cannot be on multiple disks."`;
+
 exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use [36m[1mblock set-api-key[22m[39m to set it."`;
 
 exports[`verbose_message formats systemConfigAppDirectoryNotFound 1`] = `"❌ Could not find the root of an Airtable project. Please run again from an Airtable project."`;

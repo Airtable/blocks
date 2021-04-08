@@ -10,6 +10,7 @@ import {
     RunDevServerMethods,
     RunTaskConsumer,
 } from './run';
+import {SubmitFindDependenciesOptions, SubmitFoundDependencies, SubmitTaskConsumer} from './submit';
 
 export {
     ReleaseBundleOptions,
@@ -23,6 +24,12 @@ export {
     BuildStatus,
     RunDevServerMethods,
     RunTaskConsumer,
+    SubmitFindDependenciesOptions,
+    SubmitFoundDependencies,
+    SubmitTaskConsumer,
 };
 
-export interface BundlerTaskConsumer extends RunTaskConsumer, ReleaseTaskConsumer {}
+export interface BundlerTaskConsumer
+    extends ReleaseTaskConsumer,
+        RunTaskConsumer,
+        SubmitTaskConsumer {}

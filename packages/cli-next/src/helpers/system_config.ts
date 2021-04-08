@@ -98,9 +98,13 @@ async function findAppDirectoryFileAsync(
  * Find the AppConfig file in the App's root directory.
  *
  * @param sys Host system to search
+ * @param workingdir Directory to start search from
  */
-export async function findAppConfigAsync(sys: System): Promise<string> {
-    return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, sys.process.cwd());
+export async function findAppConfigAsync(
+    sys: System,
+    workingdir = sys.process.cwd(),
+): Promise<string> {
+    return await findAppDirectoryFileAsync(sys, BLOCK_FILE_NAME, workingdir);
 }
 
 export async function findRemoteConfigPathByNameAsync(

@@ -14,6 +14,8 @@ export const INIT_TEMPLATE_TARBALL_FILENAME = 'template.tar.gz';
 export const INIT_TEMPLATE_EXTRACT_DIRECTORY = 'template';
 export const INIT_DEFAULT_TEMPLATE_URL = 'https://github.com/Airtable/apps-hello-world';
 
+export const SUBMIT_ARCHIVE_NAME = 'block_source.zip';
+
 /**
  * V2 blocks don't have an application id, we store this value in the
  * remote.json file instead to signal that it is a V2 block and allow development

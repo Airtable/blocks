@@ -4,6 +4,7 @@ import {platform, homedir} from 'os';
 
 import asyncFs, {AsyncFS} from './fs_async';
 import nonAsyncFs, {NonAsyncFs} from './fs_non_async';
+import streamFs, {StreamFS} from './fs_stream';
 import {atomicify} from './system_extra';
 
 export {AsyncFS};
@@ -30,14 +31,14 @@ export interface SystemOS {
 }
 
 export interface System {
-    fs: AsyncFS & NonAsyncFs;
+    fs: AsyncFS & NonAsyncFs & StreamFS;
     path: SystemPath;
     process: SystemProcess;
     os: SystemOS;
 }
 
 export function createSystem({
-    fs = {...asyncFs, ...nonAsyncFs},
+    fs = {...asyncFs, ...nonAsyncFs, ...streamFs},
     path = {sep, dirname, join, parse, relative, resolve},
     process = {chdir, cwd, env, version},
     os = {homedir, platform},

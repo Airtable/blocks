@@ -7,14 +7,17 @@ import typescript from 'typescript';
 
 import {RunTaskConsumer, RunDevServerOptions, BuildStatus, RunDevServerMethods} from '../tasks/run';
 import {ReleaseTaskConsumer, ReleaseBundleOptions} from '../tasks/release';
-import {invariant} from '../helpers/error_utils';
+import {SubmitFindDependenciesOptions, SubmitTaskConsumer} from '../tasks/submit';
+import {invariant, spawnUnexpectedError} from '../helpers/error_utils';
 import {createSystem, System} from '../helpers/system';
 
 import {createWebpackCompilerConfig, WebpackSummaryOptions} from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createJavascriptAssetConfigAsync} from './javascript_config';
 
-class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
+const AIRTABLE_CANCEL_BUILD_ERROR = 'AirtableCancelBuildPlugin: Bail' as const;
+
+class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsumer {
     system: System;
 
     compilerConfig?: webpack.Configuration;
@@ -49,6 +52,41 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer {
         if (stats?.hasErrors()) {
             throw stats.toJson().errors[0];
         }
+    }
+
+    async findDependenciesAsync(options: SubmitFindDependenciesOptions) {
+        await this._configureCompilerAsync({...options});
+        invariant(this.compiler, 'compiler must be configured to find dependencies');
+
+        let fileDependencies: string[] = [];
+        // The compiler's make hook finds modules starting from the entry
+        // module. After make cause the compiler to stop with an error. We can
+        // allow the compiler to continue past this point, but that will not
+        // impact the list of fileDependecies that we are after in this
+        // function.
+        this.compiler.hooks.finishMake.tapPromise(
+            'AirtableCancelBuildPlugin',
+            async compilation => {
+                compilation.summarizeDependencies();
+                fileDependencies = Array.from(compilation.fileDependencies.values());
+                // Throw an error at this point. The compiler is configured with
+                // other plugins that will perform a lot more work to produce a
+                // bundle that we will not use.
+                throw spawnUnexpectedError(AIRTABLE_CANCEL_BUILD_ERROR);
+            },
+        );
+
+        try {
+            await promisify(this.compiler.run.bind(this.compiler))();
+        } catch (err) {
+            if (err.message !== AIRTABLE_CANCEL_BUILD_ERROR) {
+                throw err;
+            }
+        }
+
+        return {
+            files: fileDependencies,
+        };
     }
 
     async startDevServerAsync({
