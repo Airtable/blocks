@@ -15,8 +15,8 @@ export type Messages<MessageInfo extends {type: string}, MessageUtil = void> = {
     util: MessageUtil;
     renderMessage(message: MessageInfo): string;
     renderError(err: UserError<MessageInfo>): string;
-    supportsMessage(message: unknown): message is MessageInfo;
-    supportsError(err: Error): err is UserError<MessageInfo>;
+    supportsMessage<Info extends MessageInfo = MessageInfo>(message: unknown): message is Info;
+    supportsError<Info extends MessageInfo = MessageInfo>(err: Error): err is UserError<Info>;
 } & MessageCalls<MessageInfo>;
 
 export interface MessageConstructor<MessageInfo extends {type: string}, MessageUtil = void> {

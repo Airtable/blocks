@@ -3,16 +3,47 @@ import stripAnsi from 'strip-ansi';
 
 import {BLOCK_REQUEST_BODY_LIMIT} from '../settings';
 import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
-import {spawnUnexpectedError} from './error_utils';
+import {RemoteConfig} from './config_remote';
+import {invariant, spawnUnexpectedError} from './error_utils';
+import {RenderMessage} from './render_message';
+
+export enum DevelopmentRunFrameMessageName {
+    DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY = 'developmentRunFrameOriginalBlockOnly',
+    DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION = 'developmentRunFrameNewBlockInstallation',
+}
+
+export interface DevelopmentRunFrameOriginalBlockOnlyMessage {
+    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY;
+}
+
+export interface DevelopmentRunFrameNewBlockInstallationMessage {
+    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION;
+}
+
+export type DevelopmentRunFrameMessageInfo =
+    | DevelopmentRunFrameOriginalBlockOnlyMessage
+    | DevelopmentRunFrameNewBlockInstallationMessage;
 
 export interface RunFrameRouteOptions {
+    remoteConfig: RemoteConfig;
+    userAgent: string;
+    messages: RenderMessage<DevelopmentRunFrameMessageInfo, any>;
+
     getBuildState(): BuildState;
     getBuildStateResultAsync(): Promise<BuildStateBuilt | BuildStateError>;
+
+    setBlockInstallationId(id: string): void;
 }
 
 export function createRunFrameRoutes({
+    remoteConfig,
+    userAgent,
+    messages,
+
     getBuildState,
     getBuildStateResultAsync,
+
+    setBlockInstallationId,
 }: RunFrameRouteOptions) {
     const runFrameRoutes = express.Router();
 
@@ -90,6 +121,56 @@ export function createRunFrameRoutes({
             status: buildState.status,
             ...stack,
         });
+    });
+
+    runFrameRoutes.options('/registerBlockInstallationMetadata', (req, res) => {
+        res.set({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': '*',
+            'Access-Control-Max-Age': '86400',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        })
+            .status(200)
+            .end();
+    });
+
+    runFrameRoutes.post('/registerBlockInstallationMetadata', (req, res) => {
+        if (
+            !req.body ||
+            !req.body.applicationId ||
+            !req.body.blockId ||
+            !req.body.blockInstallationId
+        ) {
+            res.status(400).send({
+                error: 'BAD_REQUEST',
+                message: 'Invalid request body',
+            });
+        } else if (req.body.applicationId !== remoteConfig.baseId) {
+            res.status(403).send({
+                error: 'FORBIDDEN',
+                message: messages.renderMessage({
+                    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY,
+                }),
+            });
+        } else if (req.body.blockId !== remoteConfig.blockId) {
+            res.status(403).send({
+                error: 'FORBIDDEN',
+                message: messages.renderMessage({
+                    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY,
+                }),
+            });
+        } else {
+            invariant(
+                typeof req.body.applicationId === 'string',
+                'expects req.body.applicationId to be a string',
+            );
+            invariant(
+                typeof req.body.blockInstallationId === 'string',
+                'req.body.blockInstallationId to be a string',
+            );
+            setBlockInstallationId(req.body.blockInstallationId);
+            res.status(200).send({userAgent});
+        }
     });
 
     return runFrameRoutes;

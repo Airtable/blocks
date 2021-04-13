@@ -41,6 +41,10 @@ import {AirtableApiErrorName, AirtableApiErrorInfo} from './airtable_api';
 import {AppConfigErrorInfo, AppConfigErrorName} from './config_app';
 import {BlockIdentifierErrorInfo, BlockIdentifierErrorName} from './block_identifier';
 import {BuildErrorInfo, BuildErrorName} from './build_messages';
+import {
+    DevelopmentRunFrameMessageInfo,
+    DevelopmentRunFrameMessageName,
+} from './development_run_frame_routes';
 import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
 import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
@@ -58,6 +62,8 @@ export {
     BlockIdentifierErrorName,
     BuildErrorName,
     BuildErrorInfo,
+    DevelopmentRunFrameMessageInfo,
+    DevelopmentRunFrameMessageName,
     FindPortErrorInfo,
     FindPortErrorName,
     InitCommandErrorInfo,
@@ -97,6 +103,7 @@ export const MessageName = {
     ...AppConfigErrorName,
     ...BlockIdentifierErrorName,
     ...BuildErrorName,
+    ...DevelopmentRunFrameMessageName,
     ...FindPortErrorName,
     ...InitCommandErrorName,
     ...InitCommandMessageName,
@@ -123,6 +130,7 @@ export type MessageInfo =
     | AppConfigErrorInfo
     | BlockIdentifierErrorInfo
     | BuildErrorInfo
+    | DevelopmentRunFrameMessageInfo
     | FindPortErrorInfo
     | InitCommandErrorInfo
     | InitCommandMessageInfo
@@ -193,6 +201,15 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         buildNodeModulesAbsent({appRootPath}) {
             return this.util
                 .chalk`Please run {cyan.bold npm install} in ${appRootPath} to install packages before running.`;
+        },
+
+        // development_run_frame_routes.ts
+        developmentRunFrameNewBlockInstallation() {
+            return this.util.chalk`Switched to a new block installation.`;
+        },
+        developmentRunFrameOriginalBlockOnly() {
+            return this.util
+                .chalk`You can only run your development block in the original base where it was created.`;
         },
 
         // find_port_async.ts

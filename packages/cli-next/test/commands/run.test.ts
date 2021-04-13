@@ -3,6 +3,7 @@ import {expect} from '@oclif/test';
 import * as findPortAsyncModule from '../../src/helpers/find_port_async';
 import * as developmentProxyServerModule from '../../src/helpers/development_proxy_server';
 import * as runModule from '../../src/manager/run';
+import * as userAgentModule from '../../src/helpers/user_agent';
 import {RunDevServerOptions, RunTaskConsumer} from '../../src/tasks/run';
 
 import {test} from '../mocks/test';
@@ -11,6 +12,7 @@ import {invariant} from '../../src/helpers/error_utils';
 import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {AppBundlerContext} from '../../src/manager/bundler';
 import {BuildErrorName} from '../../src/helpers/build_messages';
+import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
 
 type DevelopmentServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
 type DevelopmentProxyServerInterface = developmentProxyServerModule.DevelopmentServerInterface;
@@ -64,9 +66,13 @@ describe('run', () => {
         .stub(findPortAsyncModule, 'findPortAsync', stubFindPortAsync())
         .stub(developmentProxyServerModule, 'createServerAsync', stubCreateServer)
         .stub(runModule, 'createRunTaskAsync', stubCreateRunTaskAsync)
+        .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0')
         .withFiles({
             '/home/projects/my-app/node_modules/fake-dependency/index.js': Buffer.from(
                 '// fake dependency',
+            ),
+            '/home/projects/my-app/.block/remote.json': Buffer.from(
+                '{"baseId": "abcd", "blockId": "1234"}',
             ),
             '/home/projects/my-app/block.json': Buffer.from('{"frontendEntry":"index.js"}'),
             '/home/projects/my-app/index.js': Buffer.from('// hello world'),
@@ -128,6 +134,19 @@ describe('run', () => {
         });
 
     testRunCommand
+        .withJSON({
+            '/home/projects/my-app/.block/newremote.remote.json': {
+                baseId: 'app123',
+                blockId: 'blk5678',
+            },
+        })
+        .answer('Server listening', {signal: 'SIGINT'})
+        .command(['run', '--remote', 'newremote'])
+        .it('runs with newremote remote', ctx => {
+            expect(ctx.stderr).to.contain('/newremote.remote.json');
+        });
+
+    testRunCommand
         .withFiles({
             '/home/projects/my-app/block.json': null,
         })
@@ -142,6 +161,14 @@ describe('run', () => {
         .command(['run'])
         .catch(new RegExp(AppConfigErrorName.APP_CONFIG_IS_NOT_VALID))
         .it('validates block.json');
+
+    testRunCommand
+        .withJSON({
+            '/home/projects/my-app/.block/remote.json': {},
+        })
+        .command(['run'])
+        .catch(new RegExp(RemoteConfigErrorName.REMOTE_CONFIG_IS_NOT_VALID))
+        .it('validates remote.json');
 
     testRunCommand
         .answer('Server listening', {

@@ -15,7 +15,10 @@ import {
 import {
     findAppConfigAsync,
     findAppDirectoryAsync,
+    findRemoteConfigPathByNameAsync,
     readAppConfigAsync,
+    readRemoteConfigAsync,
+    validateRemoteName,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {dirExistsAsync, mkdirpAsync, rmdirAsync, watchFileAsync} from '../helpers/system_extra';
@@ -23,6 +26,14 @@ import {Deferred} from '../helpers/deferred';
 import {spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
 import {RunTaskConsumerAdapter} from '../manager/run_adapter';
 import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
+import {unwrapResultFunctor} from '../helpers/result';
+import {RemoteCommandMessageName} from '../helpers/remote_messages';
+import {createUserAgentAsync} from '../helpers/user_agent';
+import {
+    DevelopmentRunFrameMessageName,
+    RunFrameRouteOptions,
+} from '../helpers/development_run_frame_routes';
+import {MessageInfo} from '../helpers/verbose_message';
 
 const debug = _debug('block-cli:command:run');
 
@@ -68,10 +79,17 @@ export default class Run extends AirtableCommand {
                 'HTTPS port the server listens on. The server will listen for HTTP on PORT + 1.',
             default: 9000,
         }),
+
+        remote: commandFlags.string({
+            description: '[Beta] Configure which remote to use',
+            parse: unwrapResultFunctor(validateRemoteName),
+        }),
     };
 
     async runAsync() {
         const {flags} = this.parse(Run);
+
+        const {system: sys, messages} = this;
 
         // load app config
         const appRootPath = await findAppDirectoryAsync(this.system, this.system.process.cwd());
@@ -106,6 +124,25 @@ export default class Run extends AirtableCommand {
             });
         })();
 
+        if (flags.remote) {
+            this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
+        }
+
+        const remoteConfigPath = await findRemoteConfigPathByNameAsync(
+            sys,
+            sys.process.cwd(),
+            flags.remote,
+        );
+        const remoteConfigResult = await readRemoteConfigAsync(sys, remoteConfigPath);
+        if (remoteConfigResult.err) {
+            this.error(remoteConfigResult.err);
+        }
+        const remoteConfig = remoteConfigResult.value;
+        debug('loaded remote config at %s', sys.path.relative(sys.process.cwd(), remoteConfigPath));
+
+        const userAgent = await createUserAgentAsync(sys);
+        debug('connecting to Airtable with user agent: %s', userAgent);
+
         const producer = new RunProducer();
 
         // find our ports
@@ -117,7 +154,13 @@ export default class Run extends AirtableCommand {
         ]);
         const serverPort = secureServerPort + 1;
 
-        const frameRouteOptions = {
+        let blockInstallationId: string | undefined;
+        const logMessage = <Info extends MessageInfo>(message: Info) => this.logMessage(message);
+        const frameRouteOptions: RunFrameRouteOptions = {
+            remoteConfig,
+            userAgent,
+            messages,
+
             getBuildState: () => producer.buildState,
             async getBuildStateResultAsync(): Promise<BuildStateBuilt | BuildStateError> {
                 if (
@@ -128,6 +171,16 @@ export default class Run extends AirtableCommand {
                 } else {
                     await producer.buildStateDefer.promise;
                     return await frameRouteOptions.getBuildStateResultAsync();
+                }
+            },
+
+            setBlockInstallationId(id: string) {
+                if (blockInstallationId !== id) {
+                    logMessage({
+                        type:
+                            DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION,
+                    });
+                    blockInstallationId = id;
                 }
             },
         };
