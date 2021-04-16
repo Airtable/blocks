@@ -8,9 +8,10 @@
     },
     "homepage": "https://airtable.com/developers/blocks",
     "main": "dist/cjs/index.js",
-    "types": "index.d.ts",
+    "types": "dist/types/src/index.d.ts",
     "files": [
-        "dist"
+        "dist",
+        "types"
     ],
     "scripts": {
         "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
