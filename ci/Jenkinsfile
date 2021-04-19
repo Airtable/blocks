@@ -8,6 +8,7 @@ stashedDirectories = [];
 pipeline {
     options {
         timestamps();
+        timeout(time: 20, unit: 'MINUTES');
     }
 
     // Let each individual stage determine the host (and possibly container) where it is run
