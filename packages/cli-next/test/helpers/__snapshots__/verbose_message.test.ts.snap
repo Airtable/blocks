@@ -14,6 +14,10 @@ exports[`verbose_message formats airtableApiErrorStatusAndMessages 2`] = `
 [{\\"code\\":\\"SOMETHING_WRONG\\",\\"message\\":\\"Something went wrong.\\"}]"
 `;
 
+exports[`verbose_message formats airtableApiKeyMalformed 1`] = `"❌ Invalid Airtable API key specified. Make sure you copied it correctly from airtable.com/account."`;
+
+exports[`verbose_message formats airtableApiKeyNameInvalid 1`] = `"❌ Invalid Airtable API key name specified: \\"a taxi cab covered in waffles\\"."`;
+
 exports[`verbose_message formats airtableApiMultipleErrors 1`] = `
 "Airtable server responded with multiple errors:
 

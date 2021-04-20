@@ -3,11 +3,14 @@ import * as Parser from '@oclif/parser';
 import cli from '../helpers/cli_ux';
 
 import AirtableCommand from '../helpers/airtable_command';
+import {AirtableApiErrorName} from '../helpers/airtable_api';
+import {spawnUserError} from '../helpers/error_utils';
 
 import {
     ConfigLocation,
     findApiKeyConfigPathAsync,
     isValidApiKey,
+    isValidApiKeyName,
     writeApiKeyAsync,
 } from '../helpers/system_api_key';
 
@@ -41,9 +44,25 @@ $ block set-api-key --location app APIKEY
         const {args, flags} = this.parse(SetApiKey);
         const apiKeyName = flags['api-key-name'];
 
+        if (typeof apiKeyName === 'string' && !isValidApiKeyName(apiKeyName)) {
+            throw spawnUserError({
+                type: AirtableApiErrorName.AIRTABLE_API_KEY_NAME_INVALID,
+                name: apiKeyName,
+            });
+        }
+
         let {apiKey} = args;
 
+        // Immediately fail if an invalid API key is provided non-interactively
+        if (apiKey && !isValidApiKey(apiKey)) {
+            throw spawnUserError({type: AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED});
+        }
+
+        // Repeatedly prompt if an invalid API key is provided interactively
         while (!isValidApiKey(apiKey)) {
+            if (apiKey) {
+                this.logMessage({type: AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED});
+            }
             apiKey = await cli.prompt('What is your Airtable API Key?', {
                 type: 'mask',
                 required: true,

@@ -13,6 +13,8 @@ enum ErrorResponseCode {
 
 export enum AirtableApiErrorName {
     AIRTABLE_API_ERROR_STATUS_AND_MESSAGES = 'airtableApiErrorStatusAndMessages',
+    AIRTABLE_API_KEY_MALFORMED = 'airtableApiKeyMalformed',
+    AIRTABLE_API_KEY_NAME_INVALID = 'airtableApiKeyNameInvalid',
     AIRTABLE_API_MULTIPLE_ERRORS = 'airtableApiMultipleErrors',
     AIRTABLE_API_WITH_INVALID_API_KEY = 'airtableApiWithInvalidApiKey',
     AIRTABLE_API_BASE_NOT_FOUND = 'airtableApiBaseNotFound',
@@ -24,6 +26,18 @@ export interface AirtableApiErrorStatusAndMessages {
     type: AirtableApiErrorName.AIRTABLE_API_ERROR_STATUS_AND_MESSAGES;
     status: number;
     errors: Exclude<ErrorResponseJson['errors'], undefined>;
+}
+
+// This message intentionally omits the invalid value because displaying it
+// could leak information to terminal logs and during active "shoulder surfing"
+// attacks.
+export interface AirtableApiErrorKeyMalformed {
+    type: AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED;
+}
+
+export interface AirtableApiErrorKeyNameInvalid {
+    type: AirtableApiErrorName.AIRTABLE_API_KEY_NAME_INVALID;
+    name: string;
 }
 
 export interface AirtableApiErrorMultiple {
@@ -51,6 +65,8 @@ export interface AirtableApiErrorUnexpected {
 
 export type AirtableApiErrorInfo =
     | AirtableApiErrorStatusAndMessages
+    | AirtableApiErrorKeyMalformed
+    | AirtableApiErrorKeyNameInvalid
     | AirtableApiErrorMultiple
     | AirtableApiErrorInvalidApiKey
     | AirtableApiErrorBaseNotFound

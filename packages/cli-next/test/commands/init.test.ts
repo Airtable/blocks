@@ -32,7 +32,9 @@ describe('init', () => {
         .stub(appTemplateUtilsModule, 'extractTarballAsync', stubExtractTarballAsync())
         .stub(npmModule, 'installAsync', stubNpmInstallAsync())
         .withFiles({
-            '/home/.config/.airtableblocksrc.json': Buffer.from('{"airtableApiKey":"key1234"}'),
+            '/home/.config/.airtableblocksrc.json': Buffer.from(
+                '{"airtableApiKey":"keyAPI12345678910"}',
+            ),
         });
 
     testInitCommand
@@ -66,9 +68,9 @@ describe('init', () => {
 
     testInitCommand
         .withFiles({'/home/.config': null})
-        .answer('What is your Airtable', {stdin: 'keyAPI1234'})
+        .answer('What is your Airtable', {stdin: 'keyAPI12345678910'})
         .command(['init', 'app1234/blk5678', 'my-app'])
-        .wroteUserConfigFile({airtableApiKey: {default: 'keyAPI1234'}})
+        .wroteUserConfigFile({airtableApiKey: {default: 'keyAPI12345678910'}})
         .it('runs set-api-key if no key is set', ctx => {
             expect(ctx.stderr).to.contain('no api key has been set');
         });

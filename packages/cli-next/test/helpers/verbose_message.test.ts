@@ -71,6 +71,10 @@ function testMessages(): {
                 errors: [{code: 'SOMETHING_WRONG', message: 'Something went wrong.'}],
             },
         ],
+        [AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED]: [{}],
+        [AirtableApiErrorName.AIRTABLE_API_KEY_NAME_INVALID]: [
+            {name: 'a taxi cab covered in waffles'},
+        ],
         [AirtableApiErrorName.AIRTABLE_API_MULTIPLE_ERRORS]: [
             {errors: []},
             {

@@ -162,6 +162,13 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
                 errors,
             )}`;
         },
+        airtableApiKeyMalformed() {
+            return this.util
+                .chalk`❌ Invalid Airtable API key specified. Make sure you copied it correctly from airtable.com/account.`;
+        },
+        airtableApiKeyNameInvalid({name}) {
+            return this.util.chalk`❌ Invalid Airtable API key name specified: "${name}".`;
+        },
         airtableApiMultipleErrors({errors}) {
             return this.util.chalk`Airtable server responded with multiple errors:\n\n${errors
                 .map(this.renderMessage, this)

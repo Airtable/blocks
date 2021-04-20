@@ -29,8 +29,16 @@ export enum ConfigLocation {
     APP = 'app',
 }
 
+const VALID_API_KEY_REGEX = /^key[a-zA-Z0-9]{14}$/;
+
 export function isValidApiKey(apiKey: unknown): apiKey is string {
-    return typeof apiKey === 'string' && apiKey.startsWith('key');
+    return typeof apiKey === 'string' && VALID_API_KEY_REGEX.test(apiKey);
+}
+
+const VALID_API_KEY_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+
+export function isValidApiKeyName(apiKeyName: string) {
+    return VALID_API_KEY_NAME_REGEX.test(apiKeyName);
 }
 
 export function castLocation(location: string): Result<ConfigLocation> {
