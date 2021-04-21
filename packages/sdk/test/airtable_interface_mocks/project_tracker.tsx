@@ -11,6 +11,7 @@ const projectTracker: SdkInitData = {
     baseData: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Project tracker',
+        color: 'purple',
         activeTableId: 'tblDesignProjects',
         tableOrder: ['tblDesignProjects', 'tblTasks', 'tblClients'],
         tablesById: {
