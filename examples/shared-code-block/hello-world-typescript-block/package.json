@@ -1,0 +1,24 @@
+{
+    "name": "@airtable/hello-world-typescript-shared-app",
+    "version": "2.0.5",
+    "description": "A typescript version of a hello world app",
+    "author": "",
+    "license": "MIT",
+    "scripts": {
+        "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend"
+    },
+    "dependencies": {
+        "@airtable/blocks": "file:../../../packages/cli-next",
+        "hello-world-file-url": "file:../hello-world-file-url",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^3.0.2",
+        "@typescript-eslint/parser": "^2.15.0",
+        "eslint": "^6.3.0",
+        "eslint-plugin-react": "^7.14.3",
+        "eslint-plugin-react-hooks": "^2.0.1",
+        "typescript": "^3.9.3"
+    }
+}
