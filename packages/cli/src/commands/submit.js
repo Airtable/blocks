@@ -11,7 +11,7 @@ import fs from 'fs';
 import fsUtils from '../helpers/fs_utils';
 import path from 'path';
 import {getBlockDirPath} from '../helpers/get_block_dir_path';
-import {BUILD_DIR} from '../config/block_cli_config_settings';
+import {BUILD_DIR, V2_BLOCKS_BASE_ID} from '../config/block_cli_config_settings';
 import {exitWithError} from '../helpers/cli_helpers';
 
 const requestAsync = util.promisify(request);
@@ -69,7 +69,8 @@ export async function runCommandAsync(argv: Argv): Promise<void> {
         exitWithError('Error packaging source code.', err);
     }
 
-    const {presignedUploadUrl, codeUploadId} = await apiClient.createCodeUploadAsync();
+    const isV2Block = remoteJson.baseId === V2_BLOCKS_BASE_ID;
+    const {presignedUploadUrl, codeUploadId} = await apiClient.createCodeUploadAsync(isV2Block);
     // eslint-disable-next-line no-console
     console.log('Uploading your block...');
 
@@ -82,7 +83,7 @@ export async function runCommandAsync(argv: Argv): Promise<void> {
 
     const didUpload = response.statusCode === 200;
     const status = didUpload ? 'uploaded' : 'failed';
-    const {message} = await apiClient.finalizeCodeUploadAsync({codeUploadId, status});
+    const {message} = await apiClient.finalizeCodeUploadAsync(isV2Block, {codeUploadId, status});
     if (!didUpload) {
         exitWithError(message);
     }

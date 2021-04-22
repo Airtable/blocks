@@ -70,6 +70,11 @@ class ApiClient {
         return this._getUrl(`/v2/bases/${this._applicationId}/blocks/${this._blockId}`);
     }
 
+    _getBlockV2BaseUrl(): string {
+        invariant(this._blockId, 'this._blockId');
+        return this._getUrl(`/v2/blocksV2/${this._blockId}`);
+    }
+
     // TODO(jb): realistically, this endpoint should be using `bases` and not `meta`.
     _getAccessPolicyUrl(): string {
         invariant(this._blockInstallationId, '_blockInstallationId');
@@ -180,9 +185,8 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         buildId: BuildId,
         frontendBundleS3UploadInfo: S3UploadInfo,
     }> {
-        invariant(this._blockId, 'this._blockId');
         const options = {
-            url: this._getUrl(`/v2/blocksV2/${this._blockId}/builds/start`),
+            url: `${this._getBlockV2BaseUrl()}/builds/start`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -303,9 +307,8 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         buildId: BuildId,
         developerComment: string,
     ): Promise<{releaseId: ReleaseId}> {
-        invariant(this._blockId, 'this._blockId');
         const options = {
-            url: this._getUrl(`/v2/blocksV2/${this._blockId}/releases/create`),
+            url: `${this._getBlockV2BaseUrl()}/releases/create`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -348,12 +351,20 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         return bodyParsed.accessPolicy;
     }
 
-    async createCodeUploadAsync(): Promise<{codeUploadId: string, presignedUploadUrl: string}> {
+    async createCodeUploadAsync(
+        isV2Block: boolean,
+    ): Promise<{codeUploadId: string, presignedUploadUrl: string}> {
+        const url = `${
+            isV2Block ? this._getBlockV2BaseUrl() : this._getBlockBaseUrl()
+        }/codeUpload/create`;
         const options = {
-            url: `${this._getBlockBaseUrl()}/codeUpload/create`,
+            url,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
+            },
+            body: {
+                isV2Block,
             },
             json: true,
         };
@@ -365,12 +376,18 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         }
         return body;
     }
-    async finalizeCodeUploadAsync(requestBody: {
-        codeUploadId: string,
-        status: 'uploaded' | 'failed',
-    }): Promise<{message: string}> {
+    async finalizeCodeUploadAsync(
+        isV2Block: boolean,
+        requestBody: {
+            codeUploadId: string,
+            status: 'uploaded' | 'failed',
+        },
+    ): Promise<{message: string}> {
+        const url = `${
+            isV2Block ? this._getBlockV2BaseUrl() : this._getBlockBaseUrl()
+        }/codeUpload/finalize`;
         const options = {
-            url: `${this._getBlockBaseUrl()}/codeUpload/finalize`,
+            url,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
