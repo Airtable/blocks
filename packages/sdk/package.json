@@ -27,9 +27,9 @@
         "unstable_testing_utils.d.ts"
     ],
     "scripts": {
-        "ci": "yarn run build && yarn run docs && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
+        "ci": "yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
+        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
@@ -43,11 +43,6 @@
         "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
-        "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
-        "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
-        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json ./docs/docs-$npm_package_version.json .",
-        "docs:minify-docs-json": "node ./doc-generator/minify-docs-json.js ./docs/docs-$npm_package_version.json",
-        "docs": "yarn build && yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:minify-docs-json",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",
@@ -95,8 +90,6 @@
         "jest": "^24.9.0",
         "prettier": "^1.19.1",
         "prism-react-renderer": "^1.0.2",
-        "typedoc": "^0.15.4",
-        "typedoc-plugin-no-inherit": "^1.1.10",
         "typescript": "^3.7.3"
     },
     "dependencies": {

@@ -20,5 +20,5 @@
 
         "useDefineForClassFields": true
     },
-    "include": ["src/**/*", "test/**/*"]
+    "include": ["types/**/*", "src/**/*", "test/**/*"]
 }

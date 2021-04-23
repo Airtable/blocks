@@ -22,10 +22,17 @@ export const MutationTypes = Object.freeze({
 /** @hidden */
 export type MutationType = ObjectValues<typeof MutationTypes>;
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App modifies one or more {@link Record|Records}.
+ *
+ * @docsPath testing/mutations/SetMultipleRecordsCellValuesMutation
+ */
 export interface SetMultipleRecordsCellValuesMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
+    /** The identifier for the @link Table in which Records are being modified */
     readonly tableId: TableId;
+    /** The Records being modified */
     readonly records: ReadonlyArray<{
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
@@ -44,10 +51,17 @@ export interface PartialSetMultipleRecordsCellValuesMutation {
         | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App deletes one or more {@link Record|Records}.
+ *
+ * @docsPath testing/mutations/DeleteMultipleRecordsMutation
+ */
 export interface DeleteMultipleRecordsMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
+    /** The identifier for the Table in which Records are being deleted */
     readonly tableId: TableId;
+    /** The identifiers for records being deleted */
     readonly recordIds: ReadonlyArray<RecordId>;
 }
 
@@ -58,10 +72,17 @@ export interface PartialDeleteMultipleRecordsMutation {
     readonly recordIds: ReadonlyArray<RecordId> | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App creates one or more {@link Record|Records}.
+ *
+ * @docsPath testing/mutations/CreateMultipleRecordsMutation
+ */
 export interface CreateMultipleRecordsMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
+    /** The identifier for the Table in which Records are being created */
     readonly tableId: TableId;
+    /** The records being created */
     readonly records: ReadonlyArray<{
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
@@ -80,9 +101,16 @@ export interface PartialCreateMultipleRecordsMutation {
         | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App modifies one or more values in the
+ * {@link GlobalConfig}.
+ *
+ * @docsPath testing/mutations/SetMultipleGlobalConfigPathsMutation
+ */
 export interface SetMultipleGlobalConfigPathsMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS;
+    /** One or more pairs of path and value */
     readonly updates: ReadonlyArray<GlobalConfigUpdate>;
 }
 
@@ -97,12 +125,21 @@ export interface PartialSetMultipleGlobalConfigPathsMutation {
         | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App creates a {@link Field}.
+ *
+ * @docsPath testing/mutations/CreateSingleFieldMutation
+ */
 export interface CreateSingleFieldMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
+    /** The identifier for the Table in which a Field is being created */
     readonly tableId: TableId;
+    /** The identifier for the Field being created */
     readonly id: FieldId;
+    /** The name of the Field being created */
     readonly name: string;
+    /** The configuration for the Field being created */
     readonly config: FieldTypeConfig;
 }
 
@@ -115,12 +152,20 @@ export interface PartialCreateSingleFieldMutation {
     readonly config: FieldTypeConfig | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App modifies a {@link Field}.
+ *
+ * @docsPath testing/mutations/UpdateSingleFieldConfigMutation
+ */
 
 export interface UpdateSingleFieldConfigMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
+    /** The identifier for the Table in which a Field is being modified */
     readonly tableId: TableId;
+    /** The identifier for the Field being modified */
     readonly id: FieldId;
+    /** The new configuration for the Field being modified */
     readonly config: FieldTypeConfig;
 }
 
@@ -132,11 +177,19 @@ export interface PartialUpdateSingleFieldConfigMutation {
     readonly config: FieldTypeConfig | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App creates a {@link Table}
+ *
+ * @docsPath testing/mutations/CreateSingleTableMutation
+ */
 export interface CreateSingleTableMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
+    /** The identifier for the Table being created */
     readonly id: TableId;
+    /** The name of the Table being created */
     readonly name: string;
+    /** The Fields that are being created within the new Table */
     readonly fields: ReadonlyArray<{
         name: string;
         config: FieldTypeConfig;
@@ -156,11 +209,19 @@ export interface PartialCreateSingleTableMutation {
         | undefined;
 }
 
-/** @hidden */
+/**
+ * The Mutation emitted when the App modifies a {@link View}.
+ *
+ * @docsPath testing/mutations/UpdateViewMetadataMutation
+ */
 export interface UpdateViewMetadataMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
     readonly type: typeof MutationTypes.UPDATE_VIEW_METADATA;
+    /** The identifier for the Table in which a View is being modified */
     readonly tableId: TableId;
+    /** The identifier for the View being modified */
     readonly viewId: ViewId;
+    /** The metadata for the View being modified */
     readonly metadata: NormalizedViewMetadata;
 }
 

@@ -6,5 +6,5 @@
 /docs/.cache/
 /docs/public/
 /examples/*/build
-/packages/sdk/docs/*
-/packages/blocks-testing/docs/*
+/packages/blocks-docs/docs.json
+/packages/cli-next/test/fixtures/

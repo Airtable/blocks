@@ -22,6 +22,15 @@ module.exports = {
         '@babel/proposal-nullish-coalescing-operator',
         '@babel/proposal-optional-chaining',
         '@babel/transform-runtime',
+        [
+            'transform-define',
+            {
+                'global.COMPATIBLE_SDK_VERSIONS': require('./package.json').peerDependencies[
+                    '@airtable/blocks'
+                ],
+                'global.PACKAGE_VERSION': require('./package.json').version,
+            },
+        ],
     ],
     parserOpts: {
         allowAwaitOutsideFunction: true,

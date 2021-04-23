@@ -55,7 +55,12 @@ function defaultUpdateBatcher(applyUpdates: () => void) {
  * @hidden
  */
 export default class BlockSdk {
-    /** @hidden */
+    /**
+     * This value is used by the blocks-testing library to verify
+     * compatibility.
+     *
+     * @hidden
+     */
     static VERSION = global.PACKAGE_VERSION;
 
     /** @internal */

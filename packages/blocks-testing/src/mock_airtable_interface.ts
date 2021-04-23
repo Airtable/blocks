@@ -77,6 +77,17 @@ function isReadonlyArray(value: any): value is ReadonlyArray<any> {
     return Array.isArray(value);
 }
 
+/**
+ * Determine whether a given Mutation is defined by the Blocks SDK (and used in
+ * production scenarios) or defined by the blocks-testing library (and used
+ * purely for simulation purposes).
+ *
+ * @internal
+ */
+function isAuthenticMutation(mutation: TestMutation): mutation is Mutation {
+    return MutationTypeValues.includes(mutation.type);
+}
+
 const alphanumerics = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /**
@@ -135,15 +146,15 @@ function setGlobalConfigValue(
 
 /**
  * A mapping relating the names of event subscriptions available on
- * `TestDriver` instances to the arguments that are provided when one of those
- * events is triggered.
+ * {@link TestDriver} instances to the arguments that are provided when one of
+ * those events is triggered.
  */
 export interface WatchableKeysAndArgs {
     /**
      * Triggered whenever the SDK has been induced to persist a change to the
      * Base.
      */
-    mutation: TestMutation;
+    mutation: Mutation;
     /**
      * Triggered when the SDK has been induced to expand a Record in the user
      * interface
@@ -294,9 +305,9 @@ interface RecordDataStore {
 /**
  * A callback function allowing tests to simulate user interaction with the
  * expanded record picker UI. The testing library will invoke this function
- * whenever the App under test uses the `expandRecordPickerAsync` API, and the
- * return value of this function will be provided to the App under test as the
- * Record that the simulated user selected.
+ * whenever the App under test uses the {@link expandRecordPickerAsync}
+ * function, and the return value of this function will be provided to the App
+ * under test as the {@link Record} that the simulated user selected.
  */
 export type PickRecord = (
     tableId: string,
@@ -559,7 +570,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
             this.triggerModelUpdates(updates);
         }
 
-        if (MutationTypeValues.includes(mutation.type)) {
+        if (isAuthenticMutation(mutation)) {
             this.emit('mutation', mutation);
         }
     }

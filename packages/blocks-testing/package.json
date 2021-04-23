@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks-testing",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Airtable Blocks Testing Library",
     "repository": {
         "type": "git",
@@ -8,14 +8,15 @@
     },
     "homepage": "https://airtable.com/developers/blocks",
     "main": "dist/cjs/index.js",
-    "types": "index.d.ts",
+    "types": "dist/types/src/index.d.ts",
     "files": [
-        "dist"
+        "dist",
+        "types"
     ],
     "scripts": {
-        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run docs && yarn run test:coverage",
+        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
         "pretest": "yarn run lint && yarn run types",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
+        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
@@ -28,11 +29,6 @@
         "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
-        "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
-        "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
-        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json ./docs/docs-$npm_package_version.json .",
-        "docs:minify-docs-json": "node ./doc-generator/minify-docs-json.js ./docs/docs-$npm_package_version.json",
-        "docs": "yarn build && yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:minify-docs-json",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types"
     },
@@ -57,6 +53,7 @@
         "@typescript-eslint/parser": "^2.10.0",
         "babel-eslint": "^11.0.0-beta.0",
         "babel-loader": "^8.0.6",
+        "babel-plugin-transform-define": "^2.0.0",
         "concurrently": "^5.0.0",
         "eslint": "6.7.2",
         "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01fef1f",
@@ -77,8 +74,10 @@
         "@types/prettier": "^1.19.0",
         "@types/prop-types": "^15.7.3",
         "@types/react": "^16.9.5",
+        "@types/semver": "^7.3.4",
         "@types/styled-system": "^5.1.4",
-        "core-js": "^3.4.8"
+        "core-js": "^3.4.8",
+        "semver": "^7.3.4"
     },
     "airtable_comments": {
         "@airtabel/blocks": [
@@ -114,7 +113,8 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
-            "after:bump": "yarn build"
+            "after:bump": "yarn build",
+            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-testing@${version})"
         },
         "npm": {
             "access": "public"

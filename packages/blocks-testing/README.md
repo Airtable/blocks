@@ -1,7 +1,6 @@
 # Introduction to writing automated tests for Airtable Apps
 
-Support for automated testing is currently under development, considered unstable, and intended for
-internal Airtable use only.
+Support for automated testing is currently in open beta.
 
 ## Implementation status
 
@@ -14,28 +13,28 @@ The following table describes the implementation status of each operation.
 
 | operation                 | internal support   | testing API        |
 | ------------------------- | ------------------ | ------------------ |
-| Table - create            |                    | partial [1]        |
-| Table - update            |                    |
-| Table - destroy           |                    |
-| Field - create            |                    | partial [1]        |
-| Field - update            |                    |
-| Field - destroy           |                    |
+| Table - create            | partial [1]        |
+| Table - update            | partial [1]        |
+| Table - destroy           |                    | :heavy_check_mark: |
+| Field - create            | partial [1]        |
+| Field - update            | partial [1]        |
+| Field - destroy           |                    | :heavy_check_mark: |
 | View - create             |                    |
 | View - update             |                    |
-| View - destroy            |                    |
-| Global Config - update    |                    | n/a [2]            |
-| Cursor Data - update      |                    |
+| View - destroy            |                    | :heavy_check_mark: |
+| Global Config - update    | :heavy_check_mark: | n/a [2]            |
+| Cursor Data - update      |                    | :heavy_check_mark: |
 | Session Data - update     |                    |
 | User permissions - update | :heavy_check_mark: | :heavy_check_mark: |
 | click settings button     |                    |
 | toggle full screen        |                    |
-| expand record             |                    | n/a [2]            |
+| expand record             |                    | :heavy_check_mark: |  |
 | Record - create           | partial [3]        | n/a [2]            |
 | Record - update           | :heavy_check_mark: | n/a [2]            |
 | Record - destroy          | :heavy_check_mark: | n/a [2]            |
 
--   [1] While the SDK's public API nominally supports these operations, its capabilities are
-    severely restricted. They should be complemented by a more powerful testing API.
+-   [1] While the SDK's public API supports these operations, its capabilities are restricted.
+    Ideally they would be complemented by a more powerful testing API.
 -   [2] These operations can be initiated using the SDK's public API.
 -   [3] Unsupported operations: creating records for tables which have not yet been loaded,
     [creating records with data for fields which have not yet beean loaded](https://github.com/Hyperbase/blocks-sdk/blob/a77fa4b959f512a041e987ee0bfe3fafb7db8b59/packages/sdk/src/models/mutations.ts#L583),
@@ -47,12 +46,11 @@ The following table describes the implementation status of each operation.
 of Tables, Views, Fields, and Records. It is written by test authors and in terms of
 JSON-serializable values.
 [The App Test Fixtures Airtable App](https://airtable.com/marketplace/blk5qI32GYyYb1Rbm/test-fixture-generator)
-allows developers to generate this data from the state of an authentic Base.
+allows developers to generate this data from the state of an authentic Base. This App is not ready
+for beta yet.
 
 **`TestDriver`** is the JavaScript interface for creating and manipulating a simulated Airtable Apps
-environment. It implements methods for performing operations which are not available in the SDK. In
-lieu of formal API documentation, please review the formatted comments maintained within the
-`TestDriver` source code.
+environment. It implements methods for performing operations which are not available in the SDK.
 
 **`AirtableInterface`** is the layer of the SDK which mediates between the models and the backend.
 In production environments, it operates via asynchronous message passing with the App's parent web
@@ -138,7 +136,7 @@ Each test will typically perform the following steps:
     expect(recordIds).toEqual(['reca']);
     ```
 
-[The automated test suite for the To-do List example App](https://github.com/Hyperbase/blocks-sdk/tree/master/examples/todo-block/test)
+[The automated test suite for the To-do List example App](https://github.com/Airtable/apps-todo-list/tree/master/test)
 demonstrates this pattern.
 
 ## Extending the Testing API
