@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.62...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.63...HEAD)
+
+No changes.
+
+## [0.0.63](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.62...@airtable/blocks-cli@0.0.63) - 2021-04-26
 
 -   Adds a new optional argument "--http" to `block run`, which will server your block from an HTTP
     server instead of the default HTTPS server.
