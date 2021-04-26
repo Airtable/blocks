@@ -122,7 +122,10 @@ export class AirtableBlock1Api extends AirtableApi {
         urlOptions: AirtableBlock1ApiBaseOptions,
     ): Promise<AirtableBlock1CodeUploadResponse> {
         return await this.fetchJsonAsync(
-            airtableBlock1FetchInit(urlOptions, {url: '/codeUpload/create'}),
+            airtableBlock1FetchInit(urlOptions, {
+                url: '/codeUpload/create',
+                body: {isV2Block: false},
+            }),
         );
     }
 

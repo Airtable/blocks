@@ -10,6 +10,7 @@ import {
     APP_RELEASE_DIR,
     APP_ROOT_TEMPORARY_DIR,
     SUBMIT_ARCHIVE_NAME,
+    V2_BLOCKS_BASE_ID,
 } from '../settings';
 
 import {createSubmitTaskAsync, SubmitTaskProducer} from '../manager/submit';
@@ -29,11 +30,13 @@ import {readApiKeyAsync} from '../helpers/system_api_key';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
-import {uploadSubmitAsync} from '../helpers/upload_submit';
 import {System} from '../helpers/system';
 import {SubmitCommandErrorName, SubmitCommandMessageName} from '../helpers/submit_messages';
 import {spawnUserError} from '../helpers/error_utils';
 import {AirtableBlock1Api} from '../helpers/airtable_block1_api';
+import {AirtableBlock2Api} from '../helpers/airtable_block2_api';
+import {uploadBlock1SubmitAsync} from '../helpers/upload_block1_submit';
+import {uploadBlock2SubmitAsync} from '../helpers/upload_block2_submit';
 
 const debug = _debug('block-cli:command:submit');
 
@@ -107,20 +110,6 @@ export default class Submit extends AirtableCommand {
 
         const userAgent = await createUserAgentAsync(sys);
         debug('connecting to Airtable with user agent: %s', userAgent);
-
-        const api = {
-            airtable: new AirtableBlock1Api(),
-        };
-        const uploadOptions = {
-            api,
-            blockUrlOptions: {
-                baseId,
-                blockId,
-                apiKey,
-                userAgent,
-                apiBaseUrl: remoteConfig.server ?? AIRTABLE_API_URL,
-            },
-        };
 
         // fork bundler process
         const producer = new SubmitProducer();
@@ -266,9 +255,41 @@ export default class Submit extends AirtableCommand {
         cli.action.start('Submitting');
 
         // upload archive
-        const submitResponseMessage = await uploadSubmitAsync(uploadOptions, {
-            archiveBuffer,
-        });
+        let submitResponseMessage: string;
+        if (baseId === V2_BLOCKS_BASE_ID) {
+            const api = {
+                airtable: new AirtableBlock2Api(),
+            };
+            const uploadOptions = {
+                api,
+                blockUrlOptions: {
+                    blockId,
+                    apiKey,
+                    userAgent,
+                    apiBaseUrl: remoteConfig.server ?? AIRTABLE_API_URL,
+                },
+            };
+            submitResponseMessage = await uploadBlock2SubmitAsync(uploadOptions, {
+                archiveBuffer,
+            });
+        } else {
+            const api = {
+                airtable: new AirtableBlock1Api(),
+            };
+            const uploadOptions = {
+                api,
+                blockUrlOptions: {
+                    baseId,
+                    blockId,
+                    apiKey,
+                    userAgent,
+                    apiBaseUrl: remoteConfig.server ?? AIRTABLE_API_URL,
+                },
+            };
+            submitResponseMessage = await uploadBlock1SubmitAsync(uploadOptions, {
+                archiveBuffer,
+            });
+        }
 
         cli.action.stop();
         this._teardownAction = null;

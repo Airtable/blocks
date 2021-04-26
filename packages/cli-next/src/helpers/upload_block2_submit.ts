@@ -1,19 +1,19 @@
 import fetch from 'node-fetch';
-import {AirtableBlock1Api, AirtableBlock1ApiBaseOptions} from './airtable_block1_api';
+import {AirtableBlock2Api, AirtableBlock2ApiBaseOptions} from './airtable_block2_api';
 import {spawnUnexpectedError} from './error_utils';
 
 export interface UploadSubmitOptions {
     api: {
-        airtable: AirtableBlock1Api;
+        airtable: AirtableBlock2Api;
     };
-    blockUrlOptions: AirtableBlock1ApiBaseOptions;
+    blockUrlOptions: AirtableBlock2ApiBaseOptions;
 }
 
 export interface UploadSubmitDataOptions {
     archiveBuffer: Buffer;
 }
 
-export async function uploadSubmitAsync(
+export async function uploadBlock2SubmitAsync(
     {api: {airtable}, blockUrlOptions}: UploadSubmitOptions,
     {archiveBuffer}: UploadSubmitDataOptions,
 ): Promise<string> {

@@ -1,7 +1,7 @@
 import {expect, test} from '../mocks/test';
 
 import * as submitModule from '../../src/manager/submit';
-import * as uploadSubmitModule from '../../src/helpers/upload_submit';
+import * as uploadSubmitModule from '../../src/helpers/upload_block1_submit';
 import * as userAgentModule from '../../src/helpers/user_agent';
 
 import {AppConfigErrorName} from '../../src/helpers/config_app';
@@ -42,7 +42,7 @@ describe('submit', () => {
             'createSubmitTaskAsync',
             stubCreateSubmitTaskAsync(['/home/projects/my-app/frontend/index.js']),
         )
-        .stub(uploadSubmitModule, 'uploadSubmitAsync', uploadSubmitStubAsync)
+        .stub(uploadSubmitModule, 'uploadBlock1SubmitAsync', uploadSubmitStubAsync)
         .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0');
 
     const testSubmitCommandAndContinue = testSubmitCommand.answer(
