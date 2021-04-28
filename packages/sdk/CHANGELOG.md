@@ -13,6 +13,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Add `color` property to `base` to access the background color of the base, as well as the
     `color` watch key
+-   Update documentation text for `GlobalConfig` with increased 150kb limit.
 
 ## [1.5.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.0...@airtable/blocks@1.5.1) - 2021-03-04
 
