@@ -1,12 +1,15 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 
+import fetch from 'node-fetch';
+import FormData from 'form-data';
 import AirtableCommand from '../helpers/airtable_command';
 import {
     AIRTABLE_API_URL,
     APP_RELEASE_DIR,
     APP_ROOT_TEMPORARY_DIR,
     BUNDLE_FILE_NAME,
+    ROLLBAR_ACCESS_TOKEN,
     V2_BLOCKS_BASE_ID,
 } from '../settings';
 import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
@@ -29,12 +32,14 @@ import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
-import {invariant, spawnUserError} from '../helpers/error_utils';
+import {invariant, spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
 import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {ReleaseCommandErrorName, ReleaseCommandMessageName} from '../helpers/release_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
 import {AirtableApi} from '../helpers/airtable_api';
+import {getGitHashAsync} from '../helpers/get_git_hash';
+import {System} from '../helpers/system';
 
 const debug = _debug('block-cli:command:release');
 
@@ -73,12 +78,51 @@ export default class Release extends AirtableCommand {
                 'A string describing the changes in this release. Can be at most 1000 characters',
             hidden: true,
         }),
+        'upload-source-maps-to-rollbar': commandFlags.boolean({
+            description:
+                "Uploads the source map for the block's frontend bundle to the airtable-blocks rollbar project",
+            default: false,
+            hidden: true,
+        }),
     };
+
+    async _uploadSourceMapToRollbarAsync(
+        sys: System,
+        frontendBundleSourceMapPath: string,
+        s3BundleKey: string,
+        gitHash: string,
+        bundleCdn: string,
+    ): Promise<void> {
+        const form = new FormData();
+        form.append('access_token', ROLLBAR_ACCESS_TOKEN);
+        form.append('version', gitHash);
+        form.append('minified_url', `${bundleCdn}/${s3BundleKey}`);
+        form.append(
+            'source_map',
+            await sys.fs.readFileAsync(frontendBundleSourceMapPath, {encoding: 'utf-8'}),
+            'thirdparty.min.map',
+        );
+        const response = await fetch('https://api.rollbar.com/api/1/sourcemap', {
+            method: 'post',
+            body: form,
+        });
+        if (!response.ok) {
+            let errorDetails;
+            try {
+                const body = await response.json();
+                errorDetails = JSON.stringify(body);
+            } catch (e) {
+                errorDetails = `${response.status} - ${response.statusText}`;
+            }
+            throw spawnUnexpectedError(errorDetails);
+        }
+    }
 
     async runAsync() {
         const {flags} = this.parse(Release);
 
         const sys = this.system;
+        const uploadSourceMapsToRollbar = flags['upload-source-maps-to-rollbar'];
 
         // load app config
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
@@ -189,11 +233,14 @@ export default class Release extends AirtableCommand {
 
         // write entry point to disk
         const entryPointPath = sys.path.join(this._appTemporaryPath, 'index.js');
+        const frontendBundlePath = sys.path.join(appBuildPath, BUNDLE_FILE_NAME);
         const userEntryPoint = sys.path.join(appRootPath, appConfig.frontendEntry);
+        const gitHash = await getGitHashAsync(sys, appRootPath);
         const entryPoint = await renderEntryPointAsync(sys, {
             mode: 'production',
             destination: entryPointPath,
             userEntryPoint,
+            gitHash: gitHash ?? undefined,
         });
         await sys.fs.writeFileAsync(entryPointPath, Buffer.from(entryPoint));
         debug(
@@ -210,14 +257,13 @@ export default class Release extends AirtableCommand {
             context: appRootPath,
             entry: entryPointPath,
             outputPath: appBuildPath,
+            shouldGenerateSeparateSourceMaps: uploadSourceMapsToRollbar,
         });
 
         cli.action.stop();
         cli.action.start('Uploading');
 
-        const frontendBundle = await sys.fs.readFileAsync(
-            sys.path.join(appBuildPath, BUNDLE_FILE_NAME),
-        );
+        const frontendBundle = await sys.fs.readFileAsync(frontendBundlePath);
 
         // upload bundle
         const build = await airtableApi.createBuildAsync({
@@ -227,6 +273,29 @@ export default class Release extends AirtableCommand {
         });
 
         cli.action.stop();
+        if (uploadSourceMapsToRollbar) {
+            cli.action.start('Uploading source maps');
+            const bundleCdn = remoteConfig.bundleCdn;
+            const s3BundleKey = build.frontendBundleS3UploadInfo.key;
+            const frontendBundleSourceMapPath = frontendBundlePath + '.map';
+            invariant(typeof s3BundleKey === 'string', 'expected s3BundleKey to be string');
+            invariant(
+                typeof gitHash === 'string',
+                'failed to get gitHash, the block must be in a git repo to support uploading sourcemaps',
+            );
+            invariant(
+                typeof bundleCdn === 'string',
+                'bundleCdn must be set on the .block/*.json config',
+            );
+            await this._uploadSourceMapToRollbarAsync(
+                sys,
+                frontendBundleSourceMapPath,
+                s3BundleKey,
+                gitHash,
+                bundleCdn,
+            );
+            cli.action.stop();
+        }
         cli.action.start('Releasing');
 
         // create release with uploaded build

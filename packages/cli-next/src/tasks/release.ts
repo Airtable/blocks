@@ -10,6 +10,8 @@ export interface ReleaseBundleOptions {
     entry: string;
     /** Absolute directory path to write the produced bundle to. */
     outputPath: string;
+    /** Whether or not to generate a separate sourcemap file. This will override the default behavior for mode. */
+    shouldGenerateSeparateSourceMaps?: boolean;
 }
 
 export interface ReleaseTaskConsumer {

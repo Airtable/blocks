@@ -17,6 +17,10 @@ export interface WebpackSummaryOptions {
     entry: string;
     /** Path on disk to write files produced while bundling. */
     outputPath?: string;
+    /** When set to true, we always generate a separate .map file with sourcemap information.
+     *  This overrides the default behavior based on mode where development would generate inline sourcemaps.
+     */
+    shouldGenerateSeparateSourceMaps?: boolean;
     /** Configure live reload client. */
     liveReload?: {
         /**
@@ -41,7 +45,7 @@ export interface JavascriptAssetOptions {
 }
 
 /**
- * If the bundler is behind a proxy (it is), we need to manualy inject the client.
+ * If the bundler is behind a proxy (it is), we need to manually inject the client.
  *
  * @param entry Path to first module to execute in the produced bundle.
  * @param liveReload Configure live reload client.
@@ -62,7 +66,7 @@ function injectLiveReloadClient(entry: string, liveReload: WebpackSummaryOptions
 }
 
 /**
- * Syncronyously transform a serializable bundler configuration summary to
+ * Synchronously transform a serializable bundler configuration summary to
  * webpack configuration format.
  *
  * @param param0 summary of webpack compiler config
@@ -72,6 +76,7 @@ export function createWebpackCompilerConfig({
     context,
     entry,
     outputPath,
+    shouldGenerateSeparateSourceMaps,
     liveReload,
     assets: {
         javascript: {options: babelOptions},
@@ -81,6 +86,9 @@ export function createWebpackCompilerConfig({
 
     if (mode === 'development') {
         devtool = 'inline-cheap-module-source-map';
+    }
+    if (shouldGenerateSeparateSourceMaps) {
+        devtool = 'source-map';
     }
 
     return {

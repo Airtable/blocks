@@ -1,6 +1,7 @@
 import {expect} from '@oclif/test';
 
 import * as releaseModule from '../../src/manager/release';
+import * as getGitHashModule from '../../src/helpers/get_git_hash';
 import * as userAgentModule from '../../src/helpers/user_agent';
 import * as airtableLegacyBlockApiModule from '../../src/helpers/airtable_legacy_block_api';
 import * as airtableBlockV2ApiModule from '../../src/helpers/airtable_block_v2_api';
@@ -29,6 +30,7 @@ import {
 
 const {
     stubCreateReleaseTaskAsync,
+    stubGetGitHashAsync,
     airtableLegacyBlockApiStub,
     airtableBlockV2ApiStub,
 } = createStubs();
@@ -40,6 +42,7 @@ describe('release', () => {
         .stderr()
         .enableDebug('block-cli*:release')
         .stub(releaseModule, 'createReleaseTaskAsync', stubCreateReleaseTaskAsync)
+        .stub(getGitHashModule, 'getGitHashAsync', stubGetGitHashAsync)
         .stub(airtableLegacyBlockApiModule, 'AirtableLegacyBlockApi', airtableLegacyBlockApiStub())
         .stub(
             airtableBlockV2ApiModule,
@@ -205,6 +208,46 @@ describe('release', () => {
         .command(['release', '--comment', 'fixed the bug'])
         .catch(new RegExp(ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK1_COMMENT_UNSUPPORTED))
         .it('does not support comment flag for v1 blocks');
+
+    testReleaseCommand
+        .stub(getGitHashModule, 'getGitHashAsync', () => null)
+        .command(['release', '--upload-source-maps-to-rollbar'])
+        .catch(
+            'failed to get gitHash, the block must be in a git repo to support uploading sourcemaps',
+        )
+        .it('requires gitHash');
+
+    testReleaseCommand
+        .command(['release', '--upload-source-maps-to-rollbar'])
+        .catch('bundleCdn must be set on the .block/*.json config')
+        .it('requires bundleCdn to be set');
+
+    testReleaseCommand
+        .withJSON({
+            '/home/projects/my-app/.block/remote.json': {
+                baseId: 'abcd',
+                blockId: '1234',
+                bundleCdn: 'https://cdn.airtableblocks.com',
+            },
+        })
+        .nock('https://api.rollbar.com', api => api.post('/api/1/sourcemap').reply(200, {}))
+        .command(['release', '--upload-source-maps-to-rollbar'])
+        .it('uploads sourcemaps when flag is set');
+
+    testReleaseCommand
+        .withJSON({
+            '/home/projects/my-app/.block/remote.json': {
+                baseId: 'abcd',
+                blockId: '1234',
+                bundleCdn: 'https://cdn.airtableblocks.com',
+            },
+        })
+        .nock('https://api.rollbar.com', api =>
+            api.post('/api/1/sourcemap').reply(404, {body: 'An error was encountered'}),
+        )
+        .command(['release', '--upload-source-maps-to-rollbar'])
+        .catch(new RegExp('An error was encountered'))
+        .it('reports api errors when failing to upload source maps');
 });
 
 function createStubs() {
@@ -224,14 +267,25 @@ function createStubs() {
         })();
 
         return {
-            async bundleAsync({outputPath}) {
+            async bundleAsync({outputPath, shouldGenerateSeparateSourceMaps}) {
                 await sys.fs.writeFileAsync(
                     sys.path.join(outputPath, BUNDLE_FILE_NAME),
                     '// bundled source',
                 );
+                if (shouldGenerateSeparateSourceMaps) {
+                    await sys.fs.writeFileAsync(
+                        sys.path.join(outputPath, BUNDLE_FILE_NAME) + '.map',
+                        '// sourcemap',
+                    );
+                }
             },
             async teardownAsync() {},
         };
+    }
+
+    async function _stubGetGitHashAsync(sys?: System, cwd?: string) {
+        invariant(sys && cwd, 'Arguments sys and cwd must be passed in');
+        return 'gitHash';
     }
 
     type AirtableLegacyBlockApiStubMethods = {
@@ -270,7 +324,7 @@ function createStubs() {
                           backendDeploymentPackageUploadUrl: null,
                           frontendBundleS3UploadInfo: {
                               endpointUrl: 'endpointUrl',
-                              key: null,
+                              key: 'frontendBundleS3Key',
                               keyPrefix: null,
                               params: {},
                           },
@@ -315,7 +369,7 @@ function createStubs() {
                     backendDeploymentPackageUploadUrl: null,
                     frontendBundleS3UploadInfo: {
                         endpointUrl: 'endpointUrl',
-                        key: null,
+                        key: 'frontendBundleS3Key',
                         keyPrefix: null,
                         params: {},
                     },
@@ -333,6 +387,7 @@ function createStubs() {
 
     return {
         stubCreateReleaseTaskAsync: _stubCreateReleaseTaskAsync,
+        stubGetGitHashAsync: _stubGetGitHashAsync,
         airtableLegacyBlockApiStub: _airtableLegacyBlockApiStub,
         airtableBlockV2ApiStub: _airtableBlockV2ApiStub,
     };
