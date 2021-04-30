@@ -2,16 +2,21 @@ import {expect} from '@oclif/test';
 
 import * as releaseModule from '../../src/manager/release';
 import * as userAgentModule from '../../src/helpers/user_agent';
-import * as uploadBlock1ReleaseModule from '../../src/helpers/upload_block1_release';
-import * as uploadBlock2ReleaseModule from '../../src/helpers/upload_block2_release';
+import * as airtableLegacyBlockApiModule from '../../src/helpers/airtable_legacy_block_api';
+import * as airtableBlockV2ApiModule from '../../src/helpers/airtable_block_v2_api';
 import {ReleaseTaskConsumer} from '../../src/tasks/release';
 import {System} from '../../src/helpers/system';
 
 import {test} from '../mocks/test';
 import {AIRTABLE_API_URL, BUNDLE_FILE_NAME, V2_BLOCKS_BASE_ID} from '../../src/settings';
 import {invariant, spawnUnexpectedError, spawnUserError} from '../../src/helpers/error_utils';
-import {AirtableApiErrorName, AirtableApiErrorInfo} from '../../src/helpers/airtable_api';
-import {AirtableBlock1ApiBaseOptions} from '../../src/helpers/airtable_block1_api';
+import {
+    AirtableApiErrorName,
+    AirtableApiErrorInfo,
+    CreateBuildOptions,
+    CreateReleaseOptions,
+    CreateBuildResponseJson,
+} from '../../src/helpers/airtable_api';
 import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
 import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
@@ -24,8 +29,8 @@ import {
 
 const {
     stubCreateReleaseTaskAsync,
-    uploadBlock1ReleaseStub,
-    uploadBlock2ReleaseStub,
+    airtableLegacyBlockApiStub,
+    airtableBlockV2ApiStub,
 } = createStubs();
 
 describe('release', () => {
@@ -35,13 +40,13 @@ describe('release', () => {
         .stderr()
         .enableDebug('block-cli*:release')
         .stub(releaseModule, 'createReleaseTaskAsync', stubCreateReleaseTaskAsync)
-        .stub(uploadBlock1ReleaseModule, 'UploadBlock1Release', uploadBlock1ReleaseStub())
+        .stub(airtableLegacyBlockApiModule, 'AirtableLegacyBlockApi', airtableLegacyBlockApiStub())
         .stub(
-            uploadBlock2ReleaseModule,
-            'UploadBlock2Release',
-            uploadBlock2ReleaseStub({
+            airtableBlockV2ApiModule,
+            'AirtableBlockV2Api',
+            airtableBlockV2ApiStub({
                 constructorOptions() {
-                    throw spawnUnexpectedError('Must use UploadBlock1Release');
+                    throw spawnUnexpectedError('Must use AirtableLegacyBlockApi');
                 },
             }),
         )
@@ -61,15 +66,15 @@ describe('release', () => {
 
     const testReleaseCommandBlock2 = testReleaseCommand
         .stub(
-            uploadBlock1ReleaseModule,
-            'UploadBlock1Release',
-            uploadBlock1ReleaseStub({
+            airtableLegacyBlockApiModule,
+            'AirtableLegacyBlockApi',
+            airtableLegacyBlockApiStub({
                 constructorOptions() {
-                    throw spawnUnexpectedError('Must use UploadBlock2Release');
+                    throw spawnUnexpectedError('Must use AirtableBlockV2Api');
                 },
             }),
         )
-        .stub(uploadBlock2ReleaseModule, 'UploadBlock2Release', uploadBlock2ReleaseStub())
+        .stub(airtableBlockV2ApiModule, 'AirtableBlockV2Api', airtableBlockV2ApiStub())
         .withJSON({
             '/home/projects/my-app/.block/remote.json': {
                 baseId: V2_BLOCKS_BASE_ID,
@@ -114,10 +119,10 @@ describe('release', () => {
             },
         })
         .stub(
-            uploadBlock1ReleaseModule,
-            'UploadBlock1Release',
-            uploadBlock1ReleaseStub({
-                constructorOptions({blockUrlOptions: {apiBaseUrl}}) {
+            airtableLegacyBlockApiModule,
+            'AirtableLegacyBlockApi',
+            airtableLegacyBlockApiStub({
+                constructorOptions({apiBaseUrl}) {
                     expect(apiBaseUrl).to.not.equal(AIRTABLE_API_URL);
                 },
             }) as any,
@@ -174,17 +179,15 @@ describe('release', () => {
 
     testReleaseCommand
         .stub(
-            uploadBlock1ReleaseModule,
-            'UploadBlock1Release',
-            uploadBlock1ReleaseStub({
-                async buildUploadAsync(): Promise<
-                    uploadBlock1ReleaseModule.AppBlock1BuildResponseJson
-                > {
+            airtableLegacyBlockApiModule,
+            'AirtableLegacyBlockApi',
+            airtableLegacyBlockApiStub({
+                async createBuildAsync(): Promise<CreateBuildResponseJson> {
                     throw spawnUserError<AirtableApiErrorInfo>({
                         type: AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND,
                     });
                 },
-            }) as any,
+            }),
         )
         .command(['release'])
         .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND))
@@ -231,40 +234,36 @@ function createStubs() {
         };
     }
 
-    type UploadBlock1ReleaseStubMethods = {
+    type AirtableLegacyBlockApiStubMethods = {
         constructorOptions(
-            options: uploadBlock1ReleaseModule.UploadBlock1ReleaseConstructorOptions,
+            options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions,
         ): void;
     } & Pick<
-        uploadBlock1ReleaseModule.UploadBlock1Release,
-        'buildUploadAsync' | 'createReleaseAsync'
+        airtableLegacyBlockApiModule.AirtableLegacyBlockApi,
+        'createBuildAsync' | 'createReleaseAsync'
     >;
 
-    function _uploadBlock1ReleaseStub(methods: Partial<UploadBlock1ReleaseStubMethods> = {}): any {
-        return class _UploadReleaseStub
+    function _airtableLegacyBlockApiStub(
+        methods: Partial<AirtableLegacyBlockApiStubMethods> = {},
+    ): any {
+        return class AirtableLegacyBlockApiStub
             implements
                 Pick<
-                    uploadBlock1ReleaseModule.UploadBlock1Release,
-                    'buildUploadAsync' | 'createReleaseAsync'
+                    airtableLegacyBlockApiModule.AirtableLegacyBlockApi,
+                    'createBuildAsync' | 'createReleaseAsync'
                 > {
-            private blockUrlOptions: AirtableBlock1ApiBaseOptions;
+            private options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions;
 
-            constructor(
-                options: ConstructorParameters<
-                    typeof uploadBlock1ReleaseModule['UploadBlock1Release']
-                >[0],
-            ) {
+            constructor(options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions) {
                 if (methods.constructorOptions) {
                     methods.constructorOptions(options);
                 }
-                this.blockUrlOptions = options.blockUrlOptions;
+                this.options = options;
             }
 
-            async buildUploadAsync(
-                options: uploadBlock1ReleaseModule.UploadBlock1ReleaseUploadOptions,
-            ) {
-                return methods.buildUploadAsync
-                    ? await methods.buildUploadAsync(options)
+            async createBuildAsync(options: CreateBuildOptions): Promise<CreateBuildResponseJson> {
+                return methods.createBuildAsync
+                    ? await methods.createBuildAsync(options)
                     : {
                           buildId: 'buildId',
                           frontendBundleUploadUrl: 'frontendBundleUploadUrl',
@@ -278,9 +277,7 @@ function createStubs() {
                           backendDeploymentPackageS3UploadInfo: null,
                       };
             }
-            async createReleaseAsync(
-                options: uploadBlock1ReleaseModule.UploadBlock1ReleaseCreateReleaseOptions,
-            ) {
+            async createReleaseAsync(options: CreateReleaseOptions): Promise<void> {
                 if (methods.createReleaseAsync) {
                     await methods.createReleaseAsync(options);
                 }
@@ -288,48 +285,45 @@ function createStubs() {
         };
     }
 
-    type UploadBlock2ReleaseStubMethods = {
-        constructorOptions(
-            options: uploadBlock2ReleaseModule.UploadBlock2ReleaseConstructorOptions,
-        ): void;
+    type AirtableBlockV2ApiStubMethods = {
+        constructorOptions(options: airtableBlockV2ApiModule.AirtableBlockV2ApiBaseOptions): void;
     } & Pick<
-        uploadBlock2ReleaseModule.UploadBlock2Release,
-        'buildUploadAsync' | 'createReleaseAsync'
+        airtableBlockV2ApiModule.AirtableBlockV2Api,
+        'createBuildAsync' | 'createReleaseAsync'
     >;
 
-    function _uploadBlock2ReleaseStub(methods: Partial<UploadBlock2ReleaseStubMethods> = {}): any {
-        return class UploadBlock2ReleaseStub
+    function _airtableBlockV2ApiStub(methods: Partial<AirtableBlockV2ApiStubMethods> = {}): any {
+        return class AirtableBlockV2ApiStub
             implements
                 Pick<
-                    uploadBlock2ReleaseModule.UploadBlock2Release,
-                    'buildUploadAsync' | 'createReleaseAsync'
+                    airtableBlockV2ApiModule.AirtableBlockV2Api,
+                    'createBuildAsync' | 'createReleaseAsync'
                 > {
-            constructor(options: uploadBlock2ReleaseModule.UploadBlock2ReleaseConstructorOptions) {
+            constructor(options: airtableBlockV2ApiModule.AirtableBlockV2ApiBaseOptions) {
                 if (methods.constructorOptions) {
                     methods.constructorOptions(options);
                 }
             }
 
-            async buildUploadAsync(
-                options: uploadBlock2ReleaseModule.UploadBlock2ReleaseBuildUploadOptions,
-            ): Promise<uploadBlock2ReleaseModule.UploadBlock2BuildResponseJson> {
-                if (methods.buildUploadAsync) {
-                    return await methods.buildUploadAsync(options);
+            async createBuildAsync(options: CreateBuildOptions): Promise<CreateBuildResponseJson> {
+                if (methods.createBuildAsync) {
+                    return await methods.createBuildAsync(options);
                 }
                 return {
                     buildId: 'buildId',
+                    frontendBundleUploadUrl: 'frontendBundleUploadUrl',
+                    backendDeploymentPackageUploadUrl: null,
                     frontendBundleS3UploadInfo: {
                         endpointUrl: 'endpointUrl',
                         key: null,
                         keyPrefix: null,
                         params: {},
                     },
+                    backendDeploymentPackageS3UploadInfo: null,
                 };
             }
 
-            async createReleaseAsync(
-                options: uploadBlock2ReleaseModule.UploadBlock2ReleaseCreateReleaseOptions,
-            ) {
+            async createReleaseAsync(options: CreateReleaseOptions): Promise<void> {
                 if (methods.createReleaseAsync) {
                     await methods.createReleaseAsync(options);
                 }
@@ -339,7 +333,7 @@ function createStubs() {
 
     return {
         stubCreateReleaseTaskAsync: _stubCreateReleaseTaskAsync,
-        uploadBlock1ReleaseStub: _uploadBlock1ReleaseStub,
-        uploadBlock2ReleaseStub: _uploadBlock2ReleaseStub,
+        airtableLegacyBlockApiStub: _airtableLegacyBlockApiStub,
+        airtableBlockV2ApiStub: _airtableBlockV2ApiStub,
     };
 }

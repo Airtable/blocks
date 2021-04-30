@@ -21,11 +21,9 @@ import {
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
 import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
-import {AirtableBlock1Api} from '../helpers/airtable_block1_api';
-import {AirtableBlock2Api} from '../helpers/airtable_block2_api';
+import {AirtableLegacyBlockApi} from '../helpers/airtable_legacy_block_api';
+import {AirtableBlockV2Api} from '../helpers/airtable_block_v2_api';
 import {S3Api} from '../helpers/s3_api';
-import {UploadBlock1Release} from '../helpers/upload_block1_release';
-import {UploadBlock2Release} from '../helpers/upload_block2_release';
 import {readApiKeyAsync} from '../helpers/system_api_key';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
@@ -36,6 +34,7 @@ import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {ReleaseCommandErrorName, ReleaseCommandMessageName} from '../helpers/release_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
+import {AirtableApi} from '../helpers/airtable_api';
 
 const debug = _debug('block-cli:command:release');
 
@@ -126,9 +125,11 @@ export default class Release extends AirtableCommand {
         const userAgent = await createUserAgentAsync(sys);
         debug('connecting to Airtable with user agent: %s', userAgent);
 
-        let upload;
+        let airtableApi: AirtableApi;
+        let developerComment: string | undefined;
+        const s3 = new S3Api();
         if (baseId === V2_BLOCKS_BASE_ID) {
-            let developerComment = flags.comment;
+            developerComment = flags.comment;
             if (!developerComment) {
                 developerComment = await cli.prompt(
                     this.messages.renderMessage({
@@ -138,21 +139,11 @@ export default class Release extends AirtableCommand {
                 invariant(developerComment, 'prompt must return a value');
             }
 
-            const api = {
-                airtable: new AirtableBlock2Api(),
-                s3: new S3Api(),
-            };
-            upload = new UploadBlock2Release({
-                api,
-
-                developerComment,
-
-                blockUrlOptions: {
-                    blockId,
-                    apiKey,
-                    userAgent,
-                    apiBaseUrl,
-                },
+            airtableApi = new AirtableBlockV2Api({
+                blockId,
+                apiKey,
+                userAgent,
+                apiBaseUrl,
             });
         } else {
             if (flags.comment) {
@@ -161,19 +152,12 @@ export default class Release extends AirtableCommand {
                 });
             }
 
-            const api = {
-                airtable: new AirtableBlock1Api(),
-                s3: new S3Api(),
-            };
-            upload = new UploadBlock1Release({
-                api,
-                blockUrlOptions: {
-                    baseId,
-                    blockId,
-                    apiKey,
-                    userAgent,
-                    apiBaseUrl,
-                },
+            airtableApi = new AirtableLegacyBlockApi({
+                baseId,
+                blockId,
+                apiKey,
+                userAgent,
+                apiBaseUrl,
             });
         }
 
@@ -236,7 +220,8 @@ export default class Release extends AirtableCommand {
         );
 
         // upload bundle
-        const build = await upload.buildUploadAsync({
+        const build = await airtableApi.createBuildAsync({
+            s3,
             frontendBundle,
             backendBundle: null,
         });
@@ -245,7 +230,7 @@ export default class Release extends AirtableCommand {
         cli.action.start('Releasing');
 
         // create release with uploaded build
-        await upload.createReleaseAsync(build);
+        await airtableApi.createReleaseAsync({buildId: build.buildId, developerComment});
 
         cli.action.stop();
         this._teardownAction = null;

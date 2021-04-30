@@ -1,7 +1,8 @@
 import {expect, test} from '../mocks/test';
 
 import * as submitModule from '../../src/manager/submit';
-import * as uploadSubmitModule from '../../src/helpers/upload_block1_submit';
+import * as airtableLegacyBlockApiModule from '../../src/helpers/airtable_legacy_block_api';
+import * as airtableBlockV2ApiModule from '../../src/helpers/airtable_block_v2_api';
 import * as userAgentModule from '../../src/helpers/user_agent';
 
 import {AppConfigErrorName} from '../../src/helpers/config_app';
@@ -12,10 +13,16 @@ import {System} from '../../src/helpers/system';
 import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
 
 import {mapFancyTestAsyncPlugin} from '../mocks/FancyTestAsync';
+import {spawnUnexpectedError} from '../../src/helpers/error_utils';
+import {UploadSubmissionOptions} from '../../src/helpers/airtable_api';
 
 type SubmitTaskProducer = submitModule.SubmitTaskProducer;
 
-const {stubCreateSubmitTaskAsync, uploadSubmitStubAsync} = createStubs();
+const {
+    stubCreateSubmitTaskAsync,
+    airtableLegacyBlockApiStub,
+    airtableBlockV2ApiStub,
+} = createStubs();
 
 describe('submit', () => {
     const testSubmitCommand = test
@@ -42,7 +49,16 @@ describe('submit', () => {
             'createSubmitTaskAsync',
             stubCreateSubmitTaskAsync(['/home/projects/my-app/frontend/index.js']),
         )
-        .stub(uploadSubmitModule, 'uploadBlock1SubmitAsync', uploadSubmitStubAsync)
+        .stub(airtableLegacyBlockApiModule, 'AirtableLegacyBlockApi', airtableLegacyBlockApiStub())
+        .stub(
+            airtableBlockV2ApiModule,
+            'AirtableBlockV2Api',
+            airtableBlockV2ApiStub({
+                constructorOptions() {
+                    throw spawnUnexpectedError('Must use AirtableLegacyBlockApi');
+                },
+            }),
+        )
         .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0');
 
     const testSubmitCommandAndContinue = testSubmitCommand.answer(
@@ -89,15 +105,28 @@ describe('submit', () => {
                 apiKeyName: 'another',
             },
         })
-        .stub(uploadSubmitModule, 'uploadSubmitAsync', async function(
-            options: uploadSubmitModule.UploadSubmitOptions,
-            data: uploadSubmitModule.UploadSubmitDataOptions,
-        ) {
-            expect(options.blockUrlOptions.baseId).to.equal('app5678');
-            expect(options.blockUrlOptions.apiBaseUrl).to.equal('t.t.com');
-            expect(options.blockUrlOptions.apiKey).to.equal('key5678');
-            return 'message';
-        } as any)
+        .stub(
+            airtableLegacyBlockApiStub,
+            'AirtableLegacyBlockApi',
+            airtableLegacyBlockApiStub({
+                constructorOptions(
+                    options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions,
+                ) {
+                    expect(options.baseId).to.equal('app5678');
+                    expect(options.apiBaseUrl).to.equal('t.t.com');
+                    expect(options.apiKey).to.equal('key5678');
+                },
+            }),
+        )
+        .stub(
+            airtableBlockV2ApiModule,
+            'AirtableBlockV2Api',
+            airtableBlockV2ApiStub({
+                constructorOptions() {
+                    throw spawnUnexpectedError('Must use AirtableLegacyBlockApi');
+                },
+            }),
+        )
         .command(['submit', '--remote', 'newremote'])
         .it('submits to newremote remote');
 
@@ -143,13 +172,59 @@ function createStubs() {
         };
     }
 
-    async function _uploadSubmitStubAsync() {
-        return 'message';
+    type AirtableLegacyBlockApiStubMethods = {
+        constructorOptions(
+            options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions,
+        ): void;
+    } & Pick<airtableLegacyBlockApiModule.AirtableLegacyBlockApi, 'uploadSubmissionAsync'>;
+
+    function _airtableLegacyBlockApiStub(
+        methods: Partial<AirtableLegacyBlockApiStubMethods> = {},
+    ): any {
+        return class AirtableLegacyBlockApiStub {
+            private options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions;
+
+            constructor(options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions) {
+                if (methods.constructorOptions) {
+                    methods.constructorOptions(options);
+                }
+                this.options = options;
+            }
+
+            async uploadSubmissionAsync(options: UploadSubmissionOptions) {
+                if (methods.uploadSubmissionAsync) {
+                    return await methods.uploadSubmissionAsync(options);
+                }
+                return 'message';
+            }
+        };
+    }
+
+    type AirtableBlockV2ApiStubMethods = {
+        constructorOptions(options: airtableBlockV2ApiModule.AirtableBlockV2ApiBaseOptions): void;
+    } & Pick<airtableBlockV2ApiModule.AirtableBlockV2Api, 'uploadSubmissionAsync'>;
+
+    function _airtableBlockV2ApiStub(methods: Partial<AirtableBlockV2ApiStubMethods> = {}): any {
+        return class AirtableBlockV2ApiStub {
+            constructor(options: airtableBlockV2ApiModule.AirtableBlockV2ApiBaseOptions) {
+                if (methods.constructorOptions) {
+                    methods.constructorOptions(options);
+                }
+            }
+
+            async uploadSubmissionAsync(options: UploadSubmissionOptions) {
+                if (methods.uploadSubmissionAsync) {
+                    return await methods.uploadSubmissionAsync(options);
+                }
+                return 'message';
+            }
+        };
     }
 
     return {
         stubCreateSubmitTaskAsync: _stubCreateSubmitTaskAsync,
-        uploadSubmitStubAsync: _uploadSubmitStubAsync,
+        airtableLegacyBlockApiStub: _airtableLegacyBlockApiStub,
+        airtableBlockV2ApiStub: _airtableBlockV2ApiStub,
     };
 }
 

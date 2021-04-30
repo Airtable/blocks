@@ -1,5 +1,7 @@
+import fetch from 'node-fetch';
 import {spawnUnexpectedError, spawnUserError} from './error_utils';
 import {FetchApi, Response, FetchInit} from './fetch_api';
+import {S3Api, S3SignedUploadInfo} from './s3_api';
 
 /**
  * Enumeration of some error types server may return.
@@ -93,25 +95,50 @@ interface ErrorResponseError {
 }
 
 export interface AirtableApiOptions {
+    blockId: string;
     apiKey: string;
     userAgent: string;
     apiBaseUrl: string;
 }
 
-export function airtableFetchInit(
-    {apiKey, userAgent, apiBaseUrl}: AirtableApiOptions,
-    {url, ...init}: FetchInit,
-): FetchInit {
-    return {
-        url: new URL(url, apiBaseUrl).href,
-        ...init,
-        method: 'post',
-        headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'User-Agent': userAgent,
-            'Content-Type': 'application/json',
-        },
-    };
+export interface CreateBuildOptions {
+    s3: S3Api;
+    frontendBundle: Buffer;
+    backendBundle: Buffer | null;
+}
+
+export interface CreateReleaseOptions {
+    buildId: string;
+    // Only legacy blocks support deployId, but support is not implemented in this version of the cli
+    deployId?: string;
+    // V2 blocks must have a non-empty developer comment, legacy blocks do not support developer comments
+    developerComment?: string;
+}
+
+export interface CodeUploadOptions {
+    codeUploadId: string;
+    status: 'uploaded' | 'failed';
+}
+
+export interface CodeUploadResponse {
+    codeUploadId: string;
+    presignedUploadUrl: string;
+}
+
+export interface FinalizeCodeUploadResponse {
+    message: string;
+}
+
+export interface UploadSubmissionOptions {
+    archiveBuffer: Buffer;
+}
+
+export interface CreateBuildResponseJson {
+    buildId: string;
+    frontendBundleUploadUrl: string;
+    backendDeploymentPackageUploadUrl: string | null;
+    frontendBundleS3UploadInfo: S3SignedUploadInfo;
+    backendDeploymentPackageS3UploadInfo: S3SignedUploadInfo | null;
 }
 
 function createAirtableApiError({
@@ -134,7 +161,62 @@ function createAirtableApiError({
     }
 }
 
-export class AirtableApi extends FetchApi {
+export abstract class AirtableApi extends FetchApi {
+    protected blockId: string;
+    private apiKey: string;
+    private userAgent: string;
+    private apiBaseUrl: string;
+
+    constructor({blockId, apiKey, userAgent, apiBaseUrl}: AirtableApiOptions) {
+        super();
+        this.blockId = blockId;
+        this.apiKey = apiKey;
+        this.userAgent = userAgent;
+        this.apiBaseUrl = apiBaseUrl;
+    }
+
+    airtableFetchInit({url, ...init}: FetchInit): FetchInit {
+        return {
+            url: new URL(url, this.apiBaseUrl).href,
+            ...init,
+            method: 'post',
+            headers: {
+                Authorization: `Bearer ${this.apiKey}`,
+                'User-Agent': this.userAgent,
+                'Content-Type': 'application/json',
+            },
+        };
+    }
+
+    abstract async createBuildAsync(options: CreateBuildOptions): Promise<CreateBuildResponseJson>;
+
+    abstract async createReleaseAsync(options: CreateReleaseOptions): Promise<void>;
+
+    async uploadSubmissionAsync({archiveBuffer}: UploadSubmissionOptions): Promise<string> {
+        const {presignedUploadUrl, codeUploadId} = await this._blockCreateCodeUploadAsync();
+
+        const response = await fetch(presignedUploadUrl, {method: 'put', body: archiveBuffer});
+
+        const didUpload = response.status === 200;
+        const status = didUpload ? 'uploaded' : 'failed';
+        const {message} = await this._blockFinalizeCodeUploadAsync({
+            codeUploadId,
+            status,
+        });
+
+        if (!didUpload) {
+            throw spawnUnexpectedError(message);
+        }
+
+        return message;
+    }
+
+    protected abstract async _blockCreateCodeUploadAsync(): Promise<CodeUploadResponse>;
+
+    protected abstract async _blockFinalizeCodeUploadAsync(
+        options: CodeUploadOptions,
+    ): Promise<FinalizeCodeUploadResponse>;
+
     protected async _invariantOkResponseAsync(init: FetchInit, response: Response) {
         const {status} = response;
         if (status === 200) {
