@@ -84,7 +84,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      */
     constructor(sdk: Sdk) {
         super(sdk, sdk.__airtableInterface.sdkInitData.baseData.id);
-
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
         this.__billingPlanGrouping =
             sdk.__airtableInterface.sdkInitData.baseData.billingPlanGrouping;
@@ -537,6 +536,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         });
 
         return this.getTableById(tableId);
+    }
+
+    /**
+     * Returns the maximum number of records allowed in each table of this base.
+     */
+    getMaxRecordsPerTable(): number {
+        return this._data.maxRowsPerTable ?? 50000;
     }
 
     /**
