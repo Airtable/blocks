@@ -9,9 +9,16 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.1...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.6.0...HEAD)
 
 No changes.
+
+## [1.6.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.1...@airtable/blocks@1.6.0) - 2021-05-12
+
+-   Add `color` property to `base` to access the background color of the base, as well as the
+    `color` watch key
+-   Update documentation text for `GlobalConfig` with increased 150kb limit.
+-   Add `getMaxRecordsPerTable` to `base`
 
 ## [1.5.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.0...@airtable/blocks@1.5.1) - 2021-03-04
 

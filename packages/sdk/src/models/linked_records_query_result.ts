@@ -59,7 +59,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     _computedFilteredSortedRecordIds: Array<string> | null = null;
     /** @internal */
     _cellValueChangeHandlerByFieldId: {
-        [key: string]: (arg1: TableOrViewQueryResult, arg2: string, arg3: unknown) => void;
+        [key: string]: (
+            arg1: TableOrViewQueryResult,
+            key: string,
+            recordIds: Array<RecordId> | void,
+        ) => void;
     } = {};
 
     /** @internal */
@@ -437,12 +441,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     /** @internal */
     _getOnLinkedCellValuesInFieldChange(
         fieldId: string,
-    ): (arg1: TableOrViewQueryResult, arg2: string, arg3: unknown) => void {
+    ): (arg1: TableOrViewQueryResult, key: string, recordIds: Array<RecordId> | void) => void {
         if (!this._cellValueChangeHandlerByFieldId[fieldId]) {
             this._cellValueChangeHandlerByFieldId[fieldId] = (
                 queryResult: TableOrViewQueryResult,
                 key: string,
-                recordIds: unknown,
+                recordIds: Array<RecordId> | void,
             ) => {
                 invariant(this.isValid, 'watch key change event whilst invalid');
 

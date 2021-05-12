@@ -17,6 +17,7 @@ const WatchableBaseKeys = Object.freeze({
     tables: 'tables' as const,
     collaborators: 'collaborators' as const,
     schema: 'schema' as const,
+    color: 'color' as const,
 });
 
 /**
@@ -70,7 +71,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      */
     constructor(sdk: Sdk) {
         super(sdk, sdk.__airtableInterface.sdkInitData.baseData.id);
-
         this._tableModelsById = {}; 
         this.__billingPlanGrouping =
             sdk.__airtableInterface.sdkInitData.baseData.billingPlanGrouping;
@@ -103,6 +103,21 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     get name(): string {
         return this._data.name;
     }
+
+    /**
+     * The color of the base.
+     *
+     * @example
+     * ```js
+     * import {base} from '@airtable/blocks';
+     * import {Box} from '@airtable/blocks/ui';
+     * const exampleBox = <Box backgroundColor={base.color}> This box's background is the same color as the base background</Box>
+     * ```
+     */
+    get color(): string {
+        return this._data.color;
+    }
+
     /**
      * The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
      *
@@ -496,12 +511,23 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
+     * Returns the maximum number of records allowed in each table of this base.
+     */
+    getMaxRecordsPerTable(): number {
+        return this._data.maxRowsPerTable ?? 50000;
+    }
+
+    /**
      * @internal
      */
     __triggerOnChangeForChangedPaths(changedPaths: ChangedPathsForType<BaseData>) {
         let didSchemaChange = false;
         if (changedPaths.name) {
             this._onChange(WatchableBaseKeys.name);
+            didSchemaChange = true;
+        }
+        if (changedPaths.color) {
+            this._onChange(WatchableBaseKeys.color);
             didSchemaChange = true;
         }
         if (changedPaths.tableOrder) {

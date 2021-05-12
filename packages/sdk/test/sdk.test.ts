@@ -80,6 +80,54 @@ describe('sdk', () => {
             });
         });
 
+        describe('color', () => {
+            it('notifies "color" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('color', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {path: ['color'], value: 'purple'},
+                    {path: ['color'], value: 'blue'},
+                    {path: ['color'], value: 'purpleLight2'},
+                ]);
+                expect(mock).toHaveBeenCalledTimes(1);
+                expect(sdk.base.color).toBe('purpleLight2');
+            });
+
+            it('notifies "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {path: ['color'], value: 'purpleLight2'},
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('does not notify "color" watchers when new value matches current', () => {
+                const mock = jest.fn();
+                sdk.base.watch('color', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {path: ['color'], value: sdk.base.color},
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(0);
+            });
+
+            it('does not notify "name" watchers when new value matches current', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {path: ['color'], value: sdk.base.color},
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(0);
+            });
+        });
+
         describe('tableOrder', () => {
             it('notifies "tables" watchers', () => {
                 const mock = jest.fn();

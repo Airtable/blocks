@@ -19,6 +19,7 @@ export interface ModelChange {
 export interface BaseData {
     id: BaseId;
     name: string;
+    color: string;
     tableOrder: Array<TableId>;
     activeTableId: TableId | null;
     tablesById: ObjectMap<TableId, TableData>;
@@ -36,6 +37,7 @@ export interface BaseData {
 
     billingPlanGrouping: string;
     isBlockDevelopmentRestrictionEnabled: boolean;
+    maxRowsPerTable?: number;
 }
 
 /** @hidden */

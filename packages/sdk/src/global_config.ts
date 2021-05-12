@@ -34,7 +34,8 @@ type WatchableGlobalConfigKey = string;
  *
  * You should not need to construct this object yourself.
  *
- * The maximum allowed size of each URL-encoded write to GlobalConfig is 100kB.
+ * The maximum allowed size for a given GlobalConfig instance is 150kB.
+ * The maximum number of keys for a given GlobalConfig instance is 1000.
  *
  * @example
  * ```js

@@ -198,6 +198,7 @@ export interface FixtureData {
     base: {
         id: BaseId;
         name: string;
+        color?: string;
         tables: Array<TableFixtureData>;
         collaborators: Array<CollaboratorData & {isActive: boolean}>;
     };
@@ -421,6 +422,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
                 ...(unmodifiableBaseData as Pick<BaseData, keyof typeof unmodifiableBaseData>),
                 id: fixtureData.base.id,
                 name: fixtureData.base.name,
+                color: fixtureData.base.color || 'gray',
                 activeTableId: tables[0].id,
                 tableOrder: tables.map(({id}) => id),
                 tablesById: keyBy(tables, getId),

@@ -542,4 +542,10 @@ describe('Base', () => {
             expect(mockGetTableById).toHaveBeenLastCalledWith('tblGeneratedMockId');
         });
     });
+
+    describe('getMaxRecordsPerTable', () => {
+        it('returns the correct limit', () => {
+            expect(base.getMaxRecordsPerTable()).toEqual(50000);
+        });
+    });
 });

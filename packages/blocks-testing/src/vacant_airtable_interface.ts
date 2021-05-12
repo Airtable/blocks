@@ -64,6 +64,7 @@ export default class VacantAirtableInterface extends AbstractMockAirtableInterfa
             baseData: {
                 id: '',
                 name: '',
+                color: '',
                 activeTableId: '',
                 tableOrder: [],
                 tablesById: {},

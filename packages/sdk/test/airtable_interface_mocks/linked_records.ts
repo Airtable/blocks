@@ -11,6 +11,7 @@ const linkedRecords: SdkInitData = {
     baseData: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Linked Records Table',
+        color: 'purpleLight2',
         activeTableId: 'tblFirst',
         tableOrder: ['tblFirst', 'tblSecond'],
         tablesById: {
