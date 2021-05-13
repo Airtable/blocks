@@ -9,6 +9,7 @@ Airtable apps cli
 
 <!-- toc -->
 
+-   [@airtable/blocks-cli-next](#airtableblocks-cli-next)
 -   [Usage](#usage)
 -   [Commands](#commands)
     <!-- tocstop -->
@@ -22,7 +23,6 @@ $ npm install -g @airtable/blocks-cli-next
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli-next/0.0.0 darwin-x64 node-v15.0.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -35,26 +35,156 @@ USAGE
 
 <!-- commands -->
 
--   [`block set-api-key`](#block-set-api-key)
+-   [`block init BLOCKIDENTIFIER BLOCKDIRPATH`](#block-init-blockidentifier-blockdirpath)
+-   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
+-   [`block run`](#block-run)
+-   [`block release`](#block-release)
+-   [`block submit`](#block-submit)
+-   [`block add-remote BLOCKIDENTIFIER REMOTENAME`](#block-add-remote-blockidentifier-remotename)
+-   [`block list-remotes`](#block-list-remotes)
+-   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
 -   [`block help [COMMAND]`](#block-help-command)
 
-## `block set-api-key`
+## `block init BLOCKIDENTIFIER BLOCKDIRPATH`
 
-Save a key when `block` needs to contact the Airtable API.
+Initialize an Airtable app project
 
 ```
 USAGE
-  $ block set-api-key
+  $ block init BLOCKIDENTIFIER BLOCKDIRPATH
 
 OPTIONS
-  -h, --help       show CLI help
+  -h, --help           show CLI help
+  --template=template  [default: https://github.com/Airtable/apps-hello-world]
 
 EXAMPLE
-  $ block set-api-key
+  $ block init app12345678/blk12345678 hellow-world-app --template https://github.com/Airtable/apps-hello-world
 ```
 
 _See code:
-[src/commands/set-api-key.ts](https://github.com/Airtable/blocks-cli-next/blob/v0.0.0/src/commands/set-api-key.ts)_
+[lib/commands/init.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/init.js)_
+
+## `block set-api-key [APIKEY]`
+
+Set an api key for an airtable account to upload to
+
+```
+USAGE
+  $ block set-api-key [APIKEY]
+
+OPTIONS
+  -h, --help             show CLI help
+  --location=(user|app)  [default: user]
+
+EXAMPLE
+  $ block set-api-key
+  $ block set-api-key APIKEY
+  $ block set-api-key --location app APIKEY
+```
+
+## `block run`
+
+Run the app locally
+
+```
+USAGE
+  $ block run
+
+OPTIONS
+  -h, --help       show CLI help
+  --port=port      [default: 9000] HTTPS port the server listens on. The server will listen for HTTP on PORT + 1.
+  --remote=remote  [Beta] Configure which remote to use
+
+EXAMPLE
+  $ block run
+```
+
+_See code:
+[lib/commands/run.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/run.js)_
+
+## `block release`
+
+Release a build to an Airtable base
+
+```
+USAGE
+  $ block release
+
+OPTIONS
+  -h, --help       show CLI help
+  --remote=remote  [Beta] Configure which remote to use
+
+EXAMPLE
+  $ block release
+```
+
+_See code:
+[lib/commands/release.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/release.js)_
+
+## `block submit`
+
+Submit app for review for listing in the the Airtable Marketplace
+
+```
+USAGE
+  $ block submit
+
+OPTIONS
+  -h, --help       show CLI help
+  --remote=remote  Configure which remote to use
+
+EXAMPLE
+  $ block submit
+```
+
+## `block add-remote BLOCKIDENTIFIER REMOTENAME`
+
+[Beta] Add a new remote configuration
+
+```
+USAGE
+  $ block add-remote BLOCKIDENTIFIER REMOTENAME
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ block add-remote app12345678/blk12345678 new-remote
+```
+
+_See code:
+[lib/commands/add-remote.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/add-remote.js)_
+
+## `block list-remotes`
+
+[Beta] List remote configurations
+
+```
+USAGE
+  $ block list-remotes
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ block list-remotes
+```
+
+## `block remove-remote REMOTENAME`
+
+[Beta] Remove a remote configuration
+
+```
+USAGE
+  $ block remove-remote REMOTENAME
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ block remove-remote old-remote
+
+```
 
 ## `block help [COMMAND]`
 

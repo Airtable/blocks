@@ -64,7 +64,7 @@ export default class Run extends AirtableCommand {
      */
     private _appTemporaryPath?: string;
 
-    static description = 'run the app locally';
+    static description = 'Run the app locally';
 
     static examples = [
         `$ block run

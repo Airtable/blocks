@@ -60,7 +60,7 @@ export default class Release extends AirtableCommand {
      */
     private _appTemporaryPath?: string;
 
-    static description = 'release a build to an Airtable base';
+    static description = 'Release a build to an Airtable base';
 
     static examples = [
         `$ block release

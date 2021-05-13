@@ -15,7 +15,7 @@ import {
 } from '../helpers/system_api_key';
 
 export default class SetApiKey extends AirtableCommand {
-    static description = 'set an api key for an airtable account to upload to';
+    static description = 'Set an api key for an airtable account to upload to';
 
     static examples = [
         `$ block set-api-key
