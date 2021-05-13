@@ -13,6 +13,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 No changes.
 
+-   Add `onBlur` and `onFocus` support to `Input` and `InputSynced` UI components.
+
 ## [1.6.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.1...@airtable/blocks@1.6.0) - 2021-05-12
 
 -   Add `color` property to `base` to access the background color of the base, as well as the

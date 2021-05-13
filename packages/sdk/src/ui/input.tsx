@@ -133,6 +133,10 @@ export interface SharedInputProps extends InputStyleProps, TooltipAnchorProps<HT
     className?: string;
     /** A function to be called when the input changes. */
     onChange?(e: React.ChangeEvent<HTMLInputElement>): unknown;
+    /** A function to be called when the input loses focus. */
+    onBlur?(e: React.FocusEvent<HTMLInputElement>): unknown;
+    /** A function to be called when the input gains focus. */
+    onFocus?(e: React.FocusEvent<HTMLInputElement>): unknown;
     /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
     /** A space separated list of description element IDs. */
@@ -179,6 +183,8 @@ export const sharedInputPropTypes = {
     readOnly: PropTypes.bool,
     autoComplete: PropTypes.string,
     onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    onFocus: PropTypes.func,
     style: PropTypes.object,
     className: PropTypes.string,
     'aria-labelledby': PropTypes.string,
@@ -218,6 +224,8 @@ const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         hasOnClick,
         onChange,
+        onBlur,
+        onFocus,
         style,
         className,
         disabled,
@@ -272,6 +280,8 @@ const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
             readOnly={readOnly}
             autoComplete={autoComplete}
             onChange={onChange}
+            onBlur={onBlur}
+            onFocus={onFocus}
             // TODO (stephen): remove tooltip anchor props
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
