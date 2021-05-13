@@ -15,8 +15,6 @@ No changes.
 
 ## [1.7.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.6.0...@airtable/blocks@1.7.0) - 2021-05-13
 
-No changes.
-
 -   Add `onBlur` and `onFocus` support to `Input` and `InputSynced` UI components.
 
 ## [1.6.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.1...@airtable/blocks@1.6.0) - 2021-05-12
