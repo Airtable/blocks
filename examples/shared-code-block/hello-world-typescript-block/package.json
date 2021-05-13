@@ -5,11 +5,11 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend"
+        "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend",
+        "ci": "yarn lint"
     },
     "dependencies": {
-        "@airtable/blocks": "file:../../../packages/cli-next",
-        "hello-world-file-url": "file:../hello-world-file-url",
+        "@airtable/blocks": "latest",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
     },
