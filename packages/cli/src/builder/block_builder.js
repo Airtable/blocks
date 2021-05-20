@@ -925,6 +925,16 @@ class BlockBuilder {
                 return {err: new Error('package-lock.json does not exist!')};
             }
 
+            // 1c. Copy the patches directory if it exists so that patch package will succeed as part of
+            // npm install if the block uses that
+            if (await fsUtils.existsAsync('patches')) {
+                console.log('copying patches directory');
+                await fsUtils.copyAsync(
+                    'patches',
+                    path.join(this._outputUserTranspiledDirPath, 'patches'),
+                );
+            }
+
             // 2. Install node modules in the output transpiled directory
             console.log('installing node modules');
             const npmCIResult = await this._npmCIAsync(this._outputUserTranspiledDirPath);
