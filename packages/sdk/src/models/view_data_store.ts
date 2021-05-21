@@ -5,6 +5,7 @@ import {
     FlowAnyObject,
     has,
     ObjectMap,
+    cloneDeep,
 } from '../private_utils';
 import {invariant} from '../error_utils';
 import {ModelChange} from '../types/base';
@@ -158,10 +159,11 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         for (const recordId of recordIds) {
             recordIdsToDeleteSet[recordId] = true;
         }
-        const newVisibleRecordIds = this.visibleRecordIds.filter(recordId => {
-            return !recordIdsToDeleteSet[recordId];
-        });
-        return [
+        const newVisibleRecordIds = this.visibleRecordIds.filter(
+            recordId => !recordIdsToDeleteSet[recordId],
+        );
+
+        const changePayload = [
             {
                 path: [
                     'tablesById',
@@ -170,9 +172,46 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
                     this.viewId,
                     'visibleRecordIds',
                 ],
-                value: newVisibleRecordIds,
+                value: newVisibleRecordIds as unknown,
             },
         ];
+
+        if (this._data.groups) {
+            const newGroups = this.__recursivelyRemoveRecordsFromGroupsInPlace(
+                cloneDeep(this._data.groups),
+                recordIdsToDeleteSet,
+            );
+            changePayload.push({
+                path: [
+                    'tablesById',
+                    this.parentRecordStore.tableId,
+                    'viewsById',
+                    this.viewId,
+                    'groups',
+                ],
+                value: newGroups,
+            });
+        }
+        return changePayload;
+    }
+
+    __recursivelyRemoveRecordsFromGroupsInPlace(
+        groups: Array<GroupData> | null,
+        recordIdsToDeleteSet: ObjectMap<RecordId, true>,
+    ) {
+        if (!groups || groups.length === 0) {
+            return groups;
+        }
+
+        return groups.map(group => {
+            if (group.visibleRecordIds) {
+                group.visibleRecordIds = group.visibleRecordIds.filter(
+                    id => !recordIdsToDeleteSet[id],
+                );
+            }
+            this.__recursivelyRemoveRecordsFromGroupsInPlace(group.groups, recordIdsToDeleteSet);
+            return group;
+        });
     }
 
     /**

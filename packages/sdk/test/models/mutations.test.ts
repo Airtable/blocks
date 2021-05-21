@@ -794,7 +794,6 @@ Mock reason"
                             recordsById,
                         },
                     );
-
                     await base.tables[0].views[0].selectMetadataAsync();
                     await base.tables[0].selectRecordsAsync();
                 });
@@ -818,7 +817,6 @@ Mock reason"
                         tableId: 'tblDesignProjects',
                         recordIds: ['recA', 'recC'],
                     });
-
                     expect(applyModelChanges.mock.calls.length).toBe(1);
                     expect(
                         applyModelChanges.mock.calls[0][0].sort(compareUpdatePath),
@@ -830,6 +828,96 @@ Mock reason"
                         {
                             path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recC'],
                             value: undefined,
+                        },
+                        {
+                            path: [
+                                'tablesById',
+                                'tblDesignProjects',
+                                'viewsById',
+                                'viwPrjctAll',
+                                'visibleRecordIds',
+                            ],
+                            value: ['recB'],
+                        },
+                    ]);
+                });
+
+                it('removes records from nested groups', async () => {
+                    mockAirtableInterface.triggerModelUpdates([
+                        {
+                            path: [
+                                'tablesById',
+                                'tblDesignProjects',
+                                'viewsById',
+                                'viwPrjctAll',
+                                'groupLevels',
+                            ],
+                            value: [
+                                {fieldId: 'fldTaskName', direction: 'asc'},
+                                {fieldId: 'fldTaskNotes', direction: 'asc'},
+                            ],
+                        },
+                        {
+                            path: [
+                                'tablesById',
+                                'tblDesignProjects',
+                                'viewsById',
+                                'viwPrjctAll',
+                                'groups',
+                            ],
+                            value: [
+                                {
+                                    groups: [{groups: null, visibleRecordIds: ['recA']}],
+                                    visibleRecordIds: null,
+                                },
+                                {
+                                    groups: [
+                                        {groups: null, visibleRecordIds: ['recB']},
+                                        {groups: null, visibleRecordIds: ['recC']},
+                                    ],
+                                    visibleRecordIds: null,
+                                },
+                            ],
+                        },
+                    ]);
+                    await mutations.applyMutationAsync({
+                        type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                        tableId: 'tblDesignProjects',
+                        recordIds: ['recA', 'recC'],
+                    });
+                    expect(applyModelChanges.mock.calls.length).toBe(1);
+                    expect(
+                        applyModelChanges.mock.calls[0][0].sort(compareUpdatePath),
+                    ).toStrictEqual([
+                        {
+                            path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recA'],
+                            value: undefined,
+                        },
+                        {
+                            path: ['tablesById', 'tblDesignProjects', 'recordsById', 'recC'],
+                            value: undefined,
+                        },
+                        {
+                            path: [
+                                'tablesById',
+                                'tblDesignProjects',
+                                'viewsById',
+                                'viwPrjctAll',
+                                'groups',
+                            ],
+                            value: [
+                                {
+                                    groups: [{groups: null, visibleRecordIds: []}],
+                                    visibleRecordIds: null,
+                                },
+                                {
+                                    groups: [
+                                        {groups: null, visibleRecordIds: ['recB']},
+                                        {groups: null, visibleRecordIds: []},
+                                    ],
+                                    visibleRecordIds: null,
+                                },
+                            ],
                         },
                         {
                             path: [

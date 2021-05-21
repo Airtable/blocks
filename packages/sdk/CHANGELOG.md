@@ -9,13 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.1...HEAD)
+
+No changes.
+
+## [1.7.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.0...@airtable/blocks@1.7.1) - 2021-05-21
 
 No changes.
 
 ## [1.7.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.6.0...@airtable/blocks@1.7.0) - 2021-05-13
-
-No changes.
 
 -   Add `onBlur` and `onFocus` support to `Input` and `InputSynced` UI components.
 
