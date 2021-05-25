@@ -1,18 +1,21 @@
-# @airtable/blocks-cli-next
+# @airtable/blocks-cli
 
-Airtable apps cli
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/@airtable/blocks-cli-next.svg)](https://npmjs.org/package/@airtable/blocks-cli-next)
-[![Codecov](https://codecov.io/gh/Airtable/blocks-cli-next/branch/master/graph/badge.svg)](https://codecov.io/gh/Airtable/blocks-cli-next)
-[![Downloads/week](https://img.shields.io/npm/dw/@airtable/blocks-cli-next.svg)](https://npmjs.org/package/@airtable/blocks-cli-next)
+Command line tool for Airtable Blocks development.<br /> This README is specifically for the v2
+version of the CLI, which is in public beta
 
 <!-- toc -->
 
--   [@airtable/blocks-cli-next](#airtableblocks-cli-next)
+-   [Installation](#installation)
 -   [Usage](#usage)
 -   [Commands](#commands)
     <!-- tocstop -->
+-   [New features in v2](#new-features-in-v2)
+
+# Installation
+
+To install or update the `block` cli, run:
+
+    npm install --global @airtable/blocks-cli@2.0.0-beta
 
 # Usage
 
@@ -205,3 +208,65 @@ _See code:
 [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
 <!-- commandsstop -->
+
+# New features in v2
+
+## Using code from other directories
+
+The new CLI allows this method of code-sharing by allowing “sibling directories” outside the source
+directory to be bundled. Those other directories can include npm imports based on link or file.
+
+## Using a custom bundler
+
+Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns app
+source code into publishable artifacts. Your custom bundler's output must conform to the Airtable
+platform's expected format, calling convention, and file structure.
+
+Unlike other bundling systems, which allow configurability by composing multiple single-purpose
+plugins (or replacing just part of the bundling pipeline), this CLI exposes a simpler bundler
+extension API that expects a single, complete replacement of bundling functionality.
+
+To use a custom bundler:
+
+1. Save your bundler as a TypeScript file (i.e. index.ts).
+2. Then, change the block.json ‘bundler.module’ option to point at your new bundler entry file;
+   i.e.:
+
+```
+# block.json
+{
+    “bundler”: {
+        “module”: “./bundler/index.ts”
+    }
+}
+```
+
+3. Once the change is made, restart your dev server (if running on a dev server).
+
+A bundler needs to implement the following APIs:
+
+```
+class Bundler {
+    async bundleAsync(options: ReleaseBundleOptions): Promise<void> {
+        // implement release build
+    }
+
+    async startDevServerAsync(options: RunDevServerOptions & RunDevServerMethods): Promise<void> {
+        // implement run development build
+    }
+
+    async teardownAsync(): Promise<void> {
+        // implement any work needed to gracefully
+        // close bundler process
+    }
+}
+
+export default function() {
+    return new Bundler();
+}
+
+For more details about the bundler API, see src/bundler/bundler.ts
+```
+
+Static assets are still not supported by default, but you can now swap in your own bundler that
+supports this.
