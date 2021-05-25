@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.1...HEAD)
 
-No changes.
+-   Add `FieldType.EXTERNAL_SYNC_SOURCE`.
 
 ## [1.7.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.0...@airtable/blocks@1.7.1) - 2021-05-21
 

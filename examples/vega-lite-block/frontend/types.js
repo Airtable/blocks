@@ -32,6 +32,7 @@ export const AllowedTypes = [
     FieldType.SINGLE_LINE_TEXT,
     FieldType.SINGLE_SELECT,
     FieldType.URL,
+    FieldType.EXTERNAL_SYNC_SOURCE,
 ];
 
 // Order matters here!
@@ -77,4 +78,5 @@ export const VegaTypes = {
     [FieldType.SINGLE_LINE_TEXT]: 'nominal',
     [FieldType.SINGLE_SELECT]: 'nominal',
     [FieldType.URL]: 'nominal',
+    [FieldType.EXTERNAL_SYNC_SOURCE]: 'nominal',
 };

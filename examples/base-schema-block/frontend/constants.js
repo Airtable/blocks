@@ -68,6 +68,7 @@ export const FIELD_LABELS_BY_TYPE = Object.freeze({
     [FieldType.CREATED_BY]: 'Created by field',
     [FieldType.LAST_MODIFIED_BY]: 'Last modified by field',
     [FieldType.BUTTON]: 'Button field',
+    [FieldType.EXTERNAL_SYNC_SOURCE]: 'Sync source field',
 });
 export const LINK_LABELS_BY_TYPE = Object.freeze({
     [FieldType.MULTIPLE_RECORD_LINKS]: 'Linked record',

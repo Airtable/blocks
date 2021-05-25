@@ -7,6 +7,7 @@ import Button from '../../src/ui/button';
 import Icon from '../../src/ui/icon';
 import {CONTROL_WIDTH} from './code_utils';
 import choiceOptions from './choice_options';
+import syncSourceOptions from './sync_source_options';
 import collaboratorOptions from './collaborator_options';
 import {FieldType} from '../../src/types/field';
 import attachments from './attachments';
@@ -141,5 +142,7 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
                     Open URL
                 </Button>
             );
+        case FieldType.EXTERNAL_SYNC_SOURCE:
+            return <ChoiceToken choice={value || (syncSourceOptions[0] as any)} />;
     }
 }

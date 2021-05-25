@@ -139,7 +139,7 @@ export enum FieldType {
      *     color?: Color
      * }
      * ```
-     * The currently selected choices.
+     * The currently selected choice.
      *
      * **Cell write format**
      * ```js
@@ -1046,6 +1046,42 @@ export enum FieldType {
      *
      */
     BUTTON = 'button',
+    /**
+     * Shows the name of the source that a record is synced from. This field is only available on
+     * synced tables.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     name: string,
+     *     color?: Color
+     * }
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         name: string,
+     *         color?: {@link Color}, // Color is not provided when field coloring is disabled.
+     *     }>,
+     * }
+     * ```
+     * Every choice represents a sync source, and choices are added or removed automatically as
+     * sync sources are added or removed. Choice names and colors are user-configurable.
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `EXTERNAL_SYNC_SOURCE` fields is not supported.
+     *
+     */
+    EXTERNAL_SYNC_SOURCE = 'externalSyncSource',
 }
 
 /** @hidden */
@@ -1227,6 +1263,9 @@ interface LastModifiedByFieldOptions extends CreatedByFieldOptions {
 }
 
 /** @hidden */
+interface ExternalSyncSourceFieldOptions extends SelectFieldOptions {}
+
+/** @hidden */
 interface OptionlessFieldConfig {
     type:
         | FieldType.SINGLE_LINE_TEXT
@@ -1355,6 +1394,12 @@ interface LastModifiedByFieldConfig {
     options: LastModifiedByFieldOptions;
 }
 
+/** @hidden */
+interface ExternalSyncSourceFieldConfig {
+    type: FieldType.EXTERNAL_SYNC_SOURCE;
+    options: ExternalSyncSourceFieldOptions;
+}
+
 /**
  * A type for use with Field objects to make type narrowing FieldOptions easier.
  *
@@ -1389,4 +1434,5 @@ export type FieldConfig =
     | DurationFieldConfig
     | LastModifiedTimeFieldConfig
     | CreatedByFieldConfig
-    | LastModifiedByFieldConfig;
+    | LastModifiedByFieldConfig
+    | ExternalSyncSourceFieldConfig;
