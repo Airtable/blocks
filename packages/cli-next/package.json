@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/blocks-cli-next",
+    "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
     "version": "2.0.0-beta.0",
     "homepage": "https://airtable.com/developers/blocks",
@@ -109,5 +109,18 @@
     "types": "lib/index.d.ts",
     "installConfig": {
         "pnp": true
+    },
+    "release-it": {
+        "git": {
+            "tagName": "@airtable/blocks-cli@${version}",
+            "commitMessage": "Release @airtable/blocks-cli@${version}"
+        },
+        "hooks": {
+            "before:init": "../../bin/check-repo-for-release && yarn run test",
+            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version})"
+        },
+        "npm": {
+            "access": "public"
+        }
     }
 }
