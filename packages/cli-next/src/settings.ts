@@ -16,12 +16,10 @@ export const INIT_DEFAULT_TEMPLATE_URL = 'https://github.com/Airtable/apps-hello
 
 export const SUBMIT_ARCHIVE_NAME = 'block_source.zip';
 
-/**
- * V2 blocks don't have an application id, we store this value in the
- * remote.json file instead to signal that it is a V2 block and allow development
- * in any base. Most be kept in sync with V2_BLOCKS_APPLICATION_ID in
- * block_frame.tsx in hyperbase
- */
+// V2 blocks don't have an application id, we store this value in the
+// remote.json file instead to signal that it is a V2 block and allow development
+// in any base. Most be kept in sync with V2_BLOCKS_APPLICATION_ID in
+// block_frame.tsx in hyperbase
 export const V2_BLOCKS_BASE_ID = 'NONE';
 
 export const APP_ROOT_TEMPORARY_DIR = '.tmp';
@@ -49,5 +47,5 @@ export const BLOCK_REQUEST_BODY_LIMIT = 5.2 * 1024 * 1024; // 5.2MB
 /** The name of the blocks sdk. */
 export const SDK_PACKAGE_NAME = '@airtable/blocks';
 
-// This access token is not considered sensitive.
+/** This access token is not considered sensitive. */
 export const ROLLBAR_ACCESS_TOKEN = '2de7b9533b7243f7989e3a7584c7dad7';
