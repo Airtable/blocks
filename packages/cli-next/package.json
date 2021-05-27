@@ -3,7 +3,6 @@
     "description": "Official command line tool for Airtable blocks development",
     "version": "2.0.0-beta.0",
     "homepage": "https://airtable.com/developers/blocks",
-    "private": true,
     "author": "Airtable",
     "bin": {
         "block": "bin/run"
@@ -104,7 +103,8 @@
         "test:types": "tsc --project tsconfig-testing.json",
         "test:unit": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
         "test:update-snapshot": "UPDATE_SNAPSHOT=1 yarn test:unit",
-        "version": "oclif-dev readme && git add README.md"
+        "version": "oclif-dev readme && git add README.md",
+        "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },
     "types": "lib/index.d.ts",
     "installConfig": {
@@ -119,7 +119,7 @@
             "before:init": "../../bin/check-repo-for-release && yarn run test",
             "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version})"
         },
-        "npm": {
+        "publishConfig": {
             "access": "public"
         }
     }
