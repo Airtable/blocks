@@ -8,8 +8,8 @@ version of the CLI, which is in public beta
 -   [Installation](#installation)
 -   [Usage](#usage)
 -   [Commands](#commands)
-    <!-- tocstop -->
 -   [New features in v2](#new-features-in-v2)
+    <!-- tocstop -->
 
 # Installation
 
@@ -22,10 +22,11 @@ To install or update the `block` cli, run:
 <!-- usage -->
 
 ```sh-session
-$ npm install -g @airtable/blocks-cli-next
+$ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
+@airtable/blocks-cli/2.0.0-beta.1 darwin-x64 node-v12.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
