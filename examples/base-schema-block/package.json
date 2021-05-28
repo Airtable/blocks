@@ -1,6 +1,6 @@
 {
     "name": "@airtable/base-schema-app",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "scripts": {
         "lint": "eslint frontend"
     },
