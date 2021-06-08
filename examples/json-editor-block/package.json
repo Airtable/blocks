@@ -3,7 +3,7 @@
     "version": "1.0.3",
     "license": "MIT",
     "dependencies": {
-        "@airtable/blocks": "0.0.43",
+        "@airtable/blocks": "latest",
         "lodash.debounce": "^4.0.8",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
