@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...HEAD)
 
 -   Add `opts` argument to `Field.updateOptionsAsync` with `enableSelectFieldChoiceDeletion` opt.
+-   Add `prefersSingleRecordLink` to `field.options` for `MULTIPLE_RECORD_LINKS` type fields.
 
 ## [1.7.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.1...@airtable/blocks@1.7.2) - 2021-05-26
 
