@@ -362,7 +362,7 @@ class Mutations {
             }
 
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
-                const {tableId, id, config} = mutation;
+                const {tableId, id, config, opts} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError("Can't update field: No table with id %s exists", tableId);
@@ -387,6 +387,7 @@ class Mutations {
                     currentConfig,
                     field._data,
                     billingPlanGrouping,
+                    opts,
                 );
 
                 if (!validationResult.isValid) {

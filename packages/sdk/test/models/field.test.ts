@@ -71,6 +71,7 @@ describe('Field', () => {
                             choices: [{name: 'pick me'}],
                         },
                     },
+                    opts: {},
                 },
                 {holdForMs: 100},
             );

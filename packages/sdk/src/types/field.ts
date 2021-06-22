@@ -172,9 +172,10 @@ export enum FieldType {
      *     >,
      * }
      * ```
-     * You must pass all pre-existing choices in `choices` when updating a `SINGLE_SELECT` field
-     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
-     * the current choices:
+     * The default behavior of calling `updateOptionsAsync` on a `SINGLE_SELECT` field allows
+     * choices to be added or updated, but not deleted. Therefore, you should pass all pre-existing
+     * choices in `choices` (similar to updating a `MULTIPLE_SELECTS` field type cell value). You can
+     * do this by spreading the current choices:
      * ```js
      * const selectField = table.getFieldByName('My select field');
      * await selectField.updateOptionsAsync({
@@ -182,7 +183,20 @@ export enum FieldType {
      *         ...selectField.options.choices,
      *         {name: 'My new choice'},
      *     ],
-     * })
+     * });
+     *
+     * ```
+     *
+     * If you want to allow choices to be deleted, you can pass an object with
+     * `enableSelectFieldChoiceDeletion: true` as the second argument. By passing this argument,
+     * any existing choices which are not passed again via `choices` will be deleted, and any
+     * cells which referenced a now-deleted choice will be cleared.
+     * ```js
+     * const selectField = table.getFieldByName('My select field');
+     * await selectField.updateOptionsAsync({
+     *     choices: selectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     {enableSelectFieldChoiceDeletion: true},
+     * });
      *
      * ```
      */
@@ -230,9 +244,10 @@ export enum FieldType {
      *     >,
      * }
      * ```
-     * You must pass all pre-existing choices in `choices` when updating a `MULTIPLE_SELECT` field
-     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
-     * the current choices:
+     * The default behavior of calling `updateOptionsAsync` on a `MULTIPLE_SELECTS` field allows
+     * choices to be added or updated, but not deleted. Therefore, you should pass all pre-existing
+     * choices in `choices` (similar to updating a `SINGLE_SELECT` field type cell value). You can
+     * do this by spreading the current choices:
      * ```js
      * const multipleSelectField = table.getFieldByName('My multiple select field');
      * await multipleSelectField.updateOptionsAsync({
@@ -240,7 +255,20 @@ export enum FieldType {
      *         ...multipleSelectField.options.choices,
      *         {name: 'My new choice'},
      *     ],
-     * })
+     * });
+     *
+     * ```
+     *
+     * If you want to allow choices to be deleted, you can pass an object with
+     * `enableSelectFieldChoiceDeletion: true` as the second argument. By passing this argument,
+     * any existing choices which are not passed again via `choices` will be deleted, and any
+     * cells which referenced a now-deleted choice will be cleared.
+     * ```js
+     * const multipleSelectField = table.getFieldByName('My multiple select field');
+     * await multipleSelectField.updateOptionsAsync({
+     *     choices: multipleSelectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     {enableSelectFieldChoiceDeletion: true},
+     * });
      *
      * ```
      */
@@ -345,7 +373,7 @@ export enum FieldType {
      *         ...myRecord.getCellValue('myLinkedRecordField'),
      *         { id: newForeignRecordIdToLink }
      *     ]
-     * })
+     * });
      * ```
      *
      * Similarly, you can clear the current cell value by passing an empty array, or
@@ -525,7 +553,7 @@ export enum FieldType {
      *         ...myRecord.getCellValue('myAttachmentField'),
      *         { url: newAttachmentUrl }
      *     ]
-     * })
+     * });
      * ```
      *
      * Similarly, you can clear the current cell value by passing an empty array, or
