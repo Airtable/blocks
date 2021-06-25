@@ -171,8 +171,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         } as FieldConfig;
     }
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to perform the given options update.
      *
      * Accepts partial input, in the same format as {@link updateOptionsAsync}.
@@ -205,8 +203,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * An alias for `checkPermissionsForUpdateOptions(options).hasPermission`.
      *
      * Checks whether the current user has permission to perform the options update.
@@ -229,8 +225,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Updates the options for this field.
      *
      * Throws an error if the user does not have permission to update the field, if invalid
