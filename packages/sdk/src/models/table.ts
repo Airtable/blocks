@@ -1554,8 +1554,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
     }
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to create a field in this table.
      *
      * Accepts partial input, in the same format as {@link createFieldAsync}.
@@ -1597,8 +1595,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * An alias for `checkPermissionsForCreateField(name, type, options).hasPermission`.
      *
      * Checks whether the current user has permission to create a field in this table.
@@ -1627,8 +1623,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Creates a new field.
      *
      * Similar to creating a field from the Airtable UI, the new field will not be visible

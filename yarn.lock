@@ -3,9 +3,9 @@
 
 
 "@airtable/blocks@latest":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-1.5.1.tgz#4401afa8a1dbee4296f32ffa7f50b26c2d85b051"
-  integrity sha512-c0XJwOw1Ay7508CmDF22C7QdsAmZCIoXDhowirj7yzkBphIcwaKf+ZIRH6TiH9OMbRtyg0Peszdefowr/oy13A==
+  version "1.7.2"
+  resolved "https://registry.npmjs.org/@airtable/blocks/-/blocks-1.7.2.tgz"
+  integrity sha512-w+yRQ5Cd93rPD6FqbExtTxpOQ2psh2Cxd/PEvWTgBFANuyecg5qlIUnjtDCzRTe2Kk/+aVYG3Yl7JUfyX/pScg==
   dependencies:
     "@airtable/eslint-plugin-blocks" "^1.0.2"
     "@babel/runtime" "^7.7.6"
@@ -4117,7 +4117,7 @@
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.14.1.tgz#0d8a53f308f017c53a5ddc3d07f4d6fa76b790d7"
   integrity sha512-0Ki9jAAhKDSuLDXOIMADg54Hu60SuBTEsWaJGGy5cV+SSUQ63J2a+RrYYGrErzz39fXzTibhKrAQJAb8M7PNcA==
 
-"@types/webpack-sources@*":
+"@types/webpack-sources@*", "@types/webpack-sources@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/webpack-sources/-/webpack-sources-2.1.0.tgz#8882b0bd62d1e0ce62f183d0d01b72e6e82e8c10"
   integrity sha512-LXn/oYIpBeucgP1EIJbKQ2/4ZmpvRl+dlrFdX7+94SKRUV3Evy3FsfMZY318vGhkWUS5MPhtOM3w1/hCOAOXcg==

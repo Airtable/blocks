@@ -5,6 +5,7 @@ version of the CLI, which is in public beta
 
 <!-- toc -->
 
+-   [@airtable/blocks-cli](#airtableblocks-cli)
 -   [Installation](#installation)
 -   [Usage](#usage)
 -   [Commands](#commands)
@@ -26,7 +27,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.0-beta.2 darwin-x64 node-v12.20.1
+@airtable/blocks-cli/2.0.0-beta.3 darwin-x64 node-v12.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -39,107 +40,15 @@ USAGE
 
 <!-- commands -->
 
--   [`block init BLOCKIDENTIFIER BLOCKDIRPATH`](#block-init-blockidentifier-blockdirpath)
--   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
--   [`block run`](#block-run)
--   [`block release`](#block-release)
--   [`block submit`](#block-submit)
 -   [`block add-remote BLOCKIDENTIFIER REMOTENAME`](#block-add-remote-blockidentifier-remotename)
--   [`block list-remotes`](#block-list-remotes)
--   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
 -   [`block help [COMMAND]`](#block-help-command)
-
-## `block init BLOCKIDENTIFIER BLOCKDIRPATH`
-
-Initialize an Airtable app project
-
-```
-USAGE
-  $ block init BLOCKIDENTIFIER BLOCKDIRPATH
-
-OPTIONS
-  -h, --help           show CLI help
-  --template=template  [default: https://github.com/Airtable/apps-hello-world]
-
-EXAMPLE
-  $ block init app12345678/blk12345678 hellow-world-app --template https://github.com/Airtable/apps-hello-world
-```
-
-_See code:
-[lib/commands/init.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/init.js)_
-
-## `block set-api-key [APIKEY]`
-
-Set an api key for an airtable account to upload to
-
-```
-USAGE
-  $ block set-api-key [APIKEY]
-
-OPTIONS
-  -h, --help             show CLI help
-  --location=(user|app)  [default: user]
-
-EXAMPLE
-  $ block set-api-key
-  $ block set-api-key APIKEY
-  $ block set-api-key --location app APIKEY
-```
-
-## `block run`
-
-Run the app locally
-
-```
-USAGE
-  $ block run
-
-OPTIONS
-  -h, --help       show CLI help
-  --port=port      [default: 9000] HTTPS port the server listens on. The server will listen for HTTP on PORT + 1.
-  --remote=remote  [Beta] Configure which remote to use
-
-EXAMPLE
-  $ block run
-```
-
-_See code:
-[lib/commands/run.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/run.js)_
-
-## `block release`
-
-Release a build to an Airtable base
-
-```
-USAGE
-  $ block release
-
-OPTIONS
-  -h, --help       show CLI help
-  --remote=remote  [Beta] Configure which remote to use
-
-EXAMPLE
-  $ block release
-```
-
-_See code:
-[lib/commands/release.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/release.js)_
-
-## `block submit`
-
-Submit app for review for listing in the the Airtable Marketplace
-
-```
-USAGE
-  $ block submit
-
-OPTIONS
-  -h, --help       show CLI help
-  --remote=remote  Configure which remote to use
-
-EXAMPLE
-  $ block submit
-```
+-   [`block init BLOCKIDENTIFIER BLOCKDIRPATH`](#block-init-blockidentifier-blockdirpath)
+-   [`block list-remotes`](#block-list-remotes)
+-   [`block release`](#block-release)
+-   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
+-   [`block run`](#block-run)
+-   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
+-   [`block submit`](#block-submit)
 
 ## `block add-remote BLOCKIDENTIFIER REMOTENAME`
 
@@ -154,40 +63,6 @@ OPTIONS
 
 EXAMPLE
   $ block add-remote app12345678/blk12345678 new-remote
-```
-
-_See code:
-[lib/commands/add-remote.js](https://github.com/packages/cli-next/blob/v0.1.0/lib/commands/add-remote.js)_
-
-## `block list-remotes`
-
-[Beta] List remote configurations
-
-```
-USAGE
-  $ block list-remotes
-
-OPTIONS
-  -h, --help  show CLI help
-
-EXAMPLE
-  $ block list-remotes
-```
-
-## `block remove-remote REMOTENAME`
-
-[Beta] Remove a remote configuration
-
-```
-USAGE
-  $ block remove-remote REMOTENAME
-
-OPTIONS
-  -h, --help  show CLI help
-
-EXAMPLE
-  $ block remove-remote old-remote
-
 ```
 
 ## `block help [COMMAND]`
@@ -207,6 +82,119 @@ OPTIONS
 
 _See code:
 [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `block init BLOCKIDENTIFIER BLOCKDIRPATH`
+
+Initialize an Airtable app project
+
+```
+USAGE
+  $ block init BLOCKIDENTIFIER BLOCKDIRPATH
+
+OPTIONS
+  -h, --help           show CLI help
+  --template=template  [default: https://github.com/Airtable/apps-hello-world]
+
+EXAMPLE
+  $ block init app12345678/blk12345678 hellow-world-app --template https://github.com/Airtable/apps-hello-world
+```
+
+## `block list-remotes`
+
+[Beta] List remote configurations
+
+```
+USAGE
+  $ block list-remotes
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ block list-remotes
+```
+
+## `block release`
+
+Release a build to an Airtable base
+
+```
+USAGE
+  $ block release
+
+OPTIONS
+  -h, --help       show CLI help
+  --remote=remote  [Beta] Configure which remote to use
+
+EXAMPLE
+  $ block release
+```
+
+## `block remove-remote REMOTENAME`
+
+[Beta] Remove a remote configuration
+
+```
+USAGE
+  $ block remove-remote REMOTENAME
+
+OPTIONS
+  -h, --help  show CLI help
+
+EXAMPLE
+  $ block remove-remote old-remote
+```
+
+## `block run`
+
+Run the app locally
+
+```
+USAGE
+  $ block run
+
+OPTIONS
+  -h, --help       show CLI help
+  --port=port      [default: 9000] HTTPS port the server listens on. The server will listen for HTTP on PORT + 1.
+  --remote=remote  [Beta] Configure which remote to use
+
+EXAMPLE
+  $ block run
+```
+
+## `block set-api-key [APIKEY]`
+
+Set an api key for an airtable account to upload to
+
+```
+USAGE
+  $ block set-api-key [APIKEY]
+
+OPTIONS
+  -h, --help             show CLI help
+  --location=(user|app)  [default: user]
+
+EXAMPLE
+  $ block set-api-key
+  $ block set-api-key APIKEY
+  $ block set-api-key --location app APIKEY
+```
+
+## `block submit`
+
+Submit app for review for listing in the the Airtable Marketplace
+
+```
+USAGE
+  $ block submit
+
+OPTIONS
+  -h, --help       show CLI help
+  --remote=remote  Configure which remote to use
+
+EXAMPLE
+  $ block submit
+```
 
 <!-- commandsstop -->
 
@@ -234,7 +222,7 @@ To use a custom bundler:
    i.e.:
 
 ```
-# block.json
+// block.json
 {
     “bundler”: {
         “module”: “./bundler/index.ts”

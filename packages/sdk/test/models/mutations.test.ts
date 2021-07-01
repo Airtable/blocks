@@ -218,7 +218,7 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                let mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
                     () => {
                         return {isValid: false, reason: 'Mock reason'};
                     },
@@ -261,6 +261,7 @@ describe('Mutations', () => {
                     oldConfig,
                     field._data,
                     'pro',
+                    undefined,
                 );
 
                 mockValidate.mockClear();
@@ -280,6 +281,76 @@ describe('Mutations', () => {
                     oldConfig,
                     field._data,
                     'pro',
+                    undefined,
+                );
+            });
+
+            it('passes opts when validating field config', () => {
+                const projectsTable = base.getTableById('tblDesignProjects');
+                const selectField = projectsTable.getFieldById('fldPrjctCtgry');
+                const oldSelectConfig = {
+                    name: 'Category',
+                    type: FieldType.SINGLE_SELECT,
+                    choiceOrder: [
+                        'selPrjctBrand',
+                        'selPrjctIndstrl',
+                        'selPrjctHealth',
+                        'selPrjctTech',
+                    ],
+                    choices: {
+                        selPrjctBrand: {
+                            color: 'cyanDark',
+                            id: 'selPrjctBrand',
+                            name: 'Brand identity',
+                        },
+                        selPrjctHealth: {
+                            color: 'yellowDark',
+                            id: 'selPrjctHealth',
+                            name: 'Healthcare design',
+                        },
+                        selPrjctIndstrl: {
+                            color: 'redDark',
+                            id: 'selPrjctIndstrl',
+                            name: 'Industrial design',
+                        },
+                        selPrjctTech: {
+                            color: 'greenDark',
+                            id: 'selPrjctTech',
+                            name: 'Technology design',
+                        },
+                    },
+                };
+                const newSelectConfig = {
+                    ...oldSelectConfig,
+                    choiceOrder: ['selPrjctBrand', 'selPrjctHealth', 'selPrjctTech'],
+                    choices: {
+                        selPrjctBrand: oldSelectConfig.choices.selPrjctBrand,
+                        selPrjctHealth: oldSelectConfig.choices.selPrjctHealth,
+                        selPrjctTech: oldSelectConfig.choices.selPrjctTech,
+                    },
+                };
+
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockReturnValue(
+                    {isValid: true},
+                );
+                mockAirtableInterface.fieldTypeProvider.getConfig.mockReturnValue(oldSelectConfig);
+
+                mutations._assertMutationIsValid({
+                    type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+                    tableId: projectsTable.id,
+                    id: selectField.id,
+                    config: newSelectConfig,
+                    opts: {enableSelectFieldChoiceDeletion: true},
+                });
+
+                expect(mockValidate).toHaveBeenCalledTimes(1);
+                expect(mockValidate).toHaveBeenCalledWith(
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
+                    newSelectConfig,
+                    oldSelectConfig,
+                    selectField._data,
+                    'pro',
+                    {enableSelectFieldChoiceDeletion: true},
                 );
             });
         });
@@ -1360,7 +1431,7 @@ Mock reason"
                 .then(() => {
                     throw new Error('Unexpected fulfillment');
                 });
-            const uncaughtException = new Promise(resolve => {
+            const uncaughtException = new Promise<void>(resolve => {
                 window.onerror = () => {
                     resolve();
                     return true;

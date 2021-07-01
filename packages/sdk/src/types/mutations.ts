@@ -167,6 +167,8 @@ export interface UpdateSingleFieldConfigMutation {
     readonly id: FieldId;
     /** The new configuration for the Field being modified */
     readonly config: FieldTypeConfig;
+    /** Optional options to affect the behavior of the update */
+    readonly opts?: UpdateFieldOptionsOpts;
 }
 
 /** @hidden */
@@ -175,6 +177,20 @@ export interface PartialUpdateSingleFieldConfigMutation {
     readonly tableId: TableId | undefined;
     readonly id: FieldId | undefined;
     readonly config: FieldTypeConfig | undefined;
+    readonly opts?: UpdateFieldOptionsOpts | undefined;
+}
+
+/**
+ * Options that affect the behavior of an `UpdateSingleFieldConfigMutation`
+ */
+export interface UpdateFieldOptionsOpts {
+    /**
+     * Allowing select field choices to be deleted  is dangerous since any
+     * records which use that choice will lose their cell value. By default,
+     * calling `updateOptionsAsync` on a select field only allows choices to be
+     *  added or modified. Passing this option will allow choices to be deleted.
+     */
+    enableSelectFieldChoiceDeletion?: boolean;
 }
 
 /**

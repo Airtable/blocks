@@ -1,7 +1,7 @@
 {
     "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "2.0.0-beta.2",
+    "version": "2.0.0-beta.3",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "bin": {
@@ -19,6 +19,7 @@
         "@octokit/rest": "^18.2.0",
         "@types/npm": "^2.0.31",
         "@types/tar": "^4.0.4",
+        "@types/webpack-sources": "^2.1.0",
         "archiver": "^5.1.0",
         "babel-loader": "^8.2.2",
         "chalk": "^4.1.0",
@@ -80,7 +81,8 @@
         "/bin",
         "/lib",
         "/npm-shrinkwrap.json",
-        "/oclif.manifest.json"
+        "/oclif.manifest.json",
+        "/keys"
     ],
     "license": "UNLICENSED",
     "main": "lib/index.js",
@@ -94,9 +96,9 @@
     "scripts": {
         "ci": "yarn test",
         "lint": "eslint . --ext .ts --config .eslintrc.js",
-        "pack:typescript": "rm -rf lib && tsc --build",
+        "pack:typescript": "rm -rf lib && rm tsconfig.tsbuildinfo && tsc --build",
         "postpack": "rm -f oclif.manifest.json",
-        "prepack": "yarn run pack:typescript && oclif-dev manifest && oclif-dev readme",
+        "prepack": "yarn install && yarn run pack:typescript && oclif-dev manifest && oclif-dev readme",
         "test": "yarn lint && yarn test:types && yarn test:unit",
         "test:cov-report": "nyc --reporter=text --reporter=html --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
         "test:grep": "nyc --reporter=text --reporter=html --extension .ts mocha",

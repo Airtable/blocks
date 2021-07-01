@@ -16,7 +16,12 @@ import {
 import {RecordData, RecordId} from './record';
 import {UndoRedoMode} from './undo_redo';
 import {ViewportSizeConstraint} from './viewport';
-import {Mutation, PartialMutation, PermissionCheckResult} from './mutations';
+import {
+    Mutation,
+    PartialMutation,
+    PermissionCheckResult,
+    UpdateFieldOptionsOpts,
+} from './mutations';
 import {TableId} from './table';
 import {
     GroupData,
@@ -160,6 +165,7 @@ export interface FieldTypeProvider {
         currentConfig: FieldTypeConfig | null,
         fieldData: FieldData | null,
         billingPlanGrouping: string,
+        opts?: UpdateFieldOptionsOpts,
     ): FieldConfigValidationResult;
     canBePrimary(
         appInterface: AppInterface,

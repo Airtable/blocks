@@ -351,8 +351,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to create a table.
      *
      * Accepts partial input, in the same format as {@link createTableAsync}.
@@ -400,8 +398,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * An alias for `checkPermissionsForCreateTable(name, fields).hasPermission`.
      *
      * Checks whether the current user has permission to create a table.
@@ -432,8 +428,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Creates a new table.
      *
      * Throws an error if the user does not have permission to create a table, if an invalid

@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {AggregatorKey} from '../types/aggregators';
 import Sdk from '../sdk';
-import {MutationTypes, PermissionCheckResult} from '../types/mutations';
+import {MutationTypes, PermissionCheckResult, UpdateFieldOptionsOpts} from '../types/mutations';
 import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import AbstractModel from './abstract_model';
@@ -166,8 +166,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         } as FieldConfig;
     }
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to perform the given options update.
      *
      * Accepts partial input, in the same format as {@link updateOptionsAsync}.
@@ -200,8 +198,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * An alias for `checkPermissionsForUpdateOptions(options).hasPermission`.
      *
      * Checks whether the current user has permission to perform the options update.
@@ -224,8 +220,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Updates the options for this field.
      *
      * Throws an error if the user does not have permission to update the field, if invalid
@@ -239,7 +233,11 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * **not** applied optimistically locally. You must `await` the returned promise before
      * relying on the change in your app.
      *
+     * Optionally, you can pass an `opts` object as the second argument. See {@link UpdateFieldOptionsOpts}
+     * for available options.
+     *
      * @param options new options for the field
+     * @param opts optional options to affect the behavior of the update
      *
      * @example
      * ```js
@@ -257,7 +255,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * }
      * ```
      */
-    async updateOptionsAsync(options: FieldOptions): Promise<void> {
+    async updateOptionsAsync(
+        options: FieldOptions,
+        opts: UpdateFieldOptionsOpts = {},
+    ): Promise<void> {
         await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
@@ -266,6 +267,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
                 type: this.type,
                 options: options,
             },
+            opts,
         });
     }
     /**
