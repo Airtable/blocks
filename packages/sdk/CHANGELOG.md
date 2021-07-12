@@ -9,9 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...HEAD)
+
+No changes.
+
+## [1.8.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...@airtable/blocks@1.8.0) - 2021-07-12
 
 -   Add `opts` argument to `Field.updateOptionsAsync` with `enableSelectFieldChoiceDeletion` opt.
+-   Add `prefersSingleRecordLink` to `field.options` for `MULTIPLE_RECORD_LINKS` type fields.
+-   Add new timeline icon (and micro variant).
 
 ## [1.7.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.1...@airtable/blocks@1.7.2) - 2021-05-26
 

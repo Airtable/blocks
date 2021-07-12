@@ -409,6 +409,11 @@ export enum FieldType {
      *     // Airtable UI (i.e. most recent first)
      *     // You generally do not need to rely on this option.
      *     isReversed: boolean,
+     *     // Whether this field prefers to only have a single linked record. While this preference
+     *     // is enforced in the Airtable UI, it is possible for a field that prefers single linked
+     *     // records to have multiple record links (for example, via copy-and-paste or programmatic
+     *     // updates).
+     *     prefersSingleRecordLink: boolean,
      * }
      * ```
      *
@@ -420,6 +425,8 @@ export enum FieldType {
      *     // The ID of the view in the linked table to use when showing
      *     // a list of records to select from
      *     viewIdForRecordSelection?: ViewId,
+     *     // Note: prefersSingleRecordLink cannot be specified via programmatic field creation
+     *     // and will be false for fields created within an app
      * }
      * ```
      *
@@ -1172,6 +1179,7 @@ interface LinkedRecordFieldOptions {
     inverseLinkFieldId?: FieldId;
     viewIdForRecordSelection?: ViewId;
     isReversed: boolean;
+    prefersSingleRecordLink: boolean;
 }
 
 /** @hidden */
