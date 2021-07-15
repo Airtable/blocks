@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...HEAD)
 
-No changes.
+-   Update documentation for `FieldType.CHECKBOX` cell read & write types to be more accurate.
 
 ## [1.8.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...@airtable/blocks@1.8.0) - 2021-07-12
 

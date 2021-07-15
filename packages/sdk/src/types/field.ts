@@ -640,11 +640,19 @@ export enum FieldType {
     /**
      * A checkbox.
      *
-     * This field is "true" when checked and otherwise empty.
+     * This field is "true" when checked and "null" when unchecked.
      *
-     * **Cell format**
+     * **Cell read format**
      * ```js
-     * boolean
+     * true | null
+     * ```
+     *
+     * You can write to the cell with "false", but the read value will be still be "null"
+     * (unchecked).
+     *
+     * **Cell write format**
+     * ```js
+     * boolean | null
      * ```
      *
      * **Field options**
