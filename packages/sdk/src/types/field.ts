@@ -458,22 +458,25 @@ export enum FieldType {
      * **Field options read format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
-     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     }
+     *     dateFormat:
+     *          | {name: 'local', format: 'l'}
+     *          | {name: 'friendly', format: 'LL'}
+     *          | {name: 'us', format: 'M/D/YYYY'}
+     *          | {name: 'european', format: 'D/M/YYYY'}
+     *          | {name: 'iso', format: 'YYYY-MM-DD'}
      * }
      * ```
      *
      * **Field options write format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     }
+     *     dateFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: 'local', format?: 'l'}
+     *          | {name: 'friendly', format?: 'LL'}
+     *          | {name: 'us', format?: 'M/D/YYYY'}
+     *          | {name: 'european', format?: 'D/M/YYYY'}
+     *          | {name: 'iso', format?: 'YYYY-MM-DD'}
      * }
      * ```
      */
@@ -502,16 +505,15 @@ export enum FieldType {
      * **Field options read format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
-     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     },
-     *     timeFormat: {
-     *         name: '12hour' | '24hour',
-     *         // Will correspond to name
-     *         format: 'h:mma' | 'HH:mm',
-     *     },
+     *     dateFormat:
+     *          | {name: 'local', format: 'l'}
+     *          | {name: 'friendly', format: 'LL'}
+     *          | {name: 'us', format: 'M/D/YYYY'}
+     *          | {name: 'european', format: 'D/M/YYYY'}
+     *          | {name: 'iso', format: 'YYYY-MM-DD'},
+     *     timeFormat:
+     *          | {name: '12hour', format: 'h:mma'}
+     *          | {name: '24hour', format: 'HH:mm'},
      *     timeZone: 'utc' | 'client',
      * }
      * ```
@@ -519,16 +521,17 @@ export enum FieldType {
      * **Field options write format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     },
-     *     timeFormat: {
-     *         name: '12hour' | '24hour',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'h:mma' | 'HH:mm',
-     *     },
+     *     dateFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: 'local', format?: 'l'}
+     *          | {name: 'friendly', format?: 'LL'}
+     *          | {name: 'us', format?: 'M/D/YYYY'}
+     *          | {name: 'european', format?: 'D/M/YYYY'}
+     *          | {name: 'iso', format?: 'YYYY-MM-DD'},
+     *     timeFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: '12hour', format?: 'h:mma'}
+     *          | {name: '24hour', format?: 'HH:mm'},
      *     timeZone: 'utc' | 'client',
      * }
      * ```
@@ -1186,18 +1189,17 @@ interface LinkedRecordFieldOptions {
 
 /** @hidden */
 interface DateFieldOptions {
-    dateFormat: {
-        name: 'local' | 'friendly' | 'us' | 'european' | 'iso';
-        format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD';
-    };
+    dateFormat:
+        | {name: 'local'; format: 'l'}
+        | {name: 'friendly'; format: 'LL'}
+        | {name: 'us'; format: 'M/D/YYYY'}
+        | {name: 'european'; format: 'D/M/YYYY'}
+        | {name: 'iso'; format: 'YYYY-MM-DD'};
 }
 
 /** @hidden */
 interface DateTimeFieldOptions extends DateFieldOptions {
-    timeFormat: {
-        name: '12hour' | '24hour';
-        format: 'h:mma' | 'HH:mm';
-    };
+    timeFormat: {name: '12hour'; format: 'h:mma'} | {name: '24hour'; format: 'HH:mm'};
     timeZone: 'utc' | 'client';
 }
 
