@@ -211,7 +211,11 @@ export default class Submit extends AirtableCommand {
                 name,
             });
         }
+        const fileStreamClosedPromise = new Promise(resolve => {
+            output.on('close', resolve);
+        });
         await zip.finalize();
+        await fileStreamClosedPromise;
         await sys.fs.writeFileAsync(
             sys.path.join(appBuildPath, 'block_archive.files.txt'),
             Buffer.from(`${zipFileTable.join('\n')}\n`),

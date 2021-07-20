@@ -1,7 +1,7 @@
 {
     "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "2.0.0-beta.3",
+    "version": "2.0.0-beta.4",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "bin": {
@@ -96,7 +96,7 @@
     "scripts": {
         "ci": "yarn test",
         "lint": "eslint . --ext .ts --config .eslintrc.js",
-        "pack:typescript": "rm -rf lib && rm tsconfig.tsbuildinfo && tsc --build",
+        "pack:typescript": "rm -rf lib && rm -f tsconfig.tsbuildinfo && tsc --build",
         "postpack": "rm -f oclif.manifest.json",
         "prepack": "yarn install && yarn run pack:typescript && oclif-dev manifest && oclif-dev readme",
         "test": "yarn lint && yarn test:types && yarn test:unit",
