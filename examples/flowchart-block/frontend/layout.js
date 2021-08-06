@@ -106,11 +106,11 @@ export function createLayout(settings) {
         const shouldUseLightText = record
             ? colorUtils.shouldUseLightTextOnColor(recordColor)
             : false;
-        let displayText = record.primaryCellValueAsString
+        let displayText = record.name
             .substring(0, 50)
             .trim()
             .replace(/"/g, '\\"');
-        if (record.primaryCellValueAsString.length > 50) {
+        if (record.name.length > 50) {
             displayText += '...';
         }
         nodes.push(

@@ -53,7 +53,7 @@ import useRenderSignal from './useRenderSignal';
  * invalid JSON which is not appropriate to save to the base.
  */
 const changeDelay = 500;
-const supportedFields = [FieldType.MULTILINE_TEXT, FieldType.SINGLE_LINE_TEXT];
+const supportedFields = [FieldType.MULTILINE_TEXT, FieldType.SINGLE_LINE_TEXT, FieldType.RICH_TEXT];
 const isFieldSupported = field => supportedFields.includes(field.type);
 
 function JsonEditorApp() {

@@ -8,7 +8,7 @@
         "@airtable/blocks": "latest",
         "classnames": "^2.2.6",
         "leader-line": "^1.0.5",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.21",
         "prop-types": "^15.7.2",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
