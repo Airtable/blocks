@@ -829,7 +829,15 @@ class BlockBuilder {
                 );
             }
 
-            await fsUtils.mkdirAsync(path.join(this._outputUserTranspiledDirPath, 'node_modules'));
+            await fsUtils.mkdirAsync(
+                path.join(
+                    this._outputUserTranspiledDirPath,
+                    'node_modules',
+                    absoluteImportRoot,
+                    '..',
+                ),
+                {recursive: true},
+            );
             await fsUtils.symlinkAsync(
                 this._outputUserTranspiledDirPath,
                 path.join(this._outputUserTranspiledDirPath, 'node_modules', absoluteImportRoot),
@@ -941,10 +949,11 @@ class BlockBuilder {
             if (npmCIResult.err) {
                 return npmCIResult;
             }
-            // Write fake stub module for legacy imports after npm install so that it isn't deleted
-            // because it isn't included in package.json
-            await this._writeLegacyAirtableBlockModuleAsync();
         }
+        // Write fake stub module for legacy imports after npm install so that it isn't deleted
+        // because it isn't included in package.json. We do this for both isolated & non-isolated
+        // builds, because this module won't be created any other way.
+        await this._writeLegacyAirtableBlockModuleAsync();
 
         // 3. Starting chokidar will recursively scan the entire user's block directory and queue
         //    the files for transpilation and bundling.
