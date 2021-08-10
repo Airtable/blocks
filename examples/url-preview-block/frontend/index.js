@@ -465,7 +465,7 @@ const converters = [
     function getLoomPreviewUrl(url) {
         const match = url.match(/loom\.com\/share\/([\w-]+)(\?|$)/);
         if (match) {
-            return `https://loom.com/embed/${match[1]}`;
+            return `https://www.loom.com/embed/${match[1]}`;
         }
 
         // URL isn't for a Loom video
