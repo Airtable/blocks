@@ -1,6 +1,6 @@
 {
     "name": "@airtable/hello-world-typescript-app",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "description": "A typescript version of a hello world app",
     "author": "",
     "license": "MIT",
