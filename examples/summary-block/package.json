@@ -1,6 +1,6 @@
 {
     "name": "@airtable/summary-app",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "description": "Shows many different summaries of a table field",
     "author": "",
     "license": "MIT",
