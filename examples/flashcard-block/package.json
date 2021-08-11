@@ -1,6 +1,6 @@
 {
     "name": "@airtable/flashcard-app",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "scripts": {
         "lint": "eslint frontend"
     },
