@@ -816,33 +816,6 @@ class BlockBuilder {
             fsUtils.emptyDirAsync(this._outputUserTranspiledDirPath),
             fsUtils.emptyDirAsync(this._outputBuildArtifactsDirPath),
         ]);
-
-        // It's possible for some blocks (e.g. scripting) to live in hyperbase, which by convention
-        // uses absolute instead of relative imports. This absoluteImportRoot option specifies the
-        // prefix for files in this block dir to use for absolute imports.
-        const absoluteImportRoot =
-            this._blockJson.__hyperbase && this._blockJson.__hyperbase.absoluteImportRoot;
-        if (absoluteImportRoot) {
-            if (this._enableDeprecatedAbsolutePathImport) {
-                throw new Error(
-                    'cannot use hyperbase absolute imports and legacy absolute imports at the same time',
-                );
-            }
-
-            await fsUtils.mkdirAsync(
-                path.join(
-                    this._outputUserTranspiledDirPath,
-                    'node_modules',
-                    absoluteImportRoot,
-                    '..',
-                ),
-                {recursive: true},
-            );
-            await fsUtils.symlinkAsync(
-                this._outputUserTranspiledDirPath,
-                path.join(this._outputUserTranspiledDirPath, 'node_modules', absoluteImportRoot),
-            );
-        }
     }
     /**
      * For @airtable/blocks-cli up to version 0.0.34, the 'build' directory saved the bundle.js
@@ -879,6 +852,34 @@ class BlockBuilder {
         await this._cleanAndPrepareOutputDirectoriesAsync();
         await this._writeFrontendClientWrapperFileAsync(environment);
     }
+    async _symlinkAbsoluteImportRootIfNeededAsync(): Promise<void> {
+        // It's possible for some blocks (e.g. scripting) to live in hyperbase, which by convention
+        // uses absolute instead of relative imports. This absoluteImportRoot option specifies the
+        // prefix for files in this block dir to use for absolute imports.
+        const absoluteImportRoot =
+            this._blockJson.__hyperbase && this._blockJson.__hyperbase.absoluteImportRoot;
+        if (absoluteImportRoot) {
+            if (this._enableDeprecatedAbsolutePathImport) {
+                throw new Error(
+                    'cannot use hyperbase absolute imports and legacy absolute imports at the same time',
+                );
+            }
+
+            await fsUtils.mkdirAsync(
+                path.join(
+                    this._outputUserTranspiledDirPath,
+                    'node_modules',
+                    absoluteImportRoot,
+                    '..',
+                ),
+                {recursive: true},
+            );
+            await fsUtils.symlinkAsync(
+                this._outputUserTranspiledDirPath,
+                path.join(this._outputUserTranspiledDirPath, 'node_modules', absoluteImportRoot),
+            );
+        }
+    }
     async _waitForInitialBuildAsync(): Promise<void> {
         // This promise will be resolved outside of this function when the initial bundle triggered
         // by the BlockBuilderJobQueue completes.
@@ -906,6 +907,7 @@ class BlockBuilder {
         }
         await this._cleanAndPrepareBuildAsync(environment);
         await this._writeLegacyAirtableBlockModuleAsync();
+        await this._symlinkAbsoluteImportRootIfNeededAsync();
 
         this._startChokidarWatchAndStartBuildJobQueueConsumer({
             shouldContinueWatchingAfterReady: true,
@@ -950,12 +952,18 @@ class BlockBuilder {
                 return npmCIResult;
             }
         }
-        // Write fake stub module for legacy imports after npm install so that it isn't deleted
+        // 3. Setup stubbed node_modules
+
+        // 3a. Write fake stub module for legacy imports after npm install so that it isn't deleted
         // because it isn't included in package.json. We do this for both isolated & non-isolated
         // builds, because this module won't be created any other way.
         await this._writeLegacyAirtableBlockModuleAsync();
 
-        // 3. Starting chokidar will recursively scan the entire user's block directory and queue
+        // 3b. Setup symlink for absolute import root AFTER `npm ci` so that it does not get overridden.
+        // This allows us to use `absoluteImportRoot` without needing `--disable-isolated-build`.
+        await this._symlinkAbsoluteImportRootIfNeededAsync();
+
+        // 4. Starting chokidar will recursively scan the entire user's block directory and queue
         //    the files for transpilation and bundling.
         console.log('transpiling and building frontend bundle');
         this._startChokidarWatchAndStartBuildJobQueueConsumer({
