@@ -7,7 +7,7 @@ import {
     VisList,
     PartialViewData,
 } from '../../src/types/airtable_interface';
-import MockAirtableInterface from '../../src/testing/mock_airtable_interface';
+import {AbstractMockAirtableInterface} from '../../src/testing/abstract_mock_airtable_interface';
 import {TableId} from '../../src/types/table';
 import {FieldId} from '../../src/types/field';
 import {spawnError} from '../../src/error_utils';
@@ -40,22 +40,18 @@ const resetSpies = (target: {[key: string]: any}, names: string[]) => {
 };
 
 /**
- * An implementation of the MockAirtableInterface designed for use in the
+ * An implementation of the AbstractMockAirtableInterface designed for use in the
  * Blocks SDK internal automated test suite. Provides Jest spies for all
  * available methods (and which resets the state of those spies with every call
  * to `reset`).
  */
-class MockAirtableInterfaceInternal extends MockAirtableInterface {
+export class MockAirtableInterface extends AbstractMockAirtableInterface {
     static projectTrackerExample() {
-        return new MockAirtableInterfaceInternal(projectTrackerData) as jest.Mocked<
-            MockAirtableInterfaceInternal
-        >;
+        return new MockAirtableInterface(projectTrackerData) as jest.Mocked<MockAirtableInterface>;
     }
 
     static linkedRecordsExample() {
-        return new MockAirtableInterfaceInternal(linkedRecordsData) as jest.Mocked<
-            MockAirtableInterfaceInternal
-        >;
+        return new MockAirtableInterface(linkedRecordsData) as jest.Mocked<MockAirtableInterface>;
     }
 
     get aggregators() {
@@ -88,8 +84,8 @@ class MockAirtableInterfaceInternal extends MockAirtableInterface {
     reset() {
         super.reset();
 
-        resetSpies(this, Object.getOwnPropertyNames(MockAirtableInterfaceInternal.prototype));
         resetSpies(this, Object.getOwnPropertyNames(MockAirtableInterface.prototype));
+        resetSpies(this, Object.getOwnPropertyNames(AbstractMockAirtableInterface.prototype));
         resetSpies(this.fieldTypeProvider, Object.keys(this.fieldTypeProvider));
         resetSpies(this.urlConstructor, Object.keys(this.urlConstructor));
         resetSpies(this.globalConfigHelpers, Object.keys(this.globalConfigHelpers));
@@ -97,7 +93,7 @@ class MockAirtableInterfaceInternal extends MockAirtableInterface {
     }
 
     createVisList(
-        ...args: Parameters<MockAirtableInterface['createVisList']>
+        ...args: Parameters<AbstractMockAirtableInterface['createVisList']>
     ): jest.Mocked<VisList> {
         const visList = super.createVisList(...args);
         resetSpies(visList, Object.keys(visList));
@@ -170,5 +166,3 @@ class MockAirtableInterfaceInternal extends MockAirtableInterface {
         throw spawnError('performBackendFetchAsync unimplemented');
     }
 }
-
-export default MockAirtableInterfaceInternal;

@@ -4,7 +4,7 @@ import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
 import AbstractModelWithAsyncData from '../../src/models/abstract_model_with_async_data';
 import useLoadable from '../../src/ui/use_loadable';
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../src/sdk';
 
 jest.useFakeTimers();

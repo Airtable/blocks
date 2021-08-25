@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 
 jest.mock('../../src/injected/airtable_interface', () => ({
     __esModule: true,

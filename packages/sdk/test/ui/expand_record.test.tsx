@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {expandRecord, useBase, useRecords} from '../../src/ui/ui';
 import {SdkContext} from '../../src/ui/sdk_context';
 import {__sdk as sdk} from '../../src';

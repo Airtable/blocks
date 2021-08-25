@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {UserId} from '../../src/types/collaborator';
 import {PermissionLevel, PermissionLevels} from '../../src/types/permission_levels';
 import {

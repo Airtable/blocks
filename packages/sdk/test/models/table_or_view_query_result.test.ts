@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
 import {waitForWatchKeyAsync} from '../test_helpers';
 import {__reset, __sdk as sdk} from '../../src';
