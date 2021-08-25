@@ -141,6 +141,8 @@ export interface CreateSingleFieldMutation {
     readonly name: string;
     /** The configuration for the Field being created */
     readonly config: FieldTypeConfig;
+    /** The description for the Field being created */
+    readonly description: string | null;
 }
 
 /** @hidden */
@@ -150,6 +152,7 @@ export interface PartialCreateSingleFieldMutation {
     readonly id: FieldId | undefined;
     readonly name: string | undefined;
     readonly config: FieldTypeConfig | undefined;
+    readonly description: string | null | undefined;
 }
 
 /**

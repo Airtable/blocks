@@ -19,6 +19,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 jest.mock('../../src/models/mutation_constants', () => ({
     MAX_NUM_FIELDS_PER_TABLE: 10,
     MAX_FIELD_NAME_LENGTH: 20,
+    MAX_FIELD_DESCRIPTION_LENGTH: 50,
     MAX_TABLE_NAME_LENGTH: 20,
 }));
 
@@ -70,6 +71,7 @@ describe('Mutations', () => {
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }).toThrow("Can't create field: No table with id tblNonExistentTableId exists");
             });
@@ -84,6 +86,7 @@ describe('Mutations', () => {
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }).toThrow("Can't create field: table already has the maximum of 10 fields");
             });
@@ -98,6 +101,7 @@ describe('Mutations', () => {
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }).toThrow("Can't create field: must provide non-empty name");
 
@@ -110,6 +114,7 @@ describe('Mutations', () => {
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }).toThrow(
                     "Can't create field: name 'really long field name wow' exceeds maximum length of 20 characters",
@@ -124,6 +129,7 @@ describe('Mutations', () => {
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }).toThrow("Can't create field: field with name 'name' already exists");
             });
@@ -150,6 +156,7 @@ describe('Mutations', () => {
                         id: 'fldNewFieldId',
                         name: 'new field',
                         config,
+                        description: null,
                     });
                 }).toThrow("Can't create field: invalid field config.\nMock reason");
 
@@ -160,6 +167,24 @@ describe('Mutations', () => {
                     null,
                     null,
                     'pro',
+                );
+            });
+
+            it('checks the field description', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.CREATE_SINGLE_FIELD,
+                        tableId: 'tblTasks',
+                        id: 'fldNewFieldId',
+                        name: 'new field',
+                        config: {
+                            type: FieldType.SINGLE_LINE_TEXT,
+                        },
+                        description:
+                            'this is a really long field description that is definitely longer than the limit wow',
+                    });
+                }).toThrow(
+                    "Can't create field: description exceeds maximum length of 50 characters",
                 );
             });
 
@@ -180,6 +205,7 @@ describe('Mutations', () => {
                     id: 'fldNewFieldId',
                     name: 'new field',
                     config,
+                    description: 'field description',
                 });
 
                 // check we still called validate
@@ -1272,6 +1298,7 @@ Mock reason"
                     config: {
                         type: FieldType.SINGLE_LINE_TEXT,
                     },
+                    description: 'test description',
                 });
 
                 expect(applyModelChanges.mock.calls.length).toBe(0);

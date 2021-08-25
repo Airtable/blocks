@@ -11,6 +11,7 @@ import Base from './base';
 import Field from './field';
 import {
     MAX_FIELD_NAME_LENGTH,
+    MAX_FIELD_DESCRIPTION_LENGTH,
     MAX_TABLE_NAME_LENGTH,
     MAX_NUM_FIELDS_PER_TABLE,
 } from './mutation_constants';
@@ -307,7 +308,7 @@ class Mutations {
             }
 
             case MutationTypes.CREATE_SINGLE_FIELD: {
-                const {tableId, name, config} = mutation;
+                const {tableId, name, config, description} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError("Can't create field: No table with id %s exists", tableId);
@@ -356,6 +357,13 @@ class Mutations {
                     throw spawnError(
                         "Can't create field: invalid field config.\n%s",
                         validationResult.reason,
+                    );
+                }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't create field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
                     );
                 }
                 return;
