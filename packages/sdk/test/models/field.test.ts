@@ -89,7 +89,7 @@ describe('Field', () => {
                 {
                     config: {
                         options: undefined,
-                        type: 'foreignKey',
+                        type: 'multipleRecordLinks',
                     },
                     id: 'fldPrjctClient',
                     tableId: 'tblDesignProjects',
@@ -106,7 +106,7 @@ describe('Field', () => {
                 {
                     config: {
                         options: {foo: 'bar'},
-                        type: 'foreignKey',
+                        type: 'multipleRecordLinks',
                     },
                     id: 'fldPrjctClient',
                     tableId: 'tblDesignProjects',

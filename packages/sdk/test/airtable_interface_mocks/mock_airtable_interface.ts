@@ -17,6 +17,7 @@ import {RecordActionData} from '../../src/types/record_action_data';
 import {RequestJson, ResponseJson} from '../../src/types/backend_fetch_types';
 import projectTrackerData from './project_tracker';
 import linkedRecordsData from './linked_records';
+import {FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';
 
 // From the Jest documentation on `mockReset`:
 //
@@ -47,11 +48,16 @@ const resetSpies = (target: {[key: string]: any}, names: string[]) => {
  */
 export class MockAirtableInterface extends AbstractMockAirtableInterface {
     static projectTrackerExample() {
-        return new MockAirtableInterface(projectTrackerData) as jest.Mocked<MockAirtableInterface>;
+        return MockAirtableInterface.createFromFixtureData(projectTrackerData);
     }
 
     static linkedRecordsExample() {
-        return new MockAirtableInterface(linkedRecordsData) as jest.Mocked<MockAirtableInterface>;
+        return MockAirtableInterface.createFromFixtureData(linkedRecordsData);
+    }
+
+    static createFromFixtureData(fixtureData: FixtureData) {
+        const sdkInitData = convertFixtureDataToSdkInitData(fixtureData);
+        return new MockAirtableInterface(sdkInitData) as jest.Mocked<MockAirtableInterface>;
     }
 
     get aggregators() {
