@@ -220,7 +220,7 @@ describe('Mutations', () => {
             });
         });
 
-        describe('UPDATE_SINGLE_FIELD', () => {
+        describe('UPDATE_SINGLE_FIELD_OPTIONS', () => {
             it('checks that the table exists', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -381,6 +381,53 @@ describe('Mutations', () => {
                     'pro',
                     {enableSelectFieldChoiceDeletion: true},
                 );
+            });
+        });
+
+        describe('UPDATE_SINGLE_FIELD_DESCRIPTION', () => {
+            it('checks that the table exists', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+                        tableId: 'tblNonExistentTableId',
+                        id: 'fldNonExistentFieldId',
+                        description: 'my cool field description',
+                    });
+                }).toThrow("Can't update field: No table with id tblNonExistentTableId exists");
+            });
+
+            it('checks that the field exists', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+                        tableId: 'tblTasks',
+                        id: 'fldNonExistentFieldId',
+                        description: 'my cool field description',
+                    });
+                }).toThrow("Can't update field: No field with id fldNonExistentFieldId exists");
+            });
+
+            it('checks the description length', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskCompleted',
+                        description:
+                            'this is a really long field description that is definitely longer than the limit wow',
+                    });
+                }).toThrow(
+                    "Can't update field: description exceeds maximum length of 50 characters",
+                );
+            });
+
+            it('successfully returns when all criteria pass', () => {
+                mutations._assertMutationIsValid({
+                    type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+                    tableId: 'tblTasks',
+                    id: 'fldTaskCompleted',
+                    description: 'my cool field description',
+                });
             });
         });
 

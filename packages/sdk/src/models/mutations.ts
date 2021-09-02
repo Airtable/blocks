@@ -407,6 +407,27 @@ class Mutations {
                 return;
             }
 
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION: {
+                const {tableId, id, description} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't update field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
+                    );
+                }
+                return;
+            }
+
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 const {name, fields} = mutation;
 
@@ -652,6 +673,7 @@ class Mutations {
 
             case MutationTypes.CREATE_SINGLE_FIELD:
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION:
             case MutationTypes.UPDATE_VIEW_METADATA:
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 // No optimistic updates for field, view metadata, or table mutations.
