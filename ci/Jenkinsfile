@@ -1,7 +1,20 @@
+// Some string constants
+class GITHUB_STATUS {
+    final static PENDING = 'pending';
+    final static FAILURE = 'failure';
+    final static SUCCESS = 'success';
+}
+
+// GitHub reporting script constants.  Groovy won't let me stuff this into a class, because variables depend on each
+// other. :(
+ECR_REGION = 'us-west-2';
+ECR_PREFIX = "590483966623.dkr.ecr.${ECR_REGION}.amazonaws.com";
+ECR_URL = "https://${ECR_PREFIX}";
+CI_PY_DOCKER_IMAGE_NAME = "${ECR_PREFIX}/ci-py";
+CI_PY_DOCKER_IMAGE_VERSION = '20210902-07';
+
 commitSha = '';
 branch = '';
-final personOrSystemThatTriggeredBuild = params.getOrDefault('AUTHOR_NAME', env.AUTHOR_NAME ?: 'jenkins');
-final branchNameForDisplayOnly = params.getOrDefault('BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT', env.BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT ?: 'Branch name is unknown');
 
 stashedDirectories = [];
 
@@ -21,20 +34,61 @@ pipeline {
                     // Run on the master node, to report back immediately to Phabricator without possibly waiting for a new EC2 worker to be provisioned.
                     node('master') {
                         // Tells a lambda to post to a Phabricator diff, to set a link to this Jenkins job.
-                        postBackToPhabricatorIfNecessary("pending");
+                        postBackToCodeReviewIfNecessary("pending");
 
-                        // This build description is optimized for the Jenkins job that is triggered by Phacility diffs.
-                        def revisionId = params.get('REVISION_ID')
-                        def revisionUrl = "https://airtable.phacility.com/D${revisionId}?id=${params.get('DIFF_ID')}";
-                        def revisionLink = params.getOrDefault('REVISION_ID', false) ? "<a href=\"${revisionUrl}\">D${revisionId}</a><br/>" : "";
-                        def gitRefOrDefault = params.getOrDefault('GIT_REF', scm.branches[0].name);
-                        def gitRefOrDefaultLink = "<a href=\"https://github.com/Hyperbase/hyperbase/tree/${gitRefOrDefault}\">${gitRefOrDefault}</a>";
-                        def displayBranchLink = "The branch is <a href=\"https://github.com/hyperbase/hyperbase/tree/${branchNameForDisplayOnly}\">${branchNameForDisplayOnly}</a>";
+                        // This build description is optimized for the Jenkins job that is triggered by Phacility or Github.
                         def feedbackLink = "<a href=\"https://airtable.com/shr9LjyNcD6rUUFAN\">Submit feedback to the Production Engineering team here</a>";
                         def playbookLink = "How should you interpret this page? <a href=\"https://docs.google.com/document/d/1xzPmMYLrI0MtNiqSewZwu90X_paM_9aod9DcoV6Tihs/edit#heading=h.h83xxogp9l2b\">Read this playbook</a>";
-                        // NOTE: revisionLink and gitRefOrDefaultLink intentionally have the URL as the first part of the line, so that the job summaries that Jenkins
-                        // shows on the the left side of the homepage will include the URL (rather than generic text).
-                        currentBuild.description = "${revisionLink}${gitRefOrDefaultLink} for ${personOrSystemThatTriggeredBuild}<br/>${displayBranchLink}<br/>${playbookLink}<br/>${feedbackLink}<br/>";
+
+                        final githubPullRequestId = params.getOrDefault('GITHUB_PULL_REQUEST_ID', false);
+                        if (githubPullRequestId) {
+                            // link to the github pull request.
+
+                            // get the params
+                            final gitBranch = params.get('GIT_BRANCH');
+                            final gitSha = params.get('GIT_SHA');
+                            final githubUser = params.getOrDefault('GITHUB_USER', false);
+
+                            // build the links
+                            final revisionLink = """
+<a href=\"https://github.com/hyperbase/blocks-sdk/pull/${githubPullRequestId}/\">#${githubPullRequestId}</a>
+<a href=\"https://github.com/hyperbase/blocks-sdk/tree/${gitSha}\">@${gitSha.substring(0, 7)}</a>""";
+                            final personOrSystemLink = "<a href=\"https://github.com/${githubUser}/\">@${githubUser}</a>";
+                            final displayBranchLink = "The branch is <a href=\"https://github.com/hyperbase/blocks-sdk/tree/${gitBranch}\">${gitBranch}</a>.";
+
+                            currentBuild.description = "${revisionLink} for ${personOrSystemLink}.<br/>${displayBranchLink}<br/>${playbookLink}<br/>${feedbackLink}<br/>";
+                        } else {
+                            // link to the phabricator diff
+                            final personOrSystemThatTriggeredBuild = params.getOrDefault('AUTHOR_NAME', env.AUTHOR_NAME ?: 'root');
+                            final branchNameForDisplayOnly = params.getOrDefault('BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT', env.BRANCH_NAME_FOR_DISPLAY_IN_SUMMARY_AND_IS_NOT_ACTUALLY_WHAT_IS_BUILT ?: 'Branch name is unknown');
+
+                            // Figure out what our upstream is, and transform it into a https://github.com prefix without a
+                            // trailing path separator.  Handle all of the following cases:
+                            //   1. git@github.com:<owner>/<repo>.git
+                            //   2. git@github.com:<owner>/<repo>
+                            //   3. https://github.com/<owner>/<repo>
+                            //   4. https://github.com/<owner>/<repo>/
+                            def scmroot = scm.getUserRemoteConfigs()[0].getUrl();
+                            if (scmroot.startsWith('git@github.com:')) {
+                                // if it starts with git://, remove the extra stuff so we just get <owner>/<repo>, then add back on https://github.com/
+                                [~'^git@github\\.com:', ~'\\.git$'].each {
+                                    scmroot -= it;
+                                }
+                                scmroot = "https://github.com/${scmroot}";
+                            } else if (scmroot.startsWith('https://')) {
+                                // remove trailing '/'
+                                scmroot -= ~'\\/$';
+                            }
+
+                            final revisionUrl = "https://airtable.phacility.com/D${params.get('REVISION_ID')}?id=${params.get('DIFF_ID')}";
+                            final revisionLink = params.getOrDefault('REVISION_ID', false) ? "<a href=\"${revisionUrl}\">D${params.get('REVISION_ID')}</a><br/>" : "";
+
+                            final gitRefOrDefault = params.getOrDefault('GIT_REF', scm.branches[0].name);
+                            final gitRefOrDefaultLink = "<a href=\"${scmroot}/tree/${gitRefOrDefault}\">${gitRefOrDefault}</a>";
+                            final displayBranchLink = "The branch is ${branchNameForDisplayOnly}.";
+
+                            currentBuild.description = "${revisionLink}${gitRefOrDefaultLink} for ${personOrSystemThatTriggeredBuild}.<br/>${displayBranchLink}<br/>${playbookLink}<br/>${feedbackLink}<br/>";
+                        }
                     }
                 }
             }
@@ -67,49 +121,67 @@ pipeline {
             post {
                 always {
                     script {
-                        currentBuild.description += "The build took ${currentBuild.duration/60000} minutes";
-
-                        // Post status before doing any other processing, to get these updates out ASAP.
-                        postBackToPhabricatorIfNecessary(getTerminalResultForPhacilityAndSlack());
-                        notifySlack();
-
                         cleanWs();
                     }
                 }
             }
         }
     }
+    post {
+        always {
+            script {
+                currentBuild.description += "The build took ${currentBuild.duration/60000} minutes";
+
+                node('master') {
+                    // Post status before doing any other processing, to get these updates out ASAP.
+                    postBackToCodeReviewIfNecessary(currentBuild.currentResult);
+                    notifySlack();
+                }
+            }
+        }
+    }
 }
 
-
-def getTerminalResultForPhacilityAndSlack() {
-    def resultForPhacility = 'failed';
-    if (currentBuild.currentResult == 'SUCCESS' || currentBuild.currentResult == 'UNSTABLE') {
-        resultForPhacility = 'passed';
+def getResultForPhacilityAndSlack(buildResult) {
+    if (buildResult == 'pending') {
+        return 'pending';
+    } else if (buildResult == 'SUCCESS' || buildResult == 'UNSTABLE') {
+        return 'passed';
+    } else {
+        return 'failed';
     }
-    return resultForPhacility;
+}
+
+def getResultForGithub(buildResult) {
+    if (buildResult == 'pending') {
+        return GITHUB_STATUS.PENDING;
+    } else if (buildResult == 'SUCCESS' || buildResult == 'UNSTABLE') {
+        return GITHUB_STATUS.SUCCESS;
+    } else {
+        return GITHUB_STATUS.FAILURE;
+    }
 }
 
 def notifySlack() {
-    def resultForPhacilityAndSlack = getTerminalResultForPhacilityAndSlack();
+    def resultForSlack = getResultForPhacilityAndSlack(currentBuild.currentResult);
     try {
         def channelsToNotify = [];
         // Send a notification to a channel that Prod Eng (and other interested parties) can monitor.
         channelsToNotify.add('#jenkins-feed');
         // FIXME_CICD use some constants
-        if (env.JOB_NAME == 'blocks-sdk-main' && resultForPhacilityAndSlack == 'failed') {
+        if (env.JOB_NAME == 'blocks-sdk-main' && resultForSlack == 'failed') {
             // When main fails, send it to a channel that all platform engineers are members of.
             channelsToNotify.add('#team-ecosystem-dev-feed');
         }
         channelsToNotify.each {
             // In Slack, the Jenkins app configuration is here: https://h.slack.com/services/B01DK46MT5Y?added=1
             // In Jenkins, the configuration instructions are: https://www.baeldung.com/jenkins-slack-integration and https://plugins.jenkins.io/slack/
-            def slackColor = resultForPhacilityAndSlack == 'passed' ? 'good' : 'danger';
+            def slackColor = resultForSlack == 'passed' ? 'good' : 'danger';
             // Guard against commitSha not being set.
             def shaShort = commitSha.length() >= 8 ? commitSha[0..7] : commitSha;
             slackSend(
                 channel: "${it}",
-                message: "*Tests have ${resultForPhacilityAndSlack} on <https://github.com/Hyperbase/blocks-sdk/tree/${commitSha}|${branch} (${shaShort})> *\n<${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
+                message: "*Tests have ${resultForSlack} on <https://github.com/Hyperbase/blocks-sdk/tree/${commitSha}|${branch} (${shaShort})> *\n<${env.BUILD_URL}|${env.JOB_NAME} #${env.BUILD_NUMBER}>",
                 color: slackColor,
                 tokenCredentialId: 'slack-oauth-token2'
             );
@@ -129,11 +201,16 @@ def notifySlack() {
 //       Arguably continuing to use lambdas have worse tradeoffs (they're nearly impossible for engineers to inspect; they're very cumbersome to test and deploy)
 //       However, we can revisit this decision later, since this component can be swapped out.
 // FIXME_CICD: consider loading logic from separate Jenkins files, like in: https://github.com/ksuther/jenkins-jenkinsfile-include/blob/master/Jenkinsfile
-def postBackToPhabricatorIfNecessary(status) {
+def postBackToCodeReviewIfNecessary(jenkinsBuildResult) {
+    final phabricatorStatus = getResultForPhacilityAndSlack(jenkinsBuildResult);
+    final githubStatus = getResultForGithub(jenkinsBuildResult);
+
     try {
         // Report the build result to phacility.
         // NOTE: this phid is the Harbormaster build target phid associated with this build run.
         if (params.getOrDefault('PHID', false)) {
+            // Note: this script block runs on a Jenkins instance that does NOT have a checkout of a branch, so the logic needs to be contained in this Jenkinsfile
+            // as opposed to e.g. a script in the branch.
             // Tells a lambda to post to a Phabricator diff, to set the status as of this job as "passed" or "failed"
             sh """curl --silent --show-error --retry 4 --max-time 5 -XPOST 'https://airbuild.hyperbasedev.com/airbuildWebhook' \
                     -H 'Content-Type: application/json' \
@@ -145,14 +222,44 @@ def postBackToPhabricatorIfNecessary(status) {
                         \"diffId\": \"${params.DIFF_ID}\",
                         \"phid\": \"${params.PHID}\",
                         \"jenkinsJobName\": \"${env.JOB_NAME}\",
-                        \"jenkinsStatus\": \"${status}\"
+                        \"jenkinsStatus\": \"${phabricatorStatus}\"
                     }' \
                     || echo 'Failed' to report to Phacility
-            """;        
+            """;
         }
     } catch (Exception e) {
-        // This post block should continue processing even if there's a failure in this method
+        // This post block should continue processing if even if there's a failure in this method
         // FIXME_CID add stack trace to the output, otherwise it may be hard to determine which line threw it
         print "Suppressed error when posting to Phacility: ${e}"
+    }
+
+    // if GIT_SHA and GIT_PULL_REQUEST_ID are defined, then report the build result to github.
+    if (params.getOrDefault('GIT_SHA', false) && params.getOrDefault('GITHUB_PULL_REQUEST_ID', false)) {
+        final git_sha = "${params.GIT_SHA}";
+        final git_pull_request_id = "${params.GITHUB_PULL_REQUEST_ID}";
+
+        // Make sure we're authenticated with ECR.
+        sh """docker run --rm amazon/aws-cli:latest ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_URL}""";
+
+        withCredentials([string(credentialsId: 'jenkins-github-status-reporting', variable: 'GITHUB_AUTH_TOKEN')]) {
+            docker.withRegistry(ECR_URL) {
+                docker.image("${CI_PY_DOCKER_IMAGE_NAME}:${CI_PY_DOCKER_IMAGE_VERSION}").inside {
+                    def pythonExe = 'python';
+                    def scriptPath = '/static-ci/notify_github.py';
+
+                    sh """
+                        python /static-ci/notify_github.py                                                                   \
+                            --repo \"hyperbase/blocks-sdk\"                                                                  \
+                            --sha \"${git_sha}\"                                                                             \
+                            --pull-request-id \"${git_pull_request_id}\"                                                     \
+                            --job-name \"jenkins/${JOB_BASE_NAME}\"                                                          \
+                            --description \"Jenkins\"                                                                        \
+                            --target-url \"${BUILD_URL}\"                                                                    \
+                            on-build-complete                                                                                \
+                            --status \"${githubStatus}\"                                                                     \
+                    """;
+                }
+            }
+        }
     }
 }

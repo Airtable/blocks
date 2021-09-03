@@ -1,0 +1,38 @@
+# This file defines a GitHub workflow that sends every pull request to Jenkins.
+#
+# At a high level, this is triggered on every new pull request or update to an existing pull request.  The curl request
+# hits Jenkins and starts a new job in the `blocks-sdk-github` pipeline.  Control flow resumes in `ci/Jenkinsfile`.  At
+# the start of the Jenkins run, a request is made to github to indicate that the Jenkins job is pending.  At the
+# conclusion of the Jenkins run, a second request is made to github to indicate the success or failure of the Jenkins
+# job.  If a jenkins run is unsuccessful, a message is posted to pull request to notify the author.
+#
+# Future planned efforts:
+# 1. The Jenkins job will also have the ability to post a message to the pull request upon the first failure so the user
+#    does not have to wait until the conclusion of the Jenkins job to find out the status.
+# 2. The ability to tag a PR as draft, and move it from draft to non-draft upon the successful conclusion of a PR run.
+
+# Controls when the action will run. Triggers the workflow on any pull requests event
+on:
+    pull_request:
+        branches:
+            - '**'
+
+jobs:
+    # This workflow contains a single job called "trigger"
+    trigger:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            - name: Trigger Jenkins build
+              run: |
+                  curl                                                                                      \
+                  --include                                                                                 \
+                  --silent                                                                                  \
+                  -XPOST https://jenkins-api.hyperbasedev.com/job/blocks-sdk-github/buildWithParameters     \
+                  --user root:${{ secrets.JENKINS_DEVELOPMENT_API_KEY }}                                    \
+                  --data-urlencode 'GIT_BRANCH=${{ github.event.pull_request.head.ref }}'                   \
+                  --data-urlencode 'GIT_SHA=${{ github.event.pull_request.head.sha }}'                      \
+                  --data-urlencode 'GITHUB_USER=${{ github.actor }}'                                        \
+                  --data-urlencode 'GITHUB_PULL_REQUEST_ID=${{ github.event.pull_request.number }}'         \
