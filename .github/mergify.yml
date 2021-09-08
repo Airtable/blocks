@@ -1,0 +1,18 @@
+queue_rules:
+  - name: default
+    conditions:
+      - check-success=tests
+
+pull_request_rules:
+  - name: Automatic merge ⬇ on approval ✔
+    conditions:
+      - and:
+        - "#approved-reviews-by>=1"
+        - label=mergeme
+        - check-success=jenkins/blocks-sdk-github
+    actions:
+      queue:
+        commit_message: title+body
+        method: squash
+        name: default
+        rebase_fallback: none
