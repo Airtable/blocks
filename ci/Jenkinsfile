@@ -7,13 +7,8 @@ class GITHUB_STATUS {
     final static SUCCESS = 'success';
 }
 
-// GitHub reporting script constants.  Groovy won't let me stuff this into a class, because variables depend on each
-// other. :(
-ECR_REGION = 'us-west-2';
-ECR_PREFIX = "590483966623.dkr.ecr.${ECR_REGION}.amazonaws.com";
-ECR_URL = "https://${ECR_PREFIX}";
-CI_PY_DOCKER_IMAGE_NAME = "${ECR_PREFIX}/ci-py";
-CI_PY_DOCKER_IMAGE_VERSION = '20210902-07';
+@Field
+final CI_PY_DOCKER_IMAGE_NAME = "airtable/ci-py";
 
 
 @Field
@@ -99,17 +94,7 @@ pipeline {
                 script {
                     node('jenkins-worker-for-blocks-tests') {
                         try {
-                            checkout scm:[
-                                $class: 'GitSCM',
-                                branches: [
-                                    [
-                                        $class: 'BranchSpec',
-                                        name: commitSha,
-                                    ],
-                                ],
-                                extensions: scm.getExtensions(),
-                                userRemoteConfigs: scm.getUserRemoteConfigs(),
-                            ];
+                            prepRepoAndCiTools();
 
                             // Tells a lambda to post to the code review tools.
                             postBackToCodeReviewIfNecessary("pending");
@@ -144,17 +129,7 @@ pipeline {
                 node('jenkins-worker-for-blocks-tests') {
                     // This is here instead of at the above `finally` block (in the `Blocks-sdk tests` stage) because
                     // that is not guaranteed to run.
-                    checkout scm:[
-                        $class: 'GitSCM',
-                        branches: [
-                            [
-                                $class: 'BranchSpec',
-                                name: commitSha,
-                            ],
-                        ],
-                        extensions: scm.getExtensions(),
-                        userRemoteConfigs: scm.getUserRemoteConfigs(),
-                    ];
+                    prepRepoAndCiTools();
 
                     postBackToCodeReviewIfNecessary(currentBuild.currentResult);
                     notifySlack();
@@ -261,28 +236,46 @@ def postBackToCodeReviewIfNecessary(jenkinsBuildResult) {
         final git_sha = "${params.GIT_SHA}";
         final git_pull_request_id = "${params.GITHUB_PULL_REQUEST_ID}";
 
-        // Make sure we're authenticated with ECR.
-        sh """docker run --rm amazon/aws-cli:latest ecr get-login-password --region ${ECR_REGION} | docker login --username AWS --password-stdin ${ECR_URL}""";
-
         withCredentials([string(credentialsId: 'jenkins-github-status-reporting', variable: 'GITHUB_AUTH_TOKEN')]) {
-            docker.withRegistry(ECR_URL) {
-                docker.image("${CI_PY_DOCKER_IMAGE_NAME}:${CI_PY_DOCKER_IMAGE_VERSION}").inside {
-                    def pythonExe = 'python';
-                    def scriptPath = '/static-ci/notify_github.py';
-
-                    sh """
-                        python /static-ci/notify_github.py                                                                   \
-                            --repo \"hyperbase/blocks-sdk\"                                                                  \
-                            --sha \"${git_sha}\"                                                                             \
-                            --pull-request-id \"${git_pull_request_id}\"                                                     \
-                            --job-name \"jenkins/${JOB_BASE_NAME}\"                                                          \
-                            --description \"Jenkins\"                                                                        \
-                            --target-url \"${BUILD_URL}\"                                                                    \
-                            on-build-complete                                                                                \
-                            --status \"${githubStatus}\"                                                                     \
-                    """;
-                }
+            docker.image("${CI_PY_DOCKER_IMAGE_NAME}").inside {
+                sh """
+                    python /static-ci/notify_github.py                                                                   \
+                        --repo \"hyperbase/blocks-sdk\"                                                                  \
+                        --sha \"${git_sha}\"                                                                             \
+                        --pull-request-id \"${git_pull_request_id}\"                                                     \
+                        --job-name \"jenkins/${JOB_BASE_NAME}\"                                                          \
+                        --description \"Jenkins\"                                                                        \
+                        --target-url \"${BUILD_URL}\"                                                                    \
+                        on-build-complete                                                                                \
+                        --status \"${githubStatus}\"                                                                     \
+                """;
             }
         }
     }
+}
+
+/**
+ * Prep the repo and the CI tools.  This means:
+ * 1. Checkout the repo.
+ * 2. Clean the local repo.
+ * 3. Build the docker image that contains the code for communicating with GitHub.
+ */
+def prepRepoAndCiTools() {
+    checkout scm:[
+        $class: 'GitSCM',
+        branches: [
+            [
+                $class: 'BranchSpec',
+                name: commitSha,
+            ],
+        ],
+        extensions: scm.getExtensions(),
+        userRemoteConfigs: scm.getUserRemoteConfigs(),
+    ];
+
+    // Clear the workspace before we start to delete, for example, old outputs.  We need sudo permissions because the
+    // tests run as root and leave root-owned files.
+    sh script: "sudo git clean -dfx"
+
+    sh """docker build -t ${CI_PY_DOCKER_IMAGE_NAME} ci/py"""
 }
