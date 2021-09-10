@@ -344,7 +344,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     console.log('✅ successfully released block!');
     if (isV2Block) {
-        console.log('Note: updating all block installations may take up to 10 minutes');
+        console.log('Note: updating all block installations may take up to 30 minutes');
     }
 }
 
