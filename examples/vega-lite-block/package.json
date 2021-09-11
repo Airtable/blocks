@@ -15,7 +15,8 @@
         "react-vega": "^7.3.0",
         "vega": "^5.12.1",
         "vega-lite": "^4.13.1",
-        "vega-util": "^1.16.0"
+        "vega-util": "^1.16.0",
+        "vega-embed": "6.5.1"
     },
     "devDependencies": {
         "eslint": "^7.0.0",
