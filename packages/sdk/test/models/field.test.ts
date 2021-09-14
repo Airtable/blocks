@@ -277,6 +277,26 @@ describe('Field', () => {
             expect(field.type).toBe(FieldType.MULTIPLE_LOOKUP_VALUES);
         });
 
+        test('ensure cache for type updates changes', () => {
+            mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects.fieldsById.fldPrjctClient.type =
+                'lookup';
+            expect(field.type).toBe(FieldType.MULTIPLE_LOOKUP_VALUES);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblDesignProjects',
+                        'fieldsById',
+                        'fldPrjctClient',
+                        'type',
+                    ],
+                    value: FieldType.SINGLE_SELECT,
+                },
+            ]);
+            expect(field.type).toBe(FieldType.SINGLE_SELECT);
+        });
+
         test('other types', () => {
             expect(sdk.base.tables[0].fields[3].type).toBe(FieldType.CHECKBOX);
         });

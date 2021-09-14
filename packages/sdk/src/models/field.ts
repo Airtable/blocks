@@ -4,6 +4,7 @@ import Sdk from '../sdk';
 import {MutationTypes, PermissionCheckResult, UpdateFieldOptionsOpts} from '../types/mutations';
 import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
+import {FieldTypeConfig} from '../types/airtable_interface';
 import AbstractModel from './abstract_model';
 import {Aggregator} from './create_aggregators';
 import Table from './table';
@@ -50,6 +51,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
     /** @internal */
     _parentTable: Table;
+    /** @internal */
+    _cachedFieldTypeConfigOrNull: FieldTypeConfig | null;
     /**
      * @internal
      */
@@ -57,6 +60,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         super(sdk, fieldId);
 
         this._parentTable = parentTable;
+        this._cachedFieldTypeConfigOrNull = null;
     }
 
     /**
@@ -102,14 +106,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get type(): FieldType {
-        const airtableInterface = this._sdk.__airtableInterface;
-        const appInterface = this._sdk.__appInterface;
-
-        const {type} = airtableInterface.fieldTypeProvider.getConfig(
-            appInterface,
-            this._data,
-            this.parentTable.__getFieldNamesById(),
-        );
+        const {type} = this._getCachedConfigFromFieldTypeProvider();
         // We intend to switch from "lookup" to "multipleLookupValues", but need to support both
         // until the transition is complete. See <https://airtable.quip.com/VxaMAmAfUscs> for more.
         // @ts-ignore
@@ -136,17 +133,34 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get options(): FieldOptions | null {
+        const {options} = this._getCachedConfigFromFieldTypeProvider();
+
+        // TODO: In the next breaking release freeze (inside of the cache) and replace
+        // FieldOptions with readonly<FieldOptions>.
+        // Today this is required because we re-use the fieldTypeProvider.getConfig response.
+        return options ? cloneDeep(options) : null;
+    }
+
+    // We use a cached response from FieldTypeProvider because getting the config can
+    // be an expensive operation. In particular when fieldConfigs are extremely large
+    // (eg: Select fields with lots of select options)
+    _getCachedConfigFromFieldTypeProvider(): FieldTypeConfig {
+        if (this._cachedFieldTypeConfigOrNull !== null) {
+            return this._cachedFieldTypeConfigOrNull;
+        }
         const airtableInterface = this._sdk.__airtableInterface;
         const appInterface = this._sdk.__appInterface;
 
-        const {options} = airtableInterface.fieldTypeProvider.getConfig(
+        this._cachedFieldTypeConfigOrNull = airtableInterface.fieldTypeProvider.getConfig(
             appInterface,
             this._data,
             this.parentTable.__getFieldNamesById(),
         );
 
-        // TODO(emma): can we remove this cloneDeep?
-        return options ? cloneDeep(options) : null;
+        return this._cachedFieldTypeConfigOrNull;
+    }
+    _clearCachedConfig(): void {
+        this._cachedFieldTypeConfigOrNull = null;
     }
 
     /**
@@ -414,6 +428,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @internal
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
+        // Always clear the cached config when anything on the field data model changes
+        this._clearCachedConfig();
+
         if (dirtyPaths.name) {
             this._onChange(WatchableFieldKeys.name);
         }
