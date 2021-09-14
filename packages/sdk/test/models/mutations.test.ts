@@ -473,13 +473,18 @@ describe('Mutations', () => {
                     });
                 }).toThrow("Can't create table: must specify at least one field");
 
-                const tooManyFields: Array<{name: string; config: FieldTypeConfig}> = [];
+                const tooManyFields: Array<{
+                    name: string;
+                    config: FieldTypeConfig;
+                    description: string | null;
+                }> = [];
                 for (let i = 0; i < 11; i++) {
                     tooManyFields.push({
                         name: `field ${i}`,
                         config: {
                             type: FieldType.SINGLE_LINE_TEXT,
                         },
+                        description: null,
                     });
                 }
 
@@ -499,7 +504,13 @@ describe('Mutations', () => {
                         type: MutationTypes.CREATE_SINGLE_TABLE,
                         id: 'fldNewTableId',
                         name: 'new table',
-                        fields: [{name: '', config: {type: FieldType.SINGLE_LINE_TEXT}}],
+                        fields: [
+                            {
+                                name: '',
+                                config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description: null,
+                            },
+                        ],
                     });
                 }).toThrow("Can't create table: must provide non-empty name for every field");
 
@@ -512,6 +523,7 @@ describe('Mutations', () => {
                             {
                                 name: 'new field with name that is too long',
                                 config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description: null,
                             },
                         ],
                     });
@@ -530,7 +542,13 @@ describe('Mutations', () => {
                         type: MutationTypes.CREATE_SINGLE_TABLE,
                         id: 'fldNewTableId',
                         name: 'new table',
-                        fields: [{name: 'new field', config: {type: FieldType.SINGLE_LINE_TEXT}}],
+                        fields: [
+                            {
+                                name: 'new field',
+                                config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description: null,
+                            },
+                        ],
                     });
                 }).toThrow(
                     "Can't create table: invalid field config for field 'new field'.\nMock reason",
@@ -546,6 +564,26 @@ describe('Mutations', () => {
                 );
             });
 
+            it('checks the fields have valid descriptions', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.CREATE_SINGLE_TABLE,
+                        id: 'fldNewTableId',
+                        name: 'new table',
+                        fields: [
+                            {
+                                name: 'new field',
+                                config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description:
+                                    'really long description for my new field in fact this is TOO long',
+                            },
+                        ],
+                    });
+                }).toThrow(
+                    "Can't create table: description for field 'new field' exceeds maximum length of 50 characters",
+                );
+            });
+
             it('checks the field names for case-insensitive uniqueness', () => {
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -553,8 +591,16 @@ describe('Mutations', () => {
                         id: 'fldNewTableId',
                         name: 'new table',
                         fields: [
-                            {name: 'new field', config: {type: FieldType.SINGLE_LINE_TEXT}},
-                            {name: 'New Field', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                            {
+                                name: 'new field',
+                                config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description: null,
+                            },
+                            {
+                                name: 'New Field',
+                                config: {type: FieldType.SINGLE_LINE_TEXT},
+                                description: null,
+                            },
                         ],
                     });
                 }).toThrow("Can't create table: duplicate field name 'New Field'");
@@ -572,7 +618,13 @@ describe('Mutations', () => {
                         type: MutationTypes.CREATE_SINGLE_TABLE,
                         id: 'fldNewTableId',
                         name: 'new table',
-                        fields: [{name: 'new field', config: {type: FieldType.FORMULA}}],
+                        fields: [
+                            {
+                                name: 'new field',
+                                config: {type: FieldType.FORMULA},
+                                description: null,
+                            },
+                        ],
                     });
                 }).toThrow(
                     "Can't create table: first field 'new field' has type 'formula' which cannot be a primary field",
@@ -595,17 +647,36 @@ describe('Mutations', () => {
                     type: MutationTypes.CREATE_SINGLE_TABLE,
                     id: 'fldNewTableId',
                     name: 'new table',
-                    fields: [{name: 'new field', config: {type: FieldType.SINGLE_LINE_TEXT}}],
+                    fields: [
+                        {
+                            name: 'new field',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: null,
+                        },
+                        {
+                            name: 'another new field',
+                            config: {type: FieldType.MULTILINE_TEXT},
+                            description: 'with a description',
+                        },
+                    ],
                 });
 
-                expect(mockValidate).toHaveBeenCalledTimes(1);
-                expect(mockValidate).toHaveBeenCalledWith(
-                    mockAirtableInterface.sdkInitData.baseData.appInterface,
-                    {type: FieldType.SINGLE_LINE_TEXT},
-                    null,
-                    null,
-                    'pro',
-                );
+                expect(mockValidate.mock.calls).toEqual([
+                    [
+                        mockAirtableInterface.sdkInitData.baseData.appInterface,
+                        {type: FieldType.SINGLE_LINE_TEXT},
+                        null,
+                        null,
+                        'pro',
+                    ],
+                    [
+                        mockAirtableInterface.sdkInitData.baseData.appInterface,
+                        {type: FieldType.MULTILINE_TEXT},
+                        null,
+                        null,
+                        'pro',
+                    ],
+                ]);
 
                 expect(mockCanBePrimary).toHaveBeenCalledTimes(1);
                 expect(mockCanBePrimary).toHaveBeenCalledWith(
@@ -1379,6 +1450,7 @@ Mock reason"
                             config: {
                                 type: FieldType.SINGLE_LINE_TEXT,
                             },
+                            description: 'this is a field',
                         },
                     ],
                 });

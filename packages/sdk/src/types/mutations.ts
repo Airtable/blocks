@@ -238,6 +238,7 @@ export interface CreateSingleTableMutation {
     readonly fields: ReadonlyArray<{
         name: string;
         config: FieldTypeConfig;
+        description: string | null;
     }>;
 }
 
@@ -250,6 +251,7 @@ export interface PartialCreateSingleTableMutation {
         | ReadonlyArray<{
               name: string | undefined;
               config: FieldTypeConfig | undefined;
+              description: string | null | undefined;
           }>
         | undefined;
 }

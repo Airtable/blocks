@@ -415,6 +415,7 @@ describe('Base', () => {
                   "fields": Array [
                     Object {
                       "config": undefined,
+                      "description": undefined,
                       "name": "foo",
                     },
                   ],
@@ -442,6 +443,7 @@ describe('Base', () => {
                         },
                         "type": "singleLineText",
                       },
+                      "description": undefined,
                       "name": "foo",
                     },
                   ],
@@ -466,6 +468,7 @@ describe('Base', () => {
                       "config": Object {
                         "type": "singleLineText",
                       },
+                      "description": undefined,
                       "name": "foo",
                     },
                   ],
@@ -530,15 +533,63 @@ describe('Base', () => {
                     id: 'tblGeneratedMockId',
                     name: 'new table',
                     fields: [
-                        {name: 'field 1', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                        {
+                            name: 'field 1',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: null,
+                        },
                         // null options are omitted
-                        {name: 'field 2', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                        {
+                            name: 'field 2',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: null,
+                        },
                         {
                             name: 'field 3',
                             config: {
                                 type: FieldType.SINGLE_SELECT,
                                 options: {choices: [{name: 'pick me'}]},
                             },
+                            description: null,
+                        },
+                    ],
+                },
+                {holdForMs: 100},
+            );
+
+            expect(mockGetTableById).toHaveBeenCalledTimes(1);
+            expect(mockGetTableById).toHaveBeenLastCalledWith('tblGeneratedMockId');
+        });
+
+        it('accepts null, undefined and non-null field description', async () => {
+            await base.createTableAsync('new table', [
+                {name: 'field 1', type: FieldType.SINGLE_LINE_TEXT},
+                {name: 'field 2', type: FieldType.SINGLE_LINE_TEXT, description: 'wow'},
+                {name: 'field 3', type: FieldType.SINGLE_LINE_TEXT, description: null},
+            ]);
+
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_SINGLE_TABLE,
+                    id: 'tblGeneratedMockId',
+                    name: 'new table',
+                    fields: [
+                        // undefined description is cast to null
+                        {
+                            name: 'field 1',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: null,
+                        },
+                        {
+                            name: 'field 2',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: 'wow',
+                        },
+                        {
+                            name: 'field 3',
+                            config: {type: FieldType.SINGLE_LINE_TEXT},
+                            description: null,
                         },
                     ],
                 },

@@ -506,6 +506,17 @@ class Mutations {
                             validationResult.reason,
                         );
                     }
+
+                    if (
+                        field.description &&
+                        field.description.length > MAX_FIELD_DESCRIPTION_LENGTH
+                    ) {
+                        throw spawnError(
+                            "Can't create table: description for field '%s' exceeds maximum length of %s characters",
+                            field.name,
+                            MAX_FIELD_DESCRIPTION_LENGTH,
+                        );
+                    }
                 }
 
                 const primaryField = fields[0];
