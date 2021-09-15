@@ -1,136 +1,117 @@
-import {BlockRunContextType, SdkInitData} from '../../src/types/airtable_interface';
 import {ViewType} from '../../src/types/view';
+import {FieldType} from '../../src/types/field';
+import {FixtureData} from './fixture_data';
 
-const linkedRecords: SdkInitData = {
-    isDevelopmentMode: false,
-    blockInstallationId: 'blicPfOILwejF6HL2',
-    isFirstRun: false,
-    isFullscreen: false,
-    initialKvValuesByKey: {},
-    runContext: {type: BlockRunContextType.DASHBOARD_APP},
-    baseData: {
+const linkedRecords: FixtureData = {
+    base: {
         id: 'app97Vimdj1OP7QKF',
         name: 'Linked Records Table',
         color: 'purpleLight2',
-        activeTableId: 'tblFirst',
-        tableOrder: ['tblFirst', 'tblSecond'],
-        tablesById: {
-            tblFirst: {
+        tables: [
+            {
                 id: 'tblFirst',
                 name: 'First Table',
-                primaryFieldId: 'fld1stPrimary',
-                fieldsById: {
-                    fld1stPrimary: {
+                fields: [
+                    {
                         id: 'fld1stPrimary',
                         name: 'Name',
-                        type: 'text',
-                        typeOptions: null,
+                        type: FieldType.SINGLE_LINE_TEXT,
+                        options: null,
                         description: '',
-                        lock: null,
                     },
-                    fld1stLinked: {
+                    {
                         id: 'fld1stLinked',
                         name: 'linked records',
-                        type: 'multipleRecordLinks',
-                        typeOptions: {
+                        type: FieldType.MULTIPLE_RECORD_LINKS,
+                        options: {
                             linkedTableId: 'tblSecond',
                             relationship: 'many',
                             symmetricColumnId: 'fld2ndLinked',
                             unreversed: true,
                         },
                         description: '',
-                        lock: null,
                     },
-                    fldMockLookup: {
+                    {
                         id: 'fldMockLookup',
                         name: 'lookup',
-                        type: 'multipleLookupValues',
-                        typeOptions: null,
+                        type: FieldType.MULTIPLE_LOOKUP_VALUES,
+                        options: null,
                         description: '',
-                        lock: null,
                     },
-                },
-                activeViewId: 'viwPrjctAll',
-                viewOrder: ['viwPrjctAll'],
-                viewsById: {
-                    viwPrjctAll: {
+                ],
+                views: [
+                    {
                         id: 'viwPrjctAll',
                         name: 'All projects',
                         type: ViewType.GRID,
+                        fieldOrder: {
+                            fieldIds: [],
+                            visibleFieldCount: 0,
+                        },
+                        records: [],
                     },
-                },
+                ],
                 description: '',
-                lock: null,
-                externalSyncById: null,
+                records: [],
             },
-            tblSecond: {
+            {
                 id: 'tblSecond',
                 name: 'Second Table',
-                primaryFieldId: 'fld2ndPrimary',
-                fieldsById: {
-                    fld2ndPrimary: {
+                fields: [
+                    {
                         id: 'fld2ndPrimary',
                         name: 'Name',
-                        type: 'text',
-                        typeOptions: null,
+                        type: FieldType.SINGLE_LINE_TEXT,
+                        options: null,
                         description: '',
-                        lock: null,
                     },
-                    fld2ndSecondary: {
+                    {
                         id: 'fld2ndSecondary',
                         name: 'Name',
-                        type: 'text',
-                        typeOptions: null,
+                        type: FieldType.SINGLE_LINE_TEXT,
+                        options: null,
                         description: '',
-                        lock: null,
                     },
-                    fld2ndLinked: {
+                    {
                         id: 'fld2ndLinked',
                         name: 'linked records',
-                        type: 'multipleRecordLinks',
-                        typeOptions: {
+                        type: FieldType.MULTIPLE_RECORD_LINKS,
+                        options: {
                             linkedTableId: 'tblFirst',
                             relationship: 'many',
                             symmetricColumnId: 'fld1stLinked',
                             unreversed: true,
                         },
                         description: '',
-                        lock: null,
                     },
-                },
-                activeViewId: null,
-                viewOrder: ['viwTaskAll'],
-                viewsById: {
-                    viwTaskAll: {
+                ],
+                views: [
+                    {
                         id: 'viwTaskAll',
                         name: 'All tasks',
                         type: ViewType.GRID,
+                        fieldOrder: {
+                            fieldIds: [],
+                            visibleFieldCount: 0,
+                        },
+                        records: [],
                     },
-                },
+                ],
                 description: '',
-                lock: null,
-                externalSyncById: null,
+                records: [],
             },
-        },
-        permissionLevel: 'create',
-        currentUserId: 'usrCurrent',
-        enabledFeatureNames: [],
-        collaboratorsById: {
-            usrGalSamari: {
+        ],
+        collaborators: [
+            {
                 id: 'usrGalSamari',
                 email: 'collab10@example.com',
                 name: 'Gal Samari',
                 profilePicUrl:
                     'https://dl.airtable.com/profilePics/qy4E6kRaaku2JJwXpjQb_headshot-purple-2.png',
+                isActive: true,
             },
-        },
-        activeCollaboratorIds: ['usrEcGMEnwYKUYIJQ', 'usrCurrent'],
-        cursorData: null,
-        billingPlanGrouping: 'pro',
-        appInterface: {},
-        isBlockDevelopmentRestrictionEnabled: false,
+        ],
     },
-    intentData: null,
 };
 
 export default linkedRecords;

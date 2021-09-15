@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../src/sdk';
 import useRecordActionData from '../../src/ui/use_record_action_data';
 import {RecordActionData} from '../../src/types/record_action_data';

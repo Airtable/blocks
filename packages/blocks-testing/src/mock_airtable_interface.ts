@@ -34,7 +34,7 @@ import {
     ViewType,
 } from '@airtable/blocks/unstable_testing_utils';
 import {TestMutation, TestMutationTypes} from './test_mutations';
-import {cloneDeep, has, keyBy, ObjectMap} from './private_utils';
+import {cloneDeep, has, keyBy, getId, ObjectMap} from './private_utils';
 import {invariant, spawnError} from './error_utils';
 
 const MutationTypeValues: ReadonlyArray<string> = Object.freeze(Object.values(MutationTypes));
@@ -316,8 +316,6 @@ export type PickRecord = (
     fieldIds: Array<string> | null,
     shouldAllowCreatingRecord: boolean,
 ) => RecordId | null;
-
-const getId = ({id}: {id: string}) => id;
 
 const generateGenericId = () => {
     const length = 10 + Math.floor(Math.random() * 10);

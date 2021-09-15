@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {BaseProvider, useBase} from '../../src/ui/ui';
 import {__sdk as sdk} from '../../src';
 

@@ -4,6 +4,7 @@ import Sdk from '../sdk';
 import {MutationTypes, PermissionCheckResult, UpdateFieldOptionsOpts} from '../types/mutations';
 import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
+import {FieldTypeConfig} from '../types/airtable_interface';
 import AbstractModel from './abstract_model';
 import {Aggregator} from './create_aggregators';
 import Table from './table';
@@ -48,6 +49,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
     /** @internal */
     _parentTable: Table;
+    /** @internal */
+    _cachedFieldTypeConfigOrNull: FieldTypeConfig | null;
     /**
      * @internal
      */
@@ -55,6 +58,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         super(sdk, fieldId);
 
         this._parentTable = parentTable;
+        this._cachedFieldTypeConfigOrNull = null;
     }
 
     /**
@@ -100,14 +104,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get type(): FieldType {
-        const airtableInterface = this._sdk.__airtableInterface;
-        const appInterface = this._sdk.__appInterface;
-
-        const {type} = airtableInterface.fieldTypeProvider.getConfig(
-            appInterface,
-            this._data,
-            this.parentTable.__getFieldNamesById(),
-        );
+        const {type} = this._getCachedConfigFromFieldTypeProvider();
         // @ts-ignore
         if (type === 'lookup') {
             return FieldType.MULTIPLE_LOOKUP_VALUES;
@@ -132,16 +129,28 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get options(): FieldOptions | null {
+        const {options} = this._getCachedConfigFromFieldTypeProvider();
+
+        return options ? cloneDeep(options) : null;
+    }
+
+    _getCachedConfigFromFieldTypeProvider(): FieldTypeConfig {
+        if (this._cachedFieldTypeConfigOrNull !== null) {
+            return this._cachedFieldTypeConfigOrNull;
+        }
         const airtableInterface = this._sdk.__airtableInterface;
         const appInterface = this._sdk.__appInterface;
 
-        const {options} = airtableInterface.fieldTypeProvider.getConfig(
+        this._cachedFieldTypeConfigOrNull = airtableInterface.fieldTypeProvider.getConfig(
             appInterface,
             this._data,
             this.parentTable.__getFieldNamesById(),
         );
 
-        return options ? cloneDeep(options) : null;
+        return this._cachedFieldTypeConfigOrNull;
+    }
+    _clearCachedConfig(): void {
+        this._cachedFieldTypeConfigOrNull = null;
     }
 
     /**
@@ -170,7 +179,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * Accepts partial input, in the same format as {@link updateOptionsAsync}.
      *
-     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * Returns `{hasPermission: true}` if the current user can update the specified field,
      * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
      * used to display an error message to the user.
      *
@@ -270,6 +279,97 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             opts,
         });
     }
+
+    /**
+     * Checks whether the current user has permission to perform the given description update.
+     *
+     * Accepts partial input, in the same format as {@link updateDescriptionAsync}.
+     *
+     * Returns `{hasPermission: true}` if the current user can update the specified field,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
+     * @param description new description for the field
+     *
+     * @example
+     * ```js
+     * const updateFieldCheckResult = field.checkPermissionsForUpdateDescription();
+     *
+     * if (!updateFieldCheckResult.hasPermission) {
+     *     alert(updateFieldCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    checkPermissionsForUpdateDescription(description?: string | null): PermissionCheckResult {
+        return this._sdk.__mutations.checkPermissionsForMutation({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+            tableId: this.parentTable.id,
+            id: this.id,
+            description,
+        });
+    }
+
+    /**
+     * An alias for `checkPermissionsForUpdateDescription(options).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the description update.
+     *
+     * Accepts partial input, in the same format as {@link updateDescriptionAsync}.
+     *
+     * @param description new description for the field
+     *
+     * @example
+     * ```js
+     * const canUpdateField = field.hasPermissionToUpdateDescription();
+     *
+     * if (!canUpdateField) {
+     *     alert('not allowed!');
+     * }
+     * ```
+     */
+    hasPermissionToUpdateDescription(description?: string | null): boolean {
+        return this.checkPermissionsForUpdateDescription(description).hasPermission;
+    }
+
+    /**
+     * Updates the description for this field.
+     *
+     * To remove an existing description, pass `''` or `null` as the new description.
+     *
+     * Throws an error if the user does not have permission to update the field, or if an invalid
+     * description is provided.
+     *
+     * This action is asynchronous. Unlike updates to cell values, updates to field descriptions are
+     * **not** applied optimistically locally. You must `await` the returned promise before
+     * relying on the change in your app.
+     *
+     * @param description new description for the field
+     *
+     * @example
+     * ```js
+     * async function addChoiceToSelectField(selectField, nameForNewOption) {
+     *     const updatedOptions = {
+     *         choices: [
+     *             ...selectField.options.choices,
+     *             {name: nameForNewOption},
+     *         ]
+     *     };
+     *
+     *     if (selectField.hasPermissionToUpdateOptions(updatedOptions)) {
+     *         await selectField.updateOptionsAsync(updatedOptions);
+     *     }
+     * }
+     * ```
+     */
+    async updateDescriptionAsync(description: string | null): Promise<void> {
+        await this._sdk.__mutations.applyMutationAsync({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION,
+            tableId: this.parentTable.id,
+            id: this.id,
+            description,
+        });
+    }
+
     /**
      * `true` if this field is computed, `false` otherwise. A field is
      * "computed" if it's value is not set by user input (e.g. autoNumber, formula,
@@ -398,6 +498,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @internal
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
+        this._clearCachedConfig();
+
         if (dirtyPaths.name) {
             this._onChange(WatchableFieldKeys.name);
         }

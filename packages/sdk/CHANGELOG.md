@@ -9,9 +9,19 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...HEAD)
+
+No changes.
+
+## [1.9.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...@airtable/blocks@1.9.0) - 2021-09-15
 
 -   Update documentation for `FieldType.CHECKBOX` cell read & write types to be more accurate.
+-   Fetching field types & configs is now cached, making it more performant.
+-   Field descriptions can now be edited and specified when creating a new field:
+    -   Added `field.updateDescriptionAsync`.
+    -   Added optional `description` argument to `table.createFieldAsync`.
+    -   Added optional `description` property to `field` objects accepted by
+        `base.createTableAsync`.
 
 ## [1.8.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...@airtable/blocks@1.8.0) - 2021-07-12
 

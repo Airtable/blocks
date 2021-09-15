@@ -29,4 +29,4 @@ export {
 export {RequestJson, ResponseJson} from './types/backend_fetch_types';
 
 export {default as Sdk} from './sdk';
-export {default as AbstractMockAirtableInterface} from './testing/mock_airtable_interface';
+export {AbstractMockAirtableInterface} from './testing/abstract_mock_airtable_interface';

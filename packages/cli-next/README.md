@@ -16,7 +16,7 @@ version of the CLI, which is in public beta
 
 To install or update the `block` cli, run:
 
-    npm install --global @airtable/blocks-cli@2.0.0-beta
+    npm install --global @airtable/blocks-cli@2.0.0-beta.4
 
 # Usage
 
@@ -217,7 +217,9 @@ extension API that expects a single, complete replacement of bundling functional
 
 To use a custom bundler:
 
-1. Save your bundler as a TypeScript file (i.e. index.ts).
+1. Save your bundler as a JavaScript file (i.e. index.js). The bundler must be a CommonJS module. If
+   your bundler in written in TypeScript, you must use the transpiled version as the entry file.
+
 2. Then, change the block.json ‘bundler.module’ option to point at your new bundler entry file;
    i.e.:
 
@@ -225,7 +227,7 @@ To use a custom bundler:
 // block.json
 {
     “bundler”: {
-        “module”: “./bundler/index.ts”
+        “module”: “./bundler/index.js”
     }
 }
 ```

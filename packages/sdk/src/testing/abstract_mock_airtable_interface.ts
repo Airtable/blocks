@@ -146,8 +146,14 @@ const idGenerator: IdGenerator = {
     generateTableId: () => 'tblGeneratedMockId',
 };
 
-/** @hidden */
-abstract class MockAirtableInterface extends EventEmitter implements AirtableInterface {
+/**
+ * An abstract base class with a common interface exposed to both Blocks SDK's
+ * internal automated test suite and the blocks-testing public repo.
+ *
+ * @hidden
+ */
+export abstract class AbstractMockAirtableInterface extends EventEmitter
+    implements AirtableInterface {
     sdkInitData!: SdkInitData;
 
     private _initData: SdkInitData;
@@ -280,5 +286,3 @@ abstract class MockAirtableInterface extends EventEmitter implements AirtableInt
     abstract sendStat(): void;
     abstract performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson>;
 }
-
-export default MockAirtableInterface;

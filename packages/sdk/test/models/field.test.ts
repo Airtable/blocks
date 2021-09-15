@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Field from '../../src/models/field';
 import {FieldType} from '../../src/types/field';
 import {__reset, __sdk as sdk} from '../../src';
@@ -87,7 +87,7 @@ describe('Field', () => {
                 {
                     config: {
                         options: undefined,
-                        type: 'foreignKey',
+                        type: 'multipleRecordLinks',
                     },
                     id: 'fldPrjctClient',
                     tableId: 'tblDesignProjects',
@@ -104,7 +104,7 @@ describe('Field', () => {
                 {
                     config: {
                         options: {foo: 'bar'},
-                        type: 'foreignKey',
+                        type: 'multipleRecordLinks',
                     },
                     id: 'fldPrjctClient',
                     tableId: 'tblDesignProjects',
@@ -121,6 +121,97 @@ describe('Field', () => {
             expect(field.checkPermissionsForUpdateOptions()).toStrictEqual({
                 hasPermission: true,
             });
+        });
+    });
+
+    describe('#hasPermissionToUpdateOptions', () => {
+        test('return value: true', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.hasPermissionToUpdateOptions()).toBe(true);
+        });
+
+        test('return value: false', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: false,
+                reasonDisplayString: '',
+            });
+            expect(field.hasPermissionToUpdateOptions()).toBe(false);
+        });
+    });
+
+    describe('updateDescriptionAsync', () => {
+        it('accepts non-null description', async () => {
+            await field.updateDescriptionAsync('This is a field');
+
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    tableId: 'tblDesignProjects',
+                    id: 'fldPrjctClient',
+                    description: 'This is a field',
+                    type: 'updateSingleFieldDescription',
+                },
+                {holdForMs: 100},
+            );
+        });
+    });
+
+    describe('#checkPermissionsForUpdateDescription', () => {
+        test('request to AirtableInterface - without description', () => {
+            field.checkPermissionsForUpdateDescription();
+
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledWith(
+                {
+                    description: undefined,
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
+                    type: 'updateSingleFieldDescription',
+                },
+                mockAirtableInterface.sdkInitData.baseData,
+            );
+        });
+
+        test('request to AirtableInterface - with description', () => {
+            field.checkPermissionsForUpdateDescription('This is a field');
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledWith(
+                {
+                    description: 'This is a field',
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
+                    type: 'updateSingleFieldDescription',
+                },
+                mockAirtableInterface.sdkInitData.baseData,
+            );
+        });
+
+        test('forwarding of response from AirtableInterface', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.checkPermissionsForUpdateDescription()).toStrictEqual({
+                hasPermission: true,
+            });
+        });
+    });
+
+    describe('#hasPermissionToUpdateDescription', () => {
+        test('return value: true', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.hasPermissionToUpdateDescription()).toBe(true);
+        });
+
+        test('return value: false', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: false,
+                reasonDisplayString: '',
+            });
+            expect(field.hasPermissionToUpdateDescription()).toBe(false);
         });
     });
 
@@ -194,23 +285,6 @@ describe('Field', () => {
         expect(field.description).toBe('the project client');
     });
 
-    describe('#hasPermissionToUpdateOptions', () => {
-        test('return value: true', () => {
-            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
-                hasPermission: true,
-            });
-            expect(field.hasPermissionToUpdateOptions()).toBe(true);
-        });
-
-        test('return value: true', () => {
-            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
-                hasPermission: false,
-                reasonDisplayString: '',
-            });
-            expect(field.hasPermissionToUpdateOptions()).toBe(false);
-        });
-    });
-
     describe('#isComputed', () => {
         test('affirmative', () => {
             mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
@@ -273,6 +347,26 @@ describe('Field', () => {
             mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects.fieldsById.fldPrjctClient.type =
                 'lookup';
             expect(field.type).toBe(FieldType.MULTIPLE_LOOKUP_VALUES);
+        });
+
+        test('ensure cache for type updates changes', () => {
+            mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects.fieldsById.fldPrjctClient.type =
+                'lookup';
+            expect(field.type).toBe(FieldType.MULTIPLE_LOOKUP_VALUES);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblDesignProjects',
+                        'fieldsById',
+                        'fldPrjctClient',
+                        'type',
+                    ],
+                    value: FieldType.SINGLE_SELECT,
+                },
+            ]);
+            expect(field.type).toBe(FieldType.SINGLE_SELECT);
         });
 
         test('other types', () => {

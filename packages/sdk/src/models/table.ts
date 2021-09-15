@@ -1565,6 +1565,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique for the table
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. omit to leave blank
      *
      * @example
      * ```js
@@ -1579,6 +1580,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): PermissionCheckResult {
         return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_SINGLE_FIELD,
@@ -1591,11 +1593,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                       ...(options ? {options} : null),
                   }
                 : undefined,
+            description,
         });
     }
 
     /**
-     * An alias for `checkPermissionsForCreateField(name, type, options).hasPermission`.
+     * An alias for `checkPermissionsForCreateField(name, type, options, description).hasPermission`.
      *
      * Checks whether the current user has permission to create a field in this table.
      *
@@ -1604,6 +1607,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique for the table
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. omit to leave blank
      *
      * @example
      * ```js
@@ -1618,8 +1622,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): boolean {
-        return this.checkPermissionsForCreateField(name, type, options).hasPermission;
+        return this.checkPermissionsForCreateField(name, type, options, description).hasPermission;
     }
 
     /**
@@ -1641,6 +1646,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. omit to leave blank
      *
      * @example
      * ```js
@@ -1676,6 +1682,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name: string,
         type: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): Promise<Field> {
         const fieldId = this._sdk.__airtableInterface.idGenerator.generateFieldId();
 
@@ -1688,6 +1695,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 type: type,
                 ...(options ? {options} : null),
             },
+            description: description ?? null,
         });
 
         return this.getFieldById(fieldId);

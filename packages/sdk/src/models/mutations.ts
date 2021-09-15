@@ -11,6 +11,7 @@ import Base from './base';
 import Field from './field';
 import {
     MAX_FIELD_NAME_LENGTH,
+    MAX_FIELD_DESCRIPTION_LENGTH,
     MAX_TABLE_NAME_LENGTH,
     MAX_NUM_FIELDS_PER_TABLE,
 } from './mutation_constants';
@@ -270,7 +271,7 @@ class Mutations {
             }
 
             case MutationTypes.CREATE_SINGLE_FIELD: {
-                const {tableId, name, config} = mutation;
+                const {tableId, name, config, description} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError("Can't create field: No table with id %s exists", tableId);
@@ -320,6 +321,13 @@ class Mutations {
                         validationResult.reason,
                     );
                 }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't create field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
+                    );
+                }
                 return;
             }
 
@@ -353,6 +361,27 @@ class Mutations {
                     throw spawnError(
                         "Can't update field: invalid field config.\n%s",
                         validationResult.reason,
+                    );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION: {
+                const {tableId, id, description} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't update field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
                     );
                 }
                 return;
@@ -433,6 +462,17 @@ class Mutations {
                             "Can't create table: invalid field config for field '%s'.\n%s",
                             field.name,
                             validationResult.reason,
+                        );
+                    }
+
+                    if (
+                        field.description &&
+                        field.description.length > MAX_FIELD_DESCRIPTION_LENGTH
+                    ) {
+                        throw spawnError(
+                            "Can't create table: description for field '%s' exceeds maximum length of %s characters",
+                            field.name,
+                            MAX_FIELD_DESCRIPTION_LENGTH,
                         );
                     }
                 }
@@ -595,6 +635,7 @@ class Mutations {
 
             case MutationTypes.CREATE_SINGLE_FIELD:
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION:
             case MutationTypes.UPDATE_VIEW_METADATA:
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 return [];

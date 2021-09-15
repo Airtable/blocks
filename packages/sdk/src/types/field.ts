@@ -193,10 +193,12 @@ export enum FieldType {
      * cells which referenced a now-deleted choice will be cleared.
      * ```js
      * const selectField = table.getFieldByName('My select field');
-     * await selectField.updateOptionsAsync({
-     *     choices: selectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     * await selectField.updateOptionsAsync(
+     *     {
+     *         choices: selectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     },
      *     {enableSelectFieldChoiceDeletion: true},
-     * });
+     * );
      *
      * ```
      */
@@ -265,10 +267,12 @@ export enum FieldType {
      * cells which referenced a now-deleted choice will be cleared.
      * ```js
      * const multipleSelectField = table.getFieldByName('My multiple select field');
-     * await multipleSelectField.updateOptionsAsync({
-     *     choices: multipleSelectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     * await multipleSelectField.updateOptionsAsync(
+     *     {
+     *         choices: multipleSelectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     },
      *     {enableSelectFieldChoiceDeletion: true},
-     * });
+     * );
      *
      * ```
      */

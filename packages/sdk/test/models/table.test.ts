@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
 import Table from '../../src/models/table';
 import Field from '../../src/models/field';
@@ -218,6 +218,7 @@ describe('Table', () => {
                     config: {
                         type: FieldType.SINGLE_LINE_TEXT,
                     },
+                    description: null,
                 },
                 {holdForMs: 100},
             );
@@ -238,6 +239,7 @@ describe('Table', () => {
                     config: {
                         type: FieldType.SINGLE_LINE_TEXT,
                     },
+                    description: null,
                 },
                 {holdForMs: 100},
             );
@@ -263,6 +265,54 @@ describe('Table', () => {
                             choices: [{name: 'pick me'}],
                         },
                     },
+                    description: null,
+                },
+                {holdForMs: 100},
+            );
+
+            expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
+        });
+
+        it('accepts null description', async () => {
+            await table.createFieldAsync('name2', FieldType.SINGLE_LINE_TEXT, null, null);
+
+            expect(mockApplyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockApplyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_SINGLE_FIELD,
+                    tableId: table.id,
+                    id: 'fldGeneratedMockId',
+                    name: 'name2',
+                    config: {
+                        type: FieldType.SINGLE_LINE_TEXT,
+                    },
+                    description: null,
+                },
+                {holdForMs: 100},
+            );
+
+            expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
+        });
+
+        it('accepts non-null description', async () => {
+            await table.createFieldAsync(
+                'name2',
+                FieldType.SINGLE_LINE_TEXT,
+                null,
+                'description for field',
+            );
+
+            expect(mockApplyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockApplyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_SINGLE_FIELD,
+                    tableId: table.id,
+                    id: 'fldGeneratedMockId',
+                    name: 'name2',
+                    config: {
+                        type: FieldType.SINGLE_LINE_TEXT,
+                    },
+                    description: 'description for field',
                 },
                 {holdForMs: 100},
             );
@@ -282,6 +332,7 @@ describe('Table', () => {
                     id: undefined,
                     name: undefined,
                     config: undefined,
+                    description: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
             );
@@ -296,6 +347,7 @@ describe('Table', () => {
                     id: undefined,
                     name: 'a name',
                     config: undefined,
+                    description: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
             );
@@ -312,6 +364,7 @@ describe('Table', () => {
                     config: {
                         type: FieldType.SINGLE_SELECT,
                     },
+                    description: undefined,
                 },
                 mockAirtableInterface.sdkInitData.baseData,
             );
@@ -333,6 +386,27 @@ describe('Table', () => {
                             color: 'very light green',
                         },
                     },
+                    description: undefined,
+                },
+                mockAirtableInterface.sdkInitData.baseData,
+            );
+        });
+
+        it('correctly queries AirtableInterface when a description is provided', () => {
+            table.checkPermissionsForCreateField(
+                undefined,
+                undefined,
+                undefined,
+                'my very cool field (wow)',
+            );
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_SINGLE_FIELD,
+                    tableId: 'tblDesignProjects',
+                    id: undefined,
+                    name: undefined,
+                    config: undefined,
+                    description: 'my very cool field (wow)',
                 },
                 mockAirtableInterface.sdkInitData.baseData,
             );

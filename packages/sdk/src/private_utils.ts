@@ -304,6 +304,13 @@ export function keyBy<Item, Key extends string>(
 /**
  * @hidden
  */
+export function getId({id}: {id: string}) {
+    return id;
+}
+
+/**
+ * @hidden
+ */
 export function uniqBy<Item, Key>(
     array: ReadonlyArray<Item>,
     getKey: (arg1: Item) => Key,

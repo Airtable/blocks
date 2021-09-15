@@ -15,6 +15,7 @@ export const MutationTypes = Object.freeze({
     SET_MULTIPLE_GLOBAL_CONFIG_PATHS: 'setMultipleGlobalConfigPaths' as const,
     CREATE_SINGLE_FIELD: 'createSingleField' as const,
     UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
+    UPDATE_SINGLE_FIELD_DESCRIPTION: 'updateSingleFieldDescription' as const,
     CREATE_SINGLE_TABLE: 'createSingleTable' as const,
     UPDATE_VIEW_METADATA: 'updateViewMetadata' as const,
 });
@@ -141,6 +142,8 @@ export interface CreateSingleFieldMutation {
     readonly name: string;
     /** The configuration for the Field being created */
     readonly config: FieldTypeConfig;
+    /** The description for the Field being created */
+    readonly description: string | null;
 }
 
 /** @hidden */
@@ -150,10 +153,11 @@ export interface PartialCreateSingleFieldMutation {
     readonly id: FieldId | undefined;
     readonly name: string | undefined;
     readonly config: FieldTypeConfig | undefined;
+    readonly description: string | null | undefined;
 }
 
 /**
- * The Mutation emitted when the App modifies a {@link Field}.
+ * The Mutation emitted when the App modifies the options of a {@link Field}.
  *
  * @docsPath testing/mutations/UpdateSingleFieldConfigMutation
  */
@@ -178,6 +182,30 @@ export interface PartialUpdateSingleFieldConfigMutation {
     readonly id: FieldId | undefined;
     readonly config: FieldTypeConfig | undefined;
     readonly opts?: UpdateFieldOptionsOpts | undefined;
+}
+
+/**
+ * The Mutation emitted when the App modifies the description of a {@link Field}.
+ *
+ * @docsPath testing/mutations/UpdateSingleFieldDescriptionMutation
+ */
+export interface UpdateSingleFieldDescriptionMutation {
+    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION;
+    /** The identifier for the Table in which a Field is being modified */
+    readonly tableId: TableId;
+    /** The identifier for the Field being modified */
+    readonly id: FieldId;
+    /** The new description for the Field being created */
+    readonly description: string | null;
+}
+
+/** @hidden */
+export interface PartialUpdateSingleFieldDescriptionMutation {
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION;
+    readonly tableId: TableId | undefined;
+    readonly id: FieldId | undefined;
+    readonly description: string | null | undefined;
 }
 
 /**
@@ -209,6 +237,7 @@ export interface CreateSingleTableMutation {
     readonly fields: ReadonlyArray<{
         name: string;
         config: FieldTypeConfig;
+        description: string | null;
     }>;
 }
 
@@ -221,6 +250,7 @@ export interface PartialCreateSingleTableMutation {
         | ReadonlyArray<{
               name: string | undefined;
               config: FieldTypeConfig | undefined;
+              description: string | null | undefined;
           }>
         | undefined;
 }
@@ -257,6 +287,7 @@ export type Mutation =
     | SetMultipleGlobalConfigPathsMutation
     | CreateSingleFieldMutation
     | UpdateSingleFieldConfigMutation
+    | UpdateSingleFieldDescriptionMutation
     | CreateSingleTableMutation
     | UpdateViewMetadataMutation;
 
@@ -268,6 +299,7 @@ export type PartialMutation =
     | PartialSetMultipleGlobalConfigPathsMutation
     | PartialCreateSingleFieldMutation
     | PartialUpdateSingleFieldConfigMutation
+    | PartialUpdateSingleFieldDescriptionMutation
     | PartialCreateSingleTableMutation
     | PartialUpdateViewMetadataMutation;
 

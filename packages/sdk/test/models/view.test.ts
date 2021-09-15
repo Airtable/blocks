@@ -1,4 +1,4 @@
-import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface_internal';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {ViewType} from '../../src/types/view';
 import {__reset, __sdk as sdk} from '../../src';
 import AbstractModel from '../../src/models/abstract_model';

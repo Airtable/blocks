@@ -42,3 +42,10 @@ export function keyBy<Item, Key extends string>(
     }
     return result;
 }
+
+/**
+ * @hidden
+ */
+export function getId({id}: {id: string}) {
+    return id;
+}

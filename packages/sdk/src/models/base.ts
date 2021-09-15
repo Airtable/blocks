@@ -377,6 +377,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name?: string;
             type?: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): PermissionCheckResult {
         return this._sdk.__mutations.checkPermissionsForMutation({
@@ -392,6 +393,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                               ...(field.options ? {options: field.options} : null),
                           }
                         : undefined,
+                    description: field.description,
                 };
             }),
         });
@@ -422,6 +424,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name?: string;
             type?: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): boolean {
         return this.checkPermissionsForCreateTable(name, fields).hasPermission;
@@ -431,7 +434,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Creates a new table.
      *
      * Throws an error if the user does not have permission to create a table, if an invalid
-     * table name is provided, or if invalid fields are provided (invalid name, type or options).
+     * table name is provided, or if invalid fields are provided (invalid name, type, options or
+     * description).
      *
      * Refer to {@link FieldType} for supported field types, the write format for field options, and
      * other specifics for certain field types.
@@ -448,7 +452,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * table in your app.
      *
      * @param name name for the table. must be case-insensitive unique
-     * @param fields array of fields to create in the table: see below for details.
+     * @param fields array of fields to create in the table: see below for an example. `name` and
+     * `type` must be specified for all fields, while `options` is only required for fields that
+     * have field options. `description` is optional and will be empty if not specified.
      *
      * @example
      * ```js
@@ -456,7 +462,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *     const name = 'My new table';
      *     const fields = [
      *         // Name will be the primary field of the table.
-     *         {name: 'Name', type: FieldType.SINGLE_LINE_TEXT},
+     *         {name: 'Name', type: FieldType.SINGLE_LINE_TEXT, description: 'This is the primary field'},
      *         {name: 'Notes', type: FieldType.RICH_TEXT},
      *         {name: 'Attachments', type: FieldType.MULTIPLE_ATTACHMENTS},
      *         {name: 'Number', type: FieldType.NUMBER, options: {
@@ -482,6 +488,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name: string;
             type: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): Promise<Table> {
         const tableId = this._sdk.__airtableInterface.idGenerator.generateTableId();
@@ -497,6 +504,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                         type: field.type,
                         ...(field.options ? {options: field.options} : null),
                     },
+                    description: field.description ?? null,
                 };
             }),
         });
