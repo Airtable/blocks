@@ -1,12 +1,13 @@
 queue_rules:
   - name: default
     conditions:
-      - check-success=tests
+      - check-success=jenkins/blocks-sdk-github
 
 pull_request_rules:
   - name: Automatic merge ⬇ on approval ✔
     conditions:
       - and:
+        - base=main
         - "#approved-reviews-by>=1"
         - label=mergeme
         - check-success=jenkins/blocks-sdk-github
@@ -15,4 +16,18 @@ pull_request_rules:
         commit_message: title+body
         method: squash
         name: default
+        rebase_fallback: none
+      delete_head_branch:
+        force: true
+
+
+  - name: Emergency merge ⬇
+    conditions:
+      - and:
+        - base=main
+        - label=emergency-merge
+    actions:
+      merge:
+        commit_message: title+body
+        method: squash
         rebase_fallback: none
