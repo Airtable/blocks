@@ -1,0 +1,16 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-shared-code.git",
+    "subdirectory": "examples/shared-code-block",
+    "shouldStripLineComments": false,
+    "global": [
+        "hello-world-shared/**/*",
+        "hello-world-typescript-block/**/*",
+        ".gitignore",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}

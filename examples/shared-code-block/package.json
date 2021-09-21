@@ -1,0 +1,10 @@
+{
+    "name": "@airtable/shared-code-block",
+    "version": "1.0.0",
+    "description": "This example app shows how to use code from other directories in your app.",
+    "author": "",
+    "license": "MIT",
+    "scripts": {
+        "lint": "npm run --prefix hello-world-typescript-block lint && npm run --prefix hello-world-shared lint"
+    }
+}

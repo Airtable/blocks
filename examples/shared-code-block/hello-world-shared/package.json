@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.jsx",
     "scripts": {
+        "lint": "echo \"No linter for hello-world-shared: skipping\"",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
