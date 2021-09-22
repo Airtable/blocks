@@ -8,7 +8,7 @@ const EXTRACT_FIELD_NAME = 'Extract';
 const IMAGE_FIELD_NAME = 'Image';
 
 // Airtable SDK limit: we can only update 50 records at a time. For more details, see
-// https://github.com/Airtable/blocks/blob/master/packages/sdk/docs/guide_writes.md#size-limits--rate-limits
+// https://www.airtable.com/developers/apps/guides/write-back-to-airtable#size-limits-rate-limits
 const MAX_RECORDS_PER_UPDATE = 50;
 
 // The API endpoint we're going to hit. For more details, see
