@@ -142,7 +142,7 @@ interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAn
     /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
     /** The contents of the link. */
-    children: React.ReactNode | string;
+    children?: React.ReactNode | string;
 }
 
 // A "reasonable" scheme is one which does not have any escaped characters.
