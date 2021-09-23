@@ -1,6 +1,6 @@
 {
     "name": "@airtable/shared-code-block",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "This example app shows how to use code from other directories in your app.",
     "author": "",
     "license": "MIT",
