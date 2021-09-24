@@ -205,6 +205,8 @@ EXAMPLE
 The new CLI allows this method of code-sharing by allowing “sibling directories” outside the source
 directory to be bundled. Those other directories can include npm imports based on link or file.
 
+[More details and an example can be found here.](https://github.com/Airtable/apps-shared-code)
+
 ## Using a custom bundler
 
 Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns app
