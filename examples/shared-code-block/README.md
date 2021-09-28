@@ -3,9 +3,11 @@
 This example app shows how to use code from other directories in your app.
 
 This functionality is only supported in the v2 CLI, which is in public beta. You can find out more
-about the v2 CLI and how to install it [here](npm i @airtable/blocks-cli@2.0.0-beta.4).
+about the v2 CLI and how to install it
+[here](https://www.npmjs.com/package/@airtable/blocks-cli/v/beta).
 
-In order to test this app - run block run from within `hello-world-typescript-block`
+In order to test this app - run block run from within `hello-world-typescript-block` after running
+`npm install` in the root folder
 
 ## Developing against a shared library
 
@@ -37,3 +39,18 @@ import {Hello} from 'hello-world-shared';
 And then if you use the library instead, you won't have to change any code!
 
 ([Thanks Ronen!](https://community.airtable.com/t/blocks-cli-v2-beta-how-to-use-code-from-other-directories/43197/4))
+
+## A note about `npm install`
+
+If you inspect the npm install command you will see that we install packages from three different
+places from reach of the three `package.json`'s
+
+This is done so that there is only a single React installation that all of the packages and
+reference. If there are multiple React installations in your repository there can be issues.
+Oftentimes exhibiting itself as an `Invalid hook call` if using hooks.
+
+In order to alleviate this issue - we install react once at the root level so that all installations
+can share the same single react installation.
+
+(There are other reasonable solutions to this same problem - eg: use of hardlinks, like with pnpm or
+yarn v2)

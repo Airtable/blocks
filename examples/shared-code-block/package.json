@@ -5,6 +5,12 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "lint": "npm run --prefix hello-world-typescript-block lint && npm run --prefix hello-world-shared lint"
+        "lint": "npm run --prefix hello-world-typescript-block lint && npm run --prefix hello-world-shared lint",
+        "preinstall": "npm install --prefix hello-world-typescript-block && npm install --prefix hello-world-shared"
+    },
+    "dependencies": {
+        "@airtable/blocks": "latest",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0"
     }
 }

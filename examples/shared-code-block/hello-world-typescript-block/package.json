@@ -8,8 +8,8 @@
         "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend",
         "ci": "yarn lint"
     },
-    "dependencies": {
-        "@airtable/blocks": "latest",
+    "peerDependencies": {
+        "@airtable/blocks": "^1.2.0",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
     },
