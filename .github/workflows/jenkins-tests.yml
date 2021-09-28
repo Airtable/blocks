@@ -30,6 +30,8 @@ jobs:
                   curl                                                                                      \
                   --include                                                                                 \
                   --silent                                                                                  \
+                  --show-error                                                                              \
+                  --fail                                                                                    \
                   -XPOST https://jenkins-api.hyperbasedev.com/job/blocks-sdk-github/buildWithParameters     \
                   --user root:${{ secrets.JENKINS_DEVELOPMENT_API_KEY }}                                    \
                   --data-urlencode 'GIT_BRANCH=${{ github.event.pull_request.head.ref }}'                   \
