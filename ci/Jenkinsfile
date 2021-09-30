@@ -42,13 +42,12 @@ pipeline {
 
                         // get the params
                         branch = params.get('GIT_BRANCH');
-                        final gitSha = params.get('GIT_SHA');
                         final githubUser = params.getOrDefault('GITHUB_USER', false);
 
                         // build the links
                         final revisionLink = """
 <a href=\"https://github.com/hyperbase/blocks-sdk/pull/${githubPullRequestId}/\">#${githubPullRequestId}</a>
-<a href=\"https://github.com/hyperbase/blocks-sdk/tree/${gitSha}\">@${gitSha.substring(0, 7)}</a>""";
+<a href=\"https://github.com/hyperbase/blocks-sdk/tree/${commitSha}\">@${commitSha.substring(0, 7)}</a>""";
                         final personOrSystemLink = "<a href=\"https://github.com/${githubUser}/\">@${githubUser}</a>";
                         final displayBranchLink = "The branch is <a href=\"https://github.com/hyperbase/blocks-sdk/tree/${branch}\">${branch}</a>.";
 
@@ -97,7 +96,8 @@ pipeline {
                             prepRepoAndCiTools();
 
                             // Tells a lambda to post to the code review tools.
-                            postBackToCodeReviewIfNecessary("pending");
+                            postBackToCodeReviewIfNecessary(
+                                'pending', 'Jenkins has started the build.');
 
                             // within the docker container, run the test.
                             docker.image('node:12.20.1-buster').inside {
@@ -131,7 +131,10 @@ pipeline {
                     // that is not guaranteed to run.
                     prepRepoAndCiTools();
 
-                    postBackToCodeReviewIfNecessary(currentBuild.currentResult);
+                    postBackToCodeReviewIfNecessary(
+                        currentBuild.currentResult,
+                        "Jenkins has finished running the build.",
+                    );
                     notifySlack();
                 }
                 currentBuild.description += "The build took ${currentBuild.duration/60000} minutes";
@@ -199,7 +202,7 @@ def notifySlack() {
 //       Arguably continuing to use lambdas have worse tradeoffs (they're nearly impossible for engineers to inspect; they're very cumbersome to test and deploy)
 //       However, we can revisit this decision later, since this component can be swapped out.
 // FIXME_CICD: consider loading logic from separate Jenkins files, like in: https://github.com/ksuther/jenkins-jenkinsfile-include/blob/master/Jenkinsfile
-def postBackToCodeReviewIfNecessary(jenkinsBuildResult) {
+def postBackToCodeReviewIfNecessary(jenkinsBuildResult, githubDescription) {
     final phabricatorStatus = getResultForPhacilityAndSlack(jenkinsBuildResult);
     final githubStatus = getResultForGithub(jenkinsBuildResult);
 
@@ -244,7 +247,7 @@ def postBackToCodeReviewIfNecessary(jenkinsBuildResult) {
                         --sha \"${git_sha}\"                                                                             \
                         --pull-request-id \"${git_pull_request_id}\"                                                     \
                         --job-name \"jenkins/${JOB_BASE_NAME}\"                                                          \
-                        --description \"Jenkins\"                                                                        \
+                        --description \"${githubDescription}\"                                                           \
                         --target-url \"${BUILD_URL}\"                                                                    \
                         on-build-complete                                                                                \
                         --status \"${githubStatus}\"                                                                     \

@@ -27,14 +27,29 @@ jobs:
         steps:
             - name: Trigger Jenkins build
               run: |
-                  curl                                                                                      \
-                  --include                                                                                 \
-                  --silent                                                                                  \
-                  --show-error                                                                              \
-                  --fail                                                                                    \
-                  -XPOST https://jenkins-api.hyperbasedev.com/job/blocks-sdk-github/buildWithParameters     \
-                  --user root:${{ secrets.JENKINS_DEVELOPMENT_API_KEY }}                                    \
-                  --data-urlencode 'GIT_BRANCH=${{ github.event.pull_request.head.ref }}'                   \
-                  --data-urlencode 'GIT_SHA=${{ github.event.pull_request.head.sha }}'                      \
-                  --data-urlencode 'GITHUB_USER=${{ github.actor }}'                                        \
-                  --data-urlencode 'GITHUB_PULL_REQUEST_ID=${{ github.event.pull_request.number }}'         \
+                  curl                                                                                                   \
+                  --include                                                                                              \
+                  --silent                                                                                               \
+                  --show-error                                                                                           \
+                  --fail                                                                                                 \
+                  -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"                                                  \
+                  -H "Content-Type: application/json"                                                                    \
+                  -XPOST                                                                                                 \
+                  -d '{
+                      "state": "pending",
+                      "context": "jenkins/blocks-sdk-github",
+                      "description": "Job has been sent to Jenkins."
+                  }'                                                                                                     \
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/${{ github.event.pull_request.head.sha }}"   \
+
+                  curl                                                                                                   \
+                  --include                                                                                              \
+                  --silent                                                                                               \
+                  --show-error                                                                                           \
+                  --fail                                                                                                 \
+                  -XPOST https://jenkins-api.hyperbasedev.com/job/blocks-sdk-github/buildWithParameters                  \
+                  --user root:${{ secrets.JENKINS_DEVELOPMENT_API_KEY }}                                                 \
+                  --data-urlencode 'GIT_BRANCH=${{ github.event.pull_request.head.ref }}'                                \
+                  --data-urlencode 'GIT_SHA=${{ github.event.pull_request.head.sha }}'                                   \
+                  --data-urlencode 'GITHUB_USER=${{ github.actor }}'                                                     \
+                  --data-urlencode 'GITHUB_PULL_REQUEST_ID=${{ github.event.pull_request.number }}'                      \
