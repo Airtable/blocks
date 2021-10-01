@@ -358,18 +358,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @example
      * ```js
-     * async function addChoiceToSelectField(selectField, nameForNewOption) {
-     *     const updatedOptions = {
-     *         choices: [
-     *             ...selectField.options.choices,
-     *             {name: nameForNewOption},
-     *         ]
-     *     };
-     *
-     *     if (selectField.hasPermissionToUpdateOptions(updatedOptions)) {
-     *         await selectField.updateOptionsAsync(updatedOptions);
-     *     }
-     * }
+     * await myTextField.updateDescriptionAsync('This is a text field');
      * ```
      */
     async updateDescriptionAsync(description: string | null): Promise<void> {
