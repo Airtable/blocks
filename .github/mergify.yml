@@ -25,7 +25,7 @@ pull_request_rules:
     conditions:
       - and:
         - base=main
-        - label=emergency-merge
+        - label=emergency-mergeme
     actions:
       merge:
         commit_message: title+body
