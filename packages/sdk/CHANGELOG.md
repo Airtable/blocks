@@ -11,7 +11,6 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...HEAD)
 
--   Add new `bigCheck` icon
 -   Add new `calendarDay` icon (and micro variant)
 
 ## [1.9.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...@airtable/blocks@1.9.0) - 2021-09-15
