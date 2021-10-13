@@ -71,12 +71,16 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         this.compiler.hooks.finishMake.tapPromise(
             'AirtableCancelBuildPlugin',
             async compilation => {
-                compilation.summarizeDependencies();
-                fileDependencies = Array.from(compilation.fileDependencies.values());
-                // Throw an error at this point. The compiler is configured with
-                // other plugins that will perform a lot more work to produce a
-                // bundle that we will not use.
-                throw spawnUnexpectedError(AIRTABLE_CANCEL_BUILD_ERROR);
+                if (compilation.errors.length > 0) {
+                    throw compilation.errors[0];
+                } else {
+                    compilation.summarizeDependencies();
+                    fileDependencies = Array.from(compilation.fileDependencies.values());
+                    // Throw an error at this point. The compiler is configured with
+                    // other plugins that will perform a lot more work to produce a
+                    // bundle that we will not use.
+                    throw spawnUnexpectedError(AIRTABLE_CANCEL_BUILD_ERROR);
+                }
             },
         );
 
