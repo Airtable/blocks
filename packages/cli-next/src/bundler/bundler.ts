@@ -50,7 +50,11 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         const stats = await promisify(this.compiler.run.bind(this.compiler))();
 
         if (stats?.hasErrors()) {
-            throw stats.toJson().errors[0];
+            const jsonError = stats.toJson().errors[0];
+            const e = new Error(jsonError.message);
+            e.name = jsonError.name;
+            e.stack = jsonError.stack;
+            throw e;
         }
     }
 
