@@ -105,6 +105,10 @@ export function createWebpackCompilerConfig({
         module: {
             rules: [
                 {
+                    test: /\.css$/,
+                    use: [require.resolve('style-loader'), require.resolve('css-loader')],
+                },
+                {
                     test: /\.(?:m?j|t)sx?$/,
                     include: [/node_modules/],
                     resolve: {
