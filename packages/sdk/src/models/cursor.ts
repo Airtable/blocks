@@ -56,6 +56,7 @@ interface CursorData {
  *      return (
  *          <div>
  *              Active table: {cursor.activeTableId}
+ *              <br />
  *              Active view: {cursor.activeViewId}
  *          </div>
  *      );
@@ -76,6 +77,7 @@ interface CursorData {
  *      return (
  *          <div>
  *              Selected records: {cursor.selectedRecordIds.join(', ')}
+ *              <br />
  *              Selected fields: {cursor.selectedFieldIds.join(', ')}
  *          </div>
  *      );

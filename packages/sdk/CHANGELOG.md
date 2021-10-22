@@ -11,7 +11,11 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...HEAD)
 
+<<<<<<< seankeenan-at-fixTypoAndFormattingFromOpenPR
+- Fix typo in cursor.ts documentation - thanks @m2creates!
+=======
 -   Add new `calendarDay` icon (and micro variant)
+>>>>>>> main
 
 ## [1.9.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...@airtable/blocks@1.9.0) - 2021-09-15
 
