@@ -27,7 +27,6 @@
         "unstable_testing_utils.d.ts"
     ],
     "scripts": {
-        "preinstall": "npx only-allow yarn",
         "ci": "yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run build:docs && git add CHANGELOG.md ../blocks-docs/docs.json",
