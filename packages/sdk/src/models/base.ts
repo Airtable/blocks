@@ -454,7 +454,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table: see below for an example. `name` and
      * `type` must be specified for all fields, while `options` is only required for fields that
-     * have field options. `description` is optional and will be empty if not specified.
+     * have field options. `description` is optional and will be `''` if not specified or if
+     * specified as `null`.
      *
      * @example
      * ```js

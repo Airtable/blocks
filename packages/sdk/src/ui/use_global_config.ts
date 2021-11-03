@@ -23,7 +23,7 @@ import {useSdk} from './sdk_context';
  *         <React.Fragment>
  *             <Button icon="minus" onClick={decrement} disabled={!isEnabled} ariaLabel="decrease"/>
  *             {count}
- *             <Button icon="plus" onClick={increment} disabled={!isEnabled} airaLabel="increase"/>
+ *             <Button icon="plus" onClick={increment} disabled={!isEnabled} ariaLabel="increase"/>
  *         </React.Fragment>
  *     );
  * }

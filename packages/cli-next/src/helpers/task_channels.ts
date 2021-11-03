@@ -3,7 +3,13 @@ import {EventEmitter} from 'events';
 import _debug from 'debug';
 
 import {Deferred} from './deferred';
-import {invariant, spawnUnexpectedError} from './error_utils';
+import {
+    deserializeError,
+    invariant,
+    SerializedError,
+    serializeError,
+    spawnUnexpectedError,
+} from './error_utils';
 import {ObjectMap} from './private_utils';
 import {Result} from './result';
 
@@ -140,7 +146,7 @@ type RequestMessage<H> = [
 
 type ResponseMessage<H> =
     | [ApplicationMessageType.RESPONSE, number, RequestResults<H>]
-    | [ApplicationMessageType.ERROR, number, any];
+    | [ApplicationMessageType.ERROR, number, SerializedError];
 
 class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
     implements RequestChannel<Remote> {
@@ -173,7 +179,7 @@ class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
                 return received[2];
             } else if (received[0] === ApplicationMessageType.ERROR && received[1] === id) {
                 debug('received error', id, method);
-                throw received[2];
+                throw deserializeError(received[2]);
             }
         }
 
@@ -216,8 +222,13 @@ class ResponseChannelImplementation<
                             const response = await this._handles[method](...args);
                             this._inner.send([ApplicationMessageType.RESPONSE, id, response]);
                             return {value: response};
-                        } catch (err) {
-                            this._inner.send([ApplicationMessageType.ERROR, id, err]);
+                        } catch (e) {
+                            const err: Error = e;
+                            this._inner.send([
+                                ApplicationMessageType.ERROR,
+                                id,
+                                serializeError(err),
+                            ]);
                             return {err};
                         }
                     })(),

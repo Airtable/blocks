@@ -251,10 +251,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
             this._record.__linkedRecordsQueryResultPool.unregisterObjectForReuseStrong(this);
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
-
-            this._sdk.base
-                .__getRecordStore(this._record.parentTable.id)
-                .unloadCellValuesInFieldIds([this._field.id]);
+            this._originRecordStore.unloadCellValuesInFieldIds([this._field.id]);
             this._linkedQueryResult.unloadData();
             this._unloadRecordColors();
 

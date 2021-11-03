@@ -99,6 +99,20 @@ describe('run bundler', () => {
         .it('bundles react typescript components to disk');
 
     testBundler
+        .prepareFixture('bundler_react_css')
+        .runBundlerServer()
+        .readServerBundle()
+        .bundleIncludes('color: red;')
+        .it('bundles react with css imports with server');
+
+    testBundler
+        .prepareFixture('bundler_react_css')
+        .runBundlerPass()
+        .readDiskBundle()
+        .bundleIncludes('color: red;')
+        .it('bundles react with css imports to disk');
+
+    testBundler
         .prepareFixture('bundler_src_index_ts')
         .runBundlerServer()
         .readServerBundle()

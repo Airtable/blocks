@@ -1646,7 +1646,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
-     * @param description description for the field. omit to leave blank
+     * @param description description for the field. is optional and will be `''` if not specified
+     * or if specified as `null`.
      *
      * @example
      * ```js

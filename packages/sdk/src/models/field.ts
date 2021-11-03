@@ -334,7 +334,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     /**
      * Updates the description for this field.
      *
-     * To remove an existing description, pass `''` or `null` as the new description.
+     * To remove an existing description, pass `''` as the new description.
+     * `null` is also accepted and will be coerced to `''` for consistency with field creation.
      *
      * Throws an error if the user does not have permission to update the field, or if an invalid
      * description is provided.
@@ -347,18 +348,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @example
      * ```js
-     * async function addChoiceToSelectField(selectField, nameForNewOption) {
-     *     const updatedOptions = {
-     *         choices: [
-     *             ...selectField.options.choices,
-     *             {name: nameForNewOption},
-     *         ]
-     *     };
-     *
-     *     if (selectField.hasPermissionToUpdateOptions(updatedOptions)) {
-     *         await selectField.updateOptionsAsync(updatedOptions);
-     *     }
-     * }
+     * await myTextField.updateDescriptionAsync('This is a text field');
      * ```
      */
     async updateDescriptionAsync(description: string | null): Promise<void> {

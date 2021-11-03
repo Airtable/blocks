@@ -9,9 +9,18 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.0...HEAD)
 
 No changes.
+
+## [1.10.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...@airtable/blocks@1.10.0) - 2021-11-03
+
+-   Fix typo in cursor.ts documentation - thanks @m2creates!
+-   Add new `calendarDay` icon (and micro variant)
+-   Update documentation to include attachment url guidance
+-   Update field metadata writes documentation to mention that `null` will be coerced to `''`
+-   Fix a bug when unloading data from a `linkedRecordQueryResult` after a table deletion
+-   Update `children` prop of `Link` component to be optional
 
 ## [1.9.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...@airtable/blocks@1.9.0) - 2021-09-15
 

@@ -125,3 +125,40 @@ export function spawnAbstractMethodError(): Error {
         spawnAbstractMethodError,
     );
 }
+
+/**
+ * This is used to pass errors across separate processes. If you try to send an
+ * `Error` object across processes, you will lose information since
+ * JSON.stringify(err) produces {} since `Error` has no enumerable properties.
+ * Instead you should send a SerializedError across processes.
+ *
+ * @internal
+ */
+export interface SerializedError {
+    __serializedError: true;
+    name: string;
+    message: string;
+    stack?: string;
+}
+
+/**
+ * @internal
+ */
+export function serializeError(err: Error): SerializedError {
+    return {
+        __serializedError: true,
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+    };
+}
+
+/**
+ * @internal
+ */
+export function deserializeError(jsonErr: SerializedError): Error {
+    const e = new Error(jsonErr.message);
+    e.name = jsonErr.name;
+    e.stack = jsonErr.stack;
+    return e;
+}

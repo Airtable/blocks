@@ -575,7 +575,13 @@ export enum FieldType {
      * value.
      *
      * Note: when you pass an existing attachment, you must pass the full attachment
-     * object. New attachments only require the `url` property.
+     * object. New attachments only require the `url` property. You can optionally
+     * pass the \`filename\` property to give it a readable name.
+     *
+     * Additionally, the Airtable generated attachment URLs do not currently expire,
+     * but this will change in the future. If you want to persist the attachments, we
+     * recommend downloading them instead of saving the URL. Before this change is
+     * rolled out, we will post a more detailed deprecation timeline.
      *
      * **Cell read format**
      * ```js

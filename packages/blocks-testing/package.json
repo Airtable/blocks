@@ -4,7 +4,7 @@
     "description": "Airtable Blocks Testing Library",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Airtable/blocks-testing.git"
+        "url": "https://github.com/Airtable/blocks.git"
     },
     "homepage": "https://airtable.com/developers/blocks",
     "main": "dist/cjs/index.js",

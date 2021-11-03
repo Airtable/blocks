@@ -200,10 +200,36 @@ EXAMPLE
 
 # New features in v2
 
+## CSS Support
+
+The new CLI supports css files within your app by default. The default webpack bundler is configured
+with css-loader and style-loader. This means you can import a css file into your app. Example:
+
+```
+// styles.css
+.red {
+  color: red;
+}
+```
+
+```
+import {initializeBlock} from '@airtable/blocks/ui';
+import React from 'react';
+import './styles.css'
+
+function MyApp() {
+    return <div className="red">Hello world</div>;
+}
+
+initializeBlock(() => <MyApp />);
+```
+
 ## Using code from other directories
 
 The new CLI allows this method of code-sharing by allowing “sibling directories” outside the source
 directory to be bundled. Those other directories can include npm imports based on link or file.
+
+[More details and an example can be found here.](https://github.com/Airtable/apps-shared-code)
 
 ## Using a custom bundler
 
@@ -240,6 +266,10 @@ A bundler needs to implement the following APIs:
 class Bundler {
     async bundleAsync(options: ReleaseBundleOptions): Promise<void> {
         // implement release build
+    }
+
+    async findDependenciesAsync(options: SubmitFindDependenciesOptions): Promise<{files: Array<string>}> {
+        // used in `block submit`
     }
 
     async startDevServerAsync(options: RunDevServerOptions & RunDevServerMethods): Promise<void> {

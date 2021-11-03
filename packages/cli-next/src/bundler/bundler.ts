@@ -50,7 +50,11 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         const stats = await promisify(this.compiler.run.bind(this.compiler))();
 
         if (stats?.hasErrors()) {
-            throw stats.toJson().errors[0];
+            const jsonError = stats.toJson().errors[0];
+            const e = new Error(jsonError.message);
+            e.name = jsonError.name;
+            e.stack = jsonError.stack;
+            throw e;
         }
     }
 
@@ -62,9 +66,13 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         this.compiler.hooks.finishMake.tapPromise(
             'AirtableCancelBuildPlugin',
             async compilation => {
-                compilation.summarizeDependencies();
-                fileDependencies = Array.from(compilation.fileDependencies.values());
-                throw spawnUnexpectedError(AIRTABLE_CANCEL_BUILD_ERROR);
+                if (compilation.errors.length > 0) {
+                    throw compilation.errors[0];
+                } else {
+                    compilation.summarizeDependencies();
+                    fileDependencies = Array.from(compilation.fileDependencies.values());
+                    throw spawnUnexpectedError(AIRTABLE_CANCEL_BUILD_ERROR);
+                }
             },
         );
 
