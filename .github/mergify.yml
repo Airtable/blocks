@@ -13,13 +13,18 @@ pull_request_rules:
         - check-success=jenkins/blocks-sdk-github
     actions:
       queue:
-        commit_message: title+body
+        commit_message: default
+        commit_message_template: |
+          {{title}} (#{{number}})
+          {{body}}
+
+          Reviewed By: {{approved_reviews_by | join(', ')}}
+          GitHub Pull Request: https://github.com/Hyperbase/hyperbase/pull/{{number}}
         method: squash
         name: default
         rebase_fallback: none
       delete_head_branch:
         force: true
-
 
   - name: Emergency merge ⬇
     conditions:
@@ -28,6 +33,34 @@ pull_request_rules:
         - label=emergency-mergeme
     actions:
       merge:
-        commit_message: title+body
+        commit_message: default
+        commit_message_template: |
+          {{title}} (#{{number}})
+          {{body}}
+
+          Emergency merge
+          GitHub Pull Request: https://github.com/Hyperbase/hyperbase/pull/{{number}}
         method: squash
         rebase_fallback: none
+
+  # When there is a conflict, the GitHub UI displays a message but not very prominently.  This notification attempts
+  # to actively reach out to the developer that action is required.  Note that mergify only does this notification on
+  # a transition from a non-conflict state to a conflict state.  If a developer pushes to a conflict to a PR that
+  # already has a conflict, there will be no subsequent notification.
+  - name: Ask to resolve conflict
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: This pull request has conflicts with the base branch.  In this state, tests cannot be launched.
+
+  # When we use speculative checks, the update (from main/master) + test prior to merge happens in a separate draft
+  # PR.  This provides a cleaner interface, but mergify only announces failures in the draft PR.  This hack (suggested
+  # by the mergify people) propagates the failure state back to the original PR.
+  - name: Notify author on queue failure
+    conditions:
+      - 'check-failure=Queue: Embarked in merge train'
+    actions:
+      comment:
+        message: This pull request failed to merge and has been dequeued from the merge train.
+
