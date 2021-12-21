@@ -55,7 +55,7 @@ export type ReactRefType<C> = C extends React.Component
  *
  * @hidden
  */
-export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
+export type ObjectMap<K extends keyof any, V> = {[P in K]: V};
 
 /**
  * Creates an enum from provided string arguments.

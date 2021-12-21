@@ -9,7 +9,7 @@
  *
  * @hidden
  */
-export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
+export type ObjectMap<K extends keyof any, V> = {[P in K]: V};
 
 /**
  * Safely cast a value to the type passed in as a type parameter.
