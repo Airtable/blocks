@@ -1,0 +1,16 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks.git",
+    "shouldStripLineComments": true,
+    "global": [
+        ".gitignore",
+        ".prettierignore",
+        ".prettierrc.json",
+        "DEVELOPER_AGREEMENT.md",
+        "README.md",
+        "package.json",
+        "yarn.lock",
+        "packages/blocks-testing/**/!(git-mirror.json)"
+    ]
+}

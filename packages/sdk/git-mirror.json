@@ -11,8 +11,6 @@
         "README.md",
         "package.json",
         "yarn.lock",
-        "packages/sdk/**/*",
-        "packages/blocks-testing/**/*",
-        "packages/cli-next/**/*"
+        "packages/sdk/**/!(git-mirror.json)"
     ]
 }

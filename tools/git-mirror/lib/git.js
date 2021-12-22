@@ -18,6 +18,12 @@ module.exports = {
     async initAsync(cwd) {
         await runGitAsync(cwd, 'init', '.');
     },
+    async statusAsync(cwd) {
+        return await runGitAsync(cwd, 'status');
+    },
+    async diffAsync(cwd) {
+        return await runGitAsync(cwd, 'diff');
+    },
     async lsFilesAsync(cwd) {
         const filePaths = await runGitAsync(cwd, 'ls-files');
         return filePaths.split('\n');

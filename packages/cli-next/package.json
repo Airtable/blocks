@@ -121,7 +121,7 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn run test",
-            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version})"
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version}"
         },
         "publishConfig": {
             "access": "public"

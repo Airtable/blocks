@@ -77,7 +77,7 @@ async function copyFilesBetweenReposAsync(
     }
 }
 
-async function createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter) {
+async function createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter, isDryRun) {
     await fs.mkdir(destinationPath);
     await git.initAsync(destinationPath);
     const tmpSourcePath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
@@ -103,17 +103,27 @@ async function createMirrorRepoAsync(config, sourcePath, destinationPath, tagFil
             shouldSyncFilePath,
             config.shouldStripLineComments,
         );
-        await git.commitAndTagAsync(
-            destinationPath,
-            tag.name,
-            config.authorName,
-            config.authorEmail,
-            tag.date,
-        );
+        if (isDryRun) {
+            console.log(await git.statusAsync(tmpDestinationPath));
+        } else {
+            await git.commitAndTagAsync(
+                destinationPath,
+                tag.name,
+                config.authorName,
+                config.authorEmail,
+                tag.date,
+            );
+        }
     }
 }
 
-async function syncScopedTagBetweenReposAsync(config, sourcePath, destinationPath, tagName) {
+async function syncScopedTagBetweenReposAsync(
+    config,
+    sourcePath,
+    destinationPath,
+    tagName,
+    isDryRun,
+) {
     console.log('Creating working source copy...');
     const tmpSourcePath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
     await git.cloneAsync(sourcePath, tmpSourcePath);
@@ -122,8 +132,15 @@ async function syncScopedTagBetweenReposAsync(config, sourcePath, destinationPat
     const tmpDestinationPath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
     await git.cloneAsync(destinationPath, tmpDestinationPath);
 
-    const tag = await git.getTagInfoAsync(tmpSourcePath, tagName);
-    await git.checkoutAsync(tmpSourcePath, tag.hash);
+    if (!isDryRun) {
+        // In the dry run case, treat the current working tree as what "will be released".
+        // In the non-dry run case, check out the tag created by release-it during `yarn release`.
+        // Note that this creates some room for discrepancy between what is compared for
+        // the dry run and what is actually released, but if you use `yarn release` as
+        // described in the run doc, they will always match.
+        const tag = await git.getTagInfoAsync(tmpSourcePath, tagName);
+        await git.checkoutAsync(tmpSourcePath, tag.hash);
+    }
 
     const shouldSyncFilePath = createShouldSyncFilePath(config, false);
     console.log('Copying files...');
@@ -134,22 +151,33 @@ async function syncScopedTagBetweenReposAsync(config, sourcePath, destinationPat
         config.shouldStripLineComments,
     );
 
-    await git.commitAndTagAsync(
-        tmpDestinationPath,
-        tag.name,
-        config.authorName,
-        config.authorEmail,
-        tag.date,
-    );
+    if (isDryRun) {
+        console.log(await git.statusAsync(tmpDestinationPath));
+        console.log(await git.diffAsync(tmpDestinationPath));
+    } else {
+        await git.commitAndTagAsync(
+            tmpDestinationPath,
+            tag.name,
+            config.authorName,
+            config.authorEmail,
+            tag.date,
+        );
 
-    console.log('Pushing changes...');
-    await git.pushAsync(tmpDestinationPath);
+        console.log('Pushing changes...');
+        await git.pushAsync(tmpDestinationPath);
+    }
 
     console.log('Done!');
 }
 
 async function runAsync() {
-    const args = process.argv.slice(2);
+    let args = process.argv.slice(2);
+    let isDryRun = false;
+    const dryRunIndex = args.indexOf('--dryRun');
+    if (dryRunIndex !== -1) {
+        isDryRun = true;
+        args = args.slice(0, dryRunIndex).concat(args.slice(dryRunIndex + 1));
+    }
     const command = args[0];
 
     const sourcePath = await git.getTopLevelAsync(process.cwd());
@@ -169,14 +197,14 @@ async function runAsync() {
             );
         }
 
-        await createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter);
+        await createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter, isDryRun);
     } else if (command === 'sync') {
         const tag = args[1];
-        if (!tag) {
+        if (!tag && !isDryRun) {
             throw new Error('Must provide tag arg to sync: git-mirror sync <tag>');
         }
 
-        await syncScopedTagBetweenReposAsync(config, sourcePath, config.remote, tag);
+        await syncScopedTagBetweenReposAsync(config, sourcePath, config.remote, tag, isDryRun);
     } else {
         throw new Error('Must provide 1st arg: git-mirror create|sync');
     }
