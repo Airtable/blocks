@@ -346,7 +346,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @example
      * ```js
      * console.log(myRecord.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {

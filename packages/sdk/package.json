@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "1.10.0",
+    "version": "1.10.1",
     "description": "Airtable Blocks SDK",
     "repository": {
         "type": "git",
@@ -143,7 +143,7 @@
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
             "after:bump": "yarn build",
-            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version})"
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version}"
         },
         "npm": {
             "access": "public"

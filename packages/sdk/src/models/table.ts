@@ -123,7 +123,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @example
      * ```js
      * console.log(myTable.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {

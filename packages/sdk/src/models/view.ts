@@ -110,7 +110,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @example
      * ```js
      * console.log(myView.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {
