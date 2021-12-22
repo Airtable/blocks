@@ -132,16 +132,6 @@ async function syncScopedTagBetweenReposAsync(
     const tmpDestinationPath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
     await git.cloneAsync(destinationPath, tmpDestinationPath);
 
-    if (!isDryRun) {
-        // In the dry run case, treat the current working tree as what "will be released".
-        // In the non-dry run case, check out the tag created by release-it during `yarn release`.
-        // Note that this creates some room for discrepancy between what is compared for
-        // the dry run and what is actually released, but if you use `yarn release` as
-        // described in the run doc, they will always match.
-        const tag = await git.getTagInfoAsync(tmpSourcePath, tagName);
-        await git.checkoutAsync(tmpSourcePath, tag.hash);
-    }
-
     const shouldSyncFilePath = createShouldSyncFilePath(config, false);
     console.log('Copying files...');
     await copyFilesBetweenReposAsync(
@@ -155,6 +145,13 @@ async function syncScopedTagBetweenReposAsync(
         console.log(await git.statusAsync(tmpDestinationPath));
         console.log(await git.diffAsync(tmpDestinationPath));
     } else {
+        // In the dry run case, we treat the current working tree as what "will be released".
+        // In the non-dry run case, check out the tag created by release-it during `yarn release`.
+        // Note that this creates some room for discrepancy between what is compared for
+        // the dry run and what is actually released, but if you use `yarn release` as
+        // described in the run doc, they will always match.
+        const tag = await git.getTagInfoAsync(tmpSourcePath, tagName);
+        await git.checkoutAsync(tmpSourcePath, tag.hash);
         await git.commitAndTagAsync(
             tmpDestinationPath,
             tag.name,
