@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.66...HEAD)
 
-No changes.
+-   Remove unnecessary babel plugins to fix transpilation issue with TypeScript class declarations
+    (`declare class`).
 
 ## [0.0.66](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.65...@airtable/blocks-cli@0.0.66) - 2021-08-19
 
