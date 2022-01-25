@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.1...HEAD)
 
-No changes.
+-   Rare invariant failure addressed
 
 ## [1.10.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.0...@airtable/blocks@1.10.1) - 2021-12-22
 
