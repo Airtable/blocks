@@ -50,6 +50,23 @@ export function spawnError(
     );
 }
 
+// istanbul ignore next
+/**
+ * Logs an error to Rollbar
+ *
+ * @hidden
+ */
+export function logErrorToRollbar(
+    errorMessageFormat: string,
+    ...errorMessageArgs: ReadonlyArray<unknown>
+) {
+    // See this comment for how to log via Rollbar: https://github.com/Hyperbase/hyperbase/blob/009dcd1dc4c5204277c2939e7f61dfce74535f30/client/run_block_frame.tsx#L548
+    const rollbar = (window as any).Rollbar as undefined | {warn?: (error: Error) => void};
+    if (rollbar?.warn) {
+        rollbar.warn(spawnError(errorMessageFormat, ...errorMessageArgs));
+    }
+}
+
 /**
  * An alternative to facebook's invariant that's safe to use with base data
  *

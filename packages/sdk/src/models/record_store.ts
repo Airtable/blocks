@@ -11,7 +11,7 @@ import {
     cast,
     keys as objectKeys,
 } from '../private_utils';
-import {invariant} from '../error_utils';
+import {invariant, logErrorToRollbar} from '../error_utils';
 import Sdk from '../sdk';
 import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
@@ -332,18 +332,29 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
 
-                // Metadata (createdTime, commentCount) should already be up to date,
-                // but just verify for sanity. If this doesn't catch anything, can
-                // remove it for perf.
-                invariant(
-                    existingRecordObj.commentCount === newRecordObj.commentCount,
-                    'comment count out of sync',
-                );
+                // Metadata (createdTime, commentCount) should generally be up to date,
+                // but can be out of date in the rare scenario where realtime
+                // data has not yet been delivered to the SDK, but is populated in hyperbase
+                // at the time this new fetch is executed.
+                // istanbul ignore next
+                if (existingRecordObj.commentCount !== newRecordObj.commentCount) {
+                    const isCommentCountTypesSame =
+                        typeof existingRecordObj.commentCount !== typeof newRecordObj.commentCount;
+                    logErrorToRollbar(
+                        'comment count out of sync - types are same: %s',
+                        isCommentCountTypesSame,
+                    );
+                }
 
-                invariant(
-                    existingRecordObj.createdTime === newRecordObj.createdTime,
-                    'created time out of sync',
-                );
+                // istanbul ignore next
+                if (existingRecordObj.createdTime !== newRecordObj.createdTime) {
+                    const isCreatedTimeTypesSame =
+                        typeof existingRecordObj.createdTime !== typeof newRecordObj.createdTime;
+                    logErrorToRollbar(
+                        'created time out of sync - types are same: %s',
+                        isCreatedTimeTypesSame,
+                    );
+                }
 
                 if (!existingRecordObj.cellValuesByFieldId) {
                     existingRecordObj.cellValuesByFieldId = {};
