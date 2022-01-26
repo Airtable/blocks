@@ -45,6 +45,21 @@ export function spawnError(
 }
 
 /**
+ * Logs an error to Rollbar
+ *
+ * @hidden
+ */
+export function logErrorToRollbar(
+    errorMessageFormat: string,
+    ...errorMessageArgs: ReadonlyArray<unknown>
+) {
+    const rollbar = (window as any).Rollbar as undefined | {warn?: (error: Error) => void};
+    if (rollbar?.warn) {
+        rollbar.warn(spawnError(errorMessageFormat, ...errorMessageArgs));
+    }
+}
+
+/**
  * An alternative to facebook's invariant that's safe to use with base data
  *
  * @hidden

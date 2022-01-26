@@ -11,7 +11,7 @@ import {
     cast,
     keys as objectKeys,
 } from '../private_utils';
-import {invariant} from '../error_utils';
+import {invariant, logErrorToRollbar} from '../error_utils';
 import Sdk from '../sdk';
 import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
@@ -291,15 +291,23 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
 
-                invariant(
-                    existingRecordObj.commentCount === newRecordObj.commentCount,
-                    'comment count out of sync',
-                );
+                if (existingRecordObj.commentCount !== newRecordObj.commentCount) {
+                    const isCommentCountTypesSame =
+                        typeof existingRecordObj.commentCount !== typeof newRecordObj.commentCount;
+                    logErrorToRollbar(
+                        'comment count out of sync - types are same: %s',
+                        isCommentCountTypesSame,
+                    );
+                }
 
-                invariant(
-                    existingRecordObj.createdTime === newRecordObj.createdTime,
-                    'created time out of sync',
-                );
+                if (existingRecordObj.createdTime !== newRecordObj.createdTime) {
+                    const isCreatedTimeTypesSame =
+                        typeof existingRecordObj.createdTime !== typeof newRecordObj.createdTime;
+                    logErrorToRollbar(
+                        'created time out of sync - types are same: %s',
+                        isCreatedTimeTypesSame,
+                    );
+                }
 
                 if (!existingRecordObj.cellValuesByFieldId) {
                     existingRecordObj.cellValuesByFieldId = {};
