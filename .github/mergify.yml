@@ -19,7 +19,7 @@ pull_request_rules:
           {{body}}
 
           Reviewed By: {{approved_reviews_by | join(', ')}}
-          GitHub Pull Request: https://github.com/Hyperbase/hyperbase/pull/{{number}}
+          GitHub Pull Request: https://github.com/Hyperbase/blocks-sdk/pull/{{number}}
         method: squash
         name: default
         rebase_fallback: none
@@ -39,7 +39,7 @@ pull_request_rules:
           {{body}}
 
           Emergency merge
-          GitHub Pull Request: https://github.com/Hyperbase/hyperbase/pull/{{number}}
+          GitHub Pull Request: https://github.com/Hyperbase/blocks-sdk/pull/{{number}}
         method: squash
         rebase_fallback: none
 
