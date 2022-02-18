@@ -113,6 +113,7 @@ describe('MockAirtableInterface', () => {
                     isActive: true,
                 },
             ],
+            workspaceId: 'wsptestworkspaceid',
         };
     });
 

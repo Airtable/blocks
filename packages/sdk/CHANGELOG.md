@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.2...HEAD)
 
-No changes.
+-   Add workspace id to base object.
 
 ## [1.10.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.1...@airtable/blocks@1.10.2) - 2022-01-25
 

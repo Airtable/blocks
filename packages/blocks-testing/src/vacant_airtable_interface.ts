@@ -78,6 +78,7 @@ export default class VacantAirtableInterface extends AbstractMockAirtableInterfa
                 billingPlanGrouping: 'pro',
                 appInterface: {},
                 isBlockDevelopmentRestrictionEnabled: false,
+                workspaceId: '',
             },
             intentData: null,
         });

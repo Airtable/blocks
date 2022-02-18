@@ -46,6 +46,7 @@ export interface BaseData {
     // This is optional to avoid making a backwards incompatible change.
     // If unset we default to 50000
     maxRowsPerTable?: number;
+    workspaceId: string;
 }
 
 /** @hidden */

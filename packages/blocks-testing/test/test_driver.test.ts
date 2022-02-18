@@ -210,6 +210,7 @@ describe('TestDriver', () => {
                         isActive: true,
                     },
                 ],
+                workspaceId: 'wsptestworkspaceid',
             },
         };
         testDriver = new TestDriver(fixtureData);

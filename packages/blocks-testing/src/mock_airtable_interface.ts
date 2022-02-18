@@ -201,6 +201,7 @@ export interface FixtureData {
         color?: string;
         tables: Array<TableFixtureData>;
         collaborators: Array<CollaboratorData & {isActive: boolean}>;
+        workspaceId: string;
     };
 }
 
@@ -441,6 +442,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
                 activeCollaboratorIds: fixtureData.base.collaborators
                     .filter(({isActive}) => isActive)
                     .map(({id}) => id),
+                workspaceId: fixtureData.base.workspaceId,
             },
             runContext: {type: BlockRunContextType.DASHBOARD_APP},
         };
