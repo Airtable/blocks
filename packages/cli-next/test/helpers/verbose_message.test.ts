@@ -108,6 +108,7 @@ function testMessages(): {
         [BuildErrorName.BUILD_NODE_MODULES_ABSENT]: [{appRootPath: 'an-adorable-penguin'}],
 
         [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION]: [{}],
+        [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BASE_ONLY]: [{}],
         [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY]: [{}],
 
         [FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER]: [{port: 'asdf'}],

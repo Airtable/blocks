@@ -62,7 +62,9 @@ exports[`verbose_message formats buildNodeModulesAbsent 1`] = `"Please run [36m
 
 exports[`verbose_message formats developmentRunFrameNewBlockInstallation 1`] = `"Switched to a new block installation."`;
 
-exports[`verbose_message formats developmentRunFrameOriginalBlockOnly 1`] = `"You can only run your development block in the original base where it was created."`;
+exports[`verbose_message formats developmentRunFrameOriginalBaseOnly 1`] = `"You can only run your development block in the original base where it was created."`;
+
+exports[`verbose_message formats developmentRunFrameOriginalBlockOnly 1`] = `"blockId mismatch. Make sure you are entering development for the correct block."`;
 
 exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port [4masdf[24m. [4masdf[24m is not a number."`;
 

@@ -216,6 +216,10 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         },
         developmentRunFrameOriginalBlockOnly() {
             return this.util
+                .chalk`blockId mismatch. Make sure you are entering development for the correct block.`;
+        },
+        developmentRunFrameOriginalBaseOnly() {
+            return this.util
                 .chalk`You can only run your development block in the original base where it was created.`;
         },
 
