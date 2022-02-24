@@ -63,7 +63,7 @@ function testMessages(): {
     [key in MessageName]: Omit<SelectMessage<MessageInfo, key>, 'type'>[];
 } {
     return {
-        [AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND]: [{}],
+        [AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND]: [{}],
         [AirtableApiErrorName.AIRTABLE_API_ERROR_STATUS_AND_MESSAGES]: [
             {status: 400, errors: []},
             {

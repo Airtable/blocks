@@ -19,7 +19,7 @@ export enum AirtableApiErrorName {
     AIRTABLE_API_KEY_NAME_INVALID = 'airtableApiKeyNameInvalid',
     AIRTABLE_API_MULTIPLE_ERRORS = 'airtableApiMultipleErrors',
     AIRTABLE_API_WITH_INVALID_API_KEY = 'airtableApiWithInvalidApiKey',
-    AIRTABLE_API_BASE_NOT_FOUND = 'airtableApiBaseNotFound',
+    AIRTABLE_API_BLOCK_NOT_FOUND = 'airtableApiBlockNotFound',
     AIRTABLE_API_UNSUPPORTED_BLOCKS_CLI_VERSION = 'airtableApiUnsupportedBlocksCliVersion',
     AIRTABLE_API_UNEXPECTED_ERROR = 'airtableApiUnexpectedError',
 }
@@ -52,7 +52,7 @@ export interface AirtableApiErrorInvalidApiKey {
 }
 
 export interface AirtableApiErrorBaseNotFound {
-    type: AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND;
+    type: AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND;
 }
 
 export interface AirtableApiErrorUnsupportedBlocksCliVersion {
@@ -151,7 +151,7 @@ function createAirtableApiError({
         };
     } else if (status === 422 && code === ErrorResponseCode.RESOURCE_NOT_FOUND) {
         return {
-            type: AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND,
+            type: AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND,
         };
     } else {
         return {
@@ -224,7 +224,8 @@ export abstract class AirtableApi extends FetchApi {
         }
 
         const {error, errors}: ErrorResponseJson = await response.json();
-        if (Array.isArray(errors)) {
+        // Handles multiple errors
+        if (Array.isArray(errors) && errors.length > 1) {
             if (errors.some(errObj => errObj && typeof errObj.message === 'string')) {
                 throw spawnUserError<AirtableApiErrorInfo>({
                     type: AirtableApiErrorName.AIRTABLE_API_ERROR_STATUS_AND_MESSAGES,
@@ -237,19 +238,29 @@ export abstract class AirtableApi extends FetchApi {
                 type: AirtableApiErrorName.AIRTABLE_API_MULTIPLE_ERRORS,
                 errors: errorMessages,
             });
-        } else if (
-            error &&
-            error.code === ErrorResponseCode.UNSUPPORTED_BLOCKS_CLI_VERSION &&
-            typeof error.message === 'string'
-        ) {
-            throw spawnUserError<AirtableApiErrorInfo>({
-                type: AirtableApiErrorName.AIRTABLE_API_UNSUPPORTED_BLOCKS_CLI_VERSION,
-                serverMessage: error.message,
-            });
-        } else if (error && typeof error.message === 'string') {
-            throw spawnUserError<AirtableApiErrorInfo>(createAirtableApiError({status, error}));
         } else {
-            throw spawnUnexpectedError('Request to Airtable failed with status code %s', status);
+            // Sometime there's only one error in errors array, we handle it as a single error.
+            // The implication here is error in errors array will surpass error field from response if it exists.
+            const errorToThrow = Array.isArray(errors) && errors.length === 1 ? errors[0] : error;
+            if (
+                errorToThrow &&
+                errorToThrow.code === ErrorResponseCode.UNSUPPORTED_BLOCKS_CLI_VERSION &&
+                typeof errorToThrow.message === 'string'
+            ) {
+                throw spawnUserError<AirtableApiErrorInfo>({
+                    type: AirtableApiErrorName.AIRTABLE_API_UNSUPPORTED_BLOCKS_CLI_VERSION,
+                    serverMessage: errorToThrow.message,
+                });
+            } else if (errorToThrow && typeof errorToThrow.message === 'string') {
+                throw spawnUserError<AirtableApiErrorInfo>(
+                    createAirtableApiError({status, error: errorToThrow}),
+                );
+            } else {
+                throw spawnUnexpectedError(
+                    'Request to Airtable failed with status code %s',
+                    status,
+                );
+            }
         }
     }
 }

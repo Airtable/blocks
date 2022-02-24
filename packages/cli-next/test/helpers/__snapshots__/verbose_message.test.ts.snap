@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`verbose_message formats airtableApiBaseNotFound 1`] = `"❌ The base could not be found. Make sure you have access to the base in which this block was created."`;
+exports[`verbose_message formats airtableApiBlockNotFound 1`] = `"❌ The block could not be found. Make sure your API key is correct and that you have access to the block."`;
 
 exports[`verbose_message formats airtableApiErrorStatusAndMessages 1`] = `
 "Airtable server responded with status 400:

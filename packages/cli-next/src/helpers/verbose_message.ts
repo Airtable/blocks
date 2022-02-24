@@ -152,9 +152,9 @@ export type Messages = renderMessage.Messages<MessageInfo>;
 export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {chalk: chalk.Chalk}>(
     {
         // airtable_api.ts
-        airtableApiBaseNotFound() {
+        airtableApiBlockNotFound() {
             return this.util
-                .chalk`❌ The base could not be found. Make sure you have access to the base in which this block was created.`;
+                .chalk`❌ The block could not be found. Make sure your API key is correct and that you have access to the block.`;
         },
         airtableApiErrorStatusAndMessages({status, errors}) {
             return this.util
