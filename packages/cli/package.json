@@ -49,6 +49,7 @@
         "@babel/preset-typescript": "^7.7.0",
         "@deboxsoft/cpx": "^1.5.0",
         "@octokit/rest": "^18.0.10",
+        "@sentry/cli": "1.73.0",
         "archiver": "5.0.2",
         "babelify": "^10.0.0",
         "body-parser": "^1.18.3",

@@ -68,6 +68,7 @@ describe('BlockServer', function() {
                 enableLiveSdkReload: false,
                 transpileForAllBrowsers: true,
                 uploadSourceMapsToRollbar: false,
+                uploadSourceMapsToSentry: false,
             });
 
             blockServer = new BlockServer({

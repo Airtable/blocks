@@ -98,6 +98,7 @@ class BlockBuilder {
     _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
     _ignoredGlobPatternsFromBlockJson: Array<string>;
     _uploadSourceMapsToRollbar: boolean;
+    _uploadSourceMapsToSentry: boolean;
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
@@ -109,6 +110,7 @@ class BlockBuilder {
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
         uploadSourceMapsToRollbar: boolean,
+        uploadSourceMapsToSentry: boolean,
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
@@ -119,6 +121,7 @@ class BlockBuilder {
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || true;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._uploadSourceMapsToRollbar = args.uploadSourceMapsToRollbar;
+        this._uploadSourceMapsToSentry = args.uploadSourceMapsToSentry;
         this._blockDirPath = getBlockDirPath();
 
         this._initialBuildResolveIfExists = null;
@@ -159,6 +162,7 @@ class BlockBuilder {
             remoteJson: args.remoteJson,
             transpileForAllBrowsers: args.transpileForAllBrowsers,
             uploadSourceMapsToRollbar: false,
+            uploadSourceMapsToSentry: false,
         });
     }
     static async createReleaseBlockBuilderAsync(args: {
@@ -168,6 +172,7 @@ class BlockBuilder {
         enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
         uploadSourceMapsToRollbar: boolean,
+        uploadSourceMapsToSentry: boolean,
     }): Promise<BlockBuilder> {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
@@ -180,6 +185,7 @@ class BlockBuilder {
             enableLiveSdkReload: false,
             backendSdkBaseUrl: args.backendSdkBaseUrl,
             uploadSourceMapsToRollbar: args.uploadSourceMapsToRollbar,
+            uploadSourceMapsToSentry: args.uploadSourceMapsToSentry,
         });
     }
     static getBlockBuilderError(
@@ -462,7 +468,7 @@ class BlockBuilder {
                 nodeEnv = 'production';
                 // Debug is needed to keep source maps if we're uploading them
                 this._browserify = browserify(clientWrapperFilePath, {
-                    debug: this._uploadSourceMapsToRollbar,
+                    debug: this._uploadSourceMapsToRollbar || this._uploadSourceMapsToSentry,
                 });
                 break;
 
@@ -981,9 +987,7 @@ class BlockBuilder {
             this._outputBuildArtifactsDirPath,
             blockCliConfigSettings.BUNDLE_FILE_NAME,
         );
-        const frontendBundleSourceMapPath = this._uploadSourceMapsToRollbar
-            ? frontendBundlePath + '.map'
-            : null;
+
         const frontendBundleFileBuffer = await fsUtils.readFileIfExistsAsync(frontendBundlePath);
         if (frontendBundleFileBuffer === null) {
             return {err: new Error('bundle file does not exist!')};
@@ -1003,7 +1007,10 @@ class BlockBuilder {
             frontendBundlePath,
             minifiedFrontendBundleFileResult.value.code,
         );
-        if (this._uploadSourceMapsToRollbar) {
+
+        let frontendBundleSourceMapPath = null;
+        if (this._uploadSourceMapsToRollbar || this._uploadSourceMapsToSentry) {
+            frontendBundleSourceMapPath = frontendBundlePath + '.map';
             await fsUtils.writeFileAsync(
                 frontendBundleSourceMapPath,
                 minifiedFrontendBundleFileResult.value.map,

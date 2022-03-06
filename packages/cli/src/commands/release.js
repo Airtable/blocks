@@ -11,6 +11,7 @@ const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_r
 const fsUtils = require('../helpers/fs_utils');
 const invariant = require('invariant');
 const request = require('postman-request');
+const SentryCli = require('@sentry/cli');
 const FormData = require('form-data');
 const {promisify} = require('util');
 request.postAsync = promisify(request.post);
@@ -23,6 +24,7 @@ import {getBlockDirPath} from '../helpers/get_block_dir_path';
 import type {RemoteJson} from '../types/remote_json_type';
 import {V2_BLOCKS_BASE_ID} from '../config/block_cli_config_settings';
 import inquirer from 'inquirer';
+import path from 'path';
 
 type BuildId = string;
 type DeployId = string;
@@ -77,7 +79,9 @@ async function _uploadViaSignedPostAsync(
 }
 
 async function _uploadSourceMapToRollbarAsync(
+    // Path to .js.map
     frontendBundleSourceMapPath: string,
+    // This is path in S3, not API key.
     s3BundleKey: string,
     gitHash: string,
     bundleCdn: string,
@@ -112,6 +116,39 @@ async function _uploadSourceMapToRollbarAsync(
         throw new Error(body);
     }
     return body;
+}
+
+async function _uploadSourceMapToSentryAsync(
+    // Path to .js
+    frontendBundlePath: string,
+    // Path to .js.map
+    frontendBundleSourceMapPath: string,
+    // This is path in S3, not API key. (Currently this function strip filename and use only directory portion.)
+    s3BundleKey: string,
+    gitHash: string,
+    bundleCdn: string,
+): Promise<void> {
+    const authToken = process.env.BLOCKS_CLI_SENTRY_AUTH_TOKEN;
+    const org = process.env.BLOCKS_CLI_SENTRY_ORG;
+    const project = process.env.BLOCKS_CLI_SENTRY_PROJECT;
+    invariant(
+        typeof authToken === 'string',
+        'expected BLOCKS_CLI_SENTRY_AUTH_TOKEN env variable to be string. See go/blocks-cli-sentry for more details.',
+    );
+    invariant(
+        typeof org === 'string',
+        'expected BLOCKS_CLI_SENTRY_ORG env variable to be string. See go/blocks-cli-sentry for more details.',
+    );
+    invariant(
+        typeof project === 'string',
+        'expected BLOCKS_CLI_SENTRY_PROJECT env variable to be string. See go/blocks-cli-sentry for more details.',
+    );
+    const sentryClient = new SentryCli(null, {authToken, org, project, dist: gitHash});
+    await sentryClient.releases.uploadSourceMaps(gitHash, {
+        include: [frontendBundlePath, frontendBundleSourceMapPath],
+        urlPrefix: `${bundleCdn}/${path.dirname(s3BundleKey)}`,
+        validate: true,
+    });
 }
 
 async function setTimeoutAsync(timeoutMs: number): Promise<void> {
@@ -150,6 +187,7 @@ async function _buildAndDeployAsync(
 ): Promise<{|
     buildId: BuildId,
     deployId: DeployId | null,
+    frontendBundlePath: string,
     frontendBundleSourceMapPath: string | null,
     s3BundleKey: string | null,
 |}> {
@@ -213,6 +251,7 @@ Failed to build the block code!`);
     return {
         buildId,
         deployId,
+        frontendBundlePath,
         frontendBundleSourceMapPath,
         s3BundleKey: frontendBundleS3UploadInfo.key,
     };
@@ -244,6 +283,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     invariant(
         typeof uploadSourceMapsToRollbar === 'boolean',
         'expects uploadSourceMapsToRollbar to be a boolean',
+    );
+    const uploadSourceMapsToSentry = argv.uploadSourceMapsToSentry || false;
+    invariant(
+        typeof uploadSourceMapsToSentry === 'boolean',
+        'expects uploadSourceMapsToSentry to be a boolean',
     );
 
     const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
@@ -287,6 +331,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         enableIsolatedBuild,
         backendSdkBaseUrl,
         uploadSourceMapsToRollbar,
+        uploadSourceMapsToSentry,
     });
 
     // Also parse the original remote json in order to log metrics
@@ -306,11 +351,12 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         const {
             buildId,
             deployId,
+            frontendBundlePath,
             frontendBundleSourceMapPath,
             s3BundleKey,
         } = await _buildAndDeployAsync(apiClient, blockBuilder, originalRemoteJson, isV2Block);
 
-        if (uploadSourceMapsToRollbar) {
+        if (uploadSourceMapsToRollbar || uploadSourceMapsToSentry) {
             const gitHash = await getGitHashAsync(getBlockDirPath());
             const bundleCdn = remoteJson.bundleCdn;
             // These are all required when uploading source maps
@@ -321,13 +367,25 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             invariant(typeof s3BundleKey === 'string', 'expected s3BundleKey to be string');
             invariant(typeof gitHash === 'string', 'expected gitHash to be string');
             invariant(typeof bundleCdn === 'string', 'expected bundleCdn to be string');
-            console.log(`uploading source maps to rollbar for ${s3BundleKey}`);
-            await _uploadSourceMapToRollbarAsync(
-                frontendBundleSourceMapPath,
-                s3BundleKey,
-                gitHash,
-                bundleCdn,
-            );
+            if (uploadSourceMapsToRollbar) {
+                console.log(`uploading source maps to rollbar for ${s3BundleKey}`);
+                await _uploadSourceMapToRollbarAsync(
+                    frontendBundleSourceMapPath,
+                    s3BundleKey,
+                    gitHash,
+                    bundleCdn,
+                );
+            }
+            if (uploadSourceMapsToSentry) {
+                console.log(`uploading source maps to sentry for ${s3BundleKey}`);
+                await _uploadSourceMapToSentryAsync(
+                    frontendBundlePath,
+                    frontendBundleSourceMapPath,
+                    s3BundleKey,
+                    gitHash,
+                    bundleCdn,
+                );
+            }
         }
         console.log('releasing');
         if (isV2Block) {
