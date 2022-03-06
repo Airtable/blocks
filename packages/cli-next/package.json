@@ -17,6 +17,7 @@
         "@oclif/config": "^1.17.0",
         "@oclif/plugin-help": "^3.2.0",
         "@octokit/rest": "^18.2.0",
+        "@sentry/cli": "1.73.0",
         "@types/npm": "^2.0.31",
         "@types/tar": "^4.0.4",
         "@types/webpack-sources": "^2.1.0",
