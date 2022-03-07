@@ -103,7 +103,7 @@ describe('Mutations', () => {
                         },
                         description: null,
                     });
-                }).toThrow("Can't create field: must provide non-empty name");
+                }).toThrow("Can't create or update field: must provide non-empty name");
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -117,7 +117,7 @@ describe('Mutations', () => {
                         description: null,
                     });
                 }).toThrow(
-                    "Can't create field: name 'really long field name wow' exceeds maximum length of 20 characters",
+                    "Can't create or update field: name 'really long field name wow' exceeds maximum length of 20 characters",
                 );
 
                 expect(() => {
@@ -131,7 +131,7 @@ describe('Mutations', () => {
                         },
                         description: null,
                     });
-                }).toThrow("Can't create field: field with name 'name' already exists");
+                }).toThrow("Can't create or update field: field with name 'name' already exists");
             });
 
             it('validates field config', () => {
@@ -427,6 +427,101 @@ describe('Mutations', () => {
                     tableId: 'tblTasks',
                     id: 'fldTaskCompleted',
                     description: 'my cool field description',
+                });
+            });
+        });
+
+        describe('UPDATE_SINGLE_FIELD_NAME', () => {
+            it('checks that the table exists', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblNonExistentTableId',
+                        id: 'fldNonExistentFieldId',
+                        name: 'new name',
+                    });
+                }).toThrow("Can't update field: No table with id tblNonExistentTableId exists");
+            });
+
+            it('checks that the field exists', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldNonExistentFieldId',
+                        name: 'new name',
+                    });
+                }).toThrow("Can't update field: No field with id fldNonExistentFieldId exists");
+            });
+
+            it('checks the field name', () => {
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskCompleted',
+                        name: '',
+                    });
+                }).toThrow("Can't create or update field: must provide non-empty name");
+
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskCompleted',
+                        name: 'really long field name wow',
+                    });
+                }).toThrow(
+                    "Can't create or update field: name 'really long field name wow' exceeds maximum length of 20 characters",
+                );
+
+                // Doesn't allow to update name same as other existing column.
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskCompleted',
+                        name: 'Notes',
+                    });
+                }).toThrow("Can't create or update field: field with name 'Notes' already exists");
+
+                // Doesn't allow to update name same(with case difference) as other existing column.
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskCompleted',
+                        name: 'nOtEs',
+                    });
+                }).toThrow("Can't create or update field: field with name 'nOtEs' already exists");
+
+                // Exact same name will result in no-op, no exception will be thrown.
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskName',
+                        name: 'Name',
+                    });
+                }).not.toThrow();
+
+                // Allows name update to target field with only case difference.
+                expect(() => {
+                    mutations._assertMutationIsValid({
+                        type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                        tableId: 'tblTasks',
+                        id: 'fldTaskName',
+                        name: 'nAmE',
+                    });
+                }).not.toThrow();
+            });
+
+            it('successfully returns when all criteria pass', () => {
+                mutations._assertMutationIsValid({
+                    type: MutationTypes.UPDATE_SINGLE_FIELD_NAME,
+                    tableId: 'tblTasks',
+                    id: 'fldTaskCompleted',
+                    name: 'ok name',
                 });
             });
         });
