@@ -433,10 +433,16 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /** @internal */
     _onLinkedRecordIdsChange() {
-        invariant(this.isValid, 'watch key change event whilst invalid');
-        if (!this.isDataLoaded) {
+        if (!this.isDataLoaded || this._record.isDeleted) {
+            //TODO(jamesmoody-at): Adding this._dataOrNullIfDeleted as an exit condition here is a temporary fix to address an issue where
+            // we are not reseting isValid to true while restoring deleted records that contain linked record fields. It seems the only way
+            // to do this is by creating a new LinkRecordsQueryResult instance but it seems like we might be reusing the original instance
+            // that we've already set isValid to false with. We'll need to do more investigating to figure out the right way to restore these
+            // records while keeping the behavior of isValid consistent
             return;
         }
+
+        invariant(this.isValid, 'watch key change event whilst invalid');
 
         this._invalidateComputedData();
 
@@ -531,11 +537,17 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /** @internal */
     _onOriginCellValueChange() {
-        invariant(this.isValid, 'watch key change event whilst invalid');
-
-        if (!this.isDataLoaded) {
+        if (!this.isDataLoaded || this._field.isDeleted) {
+            //TODO(jamesmoody-at): Adding this._dataOrNullIfDeleted as an exit condition here is a temporary fix to address an issue where
+            // we are not resetting isValid to true while restoring deleted records that contain linked record fields. It seems the only way
+            // to do this is by creating a new LinkRecordsQueryResult instance but it seems like we might be reusing the original instance
+            // that we've already set isValid to false with. We'll need to do more investigating to figure out the right way to restore these
+            // records while keeping the behavior of isValid consistent
             return;
         }
+
+        invariant(this.isValid, 'watch key change event whilst invalid');
+
         // when the origin cell value (listing all the linked records) changes,
         // invalidate all the data we have stored - we need to completely
         // regenerate it
