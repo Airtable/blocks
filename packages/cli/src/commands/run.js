@@ -42,6 +42,17 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expect blockDevCredentialsPath to be null or a string',
     );
     const environment = argv.testing ? Environments.TESTING : Environments.DEVELOPMENT;
+    const shouldBypassSameBaseAndBlockChecks =
+        argv.dangerouslyBypassSameBaseAndBlockChecks || false;
+    invariant(
+        typeof shouldBypassSameBaseAndBlockChecks === 'boolean',
+        'expects shouldBypassSameBaseAndBlockChecks to be a boolean',
+    );
+    if (shouldBypassSameBaseAndBlockChecks) {
+        console.log(
+            '**Warning**: dangerouslyBypassSameBaseAndBlockChecks may lead to configuration corruption if used for the wrong block. Proceed at your own risk',
+        );
+    }
 
     if (remoteName !== null) {
         outputRemotesBetaWarning();
@@ -84,6 +95,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockBuilder,
         backendSdkBaseUrl,
         shouldBackendSdkBypassCache,
+        shouldBypassSameBaseAndBlockChecks,
         blockDevCredentialsPath,
         environment,
     });

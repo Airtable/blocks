@@ -53,12 +53,14 @@ class BlockServer {
     _blockBuilder: BlockBuilder;
     _environment: Environment;
     _backenedProcessManager: BlockServerBackendProcessManager;
+    _shouldBypassSameBaseAndBlockChecks: boolean;
 
     constructor(args: {
         blockBuilder: BlockBuilder,
         apiKey: string,
         blockDevCredentialsPath: string | null,
         shouldBackendSdkBypassCache: boolean,
+        shouldBypassSameBaseAndBlockChecks: boolean,
         backendSdkBaseUrl?: string | null,
         environment: Environment,
     }) {
@@ -69,6 +71,7 @@ class BlockServer {
             backendSdkBaseUrl,
             environment,
             shouldBackendSdkBypassCache,
+            shouldBypassSameBaseAndBlockChecks,
         } = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
@@ -81,6 +84,7 @@ class BlockServer {
         this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
         this._environment = environment;
+        this._shouldBypassSameBaseAndBlockChecks = shouldBypassSameBaseAndBlockChecks;
         this._backenedProcessManager = new BlockServerBackendProcessManager({
             blockJson: this._blockJson,
             remoteJson: this._remoteJson,
@@ -240,13 +244,19 @@ class BlockServer {
                         error: 'BAD_REQUEST',
                         message: 'Invalid request body',
                     });
-                } else if (req.body.applicationId !== this._remoteJson.baseId) {
+                } else if (
+                    !this._shouldBypassSameBaseAndBlockChecks &&
+                    req.body.applicationId !== this._remoteJson.baseId
+                ) {
                     res.status(403).send({
                         error: 'FORBIDDEN',
                         message:
                             'You can only run your development block in the original base where it was created.',
                     });
-                } else if (req.body.blockId !== this._remoteJson.blockId) {
+                } else if (
+                    !this._shouldBypassSameBaseAndBlockChecks &&
+                    req.body.blockId !== this._remoteJson.blockId
+                ) {
                     res.status(403).send({
                         error: 'FORBIDDEN',
                         message:

@@ -75,6 +75,7 @@ describe('BlockServer', function() {
                 blockBuilder: blockBuilder,
                 apiKey: 'key123',
                 shouldBackendSdkBypassCache: false,
+                shouldBypassSameBaseAndBlockChecks: false,
                 blockDevCredentialsPath: null,
                 environment: Environments.DEVELOPMENT,
             });
