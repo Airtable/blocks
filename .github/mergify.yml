@@ -13,7 +13,6 @@ pull_request_rules:
         - check-success=jenkins/blocks-sdk-github
     actions:
       queue:
-        commit_message: default
         commit_message_template: |
           {{title}} (#{{number}})
           {{body}}
@@ -33,7 +32,6 @@ pull_request_rules:
         - label=emergency-mergeme
     actions:
       merge:
-        commit_message: default
         commit_message_template: |
           {{title}} (#{{number}})
           {{body}}
