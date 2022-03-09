@@ -349,6 +349,7 @@ export default class Release extends AirtableCommand {
         await airtableApi.createReleaseAsync({buildId: build.buildId, developerComment});
 
         cli.action.stop();
+        this.log('✅ Successfully released block!');
         this._teardownAction = null;
     }
 

@@ -1,6 +1,7 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 import clipboardy from 'clipboardy';
+import chalk from 'chalk';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
@@ -291,7 +292,7 @@ export default class Run extends AirtableCommand {
         this._devServer = devProxyServer;
         debug('proxying to frontend bundler (http) %s', bundlerPort);
 
-        this.log(`Server listening at https://localhost:${secureServerPort}`);
+        this.log(chalk.bold(`✅ Server listening at https://localhost:${secureServerPort}`));
 
         // Bind to the signal prior to writing to the system clipboard. This
         // ensures that the system receives signals that are sent while it is
