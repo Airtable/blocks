@@ -18,6 +18,7 @@ import {
     RemoteCommandErrorName,
     RemoteCommandMessageName,
     RemoteConfigErrorName,
+    RunCommandMessageName,
     S3ApiErrorName,
     SubmitCommandErrorName,
     SubmitCommandMessageName,
@@ -63,7 +64,7 @@ function testMessages(): {
     [key in MessageName]: Omit<SelectMessage<MessageInfo, key>, 'type'>[];
 } {
     return {
-        [AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND]: [{}],
+        [AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND]: [{}],
         [AirtableApiErrorName.AIRTABLE_API_ERROR_STATUS_AND_MESSAGES]: [
             {status: 400, errors: []},
             {
@@ -105,9 +106,11 @@ function testMessages(): {
         [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_FORMAT]: [{}],
 
         [BuildErrorName.BUILD_APP_CONFIG_MODIFIED]: [{}],
+        [BuildErrorName.BUILD_BLOCK_DIRECTORY_NOT_FOUND]: [{}],
         [BuildErrorName.BUILD_NODE_MODULES_ABSENT]: [{appRootPath: 'an-adorable-penguin'}],
 
         [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION]: [{}],
+        [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BASE_ONLY]: [{}],
         [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY]: [{}],
 
         [FindPortErrorName.FIND_PORT_ASYNC_PORT_IS_NOT_NUMBER]: [{port: 'asdf'}],
@@ -169,6 +172,11 @@ function testMessages(): {
             },
         ],
 
+        [RunCommandMessageName.RUN_COMMAND_INSTALLING_LOCAL_SDK]: [
+            {
+                sdkPath: 'path',
+            },
+        ],
         [S3ApiErrorName.S3_API_BUNDLE_TOO_LARGE]: [{}],
         [S3ApiErrorName.S3_API_FAILED]: [{}],
 

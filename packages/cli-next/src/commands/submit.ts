@@ -13,6 +13,7 @@ import {
     V2_BLOCKS_BASE_ID,
 } from '../settings';
 
+import {AppBundlerContext, resolveBundlerModuleAsync} from '../manager/bundler';
 import {createSubmitTaskAsync, SubmitTaskProducer} from '../manager/submit';
 import {SubmitTaskConsumerAdapter} from '../manager/submit_adapter';
 
@@ -36,6 +37,7 @@ import {spawnUserError} from '../helpers/error_utils';
 import {AirtableLegacyBlockApi} from '../helpers/airtable_legacy_block_api';
 import {AirtableBlockV2Api} from '../helpers/airtable_block_v2_api';
 import {AirtableApi} from '../helpers/airtable_api';
+import {resolveBuiltinModuleAsync} from '../helpers/task';
 
 const debug = _debug('block-cli:command:submit');
 
@@ -109,12 +111,20 @@ export default class Submit extends AirtableCommand {
         const userAgent = await createUserAgentAsync(sys);
         debug('connecting to Airtable with user agent: %s', userAgent);
 
-        const producer = new SubmitProducer();
-        const task = await createSubmitTaskAsync(
+        const bundlerContext: AppBundlerContext = {
+            module: appConfig.bundler?.module,
+            workingdir: appRootPath,
+        };
+        const bundlerModule = await resolveBundlerModuleAsync(sys, bundlerContext);
+        const defaultBundlerModule = await resolveBuiltinModuleAsync(
             sys,
-            {module: appConfig.bundler?.module, workingdir: appRootPath},
-            producer,
+            __dirname,
+            '..',
+            'bundler',
         );
+
+        const producer = new SubmitProducer();
+        const task = await createSubmitTaskAsync(sys, bundlerContext, producer);
         this._task = task;
         debug('initialized task');
 
@@ -158,7 +168,14 @@ export default class Submit extends AirtableCommand {
         const projectItems = await projectFilesAsync(sys, appRootPath);
         debug('project has %d descendant files', projectItems.length);
 
-        const uniqueItems = [...projectItems, ...dependencies.files].reduce((carry, file) => {
+        const customBundlerModules = bundlerModule === defaultBundlerModule ? [] : [bundlerModule];
+        debug('using custom bundler %s', bundlerModule);
+
+        const uniqueItems = [
+            ...projectItems,
+            ...dependencies.files,
+            ...customBundlerModules,
+        ].reduce((carry, file) => {
             if (!carry.includes(file)) {
                 carry.push(file);
             }

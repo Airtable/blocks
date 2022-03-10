@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`verbose_message formats airtableApiBaseNotFound 1`] = `"❌ The base could not be found. Make sure you have access to the base in which this block was created."`;
+exports[`verbose_message formats airtableApiBlockNotFound 1`] = `"❌ The block could not be found. Make sure your API key is correct and that you have access to the block."`;
 
 exports[`verbose_message formats airtableApiErrorStatusAndMessages 1`] = `
 "Airtable server responded with status 400:
@@ -58,11 +58,15 @@ exports[`verbose_message formats blockIdentifierInvalidFormat 1`] = `"Block iden
 
 exports[`verbose_message formats buildAppConfigModified 1`] = `"Detected changes to 'block.json' file. Please restart [36m[1mblock run[22m[39m."`;
 
+exports[`verbose_message formats buildBlockDirectoryNotFound 1`] = `"Block directory with block.json file not found"`;
+
 exports[`verbose_message formats buildNodeModulesAbsent 1`] = `"Please run [36m[1mnpm install[22m[39m in an-adorable-penguin to install packages before running."`;
 
 exports[`verbose_message formats developmentRunFrameNewBlockInstallation 1`] = `"Switched to a new block installation."`;
 
-exports[`verbose_message formats developmentRunFrameOriginalBlockOnly 1`] = `"You can only run your development block in the original base where it was created."`;
+exports[`verbose_message formats developmentRunFrameOriginalBaseOnly 1`] = `"You can only run your development block in the original base where it was created."`;
+
+exports[`verbose_message formats developmentRunFrameOriginalBlockOnly 1`] = `"blockId mismatch. Make sure you are entering development for the correct block."`;
 
 exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port [4masdf[24m. [4masdf[24m is not a number."`;
 
@@ -113,6 +117,8 @@ exports[`verbose_message formats remoteCommandRemovedExisting 2`] = `"✅ Succes
 exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
 
 exports[`verbose_message formats remoteConfigIsNotValid 2`] = `"❌ ../.block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats runCommandInstallingLocalSdk 1`] = `"Installing local SDK from path..."`;
 
 exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not upload bundle. The bundle's size is too big."`;
 

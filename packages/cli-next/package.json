@@ -1,45 +1,37 @@
 {
-    "name": "@airtable/blocks-cli-next",
+    "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "2.0.0-beta.4",
+    "version": "2.0.0-beta.5",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "bin": {
         "block": "bin/run"
     },
     "dependencies": {
-        "@babel/core": "^7.12.13",
-        "@babel/plugin-transform-flow-strip-types": "^7.13.0",
-        "@babel/preset-env": "^7.12.13",
-        "@babel/preset-react": "^7.12.13",
-        "@babel/preset-typescript": "^7.12.13",
+        "@airtable/blocks-webpack-bundler": "*",
         "@oclif/command": "^1.8.0",
         "@oclif/config": "^1.17.0",
         "@oclif/plugin-help": "^3.2.0",
         "@octokit/rest": "^18.2.0",
+        "@sentry/cli": "1.73.0",
+        "@types/cpx": "^1.5.2",
         "@types/npm": "^2.0.31",
         "@types/tar": "^4.0.4",
-        "@types/webpack-sources": "^2.1.0",
         "archiver": "^5.1.0",
-        "babel-loader": "^8.2.2",
         "chalk": "^4.1.0",
         "cli-ux": "^5.5.1",
         "clipboardy": "^2.3.0",
+        "cpx": "^1.5.0",
         "cross-spawn": "^7.0.3",
-        "css-loader": "^6.3.0",
         "debug": "^4.2.0",
         "express": "^4.17.1",
         "form-data": "^3.0.0",
         "graceful-fs": "^4.2.4",
         "http-proxy-middleware": "^1.0.6",
         "strip-ansi": "^6.0.0",
-        "style-loader": "^3.3.0",
         "tar": "^6.1.0",
-        "ts-loader": "^8.0.11",
         "tslib": "^1.14.1",
-        "typescript": "3.7.5",
-        "webpack": "^5.9.0",
-        "webpack-dev-server": "^3.11.0"
+        "typescript": "3.7.5"
     },
     "devDependencies": {
         "@airtable/eslint-plugin-blocks": "^1.0.2",
@@ -56,7 +48,6 @@
         "@types/node": "^14.14.7",
         "@types/node-fetch": "^2.5.7",
         "@types/react": "^17.0.1",
-        "@types/webpack-dev-server": "^3.11.1",
         "@typescript-eslint/eslint-plugin": "^4.9.1",
         "@typescript-eslint/parser": "^4.9.1",
         "chai": "^4.3.0",
@@ -96,9 +87,10 @@
         ]
     },
     "scripts": {
+        "build": "rm -rf lib && rm -f tsconfig.tsbuildinfo && tsc --build",
         "ci": "yarn test",
         "lint": "eslint . --ext .ts --config .eslintrc.js",
-        "pack:typescript": "rm -rf lib && rm -f tsconfig.tsbuildinfo && tsc --build",
+        "pack:typescript": "yarn build",
         "postpack": "rm -f oclif.manifest.json",
         "prepack": "yarn install && yarn run pack:typescript && oclif-dev manifest && oclif-dev readme",
         "test": "yarn lint && yarn test:types && yarn test:unit",
@@ -121,7 +113,7 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn run test",
-            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version})"
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-cli@${version}"
         },
         "publishConfig": {
             "access": "public"

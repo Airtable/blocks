@@ -4,6 +4,7 @@ import * as originalFs from 'fs';
 import {createFsFromVolume, Volume} from 'memfs';
 
 import {System} from '../../src/helpers/system';
+import {spawnUnexpectedError} from '../../src/helpers/error_utils';
 import {asyncify, CallbackFS} from '../../src/helpers/fs_async';
 import {StreamFS, streamify} from '../../src/helpers/fs_stream';
 
@@ -43,11 +44,12 @@ class MockProcess implements SystemProcess {
     }
 }
 
-export function createSystem({volume}: {volume: SystemVolume}) {
+export function createSystem({volume}: {volume: SystemVolume}): System {
     const path = pathModule.posix;
     const volumeFs = createFsFromVolume(volume);
     const fs = {
         ...asyncify((volumeFs as unknown) as CallbackFS),
+        existsSync: (volumeFs.existsSync as unknown) as typeof originalFs.existsSync,
         unwatchFile: (volumeFs.unwatchFile as unknown) as typeof originalFs.unwatchFile,
         watch: (volumeFs.watch as unknown) as typeof originalFs.watch,
         watchFile: (volumeFs.watchFile as unknown) as typeof originalFs.watchFile,
@@ -55,10 +57,19 @@ export function createSystem({volume}: {volume: SystemVolume}) {
     };
     const os = new MockOS();
     const process = new MockProcess();
+    const requireResolve = (id: string, options?: {paths?: string[]}) => {
+        const filePath = options?.paths ? path.resolve(...options.paths, id) : id;
+        if (!volumeFs.existsSync(filePath)) {
+            throw spawnUnexpectedError('No such file %s', filePath);
+        }
+        return filePath;
+    };
+    requireResolve.paths = () => null;
     return {
         fs,
         os,
         path,
         process,
+        require: {resolve: requireResolve},
     };
 }

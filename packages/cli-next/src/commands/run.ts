@@ -1,6 +1,7 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 import clipboardy from 'clipboardy';
+import chalk from 'chalk';
 
 import AirtableCommand from '../helpers/airtable_command';
 import {APP_ROOT_TEMPORARY_DIR} from '../settings';
@@ -8,6 +9,7 @@ import {createRunTaskAsync, RunTaskProducer} from '../manager/run';
 import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
 
 import {findPortAsync} from '../helpers/find_port_async';
+import {LocalSdkBuilder} from '../helpers/local_sdk_builder';
 import {
     createServerAsync,
     DevelopmentProxyServerInterface,
@@ -28,6 +30,7 @@ import {RunTaskConsumerAdapter} from '../manager/run_adapter';
 import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {unwrapResultFunctor} from '../helpers/result';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
+import {RunCommandMessageName} from '../helpers/run_messages';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {
     DevelopmentRunFrameMessageName,
@@ -84,6 +87,10 @@ export default class Run extends AirtableCommand {
             description: '[Beta] Configure which remote to use',
             parse: unwrapResultFunctor(validateRemoteName),
         }),
+
+        'sdk-repo': commandFlags.string({
+            hidden: true,
+        }),
     };
 
     async runAsync() {
@@ -122,6 +129,15 @@ export default class Run extends AirtableCommand {
 
         if (flags.remote) {
             this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
+        }
+
+        const sdkPath = flags['sdk-repo'];
+        if (sdkPath) {
+            this.logMessage({
+                type: RunCommandMessageName.RUN_COMMAND_INSTALLING_LOCAL_SDK,
+                sdkPath: sdkPath,
+            });
+            await new LocalSdkBuilder(this.system, sdkPath).startAsync();
         }
 
         const remoteConfigPath = await findRemoteConfigPathByNameAsync(
@@ -279,7 +295,7 @@ export default class Run extends AirtableCommand {
         this._devServer = devProxyServer;
         debug('proxying to frontend bundler (http) %s', bundlerPort);
 
-        this.log(`Server listening at https://localhost:${secureServerPort}`);
+        this.log(chalk.bold(`✅ Server listening at https://localhost:${secureServerPort}`));
 
         const sigintPromise = new Promise<void>(resolve => {
             process.once('SIGINT', () => {

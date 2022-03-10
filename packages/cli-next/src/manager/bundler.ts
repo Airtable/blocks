@@ -9,17 +9,13 @@ export interface AppBundlerContext {
 }
 
 export async function resolveBundlerModuleAsync(sys: System, bundlerContext?: AppBundlerContext) {
-    const builtinTaskPath = await resolveBuiltinModuleAsync(
-        sys,
-        __dirname,
-        '..',
-        'bundler',
-        'bundler',
-    );
+    const builtinTaskPath = await resolveBuiltinModuleAsync(sys, __dirname, '..', 'bundler');
 
     let entryPath = builtinTaskPath;
     if (bundlerContext?.module && bundlerContext?.module !== 'builtin') {
-        entryPath = require.resolve(bundlerContext.module, {paths: [bundlerContext.workingdir]});
+        entryPath = sys.require.resolve(bundlerContext.module, {
+            paths: [bundlerContext.workingdir],
+        });
     }
 
     return entryPath;

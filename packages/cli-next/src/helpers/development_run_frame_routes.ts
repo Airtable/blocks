@@ -8,8 +8,13 @@ import {invariant, spawnUnexpectedError} from './error_utils';
 import {RenderMessage} from './render_message';
 
 export enum DevelopmentRunFrameMessageName {
+    DEVELOPMENT_RUN_FRAME_ORIGINAL_BASE_ONLY = 'developmentRunFrameOriginalBaseOnly',
     DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY = 'developmentRunFrameOriginalBlockOnly',
     DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION = 'developmentRunFrameNewBlockInstallation',
+}
+
+export interface DevelopmentRunFrameOriginalBaseOnlyMessage {
+    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BASE_ONLY;
 }
 
 export interface DevelopmentRunFrameOriginalBlockOnlyMessage {
@@ -21,6 +26,7 @@ export interface DevelopmentRunFrameNewBlockInstallationMessage {
 }
 
 export type DevelopmentRunFrameMessageInfo =
+    | DevelopmentRunFrameOriginalBaseOnlyMessage
     | DevelopmentRunFrameOriginalBlockOnlyMessage
     | DevelopmentRunFrameNewBlockInstallationMessage;
 
@@ -144,7 +150,7 @@ export function createRunFrameRoutes({
             res.status(403).send({
                 error: 'FORBIDDEN',
                 message: messages.renderMessage({
-                    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BLOCK_ONLY,
+                    type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_ORIGINAL_BASE_ONLY,
                 }),
             });
         } else if (req.body.blockId !== remoteConfig.blockId) {

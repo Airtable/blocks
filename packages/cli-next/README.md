@@ -27,7 +27,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.0-beta.4 darwin-x64 node-v12.20.1
+@airtable/blocks-cli/2.0.0-beta.5 darwin-x64 node-v12.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -231,7 +231,20 @@ directory to be bundled. Those other directories can include npm imports based o
 
 [More details and an example can be found here.](https://github.com/Airtable/apps-shared-code)
 
+## Customizing the webpack config
+
+By default, the CLI uses webpack to bundle your code. Out of the box, it supports using plain
+JavaScript or TypeScript and styling via CSS files. If you want to customize the webpack config
+further, you can do so by installing the `@airtable/blocks-webpack-bundler` package. For more
+information about installing this package and customizing the webpack config, see the README for the
+`@airtable/blocks-webpack-bundler` package at
+[packages/webpack-bundler/README.md](https://github.com/Airtable/blocks/tree/master/packages/webpack-bundler/README.md).
+
 ## Using a custom bundler
+
+If customizing the webpack config as described above does not solve your use case, it is also
+possible to replace the bundler entirely with a custom implementation. This is will require a
+significant amount of work.
 
 Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns app
 source code into publishable artifacts. Your custom bundler's output must conform to the Airtable

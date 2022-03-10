@@ -187,13 +187,13 @@ describe('release', () => {
             airtableLegacyBlockApiStub({
                 async createBuildAsync(): Promise<CreateBuildResponseJson> {
                     throw spawnUserError<AirtableApiErrorInfo>({
-                        type: AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND,
+                        type: AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND,
                     });
                 },
             }),
         )
         .command(['release'])
-        .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BASE_NOT_FOUND))
+        .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND))
         .it('throws base not found error');
 
     testReleaseCommand

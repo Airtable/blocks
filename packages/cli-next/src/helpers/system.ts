@@ -30,11 +30,16 @@ export interface SystemOS {
     platform: typeof platform;
 }
 
+export interface SystemRequire {
+    resolve: RequireResolve;
+}
+
 export interface System {
     fs: AsyncFS & NonAsyncFs & StreamFS;
     path: SystemPath;
     process: SystemProcess;
     os: SystemOS;
+    require: SystemRequire;
 }
 
 export function createSystem({
@@ -48,5 +53,6 @@ export function createSystem({
         path,
         process,
         os,
+        require: {resolve: require.resolve},
     });
 }

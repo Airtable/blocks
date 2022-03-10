@@ -45,6 +45,7 @@ import {
     DevelopmentRunFrameMessageInfo,
     DevelopmentRunFrameMessageName,
 } from './development_run_frame_routes';
+import {RunCommandMessageName, RunCommandMessageInfo} from './run_messages';
 import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
 import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
@@ -80,6 +81,8 @@ export {
     RemoteCommandMessageName,
     RemoteConfigErrorInfo,
     RemoteConfigErrorName,
+    RunCommandMessageInfo,
+    RunCommandMessageName,
     S3ApiErrorInfo,
     S3ApiErrorName,
     SubmitCommandErrorInfo,
@@ -110,6 +113,7 @@ export const MessageName = {
     ...RemoteCommandErrorName,
     ...RemoteCommandMessageName,
     ...RemoteConfigErrorName,
+    ...RunCommandMessageName,
     ...S3ApiErrorName,
     ...SubmitCommandErrorName,
     ...SubmitCommandMessageName,
@@ -137,6 +141,7 @@ export type MessageInfo =
     | RemoteCommandErrorInfo
     | RemoteCommandMessageInfo
     | RemoteConfigErrorInfo
+    | RunCommandMessageInfo
     | S3ApiErrorInfo
     | SubmitCommandErrorInfo
     | SubmitCommandMessageInfo
@@ -149,9 +154,9 @@ export type Messages = renderMessage.Messages<MessageInfo>;
 
 export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {chalk: chalk.Chalk}>(
     {
-        airtableApiBaseNotFound() {
+        airtableApiBlockNotFound() {
             return this.util
-                .chalk`❌ The base could not be found. Make sure you have access to the base in which this block was created.`;
+                .chalk`❌ The block could not be found. Make sure your API key is correct and that you have access to the block.`;
         },
         airtableApiErrorStatusAndMessages({status, errors}) {
             return this.util
@@ -202,6 +207,9 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
             return this.util
                 .chalk`Detected changes to '${BLOCK_FILE_NAME}' file. Please restart {cyan.bold block run}.`;
         },
+        buildBlockDirectoryNotFound() {
+            return this.util.chalk`Block directory with block.json file not found`;
+        },
         buildNodeModulesAbsent({appRootPath}) {
             return this.util
                 .chalk`Please run {cyan.bold npm install} in ${appRootPath} to install packages before running.`;
@@ -212,6 +220,10 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
             return this.util.chalk`Switched to a new block installation.`;
         },
         developmentRunFrameOriginalBlockOnly() {
+            return this.util
+                .chalk`blockId mismatch. Make sure you are entering development for the correct block.`;
+        },
+        developmentRunFrameOriginalBaseOnly() {
             return this.util
                 .chalk`You can only run your development block in the original base where it was created.`;
         },
@@ -292,6 +304,11 @@ If you want to update the remote, please run {cyan.bold block remove-remote ${re
         remoteConfigIsNotValid({message, file}) {
             return this.util.chalk`❌ ${file ??
                 `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`} ${message}`;
+        },
+
+        // commands/run.ts
+        runCommandInstallingLocalSdk({sdkPath}) {
+            return this.util.chalk`Installing local SDK from ${sdkPath}...`;
         },
 
         // s3_api.ts

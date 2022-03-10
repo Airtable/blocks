@@ -22,7 +22,6 @@ export const APP_ROOT_TEMPORARY_DIR = '.tmp';
 
 export const APP_RELEASE_DIR = 'dist';
 
-export const BUNDLE_NAME = 'bundle';
 export const BUNDLE_FILE_NAME = 'bundle.js';
 
 export const AIRTABLE_API_URL = 'https://api.airtable.com';
