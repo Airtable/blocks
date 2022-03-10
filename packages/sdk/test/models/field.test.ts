@@ -215,6 +215,82 @@ describe('Field', () => {
         });
     });
 
+    describe('updateNameAsync', () => {
+        it('accepts non-null name', async () => {
+            const fieldName = 'my awesome name';
+            await field.updateNameAsync(fieldName);
+
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    tableId: 'tblDesignProjects',
+                    id: 'fldPrjctClient',
+                    name: fieldName,
+                    type: 'updateSingleFieldName',
+                },
+                {holdForMs: 100},
+            );
+        });
+    });
+
+    describe('#checkPermissionsForUpdateName', () => {
+        test('request to AirtableInterface - without name', () => {
+            field.checkPermissionsForUpdateName();
+
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledWith(
+                {
+                    name: undefined,
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
+                    type: 'updateSingleFieldName',
+                },
+                mockAirtableInterface.sdkInitData.baseData,
+            );
+        });
+
+        test('request to AirtableInterface - with name', () => {
+            const fieldName = 'a cool name';
+            field.checkPermissionsForUpdateName(fieldName);
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.checkPermissionsForMutation).toHaveBeenCalledWith(
+                {
+                    name: fieldName,
+                    id: 'fldPrjctClient',
+                    tableId: 'tblDesignProjects',
+                    type: 'updateSingleFieldName',
+                },
+                mockAirtableInterface.sdkInitData.baseData,
+            );
+        });
+
+        test('forwarding of response from AirtableInterface', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.checkPermissionsForUpdateName()).toStrictEqual({
+                hasPermission: true,
+            });
+        });
+    });
+
+    describe('#hasPermissionToUpdateName', () => {
+        test('return value: true', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.hasPermissionToUpdateName()).toBe(true);
+        });
+
+        test('return value: false', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: false,
+                reasonDisplayString: '',
+            });
+            expect(field.hasPermissionToUpdateName()).toBe(false);
+        });
+    });
+
     describe('#convertStringToCellValue', () => {
         test('request to AirtableInterface: conversion', () => {
             field.convertStringToCellValue('hello');

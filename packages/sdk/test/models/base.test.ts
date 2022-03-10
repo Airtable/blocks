@@ -598,4 +598,10 @@ describe('Base', () => {
             expect(base.getMaxRecordsPerTable()).toEqual(50000);
         });
     });
+
+    describe('workspaceId', () => {
+        it('returns the correct workspace id', () => {
+            expect(base.workspaceId).toEqual('wspUai0ZmWFWfSBtb');
+        });
+    });
 });

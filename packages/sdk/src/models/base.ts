@@ -105,6 +105,19 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
+     * The workspace id of the base.
+     *
+     * @example
+     * ```js
+     * import {base} from '@airtable/blocks';
+     * console.log('The workspace id of your base is', base.workspaceId);
+     * ```
+     */
+    get workspaceId(): string {
+        return this._data.workspaceId;
+    }
+
+    /**
      * The color of the base.
      *
      * @example

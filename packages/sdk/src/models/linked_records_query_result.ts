@@ -389,10 +389,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /** @internal */
     _onLinkedRecordIdsChange() {
-        invariant(this.isValid, 'watch key change event whilst invalid');
-        if (!this.isDataLoaded) {
+        if (!this.isDataLoaded || this._record.isDeleted) {
             return;
         }
+
+        invariant(this.isValid, 'watch key change event whilst invalid');
 
         this._invalidateComputedData();
 
@@ -473,11 +474,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
     /** @internal */
     _onOriginCellValueChange() {
-        invariant(this.isValid, 'watch key change event whilst invalid');
-
-        if (!this.isDataLoaded) {
+        if (!this.isDataLoaded || this._field.isDeleted) {
             return;
         }
+
+        invariant(this.isValid, 'watch key change event whilst invalid');
+
         this._invalidateComputedData();
 
         this._onChange('records');

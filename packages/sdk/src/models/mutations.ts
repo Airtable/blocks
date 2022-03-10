@@ -9,6 +9,7 @@ import Sdk from '../sdk';
 import Session from './session';
 import Base from './base';
 import Field from './field';
+import Table from './table';
 import {
     MAX_FIELD_NAME_LENGTH,
     MAX_FIELD_DESCRIPTION_LENGTH,
@@ -131,6 +132,29 @@ class Mutations {
             throw spawnError(
                 "Can't set cell values: Field '%s' is computed and cannot be set",
                 field.name,
+            );
+        }
+    }
+
+    /** @internal */
+    _assertFieldNameIsValidForMutation(name: string, table: Table) {
+        if (!name) {
+            throw spawnError("Can't create or update field: must provide non-empty name");
+        }
+
+        if (name.length > MAX_FIELD_NAME_LENGTH) {
+            throw spawnError(
+                "Can't create or update field: name '%s' exceeds maximum length of %s characters",
+                name,
+                MAX_FIELD_NAME_LENGTH,
+            );
+        }
+
+        const existingLowercaseFieldNames = table.fields.map(field => field.name.toLowerCase());
+        if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
+            throw spawnError(
+                "Can't create or update field: field with name '%s' already exists",
+                name,
             );
         }
     }
@@ -284,28 +308,7 @@ class Mutations {
                     );
                 }
 
-                if (!name) {
-                    throw spawnError("Can't create field: must provide non-empty name");
-                }
-
-                if (name.length > MAX_FIELD_NAME_LENGTH) {
-                    throw spawnError(
-                        "Can't create field: name '%s' exceeds maximum length of %s characters",
-                        name,
-                        MAX_FIELD_NAME_LENGTH,
-                    );
-                }
-
-                const existingLowercaseFieldNames = table.fields.map(field =>
-                    field.name.toLowerCase(),
-                );
-
-                if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
-                    throw spawnError(
-                        "Can't create field: field with name '%s' already exists",
-                        name,
-                    );
-                }
+                this._assertFieldNameIsValidForMutation(name, table);
 
                 const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                     appInterface,
@@ -383,6 +386,24 @@ class Mutations {
                         "Can't update field: description exceeds maximum length of %s characters",
                         MAX_FIELD_DESCRIPTION_LENGTH,
                     );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_NAME: {
+                const {tableId, id, name} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                if (field.name.toLowerCase() !== name.toLowerCase()) {
+                    this._assertFieldNameIsValidForMutation(name, table);
                 }
                 return;
             }
@@ -636,6 +657,7 @@ class Mutations {
             case MutationTypes.CREATE_SINGLE_FIELD:
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
             case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION:
+            case MutationTypes.UPDATE_SINGLE_FIELD_NAME:
             case MutationTypes.UPDATE_VIEW_METADATA:
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 return [];

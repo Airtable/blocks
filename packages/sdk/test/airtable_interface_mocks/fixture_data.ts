@@ -14,6 +14,7 @@ const MOCK_BASE_PERMISSION_LEVEL = 'create';
 const MOCK_CURRENT_USER_ID = 'usrGalSamari';
 const MOCK_BASE_COLOR = 'purple';
 const MOCK_BILLING_GROUP = 'pro';
+const MOCK_WORKSPACE_ID = 'wspUai0ZmWFWfSBtb';
 
 export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkInitData {
     const {
@@ -51,6 +52,7 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
             billingPlanGrouping: MOCK_BILLING_GROUP,
             appInterface: {},
             isBlockDevelopmentRestrictionEnabled: false,
+            workspaceId: MOCK_WORKSPACE_ID,
         },
         intentData: null,
     };

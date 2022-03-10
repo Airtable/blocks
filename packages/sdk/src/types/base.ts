@@ -38,6 +38,7 @@ export interface BaseData {
     billingPlanGrouping: string;
     isBlockDevelopmentRestrictionEnabled: boolean;
     maxRowsPerTable?: number;
+    workspaceId: string;
 }
 
 /** @hidden */
