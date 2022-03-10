@@ -62,7 +62,7 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release",
-            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-webpack-bundler@${version})"
+            "after:release": "cd ../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-webpack-bundler@${version}"
         },
         "publishConfig": {
             "access": "public"
