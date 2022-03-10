@@ -42,6 +42,15 @@ export interface JavascriptAssetOptions {
     options: {[key: string]: unknown};
 }
 
+export interface BaseWebpackConfig extends webpack.Configuration {
+    resolve: {
+        extensions: Array<string>;
+    };
+    module: {
+        rules: Array<webpack.RuleSetRule>;
+    };
+}
+
 /**
  * If the bundler is behind a proxy (it is), we need to manually inject the client.
  *
@@ -79,7 +88,7 @@ export function createWebpackCompilerConfig({
     assets: {
         javascript: {options: babelOptions},
     },
-}: WebpackSummaryOptions): webpack.Configuration {
+}: WebpackSummaryOptions): BaseWebpackConfig {
     let devtool;
 
     if (mode === 'development') {

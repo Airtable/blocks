@@ -15,22 +15,37 @@ import {
     SubmitTaskConsumer,
 } from '@airtable/blocks-cli';
 
-import {createWebpackCompilerConfig, WebpackSummaryOptions} from './webpack_config';
+import {
+    createWebpackCompilerConfig,
+    BaseWebpackConfig,
+    WebpackSummaryOptions,
+} from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createJavascriptAssetConfig} from './javascript_config';
 
 const AIRTABLE_CANCEL_BUILD_ERROR = 'AirtableCancelBuildPlugin: Bail' as const;
 
+type CustomizeWebpackConfigFn = (baseConfig: BaseWebpackConfig) => webpack.Configuration;
+
 class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsumer {
     webpackDevServer?: WebpackDevServer;
+    customizeWebpackConfig?: CustomizeWebpackConfigFn;
+
+    constructor(customizeWebpackConfig?: CustomizeWebpackConfigFn) {
+        this.customizeWebpackConfig = customizeWebpackConfig;
+    }
 
     _configureCompiler(options: Omit<WebpackSummaryOptions, 'assets'>) {
-        const compilerConfig = createWebpackCompilerConfig({
+        const baseConfig = createWebpackCompilerConfig({
             ...options,
             assets: {
                 javascript: createJavascriptAssetConfig(),
             },
         });
+
+        const compilerConfig = this.customizeWebpackConfig
+            ? this.customizeWebpackConfig(baseConfig)
+            : baseConfig;
 
         return webpack(compilerConfig);
     }
@@ -150,6 +165,6 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
     }
 }
 
-export default async function(): Promise<Bundler> {
-    return new Bundler();
+export default async function(customizeWebpackConfig?: CustomizeWebpackConfigFn): Promise<Bundler> {
+    return new Bundler(customizeWebpackConfig);
 }

@@ -124,6 +124,27 @@ describe('run bundler', () => {
         .readDiskBundle()
         .bundleIncludes('typescript')
         .it('bundles empty app to disk');
+
+    testBundler
+        .prepareFixture('bundler_custom_config')
+        .runBundlerPass(baseConfig => {
+            baseConfig.module.rules.push({
+                test: /\.js$/,
+                loader: 'babel-loader',
+                options: {
+                    plugins: [
+                        path.join(
+                            __dirname,
+                            'fixtures/bundler_custom_config/custom_babel_plugin.js',
+                        ),
+                    ],
+                },
+            });
+            return baseConfig;
+        })
+        .readDiskBundle()
+        .bundleIncludes('console.log("test", "hello world")')
+        .it('works with a custom bundler');
 });
 
 function prepareFixtureTempCopy(fixtureName: string, tempName: string = fixtureName) {
@@ -231,14 +252,16 @@ function readBundleFromServer() {
     };
 }
 
-function runBundlerPassOnFixture(): FancyTypes.Plugin<{
+function runBundlerPassOnFixture(
+    customizeWebpackConfig?: Parameters<typeof createBundler>[0],
+): FancyTypes.Plugin<{
     tmpPath: string;
     bundlerConsumer?: ReleaseTaskConsumer;
     compilerMode?: 'development' | 'production';
 }> {
     return {
         async run(ctx) {
-            const consumer = (ctx.bundlerConsumer = await createBundler());
+            const consumer = (ctx.bundlerConsumer = await createBundler(customizeWebpackConfig));
             await consumer.bundleAsync({
                 mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
