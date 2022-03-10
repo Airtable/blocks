@@ -1,0 +1,16 @@
+// See `tsconfig-testing.json` for details on preserving test support when
+// modifying this file.
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "composite": true,
+        "declaration": true,
+        "module": "commonjs",
+        "outDir": "dist",
+        "rootDir": "src",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2017"
+    },
+    "include": ["src/**/*"]
+}

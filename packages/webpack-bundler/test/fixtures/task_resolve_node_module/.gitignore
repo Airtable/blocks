@@ -1,0 +1,5 @@
+# The `node_modules` subdirectory is part of the CLI test fixture data, so the
+# repository's general policy restricting the inclusion of directories named
+# `node_modules` (as enforced by the top-level `.gitignore` file) does not
+# apply.
+!node_modules

@@ -1,18 +1,17 @@
-import {expect} from '@oclif/test';
+import * as fs from 'fs';
+import {Server} from 'net';
+import * as path from 'path';
+import {promisify} from 'util';
+
+import {expect, test, FancyTypes} from '@oclif/test';
 import fetch from 'node-fetch';
 
-import run from '../../src/bundler/bundler';
-import {System} from '../../src/helpers/system';
-import {RunTaskConsumer} from '../../src/tasks/run';
-import {ReleaseTaskConsumer} from '../../src/tasks/release';
-import {invariant} from '../../src/helpers/error_utils';
-import {findPortAsync} from '../../src/helpers/find_port_async';
-
-import {test} from '../mocks/test';
-import {mapFancyTestAsyncPlugin} from '../mocks/FancyTestAsync';
+import createBundler from '../src/index';
+import {ReleaseTaskConsumer, RunTaskConsumer} from '@airtable/blocks-cli';
 
 describe('run bundler', () => {
     const testBundler = test
+        .register('prepareFixture', prepareFixtureTempCopy)
         .register('runBundlerServer', runBundlerServerOnFixture)
         .register('readServerBundle', readBundleFromServer)
         .register('runBundlerPass', runBundlerPassOnFixture)
@@ -125,99 +124,150 @@ describe('run bundler', () => {
         .readDiskBundle()
         .bundleIncludes('typescript')
         .it('bundles empty app to disk');
-
-    testBundler
-        .prepareFixture('bundler_react_flow')
-        .runBundlerServer()
-        .readServerBundle()
-        .bundleIncludes('createElement(ReactApp')
-        .it('bundles react flow components with server');
-
-    testBundler
-        .prepareFixture('bundler_react_flow')
-        .runBundlerPass()
-        .readDiskBundle()
-        .bundleIncludes('createElement(ReactApp')
-        .it('bundles react flow components to disk');
 });
 
-function runBundlerServerOnFixture() {
-    return mapFancyTestAsyncPlugin({
-        async runAsync(ctx: {
-            tmpPath: string;
-            realSystem: System;
-            bundlerConsumer?: RunTaskConsumer;
-            bundlerPort?: number;
-            compilerMode?: 'development' | 'production';
-        }) {
+function prepareFixtureTempCopy(fixtureName: string, tempName: string = fixtureName) {
+    function cleanRecursively(dirOrFilePath: string) {
+        try {
+            for (const name of fs.readdirSync(dirOrFilePath)) {
+                cleanRecursively(path.join(dirOrFilePath, name));
+            }
+            fs.rmdirSync(dirOrFilePath);
+        } catch (err) {
+            if (err.code === 'ENOTDIR') {
+                fs.unlinkSync(dirOrFilePath);
+            }
+        }
+    }
+
+    function copyRecursively(src: string, dest: string) {
+        try {
+            const names = fs.readdirSync(src);
+            fs.mkdirSync(dest, {recursive: true});
+            for (const name of names) {
+                copyRecursively(path.join(src, name), path.join(dest, name));
+            }
+        } catch (err) {
+            if (err.code === 'ENOTDIR') {
+                fs.writeFileSync(dest, fs.readFileSync(src));
+            } else {
+                throw err;
+            }
+        }
+    }
+
+    return {
+        async run(ctx: {fixtureName: string; tmpPath: string}) {
+            const fixtureHome = path.join(__dirname, 'fixtures');
+            const fixturePath = path.join(fixtureHome, fixtureName);
+            const tempRoot = path.join(__dirname, '..', '.test-tmp');
+            const tempPath = path.join(tempRoot, tempName);
+
+            cleanRecursively(tempPath);
+            copyRecursively(fixturePath, tempPath);
+
+            ctx.fixtureName = tempName;
+            ctx.tmpPath = tempPath;
+        },
+    };
+}
+
+function runBundlerServerOnFixture(): FancyTypes.Plugin<{
+    tmpPath: string;
+    bundlerConsumer?: RunTaskConsumer;
+    bundlerPort?: number;
+    compilerMode?: 'development' | 'production';
+}> {
+    async function findPortAsync(port: number): Promise<number> {
+        // Try starting a server on this port.
+        const server = new Server();
+        await new Promise<void>((resolve, reject) => {
+            server.once('error', reject);
+            server.listen(port, resolve);
+        });
+        try {
+            const address = server.address();
+            if (address === null || typeof address !== 'object') {
+                throw new Error('server must be listening to an ip address');
+            }
+            return address.port;
+        } finally {
+            await promisify(server.close.bind(server))();
+        }
+    }
+
+    return {
+        async run(ctx) {
             const bundlerPort = (ctx.bundlerPort = await findPortAsync(0));
-            const consumer = (ctx.bundlerConsumer = await run());
+            const consumer = (ctx.bundlerConsumer = await createBundler());
             await consumer.startDevServerAsync({
                 port: bundlerPort,
                 mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
-                entry: ctx.realSystem.path.join(ctx.tmpPath, 'index'),
+                entry: path.join(ctx.tmpPath, 'index'),
 
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
                 emitBuildState() {},
             });
         },
-        async finallyAsync(ctx) {
-            invariant(ctx.bundlerConsumer, 'Bundler was not started on fixture');
+        async finally(ctx) {
+            if (!ctx.bundlerConsumer) {
+                throw new Error('Bundler was not started on fixture');
+            }
             await ctx.bundlerConsumer.teardownAsync();
         },
-    });
+    };
 }
 
 function readBundleFromServer() {
-    return mapFancyTestAsyncPlugin({
-        async runAsync(ctx: {bundlerPort: string; bundle: string}) {
+    return {
+        async run(ctx: {bundlerPort: string; bundle: string}) {
             const bundle = await (
                 await fetch(`http://localhost:${ctx.bundlerPort}/bundle.js`)
             ).text();
             ctx.bundle = bundle;
             expect(typeof ctx.bundle).to.equal('string');
         },
-    });
+    };
 }
 
-function runBundlerPassOnFixture() {
-    return mapFancyTestAsyncPlugin({
-        async runAsync(ctx: {
-            tmpPath: string;
-            realSystem: System;
-            bundlerConsumer?: ReleaseTaskConsumer;
-            compilerMode?: 'development' | 'production';
-        }) {
-            const consumer = (ctx.bundlerConsumer = await run());
+function runBundlerPassOnFixture(): FancyTypes.Plugin<{
+    tmpPath: string;
+    bundlerConsumer?: ReleaseTaskConsumer;
+    compilerMode?: 'development' | 'production';
+}> {
+    return {
+        async run(ctx) {
+            const consumer = (ctx.bundlerConsumer = await createBundler());
             await consumer.bundleAsync({
                 mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
-                entry: ctx.realSystem.path.join(ctx.tmpPath, 'index'),
-                outputPath: ctx.realSystem.path.join(ctx.tmpPath, 'dist'),
+                entry: path.join(ctx.tmpPath, 'index'),
+                outputPath: path.join(ctx.tmpPath, 'dist'),
             });
         },
-        async finallyAsync(ctx) {
-            invariant(ctx.bundlerConsumer, 'Bundler was not started on fixture');
+        async finally(ctx) {
+            if (!ctx.bundlerConsumer) {
+                throw new Error('Bundler was not started on fixture');
+            }
             await ctx.bundlerConsumer.teardownAsync();
         },
-    });
+    };
 }
 
-function readBundleFromDisk() {
-    return mapFancyTestAsyncPlugin({
-        async runAsync(ctx: {realSystem: System; tmpPath: string; bundle: string}) {
-            const bundle = await ctx.realSystem.fs.readFileAsync(
-                ctx.realSystem.path.join(ctx.tmpPath, 'dist', 'bundle.js'),
-            );
+function readBundleFromDisk(): FancyTypes.Plugin<{tmpPath: string; bundle: string}> {
+    return {
+        async run(ctx) {
+            const bundle = fs.readFileSync(path.join(ctx.tmpPath, 'dist', 'bundle.js'));
             ctx.bundle = bundle.toString();
             expect(typeof ctx.bundle).to.equal('string');
         },
-    });
+    };
 }
 
-function bundleIncludes(expectString: string) {
+function bundleIncludes(expectString: string): FancyTypes.Plugin<{bundle: string}> {
     return {
-        run(ctx: {bundle: string}) {
+        run(ctx) {
             // Check directly instead of with expect. On failure expect will
             // diff the normally long bundle. Computing that difference can take
             // a lot of time.
@@ -229,9 +279,9 @@ function bundleIncludes(expectString: string) {
     };
 }
 
-function bundleExcludes(expectString: string) {
+function bundleExcludes(expectString: string): FancyTypes.Plugin<{bundle: string}> {
     return {
-        run(ctx: {bundle: string}) {
+        run(ctx) {
             // Check directly instead of with expect. On failure expect will
             // diff the normally long bundle. Computing that difference can take
             // a lot of time.

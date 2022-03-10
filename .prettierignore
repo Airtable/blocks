@@ -8,3 +8,4 @@
 /examples/*/build
 /packages/blocks-docs/docs.json
 /packages/cli-next/test/fixtures/
+/packages/webpack-bundler/test/fixtures/

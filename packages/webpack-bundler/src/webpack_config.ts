@@ -1,6 +1,4 @@
-import {Configuration} from 'webpack';
-
-import {BUNDLE_NAME} from '../settings';
+import * as webpack from 'webpack';
 
 /**
  * Serializable bundler configuration summary.
@@ -41,7 +39,7 @@ export interface JavascriptAssetOptions {
     assetType: 'javascript';
 
     transpiler: 'babel';
-    options: any;
+    options: {[key: string]: unknown};
 }
 
 /**
@@ -60,7 +58,7 @@ function injectLiveReloadClient(entry: string, liveReload: WebpackSummaryOptions
         };
     }
     return {
-        [BUNDLE_NAME]: entry,
+        bundle: entry,
         ...otherScripts,
     };
 }
@@ -81,7 +79,7 @@ export function createWebpackCompilerConfig({
     assets: {
         javascript: {options: babelOptions},
     },
-}: WebpackSummaryOptions): Configuration {
+}: WebpackSummaryOptions): webpack.Configuration {
     let devtool;
 
     if (mode === 'development') {

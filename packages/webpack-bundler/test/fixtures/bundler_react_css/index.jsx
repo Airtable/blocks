@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css'
+import './index.css';
 
 function ReactApp() {
     return <div className="red">Hello World</div>;

@@ -3,6 +3,7 @@ import {expect, test} from '../mocks/test';
 import * as submitModule from '../../src/manager/submit';
 import * as airtableLegacyBlockApiModule from '../../src/helpers/airtable_legacy_block_api';
 import * as airtableBlockV2ApiModule from '../../src/helpers/airtable_block_v2_api';
+import * as taskModule from '../../src/helpers/task';
 import * as userAgentModule from '../../src/helpers/user_agent';
 
 import {AppConfigErrorName} from '../../src/helpers/config_app';
@@ -19,6 +20,7 @@ import {UploadSubmissionOptions} from '../../src/helpers/airtable_api';
 type SubmitTaskProducer = submitModule.SubmitTaskProducer;
 
 const {
+    stubResolveBuiltinModuleAsync,
     stubCreateSubmitTaskAsync,
     airtableLegacyBlockApiStub,
     airtableBlockV2ApiStub,
@@ -40,10 +42,14 @@ describe('submit', () => {
             '/home/projects/shared/package.json': {},
         })
         .withFiles({
+            '/node/env-12.20.1/lib/node_modules/@airtable/blocks-cli/lib/bundler.js': Buffer.from(
+                '',
+            ),
             '/home/projects/my-app/frontend/index.js': Buffer.from(''),
             '/home/projects/shared/lib/index.js': Buffer.from(''),
         })
         .stubDirectoryRemoval()
+        .stub(taskModule, 'resolveBuiltinModuleAsync', stubResolveBuiltinModuleAsync())
         .stub(
             submitModule,
             'createSubmitTaskAsync',
@@ -92,6 +98,34 @@ describe('submit', () => {
         .command(['submit'])
         .wroteFileMatchingSnapshot('/home/projects/my-app/.tmp/dist/block_archive.files.txt')
         .it('completes with sibling shared source');
+
+    testSubmitCommandAndContinue
+        .withFiles({
+            '/home/projects/my-app/my-bundler.js': Buffer.from(''),
+        })
+        .withJSON({
+            '/home/projects/my-app/block.json': {
+                frontendEntry: 'frontend/index.js',
+                bundler: {module: './my-bundler.js'},
+            },
+        })
+        .command(['submit'])
+        .wroteFileMatchingSnapshot('/home/projects/my-app/.tmp/dist/block_archive.files.txt')
+        .it('completes with custom bundler');
+
+    testSubmitCommandAndContinue
+        .withFiles({
+            '/home/projects/shared/my-bundler.js': Buffer.from(''),
+        })
+        .withJSON({
+            '/home/projects/my-app/block.json': {
+                frontendEntry: 'frontend/index.js',
+                bundler: {module: '../shared/my-bundler.js'},
+            },
+        })
+        .command(['submit'])
+        .wroteFileMatchingSnapshot('/home/projects/my-app/.tmp/dist/block_archive.files.txt')
+        .it('completes with custom bundler in shared dir');
 
     testSubmitCommandAndContinue
         .withJSON({
@@ -156,6 +190,16 @@ describe('submit', () => {
 });
 
 function createStubs() {
+    function _stubResolveBuiltinModuleAsync(): any {
+        return async function(
+            sys: System,
+            workingDir: string,
+            ...modulePath: string[]
+        ): Promise<string> {
+            return '/node/env-12.20.1/lib/node_modules/@airtable/blocks-cli/lib/bundler.js';
+        };
+    }
+
     function _stubCreateSubmitTaskAsync(files: string[] = []): any {
         return function(sys: System, context: any, producer: SubmitTaskProducer) {
             (async () => {
@@ -222,6 +266,7 @@ function createStubs() {
     }
 
     return {
+        stubResolveBuiltinModuleAsync: _stubResolveBuiltinModuleAsync,
         stubCreateSubmitTaskAsync: _stubCreateSubmitTaskAsync,
         airtableLegacyBlockApiStub: _airtableLegacyBlockApiStub,
         airtableBlockV2ApiStub: _airtableBlockV2ApiStub,

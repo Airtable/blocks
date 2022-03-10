@@ -11,7 +11,7 @@ export function createWebpackDevServerConfig({port}: WebpackDevServerOptions): C
         // `logLevel` is more reliable. But its not specified in the
         // configuration type.
         logLevel: 'silent',
-    } as any;
+    };
     return {
         port,
         // The client will be injected manually in the webpack configuration.

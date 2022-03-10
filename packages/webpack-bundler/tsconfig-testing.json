@@ -1,0 +1,36 @@
+// This file configures the TypeScript compiler to verify types for the source
+// code of both the application and the automated tests. It is distinct from
+// the configuration used when compiling the project for release (see
+// `tsconfig.json`) so that the published output can be optimized.
+//
+// The two configuration files share many of the same settings, and this parity
+// should be preserved in the future. Although the TypeScript compiler offers
+// a setting called "extends" as a way to reduce duplication, it cannot be used
+// due to a bug in the OCLIF tool:
+//
+// > tsconfig "extends" entry not respected
+// > https://github.com/oclif/oclif/issues/488
+//
+// To assist maintenance of the duplication, both files are annotated with
+// comments delimiting the settings which make them distinct.
+{
+    "compilerOptions": {
+        // begin distinctive configuration for test environment
+        "rootDir": ".",
+        "noEmit": true,
+        // end distinctive configuration for test environment
+
+        "allowJs": true,
+        "composite": true,
+        "declaration": true,
+        "module": "commonjs",
+        "outDir": "dist",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2017"
+    },
+    // begin distinctive configuration for test environment
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["test/fixtures/**/*"]
+    // end distinctive configuration for test environment
+}
