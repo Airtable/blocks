@@ -9,6 +9,7 @@ import {createRunTaskAsync, RunTaskProducer} from '../manager/run';
 import {BuildState, BuildStateBuilt, BuildStateError, BuildStatus} from '../tasks/run';
 
 import {findPortAsync} from '../helpers/find_port_async';
+import {LocalSdkBuilder} from '../helpers/local_sdk_builder';
 import {
     createServerAsync,
     DevelopmentProxyServerInterface,
@@ -29,6 +30,7 @@ import {RunTaskConsumerAdapter} from '../manager/run_adapter';
 import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {unwrapResultFunctor} from '../helpers/result';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
+import {RunCommandMessageName} from '../helpers/run_messages';
 import {createUserAgentAsync} from '../helpers/user_agent';
 import {
     DevelopmentRunFrameMessageName,
@@ -85,6 +87,10 @@ export default class Run extends AirtableCommand {
             description: '[Beta] Configure which remote to use',
             parse: unwrapResultFunctor(validateRemoteName),
         }),
+
+        'sdk-repo': commandFlags.string({
+            hidden: true,
+        }),
     };
 
     async runAsync() {
@@ -127,6 +133,15 @@ export default class Run extends AirtableCommand {
 
         if (flags.remote) {
             this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
+        }
+
+        const sdkPath = flags['sdk-repo'];
+        if (sdkPath) {
+            this.logMessage({
+                type: RunCommandMessageName.RUN_COMMAND_INSTALLING_LOCAL_SDK,
+                sdkPath: sdkPath,
+            });
+            await new LocalSdkBuilder(this.system, sdkPath).startAsync();
         }
 
         const remoteConfigPath = await findRemoteConfigPathByNameAsync(

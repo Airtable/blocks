@@ -158,3 +158,19 @@ export function dangerouslyCrossSpawn(
 
     return child;
 }
+
+export async function dangerouslyCrossSpawnAndReturnTrimmedOutputAsync(
+    sys: System,
+    filePath: string,
+    args: Array<string>,
+    {env = sys.process.env, cwd = sys.process.cwd()}: ChildProcessOptions = {},
+): Promise<string> {
+    const child = dangerouslyCrossSpawn(sys, filePath, args, {env, cwd});
+    const lineStream = createLineStream();
+    child.stdout.pipe(lineStream);
+    await resolveChildExit(child);
+    return lineStream
+        .read()
+        .toString()
+        .trim();
+}

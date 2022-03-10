@@ -49,6 +49,7 @@ export function createSystem({volume}: {volume: SystemVolume}): System {
     const volumeFs = createFsFromVolume(volume);
     const fs = {
         ...asyncify((volumeFs as unknown) as CallbackFS),
+        existsSync: (volumeFs.existsSync as unknown) as typeof originalFs.existsSync,
         unwatchFile: (volumeFs.unwatchFile as unknown) as typeof originalFs.unwatchFile,
         watch: (volumeFs.watch as unknown) as typeof originalFs.watch,
         watchFile: (volumeFs.watchFile as unknown) as typeof originalFs.watchFile,

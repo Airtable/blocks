@@ -45,6 +45,7 @@ import {
     DevelopmentRunFrameMessageInfo,
     DevelopmentRunFrameMessageName,
 } from './development_run_frame_routes';
+import {RunCommandMessageName, RunCommandMessageInfo} from './run_messages';
 import {FindPortErrorName, FindPortErrorInfo} from './find_port_async';
 import {RemoteConfigErrorInfo, RemoteConfigErrorName} from './config_remote';
 import {S3ApiErrorName, S3ApiErrorInfo} from './s3_api';
@@ -80,6 +81,8 @@ export {
     RemoteCommandMessageName,
     RemoteConfigErrorInfo,
     RemoteConfigErrorName,
+    RunCommandMessageInfo,
+    RunCommandMessageName,
     S3ApiErrorInfo,
     S3ApiErrorName,
     SubmitCommandErrorInfo,
@@ -112,6 +115,7 @@ export const MessageName = {
     ...RemoteCommandErrorName,
     ...RemoteCommandMessageName,
     ...RemoteConfigErrorName,
+    ...RunCommandMessageName,
     ...S3ApiErrorName,
     ...SubmitCommandErrorName,
     ...SubmitCommandMessageName,
@@ -139,6 +143,7 @@ export type MessageInfo =
     | RemoteCommandErrorInfo
     | RemoteCommandMessageInfo
     | RemoteConfigErrorInfo
+    | RunCommandMessageInfo
     | S3ApiErrorInfo
     | SubmitCommandErrorInfo
     | SubmitCommandMessageInfo
@@ -204,6 +209,9 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         buildAppConfigModified() {
             return this.util
                 .chalk`Detected changes to '${BLOCK_FILE_NAME}' file. Please restart {cyan.bold block run}.`;
+        },
+        buildBlockDirectoryNotFound() {
+            return this.util.chalk`Block directory with block.json file not found`;
         },
         buildNodeModulesAbsent({appRootPath}) {
             return this.util
@@ -300,6 +308,11 @@ If you want to update the remote, please run {cyan.bold block remove-remote ${re
         remoteConfigIsNotValid({message, file}) {
             return this.util.chalk`❌ ${file ??
                 `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`} ${message}`;
+        },
+
+        // commands/run.ts
+        runCommandInstallingLocalSdk({sdkPath}) {
+            return this.util.chalk`Installing local SDK from ${sdkPath}...`;
         },
 
         // s3_api.ts

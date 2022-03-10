@@ -18,6 +18,7 @@ import {
     RemoteCommandErrorName,
     RemoteCommandMessageName,
     RemoteConfigErrorName,
+    RunCommandMessageName,
     S3ApiErrorName,
     SubmitCommandErrorName,
     SubmitCommandMessageName,
@@ -105,6 +106,7 @@ function testMessages(): {
         [BlockIdentifierErrorName.BLOCK_IDENTIFIER_INVALID_FORMAT]: [{}],
 
         [BuildErrorName.BUILD_APP_CONFIG_MODIFIED]: [{}],
+        [BuildErrorName.BUILD_BLOCK_DIRECTORY_NOT_FOUND]: [{}],
         [BuildErrorName.BUILD_NODE_MODULES_ABSENT]: [{appRootPath: 'an-adorable-penguin'}],
 
         [DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION]: [{}],
@@ -170,6 +172,11 @@ function testMessages(): {
             },
         ],
 
+        [RunCommandMessageName.RUN_COMMAND_INSTALLING_LOCAL_SDK]: [
+            {
+                sdkPath: 'path',
+            },
+        ],
         [S3ApiErrorName.S3_API_BUNDLE_TOO_LARGE]: [{}],
         [S3ApiErrorName.S3_API_FAILED]: [{}],
 

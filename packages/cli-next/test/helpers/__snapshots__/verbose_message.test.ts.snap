@@ -58,6 +58,8 @@ exports[`verbose_message formats blockIdentifierInvalidFormat 1`] = `"Block iden
 
 exports[`verbose_message formats buildAppConfigModified 1`] = `"Detected changes to 'block.json' file. Please restart [36m[1mblock run[22m[39m."`;
 
+exports[`verbose_message formats buildBlockDirectoryNotFound 1`] = `"Block directory with block.json file not found"`;
+
 exports[`verbose_message formats buildNodeModulesAbsent 1`] = `"Please run [36m[1mnpm install[22m[39m in an-adorable-penguin to install packages before running."`;
 
 exports[`verbose_message formats developmentRunFrameNewBlockInstallation 1`] = `"Switched to a new block installation."`;
@@ -115,6 +117,8 @@ exports[`verbose_message formats remoteCommandRemovedExisting 2`] = `"✅ Succes
 exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
 
 exports[`verbose_message formats remoteConfigIsNotValid 2`] = `"❌ ../.block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats runCommandInstallingLocalSdk 1`] = `"Installing local SDK from path..."`;
 
 exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not upload bundle. The bundle's size is too big."`;
 
