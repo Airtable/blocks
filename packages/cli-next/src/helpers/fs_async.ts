@@ -7,13 +7,22 @@ import * as fs from 'graceful-fs';
 
 export type CallbackFS = Pick<
     typeof fs,
-    'copyFile' | 'mkdir' | 'readdir' | 'readFile' | 'rename' | 'rmdir' | 'unlink' | 'writeFile'
+    | 'copyFile'
+    | 'mkdir'
+    | 'stat'
+    | 'readdir'
+    | 'readFile'
+    | 'rename'
+    | 'rmdir'
+    | 'unlink'
+    | 'writeFile'
 >;
 
 /** Add `*Async` suffix to fs functions. */
 export interface AsyncFS {
     copyFileAsync: typeof originalFs.promises['copyFile'];
     mkdirAsync: typeof originalFs.promises['mkdir'];
+    statAsync: typeof originalFs.promises['stat'];
     readdirAsync: typeof originalFs.promises['readdir'];
     readFileAsync: typeof originalFs.promises['readFile'];
     renameAsync: typeof originalFs.promises['rename'];
@@ -26,6 +35,7 @@ export function asyncify(callbackFs: CallbackFS): AsyncFS {
     return {
         copyFileAsync: promisify(callbackFs.copyFile.bind(callbackFs)) as any,
         mkdirAsync: promisify(callbackFs.mkdir.bind(callbackFs)) as any,
+        statAsync: promisify(callbackFs.stat.bind(callbackFs)) as any,
         readdirAsync: promisify(callbackFs.readdir.bind(callbackFs)) as any,
         readFileAsync: promisify(callbackFs.readFile.bind(callbackFs)) as any,
         renameAsync: promisify(callbackFs.rename.bind(callbackFs)) as any,

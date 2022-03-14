@@ -26,10 +26,9 @@ describe('system_extra', () => {
             expect(await dirExistsAsync(system, '/bowling-alley')).equal(false);
         });
 
-        test.withFiles({'/home/gremlins': Buffer.from('!!!')})
-            .do(({system}: {system: System}) => dirExistsAsync(system, '/home/gremlins'))
-            .catch(/ENOTDIR/)
-            .it('fails in the presence of files');
+        test.withFiles({'/home/gremlins.txt': Buffer.from('!!!')})
+            .do(({system}: {system: System}) => dirExistsAsync(system, '/home/gremlins.txt'))
+            .it('returns false if given a path to a file');
     });
 
     describe('watchFileAsync', () => {
