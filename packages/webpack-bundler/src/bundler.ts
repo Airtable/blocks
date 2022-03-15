@@ -22,6 +22,7 @@ import {
 } from './webpack_config';
 import {createWebpackDevServerConfig} from './webpack_dev_server_config';
 import {createJavascriptAssetConfig} from './javascript_config';
+import {decorateModuleNotFoundError} from './webpack_error_utils';
 
 const AIRTABLE_CANCEL_BUILD_ERROR = 'AirtableCancelBuildPlugin: Bail' as const;
 
@@ -56,11 +57,12 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         const stats = await promisify(compiler.run.bind(compiler))();
 
         if (stats?.hasErrors()) {
-            const jsonError = stats.toJson().errors[0];
-            const e = new Error(jsonError.message);
-            e.name = jsonError.name;
-            e.stack = jsonError.stack;
-            throw e;
+            const firstError = stats.compilation.getErrors()[0];
+            if (firstError.name === 'ModuleNotFoundError') {
+                throw decorateModuleNotFoundError(firstError, bundlingOptions.context);
+            } else {
+                throw firstError;
+            }
         }
     }
 
@@ -106,11 +108,26 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
 
         compiler.hooks.done.tap('AirtableCliStatusPlugin', stats => {
             if (stats.hasErrors()) {
-                const statsJson = stats.toJson({colors: false});
-                emitBuildState({
-                    status: BuildStatus.ERROR,
-                    error: statsJson.errors[0],
-                });
+                const firstError = stats.compilation.getErrors()[0];
+                if (firstError.name === 'ModuleNotFoundError') {
+                    const decoratedErr = decorateModuleNotFoundError(
+                        firstError,
+                        bundlingOptions.context,
+                    );
+                    emitBuildState({
+                        status: BuildStatus.ERROR,
+                        error: {
+                            message: decoratedErr.message,
+                        },
+                    });
+                } else {
+                    emitBuildState({
+                        status: BuildStatus.ERROR,
+                        error: {
+                            message: firstError.message,
+                        },
+                    });
+                }
                 this.webpackDevServer?.sockWrite(this.webpackDevServer.sockets, 'ok');
             } else {
                 emitBuildState({status: BuildStatus.READY});
