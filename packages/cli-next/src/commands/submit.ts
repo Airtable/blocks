@@ -33,7 +33,7 @@ import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
 import {System} from '../helpers/system';
 import {SubmitCommandErrorName, SubmitCommandMessageName} from '../helpers/submit_messages';
-import {spawnUserError} from '../helpers/error_utils';
+import {spawnUserError, spawnUnexpectedError} from '../helpers/error_utils';
 import {AirtableLegacyBlockApi} from '../helpers/airtable_legacy_block_api';
 import {AirtableBlockV2Api} from '../helpers/airtable_block_v2_api';
 import {AirtableApi} from '../helpers/airtable_api';
@@ -306,16 +306,17 @@ async function projectFilesAsync(sys: System, dir: string): Promise<string[]> {
     if (excludeProjectItems.includes(sys.path.parse(dir).base)) {
         return [];
     }
-    try {
+
+    const stat = await sys.fs.statAsync(dir);
+    if (stat.isFile()) {
+        return [dir];
+    } else if (stat.isDirectory()) {
         const entries = await sys.fs.readdirAsync(dir);
         const nested = await Promise.all(
             entries.map(entry => projectFilesAsync(sys, sys.path.join(dir, entry))),
         );
         return ([] as string[]).concat(...nested);
-    } catch (err) {
-        if (err.code === 'ENOTDIR') {
-            return [dir];
-        }
-        throw err;
+    } else {
+        throw spawnUnexpectedError('Unexpected object %s', dir);
     }
 }

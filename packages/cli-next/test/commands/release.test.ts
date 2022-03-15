@@ -22,7 +22,6 @@ import {AppConfigErrorName} from '../../src/helpers/config_app';
 import {RemoteConfigErrorName} from '../../src/helpers/config_remote';
 import {SystemApiKeyErrorName} from '../../src/helpers/system_api_key';
 import {AppBundlerContext} from '../../src/manager/bundler';
-import {BuildErrorName} from '../../src/helpers/build_messages';
 import {
     ReleaseCommandErrorName,
     ReleaseCommandMessageName,
@@ -195,14 +194,6 @@ describe('release', () => {
         .command(['release'])
         .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_BLOCK_NOT_FOUND))
         .it('throws base not found error');
-
-    testReleaseCommand
-        .withFiles({
-            '/home/projects/my-app/node_modules': null,
-        })
-        .command(['release'])
-        .catch(new RegExp(BuildErrorName.BUILD_NODE_MODULES_ABSENT))
-        .it('fails in the absence of a directory named "node_modules"');
 
     testReleaseCommand
         .command(['release', '--comment', 'fixed the bug'])

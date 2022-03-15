@@ -14,7 +14,7 @@ import {RenderMessage} from '../../src/helpers/render_message';
 import {MessageName, Messages} from '../../src/helpers/verbose_message';
 import {ObjectMap} from '../../src/helpers/private_utils';
 import {ConfigSystem, ConfigMessages, ConfigChalk} from '../../src/helpers/airtable_command';
-import {rmdirAsync} from '../../src/helpers/system_extra';
+import {removeDirOrFileIfExistsAsync} from '../../src/helpers/system_extra';
 
 import {createSystem} from './system';
 import {answer} from './answer';
@@ -110,7 +110,7 @@ function withFiles(files: {[path: string]: Buffer | null}) {
                     ctx.systemVolume.mkdirpSync(ctx.system.path.dirname(key));
                     ctx.systemVolume.writeFileSync(key, value);
                 } else {
-                    await rmdirAsync(ctx.system, key);
+                    await removeDirOrFileIfExistsAsync(ctx.system, key);
                 }
             }
         },
@@ -175,6 +175,7 @@ function stubDirectoryRemoval() {
     return {
         run({system}: {system: System}) {
             system.fs.rmdirAsync = () => Promise.resolve();
+            system.fs.unlinkAsync = () => Promise.resolve();
         },
     };
 }

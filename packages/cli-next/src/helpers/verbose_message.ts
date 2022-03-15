@@ -210,12 +210,7 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
         buildBlockDirectoryNotFound() {
             return this.util.chalk`Block directory with block.json file not found`;
         },
-        buildNodeModulesAbsent({appRootPath}) {
-            return this.util
-                .chalk`Please run {cyan.bold npm install} in ${appRootPath} to install packages before running.`;
-        },
 
-        // development_run_frame_routes.ts
         developmentRunFrameNewBlockInstallation() {
             return this.util.chalk`Switched to a new block installation.`;
         },

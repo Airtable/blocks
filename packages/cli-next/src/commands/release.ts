@@ -25,7 +25,7 @@ import {
     validateRemoteName,
 } from '../helpers/system_config';
 import {renderEntryPointAsync} from '../helpers/render_entry_point_async';
-import {dirExistsAsync, mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
+import {mkdirpAsync, rmdirAsync} from '../helpers/system_extra';
 import {AirtableLegacyBlockApi} from '../helpers/airtable_legacy_block_api';
 import {AirtableBlockV2Api} from '../helpers/airtable_block_v2_api';
 import {S3Api} from '../helpers/s3_api';
@@ -35,7 +35,6 @@ import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
 import {invariant, spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
-import {BuildErrorInfo, BuildErrorName} from '../helpers/build_messages';
 import {ReleaseCommandErrorName, ReleaseCommandMessageName} from '../helpers/release_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
@@ -161,13 +160,6 @@ export default class Release extends AirtableCommand {
         const uploadSourceMapsToSentry = flags['upload-source-maps-to-sentry'];
 
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
-        const nodeModulesPath = this.system.path.join(appRootPath, 'node_modules');
-        if (!(await dirExistsAsync(this.system, nodeModulesPath))) {
-            throw spawnUserError<BuildErrorInfo>({
-                type: BuildErrorName.BUILD_NODE_MODULES_ABSENT,
-                appRootPath: sys.path.relative(sys.process.cwd(), appRootPath),
-            });
-        }
 
         const appConfigLocation = await findAppConfigAsync(sys);
         const appConfigResult = await readAppConfigAsync(sys, appConfigLocation);

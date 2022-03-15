@@ -83,19 +83,29 @@ export async function mkdirpAsync(sys: System, directoryPath: string): Promise<v
 }
 
 export async function rmdirAsync(sys: System, directoryPath: string): Promise<void> {
-    const {fs, path} = sys;
+    if (!dirExistsAsync(sys, directoryPath)) {
+        throw spawnUnexpectedError('Directory not found %s', directoryPath);
+    }
 
+    await removeDirOrFileIfExistsAsync(sys, directoryPath);
+}
+
+export async function removeDirOrFileIfExistsAsync(sys: System, dirOrFile: string): Promise<void> {
+    const {fs, path} = sys;
     try {
-        await fs.rmdirAsync(directoryPath);
-    } catch (err) {
-        if (err.code === 'ENOTEMPTY') {
-            for (const entry of await fs.readdirAsync(directoryPath)) {
-                await rmdirAsync(sys, path.join(directoryPath, entry));
+        const stat = await fs.statAsync(dirOrFile);
+        if (stat.isDirectory()) {
+            for (const entry of await fs.readdirAsync(dirOrFile)) {
+                await removeDirOrFileIfExistsAsync(sys, path.join(dirOrFile, entry));
             }
-            await rmdirAsync(sys, directoryPath);
-        } else if (err.code === 'ENOTDIR') {
-            await fs.unlinkAsync(directoryPath);
-        } else if (err.code !== 'ENOENT') {
+            await fs.rmdirAsync(dirOrFile);
+        } else if (stat.isFile()) {
+            await fs.unlinkAsync(dirOrFile);
+        } else {
+            throw spawnUnexpectedError('Unexpected object %s', dirOrFile);
+        }
+    } catch (err) {
+        if (err.code !== 'ENOENT') {
             throw err;
         }
     }
@@ -184,8 +194,8 @@ export async function findExtensionAsync(
  */
 export async function dirExistsAsync(sys: System, path: string): Promise<boolean> {
     try {
-        await sys.fs.readdirAsync(path);
-        return true;
+        const stat = await sys.fs.statAsync(path);
+        return stat.isDirectory();
     } catch (error) {
         if (error.code === 'ENOENT') {
             return false;

@@ -60,8 +60,6 @@ exports[`verbose_message formats buildAppConfigModified 1`] = `"Detected changes
 
 exports[`verbose_message formats buildBlockDirectoryNotFound 1`] = `"Block directory with block.json file not found"`;
 
-exports[`verbose_message formats buildNodeModulesAbsent 1`] = `"Please run [36m[1mnpm install[22m[39m in an-adorable-penguin to install packages before running."`;
-
 exports[`verbose_message formats developmentRunFrameNewBlockInstallation 1`] = `"Switched to a new block installation."`;
 
 exports[`verbose_message formats developmentRunFrameOriginalBaseOnly 1`] = `"You can only run your development block in the original base where it was created."`;

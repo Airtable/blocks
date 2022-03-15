@@ -184,12 +184,4 @@ describe('run', () => {
         .command(['run'])
         .catch(new RegExp(BuildErrorName.BUILD_APP_CONFIG_MODIFIED))
         .it('fails when Block config file is deleted');
-
-    testRunCommand
-        .withFiles({
-            '/home/projects/my-app/node_modules': null,
-        })
-        .command(['run'])
-        .catch(new RegExp(BuildErrorName.BUILD_NODE_MODULES_ABSENT))
-        .it('fails in the absence of a directory named "node_modules"');
 });

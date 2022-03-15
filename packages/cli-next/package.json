@@ -1,14 +1,14 @@
 {
     "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "2.0.0-beta.5",
+    "version": "2.0.0-beta.6",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "bin": {
         "block": "bin/run"
     },
     "dependencies": {
-        "@airtable/blocks-webpack-bundler": "*",
+        "@airtable/blocks-webpack-bundler": ">=0.0.2 || >=0.0.2-beta",
         "@oclif/command": "^1.8.0",
         "@oclif/config": "^1.17.0",
         "@oclif/plugin-help": "^3.2.0",

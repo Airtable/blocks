@@ -3,7 +3,7 @@ import {expect} from '@oclif/test';
 import * as npmModule from '../../src/helpers/npm_async';
 import * as appTemplateUtilsModule from '../../src/helpers/app_template_utils';
 import {System} from '../../src/helpers/system';
-import {mkdirpAsync, rmdirAsync} from '../../src/helpers/system_extra';
+import {mkdirpAsync, removeDirOrFileIfExistsAsync} from '../../src/helpers/system_extra';
 import {INIT_DEFAULT_TEMPLATE_URL} from '../../src/settings';
 
 import {test} from '../mocks/test';
@@ -162,7 +162,7 @@ function createStubs() {
                 await mkdirpAsync(sys, sys.path.dirname(keyPath));
                 await sys.fs.writeFileAsync(keyPath, value);
             } else {
-                await rmdirAsync(sys, keyPath);
+                await removeDirOrFileIfExistsAsync(sys, keyPath);
             }
         }
     }
