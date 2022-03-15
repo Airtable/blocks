@@ -81,7 +81,13 @@ describe('run bundler', () => {
         .prepareFixture('bundler_src_invalid_js')
         .runBundlerPass()
         .catch(/SyntaxError/)
-        .it('reports error');
+        .it('reports syntax error');
+
+    testBundler
+        .prepareFixture('bundler_src_module_not_found')
+        .runBundlerPass()
+        .catch(/Module not found/)
+        .it('reports module not found');
 
     testBundler
         .prepareFixture('bundler_react_tsx')
