@@ -1,18 +1,15 @@
-import {createLineStream, dangerouslyCrossSpawn, resolveChildExit} from './child_process_async';
+import {dangerouslyCrossSpawnAndReturnTrimmedOutputAsync} from './child_process_async';
 import {System} from './system';
 
 export async function getGitHashAsync(sys: System, cwd: string): Promise<string | null> {
     try {
-        const child = dangerouslyCrossSpawn(sys, 'git', ['rev-parse', 'HEAD'], {
-            cwd,
-        });
-        const lineStream = createLineStream();
-        child.stdout.pipe(lineStream);
-        await resolveChildExit(child);
-        return lineStream
-            .read()
-            .toString()
-            .trim();
+        const gitHash = await dangerouslyCrossSpawnAndReturnTrimmedOutputAsync(
+            sys,
+            'git',
+            ['rev-parse', 'HEAD'],
+            {cwd},
+        );
+        return gitHash;
     } catch (e) {
         return null;
     }
