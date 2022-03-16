@@ -1,7 +1,7 @@
 {
     "name": "@airtable/blocks-webpack-bundler",
     "description": "Webpack bundler for @airtable/blocks-cli",
-    "version": "0.0.2-beta.1",
+    "version": "0.0.2",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "peerDependencies": {
