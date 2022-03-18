@@ -1,7 +1,6 @@
 # @airtable/blocks-cli
 
-Command line tool for Airtable Blocks development.<br /> This README is specifically for the v2
-version of the CLI, which is in public beta
+Command line tool for Airtable Blocks development.
 
 <!-- toc -->
 
@@ -16,7 +15,7 @@ version of the CLI, which is in public beta
 
 To install or update the `block` cli, run:
 
-    npm install --global @airtable/blocks-cli@2.0.0-beta.4
+    npm install --global @airtable/blocks-cli
 
 # Usage
 

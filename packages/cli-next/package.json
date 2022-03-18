@@ -35,6 +35,7 @@
     },
     "devDependencies": {
         "@airtable/eslint-plugin-blocks": "^1.0.2",
+        "@airtable-blocks-internal/changelog-publish": "^1.0.2",
         "@oclif/dev-cli": "^1.23.0",
         "@oclif/test": "^1.2.7",
         "@types/archiver": "^5.1.0",
@@ -112,7 +113,7 @@
         "test:smokeTest-win": "test\\windows_smoke_test.bat",
         "test:releaseSmokeTest": "yarn run build:compileSmokeTest && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --reinstall_from_npm --blocks_cli_command=$(npm config get prefix)/bin/block",
         "test:releaseSmokeTest-win": "test\\windows_release_smoke_test.bat",
-        "version": "oclif-dev readme && git add README.md",
+        "version": "oclif-dev readme && git add README.md && changelog-publish --github-repo-url 'https://github.com/Airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },
     "types": "lib/index.d.ts",
