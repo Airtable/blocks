@@ -3,7 +3,6 @@ const updateNotifier = require('update-notifier');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 const cliHelpers = require('./helpers/cli_helpers');
 const commandConfigs = require('./commands/command_configs');
-const setUpRollbarAsync = require('./helpers/set_up_rollbar_async');
 // flow-disable-next-line
 const packageJson = require(path.join(getBlocksCliProjectRootPath(), 'package.json'));
 
@@ -68,7 +67,6 @@ function ensureCleanExit() {
 
 async function runBlockCliAsync() {
     ensureCleanExit();
-    await setUpRollbarAsync();
     updateNotifier({
         pkg: packageJson,
         // Still notify if this is invoked as part of an NPM script, e.g. in

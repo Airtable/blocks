@@ -16,7 +16,6 @@ const FormData = require('form-data');
 const {promisify} = require('util');
 request.postAsync = promisify(request.post);
 const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
-const {ROLLBAR_ACCESS_TOKEN} = require('../config/block_cli_config_settings');
 
 import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
@@ -76,46 +75,6 @@ async function _uploadViaSignedPostAsync(
 
         throw new Error(`${errorMessage} ${filePath}`);
     }
-}
-
-async function _uploadSourceMapToRollbarAsync(
-    // Path to .js.map
-    frontendBundleSourceMapPath: string,
-    // This is path in S3, not API key.
-    s3BundleKey: string,
-    gitHash: string,
-    bundleCdn: string,
-): Promise<{err: boolean, result: string}> {
-    const response = await request.postAsync({
-        url: 'https://api.rollbar.com/api/1/sourcemap',
-        headers: {
-            'content-type': 'multipart/form-data',
-        },
-        multipart: [
-            {
-                'Content-Disposition': 'form-data; name="access_token"',
-                body: ROLLBAR_ACCESS_TOKEN,
-            },
-            {
-                'Content-Disposition': 'form-data; name="version"',
-                body: gitHash,
-            },
-            {
-                'Content-Disposition': 'form-data; name="minified_url"',
-                body: `${bundleCdn}/${s3BundleKey}`,
-            },
-            {
-                'Content-Disposition':
-                    'form-data; name="source_map"; filename="thirdparty.min.map"',
-                body: await fsUtils.readFileAsync(frontendBundleSourceMapPath),
-            },
-        ],
-    });
-    const {body, statusCode} = response;
-    if (statusCode !== 200) {
-        throw new Error(body);
-    }
-    return body;
 }
 
 async function _uploadSourceMapToSentryAsync(
@@ -279,11 +238,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     if (remoteName !== null) {
         outputRemotesBetaWarning();
     }
-    const uploadSourceMapsToRollbar = argv.uploadSourceMapsToRollbar || false;
-    invariant(
-        typeof uploadSourceMapsToRollbar === 'boolean',
-        'expects uploadSourceMapsToRollbar to be a boolean',
-    );
     const uploadSourceMapsToSentry = argv.uploadSourceMapsToSentry || false;
     invariant(
         typeof uploadSourceMapsToSentry === 'boolean',
@@ -330,7 +284,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         enableDeprecatedAbsolutePathImport,
         enableIsolatedBuild,
         backendSdkBaseUrl,
-        uploadSourceMapsToRollbar,
         uploadSourceMapsToSentry,
     });
 
@@ -356,7 +309,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             s3BundleKey,
         } = await _buildAndDeployAsync(apiClient, blockBuilder, originalRemoteJson, isV2Block);
 
-        if (uploadSourceMapsToRollbar || uploadSourceMapsToSentry) {
+        if (uploadSourceMapsToSentry) {
             const gitHash = await getGitHashAsync(getBlockDirPath());
             const bundleCdn = remoteJson.bundleCdn;
             // These are all required when uploading source maps
@@ -367,15 +320,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             invariant(typeof s3BundleKey === 'string', 'expected s3BundleKey to be string');
             invariant(typeof gitHash === 'string', 'expected gitHash to be string');
             invariant(typeof bundleCdn === 'string', 'expected bundleCdn to be string');
-            if (uploadSourceMapsToRollbar) {
-                console.log(`uploading source maps to rollbar for ${s3BundleKey}`);
-                await _uploadSourceMapToRollbarAsync(
-                    frontendBundleSourceMapPath,
-                    s3BundleKey,
-                    gitHash,
-                    bundleCdn,
-                );
-            }
             if (uploadSourceMapsToSentry) {
                 console.log(`uploading source maps to sentry for ${s3BundleKey}`);
                 await _uploadSourceMapToSentryAsync(

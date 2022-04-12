@@ -67,7 +67,6 @@ describe('BlockServer', function() {
                 enableDeprecatedAbsolutePathImport: false,
                 enableLiveSdkReload: false,
                 transpileForAllBrowsers: true,
-                uploadSourceMapsToRollbar: false,
                 uploadSourceMapsToSentry: false,
             });
 

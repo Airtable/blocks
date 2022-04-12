@@ -148,13 +148,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
                 hidden: true, // hide from --help output
             },
-            'upload-source-maps-to-rollbar': {
-                description:
-                    "Uploads the source map for the block's frontend bundle to the airtable-blocks rollbar project",
-                type: 'boolean',
-                default: false,
-                hidden: true,
-            },
             'upload-source-maps-to-sentry': {
                 description:
                     "Uploads the source map for the block's frontend bundle to a Sentry project. Need to also set BLOCK_CLI_SENTRY_{AUTH_TOKEN|ORG|PROJECT} environment variables.",

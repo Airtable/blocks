@@ -97,7 +97,6 @@ class BlockBuilder {
     _browserifyCache: {[FilePath]: mixed};
     _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
     _ignoredGlobPatternsFromBlockJson: Array<string>;
-    _uploadSourceMapsToRollbar: boolean;
     _uploadSourceMapsToSentry: boolean;
 
     constructor(args: {
@@ -109,7 +108,6 @@ class BlockBuilder {
         enableLiveSdkReload: boolean,
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
-        uploadSourceMapsToRollbar: boolean,
         uploadSourceMapsToSentry: boolean,
     }) {
         this._buildTypeMode = args.buildTypeMode;
@@ -120,7 +118,6 @@ class BlockBuilder {
         this._enableLiveSdkReload = args.enableLiveSdkReload;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || true;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
-        this._uploadSourceMapsToRollbar = args.uploadSourceMapsToRollbar;
         this._uploadSourceMapsToSentry = args.uploadSourceMapsToSentry;
         this._blockDirPath = getBlockDirPath();
 
@@ -161,7 +158,6 @@ class BlockBuilder {
             blockJson: args.blockJson,
             remoteJson: args.remoteJson,
             transpileForAllBrowsers: args.transpileForAllBrowsers,
-            uploadSourceMapsToRollbar: false,
             uploadSourceMapsToSentry: false,
         });
     }
@@ -171,7 +167,6 @@ class BlockBuilder {
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
-        uploadSourceMapsToRollbar: boolean,
         uploadSourceMapsToSentry: boolean,
     }): Promise<BlockBuilder> {
         return new BlockBuilder({
@@ -184,7 +179,6 @@ class BlockBuilder {
             // RELEASE builds never use live SDK reloading
             enableLiveSdkReload: false,
             backendSdkBaseUrl: args.backendSdkBaseUrl,
-            uploadSourceMapsToRollbar: args.uploadSourceMapsToRollbar,
             uploadSourceMapsToSentry: args.uploadSourceMapsToSentry,
         });
     }
@@ -468,7 +462,7 @@ class BlockBuilder {
                 nodeEnv = 'production';
                 // Debug is needed to keep source maps if we're uploading them
                 this._browserify = browserify(clientWrapperFilePath, {
-                    debug: this._uploadSourceMapsToRollbar || this._uploadSourceMapsToSentry,
+                    debug: this._uploadSourceMapsToSentry,
                 });
                 break;
 
@@ -1009,7 +1003,7 @@ class BlockBuilder {
         );
 
         let frontendBundleSourceMapPath = null;
-        if (this._uploadSourceMapsToRollbar || this._uploadSourceMapsToSentry) {
+        if (this._uploadSourceMapsToSentry) {
             frontendBundleSourceMapPath = frontendBundlePath + '.map';
             await fsUtils.writeFileAsync(
                 frontendBundleSourceMapPath,

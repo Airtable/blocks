@@ -61,9 +61,6 @@ module.exports = {
 
     TEST_SERVER_PORT: 7132,
 
-    // This access token is not considered sensitive.
-    ROLLBAR_ACCESS_TOKEN: '2de7b9533b7243f7989e3a7584c7dad7',
-
     // Name of the file used to store user/blocks scoped configs for blocks-cli
     CONFIG_FILE_NAME: '.airtableblocksrc.json',
 
