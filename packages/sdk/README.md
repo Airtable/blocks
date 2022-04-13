@@ -8,12 +8,6 @@ To get started, check out the
 questions, feedback, or feature requests, we encourage you to post in the
 [community forum](https://community.airtable.com/c/developers/custom-blocks-beta/54).
 
-This git repository contains a few related projects:
-
--   [The sdk itself](./packages/sdk) - this is what you use when building your app!
--   [A blocks testing framework](./packages/blocks-testing) - this is used to help test your app.
--   [The new Blocks CLI](./packages/cli-next) - this is used to run your app!
-
 By using the software, you accept and agree to abide by terms of the developer agreement below:
 
 ## Developer agreement

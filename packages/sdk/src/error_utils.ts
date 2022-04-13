@@ -45,17 +45,21 @@ export function spawnError(
 }
 
 /**
- * Logs an error to Rollbar
+ * Logs an error to Sentry
  *
  * @hidden
  */
-export function logErrorToRollbar(
-    errorMessageFormat: string,
-    ...errorMessageArgs: ReadonlyArray<unknown>
-) {
-    const rollbar = (window as any).Rollbar as undefined | {warn?: (error: Error) => void};
-    if (rollbar?.warn) {
-        rollbar.warn(spawnError(errorMessageFormat, ...errorMessageArgs));
+export function logErrorToSentry(errorMessage: string, metadata?: {[key: string]: unknown}) {
+    const blocksErrorReporter = (window as any).blocksErrorReporter as
+        | undefined
+        | {
+              reportWarning?: (
+                  errOrMessage: Error | string,
+                  metadata?: {[key: string]: unknown},
+              ) => void;
+          };
+    if (blocksErrorReporter?.reportWarning) {
+        blocksErrorReporter.reportWarning(errorMessage, metadata);
     }
 }
 
