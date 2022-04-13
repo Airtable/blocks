@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.0...HEAD)
 
-No changes.
+-   Update internal utilities for error reporting
 
 ## [1.11.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.2...@airtable/blocks@1.11.0) - 2022-03-10
 
