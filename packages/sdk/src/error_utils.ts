@@ -52,18 +52,22 @@ export function spawnError(
 
 // istanbul ignore next
 /**
- * Logs an error to Rollbar
+ * Logs an error to Sentry
  *
  * @hidden
  */
-export function logErrorToRollbar(
-    errorMessageFormat: string,
-    ...errorMessageArgs: ReadonlyArray<unknown>
-) {
-    // See this comment for how to log via Rollbar: https://github.com/Hyperbase/hyperbase/blob/009dcd1dc4c5204277c2939e7f61dfce74535f30/client/run_block_frame.tsx#L548
-    const rollbar = (window as any).Rollbar as undefined | {warn?: (error: Error) => void};
-    if (rollbar?.warn) {
-        rollbar.warn(spawnError(errorMessageFormat, ...errorMessageArgs));
+export function logErrorToSentry(errorMessage: string, metadata?: {[key: string]: unknown}) {
+    // See this comment for how to log via Sentry: https://github.com/Hyperbase/hyperbase/blob/2c5438ecaddcb9fa196e027e40df5e0c68c90989/client/run_block_frame.tsx#L333
+    const blocksErrorReporter = (window as any).blocksErrorReporter as
+        | undefined
+        | {
+              reportWarning?: (
+                  errOrMessage: Error | string,
+                  metadata?: {[key: string]: unknown},
+              ) => void;
+          };
+    if (blocksErrorReporter?.reportWarning) {
+        blocksErrorReporter.reportWarning(errorMessage, metadata);
     }
 }
 
