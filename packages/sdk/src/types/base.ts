@@ -44,7 +44,7 @@ export interface BaseData {
     billingPlanGrouping: string;
     isBlockDevelopmentRestrictionEnabled: boolean;
     // This is optional to avoid making a backwards incompatible change.
-    // If unset we default to 50000
+    // If unset we default to 100000
     maxRowsPerTable?: number;
     workspaceId: string;
 }

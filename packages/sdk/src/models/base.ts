@@ -561,7 +561,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Returns the maximum number of records allowed in each table of this base.
      */
     getMaxRecordsPerTable(): number {
-        return this._data.maxRowsPerTable ?? 50000;
+        return this._data.maxRowsPerTable ?? 100000;
     }
 
     /**
