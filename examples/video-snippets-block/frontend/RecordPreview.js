@@ -28,7 +28,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
         return (
             <FullScreenBox padding={3}>
                 <Text textAlign="center" padding={1}>
-                    This app is not supported in shares.
+                    This extension is not supported in shares.
                 </Text>
             </FullScreenBox>
         );
@@ -59,7 +59,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
         );
     }
 
-    // selectedRecord will be null on app initialization, after
+    // selectedRecord will be null on extension initialization, after
     // the user switches table or view, or if the record is deleted
     if (selectedRecord === null) {
         return (

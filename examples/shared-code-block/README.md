@@ -1,12 +1,12 @@
-# Shared code app
+# Shared code extension
 
-This example app shows how to use code from other directories in your app.
+This example extension shows how to use code from other directories in your extension.
 
 This functionality is only supported in the v2 CLI, which is in public beta. You can find out more
 about the v2 CLI and how to install it
 [here](https://www.npmjs.com/package/@airtable/blocks-cli/v/beta).
 
-In order to test this app - run block run from within `hello-world-typescript-block` after running
+In order to test this extension - run block run from within `hello-world-typescript-block` after running
 `npm install` in the root folder
 
 ## Developing against a shared library

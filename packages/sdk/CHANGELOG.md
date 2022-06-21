@@ -15,6 +15,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Add `overlay` icon
 -   Update `cursor.setActiveTable` and `cursor.setActiveView` documentation to describe fullscreen
     exit behavior correctly
+-   Update examples in documentation to reflect 'extensions' in place of 'apps'
 
 ## [1.11.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.0...@airtable/blocks@1.11.1) - 2022-04-13
 

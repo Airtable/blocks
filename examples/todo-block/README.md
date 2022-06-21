@@ -1,6 +1,6 @@
-# To-do list app
+# To-do list extension
 
-This example app shows a to-do list based on the records in a table.
+This example extension shows a to-do list based on the records in a table.
 
 The code shows:
 
@@ -14,18 +14,18 @@ The code shows:
 
 -   How to create, update, and delete records in your base.
 
--   How to make your app adapt to the current user's permissions.
+-   How to make your extension adapt to the current user's permissions.
 
-## How to run this app
+## How to run this extension
 
 1. Create a new base (or you can use an existing base).
 
-2. Create a new app in your new base (see
-   [Create a new app](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-app)),
+2. Create a new extension in your new base (see
+   [Create a new extension](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-app)),
    selecting "To-do list" as your template.
 
-3. From the root of your new app, run `block run`.
+3. From the root of your new extension, run `block run`.
 
-## See the app running
+## See the extension running
 
-![App updating to-do list as the user changes data](media/block.gif)
+![Extension updating to-do list as the user changes data](media/block.gif)

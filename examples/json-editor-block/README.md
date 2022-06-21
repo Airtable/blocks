@@ -1,6 +1,6 @@
-# JSON editor app
+# JSON editor extension
 
-When the user selects a cell with a text field type in grid view, this app displays a text editor
+When the user selects a cell with a text field type in grid view, this extension displays a text editor
 allowing them to modify the cell value and alerts them of syntax errors.
 
 The code shows:
@@ -10,6 +10,6 @@ The code shows:
 -   How to dynamically load a third-party JavaScript library like
     [Monaco](https://github.com/Microsoft/monaco-editor).
 
-## See the app running
+## See the extension running
 
-![App displaying an in-browser text editor for JSON-formatted data](media/block.gif)
+![Extension displaying an in-browser text editor for JSON-formatted data](media/block.gif)

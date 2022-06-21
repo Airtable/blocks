@@ -27,7 +27,7 @@ loadCSS();
 
 const domParser = new DOMParser();
 
-function FlowchartApp() {
+function FlowchartExtension() {
     const viewport = useViewport();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     useSettingsButton(() => {
@@ -65,7 +65,7 @@ function FlowchartApp() {
             graph.current.innerHTML = '<span class="prompt">Add some records to get started</span>';
         } else if (queryResult.records.length > MAX_RECORDS) {
             graph.current.innerHTML = `<span class="prompt">
-                    The flowchart app can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
+                    The flowchart extension can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
                     filtering them out of the view.
                 </span>`;
         } else {
@@ -74,7 +74,7 @@ function FlowchartApp() {
                 const svgElement = svgDocument.firstElementChild;
                 if (svgElement && graph.current) {
                     // Set the width and height of the SVG element so that it takes up the full dimensions of the
-                    // app frame.
+                    // extension frame.
                     const width = svgElement.getAttribute('width');
                     const height = svgElement.getAttribute('height');
                     if (Number(width) > Number(height)) {
@@ -174,4 +174,4 @@ function FlowchartApp() {
     );
 }
 
-initializeBlock(() => <FlowchartApp />);
+initializeBlock(() => <FlowchartExtension />);

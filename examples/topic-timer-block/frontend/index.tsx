@@ -500,7 +500,7 @@ const DoesNotSupportShares = (): ReactElement => (
         flexDirection="column"
         justifyContent="center"
     >
-        <Box textAlign="center">This app is not supported in shares.</Box>
+        <Box textAlign="center">This extension is not supported in shares.</Box>
     </Box>
 );
 

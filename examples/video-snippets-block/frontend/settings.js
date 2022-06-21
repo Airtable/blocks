@@ -12,7 +12,7 @@ export const ConfigKeys = Object.freeze({
 /**
  * Reads values from GlobalConfig and converts them to Airtable objects.
  * @param {GlobalConfig} globalConfig
- * @param {Base} base - The base being used by the app in order to convert id's to objects
+ * @param {Base} base - The base being used by the extension in order to convert id's to objects
  * @returns {{
  *     table: Table | null,
  *     attachmentField: Field | null,

@@ -10,7 +10,7 @@ import {
     SETTINGS_FORM_BOX_WIDTH,
 } from './constants';
 
-function VegaLiteApp() {
+function VegaLiteExtension() {
     const validatedSettings = useSettings();
     const {isValid} = validatedSettings;
     const [errors, setErrors] = useState([]);
@@ -22,8 +22,8 @@ function VegaLiteApp() {
     useSettingsButton(() => {
         const newIsSettingsOpen = !isSettingsOpen;
 
-        // This app has a substantial settings form. If the user triggers
-        // settings for opening, then the app must insist on opening in
+        // This extension has a substantial settings form. If the user triggers
+        // settings for opening, then the extension must insist on opening in
         // fullscreen view if there is not enough horizontal space.
         if (
             newIsSettingsOpen &&
@@ -126,4 +126,4 @@ function VegaLiteApp() {
     );
 }
 
-initializeBlock(() => <VegaLiteApp />);
+initializeBlock(() => <VegaLiteExtension />);

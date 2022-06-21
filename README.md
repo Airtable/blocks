@@ -1,6 +1,6 @@
 # @airtable/blocks
 
-With the Blocks SDK, you can create your own custom apps on top of Airtable. These apps can be
+With the Blocks SDK, you can create your own custom extensions on top of Airtable. These extensios can be
 integrations, visualizations, internal tools, and more!
 
 To get started, check out the
@@ -10,9 +10,9 @@ questions, feedback, or feature requests, we encourage you to post in the
 
 This git repository contains a few related projects:
 
--   [The sdk itself](./packages/sdk) - this is what you use when building your app!
--   [A blocks testing framework](./packages/blocks-testing) - this is used to help test your app.
--   [The new Blocks CLI](./packages/cli-next) - this is used to run your app!
+-   [The sdk itself](./packages/sdk) - this is what you use when building your extension!
+-   [A blocks testing framework](./packages/blocks-testing) - this is used to help test your extension.
+-   [The new Blocks CLI](./packages/cli-next) - this is used to run your extension!
 
 By using the software, you accept and agree to abide by terms of the developer agreement below:
 
