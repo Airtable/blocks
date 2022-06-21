@@ -4,7 +4,7 @@ import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 
 /**
- * Returns the app's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
+ * Returns the extension's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
  * changes.
  *
  * @example

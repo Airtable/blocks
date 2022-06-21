@@ -5,7 +5,7 @@ import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 
 /**
- * A hook for using the settings button that lives outside the app's viewport. It will show
+ * A hook for using the settings button that lives outside the extension's viewport. It will show
  * the settings button (hidden by default) and call the provided callback whenever the settings
  * button is clicked. It will also re-render your component when the settings button is clicked.
  *

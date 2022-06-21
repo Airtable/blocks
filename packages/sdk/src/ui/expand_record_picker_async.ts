@@ -15,7 +15,7 @@ interface ExpandRecordPickerOpts {
 
 /**
  * Expands a list of records in the Airtable UI, and prompts the user to pick
- * one. The selected record is returned to the app, and the modal is
+ * one. The selected record is returned to the extension, and the modal is
  * automatically closed.
  *
  * If the user dismisses the modal, or another one is opened before this one
