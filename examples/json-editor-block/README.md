@@ -1,7 +1,7 @@
 # JSON editor extension
 
-When the user selects a cell with a text field type in grid view, this extension displays a text editor
-allowing them to modify the cell value and alerts them of syntax errors.
+When the user selects a cell with a text field type in grid view, this extension displays a text
+editor allowing them to modify the cell value and alerts them of syntax errors.
 
 The code shows:
 

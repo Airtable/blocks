@@ -163,8 +163,8 @@ export default function InstructionsView({settings}) {
                     <Fragment>
                         <Heading paddingBottom={3}>Use your existing key</Heading>
                         <Text size="xlarge">
-                            If you&apos;ve set up a map or street view extension before, you may reuse the
-                            same API key. If not, you&apos;ll need to{' '}
+                            If you&apos;ve set up a map or street view extension before, you may
+                            reuse the same API key. If not, you&apos;ll need to{' '}
                             <TextButton size="xlarge" onClick={() => setInstructionView(3)}>
                                 setup a new key
                             </TextButton>

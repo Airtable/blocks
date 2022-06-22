@@ -77,6 +77,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     > = {};
     _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
 
+    _timeoutForRemovingFieldIds: NodeJS.Timeout | null = null;
+
     constructor(sdk: Sdk, tableId: TableId) {
         super(sdk, `${tableId}-RecordStore`);
 
@@ -306,6 +308,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 }
             });
         }
+        // Since we are incrementing fieldIds, it's necessary to restart any pending timeouts
+        // to unload data. This is because it's possible for a timeout to fire while a queryResult
+        // is actively unloading, and erroneously unload data. Data must be unloaded _after_ the queryResult.
+        this._restartTimeoutToUnloadFieldIdsIfTimeoutIsActive();
         await Promise.all(pendingLoadPromises);
     }
 
@@ -383,7 +389,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         if (this._isForceUnloaded) {
             return;
         }
-        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
             let fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
             fieldRetainCount--;
@@ -393,21 +398,46 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 fieldRetainCount = 0;
             }
             this._cellValuesRetainCountByFieldId[fieldId] = fieldRetainCount;
+        }
+        // Don't unload immediately. Wait a while in case something else
+        // requests the data, so we can avoid going back to liveapp or
+        // the network.
+        this._startTimeoutToUnloadForFieldIdsIfNeeded();
+    }
 
-            if (fieldRetainCount === 0) {
+    // This unloads all fields where the retain count is at zero, and if any other
+    // request to unload fields is pending - cancels it and restarts it.
+    // This is important because fields must always be unloaded at least __DATA_UNLOAD_DELAY_MS
+    // after the unload is requested so that any QueryResults relying on them properly
+    // unload either first, or at the same time
+    _startTimeoutToUnloadForFieldIdsIfNeeded() {
+        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
+        for (const [fieldId, retainCount] of Object.entries(this._cellValuesRetainCountByFieldId)) {
+            if (retainCount === 0) {
                 fieldIdsWithZeroRetainCount.push(fieldId);
             }
         }
+
+        // Cancel any pending timeouts before proceeding
+        // This should be canceled even if there aren't any fields to unload as that means
+        // that there has been loading that's occured that makes the pending request invalid
+        if (this._timeoutForRemovingFieldIds) {
+            clearTimeout(this._timeoutForRemovingFieldIds);
+            this._timeoutForRemovingFieldIds = null;
+        }
         if (fieldIdsWithZeroRetainCount.length > 0) {
-            // Don't unload immediately. Wait a while in case something else
-            // requests the data, so we can avoid going back to liveapp or
-            // the network.
-            setTimeout(() => {
+            this._timeoutForRemovingFieldIds = setTimeout(() => {
                 // Make sure the retain count is still zero, since it may
                 // have been incremented before the timeout fired.
                 const fieldIdsToUnload = fieldIdsWithZeroRetainCount.filter(fieldId => {
-                    return this._cellValuesRetainCountByFieldId[fieldId] === 0;
+                    // It's necessary to also check that the field is loaded, as it's possible
+                    // for an unload to trigger with fields that have already been removed.
+                    return (
+                        this._cellValuesRetainCountByFieldId[fieldId] === 0 &&
+                        this._areCellValuesLoadedByFieldId[fieldId]
+                    );
                 });
+                // istanbul ignore else
                 if (fieldIdsToUnload.length > 0) {
                     // Set _areCellValuesLoadedByFieldId to false before calling _unloadCellValuesInFieldIds
                     // since _unloadCellValuesInFieldIds will check if *any* fields are still loaded.
@@ -415,8 +445,21 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                         this._areCellValuesLoadedByFieldId[fieldId] = false;
                     }
                     this._unloadCellValuesInFieldIds(fieldIdsToUnload);
+                } else {
+                    // This shouldn't be possible because we always cancel the timer if fieldIds loadedness
+                    // status ever changes
+                    logErrorToSentry(
+                        'fieldIdsToUnload is empty, this likely means the unload timer is not properly reset.',
+                    );
                 }
+                this._timeoutForRemovingFieldIds = null;
             }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
+        }
+    }
+
+    _restartTimeoutToUnloadFieldIdsIfTimeoutIsActive() {
+        if (this._timeoutForRemovingFieldIds) {
+            this._startTimeoutToUnloadForFieldIdsIfNeeded();
         }
     }
 
@@ -459,9 +502,14 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 this._data.recordsById = undefined;
             } else if (!this.isDataLoaded) {
                 let fieldIdsToClear;
+                // This should be impossible - for fields should always be loaded
+                // when attempting to unload specific fields. This codepath was previously possible
+                // due to a bug. It could be converted to an invariant, but that is higher risk.
+                // istanbul ignore if
                 if (unloadedFieldIds) {
                     // Specific fields were unloaded, so clear out the cell values for those fields.
                     fieldIdsToClear = unloadedFieldIds;
+                    logErrorToSentry('Field Ids are being unloaded when record_store is unloaded');
                 } else {
                     // The entire table was unloaded, but some individual fields are still loaded.
                     // We need to clear out the cell values of every field that was unloaded.

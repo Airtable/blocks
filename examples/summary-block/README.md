@@ -1,7 +1,7 @@
 # Summary extension
 
-This example extension displays many different summaries of a table field. For example: max, min, average,
-etc. It does this by using Airtable's built-in summary functions.
+This example extension displays many different summaries of a table field. For example: max, min,
+average, etc. It does this by using Airtable's built-in summary functions.
 
 ## How to run this extension
 

@@ -15,6 +15,8 @@ commit that affects the code in a way that consumers might care about should inc
 -   Add `overlay` icon
 -   Update `cursor.setActiveTable` and `cursor.setActiveView` documentation to describe fullscreen
     exit behavior correctly
+-   Fix an issue where rapidly subscribing and unsubscribing to a single field could cause a
+    queryResult to be to incorrectly marked as loaded.
 -   Update API reference documentation to reflect 'extensions' in place of 'apps'
 -   Update examples in documentation to reflect 'extensions' in place of 'apps'
 

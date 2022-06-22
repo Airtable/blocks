@@ -1,9 +1,9 @@
 # Base schema extension
 
 In Airtable, many fields rely on data from other fields: linked records, formulas, lookups, rollups,
-and counts. Use this extension to create a visual layout of all tables in your base and see all these
-relationships together. Gain insight on how data flows between fields in your base. Drag tables
-around to customize their arrangement.
+and counts. Use this extension to create a visual layout of all tables in your base and see all
+these relationships together. Gain insight on how data flows between fields in your base. Drag
+tables around to customize their arrangement.
 
 ## How to remix this extension
 

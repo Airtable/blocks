@@ -1,7 +1,7 @@
 # Wikipedia enrichment extension
 
-This example extension finds extracts and images from Wikipedia for records in your base and saves the
-information back to your base.
+This example extension finds extracts and images from Wikipedia for records in your base and saves
+the information back to your base.
 
 The code shows:
 

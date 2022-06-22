@@ -1,8 +1,8 @@
 # URL preview extension
 
-When the user selects a record in grid view, this extension gets a preview URL from the record and shows
-the corresponding preview. This extension supports previews from the following services: YouTube, Vimeo,
-Spotify, Soundcloud, and Figma.
+When the user selects a record in grid view, this extension gets a preview URL from the record and
+shows the corresponding preview. This extension supports previews from the following services:
+YouTube, Vimeo, Spotify, Soundcloud, and Figma.
 
 The code shows:
 

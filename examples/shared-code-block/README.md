@@ -6,8 +6,8 @@ This functionality is only supported in the v2 CLI, which is in public beta. You
 about the v2 CLI and how to install it
 [here](https://www.npmjs.com/package/@airtable/blocks-cli/v/beta).
 
-In order to test this extension - run block run from within `hello-world-typescript-block` after running
-`npm install` in the root folder
+In order to test this extension - run block run from within `hello-world-typescript-block` after
+running `npm install` in the root folder
 
 ## Developing against a shared library
 

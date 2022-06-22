@@ -1,7 +1,7 @@
 # Table structure extension
 
-This example extension and shows the table description as well as field names, descriptions, types and
-options for the table and view the user is currently viewing.
+This example extension and shows the table description as well as field names, descriptions, types
+and options for the table and view the user is currently viewing.
 
 The code shows:
 
@@ -28,8 +28,8 @@ The code shows:
 
 3. From the root of your new extension, run `block run`.
 
-Note: The template base does not have table or field descriptions set. It's expected for the extension to
-initially look a bit empty!
+Note: The template base does not have table or field descriptions set. It's expected for the
+extension to initially look a bit empty!
 
 ## See the extension running
 

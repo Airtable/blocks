@@ -1134,6 +1134,46 @@ describe('TableOrViewQueryResult', () => {
                 await waitForWatchKeyAsync(result, 'isDataLoaded');
             });
 
+            it('tolerates specific records cellValuesByFieldId deleted', async () => {
+                const result = await base.tables[1].selectRecordsAsync({
+                    sorts: [{field: 'fldTaskNotes'}],
+                });
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tblTasks',
+                            'recordsById',
+                            'recD',
+                            'cellValuesByFieldId',
+                        ],
+                        value: undefined,
+                    },
+                ]);
+
+                result.unloadData();
+
+                await waitForWatchKeyAsync(result, 'isDataLoaded');
+            });
+
+            it('tolerates recordsById deleted', async () => {
+                const result = await base.tables[1].selectRecordsAsync({
+                    sorts: [{field: 'fldTaskNotes'}],
+                });
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblTasks', 'recordsById'],
+                        value: undefined,
+                    },
+                ]);
+
+                result.unloadData();
+
+                await waitForWatchKeyAsync(result, 'isDataLoaded');
+            });
+
             it('tolerates unnecessary invocations', async () => {
                 const result = base.tables[0].selectRecords();
                 const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
@@ -1187,6 +1227,31 @@ describe('TableOrViewQueryResult', () => {
                             value: undefined,
                         },
                     ]);
+                    await whenUnsubscribed();
+                });
+
+                it('double subscribe', async () => {
+                    const resultTaskNotes = await base.tables[1].selectRecordsAsync({
+                        fields: ['fldTaskNotes'],
+                    });
+                    const resultTaskName = await base.tables[1].selectRecordsAsync({
+                        fields: ['fldTaskName'],
+                    });
+                    resultTaskNotes.unloadData();
+                    resultTaskName.unloadData();
+                    mockAirtableInterface.triggerModelUpdates([
+                        {
+                            path: [
+                                'tablesById',
+                                'tblTasks',
+                                'recordsById',
+                                'recD',
+                                'cellValuesByFieldId',
+                            ],
+                            value: undefined,
+                        },
+                    ]);
+                    await whenUnsubscribed();
                     await whenUnsubscribed();
                 });
             });
