@@ -339,6 +339,10 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
             this._onChange(WatchableViewKeys.name);
             didViewSchemaChange = true;
         }
+        if (dirtyPaths.isLocked) {
+            this._onChange(WatchableViewKeys.isLocked);
+            didViewSchemaChange = true;
+        }
         return didViewSchemaChange;
     }
 }

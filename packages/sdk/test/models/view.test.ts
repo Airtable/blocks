@@ -171,6 +171,16 @@ describe('View', () => {
             );
             expect(view.type).toBe(ViewType.GRID);
         });
+        test('#isLocked', () => {
+            expect(view.isLocked).toBe(false);
+            expect(() => {
+                // @ts-ignore
+                view.isLocked = 1;
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Cannot set property isLocked of [object Object] which has only a getter"`,
+            );
+            expect(view.isLocked).toBe(false);
+        });
     });
 
     describe('methods', () => {
@@ -615,6 +625,33 @@ describe('View', () => {
 
                 expect(fn).toHaveBeenCalledTimes(1);
             });
+
+            test('#unwatch("isLocked")', () => {
+                const fn = jest.fn();
+                view.watch('isLocked', fn);
+
+                expect(fn).toHaveBeenCalledTimes(0);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: true,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+
+                view.unwatch('isLocked', fn);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: false,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('#watch()', () => {
@@ -639,6 +676,23 @@ describe('View', () => {
 
                 expect(fn).toHaveBeenCalledTimes(1);
                 expect(fn).toHaveBeenCalledWith(view, 'name');
+            });
+
+            test('#watch("isLocked")', () => {
+                const fn = jest.fn();
+                view.watch('isLocked', fn);
+
+                expect(fn).toHaveBeenCalledTimes(0);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: true,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+                expect(fn).toHaveBeenCalledWith(view, 'isLocked');
             });
         });
     });

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
+import {BlockRunContextType} from '../types/airtable_interface';
 import {GlobalConfigKey} from '../types/global_config';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
-import {BlockRunContextType} from '../types/airtable_interface';
 
 /** @hidden */
 const globalConfigSyncedComponentHelpers = {
