@@ -20,6 +20,7 @@ import * as RecordColoring from './record_coloring';
 // to mirror the method/getter names on the model class.
 const WatchableViewKeys = Object.freeze({
     name: 'name' as const,
+    isLocked: 'isLocked' as const,
 });
 
 /**
@@ -105,6 +106,18 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      */
     get type(): ViewType {
         return this._data.type;
+    }
+    /**
+     * If the view is locked. Can be watched.
+     *
+     * @example
+     * ```js
+     * console.log(myView.isLocked);
+     * // => false
+     * ```
+     */
+    get isLocked(): boolean {
+        return this._data.isLocked;
     }
     /**
      * The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
