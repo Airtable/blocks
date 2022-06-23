@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.12.0...HEAD)
 
-No changes.
+-   Update global config to refresh when view 'isLocked' changes
 
 ## [1.12.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.1...@airtable/blocks@1.12.0) - 2022-06-22
 
