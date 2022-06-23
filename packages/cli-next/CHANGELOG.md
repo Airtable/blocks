@@ -31,4 +31,4 @@ No changes.
         link or file.
 -   Using a custom bundler
     -   Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns
-        app source code into publishable artifacts.
+        extension source code into publishable artifacts.

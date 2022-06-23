@@ -65,7 +65,7 @@ export default class AddRemote extends AirtableCommand {
 
         this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
 
-        // load app config
+        // load extension config
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
         debug('project root at %s', sys.path.relative(sys.process.cwd(), appRootPath));
 

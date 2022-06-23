@@ -43,10 +43,10 @@ const debug = _debug('block-cli:command:init');
 export default class Init extends AirtableCommand {
     private _teardownAction: (() => Promise<void>) | null = null;
 
-    static description = 'Initialize an Airtable app project';
+    static description = 'Initialize an Airtable extension project';
 
     static examples = [
-        `$ block init app12345678/blk12345678 hellow-world-app --template ${INIT_DEFAULT_TEMPLATE_URL}
+        `$ block init app12345678/blk12345678 hello-world-extension --template ${INIT_DEFAULT_TEMPLATE_URL}
 `,
     ];
 

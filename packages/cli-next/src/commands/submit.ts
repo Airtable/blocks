@@ -58,7 +58,7 @@ export default class Submit extends AirtableCommand {
      */
     private _appTemporaryPath?: string;
 
-    static description = 'Submit app for review for listing in the the Airtable Marketplace';
+    static description = 'Submit extension for review for listing in the the Airtable Marketplace';
 
     static examples = [
         `$ block submit
@@ -79,7 +79,7 @@ export default class Submit extends AirtableCommand {
         const sys = this.system;
         const workingdir = sys.process.cwd();
 
-        // load app config
+        // load extension config
         const appRootPath = await findAppDirectoryAsync(sys, workingdir);
         const appConfigPath = await findAppConfigAsync(sys, appRootPath);
         const appConfigResult = await readAppConfigAsync(sys, appConfigPath);
@@ -87,7 +87,7 @@ export default class Submit extends AirtableCommand {
             this.error(appConfigResult.err);
         }
         const appConfig = appConfigResult.value;
-        debug('loaded app config at %s', sys.path.relative(workingdir, appConfigPath));
+        debug('loaded extension config at %s', sys.path.relative(workingdir, appConfigPath));
 
         const remoteConfigPath = await findRemoteConfigPathByNameAsync(
             sys,

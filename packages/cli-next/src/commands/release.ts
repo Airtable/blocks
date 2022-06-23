@@ -116,7 +116,7 @@ export default class Release extends AirtableCommand {
         const sys = this.system;
         const uploadSourceMapsToSentry = flags['upload-source-maps-to-sentry'];
 
-        // load app config
+        // load extension config
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
 
         const appConfigLocation = await findAppConfigAsync(sys);
@@ -125,7 +125,10 @@ export default class Release extends AirtableCommand {
             this.error(appConfigResult.err);
         }
         const appConfig = appConfigResult.value;
-        debug('loaded app config at %s', sys.path.relative(sys.process.cwd(), appConfigLocation));
+        debug(
+            'loaded extension config at %s',
+            sys.path.relative(sys.process.cwd(), appConfigLocation),
+        );
 
         if (flags.remote) {
             this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
