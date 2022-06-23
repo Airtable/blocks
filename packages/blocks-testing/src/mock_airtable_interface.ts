@@ -307,8 +307,8 @@ interface RecordDataStore {
 /**
  * A callback function allowing tests to simulate user interaction with the
  * expanded record picker UI. The testing library will invoke this function
- * whenever the App under test uses the {@link expandRecordPickerAsync}
- * function, and the return value of this function will be provided to the App
+ * whenever the Extension under test uses the {@link expandRecordPickerAsync}
+ * function, and the return value of this function will be provided to the Extension
  * under test as the {@link Record} that the simulated user selected.
  */
 export type PickRecord = (
@@ -321,7 +321,7 @@ export type PickRecord = (
 // At the time of writing, identifiers happen to exhibit some structure in
 // production settings (e.g. fixed prefix and length), but the SDK does not
 // commit to any particular characteristics. Use a less predictable format to
-// reduce the likelihood that third-party App developers unintentionally write
+// reduce the likelihood that third-party Extension developers unintentionally write
 // fragile tests by depending any structure in these identifiers.
 const generateGenericId = () => {
     const length = 10 + Math.floor(Math.random() * 10);
@@ -818,7 +818,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         );
     }
 
-    // no-op implementations so that apps that use these features can at least
+    // no-op implementations so that extensions that use these features can at least
     // be tested in some way:
     async fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
         return {};
@@ -841,10 +841,10 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
     trackEvent() {}
 
     /**
-     * `trackExposure` cannot be invoked by any Apps (neither those authored by
-     * Airtable nor by other App developers). It should be implemented to
+     * `trackExposure` cannot be invoked by any Extensions (neither those authored by
+     * Airtable nor by other Extension developers). It should be implemented to
      * satisfy the AirtableInterface contract, but the implementation should
-     * not throw because it must be successful for Apps to function. Likewise,
+     * not throw because it must be successful for Extensions to function. Likewise,
      * it should not emit an event because test authors have no need to track
      * its usage.
      */
