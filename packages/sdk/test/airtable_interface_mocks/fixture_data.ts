@@ -182,7 +182,8 @@ interface ViewFixtureData {
      */
     records: Array<ViewRecordFixtureData>;
     /**
-     * Optional boolean denoting if the view is locked.
+     * Optional boolean denoting if the view is locked. By default tests assume
+     * the view is unlocked if undefined.
      */
     isLocked?: boolean;
 }

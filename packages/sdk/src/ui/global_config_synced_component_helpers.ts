@@ -22,7 +22,7 @@ const globalConfigSyncedComponentHelpers = {
                 ? sdk.base.getTableById(runContext.tableId).getViewById(runContext.viewId)
                 : null;
         // We can't conditionally watch, but if it's not a viewContext the model will be null.
-        useWatchable(viewIfInViewContext, ['isLocked']);
+        useWatchable(viewIfInViewContext, ['isLockedView']);
     },
 };
 

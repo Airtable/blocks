@@ -20,7 +20,7 @@ import * as RecordColoring from './record_coloring';
 // to mirror the method/getter names on the model class.
 const WatchableViewKeys = Object.freeze({
     name: 'name' as const,
-    isLocked: 'isLocked' as const,
+    isLockedView: 'isLockedView' as const,
 });
 
 /**
@@ -112,11 +112,11 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *
      * @example
      * ```js
-     * console.log(myView.isLocked);
+     * console.log(myView.isLockedView);
      * // => false
      * ```
      */
-    get isLocked(): boolean {
+    get isLockedView(): boolean {
         return this._data.isLocked;
     }
     /**
@@ -340,7 +340,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
             didViewSchemaChange = true;
         }
         if (dirtyPaths.isLocked) {
-            this._onChange(WatchableViewKeys.isLocked);
+            this._onChange(WatchableViewKeys.isLockedView);
             didViewSchemaChange = true;
         }
         return didViewSchemaChange;

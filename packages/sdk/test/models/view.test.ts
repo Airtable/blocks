@@ -171,15 +171,15 @@ describe('View', () => {
             );
             expect(view.type).toBe(ViewType.GRID);
         });
-        test('#isLocked', () => {
-            expect(view.isLocked).toBe(false);
+        test('#isLockedView', () => {
+            expect(view.isLockedView).toBe(false);
             expect(() => {
                 // @ts-ignore
                 view.isLocked = 1;
             }).toThrowErrorMatchingInlineSnapshot(
-                `"Cannot set property isLocked of [object Object] which has only a getter"`,
+                `"Cannot set property isLockedView of [object Object] which has only a getter"`,
             );
-            expect(view.isLocked).toBe(false);
+            expect(view.isLockedView).toBe(false);
         });
     });
 
@@ -626,26 +626,26 @@ describe('View', () => {
                 expect(fn).toHaveBeenCalledTimes(1);
             });
 
-            test('#unwatch("isLocked")', () => {
+            test('#unwatch("isLockedView")', () => {
                 const fn = jest.fn();
-                view.watch('isLocked', fn);
+                view.watch('isLockedView', fn);
 
                 expect(fn).toHaveBeenCalledTimes(0);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLocked'],
+                        path: [...viewPath, 'isLockedView'],
                         value: true,
                     },
                 ]);
 
                 expect(fn).toHaveBeenCalledTimes(1);
 
-                view.unwatch('isLocked', fn);
+                view.unwatch('isLockedView', fn);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLocked'],
+                        path: [...viewPath, 'isLockedView'],
                         value: false,
                     },
                 ]);
@@ -678,21 +678,21 @@ describe('View', () => {
                 expect(fn).toHaveBeenCalledWith(view, 'name');
             });
 
-            test('#watch("isLocked")', () => {
+            test('#watch("isLockedView")', () => {
                 const fn = jest.fn();
-                view.watch('isLocked', fn);
+                view.watch('isLockedView', fn);
 
                 expect(fn).toHaveBeenCalledTimes(0);
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLocked'],
+                        path: [...viewPath, 'isLockedView'],
                         value: true,
                     },
                 ]);
 
                 expect(fn).toHaveBeenCalledTimes(1);
-                expect(fn).toHaveBeenCalledWith(view, 'isLocked');
+                expect(fn).toHaveBeenCalledWith(view, 'isLockedView');
             });
         });
     });
