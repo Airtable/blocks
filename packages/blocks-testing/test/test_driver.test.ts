@@ -105,6 +105,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                             {
                                 id: 'viwForm',
@@ -124,6 +125,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                         ],
                         records: [
@@ -187,6 +189,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                         ],
                         records: [
