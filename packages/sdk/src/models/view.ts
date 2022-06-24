@@ -117,7 +117,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     get isLockedView(): boolean {
-        return this._data.isLocked;
+        return this._data.isLockedView;
     }
     /**
      * The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
