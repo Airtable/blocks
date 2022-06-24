@@ -175,7 +175,7 @@ describe('View', () => {
             expect(view.isLockedView).toBe(false);
             expect(() => {
                 // @ts-ignore
-                view.isLocked = 1;
+                view.isLockedView = 1;
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Cannot set property isLockedView of [object Object] which has only a getter"`,
             );
@@ -634,7 +634,7 @@ describe('View', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLockedView'],
+                        path: [...viewPath, 'isLocked'],
                         value: true,
                     },
                 ]);
@@ -645,7 +645,7 @@ describe('View', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLockedView'],
+                        path: [...viewPath, 'isLocked'],
                         value: false,
                     },
                 ]);
@@ -686,7 +686,7 @@ describe('View', () => {
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
-                        path: [...viewPath, 'isLockedView'],
+                        path: [...viewPath, 'isLocked'],
                         value: true,
                     },
                 ]);
@@ -694,6 +694,54 @@ describe('View', () => {
                 expect(fn).toHaveBeenCalledTimes(1);
                 expect(fn).toHaveBeenCalledWith(view, 'isLockedView');
             });
+        });
+    });
+
+    describe('deleting a view', () => {
+        test('errors when deleting a locked view', () => {
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [...viewPath, 'isLocked'],
+                    value: true,
+                },
+            ]);
+
+            deleteView();
+
+            expect(() => {
+                view.isLockedView;
+            }).toThrowErrorMatchingInlineSnapshot(`"View has been deleted"`);
+        });
+
+        test('succeeds when deleting an unlocked view', () => {
+            const fn = jest.fn();
+            view.watch('isLockedView', fn);
+
+            expect(fn).toHaveBeenCalledTimes(0);
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [...viewPath, 'isLocked'],
+                    value: false,
+                },
+            ]);
+            // Should still be 0 because isLockedView defaults to false
+            expect(fn).toHaveBeenCalledTimes(0);
+
+            deleteView();
+
+            expect(fn).toHaveBeenCalledTimes(0);
+            // Undo delete
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: viewOrderPath,
+                    value: ['viwPrjctAll'],
+                },
+                {
+                    path: activeViewIdPath,
+                    value: 'viwPrjctAll',
+                },
+            ]);
+            expect(fn).toHaveBeenCalledTimes(0);
         });
     });
 });
