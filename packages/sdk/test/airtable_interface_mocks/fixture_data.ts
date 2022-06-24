@@ -64,7 +64,7 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
 function convertViewFixtureDataToViewData(viewFixtureData: ViewFixtureData): ViewData {
     return {
         ...viewFixtureData,
-        isLocked: !!viewFixtureData.isLocked,
+        isLockedView: !!viewFixtureData.isLockedView,
     };
 }
 
@@ -185,7 +185,7 @@ interface ViewFixtureData {
      * Optional boolean denoting if the view is locked. By default tests assume
      * the view is unlocked if undefined.
      */
-    isLocked?: boolean;
+    isLockedView?: boolean;
 }
 
 /**

@@ -77,7 +77,7 @@ export interface ViewData {
     id: ViewId;
     name: string;
     type: ViewType;
-    isLocked: boolean;
+    isLockedView: boolean;
     // visibleRecordIds will be absent until the block explicity loads the view's data.
     visibleRecordIds?: Array<RecordId>;
     // fieldOrder will be absent until the block explicity loads the view's data.
