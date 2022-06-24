@@ -724,12 +724,11 @@ describe('View', () => {
                     value: false,
                 },
             ]);
-            // Should still be 0 because isLockedView defaults to false
-            expect(fn).toHaveBeenCalledTimes(0);
+            expect(fn).toHaveBeenCalledTimes(1);
 
             deleteView();
 
-            expect(fn).toHaveBeenCalledTimes(0);
+            expect(fn).toHaveBeenCalledTimes(1);
             // Undo delete
             mockAirtableInterface.triggerModelUpdates([
                 {
@@ -741,7 +740,7 @@ describe('View', () => {
                     value: 'viwPrjctAll',
                 },
             ]);
-            expect(fn).toHaveBeenCalledTimes(0);
+            expect(fn).toHaveBeenCalledTimes(1);
         });
     });
 });
