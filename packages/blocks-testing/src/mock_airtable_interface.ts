@@ -268,7 +268,7 @@ interface ViewFixtureData {
     /**
      * A boolean determining if a view is locked
      */
-    isLockedView?: boolean;
+    isLockedView: boolean;
 }
 
 /**
