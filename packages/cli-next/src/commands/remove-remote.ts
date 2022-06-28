@@ -42,7 +42,7 @@ export default class RemoveRemote extends AirtableCommand {
 
         this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
 
-        // find app directory
+        // find extension directory
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
         debug('project root at %s', sys.path.relative(sys.process.cwd(), appRootPath));
 

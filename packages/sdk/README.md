@@ -1,7 +1,7 @@
 # @airtable/blocks
 
-With the Blocks SDK, you can create your own custom apps on top of Airtable. These apps can be
-integrations, visualizations, internal tools, and more!
+With the Blocks SDK, you can create your own custom extensions on top of Airtable. These extensions
+can be integrations, visualizations, internal tools, and more!
 
 To get started, check out the
 [official Blocks SDK documentation website](https://airtable.com/developers/blocks). If you have any
