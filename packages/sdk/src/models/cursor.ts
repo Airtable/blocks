@@ -223,9 +223,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return this._data.activeViewId;
     }
     /**
-     * Sets the specified table to active in the Airtable UI. If the apps pane is fullscreen, the
-     * table will still be set as active, but the apps pane will continue to be displayed
-     * fullscreen.
+     * Sets the specified table to active in the Airtable UI. If the extension installation or extensions pane
+     * is fullscreen, fullscreen mode will be exited.
      *
      * @param tableOrTableId The target table or table ID to set as active in the Airtable main page.
      */
@@ -234,9 +233,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         this._sdk.__airtableInterface.setActiveViewOrTable(tableId);
     }
     /**
-     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the apps
-     * pane is fullscreen, the view will still be set as active, but the apps pane will continue
-     * to be displayed fullscreen.
+     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the extension
+     * installation or extensions pane is fullscreen, fullscreen mode will be exited.
      *
      * @param tableOrTableId The table or table ID that the target view belongs to.
      * @param viewOrViewId The target view or view ID to set as active in the Airtable main page.

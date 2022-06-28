@@ -9,9 +9,26 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.1...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.13.0...HEAD)
 
 No changes.
+
+## [1.13.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.12.0...@airtable/blocks@1.13.0) - 2022-06-28
+
+-   Add ability to read (and watch) if a view is locked
+-   Update `FieldType.MULTIPLE_COLLABORATOR` documentation to include user group collaborator
+    information
+
+## [1.12.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.1...@airtable/blocks@1.12.0) - 2022-06-22
+
+-   Update fallback value in `Base.getMaxRecordsPerTable`
+-   Add `overlay` icon
+-   Update `cursor.setActiveTable` and `cursor.setActiveView` documentation to describe fullscreen
+    exit behavior correctly
+-   Fix an issue where rapidly subscribing and unsubscribing to a single field could cause a
+    queryResult to be to incorrectly marked as loaded.
+-   Update API reference documentation to reflect 'extensions' in place of 'apps'
+-   Update examples in documentation to reflect 'extensions' in place of 'apps'
 
 ## [1.11.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.0...@airtable/blocks@1.11.1) - 2022-04-13
 

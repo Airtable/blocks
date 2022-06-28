@@ -1,7 +1,7 @@
 import {BaseId} from '../../src/types/base';
 import {TableId, TableData} from '../../src/types/table';
 import {FieldId, FieldType, FieldData} from '../../src/types/field';
-import {ViewId, ViewType} from '../../src/types/view';
+import {ViewData, ViewId, ViewType} from '../../src/types/view';
 import {RecordId} from '../../src/types/record';
 import {CollaboratorData} from '../../src/types/collaborator';
 import {Color} from '../../src/colors';
@@ -58,6 +58,13 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
     };
 }
 
+function convertViewFixtureDataToViewData(viewFixtureData: ViewFixtureData): ViewData {
+    return {
+        ...viewFixtureData,
+        isLockedView: !!viewFixtureData.isLockedView,
+    };
+}
+
 function convertTableFixtureDataToTableData(tableFixtureData: TableFixtureData): TableData {
     const {id, name, description, fields, views} = tableFixtureData;
     return {
@@ -68,7 +75,7 @@ function convertTableFixtureDataToTableData(tableFixtureData: TableFixtureData):
         fieldsById: keyBy<FieldData, string>(fields.map(convertFieldFixtureDataToFieldData), getId),
         activeViewId: views[0].id,
         viewOrder: views.map(v => v.id),
-        viewsById: keyBy(views, getId),
+        viewsById: keyBy(views.map(convertViewFixtureDataToViewData), getId),
         recordsById: undefined, 
         lock: null,
         externalSyncById: null,
@@ -113,7 +120,7 @@ export interface FixtureData {
 
 /** A representation of the state of a Table */
 interface TableFixtureData {
-    /** A unique identifier for the simulated Tbale */
+    /** A unique identifier for the simulated Table */
     id: TableId;
     /** The name to assign to the simulated Table */
     name: string;
@@ -171,6 +178,11 @@ interface ViewFixtureData {
      * is distinct from the complete fixture data for the simulated Records.
      */
     records: Array<ViewRecordFixtureData>;
+    /**
+     * Optional boolean denoting if the view is locked. By default tests assume
+     * the view is unlocked if undefined.
+     */
+    isLockedView?: boolean;
 }
 
 /**

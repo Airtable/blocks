@@ -255,8 +255,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The field matching the given ID or name. Returns `null` if no matching field exists within
      * this table.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getFieldByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getFieldByIdIfExists} or
      * {@link getFieldByNameIfExists} methods instead.
      *
      * @param fieldIdOrName The ID or name of the field you're looking for.
@@ -271,8 +271,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Use {@link getFieldIfExists} instead if you are unsure whether a field exists with the given
      * name/ID.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getFieldById} or {@link getFieldByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getFieldById} or {@link getFieldByName} methods
      * instead.
      *
      * @param fieldIdOrName The ID or name of the field you're looking for.
@@ -403,8 +403,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The view matching the given ID or name. Returns `null` if no matching view exists within
      * this table.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getViewByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getViewByIdIfExists} or
      * {@link getViewByNameIfExists} methods instead.
      *
      * @param viewIdOrName The ID or name of the view you're looking for.
@@ -417,8 +417,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Use {@link getViewIfExists} instead if you are unsure whether a view exists with the given
      * name/ID.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getViewById} or {@link getViewByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getViewById} or {@link getViewByName} methods
      * instead.
      *
      * @param viewIdOrName The ID or name of the view you're looking for.
@@ -563,7 +563,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the updated
      * cell values to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordOrRecordId the record to update
@@ -574,7 +574,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToUpdateRecord(record, recordFields)) {
      *         table.updateRecordAsync(record, recordFields);
      *     }
-     *     // The updated values will now show in your app (eg in
+     *     // The updated values will now show in your extension (eg in
      *     // `table.selectRecords()` result) but are still being saved to Airtable
      *     // servers (e.g. other users may not be able to see them yet).
      * }
@@ -660,7 +660,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could update specific fields, when you don't know the
      * // specific record that will be updated yet. (for example, if the field is
-     * // selected by the user and you want to check if your app can write to it).
+     * // selected by the user and you want to check if your extension can write to it).
      * const updateUnknownRecordCheckResult =
      *     table.checkPermissionsForUpdateRecord(undefined, {
      *         'My field name': 'updated value',
@@ -671,7 +671,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could perform updates within the table, without knowing the
      * // specific record or fields that will be updated yet (e.g., to render your
-     * // app in "read only" mode).
+     * // extension in "read only" mode).
      * const updateUnknownRecordAndFieldsCheckResult =
      *     table.checkPermissionsForUpdateRecord();
      * ```
@@ -727,7 +727,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could update specific fields, when you don't know the
      * // specific record that will be updated yet (e.g. if the field is selected
-     * // by the user and you want to check if your app can write to it).
+     * // by the user and you want to check if your extension can write to it).
      * const canUpdateUnknownRecord =
      *     table.hasPermissionToUpdateRecord(undefined, {
      *         'My field name': 'updated value',
@@ -738,7 +738,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could perform updates within the table, without knowing the
      * // specific record or fields that will be updated yet. (for example, to
-     * // render your app in "read only" mode)
+     * // render your extension in "read only" mode)
      * const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
      * ```
      */
@@ -762,7 +762,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * updates to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
@@ -809,7 +809,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
      *         table.updateRecordsAsync(recordsToUpdate);
      *     }
-     *     // The records are now updated within your app (eg will be reflected in
+     *     // The records are now updated within your extension (eg will be reflected in
      *     // `table.selectRecords()`) but are still being saved to Airtable servers
      *     // (e.g. they may not be updated for other users yet).
      * }
@@ -991,7 +991,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * delete to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordOrRecordId the record to be deleted
@@ -1001,7 +1001,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToDeleteRecord(record)) {
      *         table.deleteRecordAsync(record);
      *     }
-     *     // The record is now deleted within your app (eg will not be returned
+     *     // The record is now deleted within your extension (eg will not be returned
      *     // in `table.selectRecords`) but it is still being saved to Airtable
      *     // servers (e.g. it may not look deleted to other users yet).
      * }
@@ -1087,7 +1087,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * delete to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordsOrRecordIds Array of Records and RecordIds
@@ -1098,7 +1098,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToDeleteRecords(records)) {
      *         table.deleteRecordsAsync(records);
      *     }
-     *     // The records are now deleted within your app (eg will not be
+     *     // The records are now deleted within your extension (eg will not be
      *     // returned in `table.selectRecords()`) but are still being saved to
      *     // Airtable servers (e.g. they may not look deleted to other users yet).
      * }
@@ -1203,7 +1203,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * The returned promise will resolve to the RecordId of the new record once it is persisted.
@@ -1215,7 +1215,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToCreateRecord(recordFields)) {
      *         table.createRecordAsync(recordFields);
      *     }
-     *     // You can now access the new record in your app (eg
+     *     // You can now access the new record in your extension (eg
      *     // `table.selectRecords()`) but it is still being saved to Airtable
      *     // servers (e.g. other users may not be able to see it yet).
      * }
@@ -1349,7 +1349,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your app
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * The returned promise will resolve to an array of RecordIds of the new records once the new
@@ -1393,7 +1393,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToCreateRecords(recordDefs)) {
      *         table.createRecordsAsync(recordDefs);
      *     }
-     *     // You can now access the new records in your app (e.g.
+     *     // You can now access the new records in your extension (e.g.
      *     // `table.selectRecords()`) but they are still being saved to Airtable
      *     // servers (e.g. other users may not be able to see them yet.)
      * }
@@ -1641,7 +1641,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous. Unlike new records, new fields are **not** created
      * optimistically locally. You must `await` the returned promise before using the new
-     * field in your app.
+     * field in your extension.
      *
      * @param name name for the field. must be case-insensitive unique
      * @param type type for the field

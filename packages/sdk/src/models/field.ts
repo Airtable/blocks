@@ -240,7 +240,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * This action is asynchronous. Unlike updates to cell values, updates to field options are
      * **not** applied optimistically locally. You must `await` the returned promise before
-     * relying on the change in your app.
+     * relying on the change in your extension.
      *
      * Optionally, you can pass an `opts` object as the second argument. See {@link UpdateFieldOptionsOpts}
      * for available options.
@@ -339,7 +339,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * This action is asynchronous. Unlike updates to cell values, updates to field name are
      * **not** applied optimistically locally. You must `await` the returned promise before
-     * relying on the change in your app.
+     * relying on the change in your extension.
      *
      * @param name new name for the field
      *
@@ -419,7 +419,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * This action is asynchronous. Unlike updates to cell values, updates to field descriptions are
      * **not** applied optimistically locally. You must `await` the returned promise before
-     * relying on the change in your app.
+     * relying on the change in your extension.
      *
      * @param description new description for the field
      *

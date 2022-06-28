@@ -33,7 +33,7 @@ abstract class AbstractModelWithAsyncData<
      * unload happens via _forceUnload method and the only proper use
      * of that function is when the underlying data gets deleted while
      * the model is still active. e.g. when a table is deleted in the
-     * main app while an instance of record_store is still alive.
+     * main extension while an instance of record_store is still alive.
      * NOTE: Once set to true, it never goes back to false.
      *
      * @internal

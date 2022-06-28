@@ -171,6 +171,16 @@ describe('View', () => {
             );
             expect(view.type).toBe(ViewType.GRID);
         });
+        test('#isLockedView', () => {
+            expect(view.isLockedView).toBe(false);
+            expect(() => {
+                // @ts-ignore
+                view.isLockedView = 1;
+            }).toThrowErrorMatchingInlineSnapshot(
+                `"Cannot set property isLockedView of [object Object] which has only a getter"`,
+            );
+            expect(view.isLockedView).toBe(false);
+        });
     });
 
     describe('methods', () => {
@@ -611,6 +621,33 @@ describe('View', () => {
 
                 expect(fn).toHaveBeenCalledTimes(1);
             });
+
+            test('#unwatch("isLockedView")', () => {
+                const fn = jest.fn();
+                view.watch('isLockedView', fn);
+
+                expect(fn).toHaveBeenCalledTimes(0);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: true,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+
+                view.unwatch('isLockedView', fn);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: false,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('#watch()', () => {
@@ -636,6 +673,69 @@ describe('View', () => {
                 expect(fn).toHaveBeenCalledTimes(1);
                 expect(fn).toHaveBeenCalledWith(view, 'name');
             });
+
+            test('#watch("isLockedView")', () => {
+                const fn = jest.fn();
+                view.watch('isLockedView', fn);
+
+                expect(fn).toHaveBeenCalledTimes(0);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [...viewPath, 'isLocked'],
+                        value: true,
+                    },
+                ]);
+
+                expect(fn).toHaveBeenCalledTimes(1);
+                expect(fn).toHaveBeenCalledWith(view, 'isLockedView');
+            });
+        });
+    });
+
+    describe('deleting a view', () => {
+        test('errors when deleting a locked view', () => {
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [...viewPath, 'isLocked'],
+                    value: true,
+                },
+            ]);
+
+            deleteView();
+
+            expect(() => {
+                view.isLockedView;
+            }).toThrowErrorMatchingInlineSnapshot(`"View has been deleted"`);
+        });
+
+        test('succeeds when deleting an unlocked view', () => {
+            const fn = jest.fn();
+            view.watch('isLockedView', fn);
+
+            expect(fn).toHaveBeenCalledTimes(0);
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [...viewPath, 'isLocked'],
+                    value: false,
+                },
+            ]);
+            expect(fn).toHaveBeenCalledTimes(1);
+
+            deleteView();
+
+            expect(fn).toHaveBeenCalledTimes(1);
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: viewOrderPath,
+                    value: ['viwPrjctAll'],
+                },
+                {
+                    path: activeViewIdPath,
+                    value: 'viwPrjctAll',
+                },
+            ]);
+            expect(fn).toHaveBeenCalledTimes(1);
         });
     });
 });

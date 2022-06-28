@@ -595,7 +595,7 @@ describe('Base', () => {
 
     describe('getMaxRecordsPerTable', () => {
         it('returns the correct limit', () => {
-            expect(base.getMaxRecordsPerTable()).toEqual(50000);
+            expect(base.getMaxRecordsPerTable()).toEqual(100000);
         });
     });
 

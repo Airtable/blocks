@@ -68,6 +68,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     > = {};
     _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
 
+    _timeoutForRemovingFieldIds: NodeJS.Timeout | null = null;
+
     constructor(sdk: Sdk, tableId: TableId) {
         super(sdk, `${tableId}-RecordStore`);
 
@@ -266,6 +268,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 }
             });
         }
+        this._restartTimeoutToUnloadFieldIdsIfTimeoutIsActive();
         await Promise.all(pendingLoadPromises);
     }
 
@@ -331,7 +334,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         if (this._isForceUnloaded) {
             return;
         }
-        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
             let fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
             fieldRetainCount--;
@@ -341,23 +343,48 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 fieldRetainCount = 0;
             }
             this._cellValuesRetainCountByFieldId[fieldId] = fieldRetainCount;
+        }
+        this._startTimeoutToUnloadForFieldIdsIfNeeded();
+    }
 
-            if (fieldRetainCount === 0) {
+    _startTimeoutToUnloadForFieldIdsIfNeeded() {
+        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
+        for (const [fieldId, retainCount] of Object.entries(this._cellValuesRetainCountByFieldId)) {
+            if (retainCount === 0) {
                 fieldIdsWithZeroRetainCount.push(fieldId);
             }
         }
+
+        if (this._timeoutForRemovingFieldIds) {
+            clearTimeout(this._timeoutForRemovingFieldIds);
+            this._timeoutForRemovingFieldIds = null;
+        }
         if (fieldIdsWithZeroRetainCount.length > 0) {
-            setTimeout(() => {
+            this._timeoutForRemovingFieldIds = setTimeout(() => {
                 const fieldIdsToUnload = fieldIdsWithZeroRetainCount.filter(fieldId => {
-                    return this._cellValuesRetainCountByFieldId[fieldId] === 0;
+                    return (
+                        this._cellValuesRetainCountByFieldId[fieldId] === 0 &&
+                        this._areCellValuesLoadedByFieldId[fieldId]
+                    );
                 });
                 if (fieldIdsToUnload.length > 0) {
                     for (const fieldId of fieldIdsToUnload) {
                         this._areCellValuesLoadedByFieldId[fieldId] = false;
                     }
                     this._unloadCellValuesInFieldIds(fieldIdsToUnload);
+                } else {
+                    logErrorToSentry(
+                        'fieldIdsToUnload is empty, this likely means the unload timer is not properly reset.',
+                    );
                 }
+                this._timeoutForRemovingFieldIds = null;
             }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
+        }
+    }
+
+    _restartTimeoutToUnloadFieldIdsIfTimeoutIsActive() {
+        if (this._timeoutForRemovingFieldIds) {
+            this._startTimeoutToUnloadForFieldIdsIfNeeded();
         }
     }
 
@@ -402,6 +429,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 let fieldIdsToClear;
                 if (unloadedFieldIds) {
                     fieldIdsToClear = unloadedFieldIds;
+                    logErrorToSentry('Field Ids are being unloaded when record_store is unloaded');
                 } else {
                     const fieldIds = Object.keys(this._data.fieldsById);
                     fieldIdsToClear = fieldIds.filter(

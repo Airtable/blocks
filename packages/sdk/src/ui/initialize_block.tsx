@@ -25,7 +25,7 @@ interface EntryPoints {
 type DashboardOrEntryPoints = DashboardEntryElementFunction | EntryPoints;
 
 /**
- * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Apps-specific things.
+ * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Extensions-specific things.
  *
  * @param getEntryElement A function that returns your React Node.
  *
@@ -67,7 +67,7 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
         case BlockRunContextType.DASHBOARD_APP: {
             if (entryPoints.dashboard === undefined) {
                 throw spawnError(
-                    'If running an app within the dashboard, it must have a dashboard initialization function',
+                    'If running an extension within the dashboard, it must have a dashboard initialization function',
                 );
             }
             if (typeof entryPoints.dashboard !== 'function') {
@@ -81,7 +81,7 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
         case BlockRunContextType.VIEW: {
             if (entryPoints.view === undefined) {
                 throw spawnError(
-                    'If running an app within a view, it must have a view initialization function',
+                    'If running an extension within a view, it must have a view initialization function',
                 );
             }
             if (typeof entryPoints.view !== 'function') {

@@ -42,7 +42,7 @@ type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
  *     if (session.currentUser !== null) {
  *         return <span>The current user's name is {session.currentUser.name}</span>;
  *     } else {
- *         return <span>This app is being viewed in a public share</span>;
+ *         return <span>This extension is being viewed in a public share</span>;
  *     }
  * }
  * ```
@@ -89,7 +89,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     }
 
     /**
-     * The current user, or `null` if the app is running in a publicly shared base.
+     * The current user, or `null` if the extension is running in a publicly shared base.
      *
      * @example
      * ```js
@@ -99,7 +99,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *     const session = useSession();
      *
      *     if (!session.currentUser) {
-     *         return <div>This app is being used in a public share.</div>;
+     *         return <div>This extension is being used in a public share.</div>;
      *     }
      *
      *     return <ul>

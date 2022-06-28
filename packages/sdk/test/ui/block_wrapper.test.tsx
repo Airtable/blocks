@@ -41,27 +41,11 @@ describe('BlockWrapper', () => {
         );
     });
 
-    it('prompts user to resize viewport ("block" terminology)', () => {
+    it('prompts user to resize viewport ("extension" terminology)', () => {
         mockAirtableInterface.setFullscreenMaxSize.mockImplementation(() => {});
         mockAirtableInterface.enterFullscreen.mockImplementation(() => {});
         sdk.viewport.addMinSize({width: 2 ** 30});
 
-        expect(render(sdk).textContent).toMatch(/\bmake\s+this\s+block\s+bigger\b/i);
-    });
-
-    it('prompts user to resize viewport ("app" terminology)', () => {
-        mockAirtableInterface.triggerModelUpdates([
-            {
-                path: ['enabledFeatureNames'],
-                value: ['blocks.appsRename'],
-            },
-        ]);
-        __reset();
-
-        mockAirtableInterface.setFullscreenMaxSize.mockImplementation(() => {});
-        mockAirtableInterface.enterFullscreen.mockImplementation(() => {});
-        sdk.viewport.addMinSize({width: 2 ** 30});
-
-        expect(render(sdk).textContent).toMatch(/\bmake\s+this\s+app\s+bigger\b/i);
+        expect(render(sdk).textContent).toMatch(/\bmake\s+this\s+extension\s+bigger\b/i);
     });
 });

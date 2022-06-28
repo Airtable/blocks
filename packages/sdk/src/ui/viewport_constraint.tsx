@@ -18,9 +18,9 @@ type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
  * @docsPath UI/components/ViewportConstraint
  */
 interface ViewportConstraintProps {
-    /** The minimum viewport size of the app. */
+    /** The minimum viewport size of the extension. */
     minSize?: ViewportSizeConstraintProp;
-    /** The maximum viewport size of the app when it is in fullscreen mode. */
+    /** The maximum viewport size of the extension when it is in fullscreen mode. */
     maxFullscreenSize?: ViewportSizeConstraintProp;
     /** The contents of the viewport constraint. */
     children?: React.ReactNode;
@@ -37,7 +37,7 @@ const didSizeChange = (
 
 /**
  * When mounted, this wrapper component applies size constraints to the {@link Viewport}.
- * Like {@link addMinSize}, this will fullscreen the app if necessary and possible when
+ * Like {@link addMinSize}, this will fullscreen the extension if necessary and possible when
  * `minSize` is updated.
  *
  * @example

@@ -6,29 +6,29 @@ import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 
 /**
- * A hook to watch "open app" / "perform record action" events (from button field). Returns
+ * A hook to watch "open extension" / "perform record action" events (from button field). Returns
  * the data corresponding to the latest action, or `null` if no actions have occurred yet. If there
- * was a pending event for the app (for example, because a button that opens this app was
- * clicked while the apps dashboard was closed) it will be returned as the initial value.
+ * was a pending event for the extension (for example, because a button that opens this extension was
+ * clicked while the extensions dashboard was closed) it will be returned as the initial value.
  *
- * Like {@link useLoadable}, this hook puts the app in suspense while subscribing to events and
+ * Like {@link useLoadable}, this hook puts the extension in suspense while subscribing to events and
  * fetching the initial data.
  *
  * Also see {@link registerRecordActionDataCallback}, which subscribes to the same events in an
  * asynchronous (callback based) way. An advantage of using this hook over the callback is that you
- * immediately can handle any pending events when your app opens - with a callback, your app
+ * immediately can handle any pending events when your extension opens - with a callback, your extension
  * will finish it's initial render before handling the event.
  *
- * Like {@link registerRecordActionDataCallback}, your app won't receive events until this hook is
+ * Like {@link registerRecordActionDataCallback}, your extension won't receive events until this hook is
  * used for the first time. Because of that, we recommend only using this hook once, in the top
- * level component of your app. Similarly, using both `registerRecordActionDataCallback` and
+ * level component of your extension. Similarly, using both `registerRecordActionDataCallback` and
  * `useRecordActionData` is not supported.
  *
- * You can test your app in development by sending "perform record action" events to your app
- * in the "Advanced" panel of the app developer tools.
+ * You can test your extension in development by sending "perform record action" events to your extension
+ * in the "Advanced" panel of the extension developer tools.
  *
- * After releasing your app, you can use it with a button field by choosing the "Open custom
- * app" action and selecting your app.
+ * After releasing your extension, you can use it with a button field by choosing the "Open custom
+ * extension" action and selecting your extension.
  *
  * @example
  * ```js

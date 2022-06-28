@@ -16,7 +16,7 @@ const WatchableSettingsButtonKeys = Object.freeze({
 type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKeys>;
 
 /**
- * Interface to the settings button that lives outside the app's viewport.
+ * Interface to the settings button that lives outside the extension's viewport.
  *
  * The {@link useSettingsButton} hook is the recommended way to use the settings button, but you can
  * also use it with {@link useWatchable} if you want more granular control (for example, to only

@@ -22,7 +22,7 @@ import Sdk from './sdk';
 type WatchableGlobalConfigKey = string;
 
 /**
- * A key-value store for persisting configuration options for an app installation.
+ * A key-value store for persisting configuration options for an extension installation.
  *
  * The contents will be synced in real-time to all logged-in users of the installation.
  * Contents will not be updated in real-time when the installation is running in
@@ -215,7 +215,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
      *         globalConfig.setAsync('favoriteColor', color);
      *     }
-     *     // The update is now applied within your app (eg will be
+     *     // The update is now applied within your extension (eg will be
      *     // reflected in globalConfig) but are still being saved to
      *     // Airtable servers (e.g. may not be updated for other users yet)
      * }
@@ -323,7 +323,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     if (globalConfig.hasPermissionToSetPaths(updates)) {
      *         globalConfig.setPathsAsync(updates);
      *     }
-     *     // The updates are now applied within your app (eg will be reflected in
+     *     // The updates are now applied within your extension (eg will be reflected in
      *     // globalConfig) but are still being saved to Airtable servers (e.g. they
      *     // may not be updated for other users yet)
      * }

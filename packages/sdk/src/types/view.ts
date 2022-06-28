@@ -72,6 +72,7 @@ export interface ViewData {
     id: ViewId;
     name: string;
     type: ViewType;
+    isLockedView: boolean;
     visibleRecordIds?: Array<RecordId>;
     fieldOrder?: ViewFieldOrderData;
     colorsByRecordId?: ViewColorsByRecordIdData;

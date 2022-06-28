@@ -280,7 +280,7 @@ export enum FieldType {
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally
      * be notified when they're added. A single collaborator field has been configured to only
-     * reference one collaborator.
+     * reference one user collaborator.
      *
      * **Cell read format**
      * ```js
@@ -291,7 +291,7 @@ export enum FieldType {
      *     profilePicUrl?: string,
      * }
      * ```
-     * The currently selected collaborator.
+     * The currently selected user collaborator.
      *
      * **Cell write format**
      * ```js
@@ -322,9 +322,12 @@ export enum FieldType {
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally
      * be notified when they're added. A multiple collaborator field has been configured to
-     * reference any number of collaborators.
+     * reference any number of user or user group collaborators.
      *
-     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * Note: Adding user groups to multiple collaborator fields is an upcoming enterprise feature currently
+     * in beta, and will be generally released on August 29, 2022.
+     *
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_SELECTS, this array-type field
      * will override the current cell value when being updated. Be sure to spread the current
      * cell value if you want to keep the currently selected collaborators.
      *
@@ -337,7 +340,9 @@ export enum FieldType {
      *     profilePicUrl?: string,
      * }>
      * ```
-     * The currently selected collaborators.
+     * The currently selected user or user group collaborators. The email property is either the email
+     * address of the user collaborator or an RFC 2822 mailbox-list (comma-separated list of emails) that
+     * can be used to contact all members of the user group collaborator.
      *
      * **Cell write format**
      * ```js

@@ -197,8 +197,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * The user matching the given ID, name, or email address. Returns null if that user does not
      * exist or does not have access to this base.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getCollaboratorByIdIfExists} method instead.
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getCollaboratorByIdIfExists} method instead.
      *
      * @param collaboratorIdOrNameOrEmail The ID of the user.
      */
@@ -230,8 +230,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * or does not have access to this base. Use {@link getCollaboratorIfExists} instead if you are
      * unsure whether a collaborator with the given ID exists and has access to this base.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getCollaboratorById} method instead.
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getCollaboratorById} method instead.
      *
      * @param collaboratorIdOrNameOrEmail The ID of the user.
      */
@@ -329,8 +329,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * The table matching the given ID or name. Returns `null` if no matching table exists within
      * this base.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getTableByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getTableByIdIfExists} or
      * {@link getTableByNameIfExists} methods instead.
      *
      * @param tableIdOrName The ID or name of the table you're looking for.
@@ -345,8 +345,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Use {@link getTableIfExists} instead if you are unsure whether a table exists with the given
      * name/ID.
      *
-     * This method is convenient when building an app for a specific base, but for more generic
-     * apps the best practice is to use the {@link getTableById} or {@link getTableByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getTableById} or {@link getTableByName} methods
      * instead.
      *
      * @param tableIdOrName The ID or name of the table you're looking for.
@@ -462,7 +462,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * This action is asynchronous. Unlike new records, new tables are **not** created
      * optimistically locally. You must `await` the returned promise before using the new
-     * table in your app.
+     * table in your extension.
      *
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table: see below for an example. `name` and
@@ -530,7 +530,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Returns the maximum number of records allowed in each table of this base.
      */
     getMaxRecordsPerTable(): number {
-        return this._data.maxRowsPerTable ?? 50000;
+        return this._data.maxRowsPerTable ?? 100000;
     }
 
     /**
