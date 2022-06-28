@@ -52,6 +52,7 @@ describe('MockAirtableInterface', () => {
                                     color: null,
                                 },
                             ],
+                            isLockedView: false,
                         },
                         {
                             id: 'viwGrid2',
@@ -71,6 +72,7 @@ describe('MockAirtableInterface', () => {
                                     color: null,
                                 },
                             ],
+                            isLockedView: false,
                         },
                     ],
                     records: [

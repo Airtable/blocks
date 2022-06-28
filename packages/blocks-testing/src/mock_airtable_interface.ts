@@ -265,10 +265,14 @@ interface ViewFixtureData {
      * is distinct from the complete fixture data for the simulated Records.
      */
     records: Array<ViewRecordFixtureData>;
+    /**
+     * A boolean determining if a view is locked
+     */
+    isLockedView: boolean;
 }
 
 /**
- * A reference to Record contained within a simulated view. This is disctinct
+ * A reference to Record contained within a simulated view. This is distinct
  * from the complete fixture data for the simulated Record.
  */
 interface ViewRecordFixtureData {

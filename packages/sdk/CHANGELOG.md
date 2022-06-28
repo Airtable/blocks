@@ -11,6 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.12.0...HEAD)
 
+-   Add ability to read (and watch) if a view is locked
 -   Update `FieldType.MULTIPLE_COLLABORATOR` documentation to include user group collaborator
     information
 
