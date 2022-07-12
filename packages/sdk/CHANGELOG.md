@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.13.0...HEAD)
 
 -   Add `personalCloseup` icon
+-   Add `xCheckbox` icon
 
 ## [1.13.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.12.0...@airtable/blocks@1.13.0) - 2022-06-28
 
