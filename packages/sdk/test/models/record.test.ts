@@ -660,6 +660,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -672,6 +673,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -684,6 +686,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -707,6 +710,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -719,6 +723,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -731,6 +736,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -754,6 +760,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -766,6 +773,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",
@@ -778,6 +786,7 @@ describe('Record', () => {
                         Object {
                           "description": "",
                           "id": "fld1stPrimary",
+                          "isSynced": false,
                           "lock": null,
                           "name": "Name",
                           "type": "singleLineText",

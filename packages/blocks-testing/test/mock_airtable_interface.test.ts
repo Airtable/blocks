@@ -454,6 +454,7 @@ describe('MockAirtableInterface', () => {
             typeOptions: {},
             description: null,
             lock: null,
+            isSynced: false,
         };
 
         beforeEach(() => {

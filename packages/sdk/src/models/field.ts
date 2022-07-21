@@ -17,6 +17,7 @@ const WatchableFieldKeys = Object.freeze({
     options: 'options' as const,
     isComputed: 'isComputed' as const,
     description: 'description' as const,
+    isFieldSynced: 'isFieldSynced' as const,
 });
 
 /**
@@ -448,6 +449,17 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
+     * `true` if this field is synced, `false` otherwise. A field is
+     * "synced" if it's source is from another airtable base or external data source
+     * like Google Calendar, Jira, etc..
+     *
+     *  @hidden
+     */
+    get isFieldSynced(): boolean {
+        return this._data.isSynced ?? false;
+    }
+
+    /**
      * `true` if this field is computed, `false` otherwise. A field is
      * "computed" if it's value is not set by user input (e.g. autoNumber, formula,
      * etc.). Can be watched
@@ -604,6 +616,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         }
         if (dirtyPaths.description) {
             this._onChange(WatchableFieldKeys.description);
+        }
+        if (dirtyPaths.isSynced) {
+            this._onChange(WatchableFieldKeys.isFieldSynced);
         }
     }
 }

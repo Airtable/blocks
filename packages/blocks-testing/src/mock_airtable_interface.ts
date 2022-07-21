@@ -62,6 +62,7 @@ const unmodifiableTableData = {
 
 const unmodifiableFieldData = {
     lock: null,
+    isSynced: false,
 };
 
 /**

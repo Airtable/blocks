@@ -1155,6 +1155,7 @@ export interface FieldData {
     typeOptions: {[key: string]: unknown} | null | undefined;
     description: string | null;
     lock: FieldLock | null;
+    isSynced: boolean | null;
 }
 
 /** @hidden */
