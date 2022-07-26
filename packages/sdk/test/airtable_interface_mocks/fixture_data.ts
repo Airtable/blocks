@@ -91,6 +91,7 @@ function convertFieldFixtureDataToFieldData(fieldFixtureData: FieldFixtureData):
         description,
         typeOptions: options,
         lock: null,
+        isSynced: false,
     };
 }
 

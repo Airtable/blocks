@@ -19,6 +19,10 @@ describe('Field', () => {
     let field: Field;
 
     const makeField = (fieldType: FieldType) => {
+        return makeFieldWithIsSynced(fieldType, null);
+    };
+
+    const makeFieldWithIsSynced = (fieldType: FieldType, isSynced: boolean | null) => {
         const fieldId = 'fldTest';
         const baseData = mockAirtableInterface.sdkInitData.baseData;
         const parentTable = baseData.tablesById.tblDesignProjects;
@@ -29,6 +33,7 @@ describe('Field', () => {
             typeOptions: null,
             description: null,
             lock: null,
+            isSynced: isSynced,
         };
 
         const newField = new Field(sdk, sdk.base.getTableById('tblDesignProjects'), fieldId);
@@ -361,6 +366,23 @@ describe('Field', () => {
         expect(field.description).toBe('the project client');
     });
 
+    describe('#isFieldSynced', () => {
+        test('null', () => {
+            const newField = makeFieldWithIsSynced(FieldType.SINGLE_SELECT, null);
+            expect(newField.isFieldSynced).toBe(false);
+        });
+
+        test('affirmative', () => {
+            const newField = makeFieldWithIsSynced(FieldType.SINGLE_SELECT, true);
+            expect(newField.isFieldSynced).toBe(true);
+        });
+
+        test('negative', () => {
+            const newField = makeFieldWithIsSynced(FieldType.SINGLE_SELECT, false);
+            expect(newField.isFieldSynced).toBe(false);
+        });
+    });
+
     describe('#isComputed', () => {
         test('affirmative', () => {
             mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
@@ -475,12 +497,14 @@ describe('Field', () => {
                 name: jest.fn(),
                 options: jest.fn(),
                 type: jest.fn(),
+                isFieldSynced: jest.fn(),
             };
             field.watch('description', mocks.description);
             field.watch('isComputed', mocks.isComputed);
             field.watch('name', mocks.name);
             field.watch('options', mocks.options);
             field.watch('type', mocks.type);
+            field.watch('isFieldSynced', mocks.isFieldSynced);
         });
 
         test('key: description', () => {
@@ -502,6 +526,7 @@ describe('Field', () => {
             expect(mocks.name).toHaveBeenCalledTimes(0);
             expect(mocks.options).toHaveBeenCalledTimes(0);
             expect(mocks.type).toHaveBeenCalledTimes(0);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(0);
         });
 
         test('key: isComputed', () => {
@@ -523,6 +548,7 @@ describe('Field', () => {
             expect(mocks.name).toHaveBeenCalledTimes(0);
             expect(mocks.options).toHaveBeenCalledTimes(0);
             expect(mocks.type).toHaveBeenCalledTimes(1);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(0);
         });
 
         test('key: name', () => {
@@ -544,6 +570,7 @@ describe('Field', () => {
             expect(mocks.name).toHaveBeenCalledTimes(1);
             expect(mocks.options).toHaveBeenCalledTimes(0);
             expect(mocks.type).toHaveBeenCalledTimes(0);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(0);
         });
 
         test('key: options', () => {
@@ -565,6 +592,7 @@ describe('Field', () => {
             expect(mocks.name).toHaveBeenCalledTimes(0);
             expect(mocks.options).toHaveBeenCalledTimes(1);
             expect(mocks.type).toHaveBeenCalledTimes(0);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(0);
         });
 
         test('key: type', () => {
@@ -586,6 +614,29 @@ describe('Field', () => {
             expect(mocks.name).toHaveBeenCalledTimes(0);
             expect(mocks.options).toHaveBeenCalledTimes(0);
             expect(mocks.type).toHaveBeenCalledTimes(1);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(0);
+        });
+
+        test('key: isFieldSynced', () => {
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: [
+                        'tablesById',
+                        'tblDesignProjects',
+                        'fieldsById',
+                        'fldPrjctClient',
+                        'isSynced',
+                    ],
+                    value: 'true',
+                },
+            ]);
+
+            expect(mocks.description).toHaveBeenCalledTimes(0);
+            expect(mocks.isComputed).toHaveBeenCalledTimes(0);
+            expect(mocks.name).toHaveBeenCalledTimes(0);
+            expect(mocks.options).toHaveBeenCalledTimes(0);
+            expect(mocks.type).toHaveBeenCalledTimes(0);
+            expect(mocks.isFieldSynced).toHaveBeenCalledTimes(1);
         });
     });
 });
