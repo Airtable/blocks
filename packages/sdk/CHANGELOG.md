@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.14.0...HEAD)
 
-No changes.
+-   Add `applyRowTemplate` icon
 
 ## [1.14.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.13.0...@airtable/blocks@1.14.0) - 2022-07-26
 
