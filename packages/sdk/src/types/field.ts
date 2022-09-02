@@ -510,6 +510,9 @@ export enum FieldType {
      * ```js
      * Date | string
      * ```
+     * For a `dateTime` field configured with a non `utc` or `client` time zone like `America/Los_Angeles` (currently in [beta](https://community.airtable.com/t/new-beta-more-time-zone-formatting-options-for-datetime-fields/50863)),
+     * ambiguous string inputs like "2020-09-05T07:00:00" and "2020-09-08" will be interpreted according to `timeZone` of the field, and
+     * nonambiguous string inputs with zone offset like "2020-09-05T07:00:00.000Z" and "2020-09-08T00:00:00-07:00" will be interpreted as is.
      *
      * **Field options read format**
      * ```js
