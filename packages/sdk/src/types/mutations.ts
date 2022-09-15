@@ -39,6 +39,8 @@ export interface SetMultipleRecordsCellValuesMutation {
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
+    /** @hidden */
+    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
 }
 
 /** @hidden */
@@ -51,6 +53,7 @@ export interface PartialSetMultipleRecordsCellValuesMutation {
               readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
           }>
         | undefined;
+    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
 }
 
 /**
@@ -89,6 +92,8 @@ export interface CreateMultipleRecordsMutation {
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
+    /** @hidden */
+    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
 }
 
 /** @hidden */
@@ -101,6 +106,7 @@ export interface PartialCreateMultipleRecordsMutation {
               readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
           }>
         | undefined;
+    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
 }
 
 /**

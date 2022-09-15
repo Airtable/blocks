@@ -849,6 +849,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: recordsWithCellValuesByFieldId,
+            opts: {parseDateCellValueInColumnTimeZone: true},
         });
     }
     /**
@@ -1439,6 +1440,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: recordsToCreate,
+            opts: {parseDateCellValueInColumnTimeZone: true},
         });
 
         return recordsToCreate.map(record => record.id);

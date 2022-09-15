@@ -586,6 +586,23 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         }
 
         if (isAuthenticMutation(mutation)) {
+            // The two mutation types below include the internal opt 'parseDateCellValueInColumnTimeZone'
+            // which is passed into hyperbase to enable the correct date string input behavior for date time
+            // columns with utc and client time zones.
+            // Since it's an internal opt added to the mutation, we hide it from the emitted mutation, so that
+            // when mutations are watched via code such as `testDriver.watch('mutation', addMutation)` the
+            // returned mutations won't include the opt.
+            if (
+                mutation.type === TestMutationTypes.CREATE_MULTIPLE_RECORDS ||
+                mutation.type === TestMutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES
+            ) {
+                // Note that opts are internal to the mocked mutation and not re-emitted - this is in large
+                // part to ensure that we do not break existing tests in a backwards incompatible way.
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const {opts: _internalOpts, ...mainMutation} = mutation;
+                this.emit('mutation', mainMutation);
+                return;
+            }
             this.emit('mutation', mutation);
         }
     }

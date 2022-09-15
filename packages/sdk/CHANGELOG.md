@@ -14,6 +14,12 @@ commit that affects the code in a way that consumers might care about should inc
 -   Add `applyRowTemplate` icon
 -   Update `FieldType.DATE_TIME` documentation to pre-announce write behavior for field level time
     zones
+-   Modify `createRecordsAsync`, `updateRecordsAsync`, `convertStringToCellValue` so that date
+    string inputs to date time fields are interpreted correctly for utc or client time zone, fixing
+    previously incorrect behaviors. In this new version, ambiguous strings like
+    "2020-09-05T07:00:00" and "2020-09-08" will be interpreted according to the `timeZone` of the
+    field, and nonambiguous string inputs with zone offset like "2020-09-05T07:00:00.000Z" and
+    "2020-09-08T00:00:00-07:00" will be interpreted correctly as the underlying timestamp.
 
 ## [1.14.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.13.0...@airtable/blocks@1.14.0) - 2022-07-26
 

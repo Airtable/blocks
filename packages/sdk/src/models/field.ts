@@ -570,6 +570,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             appInterface,
             string,
             this._data,
+            // The opt parseDateCellValueInColumnTimeZone is used here to ensure date string
+            // inputs are interpreted correctly according to the `timeZone` of the dateTime field.
+            {parseDateCellValueInColumnTimeZone: this.type === FieldType.DATE_TIME},
         );
 
         // Temporarily bail out of validating computed values (since validation will crash)

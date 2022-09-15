@@ -1145,6 +1145,9 @@ describe('Table', () => {
                             cellValuesByFieldId: {},
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1164,6 +1167,9 @@ describe('Table', () => {
                             cellValuesByFieldId: {},
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1189,6 +1195,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1214,6 +1223,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1229,6 +1241,9 @@ describe('Table', () => {
                     type: MutationTypes.CREATE_MULTIPLE_RECORDS,
                     tableId: 'tblDesignProjects',
                     records: [],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1248,6 +1263,9 @@ describe('Table', () => {
                             cellValuesByFieldId: {},
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1277,6 +1295,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1306,6 +1327,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -1974,6 +1998,9 @@ describe('Table', () => {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
                     tableId: 'tblDesignProjects',
                     records: [{id: 'recA', cellValuesByFieldId: {}}],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2019,6 +2046,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2043,6 +2073,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2069,6 +2102,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2095,6 +2131,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2122,6 +2161,9 @@ describe('Table', () => {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
                     tableId: 'tblDesignProjects',
                     records: [],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2135,6 +2177,9 @@ describe('Table', () => {
                     type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
                     tableId: 'tblDesignProjects',
                     records: [{id: 'recA', cellValuesByFieldId: {}}],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2200,6 +2245,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -2243,6 +2291,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );

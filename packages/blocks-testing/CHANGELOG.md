@@ -13,6 +13,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Use `keyof any` instead of `PropertyKey` in type definition to avoid incompatibility with the
     "[keyofStringsOnly](https://www.typescriptlang.org/tsconfig#keyofStringsOnly)" tsconfig option
+-   Add mutation testing changes corresponding to blocks-sdk 1.15.0. This should be backward
+    compatible with previous blocks-sdk versions. Please refer to the blocks-sdk changelog for date
+    time field write changes.
 
 ## [0.0.4](https://github.com/airtable/blocks-testing/compare/@airtable/blocks-testing@0.0.3...@airtable/blocks-testing@0.0.4) - 2021-04-23
 
