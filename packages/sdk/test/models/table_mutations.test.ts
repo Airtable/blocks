@@ -72,6 +72,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );
@@ -105,6 +108,9 @@ describe('Table', () => {
                             },
                         },
                     ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
+                    },
                 },
                 {holdForMs: 100},
             );

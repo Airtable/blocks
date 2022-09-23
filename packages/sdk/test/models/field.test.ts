@@ -305,7 +305,9 @@ describe('Field', () => {
             ).toHaveBeenCalledTimes(1);
             expect(
                 mockAirtableInterface.fieldTypeProvider.convertStringToCellValue,
-            ).toHaveBeenCalledWith(sdk.__appInterface, 'hello', field._data);
+            ).toHaveBeenCalledWith(sdk.__appInterface, 'hello', field._data, {
+                parseDateCellValueInColumnTimeZone: false,
+            });
         });
 
         test('computed value (no validation applied)', () => {

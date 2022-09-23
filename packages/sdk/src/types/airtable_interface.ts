@@ -176,6 +176,7 @@ export interface FieldTypeProvider {
         appInterface: AppInterface,
         string: string,
         fieldData: FieldData,
+        opts?: {parseDateCellValueInColumnTimeZone?: boolean},
     ): unknown;
     convertCellValueToString(
         appInterface: AppInterface,

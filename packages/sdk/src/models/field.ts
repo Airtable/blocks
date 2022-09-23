@@ -554,6 +554,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             appInterface,
             string,
             this._data,
+            {parseDateCellValueInColumnTimeZone: this.type === FieldType.DATE_TIME},
         );
 
         if (this.isComputed) {
