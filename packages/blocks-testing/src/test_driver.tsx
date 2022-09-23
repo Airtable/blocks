@@ -19,16 +19,16 @@ type TableAndOrView =
     | {table?: TableId | string; view: ViewId | string};
 
 /**
- * A class designed to facilitate the automated testing of Airtable Apps
- * outside of a production Apps environment. Each instance creates a simulated
+ * A class designed to facilitate the automated testing of Airtable Extensions
+ * outside of a production Extensions environment. Each instance creates a simulated
  * {@link Base} which is distinct from any other Base created in this way.
- * Custom Apps can be instantiated using an instance of this class; see {@link
+ * Custom Extensions can be instantiated using an instance of this class; see {@link
  * Container|the `Container` method}.
  *
  * The example code for this class's methods is written in terms of a
- * non-existent Airtable App called `MyCustomApp`. Each example includes a
- * description of the presumed behavior for that App. Consumers of this library
- * will work with their own Apps whose behavior differs from these examples, so
+ * non-existent Airtable Extension called `MyCustomExtension`. Each example includes a
+ * description of the presumed behavior for that Extension. Consumers of this library
+ * will work with their own Extensions whose behavior differs from these examples, so
  * their tests will be distinct in this regard.
  *
  * @docsPath testing/TestDriver
@@ -80,14 +80,14 @@ export default class TestDriver {
     }
 
     /**
-     * A React Component which may be used to wrap App Components, enabling
-     * them to run outside of a production Apps environment.
+     * A React Component which may be used to wrap Extension Components, enabling
+     * them to run outside of a production Extensions environment.
      *
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which defines a React Component...
-     * const MyCustomApp = require('../src/my_custom_app');
+     * // Given MyCustomExtension, an Airtable Extension which defines a React Component...
+     * const MyCustomExtension = require('../src/my_custom_extension');
      * // And given myFixtureData, a data structure describing the initial
      * // state of a simulated Airtable Base...
      * const myFixtureData = require('./my_fixture_data');
@@ -96,7 +96,7 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      * ```
@@ -116,9 +116,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays the names of all
+     * // Given MyCustomExtension, an Airtable Extension which displays the names of all
      * // the Fields in the active Table...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing an Airtable
      * // Base which contains a Table named "Table One" with three Fields...
      * import myFixtureData from './my_fixture_data';
@@ -129,11 +129,11 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyApp initially displays all three Fields
+     * // Verify that MyExtension initially displays all three Fields
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
      * expect(itemTexts).toEqual(['1st field', '2nd field', '3rd field']);
@@ -141,7 +141,7 @@ export default class TestDriver {
      * // Simulate the destruction of the Field named "2nd field"
      * await testDriver.deleteFieldAsync('Table One', '2nd field');
      *
-     * // Verify that MyApp correctly updates to describe the two remaining
+     * // Verify that MyExtension correctly updates to describe the two remaining
      * // Fields
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
@@ -165,9 +165,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays the names of all
+     * // Given MyCustomExtension, an Airtable Extension which displays the names of all
      * // the Tables in the Base...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing an Airtable
      * // Base which contains three Tables...
      * import myFixtureData from './my_fixture_data';
@@ -178,11 +178,11 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyApp initially displays all three Tables
+     * // Verify that MyExtension initially displays all three Tables
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
      * expect(itemTexts).toEqual(['1st table', '2nd table', '3rd table']);
@@ -190,7 +190,7 @@ export default class TestDriver {
      * // Simulate the destruction of the Table named "2nd table"
      * testDriver.deleteTable('2nd table');
      *
-     * // Verify that MyApp correctly updates to describe the two remaining
+     * // Verify that MyExtension correctly updates to describe the two remaining
      * // Table
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
@@ -225,9 +225,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays the names of all
+     * // Given MyCustomExtension, an Airtable Extension which displays the names of all
      * // the Views in the active Table...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing an Airtable
      * // Base which contains a Table named "Table One" with three Views...
      * import myFixtureData from './my_fixture_data';
@@ -238,11 +238,11 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyApp initially displays all three Views
+     * // Verify that MyExtension initially displays all three Views
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
      * expect(itemTexts).toEqual(['1st view', '2nd view', '3rd view']);
@@ -250,7 +250,7 @@ export default class TestDriver {
      * // Simulate the destruction of the Field named "2nd view"
      * await testDriver.deleteViewAsync('Table One', '2nd view');
      *
-     * // Verify that MyApp correctly updates to describe the two remaining
+     * // Verify that MyExtension correctly updates to describe the two remaining
      * // Views
      * items = screen.getAllByRole('listitem');
      * itemTexts = items.map((el) => el.textContent);
@@ -270,7 +270,7 @@ export default class TestDriver {
 
     /**
      * Update the active {@link Table} and/or the active {@link View} of the
-     * App's {@link Cursor}. Either `table` or `view` must be specified.
+     * Extension's {@link Cursor}. Either `table` or `view` must be specified.
      *
      * @example
      * ```js
@@ -280,9 +280,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays the names of the
+     * // Given MyCustomExtension, an Airtable Extension which displays the names of the
      * // active Table...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing an Airtable
      * // Base which contains two Tables...
      * import myFixtureData from './my_fixture_data';
@@ -293,11 +293,11 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyApp initially displays the first Table
+     * // Verify that MyExtension initially displays the first Table
      * heading = screen.getByRole('heading');
      * expect(heading.textContent).toBe('First table');
      *
@@ -305,7 +305,7 @@ export default class TestDriver {
      * // user interface
      * testDriver.setActiveCursorModels(({table: 'Second table'});
      *
-     * // Verify that MyApp correctly updates to describe the newly-selected
+     * // Verify that MyExtension correctly updates to describe the newly-selected
      * // Table
      * heading = screen.getByRole('heading');
      * expect(heading.textContent).toBe('Second table');
@@ -351,16 +351,16 @@ export default class TestDriver {
 
     /**
      * Specify the outcome of internal permission checks. This influences the
-     * behavior of not only explicit permission checks from Apps code but also
+     * behavior of not only explicit permission checks from Extensions code but also
      * the outcome of model operations such as {@link createRecordsAsync}.
      *
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays a button labeled
+     * // Given MyCustomExtension, an Airtable Extension which displays a button labeled
      * // "Add" and which disables that button for users who lack "write"
      * // permissions to the Base...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing the initial
      * // state of a simulated Airtable Base...
      * import myFixtureData from './my_fixture_data';
@@ -375,11 +375,11 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyCustomApp recognizes that the current user may not
+     * // Verify that MyCustomExtension recognizes that the current user may not
      * // create Records and that disables the corresponding aspect of the user
      * // interface.
      * const button = screen.getByRole('button', {name: 'Add'});
@@ -397,9 +397,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which prompts the end user to
+     * // Given MyCustomExtension, an Airtable Extension which prompts the end user to
      * // select a Record and displays the name of the Record they selected...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing the initial
      * // state of a simulated Airtable Base...
      * import myFixtureData from './my_fixture_data';
@@ -414,19 +414,19 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Simulate a user clicking on a button in MyCustomApp labeled with the
-     * // text "Choose record". If MyCustomApp reacts to this event by invoking
+     * // Simulate a user clicking on a button in MyCustomExtension labeled with the
+     * // text "Choose record". If MyCustomExtension reacts to this event by invoking
      * // the SDK's `expandRecordPickerAsync`, then it will receive the second
      * // available record due to the function that is provided to
      * // `simulateExpandedRecordSelection` above.
      * const button = screen.getByRole('button', {name: 'Choose record'});
      * userEvent.click(button);
      *
-     * // Verify that MyCustomApp correctly responds to the simulated user's
+     * // Verify that MyCustomExtension correctly responds to the simulated user's
      * // input
      * const heading = await waitFor(() => screen.getByRole('heading'));
      * expect(heading.textContent)
@@ -439,7 +439,7 @@ export default class TestDriver {
 
     /**
      * Simulate a user visually selecting a set of {@link Record|Records} in
-     * the active {@link Table}. This operation is unrelated to an App's
+     * the active {@link Table}. This operation is unrelated to an Extension's
      * programmatic "selection" of records via, e.g. {@link
      * Table.selectRecords}. To deselect all records, invoke this method with
      * an empty array.
@@ -447,9 +447,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which displays the number of
+     * // Given MyCustomExtension, an Airtable Extension which displays the number of
      * // Records that an end user has selected in the active Table...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing the initial
      * // state of a simulated Airtable Base...
      * import myFixtureData from './my_fixture_data';
@@ -459,7 +459,7 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
@@ -469,7 +469,7 @@ export default class TestDriver {
      * // Simulate an end-user selecting the second and fourth Record
      * testDriver.userSelectRecords([records[1].id, records[3].id]);
      *
-     * // Verify that MyCustomApp correctly responds to the simulated user's
+     * // Verify that MyCustomExtension correctly responds to the simulated user's
      * // input
      * const heading = await waitFor(() => screen.getByRole('heading'));
      * expect(heading.textContent).toBe('2 records selected');
@@ -511,10 +511,10 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which presents the user with one
+     * // Given MyCustomExtension, an Airtable Extension which presents the user with one
      * // button for each available Record, and which responds to button clicks
      * // by expanding the Record in the Airtable user interface...
-     * import MyCustomApp from '../src/my_custom_app';
+     * import MyCustomExtension from '../src/my_custom_extension';
      * // And given myFixtureData, a data structure describing an Airtable
      * // Base which contains a Table with three records...
      * import myFixtureData from './my_fixture_data';
@@ -523,7 +523,7 @@ export default class TestDriver {
      *
      * const testDriver = new TestDriver(myFixtureData);
      *
-     * // Keep track of every time MyCustomApp attempts to expand a Record in
+     * // Keep track of every time MyCustomExtension attempts to expand a Record in
      * // the Airtable user interface
      * let expandedRecordIds = [];
      * testDriver.watch('expandRecord', ({recordId}) => {
@@ -532,20 +532,20 @@ export default class TestDriver {
      *
      * render(
      *     <testDriver.Container>
-     *         <MyCustomApp />
+     *         <MyCustomExtension />
      *     </testDriver.Container>
      * );
      *
-     * // Verify that MyCustomApp does not expand any Records prior to user
+     * // Verify that MyCustomExtension does not expand any Records prior to user
      * // interaction
      * expect(expandedRecords).toEqual([]);
      *
-     * // Simulate a user clicking on the second button in MyCustomApp, which
+     * // Simulate a user clicking on the second button in MyCustomExtension, which
      * // is expected to correspond to the second Record in the simulated Base
      * const buttons = screen.getAllByRole('button');
      * userEvent.click(buttons[1]);
      *
-     * // Verify that MyCustomApp correctly expanded the second Record in the
+     * // Verify that MyCustomExtension correctly expanded the second Record in the
      * // Airtable user interface
      * expect(expandedRecords).toEqual(['rec2']);
      * ```
@@ -564,9 +564,9 @@ export default class TestDriver {
      * @example
      * ```js
      * import TestDriver from '@airtable/blocks-testing';
-     * // Given MyCustomApp, an Airtable App which enters "full screen" mode
+     * // Given MyCustomExtension, an Airtable Extension which enters "full screen" mode
      * // in response to certain interactions...
-     * const MyCustomApp = require('../src/my_custom_app');
+     * const MyCustomExtension = require('../src/my_custom_extension');
      * // And given myFixtureData, a data structure describing the initial
      * // state of a simulated Airtable Base...
      * const myFixtureData = require('./my_fixture_data');

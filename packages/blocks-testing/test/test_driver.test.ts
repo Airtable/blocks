@@ -105,6 +105,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                             {
                                 id: 'viwForm',
@@ -124,6 +125,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                         ],
                         records: [
@@ -187,6 +189,7 @@ describe('TestDriver', () => {
                                         color: null,
                                     },
                                 ],
+                                isLockedView: false,
                             },
                         ],
                         records: [
@@ -210,6 +213,7 @@ describe('TestDriver', () => {
                         isActive: true,
                     },
                 ],
+                workspaceId: 'wsptestworkspaceid',
             },
         };
         testDriver = new TestDriver(fixtureData);
@@ -626,6 +630,9 @@ describe('TestDriver', () => {
                 ],
                 tableId: 'tblTable1',
                 type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                opts: {
+                    parseDateCellValueInColumnTimeZone: true,
+                },
             });
         });
 

@@ -62,6 +62,7 @@ const unmodifiableTableData = {
 
 const unmodifiableFieldData = {
     lock: null,
+    isSynced: false,
 };
 
 /**
@@ -201,6 +202,7 @@ export interface FixtureData {
         color?: string;
         tables: Array<TableFixtureData>;
         collaborators: Array<CollaboratorData & {isActive: boolean}>;
+        workspaceId: string;
     };
 }
 
@@ -264,10 +266,14 @@ interface ViewFixtureData {
      * is distinct from the complete fixture data for the simulated Records.
      */
     records: Array<ViewRecordFixtureData>;
+    /**
+     * A boolean determining if a view is locked
+     */
+    isLockedView: boolean;
 }
 
 /**
- * A reference to Record contained within a simulated view. This is disctinct
+ * A reference to Record contained within a simulated view. This is distinct
  * from the complete fixture data for the simulated Record.
  */
 interface ViewRecordFixtureData {
@@ -306,8 +312,8 @@ interface RecordDataStore {
 /**
  * A callback function allowing tests to simulate user interaction with the
  * expanded record picker UI. The testing library will invoke this function
- * whenever the App under test uses the {@link expandRecordPickerAsync}
- * function, and the return value of this function will be provided to the App
+ * whenever the Extension under test uses the {@link expandRecordPickerAsync}
+ * function, and the return value of this function will be provided to the Extension
  * under test as the {@link Record} that the simulated user selected.
  */
 export type PickRecord = (
@@ -433,6 +439,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
                 activeCollaboratorIds: fixtureData.base.collaborators
                     .filter(({isActive}) => isActive)
                     .map(({id}) => id),
+                workspaceId: fixtureData.base.workspaceId,
             },
             runContext: {type: BlockRunContextType.DASHBOARD_APP},
         };
@@ -571,6 +578,15 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         }
 
         if (isAuthenticMutation(mutation)) {
+            if (
+                mutation.type === TestMutationTypes.CREATE_MULTIPLE_RECORDS ||
+                mutation.type === TestMutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES
+            ) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const {opts: _internalOpts, ...mainMutation} = mutation;
+                this.emit('mutation', mainMutation);
+                return;
+            }
             this.emit('mutation', mutation);
         }
     }
@@ -824,10 +840,10 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
     trackEvent() {}
 
     /**
-     * `trackExposure` cannot be invoked by any Apps (neither those authored by
-     * Airtable nor by other App developers). It should be implemented to
+     * `trackExposure` cannot be invoked by any Extensions (neither those authored by
+     * Airtable nor by other Extension developers). It should be implemented to
      * satisfy the AirtableInterface contract, but the implementation should
-     * not throw because it must be successful for Apps to function. Likewise,
+     * not throw because it must be successful for Extensions to function. Likewise,
      * it should not emit an event because test authors have no need to track
      * its usage.
      */

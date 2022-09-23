@@ -52,6 +52,7 @@ describe('MockAirtableInterface', () => {
                                     color: null,
                                 },
                             ],
+                            isLockedView: false,
                         },
                         {
                             id: 'viwGrid2',
@@ -71,6 +72,7 @@ describe('MockAirtableInterface', () => {
                                     color: null,
                                 },
                             ],
+                            isLockedView: false,
                         },
                     ],
                     records: [
@@ -113,6 +115,7 @@ describe('MockAirtableInterface', () => {
                     isActive: true,
                 },
             ],
+            workspaceId: 'wsptestworkspaceid',
         };
     });
 
@@ -440,6 +443,7 @@ describe('MockAirtableInterface', () => {
             typeOptions: {},
             description: null,
             lock: null,
+            isSynced: false,
         };
 
         beforeEach(() => {

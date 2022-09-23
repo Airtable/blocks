@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks-testing",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Airtable Blocks Testing Library",
     "repository": {
         "type": "git",
@@ -114,7 +114,7 @@
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
             "after:bump": "yarn build",
-            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks-testing@${version})"
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-testing@${version}"
         },
         "npm": {
             "access": "public"

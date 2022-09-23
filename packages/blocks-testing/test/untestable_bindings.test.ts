@@ -5,7 +5,7 @@ import {blockStats, trackEvent} from '@airtable/blocks/unstable_private_utils';
 
 const errorMessage = `Unable to simulate behavior
 
-Apps which retrieve model references using JavaScript \`import\` declarations cannot be tested. To resolve this, replace \`import\` declaration in your App's source code with corresponding React Hooks. For instance, replace
+Extensions which retrieve model references using JavaScript \`import\` declarations cannot be tested. To resolve this, replace \`import\` declaration in your Extension's source code with corresponding React Hooks. For instance, replace
 
     import {base} from "@airtable/blocks";
 

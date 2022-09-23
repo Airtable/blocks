@@ -1,13 +1,14 @@
-# Introduction to writing automated tests for Airtable Apps
+# Introduction to writing automated tests for Airtable Extensions
 
 Support for automated testing is currently in open beta.
 
 ## Implementation status
 
 Not all operations are currently supported. In the course of writing tests, authors may find that
-the App under test does not function as intended when induced to perform these operations. Authors
-may request support from the SDK maintainers or implement the functionality they need as part of
-their work (this document includes guidance on extending the testing API in a subsequent section).
+the Extension under test does not function as intended when induced to perform these operations.
+Authors may request support from the SDK maintainers or implement the functionality they need as
+part of their work (this document includes guidance on extending the testing API in a subsequent
+section).
 
 The following table describes the implementation status of each operation.
 
@@ -37,7 +38,7 @@ The following table describes the implementation status of each operation.
     Ideally they would be complemented by a more powerful testing API.
 -   [2] These operations can be initiated using the SDK's public API.
 -   [3] Unsupported operations: creating records for tables which have not yet been loaded,
-    [creating records with data for fields which have not yet beean loaded](https://github.com/Hyperbase/blocks-sdk/blob/a77fa4b959f512a041e987ee0bfe3fafb7db8b59/packages/sdk/src/models/mutations.ts#L583),
+    [creating records with data for fields which have not yet been loaded](https://github.com/Hyperbase/blocks-sdk/blob/a77fa4b959f512a041e987ee0bfe3fafb7db8b59/packages/sdk/src/models/mutations.ts#L583),
     and creating records in specific views
 
 ## Key concepts
@@ -45,25 +46,26 @@ The following table describes the implementation status of each operation.
 **Test fixture data** is a representation of the state of an Airtable Base, including descriptions
 of Tables, Views, Fields, and Records. It is written by test authors and in terms of
 JSON-serializable values.
-[The App Test Fixtures Airtable App](https://airtable.com/marketplace/blk5qI32GYyYb1Rbm/test-fixture-generator)
-allows developers to generate this data from the state of an authentic Base. This App is not ready
-for beta yet.
+[The Extension Test Fixtures Airtable Extension](https://airtable.com/marketplace/blk5qI32GYyYb1Rbm/test-fixture-generator)
+allows developers to generate this data from the state of an authentic Base. This Extension is not
+ready for beta yet.
 
-**`TestDriver`** is the JavaScript interface for creating and manipulating a simulated Airtable Apps
-environment. It implements methods for performing operations which are not available in the SDK.
+**`TestDriver`** is the JavaScript interface for creating and manipulating a simulated Airtable
+Extensions environment. It implements methods for performing operations which are not available in
+the SDK.
 
 **`AirtableInterface`** is the layer of the SDK which mediates between the models and the backend.
-In production environments, it operates via asynchronous message passing with the App's parent web
-browser frame. In testing environments, no transmission occurs, but the `AirtableInterface` behaves
-as though it is receiving relevant messages in order to simulate production behavior.
+In production environments, it operates via asynchronous message passing with the Extension's parent
+web browser frame. In testing environments, no transmission occurs, but the `AirtableInterface`
+behaves as though it is receiving relevant messages in order to simulate production behavior.
 
 **Mutations** are instructions which describe changes to the Base. Mutations travel through the
 `AirtableInterface`, which sends them to the backend in production environments only.
 
 ## Writing tests
 
-As of January 2021, Airtable Apps must be written using the React framework. These instructions take
-the presence of React for granted.
+As of January 2021, Airtable Extensions must be written using the React framework. These
+instructions take the presence of React for granted.
 
 Every test file must import TestDriver through the `@airtable/blocks-testing` module to ensure that
 the environment is correctly instrumented for automation.
@@ -78,18 +80,19 @@ Each test will typically perform the following steps:
     });
     ```
 
-2.  Create an instance of the App under test by rendering the App's Component as a child of the
-    `TestDriver#Container` Component.
+2.  Create an instance of the Extension under test by rendering the Extension's Component as a child
+    of the `TestDriver#Container` Component.
 
     ```js
     render(
         <testDriver.Container>
-            <MyApp />
+            <MyExtension />
         </testDriver.Container>,
     );
     ```
 
-3.  Provide some input to the App. This may be in the form of a simulated user interaction (e.g. via
+3.  Provide some input to the Extension. This may be in the form of a simulated user interaction
+    (e.g. via
     [the `@testing-library/user-event` library](https://www.npmjs.com/package/@testing-library/user-event))
 
     ```js
@@ -112,8 +115,8 @@ Each test will typically perform the following steps:
     ]);
     ```
 
-4.  Verify that the App responded to the input as expected. For many kinds of interactions, the
-    App's response will be discernible by some change in the UI.
+4.  Verify that the Extension responded to the input as expected. For many kinds of interactions,
+    the Extension's response will be discernible by some change in the UI.
     [The `@testing-library/react` library](https://www.npmjs.com/package/@testing-library/react) is
     a good choice for inspecting the state of the user interface.
 
@@ -123,20 +126,21 @@ Each test will typically perform the following steps:
     expect(checkbox.checked).toBe(true);
     ```
 
-    ...while the `TestDriver` API can be used to verify App behaviors which do not influence the UI:
+    ...while the `TestDriver` API can be used to verify Extension behaviors which do not influence
+    the UI:
 
     ```js
-    // Track every time the App attempts to expand a record.
+    // Track every time the Extension attempts to expand a record.
     const recordIds = [];
     testDriver.watch('expandRecord', ({recordId}) => recordIds.push(recordId));
 
     // (The code necessary to simulate user inteaction elided from this example.)
 
-    // Ensure that the App attempted to expand the Record with ID `reca`
+    // Ensure that the Extension attempted to expand the Record with ID `reca`
     expect(recordIds).toEqual(['reca']);
     ```
 
-[The automated test suite for the To-do List example App](https://github.com/Airtable/apps-todo-list/tree/master/test)
+[The automated test suite for the To-do List example Extension](https://github.com/Airtable/apps-todo-list/tree/master/test)
 demonstrates this pattern.
 
 ## Extending the Testing API
@@ -150,7 +154,7 @@ order to support scripting in test environments.
 
 For some operations, this simulation may be as limited as a "no-op" implementation of an internal
 method. These operations include mutations which the SDK applies optimistically and messages with no
-direct effect on the App.
+direct effect on the Extension.
 
 Other operations will require more advanced simulation logic. Operations of this type generally rely
 on the backend's response to determine their effect on the Base. The simulated behavior should be
@@ -159,15 +163,15 @@ predictable, mimicking the expected response in production.
 **Implementing a dedicated API** A dedicated testing API is not necessary for any operation which
 can be expressed through the public API of the SDK (e.g. "create many records" or "delete a table").
 When a test author wishes to script such an operation, they should use the SDK directly. This is
-valid because an App cannot distinguish between operations initiated by the backend and operations
-initiated by a test script using the SDK.
+valid because an Extension cannot distinguish between operations initiated by the backend and
+operations initiated by a test script using the SDK.
 
 Many other operations cannot be expressed via the public API of the SDK. The `TestDriver` API must
 be extended to allow test authors to simulate these operations.
 
 Some of these restrictions are circumstantial, owing to the fact that as of January 2021, the SDK is
 incomplete and under active development. This includes an API to delete a Field. Other restrictions
-are fundamental to the design of the Apps platform. For instance, the SDK intentionally omits a
-method for an App to change the permissions of the current user. This distinction may inform the
-decision to introduce a testing API, since doing so will increase maintenance responsibilities in a
-way that may be obviated by future extensions to the SDK's public API.
+are fundamental to the design of the Extensions platform. For instance, the SDK intentionally omits
+a method for an Extension to change the permissions of the current user. This distinction may inform
+the decision to introduce a testing API, since doing so will increase maintenance responsibilities
+in a way that may be obviated by future extensions to the SDK's public API.

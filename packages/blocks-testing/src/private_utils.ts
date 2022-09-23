@@ -9,7 +9,7 @@
  *
  * @hidden
  */
-export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
+export type ObjectMap<K extends keyof any, V> = {[P in K]: V};
 
 /**
  * @hidden
@@ -25,7 +25,7 @@ export function cloneDeep<T extends unknown>(obj: T): T {
 /**
  * @hidden
  */
-export function has<T extends object>(obj: T, key: PropertyKey): key is keyof T {
+export function has<T extends object>(obj: T, key: keyof any): key is keyof T {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
