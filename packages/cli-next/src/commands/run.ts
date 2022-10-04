@@ -67,7 +67,7 @@ export default class Run extends AirtableCommand {
      */
     private _appTemporaryPath?: string;
 
-    static description = 'Run the app locally';
+    static description = 'Run the extension locally';
 
     static examples = [
         `$ block run
@@ -107,7 +107,7 @@ export default class Run extends AirtableCommand {
         }
         const appConfig = appConfigResult.value;
         debug(
-            'loaded app config at %s',
+            'loaded extension config at %s',
             this.system.path.relative(this.system.process.cwd(), appConfigLocation),
         );
 

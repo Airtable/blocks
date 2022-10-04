@@ -15,7 +15,7 @@ export async function getGithubTemplateTarballUrlAsync(templateUrl: string) {
         const {url} = await octokit.repos.downloadTarballArchive({
             owner,
             repo,
-            ref: 'master',
+            ref: '',
         });
         return url;
     } catch (e) {

@@ -206,10 +206,10 @@ class SmokeTest {
             `-> ${chalk.bold.underline(
                 `https://airtable.com/${APP_ID}?blocks=${BLOCK_INSTALLATION_ID}`,
             )}\n` +
-                '-> Click on block dropdown menu and select "Edit app"\n' +
+                '-> Click on block dropdown menu and select "Edit extension"\n' +
                 `-> Enter ${chalk.bold.underline(
                     this.getBlockRunUrl(),
-                )} and click "Start editing app"`,
+                )} and click "Start editing extension"`,
         );
         await inquirer.prompt([
             {

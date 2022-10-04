@@ -2,8 +2,6 @@ import path from 'path';
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
 
-import fetch from 'node-fetch';
-import FormData from 'form-data';
 import SentryCli from '@sentry/cli';
 import AirtableCommand from '../helpers/airtable_command';
 import {
@@ -11,7 +9,6 @@ import {
     APP_RELEASE_DIR,
     APP_ROOT_TEMPORARY_DIR,
     BUNDLE_FILE_NAME,
-    ROLLBAR_ACCESS_TOKEN,
     V2_BLOCKS_BASE_ID,
 } from '../settings';
 import {createReleaseTaskAsync, ReleaseTaskProducer} from '../manager/release';
@@ -34,13 +31,12 @@ import {createUserAgentAsync} from '../helpers/user_agent';
 import {ReleaseTaskConsumer} from '../tasks/release';
 import {Deferred} from '../helpers/deferred';
 import {unwrapResultFunctor} from '../helpers/result';
-import {invariant, spawnUnexpectedError, spawnUserError} from '../helpers/error_utils';
+import {invariant, spawnUserError} from '../helpers/error_utils';
 import {ReleaseCommandErrorName, ReleaseCommandMessageName} from '../helpers/release_messages';
 import {RemoteCommandMessageName} from '../helpers/remote_messages';
 import cli from '../helpers/cli_ux';
 import {AirtableApi} from '../helpers/airtable_api';
 import {getGitHashAsync} from '../helpers/get_git_hash';
-import {System} from '../helpers/system';
 
 const debug = _debug('block-cli:command:release');
 
@@ -76,12 +72,6 @@ export default class Release extends AirtableCommand {
                 'A string describing the changes in this release. Can be at most 1000 characters',
             hidden: true,
         }),
-        'upload-source-maps-to-rollbar': commandFlags.boolean({
-            description:
-                "Uploads the source map for the block's frontend bundle to the airtable-blocks rollbar project",
-            default: false,
-            hidden: true,
-        }),
         'upload-source-maps-to-sentry': commandFlags.boolean({
             description:
                 "Uploads the source map for the block's frontend bundle to the specified sentry project. Need to also set BLOCKS_CLI_SENTRY_{AUTH_TOKEN|ORG|PROJECT} environment variables.",
@@ -89,38 +79,6 @@ export default class Release extends AirtableCommand {
             hidden: true,
         }),
     };
-
-    async _uploadSourceMapToRollbarAsync(
-        sys: System,
-        frontendBundleSourceMapPath: string,
-        s3BundleKey: string,
-        gitHash: string,
-        bundleCdn: string,
-    ): Promise<void> {
-        const form = new FormData();
-        form.append('access_token', ROLLBAR_ACCESS_TOKEN);
-        form.append('version', gitHash);
-        form.append('minified_url', `${bundleCdn}/${s3BundleKey}`);
-        form.append(
-            'source_map',
-            await sys.fs.readFileAsync(frontendBundleSourceMapPath, {encoding: 'utf-8'}),
-            'thirdparty.min.map',
-        );
-        const response = await fetch('https://api.rollbar.com/api/1/sourcemap', {
-            method: 'post',
-            body: form,
-        });
-        if (!response.ok) {
-            let errorDetails;
-            try {
-                const body = await response.json();
-                errorDetails = JSON.stringify(body);
-            } catch (e) {
-                errorDetails = `${response.status} - ${response.statusText}`;
-            }
-            throw spawnUnexpectedError(errorDetails);
-        }
-    }
 
     async _uploadSourceMapToSentryAsync(
         frontendBundlePath: string,
@@ -156,7 +114,6 @@ export default class Release extends AirtableCommand {
         const {flags} = this.parse(Release);
 
         const sys = this.system;
-        const uploadSourceMapsToRollbar = flags['upload-source-maps-to-rollbar'];
         const uploadSourceMapsToSentry = flags['upload-source-maps-to-sentry'];
 
         const appRootPath = await findAppDirectoryAsync(sys, sys.process.cwd());
@@ -167,7 +124,10 @@ export default class Release extends AirtableCommand {
             this.error(appConfigResult.err);
         }
         const appConfig = appConfigResult.value;
-        debug('loaded app config at %s', sys.path.relative(sys.process.cwd(), appConfigLocation));
+        debug(
+            'loaded extension config at %s',
+            sys.path.relative(sys.process.cwd(), appConfigLocation),
+        );
 
         if (flags.remote) {
             this.logMessage({type: RemoteCommandMessageName.REMOTE_COMMAND_BETA_WARNING});
@@ -279,7 +239,7 @@ export default class Release extends AirtableCommand {
             context: appRootPath,
             entry: entryPointPath,
             outputPath: appBuildPath,
-            shouldGenerateSeparateSourceMaps: uploadSourceMapsToRollbar,
+            shouldGenerateSeparateSourceMaps: uploadSourceMapsToSentry,
         });
 
         cli.action.stop();
@@ -294,7 +254,7 @@ export default class Release extends AirtableCommand {
         });
 
         cli.action.stop();
-        if (uploadSourceMapsToRollbar || uploadSourceMapsToSentry) {
+        if (uploadSourceMapsToSentry) {
             cli.action.start('Uploading source maps');
             const bundleCdn = remoteConfig.bundleCdn;
             const s3BundleKey = build.frontendBundleS3UploadInfo.key;
@@ -308,24 +268,13 @@ export default class Release extends AirtableCommand {
                 typeof bundleCdn === 'string',
                 'bundleCdn must be set on the .block/*.json config',
             );
-            if (uploadSourceMapsToRollbar) {
-                await this._uploadSourceMapToRollbarAsync(
-                    sys,
-                    frontendBundleSourceMapPath,
-                    s3BundleKey,
-                    gitHash,
-                    bundleCdn,
-                );
-            }
-            if (uploadSourceMapsToSentry) {
-                await this._uploadSourceMapToSentryAsync(
-                    frontendBundlePath,
-                    frontendBundleSourceMapPath,
-                    s3BundleKey,
-                    gitHash,
-                    bundleCdn,
-                );
-            }
+            await this._uploadSourceMapToSentryAsync(
+                frontendBundlePath,
+                frontendBundleSourceMapPath,
+                s3BundleKey,
+                gitHash,
+                bundleCdn,
+            );
             cli.action.stop();
         }
         cli.action.start('Releasing');

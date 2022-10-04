@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.1...HEAD)
 
-No changes.
+-   Use the default branch (instead of `master`) when fetching a template from GitHub.
 
 ## [2.0.1](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.0...@airtable/blocks-cli@2.0.1) - 2022-03-18
 
@@ -31,4 +31,4 @@ No changes.
         link or file.
 -   Using a custom bundler
     -   Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns
-        app source code into publishable artifacts.
+        extension source code into publishable artifacts.

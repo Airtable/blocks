@@ -36,6 +36,3 @@ export const BLOCK_REQUEST_BODY_LIMIT = 5.2 * 1024 * 1024;
 
 /** The name of the blocks sdk. */
 export const SDK_PACKAGE_NAME = '@airtable/blocks';
-
-/** This access token is not considered sensitive. */
-export const ROLLBAR_ACCESS_TOKEN = '2de7b9533b7243f7989e3a7584c7dad7';

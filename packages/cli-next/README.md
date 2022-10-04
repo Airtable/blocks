@@ -26,7 +26,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.1 darwin-x64 node-v12.20.1
+@airtable/blocks-cli/2.0.2 darwin-arm64 node-v16.17.0
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -84,7 +84,7 @@ _See code:
 
 ## `block init BLOCKIDENTIFIER BLOCKDIRPATH`
 
-Initialize an Airtable app project
+Initialize an Airtable extension project
 
 ```
 USAGE
@@ -95,7 +95,7 @@ OPTIONS
   --template=template  [default: https://github.com/Airtable/apps-hello-world]
 
 EXAMPLE
-  $ block init app12345678/blk12345678 hellow-world-app --template https://github.com/Airtable/apps-hello-world
+  $ block init app12345678/blk12345678 hello-world-extension --template https://github.com/Airtable/apps-hello-world
 ```
 
 ## `block list-remotes`
@@ -146,7 +146,7 @@ EXAMPLE
 
 ## `block run`
 
-Run the app locally
+Run the extension locally
 
 ```
 USAGE
@@ -181,7 +181,7 @@ EXAMPLE
 
 ## `block submit`
 
-Submit app for review for listing in the the Airtable Marketplace
+Submit extension for review for listing in the the Airtable Marketplace
 
 ```
 USAGE
@@ -201,8 +201,9 @@ EXAMPLE
 
 ## CSS Support
 
-The new CLI supports css files within your app by default. The default webpack bundler is configured
-with css-loader and style-loader. This means you can import a css file into your app. Example:
+The new CLI supports css files within your extension by default. The default webpack bundler is
+configured with css-loader and style-loader. This means you can import a css file into your
+extension. Example:
 
 ```
 // styles.css
@@ -216,11 +217,11 @@ import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
 import './styles.css'
 
-function MyApp() {
+function MyExtension() {
     return <div className="red">Hello world</div>;
 }
 
-initializeBlock(() => <MyApp />);
+initializeBlock(() => <MyExtension />);
 ```
 
 ## Using code from other directories
@@ -245,9 +246,9 @@ If customizing the webpack config as described above does not solve your use cas
 possible to replace the bundler entirely with a custom implementation. This is will require a
 significant amount of work.
 
-Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns app
-source code into publishable artifacts. Your custom bundler's output must conform to the Airtable
-platform's expected format, calling convention, and file structure.
+Custom bundlers allow users to replace the CLI's built-in bundling functionality that turns
+extension source code into publishable artifacts. Your custom bundler's output must conform to the
+Airtable platform's expected format, calling convention, and file structure.
 
 Unlike other bundling systems, which allow configurability by composing multiple single-purpose
 plugins (or replacing just part of the bundling pipeline), this CLI exposes a simpler bundler
