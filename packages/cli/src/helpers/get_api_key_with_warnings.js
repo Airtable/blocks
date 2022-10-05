@@ -6,6 +6,7 @@ const CommandNames = require('../commands/command_names');
 const configHelpers = require('./config_helpers');
 const chalk = require('chalk');
 const invariant = require('invariant');
+const isApiKeyValid = require('./api_key');
 
 async function getApiKeyWithWarningsAsync(apiKeyName: string | null): Promise<string> {
     const blockCommandForInstructions =
@@ -23,7 +24,7 @@ async function getApiKeyWithWarningsAsync(apiKeyName: string | null): Promise<st
 
     invariant(typeof apiKey === 'string', 'apiKey should be string');
     // Validate that it looks like an API key.
-    if (!/key[0-ZA-Za-z]{14}/.test(apiKey)) {
+    if (!isApiKeyValid(apiKey)) {
         console.log('The Airtable API key looks invalid.\n' + instructions);
         process.exit(1);
     }

@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.68...HEAD)
 
-No changes.
+-   Added forwards-compatibility support for personal access tokens, in addition to user API keys
 
 ## [0.0.68](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.67...@airtable/blocks-cli@0.0.68) - 2022-03-09
 

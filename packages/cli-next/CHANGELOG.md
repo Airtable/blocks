@@ -11,6 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.1...HEAD)
 
+-   Added forwards-compatibility support for personal access tokens, in addition to user API keys
 -   Use the default branch (instead of `master`) when fetching a template from GitHub.
 
 ## [2.0.1](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.0...@airtable/blocks-cli@2.0.1) - 2022-03-18

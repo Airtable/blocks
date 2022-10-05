@@ -13,6 +13,21 @@ describe('set-api-key', () => {
         });
 
     test.stdout()
+        .command([
+            'set-api-key',
+            'pat1234567890abcd.1234567890123456789012345678901234567890123456789012345678901234',
+        ])
+        .wroteUserConfigFile({
+            airtableApiKey: {
+                default:
+                    'pat1234567890abcd.1234567890123456789012345678901234567890123456789012345678901234',
+            },
+        })
+        .it('runs set-api-key pat1234567890abcd', ctx => {
+            expect(ctx.stdout).to.contain('API Key saved');
+        });
+
+    test.stdout()
         .stderr()
         .answer('What is your Airtable', {stdin: 'keyAPI12345678910'})
         .command(['set-api-key'])
@@ -120,4 +135,9 @@ describe('set-api-key', () => {
         .command(['set-api-key', 'keyAPI12345678910', '--api-key-name', ''])
         .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_KEY_NAME_INVALID))
         .it('rejects invalid key name');
+
+    test.stdout()
+        .command(['set-api-key', 'pat1234567890abcd', '--api-key-name', ''])
+        .catch(new RegExp(AirtableApiErrorName.AIRTABLE_API_KEY_NAME_INVALID))
+        .it('rejects invalid PAT format');
 });

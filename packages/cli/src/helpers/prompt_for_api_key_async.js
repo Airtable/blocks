@@ -1,6 +1,7 @@
 // @flow
 const inquirer = require('inquirer');
 const {AIRTABLE_ACCOUNT_URL} = require('../config/block_cli_config_settings');
+const isApiKeyValid = require('./api_key');
 
 async function promptForApiKeyAsync(): Promise<string> {
     const {apiKey} = await inquirer.prompt({
@@ -11,7 +12,7 @@ async function promptForApiKeyAsync(): Promise<string> {
                 return 'API Key cannot be blank!';
             }
 
-            if (!input.startsWith('key')) {
+            if (!isApiKeyValid(input)) {
                 return 'Incorrect API Key!';
             }
 
