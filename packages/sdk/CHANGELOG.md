@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.15.0...HEAD)
 
-No changes.
+-   Update `FieldType.DATE_TIME` documentation to add additional time zones and clarify the write
+    behavior.
 
 ## [1.15.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.14.0...@airtable/blocks@1.15.0) - 2022-09-23
 
