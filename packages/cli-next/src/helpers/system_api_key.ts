@@ -30,9 +30,13 @@ export enum ConfigLocation {
 }
 
 const VALID_API_KEY_REGEX = /^key[a-zA-Z0-9]{14}$/;
+const PERSONAL_ACCESS_TOKEN_REGEX = /^pat[a-zA-Z0-9]{14}\.[0-9a-f]{64}$/;
 
 export function isValidApiKey(apiKey: unknown): apiKey is string {
-    return typeof apiKey === 'string' && VALID_API_KEY_REGEX.test(apiKey);
+    return (
+        typeof apiKey === 'string' &&
+        (VALID_API_KEY_REGEX.test(apiKey) || PERSONAL_ACCESS_TOKEN_REGEX.test(apiKey))
+    );
 }
 
 const VALID_API_KEY_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
