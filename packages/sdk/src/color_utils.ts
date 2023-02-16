@@ -100,8 +100,10 @@ const colorUtils: ColorUtils = {
             return false;
         }
 
-        const shouldUseDarkText = colorString.endsWith('Light1') || colorString.endsWith('Light2');
-        return !shouldUseDarkText;
+        const isLightColor = colorString.endsWith('Light1') || colorString.endsWith('Light2');
+        const isNonLightColorThatShouldBeTreatedAsLight = ['cyan', 'teal', 'yellow'].includes(colorString);
+        
+        return !isLightColor && !isNonLightColorThatShouldBeTreatedAsLight;
     },
 };
 
