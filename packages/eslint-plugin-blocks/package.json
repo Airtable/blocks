@@ -11,7 +11,7 @@
         "lib"
     ],
     "scripts": {
-        "ci": "yarn run test",
+        "ci": "echo '--- eslint-plugin-blocks' && yarn run test",
         "test": "mocha 'test/**/*.js'",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },

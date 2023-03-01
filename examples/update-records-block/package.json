@@ -5,7 +5,7 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "ci": "cd ../../packages/sdk && yarn build && cd - && yarn test",
+        "ci": "echo '--- examples/update-records-blocks' && cd ../../packages/sdk && yarn build && cd - && yarn test",
         "lint": "eslint frontend",
         "test": "yarn lint && yarn jest"
     },

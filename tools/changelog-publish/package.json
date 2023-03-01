@@ -8,7 +8,7 @@
         "changelog-publish": "./bin/changelog-publish"
     },
     "scripts": {
-        "ci": "yarn run test",
+        "ci": "echo '--- tools/changelog-publish' && yarn run test",
         "pretest": "flow",
         "test": "TZ=utc jest",
         "test:watch": "TZ=utc jest --watch"

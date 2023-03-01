@@ -6,7 +6,7 @@
     "license": "MIT",
     "scripts": {
         "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend",
-        "ci": "yarn lint"
+        "ci": "echo '--- examples/shared-code-block/hello-world-typescript-block' && yarn lint"
     },
     "peerDependencies": {
         "@airtable/blocks": "^1.2.0",

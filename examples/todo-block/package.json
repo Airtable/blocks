@@ -5,7 +5,7 @@
     "author": "",
     "license": "MIT",
     "scripts": {
-        "ci": "cd ../../packages/sdk && yarn build && cd - && yarn test",
+        "ci": "echo '--- examples/todo-block' && cd ../../packages/sdk && yarn build && cd - && yarn test",
         "cypress": "cypress run",
         "lint": "eslint frontend test cypress",
         "start-testing": "../../packages/cli/bin/block run --testing",

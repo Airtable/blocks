@@ -44,7 +44,7 @@
     "license": "UNLICENSED",
     "main": "dist/index.js",
     "scripts": {
-        "ci": "(cd ../cli-next && yarn build) && yarn test",
+        "ci": "echo '--- webpack-bundler' && (cd ../cli-next && yarn build) && yarn test",
         "lint": "eslint . --ext .ts --config .eslintrc.js",
         "pack:typescript": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc",
         "prepack": "yarn install && yarn run pack:typescript",

@@ -8,7 +8,7 @@
     },
     "license": "UNLICENSED",
     "scripts": {
-        "ci": "yarn run test",
+        "ci": "echo '--- cli' && yarn run test",
         "lint": "eslint .",
         "flow": "flow",
         "clean": "rm -rf transpiled node_modules",

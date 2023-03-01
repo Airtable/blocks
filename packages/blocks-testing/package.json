@@ -14,7 +14,7 @@
         "types"
     ],
     "scripts": {
-        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
+        "ci": "echo '--- blocks-testing' && (cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",

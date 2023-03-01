@@ -96,7 +96,7 @@
     },
     "scripts": {
         "build": "rm -rf lib && rm -f tsconfig.tsbuildinfo && tsc --build",
-        "ci": "yarn test",
+        "ci": "echo '--- cli-next' && yarn test",
         "lint": "eslint . --ext .ts --config .eslintrc.js",
         "pack:typescript": "yarn build",
         "postpack": "rm -f oclif.manifest.json",

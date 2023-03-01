@@ -1,0 +1,18 @@
+# We use exit_status 255 to signal an infra failure unrelated to this job that can be retried
+retry: &retries
+    automatic:
+        - exit_status: 255
+          limit: 2
+
+steps:
+    - label: ':hammer: Build and Test'
+      key: 'build'
+      timeout_in_minutes: 30
+      command: 'ci/buildkite/run_build_and_test.sh'
+      agents:
+          queue: administrivia
+      retry: *retries
+      plugins:
+          - docker#v5.4.0:
+                image: 'node:12.20.1-buster'
+                mount-ssh-agent: true
