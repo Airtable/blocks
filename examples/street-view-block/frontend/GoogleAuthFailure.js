@@ -74,7 +74,7 @@ export default function(errorCode) {
                     <ExternalLink href={URL_GOOGLE_DEV_API_CREDENTIALS}>
                         update this key&apos;s application restrictions
                     </ExternalLink>{' '}
-                    to accept requests from <code>*.airtableblocks.com/*</code>.
+                    to accept requests from <code>*.alt.airtableblocks.com/*</code>.
                 </Fragment>
             );
 
