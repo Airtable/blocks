@@ -275,7 +275,7 @@ class BlockServerBackendProcessManager {
                 //
                 // This is necessary in development because the block's frontend
                 // code is currently served from a different origin (i.e.
-                // https://devblock--xxx.airtableblocks.com) than the backend
+                // https://devblock--xxx.alt.airtableblocks.com) than the backend
                 // code, which runs on localhost.
                 //
                 // TODO(Chuan): Only handle OPTIONS requests if the origin
