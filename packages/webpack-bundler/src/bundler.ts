@@ -13,7 +13,7 @@ import {
     ReleaseBundleOptions,
     SubmitFindDependenciesOptions,
     SubmitTaskConsumer,
-} from '@airtable/blocks-cli';
+} from '@airtable/blocks-cli-next';
 
 import {
     createWebpackCompilerConfig,

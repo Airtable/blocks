@@ -7,7 +7,7 @@ import {expect, test, FancyTypes} from '@oclif/test';
 import fetch from 'node-fetch';
 
 import createBundler from '../src/index';
-import {ReleaseTaskConsumer, RunTaskConsumer} from '@airtable/blocks-cli';
+import {ReleaseTaskConsumer, RunTaskConsumer} from '@airtable/blocks-cli-next';
 
 describe('run bundler', () => {
     const testBundler = test
