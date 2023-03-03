@@ -1,7 +1,7 @@
 queue_rules:
   - name: default
     conditions:
-      - check-success=jenkins/blocks-sdk-github
+      - check-success=buildkite/blocks-sdk
 
 pull_request_rules:
   - name: Automatic merge ⬇ on approval ✔
@@ -10,7 +10,7 @@ pull_request_rules:
         - base=main
         - "#approved-reviews-by>=1"
         - label=mergeme
-        - check-success=jenkins/blocks-sdk-github
+        - check-success=buildkite/blocks-sdk
     actions:
       queue:
         commit_message_template: |

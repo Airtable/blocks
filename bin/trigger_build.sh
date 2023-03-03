@@ -1,2 +1,2 @@
 #!/bin/bash
-open https://go/trigger_blocks-sdk_build
+open https://buildkite.com/airtable/blocks-sdk#new
