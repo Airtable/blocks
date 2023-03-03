@@ -161,13 +161,15 @@ EXAMPLE
   $ block run
 ```
 
-## `block set-api-key [APIKEY]`
+## `block set-api-key [TOKEN]`
 
-Set an api key for an airtable account to upload to
+Set a personal access token for an Airtable account to upload to
+
+Note: Personal access tokens must have the `block:manage` scope.
 
 ```
 USAGE
-  $ block set-api-key [APIKEY]
+  $ block set-api-key [TOKEN]
 
 OPTIONS
   -h, --help             show CLI help
@@ -175,8 +177,8 @@ OPTIONS
 
 EXAMPLE
   $ block set-api-key
-  $ block set-api-key APIKEY
-  $ block set-api-key --location app APIKEY
+  $ block set-api-key TOKEN
+  $ block set-api-key --location app TOKEN
 ```
 
 ## `block submit`
