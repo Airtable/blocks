@@ -24,8 +24,8 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
 import {
     iconNamePropType,
     IconName,
-    allIconPaths,
-    AllIconName,
+    legacyIconNameToPhosphorIconName,
+    phosphorIconConfig,
     deprecatedIconNameToReplacementName,
 } from './icon_config';
 
@@ -122,10 +122,9 @@ const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
         styleParser,
     );
 
-    // TODO (jay): Figure out how we can support micro icons when the size is in relative ems.
-    const isMicro = typeof size === 'string' ? false : size <= 12;
-    const iconName = `${name}${isMicro ? 'Micro' : ''}` as AllIconName;
-    const pathData = allIconPaths[iconName];
+    const phosphorIconName = legacyIconNameToPhosphorIconName[name];
+    const pathData = phosphorIconName ? phosphorIconConfig[phosphorIconName] : null;
+
     if (!pathData) {
         return null;
     }
@@ -139,12 +138,10 @@ const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
         warning(`'${name}' as an icon name is deprecated. ${alternativeText}`);
     }
 
-    const originalSize = isMicro ? 12 : 16;
-
     return (
         <svg
             ref={ref}
-            viewBox={`0 0 ${originalSize} ${originalSize}`}
+            viewBox="0 0 16 16"
             // TODO (stephen): remove tooltip anchor props
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
