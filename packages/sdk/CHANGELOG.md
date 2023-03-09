@@ -9,9 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.15.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.16.0...HEAD)
 
 No changes.
+
+## [1.16.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.15.0...@airtable/blocks@1.16.0) - 2023-03-08
+
+-   Update `FieldType.DATE_TIME` documentation to add additional time zones and clarify the write
+    behavior.
+-   Visually refresh all icons
 
 ## [1.15.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.14.0...@airtable/blocks@1.15.0) - 2022-09-23
 

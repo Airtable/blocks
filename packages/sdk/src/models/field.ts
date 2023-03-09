@@ -443,7 +443,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * "synced" if it's source is from another airtable base or external data source
      * like Google Calendar, Jira, etc..
      *
-     *  @hidden
+     * @hidden
      */
     get isFieldSynced(): boolean {
         return this._data.isSynced ?? false;
