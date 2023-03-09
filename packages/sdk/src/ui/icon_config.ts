@@ -664,6 +664,7 @@ export const legacyIconNameToPhosphorIconName: Partial<
 > = {
     apple: 'Apple',
     apps: 'ExtensionsFeature',
+    applyRowTemplate: 'PaintBucket',
     ascending: 'SortAscending',
     attachment: 'Paperclip',
     automations: 'GitFork',
