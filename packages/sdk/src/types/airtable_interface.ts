@@ -82,6 +82,8 @@ export interface SdkInitData {
     intentData: unknown;
     isUsingNewLookupCellValueFormat?: true | undefined;
     runContext: BlockRunContext;
+    locale?: string;
+    defaultLocale?: string;
 }
 
 /** @hidden */

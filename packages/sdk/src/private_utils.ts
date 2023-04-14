@@ -396,3 +396,16 @@ export function debounce<Args extends Array<any>>(
 export function isBlockDevelopmentRestrictionEnabled(): boolean {
     return getAirtableInterface().sdkInitData.baseData.isBlockDevelopmentRestrictionEnabled;
 }
+
+/**
+ * Added for use in Gantt View, to enable i18n.
+ *
+ * @hidden
+ * */
+export function getLocaleAndDefaultLocale(): {locale?: string; defaultLocale?: string} {
+    const sdkInitData = getAirtableInterface().sdkInitData;
+    return {
+        locale: sdkInitData.locale,
+        defaultLocale: sdkInitData.defaultLocale,
+    };
+}
