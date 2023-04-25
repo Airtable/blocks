@@ -13,10 +13,15 @@ import {
     Button,
     SelectButtonsSynced,
     ViewportConstraint,
+    Icon,
 } from '@airtable/blocks/ui';
 import {globalConfig as globalConfigType} from '@airtable/blocks';
 import React, {useState, useEffect, ReactElement} from 'react';
 import {CollaboratorData} from '@airtable/blocks/dist/types/src/types/collaborator';
+
+// Add the baymax class to the root to use the global baymax styles.
+// This was previously the default, but is now opt-in.
+document.body.classList.add('baymax');
 
 type GlobalConfig = typeof globalConfigType;
 
@@ -526,44 +531,63 @@ function MeetingModeratorApp(): ReactElement {
         globalConfig.setAsync('moderatorId', currentUser.id);
     };
 
+    function _renderDeprecationBanner() {
+        return (
+            <div className="flex p1 red-light2 pb1 pt1">
+                <div className="ml1 flex flex-column justify-start">
+                    <Icon name="warning" fillColor={colorUtils.getHexForColor(colors.RED_BRIGHT)} />
+                </div>
+                <div className="ml1">
+                    <p className="strong mb1">
+                        We have removed support for this extension, but it is still usable through
+                        June 24, 2023. After June 24, 2023, we will permanently deprecate and remove
+                        this extension.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <Box
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            display="flex"
-            flexDirection="column"
-        >
-            <ViewportConstraint minSize={{width: 370, height: 280}} />
-            <TopBar
-                moderator={moderator}
-                onTakeOver={onTakeOver}
-                isModerator={isModerator}
-                hasPermissionToParticipate={hasPermissionToParticipate}
-            />
-            {stage === Stage.TIMER ? (
-                <TimerStage
-                    globalConfig={globalConfig}
+        <React.Fragment>
+            {_renderDeprecationBanner()}
+            <Box
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                display="flex"
+                flexDirection="column"
+            >
+                <ViewportConstraint minSize={{width: 370, height: 280}} />
+                <TopBar
+                    moderator={moderator}
+                    onTakeOver={onTakeOver}
                     isModerator={isModerator}
                     hasPermissionToParticipate={hasPermissionToParticipate}
                 />
-            ) : stage === Stage.VOTING ? (
-                <VotingStage
-                    globalConfig={globalConfig}
-                    currentUser={currentUser}
-                    isModerator={isModerator}
-                    hasPermissionToParticipate={hasPermissionToParticipate}
-                />
-            ) : stage === Stage.RESULTS ? (
-                <ResultsStage
-                    globalConfig={globalConfig}
-                    isModerator={isModerator}
-                    hasPermissionToParticipate={hasPermissionToParticipate}
-                />
-            ) : null}
-        </Box>
+                {stage === Stage.TIMER ? (
+                    <TimerStage
+                        globalConfig={globalConfig}
+                        isModerator={isModerator}
+                        hasPermissionToParticipate={hasPermissionToParticipate}
+                    />
+                ) : stage === Stage.VOTING ? (
+                    <VotingStage
+                        globalConfig={globalConfig}
+                        currentUser={currentUser}
+                        isModerator={isModerator}
+                        hasPermissionToParticipate={hasPermissionToParticipate}
+                    />
+                ) : stage === Stage.RESULTS ? (
+                    <ResultsStage
+                        globalConfig={globalConfig}
+                        isModerator={isModerator}
+                        hasPermissionToParticipate={hasPermissionToParticipate}
+                    />
+                ) : null}
+            </Box>
+        </React.Fragment>
     );
 }
 
