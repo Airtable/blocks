@@ -120,8 +120,7 @@ function NameQuizExtension() {
                 <div className="ml1">
                     <p className="strong mb1">
                         We have removed support for this extension, but it is still usable through
-                        June 24, 2023. After June 24, 2023, we will permanently deprecate and remove
-                        this extension.
+                        June 24, 2023. After June 24, 2023, we will permanently remove this extension.
                     </p>
                 </div>
             </div>
