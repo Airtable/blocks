@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {viewport, runInfo} from '@airtable/blocks';
-import {initializeBlock} from '@airtable/blocks/ui';
+import {initializeBlock, Icon, colorUtils, colors} from '@airtable/blocks/ui';
 
 import SettingsForm from './SettingsForm';
 import HomeScreen from './HomeScreen';
 import GameCompletedScreen from './GameCompletedScreen';
 import Game from './Game';
 import loadCSS from './loadCSS';
+import FullScreenBox from './FullScreenBox';
+
+// Add the baymax class to the root to use the global baymax styles.
+// This was previously the default, but is now opt-in.
+document.body.classList.add('baymax');
 
 // Load all the CSS used in our extension.
 loadCSS();
@@ -106,29 +111,56 @@ function NameQuizExtension() {
         });
     }
 
-    switch (gameState) {
-        case GameStates.CONFIGURING_SETTINGS:
-            return <SettingsForm onDone={showHomeScreen} />;
-        case GameStates.PLAYING:
-            return (
-                <Game
-                    listOfNamesWithPictures={listOfNamesWithPictures}
-                    onComplete={gameCompleted}
-                />
-            );
-        case GameStates.HOME_SCREEN:
-            return <HomeScreen onStartGame={startGame} onShowSettings={showSettings} />;
-        case GameStates.GAME_COMPLETED:
-            return (
-                <GameCompletedScreen
-                    gameReport={gameReport}
-                    onStartGame={startGame}
-                    onShowSettings={showSettings}
-                />
-            );
-        default:
-            throw new Error('Unexpected game state: ', gameState);
+    function  _renderDeprecationBanner() {
+        return (
+            <div className="flex p1 red-light2 pb1 pt1">
+                <div className="ml1 flex flex-column justify-start">
+                    <Icon name="warning" fillColor={colorUtils.getHexForColor(colors.RED_BRIGHT)} />
+                </div>
+                <div className="ml1">
+                    <p className="strong mb1">
+                        We have removed support for this extension, but it is still usable through
+                        June 24, 2023. After June 24, 2023, we will permanently deprecate and remove
+                        this extension.
+                    </p>
+                </div>
+            </div>
+        );
     }
+
+    function _gameMode() {
+        switch (gameState) {
+            case GameStates.CONFIGURING_SETTINGS:
+                return <SettingsForm onDone={showHomeScreen} />;
+            case GameStates.PLAYING:
+                return (
+                    <Game
+                        listOfNamesWithPictures={listOfNamesWithPictures}
+                        onComplete={gameCompleted}
+                    />
+                );
+            case GameStates.HOME_SCREEN:
+                return <HomeScreen onStartGame={startGame} onShowSettings={showSettings} />;
+            case GameStates.GAME_COMPLETED:
+                return (
+                    <GameCompletedScreen
+                        gameReport={gameReport}
+                        onStartGame={startGame}
+                        onShowSettings={showSettings}
+                    />
+                );
+            default:
+                throw new Error('Unexpected game state: ', gameState);
+        }
+    }
+
+    return (
+        <FullScreenBox display="flex" flexDirection="column">
+            {_renderDeprecationBanner()}
+            {_gameMode()}
+        </FullScreenBox>
+    )
+   
 }
 
 initializeBlock(() => <NameQuizExtension />);

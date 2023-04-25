@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+    Box,
     Button,
     Text,
     Heading,
@@ -10,7 +11,6 @@ import {
 } from '@airtable/blocks/ui';
 
 import {useSettings, MIN_AMOUNT_OF_PICTURES} from './settings';
-import FullScreenBox from './FullScreenBox';
 import getListOfNamesWithPictures from './getListOfNamesWithPictures';
 
 /**
@@ -83,7 +83,8 @@ export default function IdleGameScreen({
     }
 
     return (
-        <FullScreenBox
+        <Box
+            flex="auto"
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -95,7 +96,7 @@ export default function IdleGameScreen({
             <Heading marginTop={4}>{title}</Heading>
             <Text textColor="light">{text}</Text>
             {callToActions}
-        </FullScreenBox>
+        </Box>
     );
 }
 
