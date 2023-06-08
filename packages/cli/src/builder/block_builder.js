@@ -940,6 +940,26 @@ class BlockBuilder {
                 );
             }
 
+            // 1d. Copy the scripts directory if it exists so that scripts package will succeed as part of
+            // npm install if the block uses that
+            if (await fsUtils.existsAsync('scripts')) {
+                console.log('copying scripts directory');
+                await fsUtils.copyAsync(
+                    'scripts',
+                    path.join(this._outputUserTranspiledDirPath, 'scripts'),
+                );
+            }
+
+            // 1e. Copy the lang directory if it exists so that lang package will succeed as part of
+            // npm install if the block uses that
+            if (await fsUtils.existsAsync('lang')) {
+                console.log('copying lang directory');
+                await fsUtils.copyAsync(
+                    'lang',
+                    path.join(this._outputUserTranspiledDirPath, '../../lang'),
+                );
+            }
+
             // 2. Install node modules in the output transpiled directory
             console.log('installing node modules');
             const npmCIResult = await this._npmCIAsync(this._outputUserTranspiledDirPath);
