@@ -22,11 +22,11 @@ To install or update the `block` cli, run:
 <!-- usage -->
 
 ```sh-session
-$ npm install -g @airtable/blocks-cli
+$ npm install -g @airtable/blocks-cli-next
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.3 darwin-arm64 node-v16.17.0
+@airtable/blocks-cli-next/2.0.4 darwin-arm64 node-v16.17.0
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -163,7 +163,7 @@ EXAMPLE
 
 ## `block set-api-key [APIKEY]`
 
-Set an api key for an airtable account to upload to
+Set a personal access token (with block:manage scope) for an Airtable account to upload to
 
 ```
 USAGE
@@ -175,8 +175,8 @@ OPTIONS
 
 EXAMPLE
   $ block set-api-key
-  $ block set-api-key APIKEY
-  $ block set-api-key --location app APIKEY
+  $ block set-api-key TOKEN
+  $ block set-api-key --location app TOKEN
 ```
 
 ## `block submit`

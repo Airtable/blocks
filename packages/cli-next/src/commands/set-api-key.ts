@@ -15,12 +15,13 @@ import {
 } from '../helpers/system_api_key';
 
 export default class SetApiKey extends AirtableCommand {
-    static description = 'Set an api key for an airtable account to upload to';
+    static description =
+        'Set a personal access token (with block:manage scope) for an Airtable account to upload to';
 
     static examples = [
         `$ block set-api-key
-$ block set-api-key APIKEY
-$ block set-api-key --location app APIKEY
+$ block set-api-key TOKEN
+$ block set-api-key --location app TOKEN
 `,
     ];
 
@@ -33,7 +34,7 @@ $ block set-api-key --location app APIKEY
         }),
 
         'api-key-name': commandFlags.string({
-            description: 'The name of the API key to set',
+            description: 'The name of the personal access token to set',
             hidden: true,
         }),
     };
@@ -61,17 +62,20 @@ $ block set-api-key --location app APIKEY
             if (apiKey) {
                 this.logMessage({type: AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED});
             }
-            apiKey = await cli.prompt('What is your Airtable API Key?', {
-                type: 'mask',
-                required: true,
-            });
+            apiKey = await cli.prompt(
+                'What is your Airtable personal access token (with block:manage scope)?',
+                {
+                    type: 'mask',
+                    required: true,
+                },
+            );
         }
 
         const locationPath = await findApiKeyConfigPathAsync(this.system, flags.location);
-        this.log(`Saving API Key to: ${locationPath}`);
+        this.log(`Saving personal access token to: ${locationPath}`);
 
         await writeApiKeyAsync(this.system, flags.location, apiKey, apiKeyName);
 
-        this.log(`API Key${apiKeyName ? ` '${apiKeyName}'` : ''} saved.`);
+        this.log(`Personal access token${apiKeyName ? ` '${apiKeyName}'` : ''} saved.`);
     }
 }
