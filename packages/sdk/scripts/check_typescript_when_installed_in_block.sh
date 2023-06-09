@@ -23,7 +23,7 @@ cat - > package.json <<EOF
 {
     "dependencies": {
         "@airtable/blocks": "$package_file_path",
-        "typescript": "latest"
+        "typescript": "^4.9.5"
     }
 }
 EOF
