@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.3...HEAD)
 
--   Updated help text for the `set-api-key` command to prompt for personal access tokens.
+-   No changes.
 
 ## [2.0.3](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.2...@airtable/blocks-cli@2.0.3)
 
