@@ -41,7 +41,7 @@ const BLOCK_ID = 'blkDOYCZmdADueASi';
 const BLOCK_INSTALLATION_ID = 'bipHcxcRpB0ObTAGo';
 const DEFAULT_BLOCK_RUN_WAIT_MS = 10 * 1000;
 const DEFAULT_BLOCK_RUN_PORT = 9000;
-const BLOCK_RELEASE_URL = 'https://block---q-oxb-w7k6m-k0-eqd--suk0375.alt.airtableblocks.com/';
+const BLOCK_RELEASE_URL = 'https://block---q-oxb-w7k6m-k0-eqd--suk0375.airtableblocks.com/';
 const BLOCKS_CLI_PACKAGE = '@airtable/blocks-cli';
 const BLOCK_DIR_NAME = 'smoke_test';
 
