@@ -46,7 +46,7 @@ USAGE
 -   [`block release`](#block-release)
 -   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
 -   [`block run`](#block-run)
--   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
+-   [`block set-api-key [TOKEN]`](#block-set-api-key-token)
 -   [`block submit`](#block-submit)
 
 ## `block add-remote BLOCKIDENTIFIER REMOTENAME`
