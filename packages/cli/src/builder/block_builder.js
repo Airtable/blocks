@@ -49,6 +49,7 @@ type BuildPackagePaths = {|
 |};
 
 const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx|ts|tsx)$/;
+const BLOCKS_THAT_SUPPORT_I18N = ['gantt'];
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -940,24 +941,26 @@ class BlockBuilder {
                 );
             }
 
-            // 1d. Copy the scripts directory if it exists so that scripts package will succeed as part of
-            // npm install if the block uses that
-            if (await fsUtils.existsAsync('scripts')) {
-                console.log('copying scripts directory');
-                await fsUtils.copyAsync(
-                    'scripts',
-                    path.join(this._outputUserTranspiledDirPath, 'scripts'),
-                );
-            }
+            // 1d. Copy the scripts and lang directories if the current block uses i18n
+            const currentBlockName = this._blockDirPath.substring(
+                this._blockDirPath.lastIndexOf('/') + 1,
+            );
+            if (BLOCKS_THAT_SUPPORT_I18N.includes(currentBlockName)) {
+                if (await fsUtils.existsAsync('scripts')) {
+                    console.log('i18n - copying scripts directory');
+                    await fsUtils.copyAsync(
+                        'scripts',
+                        path.join(this._outputUserTranspiledDirPath, 'scripts'),
+                    );
+                }
 
-            // 1e. Copy the lang directory if it exists so that lang package will succeed as part of
-            // npm install if the block uses that
-            if (await fsUtils.existsAsync('lang')) {
-                console.log('copying lang directory');
-                await fsUtils.copyAsync(
-                    'lang',
-                    path.join(this._outputUserTranspiledDirPath, '../../lang'),
-                );
+                if (await fsUtils.existsAsync('lang')) {
+                    console.log('i18n - copying lang directory');
+                    await fsUtils.copyAsync(
+                        'lang',
+                        path.join(this._outputUserTranspiledDirPath, '../../lang'),
+                    );
+                }
             }
 
             // 2. Install node modules in the output transpiled directory
