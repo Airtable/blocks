@@ -50,7 +50,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://foo.com/js/compiled/block_backend_sdk.js',
+                uri: 'https://foo.com/js/compiled/esbuild/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -67,7 +67,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://bar.com/js/compiled/block_backend_sdk.js',
+                uri: 'https://bar.com/js/compiled/esbuild/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -84,7 +84,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://airtable.com/js/compiled/block_backend_sdk.js',
+                uri: 'https://airtable.com/js/compiled/esbuild/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -101,7 +101,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://test.foo.com/js/compiled/block_backend_sdk.js',
+                uri: 'https://test.foo.com/js/compiled/esbuild/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -118,7 +118,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://foo.com/js/compiled/block_backend_sdk.js',
+                uri: 'https://foo.com/js/compiled/esbuild/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },

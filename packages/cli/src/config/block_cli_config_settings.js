@@ -67,7 +67,7 @@ module.exports = {
     // Default server providing backend SDK.
     BACKEND_SDK_BASE_URL: 'https://airtable.com',
     // URL path to backend SDK.
-    BACKEND_SDK_URL_PATH: '/js/compiled/block_backend_sdk.js',
+    BACKEND_SDK_URL_PATH: '/js/compiled/esbuild/block_backend_sdk.js',
     // Module path to backend SDK.
     BACKEND_SDK_MODULE: 'block_backend_sdk',
     // How long to cache downloaded backend SDK file on local disk, in milliseconds.
