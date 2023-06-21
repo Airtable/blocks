@@ -35,6 +35,7 @@ import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {BlockJson, Environment} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
+import type {PackageJson} from '../types/package_json_type';
 import type {Result} from '../types/result';
 import type {PromiseResolveFunction} from '../types/promise_types';
 import type {ErrorWithCode, TranspileError} from '../types/error_codes';
@@ -80,6 +81,7 @@ const DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS = 1000;
 class BlockBuilder {
     _buildTypeMode: BlockBuildType;
     _blockJson: BlockJson;
+    _blockPackageJson: PackageJson;
     _remoteJson: RemoteJson;
     _enableDeprecatedAbsolutePathImport: boolean;
     _enableIsolatedBuild: boolean;
@@ -102,6 +104,7 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
+        blockPackageJson: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
@@ -112,6 +115,7 @@ class BlockBuilder {
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
+        this._blockPackageJson = args.blockPackageJson;
         this._remoteJson = args.remoteJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
@@ -145,6 +149,7 @@ class BlockBuilder {
     static async createDevelopmentBlockBuilderAsync(args: {
         blockJson: BlockJson,
         remoteJson: RemoteJson,
+        blockPackageJson: PackageJson,
         enableDeprecatedAbsolutePathImport: boolean,
         sdkPathIfExists: string | null,
         transpileForAllBrowsers?: boolean,
@@ -154,6 +159,7 @@ class BlockBuilder {
             enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             // development builds are never isolated:
             enableIsolatedBuild: false,
+            blockPackageJson: args.blockPackageJson,
             enableLiveSdkReload: !!args.sdkPathIfExists,
             blockJson: args.blockJson,
             remoteJson: args.remoteJson,
@@ -163,6 +169,7 @@ class BlockBuilder {
     }
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        blockPackageJson: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
@@ -172,6 +179,7 @@ class BlockBuilder {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson: args.blockJson,
+            blockPackageJson: args.blockPackageJson,
             remoteJson: args.remoteJson,
             enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             enableIsolatedBuild: args.enableIsolatedBuild,
@@ -938,6 +946,32 @@ class BlockBuilder {
                     'patches',
                     path.join(this._outputUserTranspiledDirPath, 'patches'),
                 );
+            }
+
+            // 1d. Copy the scripts and lang directories if the current block uses i18n. Only check if it's an airtable 1p block
+            const currentBlockNameFromPackageJson = this._blockPackageJson.name
+                ? this._blockPackageJson.name
+                : '';
+            const currentBlockNamePrefix = currentBlockNameFromPackageJson.substring(
+                0,
+                currentBlockNameFromPackageJson.indexOf('/'),
+            );
+            if (currentBlockNamePrefix === '@airtable') {
+                if (await fsUtils.existsAsync('scripts')) {
+                    console.log('i18n - copying scripts directory');
+                    await fsUtils.copyAsync(
+                        'scripts',
+                        path.join(this._outputUserTranspiledDirPath, 'scripts'),
+                    );
+                }
+
+                if (await fsUtils.existsAsync('lang')) {
+                    console.log('i18n - copying lang directory');
+                    await fsUtils.copyAsync(
+                        'lang',
+                        path.join(this._outputUserTranspiledDirPath, '../../lang'),
+                    );
+                }
             }
 
             // 2. Install node modules in the output transpiled directory

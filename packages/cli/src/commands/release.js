@@ -280,6 +280,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
         blockJson,
+        blockPackageJson,
         remoteJson,
         enableDeprecatedAbsolutePathImport,
         enableIsolatedBuild,
