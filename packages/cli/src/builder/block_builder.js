@@ -104,6 +104,7 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
+        blockPackageJson: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
