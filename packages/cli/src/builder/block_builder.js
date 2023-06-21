@@ -104,7 +104,7 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
-        blockPackageJson: PackageJson,
+        blockPackageJson?: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
@@ -116,7 +116,7 @@ class BlockBuilder {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
         this._blockPackageJson = args.blockPackageJson;
-        this._remoteJson = args.remoteJson;
+        this._remoteJson = args.remoteJson || {};
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._enableLiveSdkReload = args.enableLiveSdkReload;
