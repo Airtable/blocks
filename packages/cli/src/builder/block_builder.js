@@ -35,6 +35,7 @@ import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {BlockJson, Environment} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
+import type {PackageJson} from '../types/package_json_type';
 import type {Result} from '../types/result';
 import type {PromiseResolveFunction} from '../types/promise_types';
 import type {ErrorWithCode, TranspileError} from '../types/error_codes';
@@ -49,7 +50,6 @@ type BuildPackagePaths = {|
 |};
 
 const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx|ts|tsx)$/;
-const BLOCKS_THAT_SUPPORT_I18N = ['gantt'];
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -81,6 +81,7 @@ const DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS = 1000;
 class BlockBuilder {
     _buildTypeMode: BlockBuildType;
     _blockJson: BlockJson;
+    _blockPackageJson: PackageJson;
     _remoteJson: RemoteJson;
     _enableDeprecatedAbsolutePathImport: boolean;
     _enableIsolatedBuild: boolean;
@@ -113,6 +114,7 @@ class BlockBuilder {
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
+        this._blockPackageJson = args.blockPackageJson;
         this._remoteJson = args.remoteJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
@@ -164,6 +166,7 @@ class BlockBuilder {
     }
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        blockPackageJson: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
@@ -173,6 +176,7 @@ class BlockBuilder {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson: args.blockJson,
+            blockPackageJson: args.blockPackageJson,
             remoteJson: args.remoteJson,
             enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             enableIsolatedBuild: args.enableIsolatedBuild,
@@ -941,11 +945,13 @@ class BlockBuilder {
                 );
             }
 
-            // 1d. Copy the scripts and lang directories if the current block uses i18n
-            const currentBlockName = this._blockDirPath.substring(
-                this._blockDirPath.lastIndexOf('/') + 1,
+            // 1d. Copy the scripts and lang directories if the current block uses i18n. Only check if it's an airtable 1p block
+            const currentBlockNameFromPackageJson = this._blockPackageJson.name;
+            const currentBlockNamePrefix = currentBlockNameFromPackageJson.substring(
+                0,
+                currentBlockNameFromPackageJson.indexOf('/'),
             );
-            if (BLOCKS_THAT_SUPPORT_I18N.includes(currentBlockName)) {
+            if (currentBlockNamePrefix === '@airtable') {
                 if (await fsUtils.existsAsync('scripts')) {
                     console.log('i18n - copying scripts directory');
                     await fsUtils.copyAsync(
