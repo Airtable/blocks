@@ -104,7 +104,7 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
-        blockPackageJson?: PackageJson,
+        blockPackageJson: PackageJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
@@ -116,7 +116,7 @@ class BlockBuilder {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
         this._blockPackageJson = args.blockPackageJson;
-        this._remoteJson = args.remoteJson || {};
+        this._remoteJson = args.remoteJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._enableLiveSdkReload = args.enableLiveSdkReload;
@@ -149,6 +149,7 @@ class BlockBuilder {
     static async createDevelopmentBlockBuilderAsync(args: {
         blockJson: BlockJson,
         remoteJson: RemoteJson,
+        blockPackageJson: PackageJson,
         enableDeprecatedAbsolutePathImport: boolean,
         sdkPathIfExists: string | null,
         transpileForAllBrowsers?: boolean,
@@ -158,6 +159,7 @@ class BlockBuilder {
             enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             // development builds are never isolated:
             enableIsolatedBuild: false,
+            blockPackageJson: args.blockPackageJson,
             enableLiveSdkReload: !!args.sdkPathIfExists,
             blockJson: args.blockJson,
             remoteJson: args.remoteJson,

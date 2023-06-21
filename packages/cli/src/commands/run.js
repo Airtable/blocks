@@ -5,6 +5,7 @@ const getApiKeyWithWarningsAsync = require('../helpers/get_api_key_with_warnings
 const BlockServer = require('../server/block_server');
 const BlockBuilder = require('../builder/block_builder');
 const LocalSdkBuilder = require('../local_sdk_builder');
+const parseBlockPackageJsonAsync = require('../helpers/parse_block_package_json_async');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
@@ -64,6 +65,12 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const blockJson = blockJsonValidationResult.value;
 
+    const parseBlockPackageJsonResult = await parseBlockPackageJsonAsync();
+    if (parseBlockPackageJsonResult.err) {
+        throw parseBlockPackageJsonResult.err;
+    }
+    const blockPackageJson = parseBlockPackageJsonResult.value;
+
     const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
     if (parseRemoteResult.err) {
         throw parseRemoteResult.err;
@@ -84,6 +91,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const blockBuilder = await BlockBuilder.createDevelopmentBlockBuilderAsync({
         blockJson,
+        blockPackageJson,
         remoteJson,
         enableDeprecatedAbsolutePathImport,
         sdkPathIfExists: sdkPath,
