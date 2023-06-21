@@ -949,7 +949,9 @@ class BlockBuilder {
             }
 
             // 1d. Copy the scripts and lang directories if the current block uses i18n. Only check if it's an airtable 1p block
-            const currentBlockNameFromPackageJson = this._blockPackageJson.name ?? '';
+            const currentBlockNameFromPackageJson = this._blockPackageJson.name
+                ? this._blockPackageJson.name
+                : '';
             const currentBlockNamePrefix = currentBlockNameFromPackageJson.substring(
                 0,
                 currentBlockNameFromPackageJson.indexOf('/'),
