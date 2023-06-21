@@ -62,6 +62,7 @@ describe('BlockServer', function() {
             blockBuilder = new BlockBuilder({
                 buildTypeMode: BlockBuildTypes.DEVELOPMENT,
                 blockJson,
+                blockPackageJson: {},
                 remoteJson,
                 enableIsolatedBuild: false,
                 enableDeprecatedAbsolutePathImport: false,
