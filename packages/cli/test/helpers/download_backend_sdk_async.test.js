@@ -22,7 +22,7 @@ const downloadBackendSdkAsync = proxyquire(downloadBackendSdkAsyncPath, {
     'postman-request': (args, callback) => {
         postmanRequestFake(args);
         process.nextTick(() => {
-            callback(null, {statusCode: 200});
+            callback(null, {statusCode: 200, body: '{dummy: "test"}'});
         });
     },
     '../config/block_cli_config_settings': {
