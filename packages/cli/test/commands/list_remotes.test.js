@@ -98,7 +98,8 @@ describe('list-remotes', function() {
                 )
                 .do(async () => await runListRemotesAsync())
                 .it('lists one remote with "default" as name', async output => {
-                    const expectedOutput = 'Name    Block identifier \ndefault app123/blk123';
+                    const expectedOutput =
+                        'Name    Block identifier \n ─────── ──────────────── \n default app123/blk123';
                     expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
@@ -120,7 +121,7 @@ describe('list-remotes', function() {
                 .do(async () => await runListRemotesAsync())
                 .it('lists multiple remotes', async output => {
                     const expectedOutput =
-                        'Name    Block identifier \ndefault app123/blk123    \nwhoa    appAbC/blkAbC';
+                        'Name    Block identifier \n ─────── ──────────────── \n default app123/blk123    \n whoa    appAbC/blkAbC';
                     expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
@@ -146,7 +147,7 @@ describe('list-remotes', function() {
                 .do(async () => await runListRemotesAsync())
                 .it('lists "Server" column if it exists', async output => {
                     const expectedOutput =
-                        'Name          Block identifier    Server              \ni_have_server appServer/blkServer https://example.com \ndefault       app123/blk123       undefined';
+                        'Name          Block identifier    Server              \n ───────────── ─────────────────── ─────────────────── \n i_have_server appServer/blkServer https://example.com \n default       app123/blk123';
                     expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
@@ -172,7 +173,7 @@ describe('list-remotes', function() {
                 .do(async () => await runListRemotesAsync())
                 .it('lists "Api key name" column if it exists', async output => {
                     const expectedOutput =
-                        'Name           Block identifier    Api key name \ni_have_api_key appApiKey/blkApiKey okok         \ndefault        app123/blk123       undefined';
+                        'Name           Block identifier    Api key name \n ────────────── ─────────────────── ──────────── \n i_have_api_key appApiKey/blkApiKey okok         \n default        app123/blk123       undefined';
                     expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
         });

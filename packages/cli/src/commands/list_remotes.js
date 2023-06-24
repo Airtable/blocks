@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 const invariant = require('invariant');
 const path = require('path');
-const {cli} = require('cli-ux');
+const {ux} = require('@oclif/core');
 const fsUtils = require('../helpers/fs_utils');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
@@ -85,7 +85,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteJson => !!remoteJson.apiKeyName,
     );
 
-    const columns: cli.Table.Columns = {
+    const columns: ux.Table.Columns = {
         name: {},
         'Block identifier': {
             get: row => `${row.baseId}/${row.blockId}`,
@@ -100,7 +100,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         };
     }
 
-    await cli.table(remoteJsonsWithName, columns);
+    await ux.table(remoteJsonsWithName, columns);
 }
 
 module.exports = {runCommandAsync};
