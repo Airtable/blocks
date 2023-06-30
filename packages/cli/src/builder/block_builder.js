@@ -318,6 +318,7 @@ class BlockBuilder {
             path.join(this._blockDirPath, blockCliConfigSettings.CONFIG_FILE_NAME),
             '.git',
             '**/.git/**',
+            '**/*.d.ts',
 
             // This is here for legacy purposes. API Keys are now in blockCliConfigSettings.CONFIG_FILE_NAME)
             '**/.airtableAPIKey',
