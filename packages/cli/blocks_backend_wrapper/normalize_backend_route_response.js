@@ -1,5 +1,5 @@
 // @flow
-const joi = require('@hapi/joi');
+const joi = require('joi');
 const {createBlocksBackendExecutionStatusHeaders} = require('./blocks_backend_execution_status');
 
 import type {

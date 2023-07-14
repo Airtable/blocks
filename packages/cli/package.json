@@ -86,7 +86,8 @@
         "update-notifier": "4.1.0",
         "user-agent-bag": "0.2.0",
         "watchify": "^3.9.0",
-        "yargs": "^13.2.0"
+        "yargs": "^13.2.0",
+        "joi": "17.9.2"
     },
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
