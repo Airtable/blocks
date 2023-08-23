@@ -10,4 +10,6 @@ These terms supplement your other agreements with Airtable, which may include th
 Service (located at <https://airtable.com/tos>) and the Airtable Privacy Policy (located at
 <https://airtable.com/privacy>).
 
-By using the Software, you accept and agree to abide by these terms.
+By using the Software, 
+I, Michael Glenn, on the day of the 23rd, in the month of, August and of the year of, 2023, 
+do hereby, accept and agree to abide by these terms.
