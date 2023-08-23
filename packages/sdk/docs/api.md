@@ -1,23 +1,25 @@
--|-# API reference
- |-
- |-**Documentation for the Blocks SDK can be found [here](https://airtable.com/developers/blocks/api).
- |-`".$_-0/build-js"
- |-"
- |-# API REFERENCE
- |///---***=
- |-"
- |-Aggregator
- |-Base
- |-Cursor
- |-Field
--|-# GlobalConfig
--Record
--Session
--SettingsButton
--Table
--View
--Viewport
-|# TestDriver
+_____________________
+|-i-|-# API reference
+|-
+|-**Documentation for the Blocks SDK can be found [here](https://airtable.com/developers/blocks/api).
+|-`".$_-0/build-js"
+|-.$_-0/build.js"=""
+_____________________
+|-# API REFERENCE
+|///---***=
+|-"
+|-Aggregator
+|-Base
+|-Cursor
+|-|Field
+|--|-# GlobalConfig
+|---|-Record
+|-Session
+|-SettingsButton
+|-Table
+|-View
+|-Viewport
+|-#-TestDriver
 -CreateMultipleRecordsMutation
 -CreateSingleFieldMutation
 -CreateSingleTableMutation
@@ -348,4 +350,4 @@ Get notified of changes to the model.
 
 Every call to .watch should have a matching call to .unwatch.
 
-Returns the array of keys that were watched."`
+Returns the array of keys that were watched.-0"`
