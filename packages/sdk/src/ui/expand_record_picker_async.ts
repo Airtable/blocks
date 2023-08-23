@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
 import {invariant} from '../error_utils';
-import getSdk from '../get_sdk';
 import Record from '../models/record';
 import Field from '../models/field';
 
@@ -16,7 +15,7 @@ interface ExpandRecordPickerOpts {
 
 /**
  * Expands a list of records in the Airtable UI, and prompts the user to pick
- * one. The selected record is returned to the block, and the modal is
+ * one. The selected record is returned to the extension, and the modal is
  * automatically closed.
  *
  * If the user dismisses the modal, or another one is opened before this one
@@ -54,6 +53,7 @@ async function expandRecordPickerAsync(
     }
 
     const tableId = records[0].parentTable.id;
+    const sdk = records[0].parentTable.parentBase.__sdk;
 
     const recordIds = records.map(record => {
         invariant(record.parentTable.id === tableId, 'all records must belong to the same table');
@@ -73,7 +73,6 @@ async function expandRecordPickerAsync(
               })
             : null;
 
-    const sdk = getSdk();
     const shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;
     const chosenRecordId = await sdk.__airtableInterface.expandRecordPickerAsync(
         tableId,

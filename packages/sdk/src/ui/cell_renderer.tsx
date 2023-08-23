@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import getSdk from '../get_sdk';
-import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
+import Sdk from '../sdk';
 import Record from '../models/record';
 import Field from '../models/field';
+import {FieldType} from '../types/field';
+import {RecordId} from '../types/record';
+import {ObjectMap} from '../private_utils';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 import {
@@ -36,6 +38,7 @@ import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
 import {OptionalResponsiveProp} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {useSdk} from './sdk_context';
 
 /**
  * Style props for the {@link CellRenderer} component. Also accepts:
@@ -97,6 +100,8 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
     cellStyle?: React.CSSProperties;
     /** Render function if provided and validation fails. */
     renderInvalidCellValue?: (cellValue: unknown, field: Field) => React.ReactElement;
+    /** @internal injected by withHooks */
+    sdk: Sdk;
 }
 
 /**
@@ -167,14 +172,15 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             cellClassName,
             cellStyle,
             renderInvalidCellValue,
+            sdk,
         } = this.props;
 
         if (field.isDeleted) {
             return null;
         }
 
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = sdk.__airtableInterface;
+        const appInterface = sdk.__appInterface;
 
         let cellValueToRender;
         if (record) {
@@ -224,6 +230,32 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             cellValueToRender = cellValue;
         }
 
+        if (
+            cellValueToRender &&
+            field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+            !airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
+        ) {
+            const originalCellValue = cellValueToRender as Array<{
+                linkedRecordId: RecordId;
+                value: unknown;
+            }>;
+            const linkedRecordIdsSet = new Set();
+            const valuesByLinkedRecordId = {} as ObjectMap<RecordId, Array<unknown>>;
+
+            for (const {linkedRecordId, value} of originalCellValue) {
+                linkedRecordIdsSet.add(linkedRecordId);
+                if (!valuesByLinkedRecordId[linkedRecordId]) {
+                    valuesByLinkedRecordId[linkedRecordId] = [];
+                }
+                valuesByLinkedRecordId[linkedRecordId].push(value);
+            }
+
+            cellValueToRender = {
+                linkedRecordIds: Array.from(linkedRecordIdsSet),
+                valuesByLinkedRecordId,
+            };
+        }
+
         const {cellValueHtml, attributes} = airtableInterface.fieldTypeProvider.getCellRendererData(
             appInterface,
             cellValueToRender,
@@ -252,11 +284,11 @@ export class CellRenderer extends React.Component<CellRendererProps> {
     }
 }
 
-export default withHooks<{className?: string}, CellRendererProps, CellRenderer>(
+export default withHooks<{className?: string; sdk: Sdk}, CellRendererProps, CellRenderer>(
     CellRenderer,
     props => {
         const {styleProps, nonStyleProps} = splitStyleProps<
-            CellRendererProps,
+            Omit<CellRendererProps, 'sdk'>,
             CellRendererStyleProps
         >(props, styleParser.propNames, {display: 'block'});
         const {className} = nonStyleProps;
@@ -264,8 +296,9 @@ export default withHooks<{className?: string}, CellRendererProps, CellRenderer>(
             styleProps,
             styleParser,
         );
+        const sdk = useSdk();
         useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
         useWatchable(props.field, ['type', 'options']);
-        return {className: cx(classNameForStyleProps, className)};
+        return {className: cx(classNameForStyleProps, className), sdk};
     },
 );

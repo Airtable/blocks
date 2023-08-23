@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useBase */ /** */
-import getSdk from '../get_sdk';
 import Base from '../models/base';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook for connecting a React component to your base's schema. This returns a {@link Base}
@@ -34,7 +34,7 @@ import useWatchable from './use_watchable';
  * @hook
  */
 const useBase = (): Base => {
-    const {base, session} = getSdk();
+    const {base, session} = useSdk();
     useWatchable(base, ['schema']);
     useWatchable(session, ['permissionLevel']);
     return base;

@@ -1,10 +1,16 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import AbstractModel from './abstract_model';
+import ObjectPool from './object_pool';
 import Table from './table';
-import {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {
+    normalizeSortsOrGroups,
+    RecordQueryResultOpts,
+    ViewMetadataForUpdate,
+} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
@@ -12,6 +18,7 @@ import * as RecordColoring from './record_coloring';
 
 const WatchableViewKeys = Object.freeze({
     name: 'name' as const,
+    isLockedView: 'isLockedView' as const,
 });
 
 /**
@@ -36,19 +43,21 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     _parentTable: Table;
     /** @internal */
     _viewDataStore: ViewDataStore;
+    /** @internal */
+    __viewMetadataQueryResultPool: ObjectPool<
+        ViewMetadataQueryResult,
+        typeof ViewMetadataQueryResult
+    >;
+
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentTable: Table,
-        viewDataStore: ViewDataStore,
-        viewId: string,
-    ) {
-        super(baseData, viewId);
+    constructor(sdk: Sdk, parentTable: Table, viewDataStore: ViewDataStore, viewId: string) {
+        super(sdk, viewId);
 
         this._parentTable = parentTable;
         this._viewDataStore = viewDataStore;
+        this.__viewMetadataQueryResultPool = new ObjectPool(ViewMetadataQueryResult);
     }
 
     /**
@@ -97,16 +106,28 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return this._data.type;
     }
     /**
+     * If the view is locked. Can be watched.
+     *
+     * @example
+     * ```js
+     * console.log(myView.isLockedView);
+     * // => false
+     * ```
+     */
+    get isLockedView(): boolean {
+        return this._data.isLockedView;
+    }
+    /**
      * The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
      *
      * @example
      * ```js
      * console.log(myView.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {
-        return this.parentTable._airtableInterface.urlConstructor.getViewUrl(
+        return this._sdk.__airtableInterface.urlConstructor.getViewUrl(
             this.id,
             this.parentTable.id,
         );
@@ -147,18 +168,22 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     selectRecords(opts: RecordQueryResultOpts = {}): TableOrViewQueryResult {
-        const defaultedOpts = {
-            ...opts,
-            recordColorMode:
-                opts.recordColorMode === undefined
-                    ? RecordColoring.modes.byView(this)
-                    : opts.recordColorMode,
-        };
-
-        return TableOrViewQueryResult.__createOrReuseQueryResult(
-            this,
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
+            this.parentTable,
             this._viewDataStore.parentRecordStore,
-            defaultedOpts,
+            {
+                ...opts,
+                recordColorMode:
+                    opts.recordColorMode === undefined
+                        ? RecordColoring.modes.byView(this)
+                        : opts.recordColorMode,
+            },
+        );
+
+        return this.parentTable.__tableOrViewQueryResultPool.getObjectForReuse(
+            this._sdk,
+            this,
+            normalizedOpts,
         );
     }
     /**
@@ -216,7 +241,11 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     selectMetadata(): ViewMetadataQueryResult {
-        return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);
+        return this.__viewMetadataQueryResultPool.getObjectForReuse(
+            this._sdk,
+            this,
+            this._viewDataStore,
+        );
     }
     /**
      * Select and load the field order and visible fields from the view. Returns a
@@ -250,6 +279,55 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     }
 
     /**
+     * Checks whether the current user has permission to update view metadata.
+     *
+     * @param viewMetadata
+     * @hidden
+     */
+    checkPermissionsForUpdateMetadata(viewMetadata: ViewMetadataForUpdate): PermissionCheckResult {
+        const metadata = {
+            groupLevels: normalizeSortsOrGroups(this.parentTable, viewMetadata.groupLevels),
+        };
+        return this._sdk.__mutations.checkPermissionsForMutation({
+            type: MutationTypes.UPDATE_VIEW_METADATA,
+            tableId: this.parentTable.id,
+            viewId: this.id,
+            metadata,
+        });
+    }
+
+    /**
+     * An alias for `checkPermissionsForUpdateMetadata(viewMetadata).hasPermission`.
+     *
+     * Checks whether the current user has permission to update view metadata.
+     *
+     * @param viewMetadata
+     * @hidden
+     */
+    hasPermissionToUpdateMetadata(viewMetadata: ViewMetadataForUpdate): boolean {
+        return this.checkPermissionsForUpdateMetadata(viewMetadata).hasPermission;
+    }
+
+    /**
+     * Updates view metadata, this is currently only supported from block views
+     * altering their own view's grouping config.
+     *
+     * @param ViewMetadataForUpdate
+     * @hidden
+     */
+    async updateMetadataAsync(viewMetadata: ViewMetadataForUpdate) {
+        const metadata = {
+            groupLevels: normalizeSortsOrGroups(this.parentTable, viewMetadata.groupLevels),
+        };
+        await this._sdk.__mutations.applyMutationAsync({
+            type: MutationTypes.UPDATE_VIEW_METADATA,
+            tableId: this.parentTable.id,
+            viewId: this.id,
+            metadata,
+        });
+    }
+
+    /**
      * @internal
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject): boolean {
@@ -257,6 +335,10 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         this._viewDataStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.name) {
             this._onChange(WatchableViewKeys.name);
+            didViewSchemaChange = true;
+        }
+        if (dirtyPaths.isLocked) {
+            this._onChange(WatchableViewKeys.isLockedView);
             didViewSchemaChange = true;
         }
         return didViewSchemaChange;

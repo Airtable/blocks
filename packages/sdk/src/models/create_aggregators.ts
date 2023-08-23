@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Aggregators */ /** */
-import getSdk from '../get_sdk';
 import {AggregatorKey} from '../types/aggregators';
 import {spawnError} from '../error_utils';
+import Sdk from '../sdk';
 import Record from './record';
 import Field from './field';
 
@@ -57,8 +57,8 @@ const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: 
         );
     }
 
-    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
-    const cellValues = records.map(record => record.getCellValue(field));
+    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = sdk;
+    const cellValues = records.map(record => record._getRawCellValue(field));
     return airtableInterface.aggregators.aggregate(
         appInterface,
         aggregatorKey,
@@ -76,8 +76,8 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
         );
     }
 
-    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
-    const cellValues = records.map(record => record.getCellValue(field));
+    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = sdk;
+    const cellValues = records.map(record => record._getRawCellValue(field));
     return airtableInterface.aggregators.aggregateToString(
         appInterface,
         aggregatorKey,
@@ -98,7 +98,7 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
  * @hidden
  */
 export default function createAggregators() {
-    const {__airtableInterface: airtableInterface} = getSdk();
+    const {__airtableInterface: airtableInterface} = sdk;
     const aggregators: Aggregators = {};
     const aggregatorKeys = airtableInterface.aggregators.getAllAvailableAggregatorKeys();
 
@@ -116,4 +116,10 @@ export default function createAggregators() {
     Object.freeze(aggregators);
 
     return aggregators;
+}
+
+let sdk: Sdk;
+
+export function __injectSdkIntoCreateAggregators(_sdk: Sdk) {
+    sdk = _sdk;
 }

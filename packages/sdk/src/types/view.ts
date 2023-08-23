@@ -29,6 +29,8 @@ export enum ViewType {
     GALLERY = 'gallery',
     /** */
     KANBAN = 'kanban',
+    /** */
+    BLOCK = 'block',
 }
 
 /** @hidden */
@@ -40,12 +42,40 @@ export interface ViewFieldOrderData {
 /** @hidden */
 export type ViewColorsByRecordIdData = ObjectMap<RecordId, Color | null | undefined>;
 
+/**
+ * Data provided by airtable for groups, only available on views or grouped queries
+ *
+ * @hidden
+ */
+export type GroupData =
+    | {
+          visibleRecordIds: Array<RecordId>;
+          groups: null;
+      }
+    | {
+          visibleRecordIds: null;
+          groups: Array<GroupData>;
+      };
+
+/**
+ * GroupLevel provided by airtable - matches NormalizedGroupLevel
+ *
+ * @hidden
+ */
+export interface GroupLevelData {
+    fieldId: FieldId;
+    direction: 'asc' | 'desc';
+}
+
 /** @hidden */
 export interface ViewData {
     id: ViewId;
     name: string;
     type: ViewType;
+    isLockedView: boolean;
     visibleRecordIds?: Array<RecordId>;
     fieldOrder?: ViewFieldOrderData;
     colorsByRecordId?: ViewColorsByRecordIdData;
+    groups?: Array<GroupData> | null;
+    groupLevels?: Array<GroupLevelData> | null;
 }

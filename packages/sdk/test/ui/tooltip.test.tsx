@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Tooltip, Text} from '../../src/ui/ui';
+import {Tooltip, Text} from '../../src/ui/unstable_standalone_ui';
 
 describe('Tooltip', () => {
     it('renders outside of a blocks context', () => {

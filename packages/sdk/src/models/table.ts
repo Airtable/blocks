@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Table */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {TableData} from '../types/table';
 import {ViewType, ViewId} from '../types/view';
 import {FieldId, FieldType, FieldOptions} from '../types/field';
@@ -7,14 +7,13 @@ import {RecordId} from '../types/record';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
-import getSdk from '../get_sdk';
-import {AirtableInterface} from '../types/airtable_interface';
 import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
 import Base, {ChangedPathsForType} from './base';
+import ObjectPool from './object_pool';
 import Record from './record';
-import {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import RecordStore from './record_store';
 
@@ -55,29 +54,22 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @internal */
     _cachedFieldNamesById: {[key: string]: string} | null;
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     _recordStore: RecordStore;
+    /** @internal */
+    __tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, typeof TableOrViewQueryResult>;
 
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentBase: Base,
-        recordStore: RecordStore,
-        tableId: string,
-        airtableInterface: AirtableInterface,
-    ) {
-        super(baseData, tableId);
-
+    constructor(parentBase: Base, recordStore: RecordStore, tableId: string, sdk: Sdk) {
+        super(sdk, tableId);
         this._parentBase = parentBase;
         this._recordStore = recordStore;
         this._viewModelsById = {}; 
         this._fieldModelsById = {}; 
         this._cachedFieldNamesById = null;
 
-        this._airtableInterface = airtableInterface;
+        this.__tableOrViewQueryResultPool = new ObjectPool(TableOrViewQueryResult);
     }
 
     /**
@@ -131,11 +123,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @example
      * ```js
      * console.log(myTable.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {
-        return this._airtableInterface.urlConstructor.getTableUrl(this.id);
+        return this._sdk.__airtableInterface.urlConstructor.getTableUrl(this.id);
     }
     /**
      * The table's primary field. Every table has exactly one primary
@@ -190,7 +182,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             return null;
         } else {
             if (!this._fieldModelsById[fieldId]) {
-                this._fieldModelsById[fieldId] = new Field(this._baseData, this, fieldId);
+                this._fieldModelsById[fieldId] = new Field(this._sdk, this, fieldId);
             }
             return this._fieldModelsById[fieldId];
         }
@@ -263,8 +255,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The field matching the given ID or name. Returns `null` if no matching field exists within
      * this table.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getFieldByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getFieldByIdIfExists} or
      * {@link getFieldByNameIfExists} methods instead.
      *
      * @param fieldIdOrName The ID or name of the field you're looking for.
@@ -279,8 +271,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Use {@link getFieldIfExists} instead if you are unsure whether a field exists with the given
      * name/ID.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getFieldById} or {@link getFieldByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getFieldById} or {@link getFieldByName} methods
      * instead.
      *
      * @param fieldIdOrName The ID or name of the field you're looking for.
@@ -334,7 +326,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         } else {
             if (!this._viewModelsById[viewId]) {
                 this._viewModelsById[viewId] = new View(
-                    this._baseData,
+                    this._sdk,
                     this,
                     this._recordStore.getViewDataStore(viewId),
                     viewId,
@@ -411,8 +403,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The view matching the given ID or name. Returns `null` if no matching view exists within
      * this table.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getViewByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getViewByIdIfExists} or
      * {@link getViewByNameIfExists} methods instead.
      *
      * @param viewIdOrName The ID or name of the view you're looking for.
@@ -425,8 +417,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Use {@link getViewIfExists} instead if you are unsure whether a view exists with the given
      * name/ID.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getViewById} or {@link getViewByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getViewById} or {@link getViewByName} methods
      * instead.
      *
      * @param viewIdOrName The ID or name of the view you're looking for.
@@ -449,7 +441,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param opts Options for the query, such as sorts and fields.
      * @example
      * ```js
-     * import {useBase, useRecords} from '@airtable/blocks';
+     * import {useBase, useRecords} from '@airtable/blocks/ui';
      * import React from 'react';
      *
      * function TodoList() {
@@ -472,11 +464,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
-        return TableOrViewQueryResult.__createOrReuseQueryResult(
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
             this,
             this._recordStore,
             opts || {},
         );
+        return this.__tableOrViewQueryResultPool.getObjectForReuse(this._sdk, this, normalizedOpts);
     }
     /**
      * Select and load records from the table. Returns a {@link RecordQueryResult} promise where
@@ -554,7 +547,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         view?: View | null;
     }): Promise<{[key: string]: unknown}> {
         const viewId = opts && opts.view ? opts.view.id : null;
-        const cellValuesByFieldId = await this._airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
+        const cellValuesByFieldId = await this._sdk.__airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
             this._id,
             viewId,
         );
@@ -570,7 +563,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the updated
      * cell values to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordOrRecordId the record to update
@@ -581,7 +574,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToUpdateRecord(record, recordFields)) {
      *         table.updateRecordAsync(record, recordFields);
      *     }
-     *     // The updated values will now show in your block (eg in
+     *     // The updated values will now show in your extension (eg in
      *     // `table.selectRecords()` result) but are still being saved to Airtable
      *     // servers (e.g. other users may not be able to see them yet).
      * }
@@ -667,7 +660,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could update specific fields, when you don't know the
      * // specific record that will be updated yet. (for example, if the field is
-     * // selected by the user and you want to check if your block can write to it).
+     * // selected by the user and you want to check if your extension can write to it).
      * const updateUnknownRecordCheckResult =
      *     table.checkPermissionsForUpdateRecord(undefined, {
      *         'My field name': 'updated value',
@@ -678,7 +671,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could perform updates within the table, without knowing the
      * // specific record or fields that will be updated yet (e.g., to render your
-     * // block in "read only" mode).
+     * // extension in "read only" mode).
      * const updateUnknownRecordAndFieldsCheckResult =
      *     table.checkPermissionsForUpdateRecord();
      * ```
@@ -734,7 +727,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could update specific fields, when you don't know the
      * // specific record that will be updated yet (e.g. if the field is selected
-     * // by the user and you want to check if your block can write to it).
+     * // by the user and you want to check if your extension can write to it).
      * const canUpdateUnknownRecord =
      *     table.hasPermissionToUpdateRecord(undefined, {
      *         'My field name': 'updated value',
@@ -745,7 +738,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could perform updates within the table, without knowing the
      * // specific record or fields that will be updated yet. (for example, to
-     * // render your block in "read only" mode)
+     * // render your extension in "read only" mode)
      * const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
      * ```
      */
@@ -769,7 +762,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * updates to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
@@ -816,7 +809,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
      *         table.updateRecordsAsync(recordsToUpdate);
      *     }
-     *     // The records are now updated within your block (eg will be reflected in
+     *     // The records are now updated within your extension (eg will be reflected in
      *     // `table.selectRecords()`) but are still being saved to Airtable servers
      *     // (e.g. they may not be updated for other users yet).
      * }
@@ -843,10 +836,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             ),
         }));
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: recordsWithCellValuesByFieldId,
+            opts: {parseDateCellValueInColumnTimeZone: true},
         });
     }
     /**
@@ -914,7 +908,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: records
@@ -998,7 +992,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * delete to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordOrRecordId the record to be deleted
@@ -1008,7 +1002,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToDeleteRecord(record)) {
      *         table.deleteRecordAsync(record);
      *     }
-     *     // The record is now deleted within your block (eg will not be returned
+     *     // The record is now deleted within your extension (eg will not be returned
      *     // in `table.selectRecords`) but it is still being saved to Airtable
      *     // servers (e.g. it may not look deleted to other users yet).
      * }
@@ -1094,7 +1088,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * delete to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * @param recordsOrRecordIds Array of Records and RecordIds
@@ -1105,7 +1099,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToDeleteRecords(records)) {
      *         table.deleteRecordsAsync(records);
      *     }
-     *     // The records are now deleted within your block (eg will not be
+     *     // The records are now deleted within your extension (eg will not be
      *     // returned in `table.selectRecords()`) but are still being saved to
      *     // Airtable servers (e.g. they may not look deleted to other users yet).
      * }
@@ -1124,7 +1118,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
             recordIds,
@@ -1161,7 +1155,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     checkPermissionsForDeleteRecords(
         recordsOrRecordIds?: ReadonlyArray<Record | RecordId>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
             recordIds: recordsOrRecordIds
@@ -1210,7 +1204,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * The returned promise will resolve to the RecordId of the new record once it is persisted.
@@ -1222,7 +1216,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToCreateRecord(recordFields)) {
      *         table.createRecordAsync(recordFields);
      *     }
-     *     // You can now access the new record in your block (eg
+     *     // You can now access the new record in your extension (eg
      *     // `table.selectRecords()`) but it is still being saved to Airtable
      *     // servers (e.g. other users may not be able to see it yet).
      * }
@@ -1356,7 +1350,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * Updates are applied optimistically locally, so your changes will be reflected in your extension
      * before the promise resolves.
      *
      * The returned promise will resolve to an array of RecordIds of the new records once the new
@@ -1400,7 +1394,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToCreateRecords(recordDefs)) {
      *         table.createRecordsAsync(recordDefs);
      *     }
-     *     // You can now access the new records in your block (e.g.
+     *     // You can now access the new records in your extension (e.g.
      *     // `table.selectRecords()`) but they are still being saved to Airtable
      *     // servers (e.g. other users may not be able to see them yet.)
      * }
@@ -1428,15 +1422,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 );
             }
             return {
-                id: this._airtableInterface.idGenerator.generateRecordId(),
+                id: this._sdk.__airtableInterface.idGenerator.generateRecordId(),
                 cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(fields),
             };
         });
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: recordsToCreate,
+            opts: {parseDateCellValueInColumnTimeZone: true},
         });
 
         return recordsToCreate.map(record => record.id);
@@ -1489,7 +1484,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: records
@@ -1561,8 +1556,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
     }
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to create a field in this table.
      *
      * Accepts partial input, in the same format as {@link createFieldAsync}.
@@ -1574,6 +1567,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique for the table
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. omit to leave blank
      *
      * @example
      * ```js
@@ -1588,8 +1582,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_SINGLE_FIELD,
             tableId: this.id,
             id: undefined, 
@@ -1600,13 +1595,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                       ...(options ? {options} : null),
                   }
                 : undefined,
+            description,
         });
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
-     * An alias for `checkPermissionsForCreateField(name, type, options).hasPermission`.
+     * An alias for `checkPermissionsForCreateField(name, type, options, description).hasPermission`.
      *
      * Checks whether the current user has permission to create a field in this table.
      *
@@ -1615,6 +1609,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique for the table
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. omit to leave blank
      *
      * @example
      * ```js
@@ -1629,13 +1624,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): boolean {
-        return this.checkPermissionsForCreateField(name, type, options).hasPermission;
+        return this.checkPermissionsForCreateField(name, type, options, description).hasPermission;
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Creates a new field.
      *
      * Similar to creating a field from the Airtable UI, the new field will not be visible
@@ -1649,11 +1643,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * This action is asynchronous. Unlike new records, new fields are **not** created
      * optimistically locally. You must `await` the returned promise before using the new
-     * field in your block.
+     * field in your extension.
      *
      * @param name name for the field. must be case-insensitive unique
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     * @param description description for the field. is optional and will be `''` if not specified
+     * or if specified as `null`.
      *
      * @example
      * ```js
@@ -1689,10 +1685,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         name: string,
         type: FieldType,
         options?: FieldOptions | null,
+        description?: string | null,
     ): Promise<Field> {
-        const fieldId = this._airtableInterface.idGenerator.generateFieldId();
+        const fieldId = this._sdk.__airtableInterface.idGenerator.generateFieldId();
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_SINGLE_FIELD,
             tableId: this.id,
             id: fieldId,
@@ -1701,6 +1698,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 type: type,
                 ...(options ? {options} : null),
             },
+            description: description ?? null,
         });
 
         return this.getFieldById(fieldId);

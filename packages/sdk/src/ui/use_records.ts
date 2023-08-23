@@ -20,6 +20,37 @@ type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 /** */
 type TableOrViewOrQueryResult = Table | View | AnyQueryResult;
 
+/**
+ * Common code to all useRecordQueryResults, returns a RecordQueryResult and loads it - but does
+ * not watch any properties on it.
+ *
+ * @param tableOrViewOrQueryResult
+ * @param functionNameForErrors
+ * @param opts
+ * @internal
+ */
+function _useUnwatchedRecordQueryResult(
+    tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
+    functionNameForErrors: string,
+    opts?: RecordQueryResultOpts,
+): RecordQueryResult | null {
+    let queryResult;
+    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
+        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
+    } else {
+        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
+            throw spawnError(
+                '%s does not support passing both a queryResult and opts.',
+                functionNameForErrors,
+            );
+        }
+        queryResult = tableOrViewOrQueryResult;
+    }
+
+    useLoadable(queryResult);
+    return queryResult;
+}
+
 /** */
 export function useRecordIds(
     tableOrView: Table | View,
@@ -68,21 +99,20 @@ export function useRecordIds(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordIdQueryResultOpts,
 ): Array<RecordId> | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords({
-            fields: [],
-            recordColorMode: RecordColoring.modes.none(),
-            sorts: opts ? opts.sorts : undefined,
-        });
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecordIds does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
+    const generatedOpts =
+        tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View
+            ? {
+                  fields: [],
+                  recordColorMode: RecordColoring.modes.none(),
+                  sorts: opts ? opts.sorts : undefined,
+              }
+            : opts;
 
-    useLoadable(queryResult);
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordIds',
+        generatedOpts,
+    );
     useWatchable(queryResult, ['recordIds']);
     return queryResult ? queryResult.recordIds : null;
 }
@@ -99,7 +129,8 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  * particular table, view or query result. Automatically handles loading data and updating
  * your component when the underlying data changes.
  *
- * This hook re-renders when any data concerning the records changes, including cell values - that's
+ * This hook re-renders when data concerning the records changes (specifically, when cell values
+ * change, the record color changes, and when records are added or removed) - that's
  * useful, but can cause re-renders quite often, meaning {@link useRecordIds} or
  * {@link useRecordById} could be more appropriate depending on your use case.
  *
@@ -171,17 +202,12 @@ export function useRecords(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordQueryResultOpts,
 ): Array<Record> | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecords does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecords',
+        opts,
+    );
 
-    useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
     return queryResult ? queryResult.records : null;
 }
@@ -198,7 +224,7 @@ export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): 
 
 /**
  * A hook for working with a single record. Automatically handles loading data and updating your
- * component when the record's cell values etc. change.
+ * component when the record's cell values or color changes.
  *
  * Often used with {@link useRecordIds} to render a list of records where each list item only
  * updates when the specific record it concerns changes.
@@ -249,19 +275,33 @@ export function useRecordById(
     recordId: RecordId,
     opts?: SingleRecordQueryResultOpts,
 ): Record | null {
-    let queryResult;
-    if (tableOrViewOrQueryResult instanceof Table || tableOrViewOrQueryResult instanceof View) {
-        queryResult = tableOrViewOrQueryResult.selectRecords(opts);
-    } else {
-        if (tableOrViewOrQueryResult instanceof RecordQueryResult && opts !== undefined) {
-            throw spawnError('useRecordById does not support passing both a queryResult and opts.');
-        }
-        queryResult = tableOrViewOrQueryResult;
-    }
-
-    useLoadable(queryResult);
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordById',
+        opts,
+    );
     useWatchable(queryResult, ['records', 'recordColors']);
     const record = queryResult ? queryResult.getRecordByIdIfExists(recordId) : null;
     useWatchable(record, ['cellValues']);
     return record;
+}
+
+/**
+ * Docs: TODO(SeanKeenan)
+ *
+ * @docsPath UI/hooks/useRecordQueryResult
+ * @hidden
+ * @hook
+ */
+export function useRecordQueryResult(
+    tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
+    opts?: RecordQueryResultOpts,
+): RecordQueryResult | null {
+    const queryResult = _useUnwatchedRecordQueryResult(
+        tableOrViewOrQueryResult,
+        'useRecordQueryResult',
+        opts,
+    );
+    useWatchable(queryResult, ['records', 'cellValues', 'recordColors', 'groups']);
+    return queryResult;
 }

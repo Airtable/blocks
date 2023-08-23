@@ -1,11 +1,11 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import getSdk from '../get_sdk';
 import Table from '../models/table';
 import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Props shared between the {@link TablePicker} and {@link TablePickerSynced} components.
@@ -48,11 +48,12 @@ interface TablePickerProps extends SharedTablePickerProps {
 const TablePicker = (props: TablePickerProps, ref: React.Ref<HTMLSelectElement>) => {
     const {table, shouldAllowPickingNone, placeholder, onChange, ...restOfProps} = props;
     const selectedTable = table && !table.isDeleted ? table : null;
-    useWatchable(getSdk().base, ['tables']);
+    const sdk = useSdk();
+    useWatchable(sdk.base, ['tables']);
 
     function _onChange(tableId: string | null) {
         if (onChange) {
-            const newTable = tableId ? getSdk().base.getTableByIdIfExists(tableId) : null;
+            const newTable = tableId ? sdk.base.getTableByIdIfExists(tableId) : null;
             onChange(newTable);
         }
     }
@@ -68,7 +69,7 @@ const TablePicker = (props: TablePickerProps, ref: React.Ref<HTMLSelectElement>)
         <ModelPickerSelect
             {...restOfProps}
             ref={ref}
-            models={getSdk().base.tables}
+            models={sdk.base.tables}
             selectedModelId={selectedTable ? selectedTable.id : null}
             modelKeysToWatch={['name']}
             shouldAllowPickingNone={shouldAllowPickingNone}

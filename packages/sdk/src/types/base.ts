@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {AppInterface} from '../types/airtable_interface';
 import {ObjectMap} from '../private_utils';
+import {AppInterface} from './airtable_interface';
 import {PermissionLevel} from './permission_levels';
 import {TableData, TablePermissionData, TableId} from './table';
 import {CursorData} from './cursor';
@@ -19,6 +19,7 @@ export interface ModelChange {
 export interface BaseData {
     id: BaseId;
     name: string;
+    color: string;
     tableOrder: Array<TableId>;
     activeTableId: TableId | null;
     tablesById: ObjectMap<TableId, TableData>;
@@ -36,6 +37,8 @@ export interface BaseData {
 
     billingPlanGrouping: string;
     isBlockDevelopmentRestrictionEnabled: boolean;
+    maxRowsPerTable?: number;
+    workspaceId: string;
 }
 
 /** @hidden */

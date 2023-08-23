@@ -4,10 +4,9 @@ import {CollaboratorData, UserId} from '../types/collaborator';
 import {FieldType} from '../types/field';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
-import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -18,6 +17,7 @@ const WatchableBaseKeys = Object.freeze({
     tables: 'tables' as const,
     collaborators: 'collaborators' as const,
     schema: 'schema' as const,
+    color: 'color' as const,
 });
 
 /**
@@ -63,20 +63,26 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /** @internal */
     _tableRecordStoresByTableId: ObjectMap<TableId, RecordStore> = {};
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     __billingPlanGrouping: string;
     /** @internal */
     _collaboratorIdsByNameAndEmail: Map<string, string> | null = null;
     /**
      * @internal
      */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, baseData.id);
-
+    constructor(sdk: Sdk) {
+        super(sdk, sdk.__airtableInterface.sdkInitData.baseData.id);
         this._tableModelsById = {}; 
-        this._airtableInterface = airtableInterface;
-        this.__billingPlanGrouping = baseData.billingPlanGrouping;
+        this.__billingPlanGrouping =
+            sdk.__airtableInterface.sdkInitData.baseData.billingPlanGrouping;
+    }
+
+    /**
+     * Aliased to communicate stability for internal use by Sdk code.
+     *
+     * @internal
+     */
+    get __sdk(): Sdk {
+        return this._sdk;
     }
 
     /**
@@ -97,6 +103,34 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     get name(): string {
         return this._data.name;
     }
+
+    /**
+     * The workspace id of the base.
+     *
+     * @example
+     * ```js
+     * import {base} from '@airtable/blocks';
+     * console.log('The workspace id of your base is', base.workspaceId);
+     * ```
+     */
+    get workspaceId(): string {
+        return this._data.workspaceId;
+    }
+
+    /**
+     * The color of the base.
+     *
+     * @example
+     * ```js
+     * import {base} from '@airtable/blocks';
+     * import {Box} from '@airtable/blocks/ui';
+     * const exampleBox = <Box backgroundColor={base.color}> This box's background is the same color as the base background</Box>
+     * ```
+     */
+    get color(): string {
+        return this._data.color;
+    }
+
     /**
      * The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
      *
@@ -163,8 +197,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * The user matching the given ID, name, or email address. Returns null if that user does not
      * exist or does not have access to this base.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getCollaboratorByIdIfExists} method instead.
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getCollaboratorByIdIfExists} method instead.
      *
      * @param collaboratorIdOrNameOrEmail The ID of the user.
      */
@@ -196,8 +230,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * or does not have access to this base. Use {@link getCollaboratorIfExists} instead if you are
      * unsure whether a collaborator with the given ID exists and has access to this base.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getCollaboratorById} method instead.
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getCollaboratorById} method instead.
      *
      * @param collaboratorIdOrNameOrEmail The ID of the user.
      */
@@ -220,7 +254,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return this._tableRecordStoresByTableId[tableId];
         }
         invariant(this._data.tablesById[tableId], 'table must exist');
-        const newRecordStore = new RecordStore(this._baseData, this._airtableInterface, tableId);
+        const newRecordStore = new RecordStore(this._sdk, tableId);
         this._tableRecordStoresByTableId[tableId] = newRecordStore;
         return newRecordStore;
     }
@@ -241,11 +275,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         } else {
             if (!this._tableModelsById[tableId]) {
                 this._tableModelsById[tableId] = new Table(
-                    this._data,
                     this,
                     this.__getRecordStore(tableId),
                     tableId,
-                    this._airtableInterface,
+                    this._sdk,
                 );
             }
             return this._tableModelsById[tableId];
@@ -296,8 +329,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * The table matching the given ID or name. Returns `null` if no matching table exists within
      * this base.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getTableByIdIfExists} or
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getTableByIdIfExists} or
      * {@link getTableByNameIfExists} methods instead.
      *
      * @param tableIdOrName The ID or name of the table you're looking for.
@@ -312,8 +345,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Use {@link getTableIfExists} instead if you are unsure whether a table exists with the given
      * name/ID.
      *
-     * This method is convenient when building a block for a specific base, but for more generic
-     * blocks the best practice is to use the {@link getTableById} or {@link getTableByName} methods
+     * This method is convenient when building an extension for a specific base, but for more generic
+     * extensions the best practice is to use the {@link getTableById} or {@link getTableByName} methods
      * instead.
      *
      * @param tableIdOrName The ID or name of the table you're looking for.
@@ -331,8 +364,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Checks whether the current user has permission to create a table.
      *
      * Accepts partial input, in the same format as {@link createTableAsync}.
@@ -359,9 +390,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name?: string;
             type?: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_SINGLE_TABLE,
             id: undefined, 
             name: name,
@@ -374,14 +406,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                               ...(field.options ? {options: field.options} : null),
                           }
                         : undefined,
+                    description: field.description,
                 };
             }),
         });
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * An alias for `checkPermissionsForCreateTable(name, fields).hasPermission`.
      *
      * Checks whether the current user has permission to create a table.
@@ -406,18 +437,18 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name?: string;
             type?: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): boolean {
         return this.checkPermissionsForCreateTable(name, fields).hasPermission;
     }
 
     /**
-     * _Beta feature with unstable API. May have breaking changes before release._
-     *
      * Creates a new table.
      *
      * Throws an error if the user does not have permission to create a table, if an invalid
-     * table name is provided, or if invalid fields are provided (invalid name, type or options).
+     * table name is provided, or if invalid fields are provided (invalid name, type, options or
+     * description).
      *
      * Refer to {@link FieldType} for supported field types, the write format for field options, and
      * other specifics for certain field types.
@@ -431,10 +462,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * This action is asynchronous. Unlike new records, new tables are **not** created
      * optimistically locally. You must `await` the returned promise before using the new
-     * table in your block.
+     * table in your extension.
      *
      * @param name name for the table. must be case-insensitive unique
-     * @param fields array of fields to create in the table: see below for details.
+     * @param fields array of fields to create in the table: see below for an example. `name` and
+     * `type` must be specified for all fields, while `options` is only required for fields that
+     * have field options. `description` is optional and will be `''` if not specified or if
+     * specified as `null`.
      *
      * @example
      * ```js
@@ -442,7 +476,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *     const name = 'My new table';
      *     const fields = [
      *         // Name will be the primary field of the table.
-     *         {name: 'Name', type: FieldType.SINGLE_LINE_TEXT},
+     *         {name: 'Name', type: FieldType.SINGLE_LINE_TEXT, description: 'This is the primary field'},
      *         {name: 'Notes', type: FieldType.RICH_TEXT},
      *         {name: 'Attachments', type: FieldType.MULTIPLE_ATTACHMENTS},
      *         {name: 'Number', type: FieldType.NUMBER, options: {
@@ -468,11 +502,12 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             name: string;
             type: FieldType;
             options?: {[key: string]: unknown} | null;
+            description?: string | null;
         }>,
     ): Promise<Table> {
-        const tableId = this._airtableInterface.idGenerator.generateTableId();
+        const tableId = this._sdk.__airtableInterface.idGenerator.generateTableId();
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             id: tableId,
             type: MutationTypes.CREATE_SINGLE_TABLE,
             name,
@@ -483,11 +518,19 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                         type: field.type,
                         ...(field.options ? {options: field.options} : null),
                     },
+                    description: field.description ?? null,
                 };
             }),
         });
 
         return this.getTableById(tableId);
+    }
+
+    /**
+     * Returns the maximum number of records allowed in each table of this base.
+     */
+    getMaxRecordsPerTable(): number {
+        return this._data.maxRowsPerTable ?? 100000;
     }
 
     /**
@@ -499,6 +542,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             this._onChange(WatchableBaseKeys.name);
             didSchemaChange = true;
         }
+        if (changedPaths.color) {
+            this._onChange(WatchableBaseKeys.color);
+            didSchemaChange = true;
+        }
         if (changedPaths.tableOrder) {
             this._onChange(WatchableBaseKeys.tables);
             didSchemaChange = true;
@@ -508,11 +555,17 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                     delete this._tableModelsById[tableId];
                 }
             }
+            for (const [tableId, recordStore] of entries(this._tableRecordStoresByTableId)) {
+                if (recordStore && recordStore.isDeleted) {
+                    recordStore.__onDataDeletion();
+                    delete this._tableRecordStoresByTableId[tableId];
+                }
+            }
         }
         const {tablesById} = changedPaths;
         if (tablesById) {
             for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
-                const table = this._tableModelsById[tableId];
+                const table = this.getTableByIdIfExists(tableId);
                 if (table && dirtyTablePaths) {
                     const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
                         dirtyTablePaths,

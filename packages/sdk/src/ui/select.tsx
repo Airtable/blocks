@@ -276,10 +276,14 @@ const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
         >
-            {options.map(option => {
+            {options.map((option, index) => {
                 const valueJson = optionValueToString(option.value);
                 return (
-                    <option key={valueJson} value={valueJson} disabled={option.disabled}>
+                    <option
+                        key={`${valueJson}-${option.label}-${index}`}
+                        value={valueJson}
+                        disabled={option.disabled}
+                    >
                         {option.label}
                     </option>
                 );

@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`verbose_message formats airtableApiBlockNotFound 1`] = `"❌ The block could not be found. Make sure your API key is correct and that you have access to the block."`;
+
+exports[`verbose_message formats airtableApiErrorStatusAndMessages 1`] = `
+"Airtable server responded with status 400:
+
+[]"
+`;
+
+exports[`verbose_message formats airtableApiErrorStatusAndMessages 2`] = `
+"Airtable server responded with status 400:
+
+[{\\"code\\":\\"SOMETHING_WRONG\\",\\"message\\":\\"Something went wrong.\\"}]"
+`;
+
+exports[`verbose_message formats airtableApiKeyMalformed 1`] = `"❌ Invalid Airtable API key specified. Make sure you copied it correctly from airtable.com/account."`;
+
+exports[`verbose_message formats airtableApiKeyNameInvalid 1`] = `"❌ Invalid Airtable API key name specified: \\"a taxi cab covered in waffles\\"."`;
+
+exports[`verbose_message formats airtableApiMultipleErrors 1`] = `
+"Airtable server responded with multiple errors:
+
+"
+`;
+
+exports[`verbose_message formats airtableApiMultipleErrors 2`] = `
+"Airtable server responded with multiple errors:
+
+❌ Your Airtable API key is invalid. Please use [36m[1mblock set-api-key[22m[39m to update it.
+❌ Airtable server returned an error.
+Something went wrong."
+`;
+
+exports[`verbose_message formats airtableApiUnexpectedError 1`] = `
+"❌ Airtable server returned an error.
+Something went wrong."
+`;
+
+exports[`verbose_message formats airtableApiUnsupportedBlocksCliVersion 1`] = `
+"❌ Please update @airtable/blocks-cli.
+
+Run [36m[1mnpm i -g @airtable/blocks[22m[39m to update.
+"
+`;
+
+exports[`verbose_message formats airtableApiWithInvalidApiKey 1`] = `"❌ Your Airtable API key is invalid. Please use [36m[1mblock set-api-key[22m[39m to update it."`;
+
+exports[`verbose_message formats appConfigIsNotValid 1`] = `"❌ block.json should be a non-null object"`;
+
+exports[`verbose_message formats appConfigIsNotValid 2`] = `"❌ ../block.json should be a non-null object"`;
+
+exports[`verbose_message formats blockIdentifierInvalidBaseId 1`] = `"Block identifier's must start with \\"app\\"."`;
+
+exports[`verbose_message formats blockIdentifierInvalidBlockId 1`] = `"Block identifier's must start with \\"blk\\" after \\"/\\"."`;
+
+exports[`verbose_message formats blockIdentifierInvalidFormat 1`] = `"Block identifier must be in the format <baseId>/<blockId>."`;
+
+exports[`verbose_message formats buildAppConfigModified 1`] = `"Detected changes to 'block.json' file. Please restart [36m[1mblock run[22m[39m."`;
+
+exports[`verbose_message formats buildBlockDirectoryNotFound 1`] = `"Block directory with block.json file not found"`;
+
+exports[`verbose_message formats developmentRunFrameNewBlockInstallation 1`] = `"Switched to a new block installation."`;
+
+exports[`verbose_message formats developmentRunFrameOriginalBaseOnly 1`] = `"You can only run your development block in the original base where it was created."`;
+
+exports[`verbose_message formats developmentRunFrameOriginalBlockOnly 1`] = `"blockId mismatch. Make sure you are entering development for the correct block."`;
+
+exports[`verbose_message formats findPortAsyncPortIsNotNumber 1`] = `"❌ Cannot listen to port [4masdf[24m. [4masdf[24m is not a number."`;
+
+exports[`verbose_message formats initCommandDirectoryExists 1`] = `"A directory already exists at my-app."`;
+
+exports[`verbose_message formats initCommandInstalledSdkNoVersion 1`] = `"Installed @airtable/blocks dependency has no version."`;
+
+exports[`verbose_message formats initCommandReady 1`] = `"✅ Your block is ready! [36m[1mcd my-app[22m[39m then [36m[1mblock run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandReady 2`] = `"✅ Your block is ready! [36m[1mcd my-app && block run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandReady 3`] = `"✅ Your block is ready! [36m[1mcd my-app && block run[22m[39m to start developing, and [36m[1mnpm run lint[22m[39m to lint."`;
+
+exports[`verbose_message formats initCommandTemplateMissing 1`] = `"Could not get template https://github.com/Airtable/apps-hello-world - please check you entered the name correctly."`;
+
+exports[`verbose_message formats initCommandTemplateNoBlockJson 1`] = `"https://github.com/Airtable/apps-hello-world does not seem to be a block template."`;
+
+exports[`verbose_message formats initCommandUnknownError 1`] = `"❌ Something failed! Cleaning up..."`;
+
+exports[`verbose_message formats releaseCommandBlock1CommentUnsupported 1`] = `"❌ This block cannot be released with a comment. Run [36m[1mblock release[22m[39m without [36m[1m--comment[22m[39m."`;
+
+exports[`verbose_message formats releaseCommandBlock2BackendUnsupported 1`] = `"❌ V2 blocks does not support backend routes."`;
+
+exports[`verbose_message formats releaseCommandDeveloperCommentPrompt 1`] = `"Enter a comment describing the changes in this release"`;
+
+exports[`verbose_message formats remoteCommandAddedNew 1`] = `"✅ Successfully added a new remote at .block/newremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandAddedNew 2`] = `"✅ Successfully added a new remote at ../.block/newremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandBetaWarning 1`] = `
+"[93mNote:[39m The remotes feature is still in beta.
+"
+`;
+
+exports[`verbose_message formats remoteCommandConfigExists 1`] = `
+"❌ The [1mnewremote[22m remote already exists!
+If you want to update the remote, please run [36m[1mblock remove-remote newremote[22m[39m and re-run [36m[1mblock add-remote[22m[39m!"
+`;
+
+exports[`verbose_message formats remoteCommandConfigMissing 1`] = `"❌ The [1moldremote[22m remote does not exist."`;
+
+exports[`verbose_message formats remoteCommandNoConfigs 1`] = `"❌ This project has no remotes. Use [1mblock add-remote[22m to add one."`;
+
+exports[`verbose_message formats remoteCommandRemovedExisting 1`] = `"✅ Successfully removed the remote from .block/oldremote.remote.json!"`;
+
+exports[`verbose_message formats remoteCommandRemovedExisting 2`] = `"✅ Successfully removed the remote from ../.block/oldremote.remote.json!"`;
+
+exports[`verbose_message formats remoteConfigIsNotValid 1`] = `"❌ .block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats remoteConfigIsNotValid 2`] = `"❌ ../.block/remote.json should be a non-null object"`;
+
+exports[`verbose_message formats runCommandInstallingLocalSdk 1`] = `"Installing local SDK from path..."`;
+
+exports[`verbose_message formats s3ApiBundleTooLarge 1`] = `"❌ Could not upload bundle. The bundle's size is too big."`;
+
+exports[`verbose_message formats s3ApiFailed 1`] = `"❌ Could not upload bundle. Failed to upload."`;
+
+exports[`verbose_message formats submitCommandPackagedContinuePrompt 1`] = `
+"
+The project source code has been packaged for review by Airtable.
+Are you ready to submit it for review? (Enter [36m[1my[22m[39m to continue)"
+`;
+
+exports[`verbose_message formats submitCommandStopAfterPackaging 1`] = `"Quitting. If you want to submit later run this command again."`;
+
+exports[`verbose_message formats submitCommandWindowsMultipleDisks 1`] = `"Dependencies cannot be on multiple disks."`;
+
+exports[`verbose_message formats systemApiKeyNotFound 1`] = `"❌ An airtable api key is not set. Please use [36m[1mblock set-api-key[22m[39m to set it."`;
+
+exports[`verbose_message formats systemConfigAppDirectoryNotFound 1`] = `"❌ Could not find the root of an Airtable project. Please run again from an Airtable project."`;
+
+exports[`verbose_message formats systemConfigInvalidRemoteName 1`] = `"❌ Incorrect characters for the name! Only alphanumeric, -, or _ characters are allowed"`;
+
+exports[`verbose_message formats systemExtraDirWithFileNotFound 1`] = `"❌ Could not find directory that includes a block.json entry."`;
+
+exports[`verbose_message formats userConfigIsNotValid 1`] = `"❌ ~/.config/.airtableblocksrc.json should be a non-null object"`;
+
+exports[`verbose_message formats userConfigIsNotValid 2`] = `"❌ ../../../.config/.airtableblocksrc.json should be a non-null object"`;

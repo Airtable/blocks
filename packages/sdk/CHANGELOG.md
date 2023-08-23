@@ -3,15 +3,209 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project
-doesn't currently follow semantic versioning, but will once it reaches 1.0.0.
+started to follow semantic versioning as of version 1.0.0.
 
 Not every commit needs to result in a change to this file (e.g. docs and chore commits). Every
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.17.0...HEAD)
 
 No changes.
+
+## [1.17.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.16.0...@airtable/blocks@1.17.0) - 2023-04-14
+
+No changes.
+
+## [1.16.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.15.0...@airtable/blocks@1.16.0) - 2023-03-08
+
+-   Update `FieldType.DATE_TIME` documentation to add additional time zones and clarify the write
+    behavior.
+-   Visually refresh all icons
+
+## [1.15.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.14.0...@airtable/blocks@1.15.0) - 2022-09-23
+
+-   Add `applyRowTemplate` icon
+-   Update `FieldType.DATE_TIME` documentation to pre-announce write behavior for field level time
+    zones
+-   Modify `createRecordsAsync`, `updateRecordsAsync`, `convertStringToCellValue` so that date
+    string inputs to date time fields are interpreted correctly for utc or client time zone, fixing
+    previously incorrect behaviors. In this new version, ambiguous strings like
+    "2020-09-05T07:00:00" and "2020-09-08" will be interpreted according to the `timeZone` of the
+    field, and nonambiguous string inputs with zone offset like "2020-09-05T07:00:00.000Z" and
+    "2020-09-08T00:00:00-07:00" will be interpreted correctly as the underlying timestamp.
+
+## [1.14.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.13.0...@airtable/blocks@1.14.0) - 2022-07-26
+
+-   Add `personalCloseup` icon
+-   Add `xCheckbox` icon
+
+## [1.13.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.12.0...@airtable/blocks@1.13.0) - 2022-06-28
+
+-   Add ability to read (and watch) if a view is locked
+-   Update `FieldType.MULTIPLE_COLLABORATOR` documentation to include user group collaborator
+    information
+
+## [1.12.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.1...@airtable/blocks@1.12.0) - 2022-06-22
+
+-   Update fallback value in `Base.getMaxRecordsPerTable`
+-   Add `overlay` icon
+-   Update `cursor.setActiveTable` and `cursor.setActiveView` documentation to describe fullscreen
+    exit behavior correctly
+-   Fix an issue where rapidly subscribing and unsubscribing to a single field could cause a
+    queryResult to be to incorrectly marked as loaded.
+-   Update API reference documentation to reflect 'extensions' in place of 'apps'
+-   Update examples in documentation to reflect 'extensions' in place of 'apps'
+
+## [1.11.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.11.0...@airtable/blocks@1.11.1) - 2022-04-13
+
+-   Update internal utilities for error reporting
+
+## [1.11.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.2...@airtable/blocks@1.11.0) - 2022-03-10
+
+-   Add workspace id to base object.
+-   Add `Field.updateNameAsync`
+-   Fixes a crash when a linked record is deleted
+-   Fixes a crash when a record containing a linked record is deleted and restored
+
+## [1.10.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.1...@airtable/blocks@1.10.2) - 2022-01-25
+
+-   Rare invariant failure addressed
+
+## [1.10.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.10.0...@airtable/blocks@1.10.1) - 2021-12-22
+
+-   Update examples for table, view and field URLs.
+-   Use `keyof any` instead of `PropertyKey` in type definition to avoid incompatibility with the
+    "[keyofStringsOnly](https://www.typescriptlang.org/tsconfig#keyofStringsOnly)" tsconfig option
+
+## [1.10.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.9.0...@airtable/blocks@1.10.0) - 2021-11-03
+
+-   Fix typo in cursor.ts documentation - thanks @m2creates!
+-   Add new `calendarDay` icon (and micro variant)
+-   Update documentation to include attachment url guidance
+-   Update field metadata writes documentation to mention that `null` will be coerced to `''`
+-   Fix a bug when unloading data from a `linkedRecordQueryResult` after a table deletion
+-   Update `children` prop of `Link` component to be optional
+
+## [1.9.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.8.0...@airtable/blocks@1.9.0) - 2021-09-15
+
+-   Update documentation for `FieldType.CHECKBOX` cell read & write types to be more accurate.
+-   Fetching field types & configs is now cached, making it more performant.
+-   Field descriptions can now be edited and specified when creating a new field:
+    -   Added `field.updateDescriptionAsync`.
+    -   Added optional `description` argument to `table.createFieldAsync`.
+    -   Added optional `description` property to `field` objects accepted by
+        `base.createTableAsync`.
+
+## [1.8.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.2...@airtable/blocks@1.8.0) - 2021-07-12
+
+-   Add `opts` argument to `Field.updateOptionsAsync` with `enableSelectFieldChoiceDeletion` opt.
+-   Add `prefersSingleRecordLink` to `field.options` for `MULTIPLE_RECORD_LINKS` type fields.
+-   Add new timeline icon (and micro variant).
+
+## [1.7.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.1...@airtable/blocks@1.7.2) - 2021-05-26
+
+-   Add `FieldType.EXTERNAL_SYNC_SOURCE`.
+
+## [1.7.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.7.0...@airtable/blocks@1.7.1) - 2021-05-21
+
+No changes.
+
+## [1.7.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.6.0...@airtable/blocks@1.7.0) - 2021-05-13
+
+-   Add `onBlur` and `onFocus` support to `Input` and `InputSynced` UI components.
+
+## [1.6.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.1...@airtable/blocks@1.6.0) - 2021-05-12
+
+-   Add `color` property to `base` to access the background color of the base, as well as the
+    `color` watch key
+-   Update documentation text for `GlobalConfig` with increased 150kb limit.
+-   Add `getMaxRecordsPerTable` to `base`
+
+## [1.5.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.5.0...@airtable/blocks@1.5.1) - 2021-03-04
+
+No changes.
+
+## [1.5.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.1...@airtable/blocks@1.5.0) - 2021-02-25
+
+-   Add type exports for `Cursor` & `Session` to `@airtable/blocks/models`.
+-   Add type exports for `GlobalConfig`, `Watchable`, & `Viewport` to `@airtable/blocks/types`.
+-   Add `boltList`, `boltListMicro`, `contacts`, `contactsMicro`, `megaphone`, `megaphoneMicro`,
+    `shareWithBolt` and `shareWithBoltMicro` icons.
+-   Increase spacing between `label` and `description` nodes in `FormField`.
+-   Support creating (but not updating) `MULTIPLE_RECORD_LINKS` fields using
+    `table.createFieldAsync`.
+-   Add `isCancelButtonDisabled` and `isConfirmButtonDisabled` props to `ConfirmationDialog`.
+-   Add `config` property to `Field`, which is a new `FieldConfig` discriminated union type that
+    provides easier access to field options.
+-   Improve type definitions for `getHexForColor` and `getRgbForColor`.
+
+## [1.4.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.4.0...@airtable/blocks@1.4.1) - 2021-01-21
+
+No changes.
+
+## [1.4.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.3.0...@airtable/blocks@1.4.0) - 2021-01-19
+
+-   **DEPRECATED:** importing the Base's Cursor instance from the main entrypoint, e.g.
+    `import {cursor} from '@airtable/blocks';`. Use the `useCursor` React Hook instead.
+-   **DEPRECATED:** importing the Base's Session instance from the main entrypoint, e.g.
+    `import {session} from '@airtable/blocks';`. Use the `useSession` React Hook instead.
+
+## [1.3.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.5...@airtable/blocks@1.3.0) - 2021-01-07
+
+-   Fix crash when deleting views.
+-   Add BaseProvider to allow rendering Components outside of the App's React tree
+
+## [1.2.5](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.4...@airtable/blocks@1.2.5) - 2020-12-10
+
+No changes.
+
+## [1.2.4](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.3...@airtable/blocks@1.2.4) - 2020-12-10
+
+No changes.
+
+## [1.2.3](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.2...@airtable/blocks@1.2.3) - 2020-12-09
+
+-   Stopped exporting an internal class that was causing typescript checking to fail on version
+    1.2.2
+
+## [1.2.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.1...@airtable/blocks@1.2.2) - 2020-12-08
+
+-   Fixed a bug in useRecordActionData that caused it to crash on version 1.2.1
+
+## [1.2.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...@airtable/blocks@1.2.1) - 2020-11-23
+
+-   Fixed a bug that prevented TableOrViewQueryResult from notifying watchers about the
+    creation/deletion of sorted fields.
+-   Fixed a bug where deleting and undeleting a table that was already loaded caused the App to
+    crash.
+-   **DEPRECATED:** importing the UI namespace from the main entrypoint, e.g.
+    `import {UI} from '@airtable/blocks';`. Use `import * as UI from '@airtable/blocks/ui/ui';`
+    instead.
+-   **DEPRECATED:** importing the models namespace from the main entrypoint, e.g.
+    `import {models} from '@airtable/blocks';`. Use
+    `import * as models from '@airtable/blocks/models/models';` instead.
+
+## [1.2.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...@airtable/blocks@1.2.0) - 2020-10-23
+
+-   Added `automations` and fixed the SVG path for `personalAuto` in `Icon`.
+-   Fixed a bug that caused an App to crash when creating a new table before the App has loaded.
+-   Fixed a bug in watching/unwatching keys of LinkedRecordQueryResult models. Watching/unwatching
+    `isDataLoaded` no longer affects the model's "loaded" state.
+-   Fixed a bug introduced in v1.0.0 in `RecordCard` when rendering a record that has a lookup field
+    of an attachment field.
+
+## [1.1.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...@airtable/blocks@1.1.0) - 2020-09-29
+
+-   **DEPRECATED:** "blocks" as an icon name. Use `<Icon name="apps" .../>` instead.
+-   Fixed bugs introduced in v1.0.0 that broke using lookup cell values with
+    `Record.getCellValueAsString`, `aggregator.aggregate` and `aggregator.aggregateToString`
+
+## [1.0.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...@airtable/blocks@1.0.1) - 2020-09-24
+
+-   Fixed bug where `Select`, `SelectButtons`, and `Synced` variants behaved incorrectly when there
+    were multiple items with the same value.
+-   Fix a bug using lookup cell values with `<CellRenderer />` introduced in v1.0.0
 
 ## [1.0.0](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.55...@airtable/blocks@1.0.0) - 2020-09-14
 
