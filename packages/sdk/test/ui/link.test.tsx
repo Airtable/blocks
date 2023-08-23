@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Link} from '../../src/ui/ui';
+import {Link} from '../../src/ui/unstable_standalone_ui';
 
 describe('Link', () => {
     it('renders outside of a blocks context', () => {

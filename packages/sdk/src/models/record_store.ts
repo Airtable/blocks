@@ -11,14 +11,13 @@ import {
     cast,
     keys as objectKeys,
 } from '../private_utils';
-import {invariant} from '../error_utils';
-import {BaseData} from '../types/base';
+import {invariant, logErrorToSentry} from '../error_utils';
+import Sdk from '../sdk';
 import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
 import {RecordId, RecordData} from '../types/record';
 import {ViewId} from '../types/view';
 import {AirtableInterface} from '../types/airtable_interface';
-import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
@@ -30,8 +29,6 @@ export const WatchableRecordStoreKeys = Object.freeze({
     cellValues: 'cellValues' as const,
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
-const WatchableRecordIdsInViewKeyPrefix = 'recordIdsInView:';
-const WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:';
 
 /**
  * The string case is to accommodate prefix keys
@@ -51,9 +48,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
-            key.startsWith(WatchableCellValuesInFieldKeyPrefix) ||
-            key.startsWith(WatchableRecordIdsInViewKeyPrefix) ||
-            key.startsWith(WatchableRecordColorsInViewKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
     static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
@@ -73,10 +68,12 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     > = {};
     _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
 
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface, tableId: TableId) {
-        super(baseData, `${tableId}-RecordStore`);
+    _timeoutForRemovingFieldIds: NodeJS.Timeout | null = null;
 
-        this._airtableInterface = airtableInterface;
+    constructor(sdk: Sdk, tableId: TableId) {
+        super(sdk, `${tableId}-RecordStore`);
+
+        this._airtableInterface = sdk.__airtableInterface;
         this.tableId = tableId;
         this._primaryFieldId = this._data.primaryFieldId;
     }
@@ -86,12 +83,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             return this._viewDataStoresByViewId[viewId];
         }
         invariant(this._data.viewsById[viewId], 'view must exist');
-        const viewDataStore = new ViewDataStore(
-            this._baseData,
-            this,
-            this._airtableInterface,
-            viewId,
-        );
+        const viewDataStore = new ViewDataStore(this._sdk, this, viewId);
         this._viewDataStoresByViewId[viewId] = viewDataStore;
         return viewDataStore;
     }
@@ -182,13 +174,30 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 return this._recordModelsById[recordId];
             }
             const newRecord = new Record(
-                this._baseData,
+                this._sdk,
                 this,
-                getSdk().base.getTableById(this.tableId),
+                this._sdk.base.getTableById(this.tableId),
                 recordId,
             );
             this._recordModelsById[recordId] = newRecord;
             return newRecord;
+        }
+    }
+
+    __onDataDeletion(): void {
+        for (const fieldId of Object.keys(this._cellValuesRetainCountByFieldId)) {
+            while (
+                this._cellValuesRetainCountByFieldId[fieldId] &&
+                this._cellValuesRetainCountByFieldId[fieldId] > 0
+            ) {
+                this.unloadCellValuesInFieldIds([fieldId]);
+            }
+        }
+
+        this._forceUnload();
+
+        for (const viewDataStore of values(this._viewDataStoresByViewId)) {
+            viewDataStore.__onDataDeletion();
         }
     }
 
@@ -219,6 +228,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
+        this._assertNotForceUnloaded();
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<FieldId> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableRecordStoreKey>>> = [];
         for (const fieldId of fieldIds) {
@@ -258,6 +268,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 }
             });
         }
+        this._restartTimeoutToUnloadFieldIdsIfTimeoutIsActive();
         await Promise.all(pendingLoadPromises);
     }
 
@@ -283,15 +294,21 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
 
-                invariant(
-                    existingRecordObj.commentCount === newRecordObj.commentCount,
-                    'comment count out of sync',
-                );
+                if (existingRecordObj.commentCount !== newRecordObj.commentCount) {
+                    const isCommentCountTypesSame =
+                        typeof existingRecordObj.commentCount !== typeof newRecordObj.commentCount;
+                    logErrorToSentry('comment count out of sync - types are same: %s', {
+                        isCommentCountTypesSame,
+                    });
+                }
 
-                invariant(
-                    existingRecordObj.createdTime === newRecordObj.createdTime,
-                    'created time out of sync',
-                );
+                if (existingRecordObj.createdTime !== newRecordObj.createdTime) {
+                    const isCreatedTimeTypesSame =
+                        typeof existingRecordObj.createdTime !== typeof newRecordObj.createdTime;
+                    logErrorToSentry('created time out of sync - types are same: %s', {
+                        isCreatedTimeTypesSame,
+                    });
+                }
 
                 if (!existingRecordObj.cellValuesByFieldId) {
                     existingRecordObj.cellValuesByFieldId = {};
@@ -314,7 +331,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
-        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
+        if (this._isForceUnloaded) {
+            return;
+        }
         for (const fieldId of fieldIds) {
             let fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
             fieldRetainCount--;
@@ -324,23 +343,48 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 fieldRetainCount = 0;
             }
             this._cellValuesRetainCountByFieldId[fieldId] = fieldRetainCount;
+        }
+        this._startTimeoutToUnloadForFieldIdsIfNeeded();
+    }
 
-            if (fieldRetainCount === 0) {
+    _startTimeoutToUnloadForFieldIdsIfNeeded() {
+        const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
+        for (const [fieldId, retainCount] of Object.entries(this._cellValuesRetainCountByFieldId)) {
+            if (retainCount === 0) {
                 fieldIdsWithZeroRetainCount.push(fieldId);
             }
         }
+
+        if (this._timeoutForRemovingFieldIds) {
+            clearTimeout(this._timeoutForRemovingFieldIds);
+            this._timeoutForRemovingFieldIds = null;
+        }
         if (fieldIdsWithZeroRetainCount.length > 0) {
-            setTimeout(() => {
+            this._timeoutForRemovingFieldIds = setTimeout(() => {
                 const fieldIdsToUnload = fieldIdsWithZeroRetainCount.filter(fieldId => {
-                    return this._cellValuesRetainCountByFieldId[fieldId] === 0;
+                    return (
+                        this._cellValuesRetainCountByFieldId[fieldId] === 0 &&
+                        this._areCellValuesLoadedByFieldId[fieldId]
+                    );
                 });
                 if (fieldIdsToUnload.length > 0) {
                     for (const fieldId of fieldIdsToUnload) {
                         this._areCellValuesLoadedByFieldId[fieldId] = false;
                     }
                     this._unloadCellValuesInFieldIds(fieldIdsToUnload);
+                } else {
+                    logErrorToSentry(
+                        'fieldIdsToUnload is empty, this likely means the unload timer is not properly reset.',
+                    );
                 }
+                this._timeoutForRemovingFieldIds = null;
             }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
+        }
+    }
+
+    _restartTimeoutToUnloadFieldIdsIfTimeoutIsActive() {
+        if (this._timeoutForRemovingFieldIds) {
+            this._startTimeoutToUnloadForFieldIdsIfNeeded();
         }
     }
 
@@ -377,6 +421,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
             values(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
+
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;
@@ -384,6 +429,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 let fieldIdsToClear;
                 if (unloadedFieldIds) {
                     fieldIdsToClear = unloadedFieldIds;
+                    logErrorToSentry('Field Ids are being unloaded when record_store is unloaded');
                 } else {
                     const fieldIds = Object.keys(this._data.fieldsById);
                     fieldIdsToClear = fieldIds.filter(
@@ -464,6 +510,15 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             }
             for (const fieldId of fieldIds) {
                 this._onChange(WatchableCellValuesInFieldKeyPrefix + fieldId, recordIds, fieldId);
+            }
+        }
+
+        if (dirtyPaths.viewOrder) {
+            for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
+                if (viewDataStore.isDeleted) {
+                    viewDataStore.__onDataDeletion();
+                    delete this._viewDataStoresByViewId[viewId];
+                }
             }
         }
     }

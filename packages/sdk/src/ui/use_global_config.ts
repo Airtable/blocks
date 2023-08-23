@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui: useGlobalConfig */ /** */
-import getSdk from '../get_sdk';
 import GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
- * Returns the block's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
+ * Returns the extension's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
  * changes.
  *
  * @example
@@ -23,7 +23,7 @@ import useWatchable from './use_watchable';
  *         <React.Fragment>
  *             <Button icon="minus" onClick={decrement} disabled={!isEnabled} ariaLabel="decrease"/>
  *             {count}
- *             <Button icon="plus" onClick={increment} disabled={!isEnabled} airaLabel="increase"/>
+ *             <Button icon="plus" onClick={increment} disabled={!isEnabled} ariaLabel="increase"/>
  *         </React.Fragment>
  *     );
  * }
@@ -32,7 +32,7 @@ import useWatchable from './use_watchable';
  * @hook
  */
 export default function useGlobalConfig(): GlobalConfig {
-    const {globalConfig, session} = getSdk();
+    const {globalConfig, session} = useSdk();
     useWatchable(session, ['permissionLevel']);
     useWatchable(globalConfig, ['*']);
     return globalConfig;

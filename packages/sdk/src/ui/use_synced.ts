@@ -1,6 +1,6 @@
 import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
-import getSdk from '../get_sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook for syncing a component to {@link GlobalConfig}.
@@ -31,12 +31,13 @@ export default function useSynced(
     globalConfigKey: GlobalConfigKey,
 ): [unknown, (newValue: GlobalConfigValue | undefined) => void, boolean] {
     globalConfigSyncedComponentHelpers.useDefaultWatchesForSyncedComponent(globalConfigKey);
-    const {globalConfig} = getSdk();
+    const sdk = useSdk();
+    const {globalConfig} = sdk;
     const value = globalConfig.get(globalConfigKey);
     const canSetValue = globalConfig.hasPermissionToSet(globalConfigKey);
 
     function setValue(newValue?: GlobalConfigValue | undefined) {
-        getSdk().globalConfig.setAsync(globalConfigKey, newValue);
+        sdk.globalConfig.setAsync(globalConfigKey, newValue);
     }
 
     return [value, setValue, canSetValue];

@@ -1,4 +1,8 @@
 /** @module @airtable/blocks/models: Field */ /** */
+import {Color} from '../colors';
+import {TableId} from './table';
+import {ViewId} from './view';
+
 /** */
 export type FieldId = string;
 /** @hidden */
@@ -135,7 +139,7 @@ export enum FieldType {
      *     color?: Color
      * }
      * ```
-     * The currently selected choices.
+     * The currently selected choice.
      *
      * **Cell write format**
      * ```js
@@ -168,9 +172,10 @@ export enum FieldType {
      *     >,
      * }
      * ```
-     * You must pass all pre-existing choices in `choices` when updating a `SINGLE_SELECT` field
-     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
-     * the current choices:
+     * The default behavior of calling `updateOptionsAsync` on a `SINGLE_SELECT` field allows
+     * choices to be added or updated, but not deleted. Therefore, you should pass all pre-existing
+     * choices in `choices` (similar to updating a `MULTIPLE_SELECTS` field type cell value). You can
+     * do this by spreading the current choices:
      * ```js
      * const selectField = table.getFieldByName('My select field');
      * await selectField.updateOptionsAsync({
@@ -178,7 +183,22 @@ export enum FieldType {
      *         ...selectField.options.choices,
      *         {name: 'My new choice'},
      *     ],
-     * })
+     * });
+     *
+     * ```
+     *
+     * If you want to allow choices to be deleted, you can pass an object with
+     * `enableSelectFieldChoiceDeletion: true` as the second argument. By passing this argument,
+     * any existing choices which are not passed again via `choices` will be deleted, and any
+     * cells which referenced a now-deleted choice will be cleared.
+     * ```js
+     * const selectField = table.getFieldByName('My select field');
+     * await selectField.updateOptionsAsync(
+     *     {
+     *         choices: selectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     },
+     *     {enableSelectFieldChoiceDeletion: true},
+     * );
      *
      * ```
      */
@@ -226,9 +246,10 @@ export enum FieldType {
      *     >,
      * }
      * ```
-     * You must pass all pre-existing choices in `choices` when updating a `MULTIPLE_SELECT` field
-     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
-     * the current choices:
+     * The default behavior of calling `updateOptionsAsync` on a `MULTIPLE_SELECTS` field allows
+     * choices to be added or updated, but not deleted. Therefore, you should pass all pre-existing
+     * choices in `choices` (similar to updating a `SINGLE_SELECT` field type cell value). You can
+     * do this by spreading the current choices:
      * ```js
      * const multipleSelectField = table.getFieldByName('My multiple select field');
      * await multipleSelectField.updateOptionsAsync({
@@ -236,7 +257,22 @@ export enum FieldType {
      *         ...multipleSelectField.options.choices,
      *         {name: 'My new choice'},
      *     ],
-     * })
+     * });
+     *
+     * ```
+     *
+     * If you want to allow choices to be deleted, you can pass an object with
+     * `enableSelectFieldChoiceDeletion: true` as the second argument. By passing this argument,
+     * any existing choices which are not passed again via `choices` will be deleted, and any
+     * cells which referenced a now-deleted choice will be cleared.
+     * ```js
+     * const multipleSelectField = table.getFieldByName('My multiple select field');
+     * await multipleSelectField.updateOptionsAsync(
+     *     {
+     *         choices: multipleSelectField.options.choices.filter((choice) => choice.name !== 'Choice to delete'),
+     *     },
+     *     {enableSelectFieldChoiceDeletion: true},
+     * );
      *
      * ```
      */
@@ -244,7 +280,7 @@ export enum FieldType {
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally
      * be notified when they're added. A single collaborator field has been configured to only
-     * reference one collaborator.
+     * reference one user collaborator.
      *
      * **Cell read format**
      * ```js
@@ -255,7 +291,7 @@ export enum FieldType {
      *     profilePicUrl?: string,
      * }
      * ```
-     * The currently selected collaborator.
+     * The currently selected user collaborator.
      *
      * **Cell write format**
      * ```js
@@ -286,9 +322,12 @@ export enum FieldType {
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally
      * be notified when they're added. A multiple collaborator field has been configured to
-     * reference any number of collaborators.
+     * reference any number of user or user group collaborators.
      *
-     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * Note: Adding user groups to multiple collaborator fields is an upcoming enterprise feature currently
+     * in beta, and will be generally released on August 29, 2022.
+     *
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_SELECTS, this array-type field
      * will override the current cell value when being updated. Be sure to spread the current
      * cell value if you want to keep the currently selected collaborators.
      *
@@ -301,7 +340,9 @@ export enum FieldType {
      *     profilePicUrl?: string,
      * }>
      * ```
-     * The currently selected collaborators.
+     * The currently selected user or user group collaborators. The email property is either the email
+     * address of the user collaborator or an RFC 2822 mailbox-list (comma-separated list of emails) that
+     * can be used to contact all members of the user group collaborator.
      *
      * **Cell write format**
      * ```js
@@ -341,7 +382,7 @@ export enum FieldType {
      *         ...myRecord.getCellValue('myLinkedRecordField'),
      *         { id: newForeignRecordIdToLink }
      *     ]
-     * })
+     * });
      * ```
      *
      * Similarly, you can clear the current cell value by passing an empty array, or
@@ -377,12 +418,29 @@ export enum FieldType {
      *     // Airtable UI (i.e. most recent first)
      *     // You generally do not need to rely on this option.
      *     isReversed: boolean,
+     *     // Whether this field prefers to only have a single linked record. While this preference
+     *     // is enforced in the Airtable UI, it is possible for a field that prefers single linked
+     *     // records to have multiple record links (for example, via copy-and-paste or programmatic
+     *     // updates).
+     *     prefersSingleRecordLink: boolean,
      * }
      * ```
      *
      * **Field options write format**
+     * ```js
+     * {
+     *     // The ID of the table this field links to
+     *     linkedTableId: TableId,
+     *     // The ID of the view in the linked table to use when showing
+     *     // a list of records to select from
+     *     viewIdForRecordSelection?: ViewId,
+     *     // Note: prefersSingleRecordLink cannot be specified via programmatic field creation
+     *     // and will be false for fields created within an app
+     * }
+     * ```
      *
-     * Creating or updating `MULTIPLE_RECORD_LINKS` fields is not supported.
+     * Creating `MULTIPLE_RECORD_LINKS` fields is supported but updating options for existing
+     * `MULTIPLE_RECORD_LINKS` fields is not supported.
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
@@ -409,22 +467,25 @@ export enum FieldType {
      * **Field options read format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
-     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     }
+     *     dateFormat:
+     *          | {name: 'local', format: 'l'}
+     *          | {name: 'friendly', format: 'LL'}
+     *          | {name: 'us', format: 'M/D/YYYY'}
+     *          | {name: 'european', format: 'D/M/YYYY'}
+     *          | {name: 'iso', format: 'YYYY-MM-DD'}
      * }
      * ```
      *
      * **Field options write format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     }
+     *     dateFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: 'local', format?: 'l'}
+     *          | {name: 'friendly', format?: 'LL'}
+     *          | {name: 'us', format?: 'M/D/YYYY'}
+     *          | {name: 'european', format?: 'D/M/YYYY'}
+     *          | {name: 'iso', format?: 'YYYY-MM-DD'}
      * }
      * ```
      */
@@ -449,38 +510,41 @@ export enum FieldType {
      * ```js
      * Date | string
      * ```
+     * For a `dateTime` field configured with a non `utc` or `client` time zone like `America/Los_Angeles`,
+     * ambiguous string inputs like "2020-09-05T07:00:00" and "2020-09-08" will be interpreted according to `timeZone` of the field instead of `utc`, and
+     * nonambiguous string inputs with zone offset like "2020-09-05T07:00:00.000Z" and "2020-09-08T00:00:00-07:00" will be interpreted as the underlying timestamp.
      *
      * **Field options read format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
-     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     },
-     *     timeFormat: {
-     *         name: '12hour' | '24hour',
-     *         // Will correspond to name
-     *         format: 'h:mma' | 'HH:mm',
-     *     },
-     *     timeZone: 'utc' | 'client',
+     *     dateFormat:
+     *          | {name: 'local', format: 'l'}
+     *          | {name: 'friendly', format: 'LL'}
+     *          | {name: 'us', format: 'M/D/YYYY'}
+     *          | {name: 'european', format: 'D/M/YYYY'}
+     *          | {name: 'iso', format: 'YYYY-MM-DD'},
+     *     timeFormat:
+     *          | {name: '12hour', format: 'h:mma'}
+     *          | {name: '24hour', format: 'HH:mm'},
+     *     timeZone: 'utc' | 'client' | 'Africa/Abidjan' | 'Africa/Accra' | 'Africa/Addis_Ababa' | 'Africa/Algiers' | 'Africa/Asmara' | 'Africa/Bamako' | 'Africa/Bangui' | 'Africa/Banjul' | 'Africa/Bissau' | 'Africa/Blantyre' | 'Africa/Brazzaville' | 'Africa/Bujumbura' | 'Africa/Cairo' | 'Africa/Casablanca' | 'Africa/Ceuta' | 'Africa/Conakry' | 'Africa/Dakar' | 'Africa/Dar_es_Salaam' | 'Africa/Djibouti' | 'Africa/Douala' | 'Africa/El_Aaiun' | 'Africa/Freetown' | 'Africa/Gaborone' | 'Africa/Harare' | 'Africa/Johannesburg' | 'Africa/Juba' | 'Africa/Kampala' | 'Africa/Khartoum' | 'Africa/Kigali' | 'Africa/Kinshasa' | 'Africa/Lagos' | 'Africa/Libreville' | 'Africa/Lome' | 'Africa/Luanda' | 'Africa/Lubumbashi' | 'Africa/Lusaka' | 'Africa/Malabo' | 'Africa/Maputo' | 'Africa/Maseru' | 'Africa/Mbabane' | 'Africa/Mogadishu' | 'Africa/Monrovia' | 'Africa/Nairobi' | 'Africa/Ndjamena' | 'Africa/Niamey' | 'Africa/Nouakchott' | 'Africa/Ouagadougou' | 'Africa/Porto-Novo' | 'Africa/Sao_Tome' | 'Africa/Tripoli' | 'Africa/Tunis' | 'Africa/Windhoek' | 'America/Adak' | 'America/Anchorage' | 'America/Anguilla' | 'America/Antigua' | 'America/Araguaina' | 'America/Argentina/Buenos_Aires' | 'America/Argentina/Catamarca' | 'America/Argentina/Cordoba' | 'America/Argentina/Jujuy' | 'America/Argentina/La_Rioja' | 'America/Argentina/Mendoza' | 'America/Argentina/Rio_Gallegos' | 'America/Argentina/Salta' | 'America/Argentina/San_Juan' | 'America/Argentina/San_Luis' | 'America/Argentina/Tucuman' | 'America/Argentina/Ushuaia' | 'America/Aruba' | 'America/Asuncion' | 'America/Atikokan' | 'America/Bahia' | 'America/Bahia_Banderas' | 'America/Barbados' | 'America/Belem' | 'America/Belize' | 'America/Blanc-Sablon' | 'America/Boa_Vista' | 'America/Bogota' | 'America/Boise' | 'America/Cambridge_Bay' | 'America/Campo_Grande' | 'America/Cancun' | 'America/Caracas' | 'America/Cayenne' | 'America/Cayman' | 'America/Chicago' | 'America/Chihuahua' | 'America/Costa_Rica' | 'America/Creston' | 'America/Cuiaba' | 'America/Curacao' | 'America/Danmarkshavn' | 'America/Dawson' | 'America/Dawson_Creek' | 'America/Denver' | 'America/Detroit' | 'America/Dominica' | 'America/Edmonton' | 'America/Eirunepe' | 'America/El_Salvador' | 'America/Fort_Nelson' | 'America/Fortaleza' | 'America/Glace_Bay' | 'America/Godthab' | 'America/Goose_Bay' | 'America/Grand_Turk' | 'America/Grenada' | 'America/Guadeloupe' | 'America/Guatemala' | 'America/Guayaquil' | 'America/Guyana' | 'America/Halifax' | 'America/Havana' | 'America/Hermosillo' | 'America/Indiana/Indianapolis' | 'America/Indiana/Knox' | 'America/Indiana/Marengo' | 'America/Indiana/Petersburg' | 'America/Indiana/Tell_City' | 'America/Indiana/Vevay' | 'America/Indiana/Vincennes' | 'America/Indiana/Winamac' | 'America/Inuvik' | 'America/Iqaluit' | 'America/Jamaica' | 'America/Juneau' | 'America/Kentucky/Louisville' | 'America/Kentucky/Monticello' | 'America/Kralendijk' | 'America/La_Paz' | 'America/Lima' | 'America/Los_Angeles' | 'America/Lower_Princes' | 'America/Maceio' | 'America/Managua' | 'America/Manaus' | 'America/Marigot' | 'America/Martinique' | 'America/Matamoros' | 'America/Mazatlan' | 'America/Menominee' | 'America/Merida' | 'America/Metlakatla' | 'America/Mexico_City' | 'America/Miquelon' | 'America/Moncton' | 'America/Monterrey' | 'America/Montevideo' | 'America/Montserrat' | 'America/Nassau' | 'America/New_York' | 'America/Nipigon' | 'America/Nome' | 'America/Noronha' | 'America/North_Dakota/Beulah' | 'America/North_Dakota/Center' | 'America/North_Dakota/New_Salem' | 'America/Nuuk' | 'America/Ojinaga' | 'America/Panama' | 'America/Pangnirtung' | 'America/Paramaribo' | 'America/Phoenix' | 'America/Port-au-Prince' | 'America/Port_of_Spain' | 'America/Porto_Velho' | 'America/Puerto_Rico' | 'America/Punta_Arenas' | 'America/Rainy_River' | 'America/Rankin_Inlet' | 'America/Recife' | 'America/Regina' | 'America/Resolute' | 'America/Rio_Branco' | 'America/Santarem' | 'America/Santiago' | 'America/Santo_Domingo' | 'America/Sao_Paulo' | 'America/Scoresbysund' | 'America/Sitka' | 'America/St_Barthelemy' | 'America/St_Johns' | 'America/St_Kitts' | 'America/St_Lucia' | 'America/St_Thomas' | 'America/St_Vincent' | 'America/Swift_Current' | 'America/Tegucigalpa' | 'America/Thule' | 'America/Thunder_Bay' | 'America/Tijuana' | 'America/Toronto' | 'America/Tortola' | 'America/Vancouver' | 'America/Whitehorse' | 'America/Winnipeg' | 'America/Yakutat' | 'America/Yellowknife' | 'Antarctica/Casey' | 'Antarctica/Davis' | 'Antarctica/DumontDUrville' | 'Antarctica/Macquarie' | 'Antarctica/Mawson' | 'Antarctica/McMurdo' | 'Antarctica/Palmer' | 'Antarctica/Rothera' | 'Antarctica/Syowa' | 'Antarctica/Troll' | 'Antarctica/Vostok' | 'Arctic/Longyearbyen' | 'Asia/Aden' | 'Asia/Almaty' | 'Asia/Amman' | 'Asia/Anadyr' | 'Asia/Aqtau' | 'Asia/Aqtobe' | 'Asia/Ashgabat' | 'Asia/Atyrau' | 'Asia/Baghdad' | 'Asia/Bahrain' | 'Asia/Baku' | 'Asia/Bangkok' | 'Asia/Barnaul' | 'Asia/Beirut' | 'Asia/Bishkek' | 'Asia/Brunei' | 'Asia/Chita' | 'Asia/Choibalsan' | 'Asia/Colombo' | 'Asia/Damascus' | 'Asia/Dhaka' | 'Asia/Dili' | 'Asia/Dubai' | 'Asia/Dushanbe' | 'Asia/Famagusta' | 'Asia/Gaza' | 'Asia/Hebron' | 'Asia/Ho_Chi_Minh' | 'Asia/Hong_Kong' | 'Asia/Hovd' | 'Asia/Irkutsk' | 'Asia/Istanbul' | 'Asia/Jakarta' | 'Asia/Jayapura' | 'Asia/Jerusalem' | 'Asia/Kabul' | 'Asia/Kamchatka' | 'Asia/Karachi' | 'Asia/Kathmandu' | 'Asia/Khandyga' | 'Asia/Kolkata' | 'Asia/Krasnoyarsk' | 'Asia/Kuala_Lumpur' | 'Asia/Kuching' | 'Asia/Kuwait' | 'Asia/Macau' | 'Asia/Magadan' | 'Asia/Makassar' | 'Asia/Manila' | 'Asia/Muscat' | 'Asia/Nicosia' | 'Asia/Novokuznetsk' | 'Asia/Novosibirsk' | 'Asia/Omsk' | 'Asia/Oral' | 'Asia/Phnom_Penh' | 'Asia/Pontianak' | 'Asia/Pyongyang' | 'Asia/Qatar' | 'Asia/Qostanay' | 'Asia/Qyzylorda' | 'Asia/Rangoon' | 'Asia/Riyadh' | 'Asia/Sakhalin' | 'Asia/Samarkand' | 'Asia/Seoul' | 'Asia/Shanghai' | 'Asia/Singapore' | 'Asia/Srednekolymsk' | 'Asia/Taipei' | 'Asia/Tashkent' | 'Asia/Tbilisi' | 'Asia/Tehran' | 'Asia/Thimphu' | 'Asia/Tokyo' | 'Asia/Tomsk' | 'Asia/Ulaanbaatar' | 'Asia/Urumqi' | 'Asia/Ust-Nera' | 'Asia/Vientiane' | 'Asia/Vladivostok' | 'Asia/Yakutsk' | 'Asia/Yangon' | 'Asia/Yekaterinburg' | 'Asia/Yerevan' | 'Atlantic/Azores' | 'Atlantic/Bermuda' | 'Atlantic/Canary' | 'Atlantic/Cape_Verde' | 'Atlantic/Faroe' | 'Atlantic/Madeira' | 'Atlantic/Reykjavik' | 'Atlantic/South_Georgia' | 'Atlantic/St_Helena' | 'Atlantic/Stanley' | 'Australia/Adelaide' | 'Australia/Brisbane' | 'Australia/Broken_Hill' | 'Australia/Currie' | 'Australia/Darwin' | 'Australia/Eucla' | 'Australia/Hobart' | 'Australia/Lindeman' | 'Australia/Lord_Howe' | 'Australia/Melbourne' | 'Australia/Perth' | 'Australia/Sydney' | 'Europe/Amsterdam' | 'Europe/Andorra' | 'Europe/Astrakhan' | 'Europe/Athens' | 'Europe/Belgrade' | 'Europe/Berlin' | 'Europe/Bratislava' | 'Europe/Brussels' | 'Europe/Bucharest' | 'Europe/Budapest' | 'Europe/Busingen' | 'Europe/Chisinau' | 'Europe/Copenhagen' | 'Europe/Dublin' | 'Europe/Gibraltar' | 'Europe/Guernsey' | 'Europe/Helsinki' | 'Europe/Isle_of_Man' | 'Europe/Istanbul' | 'Europe/Jersey' | 'Europe/Kaliningrad' | 'Europe/Kiev' | 'Europe/Kirov' | 'Europe/Lisbon' | 'Europe/Ljubljana' | 'Europe/London' | 'Europe/Luxembourg' | 'Europe/Madrid' | 'Europe/Malta' | 'Europe/Mariehamn' | 'Europe/Minsk' | 'Europe/Monaco' | 'Europe/Moscow' | 'Europe/Nicosia' | 'Europe/Oslo' | 'Europe/Paris' | 'Europe/Podgorica' | 'Europe/Prague' | 'Europe/Riga' | 'Europe/Rome' | 'Europe/Samara' | 'Europe/San_Marino' | 'Europe/Sarajevo' | 'Europe/Saratov' | 'Europe/Simferopol' | 'Europe/Skopje' | 'Europe/Sofia' | 'Europe/Stockholm' | 'Europe/Tallinn' | 'Europe/Tirane' | 'Europe/Ulyanovsk' | 'Europe/Uzhgorod' | 'Europe/Vaduz' | 'Europe/Vatican' | 'Europe/Vienna' | 'Europe/Vilnius' | 'Europe/Volgograd' | 'Europe/Warsaw' | 'Europe/Zagreb' | 'Europe/Zaporozhye' | 'Europe/Zurich' | 'Indian/Antananarivo' | 'Indian/Chagos' | 'Indian/Christmas' | 'Indian/Cocos' | 'Indian/Comoro' | 'Indian/Kerguelen' | 'Indian/Mahe' | 'Indian/Maldives' | 'Indian/Mauritius' | 'Indian/Mayotte' | 'Indian/Reunion' | 'Pacific/Apia' | 'Pacific/Auckland' | 'Pacific/Bougainville' | 'Pacific/Chatham' | 'Pacific/Chuuk' | 'Pacific/Easter' | 'Pacific/Efate' | 'Pacific/Enderbury' | 'Pacific/Fakaofo' | 'Pacific/Fiji' | 'Pacific/Funafuti' | 'Pacific/Galapagos' | 'Pacific/Gambier' | 'Pacific/Guadalcanal' | 'Pacific/Guam' | 'Pacific/Honolulu' | 'Pacific/Kanton' | 'Pacific/Kiritimati' | 'Pacific/Kosrae' | 'Pacific/Kwajalein' | 'Pacific/Majuro' | 'Pacific/Marquesas' | 'Pacific/Midway' | 'Pacific/Nauru' | 'Pacific/Niue' | 'Pacific/Norfolk' | 'Pacific/Noumea' | 'Pacific/Pago_Pago' | 'Pacific/Palau' | 'Pacific/Pitcairn' | 'Pacific/Pohnpei' | 'Pacific/Port_Moresby' | 'Pacific/Rarotonga' | 'Pacific/Saipan' | 'Pacific/Tahiti' | 'Pacific/Tarawa' | 'Pacific/Tongatapu' | 'Pacific/Wake' | 'Pacific/Wallis',
      * }
      * ```
      *
      * **Field options write format**
      * ```js
      * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
-     *     },
-     *     timeFormat: {
-     *         name: '12hour' | '24hour',
-     *         // Format is optional, but must match name if provided.
-     *         format?: 'h:mma' | 'HH:mm',
-     *     },
-     *     timeZone: 'utc' | 'client',
+     *     dateFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: 'local', format?: 'l'}
+     *          | {name: 'friendly', format?: 'LL'}
+     *          | {name: 'us', format?: 'M/D/YYYY'}
+     *          | {name: 'european', format?: 'D/M/YYYY'}
+     *          | {name: 'iso', format?: 'YYYY-MM-DD'},
+     *     timeFormat:
+     *          // Format is optional, but must match name if provided.
+     *          | {name: '12hour', format?: 'h:mma'}
+     *          | {name: '24hour', format?: 'HH:mm'},
+     *     timeZone: 'utc' | 'client' | 'Africa/Abidjan' | 'Africa/Accra' | 'Africa/Addis_Ababa' | 'Africa/Algiers' | 'Africa/Asmara' | 'Africa/Bamako' | 'Africa/Bangui' | 'Africa/Banjul' | 'Africa/Bissau' | 'Africa/Blantyre' | 'Africa/Brazzaville' | 'Africa/Bujumbura' | 'Africa/Cairo' | 'Africa/Casablanca' | 'Africa/Ceuta' | 'Africa/Conakry' | 'Africa/Dakar' | 'Africa/Dar_es_Salaam' | 'Africa/Djibouti' | 'Africa/Douala' | 'Africa/El_Aaiun' | 'Africa/Freetown' | 'Africa/Gaborone' | 'Africa/Harare' | 'Africa/Johannesburg' | 'Africa/Juba' | 'Africa/Kampala' | 'Africa/Khartoum' | 'Africa/Kigali' | 'Africa/Kinshasa' | 'Africa/Lagos' | 'Africa/Libreville' | 'Africa/Lome' | 'Africa/Luanda' | 'Africa/Lubumbashi' | 'Africa/Lusaka' | 'Africa/Malabo' | 'Africa/Maputo' | 'Africa/Maseru' | 'Africa/Mbabane' | 'Africa/Mogadishu' | 'Africa/Monrovia' | 'Africa/Nairobi' | 'Africa/Ndjamena' | 'Africa/Niamey' | 'Africa/Nouakchott' | 'Africa/Ouagadougou' | 'Africa/Porto-Novo' | 'Africa/Sao_Tome' | 'Africa/Tripoli' | 'Africa/Tunis' | 'Africa/Windhoek' | 'America/Adak' | 'America/Anchorage' | 'America/Anguilla' | 'America/Antigua' | 'America/Araguaina' | 'America/Argentina/Buenos_Aires' | 'America/Argentina/Catamarca' | 'America/Argentina/Cordoba' | 'America/Argentina/Jujuy' | 'America/Argentina/La_Rioja' | 'America/Argentina/Mendoza' | 'America/Argentina/Rio_Gallegos' | 'America/Argentina/Salta' | 'America/Argentina/San_Juan' | 'America/Argentina/San_Luis' | 'America/Argentina/Tucuman' | 'America/Argentina/Ushuaia' | 'America/Aruba' | 'America/Asuncion' | 'America/Atikokan' | 'America/Bahia' | 'America/Bahia_Banderas' | 'America/Barbados' | 'America/Belem' | 'America/Belize' | 'America/Blanc-Sablon' | 'America/Boa_Vista' | 'America/Bogota' | 'America/Boise' | 'America/Cambridge_Bay' | 'America/Campo_Grande' | 'America/Cancun' | 'America/Caracas' | 'America/Cayenne' | 'America/Cayman' | 'America/Chicago' | 'America/Chihuahua' | 'America/Costa_Rica' | 'America/Creston' | 'America/Cuiaba' | 'America/Curacao' | 'America/Danmarkshavn' | 'America/Dawson' | 'America/Dawson_Creek' | 'America/Denver' | 'America/Detroit' | 'America/Dominica' | 'America/Edmonton' | 'America/Eirunepe' | 'America/El_Salvador' | 'America/Fort_Nelson' | 'America/Fortaleza' | 'America/Glace_Bay' | 'America/Godthab' | 'America/Goose_Bay' | 'America/Grand_Turk' | 'America/Grenada' | 'America/Guadeloupe' | 'America/Guatemala' | 'America/Guayaquil' | 'America/Guyana' | 'America/Halifax' | 'America/Havana' | 'America/Hermosillo' | 'America/Indiana/Indianapolis' | 'America/Indiana/Knox' | 'America/Indiana/Marengo' | 'America/Indiana/Petersburg' | 'America/Indiana/Tell_City' | 'America/Indiana/Vevay' | 'America/Indiana/Vincennes' | 'America/Indiana/Winamac' | 'America/Inuvik' | 'America/Iqaluit' | 'America/Jamaica' | 'America/Juneau' | 'America/Kentucky/Louisville' | 'America/Kentucky/Monticello' | 'America/Kralendijk' | 'America/La_Paz' | 'America/Lima' | 'America/Los_Angeles' | 'America/Lower_Princes' | 'America/Maceio' | 'America/Managua' | 'America/Manaus' | 'America/Marigot' | 'America/Martinique' | 'America/Matamoros' | 'America/Mazatlan' | 'America/Menominee' | 'America/Merida' | 'America/Metlakatla' | 'America/Mexico_City' | 'America/Miquelon' | 'America/Moncton' | 'America/Monterrey' | 'America/Montevideo' | 'America/Montserrat' | 'America/Nassau' | 'America/New_York' | 'America/Nipigon' | 'America/Nome' | 'America/Noronha' | 'America/North_Dakota/Beulah' | 'America/North_Dakota/Center' | 'America/North_Dakota/New_Salem' | 'America/Nuuk' | 'America/Ojinaga' | 'America/Panama' | 'America/Pangnirtung' | 'America/Paramaribo' | 'America/Phoenix' | 'America/Port-au-Prince' | 'America/Port_of_Spain' | 'America/Porto_Velho' | 'America/Puerto_Rico' | 'America/Punta_Arenas' | 'America/Rainy_River' | 'America/Rankin_Inlet' | 'America/Recife' | 'America/Regina' | 'America/Resolute' | 'America/Rio_Branco' | 'America/Santarem' | 'America/Santiago' | 'America/Santo_Domingo' | 'America/Sao_Paulo' | 'America/Scoresbysund' | 'America/Sitka' | 'America/St_Barthelemy' | 'America/St_Johns' | 'America/St_Kitts' | 'America/St_Lucia' | 'America/St_Thomas' | 'America/St_Vincent' | 'America/Swift_Current' | 'America/Tegucigalpa' | 'America/Thule' | 'America/Thunder_Bay' | 'America/Tijuana' | 'America/Toronto' | 'America/Tortola' | 'America/Vancouver' | 'America/Whitehorse' | 'America/Winnipeg' | 'America/Yakutat' | 'America/Yellowknife' | 'Antarctica/Casey' | 'Antarctica/Davis' | 'Antarctica/DumontDUrville' | 'Antarctica/Macquarie' | 'Antarctica/Mawson' | 'Antarctica/McMurdo' | 'Antarctica/Palmer' | 'Antarctica/Rothera' | 'Antarctica/Syowa' | 'Antarctica/Troll' | 'Antarctica/Vostok' | 'Arctic/Longyearbyen' | 'Asia/Aden' | 'Asia/Almaty' | 'Asia/Amman' | 'Asia/Anadyr' | 'Asia/Aqtau' | 'Asia/Aqtobe' | 'Asia/Ashgabat' | 'Asia/Atyrau' | 'Asia/Baghdad' | 'Asia/Bahrain' | 'Asia/Baku' | 'Asia/Bangkok' | 'Asia/Barnaul' | 'Asia/Beirut' | 'Asia/Bishkek' | 'Asia/Brunei' | 'Asia/Chita' | 'Asia/Choibalsan' | 'Asia/Colombo' | 'Asia/Damascus' | 'Asia/Dhaka' | 'Asia/Dili' | 'Asia/Dubai' | 'Asia/Dushanbe' | 'Asia/Famagusta' | 'Asia/Gaza' | 'Asia/Hebron' | 'Asia/Ho_Chi_Minh' | 'Asia/Hong_Kong' | 'Asia/Hovd' | 'Asia/Irkutsk' | 'Asia/Istanbul' | 'Asia/Jakarta' | 'Asia/Jayapura' | 'Asia/Jerusalem' | 'Asia/Kabul' | 'Asia/Kamchatka' | 'Asia/Karachi' | 'Asia/Kathmandu' | 'Asia/Khandyga' | 'Asia/Kolkata' | 'Asia/Krasnoyarsk' | 'Asia/Kuala_Lumpur' | 'Asia/Kuching' | 'Asia/Kuwait' | 'Asia/Macau' | 'Asia/Magadan' | 'Asia/Makassar' | 'Asia/Manila' | 'Asia/Muscat' | 'Asia/Nicosia' | 'Asia/Novokuznetsk' | 'Asia/Novosibirsk' | 'Asia/Omsk' | 'Asia/Oral' | 'Asia/Phnom_Penh' | 'Asia/Pontianak' | 'Asia/Pyongyang' | 'Asia/Qatar' | 'Asia/Qostanay' | 'Asia/Qyzylorda' | 'Asia/Rangoon' | 'Asia/Riyadh' | 'Asia/Sakhalin' | 'Asia/Samarkand' | 'Asia/Seoul' | 'Asia/Shanghai' | 'Asia/Singapore' | 'Asia/Srednekolymsk' | 'Asia/Taipei' | 'Asia/Tashkent' | 'Asia/Tbilisi' | 'Asia/Tehran' | 'Asia/Thimphu' | 'Asia/Tokyo' | 'Asia/Tomsk' | 'Asia/Ulaanbaatar' | 'Asia/Urumqi' | 'Asia/Ust-Nera' | 'Asia/Vientiane' | 'Asia/Vladivostok' | 'Asia/Yakutsk' | 'Asia/Yangon' | 'Asia/Yekaterinburg' | 'Asia/Yerevan' | 'Atlantic/Azores' | 'Atlantic/Bermuda' | 'Atlantic/Canary' | 'Atlantic/Cape_Verde' | 'Atlantic/Faroe' | 'Atlantic/Madeira' | 'Atlantic/Reykjavik' | 'Atlantic/South_Georgia' | 'Atlantic/St_Helena' | 'Atlantic/Stanley' | 'Australia/Adelaide' | 'Australia/Brisbane' | 'Australia/Broken_Hill' | 'Australia/Currie' | 'Australia/Darwin' | 'Australia/Eucla' | 'Australia/Hobart' | 'Australia/Lindeman' | 'Australia/Lord_Howe' | 'Australia/Melbourne' | 'Australia/Perth' | 'Australia/Sydney' | 'Europe/Amsterdam' | 'Europe/Andorra' | 'Europe/Astrakhan' | 'Europe/Athens' | 'Europe/Belgrade' | 'Europe/Berlin' | 'Europe/Bratislava' | 'Europe/Brussels' | 'Europe/Bucharest' | 'Europe/Budapest' | 'Europe/Busingen' | 'Europe/Chisinau' | 'Europe/Copenhagen' | 'Europe/Dublin' | 'Europe/Gibraltar' | 'Europe/Guernsey' | 'Europe/Helsinki' | 'Europe/Isle_of_Man' | 'Europe/Istanbul' | 'Europe/Jersey' | 'Europe/Kaliningrad' | 'Europe/Kiev' | 'Europe/Kirov' | 'Europe/Lisbon' | 'Europe/Ljubljana' | 'Europe/London' | 'Europe/Luxembourg' | 'Europe/Madrid' | 'Europe/Malta' | 'Europe/Mariehamn' | 'Europe/Minsk' | 'Europe/Monaco' | 'Europe/Moscow' | 'Europe/Nicosia' | 'Europe/Oslo' | 'Europe/Paris' | 'Europe/Podgorica' | 'Europe/Prague' | 'Europe/Riga' | 'Europe/Rome' | 'Europe/Samara' | 'Europe/San_Marino' | 'Europe/Sarajevo' | 'Europe/Saratov' | 'Europe/Simferopol' | 'Europe/Skopje' | 'Europe/Sofia' | 'Europe/Stockholm' | 'Europe/Tallinn' | 'Europe/Tirane' | 'Europe/Ulyanovsk' | 'Europe/Uzhgorod' | 'Europe/Vaduz' | 'Europe/Vatican' | 'Europe/Vienna' | 'Europe/Vilnius' | 'Europe/Volgograd' | 'Europe/Warsaw' | 'Europe/Zagreb' | 'Europe/Zaporozhye' | 'Europe/Zurich' | 'Indian/Antananarivo' | 'Indian/Chagos' | 'Indian/Christmas' | 'Indian/Cocos' | 'Indian/Comoro' | 'Indian/Kerguelen' | 'Indian/Mahe' | 'Indian/Maldives' | 'Indian/Mauritius' | 'Indian/Mayotte' | 'Indian/Reunion' | 'Pacific/Apia' | 'Pacific/Auckland' | 'Pacific/Bougainville' | 'Pacific/Chatham' | 'Pacific/Chuuk' | 'Pacific/Easter' | 'Pacific/Efate' | 'Pacific/Enderbury' | 'Pacific/Fakaofo' | 'Pacific/Fiji' | 'Pacific/Funafuti' | 'Pacific/Galapagos' | 'Pacific/Gambier' | 'Pacific/Guadalcanal' | 'Pacific/Guam' | 'Pacific/Honolulu' | 'Pacific/Kanton' | 'Pacific/Kiritimati' | 'Pacific/Kosrae' | 'Pacific/Kwajalein' | 'Pacific/Majuro' | 'Pacific/Marquesas' | 'Pacific/Midway' | 'Pacific/Nauru' | 'Pacific/Niue' | 'Pacific/Norfolk' | 'Pacific/Noumea' | 'Pacific/Pago_Pago' | 'Pacific/Palau' | 'Pacific/Pitcairn' | 'Pacific/Pohnpei' | 'Pacific/Port_Moresby' | 'Pacific/Rarotonga' | 'Pacific/Saipan' | 'Pacific/Tahiti' | 'Pacific/Tarawa' | 'Pacific/Tongatapu' | 'Pacific/Wake' | 'Pacific/Wallis',
      * }
      * ```
      */
@@ -511,7 +575,7 @@ export enum FieldType {
      *         ...myRecord.getCellValue('myAttachmentField'),
      *         { url: newAttachmentUrl }
      *     ]
-     * })
+     * });
      * ```
      *
      * Similarly, you can clear the current cell value by passing an empty array, or
@@ -519,7 +583,13 @@ export enum FieldType {
      * value.
      *
      * Note: when you pass an existing attachment, you must pass the full attachment
-     * object. New attachments only require the `url` property.
+     * object. New attachments only require the `url` property. You can optionally
+     * pass the \`filename\` property to give it a readable name.
+     *
+     * Additionally, the Airtable generated attachment URLs do not currently expire,
+     * but this will change in the future. If you want to persist the attachments, we
+     * recommend downloading them instead of saving the URL. Before this change is
+     * rolled out, we will post a more detailed deprecation timeline.
      *
      * **Cell read format**
      * ```js
@@ -588,11 +658,19 @@ export enum FieldType {
     /**
      * A checkbox.
      *
-     * This field is "true" when checked and otherwise empty.
+     * This field is "true" when checked and "null" when unchecked.
      *
-     * **Cell format**
+     * **Cell read format**
      * ```js
-     * boolean
+     * true | null
+     * ```
+     *
+     * You can write to the cell with "false", but the read value will be still be "null"
+     * (unchecked).
+     *
+     * **Cell write format**
+     * ```js
+     * boolean | null
      * ```
      *
      * **Field options**
@@ -880,7 +958,7 @@ export enum FieldType {
      * **Field options**
      * ```js
      * {
-     *     durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h.mm.ss.SSS',
+     *     durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h:mm:ss.SSS',
      * }
      * ```
      */
@@ -1032,6 +1110,42 @@ export enum FieldType {
      *
      */
     BUTTON = 'button',
+    /**
+     * Shows the name of the source that a record is synced from. This field is only available on
+     * synced tables.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     name: string,
+     *     color?: Color
+     * }
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         name: string,
+     *         color?: {@link Color}, // Color is not provided when field coloring is disabled.
+     *     }>,
+     * }
+     * ```
+     * Every choice represents a sync source, and choices are added or removed automatically as
+     * sync sources are added or removed. Choice names and colors are user-configurable.
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `EXTERNAL_SYNC_SOURCE` fields is not supported.
+     *
+     */
+    EXTERNAL_SYNC_SOURCE = 'externalSyncSource',
 }
 
 /** @hidden */
@@ -1044,6 +1158,7 @@ export interface FieldData {
     typeOptions: {[key: string]: unknown} | null | undefined;
     description: string | null;
     lock: FieldLock | null;
+    isSynced: boolean | null;
 }
 
 /** @hidden */
@@ -1055,7 +1170,764 @@ export interface FieldPermissionData {
 }
 
 /** @hidden */
-
 export interface FieldOptions {
     [key: string]: unknown;
 }
+
+/** @hidden */
+interface NumericFieldOptions {
+    precision: number;
+}
+
+/** @hidden */
+interface CurrencyFieldOptions extends NumericFieldOptions {
+    symbol: string;
+}
+
+/** @hidden */
+interface SelectFieldOptions {
+    choices: Array<{
+        id: string;
+        name: string;
+        color?: Color;
+    }>;
+}
+
+/** @hidden */
+interface CollaboratorFieldOptions {
+    choices: Array<{
+        id: string;
+        email: string;
+        name?: string;
+        profilePicUrl?: string;
+    }>;
+}
+
+/** @hidden */
+interface LinkedRecordFieldOptions {
+    linkedTableId: TableId;
+    inverseLinkFieldId?: FieldId;
+    viewIdForRecordSelection?: ViewId;
+    isReversed: boolean;
+    prefersSingleRecordLink: boolean;
+}
+
+/** @hidden */
+interface DateFieldOptions {
+    dateFormat:
+        | {name: 'local'; format: 'l'}
+        | {name: 'friendly'; format: 'LL'}
+        | {name: 'us'; format: 'M/D/YYYY'}
+        | {name: 'european'; format: 'D/M/YYYY'}
+        | {name: 'iso'; format: 'YYYY-MM-DD'};
+}
+
+/** @hidden */
+interface DateTimeFieldOptions extends DateFieldOptions {
+    timeFormat: {name: '12hour'; format: 'h:mma'} | {name: '24hour'; format: 'HH:mm'};
+    timeZone:
+        | 'utc'
+        | 'client'
+        | 'Africa/Abidjan'
+        | 'Africa/Accra'
+        | 'Africa/Addis_Ababa'
+        | 'Africa/Algiers'
+        | 'Africa/Asmara'
+        | 'Africa/Bamako'
+        | 'Africa/Bangui'
+        | 'Africa/Banjul'
+        | 'Africa/Bissau'
+        | 'Africa/Blantyre'
+        | 'Africa/Brazzaville'
+        | 'Africa/Bujumbura'
+        | 'Africa/Cairo'
+        | 'Africa/Casablanca'
+        | 'Africa/Ceuta'
+        | 'Africa/Conakry'
+        | 'Africa/Dakar'
+        | 'Africa/Dar_es_Salaam'
+        | 'Africa/Djibouti'
+        | 'Africa/Douala'
+        | 'Africa/El_Aaiun'
+        | 'Africa/Freetown'
+        | 'Africa/Gaborone'
+        | 'Africa/Harare'
+        | 'Africa/Johannesburg'
+        | 'Africa/Juba'
+        | 'Africa/Kampala'
+        | 'Africa/Khartoum'
+        | 'Africa/Kigali'
+        | 'Africa/Kinshasa'
+        | 'Africa/Lagos'
+        | 'Africa/Libreville'
+        | 'Africa/Lome'
+        | 'Africa/Luanda'
+        | 'Africa/Lubumbashi'
+        | 'Africa/Lusaka'
+        | 'Africa/Malabo'
+        | 'Africa/Maputo'
+        | 'Africa/Maseru'
+        | 'Africa/Mbabane'
+        | 'Africa/Mogadishu'
+        | 'Africa/Monrovia'
+        | 'Africa/Nairobi'
+        | 'Africa/Ndjamena'
+        | 'Africa/Niamey'
+        | 'Africa/Nouakchott'
+        | 'Africa/Ouagadougou'
+        | 'Africa/Porto-Novo'
+        | 'Africa/Sao_Tome'
+        | 'Africa/Tripoli'
+        | 'Africa/Tunis'
+        | 'Africa/Windhoek'
+        | 'America/Adak'
+        | 'America/Anchorage'
+        | 'America/Anguilla'
+        | 'America/Antigua'
+        | 'America/Araguaina'
+        | 'America/Argentina/Buenos_Aires'
+        | 'America/Argentina/Catamarca'
+        | 'America/Argentina/Cordoba'
+        | 'America/Argentina/Jujuy'
+        | 'America/Argentina/La_Rioja'
+        | 'America/Argentina/Mendoza'
+        | 'America/Argentina/Rio_Gallegos'
+        | 'America/Argentina/Salta'
+        | 'America/Argentina/San_Juan'
+        | 'America/Argentina/San_Luis'
+        | 'America/Argentina/Tucuman'
+        | 'America/Argentina/Ushuaia'
+        | 'America/Aruba'
+        | 'America/Asuncion'
+        | 'America/Atikokan'
+        | 'America/Bahia'
+        | 'America/Bahia_Banderas'
+        | 'America/Barbados'
+        | 'America/Belem'
+        | 'America/Belize'
+        | 'America/Blanc-Sablon'
+        | 'America/Boa_Vista'
+        | 'America/Bogota'
+        | 'America/Boise'
+        | 'America/Cambridge_Bay'
+        | 'America/Campo_Grande'
+        | 'America/Cancun'
+        | 'America/Caracas'
+        | 'America/Cayenne'
+        | 'America/Cayman'
+        | 'America/Chicago'
+        | 'America/Chihuahua'
+        | 'America/Costa_Rica'
+        | 'America/Creston'
+        | 'America/Cuiaba'
+        | 'America/Curacao'
+        | 'America/Danmarkshavn'
+        | 'America/Dawson'
+        | 'America/Dawson_Creek'
+        | 'America/Denver'
+        | 'America/Detroit'
+        | 'America/Dominica'
+        | 'America/Edmonton'
+        | 'America/Eirunepe'
+        | 'America/El_Salvador'
+        | 'America/Fort_Nelson'
+        | 'America/Fortaleza'
+        | 'America/Glace_Bay'
+        | 'America/Godthab'
+        | 'America/Goose_Bay'
+        | 'America/Grand_Turk'
+        | 'America/Grenada'
+        | 'America/Guadeloupe'
+        | 'America/Guatemala'
+        | 'America/Guayaquil'
+        | 'America/Guyana'
+        | 'America/Halifax'
+        | 'America/Havana'
+        | 'America/Hermosillo'
+        | 'America/Indiana/Indianapolis'
+        | 'America/Indiana/Knox'
+        | 'America/Indiana/Marengo'
+        | 'America/Indiana/Petersburg'
+        | 'America/Indiana/Tell_City'
+        | 'America/Indiana/Vevay'
+        | 'America/Indiana/Vincennes'
+        | 'America/Indiana/Winamac'
+        | 'America/Inuvik'
+        | 'America/Iqaluit'
+        | 'America/Jamaica'
+        | 'America/Juneau'
+        | 'America/Kentucky/Louisville'
+        | 'America/Kentucky/Monticello'
+        | 'America/Kralendijk'
+        | 'America/La_Paz'
+        | 'America/Lima'
+        | 'America/Los_Angeles'
+        | 'America/Lower_Princes'
+        | 'America/Maceio'
+        | 'America/Managua'
+        | 'America/Manaus'
+        | 'America/Marigot'
+        | 'America/Martinique'
+        | 'America/Matamoros'
+        | 'America/Mazatlan'
+        | 'America/Menominee'
+        | 'America/Merida'
+        | 'America/Metlakatla'
+        | 'America/Mexico_City'
+        | 'America/Miquelon'
+        | 'America/Moncton'
+        | 'America/Monterrey'
+        | 'America/Montevideo'
+        | 'America/Montserrat'
+        | 'America/Nassau'
+        | 'America/New_York'
+        | 'America/Nipigon'
+        | 'America/Nome'
+        | 'America/Noronha'
+        | 'America/North_Dakota/Beulah'
+        | 'America/North_Dakota/Center'
+        | 'America/North_Dakota/New_Salem'
+        | 'America/Nuuk'
+        | 'America/Ojinaga'
+        | 'America/Panama'
+        | 'America/Pangnirtung'
+        | 'America/Paramaribo'
+        | 'America/Phoenix'
+        | 'America/Port-au-Prince'
+        | 'America/Port_of_Spain'
+        | 'America/Porto_Velho'
+        | 'America/Puerto_Rico'
+        | 'America/Punta_Arenas'
+        | 'America/Rainy_River'
+        | 'America/Rankin_Inlet'
+        | 'America/Recife'
+        | 'America/Regina'
+        | 'America/Resolute'
+        | 'America/Rio_Branco'
+        | 'America/Santarem'
+        | 'America/Santiago'
+        | 'America/Santo_Domingo'
+        | 'America/Sao_Paulo'
+        | 'America/Scoresbysund'
+        | 'America/Sitka'
+        | 'America/St_Barthelemy'
+        | 'America/St_Johns'
+        | 'America/St_Kitts'
+        | 'America/St_Lucia'
+        | 'America/St_Thomas'
+        | 'America/St_Vincent'
+        | 'America/Swift_Current'
+        | 'America/Tegucigalpa'
+        | 'America/Thule'
+        | 'America/Thunder_Bay'
+        | 'America/Tijuana'
+        | 'America/Toronto'
+        | 'America/Tortola'
+        | 'America/Vancouver'
+        | 'America/Whitehorse'
+        | 'America/Winnipeg'
+        | 'America/Yakutat'
+        | 'America/Yellowknife'
+        | 'Antarctica/Casey'
+        | 'Antarctica/Davis'
+        | 'Antarctica/DumontDUrville'
+        | 'Antarctica/Macquarie'
+        | 'Antarctica/Mawson'
+        | 'Antarctica/McMurdo'
+        | 'Antarctica/Palmer'
+        | 'Antarctica/Rothera'
+        | 'Antarctica/Syowa'
+        | 'Antarctica/Troll'
+        | 'Antarctica/Vostok'
+        | 'Arctic/Longyearbyen'
+        | 'Asia/Aden'
+        | 'Asia/Almaty'
+        | 'Asia/Amman'
+        | 'Asia/Anadyr'
+        | 'Asia/Aqtau'
+        | 'Asia/Aqtobe'
+        | 'Asia/Ashgabat'
+        | 'Asia/Atyrau'
+        | 'Asia/Baghdad'
+        | 'Asia/Bahrain'
+        | 'Asia/Baku'
+        | 'Asia/Bangkok'
+        | 'Asia/Barnaul'
+        | 'Asia/Beirut'
+        | 'Asia/Bishkek'
+        | 'Asia/Brunei'
+        | 'Asia/Chita'
+        | 'Asia/Choibalsan'
+        | 'Asia/Colombo'
+        | 'Asia/Damascus'
+        | 'Asia/Dhaka'
+        | 'Asia/Dili'
+        | 'Asia/Dubai'
+        | 'Asia/Dushanbe'
+        | 'Asia/Famagusta'
+        | 'Asia/Gaza'
+        | 'Asia/Hebron'
+        | 'Asia/Ho_Chi_Minh'
+        | 'Asia/Hong_Kong'
+        | 'Asia/Hovd'
+        | 'Asia/Irkutsk'
+        | 'Asia/Istanbul'
+        | 'Asia/Jakarta'
+        | 'Asia/Jayapura'
+        | 'Asia/Jerusalem'
+        | 'Asia/Kabul'
+        | 'Asia/Kamchatka'
+        | 'Asia/Karachi'
+        | 'Asia/Kathmandu'
+        | 'Asia/Khandyga'
+        | 'Asia/Kolkata'
+        | 'Asia/Krasnoyarsk'
+        | 'Asia/Kuala_Lumpur'
+        | 'Asia/Kuching'
+        | 'Asia/Kuwait'
+        | 'Asia/Macau'
+        | 'Asia/Magadan'
+        | 'Asia/Makassar'
+        | 'Asia/Manila'
+        | 'Asia/Muscat'
+        | 'Asia/Nicosia'
+        | 'Asia/Novokuznetsk'
+        | 'Asia/Novosibirsk'
+        | 'Asia/Omsk'
+        | 'Asia/Oral'
+        | 'Asia/Phnom_Penh'
+        | 'Asia/Pontianak'
+        | 'Asia/Pyongyang'
+        | 'Asia/Qatar'
+        | 'Asia/Qostanay'
+        | 'Asia/Qyzylorda'
+        | 'Asia/Rangoon'
+        | 'Asia/Riyadh'
+        | 'Asia/Sakhalin'
+        | 'Asia/Samarkand'
+        | 'Asia/Seoul'
+        | 'Asia/Shanghai'
+        | 'Asia/Singapore'
+        | 'Asia/Srednekolymsk'
+        | 'Asia/Taipei'
+        | 'Asia/Tashkent'
+        | 'Asia/Tbilisi'
+        | 'Asia/Tehran'
+        | 'Asia/Thimphu'
+        | 'Asia/Tokyo'
+        | 'Asia/Tomsk'
+        | 'Asia/Ulaanbaatar'
+        | 'Asia/Urumqi'
+        | 'Asia/Ust-Nera'
+        | 'Asia/Vientiane'
+        | 'Asia/Vladivostok'
+        | 'Asia/Yakutsk'
+        | 'Asia/Yangon'
+        | 'Asia/Yekaterinburg'
+        | 'Asia/Yerevan'
+        | 'Atlantic/Azores'
+        | 'Atlantic/Bermuda'
+        | 'Atlantic/Canary'
+        | 'Atlantic/Cape_Verde'
+        | 'Atlantic/Faroe'
+        | 'Atlantic/Madeira'
+        | 'Atlantic/Reykjavik'
+        | 'Atlantic/South_Georgia'
+        | 'Atlantic/St_Helena'
+        | 'Atlantic/Stanley'
+        | 'Australia/Adelaide'
+        | 'Australia/Brisbane'
+        | 'Australia/Broken_Hill'
+        | 'Australia/Currie'
+        | 'Australia/Darwin'
+        | 'Australia/Eucla'
+        | 'Australia/Hobart'
+        | 'Australia/Lindeman'
+        | 'Australia/Lord_Howe'
+        | 'Australia/Melbourne'
+        | 'Australia/Perth'
+        | 'Australia/Sydney'
+        | 'Europe/Amsterdam'
+        | 'Europe/Andorra'
+        | 'Europe/Astrakhan'
+        | 'Europe/Athens'
+        | 'Europe/Belgrade'
+        | 'Europe/Berlin'
+        | 'Europe/Bratislava'
+        | 'Europe/Brussels'
+        | 'Europe/Bucharest'
+        | 'Europe/Budapest'
+        | 'Europe/Busingen'
+        | 'Europe/Chisinau'
+        | 'Europe/Copenhagen'
+        | 'Europe/Dublin'
+        | 'Europe/Gibraltar'
+        | 'Europe/Guernsey'
+        | 'Europe/Helsinki'
+        | 'Europe/Isle_of_Man'
+        | 'Europe/Istanbul'
+        | 'Europe/Jersey'
+        | 'Europe/Kaliningrad'
+        | 'Europe/Kiev'
+        | 'Europe/Kirov'
+        | 'Europe/Lisbon'
+        | 'Europe/Ljubljana'
+        | 'Europe/London'
+        | 'Europe/Luxembourg'
+        | 'Europe/Madrid'
+        | 'Europe/Malta'
+        | 'Europe/Mariehamn'
+        | 'Europe/Minsk'
+        | 'Europe/Monaco'
+        | 'Europe/Moscow'
+        | 'Europe/Nicosia'
+        | 'Europe/Oslo'
+        | 'Europe/Paris'
+        | 'Europe/Podgorica'
+        | 'Europe/Prague'
+        | 'Europe/Riga'
+        | 'Europe/Rome'
+        | 'Europe/Samara'
+        | 'Europe/San_Marino'
+        | 'Europe/Sarajevo'
+        | 'Europe/Saratov'
+        | 'Europe/Simferopol'
+        | 'Europe/Skopje'
+        | 'Europe/Sofia'
+        | 'Europe/Stockholm'
+        | 'Europe/Tallinn'
+        | 'Europe/Tirane'
+        | 'Europe/Ulyanovsk'
+        | 'Europe/Uzhgorod'
+        | 'Europe/Vaduz'
+        | 'Europe/Vatican'
+        | 'Europe/Vienna'
+        | 'Europe/Vilnius'
+        | 'Europe/Volgograd'
+        | 'Europe/Warsaw'
+        | 'Europe/Zagreb'
+        | 'Europe/Zaporozhye'
+        | 'Europe/Zurich'
+        | 'Indian/Antananarivo'
+        | 'Indian/Chagos'
+        | 'Indian/Christmas'
+        | 'Indian/Cocos'
+        | 'Indian/Comoro'
+        | 'Indian/Kerguelen'
+        | 'Indian/Mahe'
+        | 'Indian/Maldives'
+        | 'Indian/Mauritius'
+        | 'Indian/Mayotte'
+        | 'Indian/Reunion'
+        | 'Pacific/Apia'
+        | 'Pacific/Auckland'
+        | 'Pacific/Bougainville'
+        | 'Pacific/Chatham'
+        | 'Pacific/Chuuk'
+        | 'Pacific/Easter'
+        | 'Pacific/Efate'
+        | 'Pacific/Enderbury'
+        | 'Pacific/Fakaofo'
+        | 'Pacific/Fiji'
+        | 'Pacific/Funafuti'
+        | 'Pacific/Galapagos'
+        | 'Pacific/Gambier'
+        | 'Pacific/Guadalcanal'
+        | 'Pacific/Guam'
+        | 'Pacific/Honolulu'
+        | 'Pacific/Kanton'
+        | 'Pacific/Kiritimati'
+        | 'Pacific/Kosrae'
+        | 'Pacific/Kwajalein'
+        | 'Pacific/Majuro'
+        | 'Pacific/Marquesas'
+        | 'Pacific/Midway'
+        | 'Pacific/Nauru'
+        | 'Pacific/Niue'
+        | 'Pacific/Norfolk'
+        | 'Pacific/Noumea'
+        | 'Pacific/Pago_Pago'
+        | 'Pacific/Palau'
+        | 'Pacific/Pitcairn'
+        | 'Pacific/Pohnpei'
+        | 'Pacific/Port_Moresby'
+        | 'Pacific/Rarotonga'
+        | 'Pacific/Saipan'
+        | 'Pacific/Tahiti'
+        | 'Pacific/Tarawa'
+        | 'Pacific/Tongatapu'
+        | 'Pacific/Wake'
+        | 'Pacific/Wallis';
+}
+
+/** @hidden */
+interface AttachmentsFieldOptions {
+    isReversed: boolean;
+}
+
+/** @hidden */
+interface CheckboxFieldOptions {
+    icon: 'check' | 'star' | 'heart' | 'thumbsUp' | 'flag';
+    color:
+        | 'yellowBright'
+        | 'orangeBright'
+        | 'redBright'
+        | 'pinkBright'
+        | 'purpleBright'
+        | 'blueBright'
+        | 'cyanBright'
+        | 'tealBright'
+        | 'greenBright'
+        | 'grayBright';
+}
+
+/** @hidden */
+interface FormulaFieldOptions {
+    isValid: boolean;
+    referencedFieldIds: Array<FieldId>;
+    result: FieldConfig;
+}
+
+/** @hidden */
+interface CreatedTimeFieldOptions {
+    result: DateFieldConfig | DateTimeFieldConfig;
+}
+
+/** @hidden */
+interface RollupFieldOptions extends FormulaFieldOptions {
+    recordLinkFieldId: FieldId;
+    fieldIdInLinkedTable: FieldId;
+}
+
+/** @hidden */
+interface CountFieldOptions {
+    isValid: boolean;
+    recordLinkFieldId: FieldId;
+}
+
+/** @hidden */
+type LookupFieldOptions =
+    | {
+          isValid: true;
+          recordLinkFieldId: FieldId;
+          fieldIdInLinkedTable: FieldId | null;
+          result: FieldConfig;
+      }
+    | {
+          isValid: false;
+          recordLinkFieldId: FieldId;
+          fieldIdInLinkedTable: FieldId | null;
+          result: undefined;
+      };
+
+/** @hidden */
+interface RatingFieldOptions {
+    icon: 'star' | 'heart' | 'thumbsUp' | 'flag';
+    max: number;
+    color:
+        | 'yellowBright'
+        | 'orangeBright'
+        | 'redBright'
+        | 'pinkBright'
+        | 'purpleBright'
+        | 'blueBright'
+        | 'cyanBright'
+        | 'tealBright'
+        | 'greenBright'
+        | 'grayBright';
+}
+
+/** @hidden */
+interface DurationFieldOptions {
+    durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h:mm:ss.SSS';
+}
+
+/** @hidden */
+interface LastModifiedTimeFieldOptions {
+    isValid: boolean;
+    referencedFieldIds: Array<FieldId>;
+    result: DateFieldConfig | DateTimeFieldConfig;
+}
+
+/** @hidden */
+interface CreatedByFieldOptions extends CollaboratorFieldOptions {}
+
+/** @hidden */
+interface LastModifiedByFieldOptions extends CreatedByFieldOptions {
+    referencedFieldIds: Array<FieldId>;
+}
+
+/** @hidden */
+interface ExternalSyncSourceFieldOptions extends SelectFieldOptions {}
+
+/** @hidden */
+interface OptionlessFieldConfig {
+    type:
+        | FieldType.SINGLE_LINE_TEXT
+        | FieldType.EMAIL
+        | FieldType.URL
+        | FieldType.MULTILINE_TEXT
+        | FieldType.PHONE_NUMBER
+        | FieldType.AUTO_NUMBER
+        | FieldType.BARCODE
+        | FieldType.RICH_TEXT
+        | FieldType.BUTTON;
+    options: null;
+}
+
+/** @hidden */
+interface NumericFieldConfig {
+    type: FieldType.NUMBER | FieldType.PERCENT;
+    options: NumericFieldOptions;
+}
+
+/** @hidden */
+interface CurrencyFieldConfig {
+    type: FieldType.CURRENCY;
+    options: CurrencyFieldOptions;
+}
+
+/** @hidden */
+interface SelectFieldConfig {
+    type: FieldType.SINGLE_SELECT | FieldType.MULTIPLE_SELECTS;
+    options: SelectFieldOptions;
+}
+
+/** @hidden */
+interface CollaboratorFieldConfig {
+    type: FieldType.SINGLE_COLLABORATOR | FieldType.MULTIPLE_COLLABORATORS | FieldType.CREATED_BY;
+    options: CollaboratorFieldOptions;
+}
+
+/** @hidden */
+interface LinkedRecordFieldConfig {
+    type: FieldType.MULTIPLE_RECORD_LINKS;
+    options: LinkedRecordFieldOptions;
+}
+
+/** @hidden */
+interface DateFieldConfig {
+    type: FieldType.DATE;
+    options: DateFieldOptions;
+}
+
+/** @hidden */
+interface DateTimeFieldConfig {
+    type: FieldType.DATE_TIME;
+    options: DateTimeFieldOptions;
+}
+
+/** @hidden */
+interface AttachmentsFieldConfig {
+    type: FieldType.MULTIPLE_ATTACHMENTS;
+    options: AttachmentsFieldOptions;
+}
+
+/** @hidden */
+interface CheckboxFieldConfig {
+    type: FieldType.CHECKBOX;
+    options: CheckboxFieldOptions;
+}
+
+/** @hidden */
+interface FormulaFieldConfig {
+    type: FieldType.FORMULA;
+    options: FormulaFieldOptions;
+}
+
+/** @hidden */
+interface CreatedTimeFieldConfig {
+    type: FieldType.CREATED_TIME;
+    options: CreatedTimeFieldOptions;
+}
+
+/** @hidden */
+interface RollupFieldConfig {
+    type: FieldType.ROLLUP;
+    options: RollupFieldOptions;
+}
+
+/** @hidden */
+interface CountFieldConfig {
+    type: FieldType.COUNT;
+    options: CountFieldOptions;
+}
+
+/** @hidden */
+interface LookupFieldConfig {
+    type: FieldType.MULTIPLE_LOOKUP_VALUES;
+    options: LookupFieldOptions;
+}
+
+/** @hidden */
+interface RatingFieldConfig {
+    type: FieldType.RATING;
+    options: RatingFieldOptions;
+}
+
+/** @hidden */
+interface DurationFieldConfig {
+    type: FieldType.DURATION;
+    options: DurationFieldOptions;
+}
+
+/** @hidden */
+interface LastModifiedTimeFieldConfig {
+    type: FieldType.LAST_MODIFIED_TIME;
+    options: LastModifiedTimeFieldOptions;
+}
+
+/** @hidden */
+interface CreatedByFieldConfig {
+    type: FieldType.CREATED_BY;
+    options: CreatedByFieldOptions;
+}
+
+/** @hidden */
+interface LastModifiedByFieldConfig {
+    type: FieldType.LAST_MODIFIED_BY;
+    options: LastModifiedByFieldOptions;
+}
+
+/** @hidden */
+interface ExternalSyncSourceFieldConfig {
+    type: FieldType.EXTERNAL_SYNC_SOURCE;
+    options: ExternalSyncSourceFieldOptions;
+}
+
+/**
+ * A type for use with Field objects to make type narrowing FieldOptions easier.
+ *
+ * @example
+ * const fieldConfig = field.config;
+ * if (fieldConfig.type === FieldType.SINGLE_SELECT) {
+ *     return fieldConfig.options.choices;
+ * } else if (fieldConfig.type === FieldType.MULTIPLE_LOOKUP_VALUES && fieldConfig.options.isValid) {
+ *     if (fieldConfig.options.result.type === FieldType.SINGLE_SELECT) {
+ *         return fieldConfig.options.result.options.choices;
+ *     }
+ * }
+ * return DEFAULT_CHOICES;
+ */
+export type FieldConfig =
+    | OptionlessFieldConfig
+    | NumericFieldConfig
+    | CurrencyFieldConfig
+    | SelectFieldConfig
+    | CollaboratorFieldConfig
+    | LinkedRecordFieldConfig
+    | DateFieldConfig
+    | DateTimeFieldConfig
+    | AttachmentsFieldConfig
+    | CheckboxFieldConfig
+    | FormulaFieldConfig
+    | CreatedTimeFieldConfig
+    | RollupFieldConfig
+    | CountFieldConfig
+    | LookupFieldConfig
+    | RatingFieldConfig
+    | DurationFieldConfig
+    | LastModifiedTimeFieldConfig
+    | CreatedByFieldConfig
+    | LastModifiedByFieldConfig
+    | ExternalSyncSourceFieldConfig;

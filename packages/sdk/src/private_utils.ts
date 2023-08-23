@@ -55,7 +55,7 @@ export type ReactRefType<C> = C extends React.Component
  *
  * @hidden
  */
-export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
+export type ObjectMap<K extends keyof any, V> = {[P in K]: V};
 
 /**
  * Creates an enum from provided string arguments.
@@ -166,7 +166,7 @@ export function fireAndForgetPromise(fn: () => Promise<unknown>) {
 /**
  * @hidden
  */
-export function has<T extends object>(obj: T, key: PropertyKey): key is keyof T {
+export function has<T extends object>(obj: T, key: keyof any): key is keyof T {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
@@ -304,6 +304,13 @@ export function keyBy<Item, Key extends string>(
 /**
  * @hidden
  */
+export function getId({id}: {id: string}) {
+    return id;
+}
+
+/**
+ * @hidden
+ */
 export function uniqBy<Item, Key>(
     array: ReadonlyArray<Item>,
     getKey: (arg1: Item) => Key,
@@ -388,4 +395,17 @@ export function debounce<Args extends Array<any>>(
 /** @hidden */
 export function isBlockDevelopmentRestrictionEnabled(): boolean {
     return getAirtableInterface().sdkInitData.baseData.isBlockDevelopmentRestrictionEnabled;
+}
+
+/**
+ * Added for use in Gantt View, to enable i18n.
+ *
+ * @hidden
+ * */
+export function getLocaleAndDefaultLocale(): {locale?: string; defaultLocale?: string} {
+    const sdkInitData = getAirtableInterface().sdkInitData;
+    return {
+        locale: sdkInitData.locale,
+        defaultLocale: sdkInitData.defaultLocale,
+    };
 }

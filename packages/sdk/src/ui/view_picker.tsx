@@ -2,13 +2,13 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {values, ObjectMap} from '../private_utils';
-import getSdk from '../get_sdk';
 import View from '../models/view';
 import Table from '../models/table';
 import {ViewType} from '../types/view';
 import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Props shared between the {@link ViewPicker} and {@link ViewPickerSynced} components.
@@ -64,8 +64,9 @@ const ViewPicker = (props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) =
         onChange,
         ...restOfProps
     } = props;
+    const sdk = useSdk();
 
-    useWatchable(getSdk().base, ['tables']);
+    useWatchable(sdk.base, ['tables']);
     useWatchable(table, ['views']);
 
     if (!table || table.isDeleted) {

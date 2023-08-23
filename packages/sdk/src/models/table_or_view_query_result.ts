@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {FieldId} from '../types/field';
 import {
     has,
@@ -10,42 +10,31 @@ import {
     ObjectMap,
 } from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
-import {VisList} from '../types/airtable_interface';
-import getAirtableInterface from '../injected/airtable_interface';
+import {VisList, NormalizedGroupLevel} from '../types/airtable_interface';
 import {RecordId} from '../types/record';
+import {GroupLevelData, GroupData} from '../types/view';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
-    RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
     NormalizedSortConfig,
 } from './record_query_result';
-import ObjectPool from './object_pool';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 import Field from './field';
 import Record from './record';
+import ObjectPool from './object_pool';
 import RecordStore, {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
+import GroupedRecordQueryResult from './grouped_record_query_result';
+import {GroupLevels} from './view_metadata_query_result';
 
 /** @hidden */
 interface TableOrViewQueryResultData {
     recordIds: Array<string> | null; 
+    groups: Array<GroupedRecordQueryResult> | null;
+    groupLevels: Array<NormalizedGroupLevel> | null;
 }
-
-const tableOrViewQueryResultPool: ObjectPool<
-    TableOrViewQueryResult,
-    {
-        sourceModel: Table | View;
-        normalizedOpts: NormalizedRecordQueryResultOpts;
-    }
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult.__sourceModelId,
-    getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
-    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-        return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-    },
-});
 
 /**
  * Represents a set of records directly from a view or table. See {@link RecordQueryResult} for main
@@ -61,31 +50,6 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     static _className = 'TableOrViewQueryResult';
 
     /** @internal */
-    static __createOrReuseQueryResult(
-        sourceModel: Table | View,
-        recordStore: RecordStore,
-        opts: RecordQueryResultOpts,
-    ) {
-        const tableModel = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, recordStore, opts);
-        return this.__createOrReuseQueryResultWithNormalizedOpts(sourceModel, normalizedOpts);
-    }
-    /** @internal */
-    static __createOrReuseQueryResultWithNormalizedOpts(
-        sourceModel: Table | View,
-        normalizedOpts: NormalizedRecordQueryResultOpts,
-    ) {
-        const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
-            sourceModel,
-            normalizedOpts,
-        });
-        if (queryResult) {
-            return queryResult;
-        } else {
-            return new TableOrViewQueryResult(sourceModel, normalizedOpts);
-        }
-    }
-    /** @internal */
     _sourceModel: Table | View;
     /** @internal */
     _mostRecentSourceModelLoadPromise: Promise<FlowAnyExistential> | null;
@@ -99,32 +63,50 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     _visList: VisList | null;
     /** @internal */
     _sorts: Array<NormalizedSortConfig> | null;
+    /** @internal */
+    _groupLevels: Array<NormalizedGroupLevel> | null;
 
     /** @internal */
     _orderedRecordIds: Array<string> | null;
+
+    /** @internal */
+    _orderedGroups: Array<GroupedRecordQueryResult> | null;
+
+    /** @internal */
+    _loadedGroupLevels: Array<NormalizedGroupLevel> | null;
 
     /** @internal */
     _recordIdsSet: {[key: string]: true | void} | null = null;
 
     /** @internal */
     _cellValueKeyWatchCounts: {[key: string]: number};
+
     /** @internal */
-    constructor(sourceModel: Table | View, normalizedOpts: NormalizedRecordQueryResultOpts) {
-        super(normalizedOpts, sourceModel.__baseData);
+    __groupedRecordQueryResultPool: ObjectPool<
+        GroupedRecordQueryResult,
+        typeof GroupedRecordQueryResult
+    >;
+
+    /** @internal */
+    constructor(
+        sdk: Sdk,
+        sourceModel: Table | View,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
+    ) {
+        super(sdk, normalizedOpts);
 
         this._sourceModel = sourceModel;
         this._mostRecentSourceModelLoadPromise = null;
         this._table = normalizedOpts.table;
 
         const {sorts} = this._normalizedOpts;
-        if (sorts) {
-            this._sorts = sorts;
-        } else {
-            this._sorts = null;
-        }
+        this._sorts = sorts ?? null;
+        this._groupLevels = null;
 
         this._visList = null;
         this._orderedRecordIds = null;
+        this._orderedGroups = null;
+        this._loadedGroupLevels = null;
 
         this._cellValueKeyWatchCounts = {};
 
@@ -146,23 +128,30 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             }
         }
         this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
+        this.__groupedRecordQueryResultPool = new ObjectPool(GroupedRecordQueryResult);
 
-        tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
         Object.seal(this);
     }
     /** @internal */
     get _dataOrNullIfDeleted(): TableOrViewQueryResultData | null {
-        if (this._sourceModel.isDeleted) {
+        if (this._sourceModel.isDeleted || this._recordStore.isDeleted) {
             return null;
         }
 
         return {
             recordIds: this._orderedRecordIds,
+            groups: this._orderedGroups,
+            groupLevels: this._loadedGroupLevels,
         };
     }
     /** @internal */
     get __sourceModelId(): string {
         return this._sourceModel.id;
+    }
+
+    /** @internal */
+    get __poolKey(): string {
+        return `${this._serializedOpts}::${this._sourceModel.id}`;
     }
 
     /**
@@ -187,9 +176,39 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
      * Can be watched.
      */
     get recordIds(): Array<string> {
+        const {recordIds} = this._data; 
         invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
-        invariant(this._data.recordIds, 'No recordIds');
-        return this._data.recordIds;
+        invariant(recordIds, 'No recordIds');
+        return recordIds;
+    }
+    /**
+     * The ordered GroupedRecordQueryResult's in this RecordQueryResult.
+     * Throws if data is not loaded yet.
+     * Can be watched.
+     *
+     * @hidden
+     */
+    get groups(): Array<GroupedRecordQueryResult> | null {
+        const {groups} = this._data; 
+        invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
+        return groups ?? null;
+    }
+    /**
+     * The GroupLevels in this RecordQueryResult.
+     * Throws if data is not loaded yet.
+     * Can be watched.
+     *
+     * @hidden
+     */
+    get groupLevels(): GroupLevels | null {
+        const {groupLevels} = this._data; 
+        invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
+        return groupLevels
+            ? groupLevels.map(singleLevel => ({
+                  ...singleLevel,
+                  field: this.parentTable.getFieldById(singleLevel.fieldId),
+              }))
+            : null;
     }
     /**
      * The set of record IDs in this RecordQueryResult.
@@ -233,10 +252,28 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         return this._sorts ? this._sorts.map(sort => `cellValuesInField:${sort.fieldId}`) : [];
     }
     /** @internal */
+    get _cellValuesForGroupWatchKeys(): Array<string> {
+        return this._groupLevels
+            ? this._groupLevels.map(group => `cellValuesInField:${group.fieldId}`)
+            : [];
+    }
+    /** @internal */
     get _sourceModelRecordIds(): Array<string> {
         return this._sourceModel instanceof Table
             ? this._recordStore.recordIds
             : this._recordStore.getViewDataStore(this._sourceModel.id).visibleRecordIds;
+    }
+    /** @internal */
+    get _sourceModelGroups(): Array<GroupData> | null {
+        return this._sourceModel instanceof Table
+            ? null
+            : this._recordStore.getViewDataStore(this._sourceModel.id).groups;
+    }
+    /** @internal */
+    get _sourceModelGroupLevels(): Array<GroupLevelData> | null {
+        return this._sourceModel instanceof Table
+            ? null
+            : this._recordStore.getViewDataStore(this._sourceModel.id).groupLevels;
     }
     /** @internal */
     get _sourceModelRecords(): Array<Record> {
@@ -360,6 +397,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         let sourceModelLoadPromise;
         let cellValuesInFieldsLoadPromise;
 
+        if (this._sourceModel.isDeleted) {
+            throw this._spawnErrorForDeletion();
+        }
+
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
             cellValuesInFieldsLoadPromise = this._recordStore.loadCellValuesInFieldIdsAsync(
                 Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields),
@@ -388,9 +429,33 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         await super.loadDataAsync();
     }
+
+    /**
+     * @internal
+     */
+    _getChangedKeysOnLoad(): Array<WatchableRecordQueryResultKey> {
+        const changedKeys: Array<WatchableRecordQueryResultKey> = [
+            RecordQueryResult.WatchableKeys.records,
+            RecordQueryResult.WatchableKeys.recordIds,
+            RecordQueryResult.WatchableKeys.cellValues,
+            RecordQueryResult.WatchableKeys.groups,
+            RecordQueryResult.WatchableKeys.groupLevels,
+        ];
+
+        const fieldIds =
+            this._normalizedOpts.fieldIdsOrNullIfAllFields ||
+            this._table.fields.map(field => field.id);
+
+        for (const fieldId of fieldIds) {
+            changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
+        }
+
+        return changedKeys;
+    }
+
     /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
-        tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
@@ -399,18 +464,35 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             this._replaceVisList();
         }
         this._orderedRecordIds = this._generateOrderedRecordIds();
+        this._orderedGroups = this._generateAndLoadOrderedGroups();
+        this._loadedGroupLevels = this._sourceModelGroupLevels;
 
         if (this._sourceModel instanceof Table) {
             this._recordStore.watch(WatchableRecordStoreKeys.records, this._onRecordsChanged, this);
         } else {
-            this._recordStore
-                .getViewDataStore(this._sourceModel.id)
-                .watch(WatchableViewDataStoreKeys.visibleRecords, this._onRecordsChanged, this);
+            const viewDataStore = this._recordStore.getViewDataStore(this._sourceModel.id);
+            viewDataStore.watch(
+                WatchableViewDataStoreKeys.visibleRecords,
+                this._onRecordsChanged,
+                this,
+            );
+            viewDataStore.watch(WatchableViewDataStoreKeys.groups, this._onGroupsChanged, this);
+            viewDataStore.watch(
+                WatchableViewDataStoreKeys.groupLevels,
+                this._onGroupLevelsChanged,
+                this,
+            );
         }
 
         this._recordStore.watch(
             this._cellValuesForSortWatchKeys,
             this._onCellValuesForSortChanged,
+            this,
+        );
+
+        this._recordStore.watch(
+            this._cellValuesForGroupWatchKeys,
+            this._onCellValuesForGroupChanged,
             this,
         );
 
@@ -426,21 +508,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             }
         }
 
-        const changedKeys: Array<WatchableRecordQueryResultKey> = [
-            RecordQueryResult.WatchableKeys.records,
-            RecordQueryResult.WatchableKeys.recordIds,
-            RecordQueryResult.WatchableKeys.cellValues,
-        ];
-
-        const fieldIds =
-            this._normalizedOpts.fieldIdsOrNullIfAllFields ||
-            this._table.fields.map(field => field.id);
-
-        for (const fieldId of fieldIds) {
-            changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
-        }
-
-        return changedKeys;
+        return this._getChangedKeysOnLoad();
     }
     /** @inheritdoc */
     unloadData() {
@@ -453,7 +521,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
                 this._recordStore.unloadData();
             }
         } else {
-            this._recordStore.getViewDataStore(this._sourceModel.id).unloadData();
+            if (!this._sourceModel.isDeleted) {
+                this._recordStore.getViewDataStore(this._sourceModel.id).unloadData();
+            }
         }
 
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
@@ -475,14 +545,35 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
                 this,
             );
         } else {
-            this._recordStore
-                .getViewDataStore(this._sourceModel.id)
-                .unwatch(WatchableViewDataStoreKeys.visibleRecords, this._onRecordsChanged, this);
+            if (!this._sourceModel.isDeleted) {
+                const viewDataStore = this._recordStore.getViewDataStore(this._sourceModel.id);
+                viewDataStore.unwatch(
+                    WatchableViewDataStoreKeys.visibleRecords,
+                    this._onRecordsChanged,
+                    this,
+                );
+                viewDataStore.unwatch(
+                    WatchableViewDataStoreKeys.groups,
+                    this._onGroupsChanged,
+                    this,
+                );
+                viewDataStore.unwatch(
+                    WatchableViewDataStoreKeys.groupLevels,
+                    this._onGroupLevelsChanged,
+                    this,
+                );
+            }
         }
 
         this._recordStore.unwatch(
             this._cellValuesForSortWatchKeys,
             this._onCellValuesForSortChanged,
+            this,
+        );
+
+        this._recordStore.unwatch(
+            this._cellValuesForGroupWatchKeys,
+            this._onCellValuesForGroupChanged,
             this,
         );
 
@@ -498,11 +589,13 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             }
         }
 
+        this._unloadOrderedGroupsIfNeeded();
+
         this._visList = null;
         this._orderedRecordIds = null;
         this._recordIdsSet = null;
 
-        tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
     /** @internal */
     _addRecordIdsToVisList(recordIds: Array<string>) {
@@ -515,27 +608,36 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
     }
     /** @internal */
+    _onGroupLevelsChanged(
+        model: RecordStore | ViewDataStore,
+        key: string,
+        updates?: {addedRecordIds: Array<string>; removedRecordIds: Array<string>} | null,
+    ) {
+        this._loadedGroupLevels = this._sourceModelGroupLevels;
+        this._unloadRemovedGroupsAndLoadNewGroupsAndTriggerWatches();
+        this._onChange(RecordQueryResult.WatchableKeys.groupLevels);
+    }
+    /** @internal */
+    _onGroupsChanged(
+        model: RecordStore | ViewDataStore,
+        key: string,
+        updates?: {addedRecordIds: Array<string>; removedRecordIds: Array<string>} | null,
+    ) {
+        this._unloadRemovedGroupsAndLoadNewGroupsAndTriggerWatches();
+    }
+    /** @internal */
     _onRecordsChanged(
         model: RecordStore | ViewDataStore,
         key: string,
         updates?: {addedRecordIds: Array<string>; removedRecordIds: Array<string>} | null,
     ) {
         if (model instanceof ViewDataStore) {
-            if (this._orderedRecordIds) {
-                const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
-                    .visibleRecordIds;
-                const addedRecordIds = arrayDifference(
-                    visibleRecordIds,
-                    this._orderedRecordIds || [],
-                );
-                const removedRecordIds = arrayDifference(
-                    this._orderedRecordIds || [],
-                    visibleRecordIds,
-                );
-                updates = {addedRecordIds, removedRecordIds};
-            } else {
-                updates = null;
-            }
+            invariant(this._orderedRecordIds, '_orderedRecordIds unset');
+            const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
+                .visibleRecordIds;
+            const addedRecordIds = arrayDifference(visibleRecordIds, this._orderedRecordIds);
+            const removedRecordIds = arrayDifference(this._orderedRecordIds, visibleRecordIds);
+            updates = {addedRecordIds, removedRecordIds};
         }
 
         if (!updates) {
@@ -572,6 +674,14 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         this._onChange(RecordQueryResult.WatchableKeys.recordIds, updates);
     }
     /** @internal */
+    _onCellValuesForGroupChanged(
+        recordStore: RecordStore,
+        key: string,
+        recordIds?: Array<string> | null,
+        fieldId?: string | null,
+    ) {
+    }
+    /** @internal */
     _onCellValuesForSortChanged(
         recordStore: RecordStore,
         key: string,
@@ -585,9 +695,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         const visList = this._visList;
         invariant(visList, 'No vis list');
 
-        if (recordIds.length === 0) {
-            return;
-        }
+        invariant(recordIds.length > 0, 'field ID set without a corresponding record ID');
 
         const visListRecordIdsSet = new Set(visList.getOrderedRecordIds());
         const recordIdsToMove = recordIds.filter(recordId => visListRecordIdsSet.has(recordId));
@@ -620,7 +728,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         let wereAnyFieldsCreatedOrDeleted = false;
         for (const fieldId of addedFieldIds) {
-            if (has(fieldIdsSet, fieldId)) {
+            if (fieldIdsSet.has(fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldByIdIfExists(fieldId);
                 invariant(field, 'Created field does not exist');
@@ -631,7 +739,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         if (!wereAnyFieldsCreatedOrDeleted) {
             wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
-                has(fieldIdsSet, fieldId),
+                fieldIdsSet.has(fieldId),
             );
         }
 
@@ -642,6 +750,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             const changeData = {addedRecordIds: [], removedRecordIds: []};
             this._onChange(RecordQueryResult.WatchableKeys.records, changeData);
             this._onChange(RecordQueryResult.WatchableKeys.recordIds, changeData);
+
         }
     }
     /** @internal */
@@ -673,9 +782,52 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
     }
     /** @internal */
+    _generateAndLoadOrderedGroups(): Array<GroupedRecordQueryResult> | null {
+        if (this._groupLevels) {
+            invariant(this._visList, 'Cannot generate record ids without a vis list');
+            throw spawnError('custom group configs not supported');
+        } else {
+            const groupLevels = this._sourceModelGroupLevels;
+            if (!this._sourceModelGroups || !groupLevels) {
+                return null;
+            }
+            return this._sourceModelGroups.map(groupData => {
+                const group = this.__groupedRecordQueryResultPool.getObjectForReuse(
+                    this,
+                    groupData,
+                    groupLevels,
+                    this._normalizedOpts,
+                    this._sdk,
+                );
+                group.loadDataAsync();
+                return group;
+            });
+        }
+    }
+    /** @internal */
+    _unloadOrderedGroupsIfNeeded() {
+        if (this._orderedGroups) {
+            for (const group of this._orderedGroups) {
+                group.unloadData();
+            }
+        }
+    }
+    /**
+     * If groupings change then some groups will need to be created, and some removed
+     * This (TODO: will) handle the diffing necessary to unload, and reload only the changed groups.
+     * Also triggers the WatchableKeys.group, as by necessity this will have changed.
+     *
+     * @internal
+     */
+    _unloadRemovedGroupsAndLoadNewGroupsAndTriggerWatches() {
+        this._unloadOrderedGroupsIfNeeded();
+        this._orderedGroups = this._generateAndLoadOrderedGroups();
+        this._onChange(RecordQueryResult.WatchableKeys.groups);
+    }
+    /** @internal */
     _replaceVisList() {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
 
         const recordDatas = this._sourceModelRecords.map(record => record._data);
         const fieldDatas = this._table.fields.map(field => field._data);

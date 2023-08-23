@@ -1,6 +1,5 @@
 /** @module @airtable/blocks: globalConfig */ /** */
 import Watchable from './watchable';
-import getSdk from './get_sdk';
 import {AirtableInterface} from './types/airtable_interface';
 import {spawnError} from './error_utils';
 import {
@@ -15,6 +14,7 @@ import {
 } from './types/global_config';
 import {MutationTypes, PermissionCheckResult} from './types/mutations';
 import {getValueAtOwnPath} from './private_utils';
+import Sdk from './sdk';
 
 /**
  * You can watch any top-level key in global config. Use '*' to watch every change.
@@ -22,7 +22,7 @@ import {getValueAtOwnPath} from './private_utils';
 type WatchableGlobalConfigKey = string;
 
 /**
- * A key-value store for persisting configuration options for a block installation.
+ * A key-value store for persisting configuration options for an extension installation.
  *
  * The contents will be synced in real-time to all logged-in users of the installation.
  * Contents will not be updated in real-time when the installation is running in
@@ -34,7 +34,8 @@ type WatchableGlobalConfigKey = string;
  *
  * You should not need to construct this object yourself.
  *
- * The maximum allowed size of each URL-encoded write to GlobalConfig is 100kB.
+ * The maximum allowed size for a given GlobalConfig instance is 150kB.
+ * The maximum number of keys for a given GlobalConfig instance is 1000.
  *
  * @example
  * ```js
@@ -50,17 +51,20 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return true;
     }
     /** @internal */
+    _sdk: Sdk;
+    /** @internal */
     _kvStore: GlobalConfigData;
     /** @internal */
     _airtableInterface: AirtableInterface;
     /**
      * @internal
      */
-    constructor(initialKvValuesByKey: GlobalConfigData, airtableInterface: AirtableInterface) {
+    constructor(initialKvValuesByKey: GlobalConfigData, sdk: Sdk) {
         super();
 
         this._kvStore = initialKvValuesByKey;
-        this._airtableInterface = airtableInterface;
+        this._sdk = sdk;
+        this._airtableInterface = sdk.__airtableInterface;
     }
 
     /**
@@ -211,7 +215,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
      *         globalConfig.setAsync('favoriteColor', color);
      *     }
-     *     // The update is now applied within your block (eg will be
+     *     // The update is now applied within your extension (eg will be
      *     // reflected in globalConfig) but are still being saved to
      *     // Airtable servers (e.g. may not be updated for other users yet)
      * }
@@ -260,7 +264,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     checkPermissionsForSetPaths(
         updates?: ReadonlyArray<PartialGlobalConfigUpdate>,
     ): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates: updates
                 ? updates.map(({path, value}) => ({path: path || undefined, value}))
@@ -319,7 +323,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     if (globalConfig.hasPermissionToSetPaths(updates)) {
      *         globalConfig.setPathsAsync(updates);
      *     }
-     *     // The updates are now applied within your block (eg will be reflected in
+     *     // The updates are now applied within your extension (eg will be reflected in
      *     // globalConfig) but are still being saved to Airtable servers (e.g. they
      *     // may not be updated for other users yet)
      * }
@@ -345,14 +349,14 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             }
         }
 
-        await getSdk().__mutations.applyMutationAsync({
+        await this._sdk.__mutations.applyMutationAsync({
             type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates,
         });
     }
     /**
      * @internal
-     * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
+     * this shouldn't be called directly - instead, use this._sdk.__applyGlobalConfigUpdates()
      */
     __setMultipleKvPaths(updates: ReadonlyArray<GlobalConfigUpdate>) {
         const {

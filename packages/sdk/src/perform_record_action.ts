@@ -1,8 +1,8 @@
-import getSdk from './get_sdk';
+import {invariant} from './error_utils';
 import {AirtableInterface} from './types/airtable_interface';
 import {RecordActionData, RecordActionDataCallback} from './types/record_action_data';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
-import {BaseData} from './types/base';
+import Sdk from './sdk';
 import {isEnumValue, ObjectValues} from './private_utils';
 
 /** @hidden */
@@ -58,8 +58,8 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
     recordActionData: RecordActionData | null;
 
     /** @hidden */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, 'performRecordAction');
+    constructor(sdk: Sdk, airtableInterface: AirtableInterface) {
+        super(sdk, 'performRecordAction');
 
         this._airtableInterface = airtableInterface;
         this._hasRegisteredHandler = false;
@@ -78,6 +78,26 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
     _handlePerformRecordAction(data: RecordActionData) {
         this.recordActionData = data;
         this._onChange(WatchablePerformRecordActionKeys.recordActionData, data);
+    }
+
+    /**
+     * This accessor method is defined solely to satisfy the contract of the
+     * AbstractModel class.
+     *
+     * @internal */
+    get _dataOrNullIfDeleted() {
+        return invariant(
+            false,
+            'The `data` property of PerformRecordAction should not be referenced',
+        ) as never;
+    }
+
+    /**
+     * This accessor method is defined because the parent implementation uses _dataOrNullIfDeleted
+     *
+     * @inheritdoc */
+    get isDeleted(): boolean {
+        return false;
     }
 
     /**
@@ -177,7 +197,7 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
 export function registerRecordActionDataCallback(
     callback: RecordActionDataCallback,
 ): UnsubscribeFunction {
-    const {performRecordAction} = getSdk();
+    const {performRecordAction} = sdk;
 
     const wrappedCallback = (
         model: PerformRecordAction,
@@ -193,4 +213,10 @@ export function registerRecordActionDataCallback(
             WatchablePerformRecordActionKeys.recordActionData,
             wrappedCallback,
         );
+}
+
+let sdk: Sdk;
+
+export function __injectSdkIntoPerformRecordAction(_sdk: Sdk) {
+    sdk = _sdk;
 }

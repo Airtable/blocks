@@ -1,30 +1,27 @@
-import Table from '../../src/models/table';
-import getAirtableInterface from '../../src/injected/airtable_interface';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
+import Base from '../../src/models/base';
 import {MutationTypes} from '../../src/types/mutations';
 import warning from '../../src/warning';
+import Sdk from '../../src/sdk';
 
-jest.mock('../../src/injected/airtable_interface', () => () => ({
-    idGenerator: {
-        generateRecordId: () => 'recGeneratedMockId',
-    },
-}));
-
-let mockMutations: any;
-jest.mock('../../src/get_sdk', () => () => ({
-    __mutations: mockMutations,
-    runInfo: {
-        isDevelopment: true,
-    },
+const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+jest.mock('../../src/injected/airtable_interface', () => ({
+    __esModule: true,
+    default: () => mockAirtableInterface,
 }));
 
 jest.mock('../../src/warning', () => jest.fn());
 
 describe('Table', () => {
+    let base: Base;
+
     describe('createRecordsAsync', () => {
         const makeTable = () => {
-            const baseData = {
-                tablesById: {
-                    tblTest: {
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblTest'],
+                    value: {
+                        id: 'tblTest',
                         fieldsById: {
                             fldTest1: {
                                 name: 'Field 1',
@@ -35,19 +32,18 @@ describe('Table', () => {
                         },
                     },
                 },
-            } as any;
-            const parentBase = {} as any;
-            const recordStore = {} as any;
-            const tableId = 'tblTest';
+            ]);
 
-            return new Table(baseData, parentBase, recordStore, tableId, getAirtableInterface());
+            return base.getTable('tblTest');
         };
 
         beforeEach(() => {
+            ({base} = new Sdk(mockAirtableInterface));
             (warning as jest.Mock).mockClear();
-            mockMutations = {
-                applyMutationAsync: jest.fn(),
-            };
+        });
+
+        afterEach(() => {
+            mockAirtableInterface.reset();
         });
 
         it('performs a mutation with no warning when passed an object with a `fields` key containing field names', async () => {
@@ -61,20 +57,27 @@ describe('Table', () => {
                 },
             ]);
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 1,
-                            fldTest2: 2,
+            const {applyMutationAsync} = mockAirtableInterface;
+            expect(applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                    tableId: 'tblTest',
+                    records: [
+                        {
+                            id: 'recGeneratedMockId',
+                            cellValuesByFieldId: {
+                                fldTest1: 1,
+                                fldTest2: 2,
+                            },
                         },
+                    ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
                     },
-                ],
-            });
+                },
+                {holdForMs: 100},
+            );
 
             expect(warning).not.toHaveBeenCalled();
         });
@@ -90,20 +93,27 @@ describe('Table', () => {
                 },
             ]);
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 3,
-                            fldTest2: 4,
+            const {applyMutationAsync} = mockAirtableInterface;
+            expect(applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                    tableId: 'tblTest',
+                    records: [
+                        {
+                            id: 'recGeneratedMockId',
+                            cellValuesByFieldId: {
+                                fldTest1: 3,
+                                fldTest2: 4,
+                            },
                         },
+                    ],
+                    opts: {
+                        parseDateCellValueInColumnTimeZone: true,
                     },
-                ],
-            });
+                },
+                {holdForMs: 100},
+            );
 
             expect(warning).not.toHaveBeenCalled();
         });
@@ -122,7 +132,7 @@ describe('Table', () => {
                 'Invalid record format. Please define field mappings using a `fields` key for each record definition object',
             );
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(0);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(0);
         });
 
         it('throws error when passed an object of field ids (legacy syntax)', async () => {
@@ -138,7 +148,7 @@ describe('Table', () => {
                 'Invalid record format. Please define field mappings using a `fields` key for each record definition object',
             );
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(0);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(0);
         });
     });
 });

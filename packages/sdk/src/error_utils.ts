@@ -45,6 +45,25 @@ export function spawnError(
 }
 
 /**
+ * Logs an error to Sentry
+ *
+ * @hidden
+ */
+export function logErrorToSentry(errorMessage: string, metadata?: {[key: string]: unknown}) {
+    const blocksErrorReporter = (window as any).blocksErrorReporter as
+        | undefined
+        | {
+              reportWarning?: (
+                  errOrMessage: Error | string,
+                  metadata?: {[key: string]: unknown},
+              ) => void;
+          };
+    if (blocksErrorReporter?.reportWarning) {
+        blocksErrorReporter.reportWarning(errorMessage, metadata);
+    }
+}
+
+/**
  * An alternative to facebook's invariant that's safe to use with base data
  *
  * @hidden

@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useSession */ /** */
-import getSdk from '../get_sdk';
 import Session from '../models/session';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook for connecting a React component to the current session. This returns a {@link Session}
@@ -32,7 +32,7 @@ import useWatchable from './use_watchable';
  * @hook
  */
 const useSession = (): Session => {
-    const {session, base} = getSdk();
+    const {session, base} = useSdk();
     useWatchable(session, ['permissionLevel', 'currentUser']);
     useWatchable(base, ['schema']);
     return session;

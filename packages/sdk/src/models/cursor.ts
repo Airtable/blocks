@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/models: Cursor */ /** */
-import {BaseData, ModelChange} from '../types/base';
+import Sdk from '../sdk';
+import {ModelChange} from '../types/base';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
 import {FieldId} from '../types/field';
-import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -47,16 +47,15 @@ interface CursorData {
  * {@link useLoadable} to access them.
  *
  * ```js
- * import {cursor} from '@airtable/blocks';
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useWatchable} from '@airtable/blocks/ui';
  *
  *  function ActiveTableAndView() {
- *      // re-render whenever the active table or view changes
- *      useWatchable(cursor, ['activeTableId', 'activeViewId']);
+ *      const cursor = useCursor();
  *
  *      return (
  *          <div>
- *              Active table: {cursor.activeTableId)}
+ *              Active table: {cursor.activeTableId}
+ *              <br />
  *              Active view: {cursor.activeViewId}
  *          </div>
  *      );
@@ -64,10 +63,10 @@ interface CursorData {
  * ```
  *
  * ```js
- * import {cursor} from '@airtable/blocks';
- * import {useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
  *
  *  function SelectedRecordAndFieldIds() {
+ *      const cursor = useCursor();
  *      // load selected records and fields
  *      useLoadable(cursor);
  *
@@ -77,6 +76,7 @@ interface CursorData {
  *      return (
  *          <div>
  *              Selected records: {cursor.selectedRecordIds.join(', ')}
+ *              <br />
  *              Selected fields: {cursor.selectedFieldIds.join(', ')}
  *          </div>
  *      );
@@ -97,19 +97,18 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return true;
     }
     /** @internal */
-    _airtableInterface: AirtableInterface;
-    /** @internal */
     _cursorData: CursorData;
 
     /** @internal */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, 'cursor');
-        this._airtableInterface = airtableInterface;
+    constructor(sdk: Sdk) {
+        super(sdk, 'cursor');
 
+        const baseData = sdk.__airtableInterface.sdkInitData.baseData;
         const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
         const selectedFieldIdSet = baseData.cursorData?.selectedFieldIdSet ?? null;
         const activeTableId = baseData.activeTableId;
-        const activeViewId = activeTableId ? baseData.tablesById[activeTableId].activeViewId : null;
+        const activeTable = activeTableId ? baseData.tablesById[activeTableId] : null;
+        const activeViewId = activeTable?.activeViewId ?? null;
 
         this._cursorData = {
             selectedRecordIdSet,
@@ -137,7 +136,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @internal
      */
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
-        const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();
+        const cursorData = await this._sdk.__airtableInterface.fetchAndSubscribeToCursorDataAsync();
         this._cursorData.selectedRecordIdSet = cursorData.selectedRecordIdSet;
         this._cursorData.selectedFieldIdSet = cursorData.selectedFieldIdSet;
 
@@ -147,7 +146,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @internal
      */
     _unloadData() {
-        this._airtableInterface.unsubscribeFromCursorData();
+        this._sdk.__airtableInterface.unsubscribeFromCursorData();
         this._cursorData.selectedRecordIdSet = null;
         this._cursorData.selectedFieldIdSet = null;
     }
@@ -224,20 +223,18 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return this._data.activeViewId;
     }
     /**
-     * Sets the specified table to active in the Airtable UI. If the blocks pane is fullscreen, the
-     * table will still be set as active, but the blocks pane will continue to be displayed
-     * fullscreen.
+     * Sets the specified table to active in the Airtable UI. If the extension installation or extensions pane
+     * is fullscreen, fullscreen mode will be exited.
      *
      * @param tableOrTableId The target table or table ID to set as active in the Airtable main page.
      */
     setActiveTable(tableOrTableId: Table | TableId): void {
         const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
-        this._airtableInterface.setActiveViewOrTable(tableId);
+        this._sdk.__airtableInterface.setActiveViewOrTable(tableId);
     }
     /**
-     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the blocks
-     * pane is fullscreen, the view will still be set as active, but the blocks pane will continue
-     * to be displayed fullscreen.
+     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the extension
+     * installation or extensions pane is fullscreen, fullscreen mode will be exited.
      *
      * @param tableOrTableId The table or table ID that the target view belongs to.
      * @param viewOrViewId The target view or view ID to set as active in the Airtable main page.
@@ -245,7 +242,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     setActiveView(tableOrTableId: Table | TableId, viewOrViewId: View | ViewId): void {
         const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
         const viewId = viewOrViewId instanceof View ? viewOrViewId.id : viewOrViewId;
-        this._airtableInterface.setActiveViewOrTable(tableId, viewId);
+        this._sdk.__airtableInterface.setActiveViewOrTable(tableId, viewId);
     }
 
     /**

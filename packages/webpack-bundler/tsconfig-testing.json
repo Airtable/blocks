@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "rootDir": ".",
+        "noEmit": true,
+
+        "allowJs": true,
+        "composite": true,
+        "declaration": true,
+        "module": "commonjs",
+        "outDir": "dist",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "es2017"
+    },
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["test/fixtures/**/*"]
+}

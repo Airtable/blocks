@@ -1,5 +1,6 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {invariant, spawnAbstractMethodError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
+import Sdk from '../sdk';
 import {BaseData} from '../types/base';
 import Watchable from '../watchable';
 
@@ -8,10 +9,19 @@ import Watchable from '../watchable';
  *
  * @docsPath models/advanced/AbstractModel
  */
-class AbstractModel<DataType, WatchableKey extends string> extends Watchable<WatchableKey> {
+abstract class AbstractModel<DataType, WatchableKey extends string> extends Watchable<
+    WatchableKey
+> {
     /** @internal */
     static _className = 'AbstractModel';
-    /** @internal */
+    /**
+     * This method is essentially abstract, but as of this writing, TypeScript
+     * does not support abstract static methods. This necessitates a concrete
+     * implementation which must be explicitly ignored by the test coverage
+     * tooling.
+     *
+     * @internal
+     */
     static _isWatchableKey(key: string): boolean {
         return false;
     }
@@ -19,10 +29,12 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
     _baseData: BaseData;
     /** @internal */
     _id: string;
+    /** @internal */
+    _sdk: Sdk;
     /**
      * @internal
      */
-    constructor(baseData: BaseData, modelId: string) {
+    constructor(sdk: Sdk, modelId: string) {
         super();
 
         invariant(
@@ -31,7 +43,8 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
             (this.constructor as typeof AbstractModel)._className,
         );
 
-        this._baseData = baseData;
+        this._sdk = sdk;
+        this._baseData = sdk.__airtableInterface.sdkInitData.baseData;
         this._id = modelId;
     }
     /**
@@ -43,9 +56,7 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
     /**
      * @internal
      */
-    get _dataOrNullIfDeleted(): DataType | null {
-        throw spawnAbstractMethodError();
-    }
+    abstract get _dataOrNullIfDeleted(): DataType | null;
     /**
      * @internal
      */
@@ -67,12 +78,6 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
      */
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;
-    }
-    /**
-     * @internal
-     */
-    get __baseData(): BaseData {
-        return this._baseData;
     }
     /**
      * @internal
