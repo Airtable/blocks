@@ -1,15 +1,16 @@
 README
-".$_-0/build.js"
-`"# app-connectors@airtable_blocks
+`".$_-0/build.js"
+---
+"# app-connectors@airtable_blocks
 
 With the Blocks SDK, you can create your own custom apps on top of Airtable. These apps can be
 integrations, visualizations, internal tools, and more!
-
+---
 To get started, check out the
 [official Blocks SDK documentation website](https://airtable.com/developers/blocks). If you have any
 questions, feedback, or feature requests, we encourage you to post in the
 [community forum](https://community.airtable.com/c/developers/custom-blocks-beta/54).
-
+---
 By using the software, you accept and agree to abide by terms of the developer agreement below:
 
 ## Developer agreement
