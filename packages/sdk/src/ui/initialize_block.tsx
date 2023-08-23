@@ -1,14 +1,31 @@
 /** @module @airtable/blocks/ui: initializeBlock */ /** */
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
+import Sdk from '../sdk';
+import getAirtableInterface from '../injected/airtable_interface';
+import {BlockRunContextType} from '../types/airtable_interface';
+import Table from '../models/table';
+import View from '../models/view';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;
 
+/** */
+type DashboardEntryElementFunction = () => React.ReactNode;
+/** @hidden */
+type ViewEntryElementFunction = ({table, view}: {table: Table; view: View}) => React.ReactNode;
+/** @hidden */
+interface EntryPoints {
+    dashboard?: DashboardEntryElementFunction;
+    view?: ViewEntryElementFunction;
+}
+
+/** @hidden */
+type DashboardOrEntryPoints = DashboardEntryElementFunction | EntryPoints;
+
 /**
- * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Blocks-specific things.
+ * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Extensions-specific things.
  *
  * @param getEntryElement A function that returns your React Node.
  *
@@ -27,7 +44,10 @@ let hasBeenInitialized = false;
  * ```
  * @docsPath UI/utils/initializeBlock
  */
-function initializeBlock(getEntryElement: () => React.ReactNode) {
+export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
+    const entryPoints =
+        typeof getEntryElement === 'function' ? {dashboard: getEntryElement} : getEntryElement;
+
     const body = typeof document !== 'undefined' ? document.body : null;
     if (!body) {
         throw spawnError('initializeBlock should only be called from browser environments');
@@ -37,21 +57,67 @@ function initializeBlock(getEntryElement: () => React.ReactNode) {
     }
     hasBeenInitialized = true;
 
-    if (typeof getEntryElement !== 'function') {
-        throw spawnError(
-            'The first argument to initializeBlock should be a function returning a React element',
-        );
+    const airtableInterface = getAirtableInterface();
+
+    let entryElement: React.ReactNode;
+    const runContext = airtableInterface.sdkInitData.runContext ?? {
+        type: BlockRunContextType.DASHBOARD_APP,
+    };
+    switch (runContext.type) {
+        case BlockRunContextType.DASHBOARD_APP: {
+            if (entryPoints.dashboard === undefined) {
+                throw spawnError(
+                    'If running an extension within the dashboard, it must have a dashboard initialization function',
+                );
+            }
+            if (typeof entryPoints.dashboard !== 'function') {
+                throw spawnError(
+                    'initializeBlock must contain a dashboard function that returns a React element',
+                );
+            }
+            entryElement = entryPoints.dashboard();
+            break;
+        }
+        case BlockRunContextType.VIEW: {
+            if (entryPoints.view === undefined) {
+                throw spawnError(
+                    'If running an extension within a view, it must have a view initialization function',
+                );
+            }
+            if (typeof entryPoints.view !== 'function') {
+                throw spawnError(
+                    'initializeBlock must contain a view function that returns a React element',
+                );
+            }
+
+            const table = sdk.base.getTableById(runContext.tableId);
+            const view = table.getViewById(runContext.viewId);
+            entryElement = entryPoints.view({table, view});
+            break;
+        }
+        default:
+            throw spawnError('Invalid context to run ');
     }
-    const entryElement = getEntryElement();
+
     if (!React.isValidElement(entryElement)) {
         throw spawnError(
             "The first argument to initializeBlock didn't return a valid React element",
         );
     }
-    getSdk().__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+
+    sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
 
     const container = document.createElement('div');
     body.appendChild(container);
-    ReactDOM.render(<BlockWrapper>{entryElement}</BlockWrapper>, container);
+    ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
 }
-export default initializeBlock;
+
+let sdk: Sdk;
+
+export function __injectSdkIntoInitializeBlock(_sdk: Sdk) {
+    sdk = _sdk;
+}
+
+export function __resetHasBeenInitialized() {
+    hasBeenInitialized = false;
+}

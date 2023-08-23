@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Input} from '../../src/ui/ui';
+import {Input} from '../../src/ui/unstable_standalone_ui';
 
 describe('Input', () => {
     it('renders outside of a blocks context', () => {

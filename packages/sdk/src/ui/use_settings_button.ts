@@ -1,11 +1,11 @@
 /** @module @airtable/blocks/ui: useSettingsButton */ /** */
 import {useEffect} from 'react';
-import getSdk from '../get_sdk';
 import {FlowAnyFunction} from '../private_utils';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
- * A hook for using the settings button that lives outside the block's viewport. It will show
+ * A hook for using the settings button that lives outside the extension's viewport. It will show
  * the settings button (hidden by default) and call the provided callback whenever the settings
  * button is clicked. It will also re-render your component when the settings button is clicked.
  *
@@ -32,15 +32,15 @@ import useWatchable from './use_watchable';
  * @hook
  */
 export default function useSettingsButton(onClickCallback: FlowAnyFunction) {
+    const {settingsButton} = useSdk();
+
     useEffect(() => {
-        const {settingsButton} = getSdk();
         settingsButton.show();
 
         return () => {
             settingsButton.hide();
         };
-    }, []); 
+    }, [settingsButton]); 
 
-    const {settingsButton} = getSdk();
     useWatchable(settingsButton, ['click'], onClickCallback);
 }

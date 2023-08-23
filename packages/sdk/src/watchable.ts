@@ -45,6 +45,37 @@ class Watchable<WatchableKey extends string> {
         return `${this._watchableId} ${this._changeCount}`;
     }
     /**
+     * Helper method to get only the valid watchable keys - or throw if a key is invalid
+     *
+     * @param keys
+     * @internal
+     */
+    _getWatchableValidKeysOrThrow(
+        keys: WatchableKey | ReadonlyArray<WatchableKey>,
+        errorMethodName: string,
+        shouldWarnInsteadOfThrow?: boolean,
+    ): Array<WatchableKey> {
+        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<WatchableKey>;
+
+        const validKeys = [];
+        for (const key of arrayKeys) {
+            if ((this.constructor as typeof Watchable)._isWatchableKey(key)) {
+                validKeys.push(key);
+            } else {
+                const className = (this.constructor as any)._className;
+                const errorString = `Invalid key to ${errorMethodName} for ${className}: ${key}`;
+                if (shouldWarnInsteadOfThrow) {
+                    // eslint-disable-next-line no-console
+                    console.warn(errorString);
+                } else {
+                    throw spawnError(errorString);
+                }
+            }
+        }
+
+        return validKeys;
+    }
+    /**
      * Get notified of changes to the model.
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
@@ -60,26 +91,15 @@ class Watchable<WatchableKey extends string> {
         callback: (model: this, key: WatchableKey, ...args: Array<any>) => unknown,
         context?: FlowAnyObject | null,
     ): Array<WatchableKey> {
-        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<WatchableKey>;
-
-        const validKeys = [];
-        for (const key of arrayKeys) {
-            if ((this.constructor as typeof Watchable)._isWatchableKey(key)) {
-                validKeys.push(key);
-                if (!this._changeWatchersByKey[key]) {
-                    this._changeWatchersByKey[key] = [];
-                }
-                this._changeWatchersByKey[key] = [
-                    ...this._changeWatchersByKey[key],
-                    {callback, context} as any,
-                ];
-            } else {
-                throw spawnError(
-                    'Invalid key to watch for %s: %s',
-                    (this.constructor as typeof Watchable)._className,
-                    key,
-                );
+        const validKeys = this._getWatchableValidKeysOrThrow(keys, 'watch');
+        for (const key of validKeys) {
+            if (!this._changeWatchersByKey[key]) {
+                this._changeWatchersByKey[key] = [];
             }
+            this._changeWatchersByKey[key] = [
+                ...this._changeWatchersByKey[key],
+                {callback, context} as any,
+            ];
         }
 
         return validKeys;
@@ -100,28 +120,18 @@ class Watchable<WatchableKey extends string> {
         callback: (model: this, key: WatchableKey, ...args: Array<any>) => unknown,
         context?: FlowAnyObject | null,
     ): Array<WatchableKey> {
-        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<WatchableKey>;
-
-        const validKeys = [];
-        for (const key of arrayKeys) {
-            if ((this.constructor as typeof Watchable)._isWatchableKey(key)) {
-                validKeys.push(key);
-                const watchers = this._changeWatchersByKey[key];
-                if (watchers) {
-                    const filteredWatchers = watchers.filter(watcher => {
-                        return watcher.callback !== callback || watcher.context !== context;
-                    });
-                    if (filteredWatchers.length > 0) {
-                        this._changeWatchersByKey[key] = filteredWatchers;
-                    } else {
-                        delete this._changeWatchersByKey[key];
-                    }
+        const validKeys = this._getWatchableValidKeysOrThrow(keys, 'unwatch', true);
+        for (const key of validKeys) {
+            const watchers = this._changeWatchersByKey[key];
+            if (watchers) {
+                const filteredWatchers = watchers.filter(watcher => {
+                    return watcher.callback !== callback || watcher.context !== context;
+                });
+                if (filteredWatchers.length > 0) {
+                    this._changeWatchersByKey[key] = filteredWatchers;
+                } else {
+                    delete this._changeWatchersByKey[key];
                 }
-            } else {
-                // eslint-disable-next-line no-console
-                console.warn(
-                    `Invalid key to unwatch for ${(this.constructor as any)._className}: ${key}`,
-                );
             }
         }
 

@@ -2,13 +2,13 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {values, ObjectMap, has} from '../private_utils';
-import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Table from '../models/table';
 import {FieldType} from '../types/field';
 import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
+import {useSdk} from './sdk_context';
 
 /**
  * Props shared between the {@link FieldPicker} and {@link FieldPickerSynced} components.
@@ -64,8 +64,9 @@ const FieldPicker = (props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>)
         onChange,
         ...restOfProps
     } = props;
+    const sdk = useSdk();
 
-    useWatchable(getSdk().base, ['tables']);
+    useWatchable(sdk.base, ['tables']);
     useWatchable(table, ['fields']);
 
     if (!table || table.isDeleted) {

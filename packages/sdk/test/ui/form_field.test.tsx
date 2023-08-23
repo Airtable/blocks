@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount, render} from 'enzyme';
-import {FormField, Select, Input} from '../../src/ui/ui';
+import {FormField, Select, Input} from '../../src/ui/unstable_standalone_ui';
 
 describe('FormField', () => {
     it('renders outside of a blocks context', () => {

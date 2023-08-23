@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "noEmit": true,
+        "target": "es2019",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowJs": true,
+        "checkJs": true,
+        "jsx": "react",
+        "typeRoots": ["./types", "./node_modules/@types"],
+
+        "useDefineForClassFields": true
+    },
+    "include": ["types/**/*", "src/**/*", "test/**/*"]
+}

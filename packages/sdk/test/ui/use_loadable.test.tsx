@@ -4,6 +4,8 @@ import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
 import AbstractModelWithAsyncData from '../../src/models/abstract_model_with_async_data';
 import useLoadable from '../../src/ui/use_loadable';
+import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
+import Sdk from '../../src/sdk';
 
 jest.useFakeTimers();
 
@@ -14,21 +16,19 @@ async function tickAsync() {
 
 class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataLoaded'> {
     _resolve: (arg1: Array<'name' | 'isDataLoaded'>) => void = () => {};
+    name: string;
 
     static _isWatchableKey() {
         return true;
     }
 
-    constructor() {
-        super({} as any, 'abc123');
+    constructor(sdk: Sdk) {
+        super(sdk, 'abc123');
+        this.name = '';
     }
 
     toString(): string {
         return `Thing(id: ${this._watchableId}, rc: ${this._dataRetainCount})`;
-    }
-
-    get name() {
-        return this._data.name;
     }
 
     get _dataOrNullIfDeleted() {
@@ -46,16 +46,24 @@ class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataL
     }
 
     resolveLoading(name: string) {
-        this._data.name = name;
+        this.name = name;
         this._resolve(['name', 'isDataLoaded']);
     }
 
     _unloadData() {
-        this._data.name = '';
+        this.name = '';
     }
 }
 
 describe('useLoadable', () => {
+    let mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+    let sdk: Sdk;
+
+    beforeEach(() => {
+        mockAirtableInterface.reset();
+        sdk = new Sdk(mockAirtableInterface);
+    });
+
     describe('with a single model', () => {
         const Component = ({
             thing,
@@ -73,7 +81,7 @@ describe('useLoadable', () => {
         };
 
         it('without suspense, it loads the passed model on mount and re-renders, then unloads on unmount', async () => {
-            const thing = new Thing();
+            const thing = new Thing(sdk);
             const wrapper = mount(<Component thing={thing} shouldSuspend={false} />);
             expect(wrapper.find('span').text()).toBe('not loaded, no name');
 
@@ -91,7 +99,7 @@ describe('useLoadable', () => {
         });
 
         it('renders immediately if already loaded and keeps loaded throughout', async () => {
-            const thing = new Thing();
+            const thing = new Thing(sdk);
             // eslint-disable-next-line airtable/no-missing-await
             thing.loadDataAsync();
             thing.resolveLoading('foo');
@@ -113,7 +121,7 @@ describe('useLoadable', () => {
         });
 
         it('with suspense, suspend until loaded then render then unload when unmounted', async () => {
-            const thing = new Thing();
+            const thing = new Thing(sdk);
 
             const el = document.createElement('div');
             act(() => {
@@ -163,8 +171,8 @@ describe('useLoadable', () => {
         };
 
         it('without suspense, it loads the passed models on mount, re-renders when any of their load-states change, then unloads on unmount', async () => {
-            const thing1 = new Thing();
-            const thing2 = new Thing();
+            const thing1 = new Thing(sdk);
+            const thing2 = new Thing(sdk);
             const wrapper = mount(<Component things={[thing1, thing2]} shouldSuspend={false} />);
             expect(wrapper.find('span').text()).toBe(
                 '0: not loaded, no name; 1: not loaded, no name',
@@ -191,9 +199,9 @@ describe('useLoadable', () => {
         });
 
         it('without suspense, loads additional models added to the array', async () => {
-            const thing1 = new Thing();
-            const thing2 = new Thing();
-            const thing3 = new Thing();
+            const thing1 = new Thing(sdk);
+            const thing2 = new Thing(sdk);
+            const thing3 = new Thing(sdk);
             const wrapper = mount(<Component things={[thing1]} shouldSuspend={false} />);
             wrapper.mount();
             expect(wrapper.find('span').text()).toBe('0: not loaded, no name');
@@ -238,11 +246,11 @@ describe('useLoadable', () => {
         });
 
         it('renders immediately if already loaded and keeps loaded throughout', async () => {
-            const thing1 = new Thing();
+            const thing1 = new Thing(sdk);
             // eslint-disable-next-line airtable/no-missing-await
             thing1.loadDataAsync();
             thing1.resolveLoading('one');
-            const thing2 = new Thing();
+            const thing2 = new Thing(sdk);
             // eslint-disable-next-line airtable/no-missing-await
             thing2.loadDataAsync();
             thing2.resolveLoading('two');
@@ -288,9 +296,9 @@ describe('useLoadable', () => {
         }
 
         it('with suspense, suspend until loaded then render, handle new models getting added, unload when unmounted', async () => {
-            const thing1 = new Thing();
-            const thing2 = new Thing();
-            const thing3 = new Thing();
+            const thing1 = new Thing(sdk);
+            const thing2 = new Thing(sdk);
+            const thing3 = new Thing(sdk);
 
             const el = document.createElement('div');
             let wrapper: any;

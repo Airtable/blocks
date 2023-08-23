@@ -4,8 +4,10 @@
  */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import getSdk from '../get_sdk';
 import {ViewportSizeConstraint} from '../types/viewport';
+import Sdk from '../sdk';
+import {useSdk} from './sdk_context';
+import withHooks from './with_hooks';
 
 /** An object specifying a width and/or height for the block's viewport. */
 type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
@@ -16,12 +18,14 @@ type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
  * @docsPath UI/components/ViewportConstraint
  */
 interface ViewportConstraintProps {
-    /** The minimum viewport size of the block. */
+    /** The minimum viewport size of the extension. */
     minSize?: ViewportSizeConstraintProp;
-    /** The maximum viewport size of the block when it is in fullscreen mode. */
+    /** The maximum viewport size of the extension when it is in fullscreen mode. */
     maxFullscreenSize?: ViewportSizeConstraintProp;
     /** The contents of the viewport constraint. */
     children?: React.ReactNode;
+    /** @internal injected by withHooks */
+    sdk: Sdk;
 }
 
 const didSizeChange = (
@@ -33,7 +37,7 @@ const didSizeChange = (
 
 /**
  * When mounted, this wrapper component applies size constraints to the {@link Viewport}.
- * Like {@link addMinSize}, this will fullscreen the block if necessary and possible when
+ * Like {@link addMinSize}, this will fullscreen the extension if necessary and possible when
  * `minSize` is updated.
  *
  * @example
@@ -123,7 +127,7 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
         this._removeMinSizeConstraint();
         const {minSize} = this.props;
         if (minSize) {
-            this._removeMinSizeConstraintFn = getSdk().viewport.addMinSize(minSize);
+            this._removeMinSizeConstraintFn = this.props.sdk.viewport.addMinSize(minSize);
         }
     }
 
@@ -132,7 +136,7 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
         this._removeMaxFullscreenSizeConstraint();
         const {maxFullscreenSize} = this.props;
         if (maxFullscreenSize) {
-            this._removeMaxFullscreenSizeConstrainFn = getSdk().viewport.addMaxFullscreenSize(
+            this._removeMaxFullscreenSizeConstrainFn = this.props.sdk.viewport.addMaxFullscreenSize(
                 maxFullscreenSize,
             );
         }
@@ -144,4 +148,11 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
     }
 }
 
-export default ViewportConstraint;
+export default withHooks<{sdk: Sdk}, ViewportConstraintProps, ViewportConstraint>(
+    ViewportConstraint,
+    props => {
+        return {
+            sdk: useSdk(),
+        };
+    },
+);

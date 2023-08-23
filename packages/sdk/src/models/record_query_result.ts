@@ -1,26 +1,21 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import Colors, {Color} from '../colors';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {
     isEnumValue,
     assertEnumValue,
     getLocallyUniqueId,
-    isDeepEqual,
     ObjectValues,
     ObjectMap,
     cast,
     FlowAnyFunction,
     FlowAnyObject,
 } from '../private_utils';
-import {
-    spawnAbstractMethodError,
-    spawnUnknownSwitchCaseError,
-    spawnError,
-    invariant,
-} from '../error_utils';
+import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../error_utils';
 import Watchable from '../watchable';
+import {NormalizedGroupLevel} from '../types/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';
 import Field from './field';
@@ -29,6 +24,7 @@ import RecordStore from './record_store';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
+    serialize as serializeColorMode,
     RecordColorMode,
 } from './record_coloring';
 
@@ -37,6 +33,8 @@ const WatchableRecordQueryResultKeys = Object.freeze({
     recordIds: 'recordIds' as const,
     cellValues: 'cellValues' as const,
     recordColors: 'recordColors' as const,
+    groups: 'groups' as const,
+    groupLevels: 'groupLevels' as const,
     isDataLoaded: 'isDataLoaded' as const,
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
@@ -69,6 +67,28 @@ export interface NormalizedSortConfig {
 }
 
 /**
+ * NormalizedGroupLevel is in airtable_interface
+ *
+ * @hidden
+ */
+export interface GroupLevelForUpdate {
+    /** A field, field id, or field name. */
+    field: Field | FieldId | string;
+    /** The order to sort this group in. Defaults to asc. */
+    direction?: 'asc' | 'desc' | undefined;
+}
+
+/**
+ * View Config that can be set by developer
+ *
+ * @hidden
+ */
+export interface ViewMetadataForUpdate {
+    /** Groups config that can be set by developer; null will clear it, undefined will skip it*/
+    groupLevels?: Array<GroupLevelForUpdate> | null | undefined;
+}
+
+/**
  * Used to control what data is loaded in a {@link RecordQueryResult}. Used when creating a
  * query result using `table/view.selectRecords()` and in convenience hooks {@link useRecords}.
  *
@@ -94,7 +114,7 @@ export interface NormalizedSortConfig {
  * ```
  *
  * ## fields
- * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
+ * Generally, it's a good idea to load as little data into your extension as possible - Airtable bases
  * can get pretty big, and we have to keep all that information in memory and up to date if you ask
  * for it. The fields option lets you make sure that only data relevant to you is loaded.
  *
@@ -224,6 +244,42 @@ export interface NormalizedRecordQueryResultOpts {
     recordStore: RecordStore;
 }
 
+/** @internal */
+interface UnknownColorMode {
+    type: never;
+}
+
+/**
+ * @internal
+ */
+function _normalizeSortOrGroup(table: Table, sortOrGroup: SortConfig | GroupLevelForUpdate) {
+    const field = table.__getFieldMatching(sortOrGroup.field);
+    if (
+        sortOrGroup.direction !== undefined &&
+        sortOrGroup.direction !== 'asc' &&
+        sortOrGroup.direction !== 'desc'
+    ) {
+        throw spawnError('Invalid sort direction: %s', sortOrGroup.direction);
+    }
+    return {
+        fieldId: field.id,
+        direction: sortOrGroup.direction ?? 'asc',
+    };
+}
+
+/**
+ * @internal
+ */
+export function normalizeSortsOrGroups(
+    table: Table,
+    sortsOrGroups: Array<SortConfig | GroupLevelForUpdate> | null | undefined,
+): Array<NormalizedGroupLevel | NormalizedSortConfig> | null | undefined {
+    if (sortsOrGroups === undefined || sortsOrGroups === null) {
+        return sortsOrGroups;
+    }
+    return sortsOrGroups.map(sortOrGroup => _normalizeSortOrGroup(table, sortOrGroup));
+}
+
 /**
  * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
  * contains a bunch of records, filtered to a useful subset of the records in the table. Those
@@ -240,7 +296,7 @@ export interface NormalizedRecordQueryResultOpts {
  *   You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
  *
  * Once you've got a query result, you need to load it before you can start working with it -
- * blocks don't load record data by default. We recommend using {@link useRecords},
+ * extensions don't load record data by default. We recommend using {@link useRecords},
  * {@link useRecordIds}, {@link useRecordById} or {@link useLoadable} to handle this.
  *
  * If you're not using a query result in a React component, you can manually load the data and
@@ -272,7 +328,7 @@ export interface NormalizedRecordQueryResultOpts {
  *
  * @docsPath models/query results/RecordQueryResult
  */
-class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
     WatchableRecordQueryResultKey
 > {
@@ -284,34 +340,26 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Throws if data is not loaded yet.
      * Can be watched.
      */
-    get recordIds(): Array<RecordId> {
-        throw spawnAbstractMethodError();
-    }
+    abstract get recordIds(): Array<RecordId>;
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      *
      * @internal
      */
-    _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void> {
-        throw spawnAbstractMethodError();
-    }
+    abstract _getOrGenerateRecordIdsSet(): ObjectMap<RecordId, true | void>;
     /**
      * The fields that were used to create this QueryResult.
      * Null if fields were not specified, which means the QueryResult
      * will load all fields in the table.
      */
-    get fields(): Array<Field> | null {
-        throw spawnAbstractMethodError();
-    }
+    abstract get fields(): Array<Field> | null;
 
     /**
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
-    get parentTable(): Table {
-        throw spawnAbstractMethodError();
-    }
+    abstract get parentTable(): Table;
 
     /** @internal */
     static WatchableKeys = WatchableRecordQueryResultKeys;
@@ -331,6 +379,8 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             key === RecordQueryResult.WatchableKeys.recordIds ||
             key === RecordQueryResult.WatchableKeys.cellValues ||
             key === RecordQueryResult.WatchableKeys.recordColors ||
+            key === RecordQueryResult.WatchableKeys.groups ||
+            key === RecordQueryResult.WatchableKeys.groupLevels ||
             key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)
         );
     }
@@ -339,24 +389,9 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     static _normalizeOpts(
         table: Table,
         recordStore: RecordStore,
-        opts: RecordQueryResultOpts = {},
+        opts: RecordQueryResultOpts,
     ): NormalizedRecordQueryResultOpts {
-        const sorts = !opts.sorts
-            ? null
-            : opts.sorts.map(sort => {
-                  const field = table.__getFieldMatching(sort.field);
-                  if (
-                      sort.direction !== undefined &&
-                      sort.direction !== 'asc' &&
-                      sort.direction !== 'desc'
-                  ) {
-                      throw spawnError('Invalid sort direction: %s', sort.direction);
-                  }
-                  return {
-                      fieldId: field.id,
-                      direction: sort.direction || 'asc',
-                  };
-              });
+        const sorts = normalizeSortsOrGroups(table, opts.sorts) ?? null;
 
         let fieldIdsOrNullIfAllFields = null;
         if (opts.fields) {
@@ -409,7 +444,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
                 break;
             default:
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         invariant(table.id === recordStore.tableId, 'record store and table must match');
@@ -433,8 +471,8 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * @internal
      */
-    constructor(normalizedOpts: NormalizedRecordQueryResultOpts, baseData: BaseData) {
-        super(baseData, getLocallyUniqueId('RecordQueryResult'));
+    constructor(sdk: Sdk, normalizedOpts: NormalizedRecordQueryResultOpts) {
+        super(sdk, getLocallyUniqueId('RecordQueryResult'));
         this._normalizedOpts = normalizedOpts;
         this._recordStore = normalizedOpts.recordStore;
     }
@@ -442,8 +480,13 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * @internal
      */
-    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {
-        return isDeepEqual(this._normalizedOpts, normalizedOpts);
+    get _serializedOpts() {
+        return JSON.stringify([
+            this._normalizedOpts.sorts,
+            this._normalizedOpts.fieldIdsOrNullIfAllFields,
+            this._normalizedOpts.table.id,
+            serializeColorMode(this._normalizedOpts.recordColorMode),
+        ]);
     }
 
     /**
@@ -539,7 +582,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .getViewDataStore(recordColorMode.view.id)
                     .getRecordColor(record);
             default:
-                throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
     }
 
@@ -619,9 +665,12 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @internal
      */
     _watchRecordColorsIfNeeded() {
-        const watchCount = (
-            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
-        ).length;
+        invariant(
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors],
+            'method may only be called when `recordColors` key has been watched',
+        );
+        const watchCount = this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors]
+            .length;
         if (!this._recordColorChangeHandler && watchCount >= 1) {
             this._watchRecordColors();
         }
@@ -657,7 +706,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             }
             default:
-                throw spawnError('Unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = handler;
@@ -694,13 +746,18 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.selectField.unwatch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                this._recordStore
-                    .getViewDataStore(recordColorMode.view.id)
-                    .unwatch('recordColors', handler);
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore
+                        .getViewDataStore(recordColorMode.view.id)
+                        .unwatch('recordColors', handler);
+                }
                 break;
             }
             default:
-                throw spawnError('unknown record coloring type %s', cast<never>(recordColorMode));
+                throw spawnError(
+                    'Unknown record coloring mode type: %s',
+                    cast<UnknownColorMode>(recordColorMode).type,
+                );
         }
 
         this._recordColorChangeHandler = null;
@@ -739,7 +796,9 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.BY_SELECT_FIELD:
                 return;
             case RecordColorModeTypes.BY_VIEW:
-                this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                if (!recordColorMode.view.isDeleted) {
+                    this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+                }
                 break;
             default:
                 throw spawnUnknownSwitchCaseError(

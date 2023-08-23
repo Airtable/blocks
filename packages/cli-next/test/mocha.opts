@@ -1,0 +1,5 @@
+--require ./test/ts-node-register
+--recursive
+--watch-extensions ts
+--reporter spec
+--timeout 5000

@@ -48,7 +48,7 @@ function useViewMetadata(
             : viewOrViewMetadataQueryResult;
 
     useLoadable(queryResult ?? null);
-    useWatchable(queryResult, ['allFields', 'visibleFields']);
+    useWatchable(queryResult, ['allFields', 'visibleFields', 'groupLevels']);
 
     return queryResult ?? null;
 }

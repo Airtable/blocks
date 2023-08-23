@@ -1,3 +1,4 @@
 export const MAX_FIELD_NAME_LENGTH = 255;
+export const MAX_FIELD_DESCRIPTION_LENGTH = 20000;
 export const MAX_TABLE_NAME_LENGTH = 255;
 export const MAX_NUM_FIELDS_PER_TABLE = 500;

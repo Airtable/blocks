@@ -1,23 +1,75 @@
 import {ObjectMap} from '../private_utils';
-import {Stat} from '../types/stat';
-import {AggregatorKey} from '../types/aggregators';
-import {BaseData, BasePermissionData, ModelChange} from '../types/base';
-import {BlockInstallationId} from '../types/block';
-import {FieldData, FieldId, FieldType} from '../types/field';
-import {RecordActionData, RecordActionDataCallback} from '../types/record_action_data';
+import {NormalizedSortConfig} from '../models/record_query_result';
+import {Stat} from './stat';
+import {AggregatorKey} from './aggregators';
+import {BaseData, BasePermissionData, ModelChange} from './base';
+import {BlockInstallationId} from './block';
+import {CursorData} from './cursor';
+import {FieldData, FieldId, FieldType} from './field';
+import {RecordActionData, RecordActionDataCallback} from './record_action_data';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
     GlobalConfigPath,
     GlobalConfigPathValidationResult,
-} from '../types/global_config';
-import {RecordData, RecordDef, RecordId} from '../types/record';
-import {UndoRedoMode} from '../types/undo_redo';
-import {ViewportSizeConstraint} from '../types/viewport';
-import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutations';
-import {TableId} from '../types/table';
-import {ViewId} from '../types/view';
-import {NormalizedSortConfig} from '../models/record_query_result';
+} from './global_config';
+import {RecordData, RecordId} from './record';
+import {UndoRedoMode} from './undo_redo';
+import {ViewportSizeConstraint} from './viewport';
+import {
+    Mutation,
+    PartialMutation,
+    PermissionCheckResult,
+    UpdateFieldOptionsOpts,
+} from './mutations';
+import {TableId} from './table';
+import {
+    GroupData,
+    ViewColorsByRecordIdData,
+    ViewFieldOrderData,
+    ViewId,
+    GroupLevelData,
+} from './view';
+import {RequestJson, ResponseJson} from './backend_fetch_types';
+
+/** @hidden */
+export enum BlockRunContextType {
+    DASHBOARD_APP = 'dashboardApp',
+    VIEW = 'view',
+}
+
+/** @hidden */
+export interface BlockInstallationPageBlockRunContext {
+    type: BlockRunContextType.DASHBOARD_APP;
+}
+
+/** @hidden */
+export interface ViewBlockRunContext {
+    type: BlockRunContextType.VIEW;
+    tableId: TableId;
+    viewId: ViewId;
+}
+
+/** @hidden */
+export type BlockRunContext = BlockInstallationPageBlockRunContext | ViewBlockRunContext;
+
+/** @hidden */
+export interface PartialViewData {
+    visibleRecordIds: Array<string>;
+    fieldOrder: ViewFieldOrderData;
+    colorsByRecordId: ViewColorsByRecordIdData | null;
+    groups?: Array<GroupData> | null;
+    groupLevels?: Array<GroupLevelData> | null;
+}
+
+/** @hidden */
+export type NormalizedGroupLevel = GroupLevelData;
+
+/** @hidden */
+export interface NormalizedViewMetadata {
+    /** Group levels, can be null or unspecified (null to clear, unspecified to not overwrite) */
+    groupLevels?: Array<NormalizedGroupLevel> | null | undefined;
+}
 
 /** @hidden */
 export interface SdkInitData {
@@ -29,17 +81,20 @@ export interface SdkInitData {
     isFirstRun: boolean;
     intentData: unknown;
     isUsingNewLookupCellValueFormat?: true | undefined;
+    runContext: BlockRunContext;
+    locale?: string;
+    defaultLocale?: string;
 }
 
 /** @hidden */
-interface IdGenerator {
+export interface IdGenerator {
     generateRecordId(): string;
     generateFieldId(): string;
     generateTableId(): string;
 }
 
 /** @hidden */
-interface UrlConstructor {
+export interface UrlConstructor {
     getTableUrl(tableId: TableId): string;
     getViewUrl(viewId: ViewId, tableId: TableId): string;
     getRecordUrl(recordId: RecordId, tableId: TableId): string;
@@ -112,6 +167,7 @@ export interface FieldTypeProvider {
         currentConfig: FieldTypeConfig | null,
         fieldData: FieldData | null,
         billingPlanGrouping: string,
+        opts?: UpdateFieldOptionsOpts,
     ): FieldConfigValidationResult;
     canBePrimary(
         appInterface: AppInterface,
@@ -122,6 +178,7 @@ export interface FieldTypeProvider {
         appInterface: AppInterface,
         string: string,
         fieldData: FieldData,
+        opts?: {parseDateCellValueInColumnTimeZone?: boolean},
     ): unknown;
     convertCellValueToString(
         appInterface: AppInterface,
@@ -138,7 +195,7 @@ export interface FieldTypeProvider {
 }
 
 /** @hidden */
-interface GlobalConfigHelpers /**/ {
+export interface GlobalConfigHelpers /**/ {
     validatePath(path: GlobalConfigPath, store: GlobalConfigData): GlobalConfigPathValidationResult;
     validateAndApplyUpdates(
         updates: ReadonlyArray<GlobalConfigUpdate>,
@@ -182,31 +239,22 @@ export interface AirtableInterface {
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 
     /**
-     * globalConfig
-     */
-    setMultipleKvPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void>;
-
-    /**
      * table
      */
-    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any>;
+    fetchAndSubscribeToTableDataAsync(
+        tableId: string,
+    ): Promise<{recordsById: {[recordId: string]: RecordData}}>;
     unsubscribeFromTableData(tableId: string): void;
     fetchAndSubscribeToCellValuesInFieldsAsync(
         tableId: string,
         fieldIds: Array<string>,
     ): Promise<any>;
     unsubscribeFromCellValuesInFields(tableId: string, fieldIds: Array<string>): void;
-    setCellValuesAsync(
-        tableId: string,
-        cellValuesByRecordIdThenFieldId: {[key: string]: RecordDef},
-    ): Promise<void>;
-    deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>;
-    createRecordsAsync(tableId: string, recordDefs: Array<RecordData>): Promise<void>;
 
     /**
      * view
      */
-    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>;
+    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<PartialViewData>;
     unsubscribeFromViewData(tableId: string, viewId: string): void;
     fetchDefaultCellValuesByFieldIdAsync(
         tableId: string,
@@ -228,7 +276,7 @@ export interface AirtableInterface {
     subscribeToEnterFullScreen(callback: () => void): void;
     subscribeToExitFullScreen(callback: () => void): void;
     subscribeToFocus(callback: () => void): void;
-    fetchAndSubscribeToCursorDataAsync(): Promise<any>;
+    fetchAndSubscribeToCursorDataAsync(): Promise<CursorData>;
     unsubscribeFromCursorData(): void;
     expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;
     expandRecordList(
@@ -258,10 +306,12 @@ export interface AirtableInterface {
     fetchAndSubscribeToPerformRecordActionAsync(
         callback: RecordActionDataCallback,
     ): Promise<RecordActionData | null>;
+    performBackendFetchAsync(requestJson: RequestJson): Promise<ResponseJson>;
 
     /**
      * internal utils
      */
     trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown}): void;
+    trackExposure(featureName: string): void;
     sendStat(stat: Stat): void;
 }

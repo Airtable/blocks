@@ -1,9 +1,6 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import getAirtableInterface from '../injected/airtable_interface';
-
-import getSdk from '../get_sdk';
 import {Color} from '../colors';
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {RecordData, RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
@@ -12,9 +9,10 @@ import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
 import Field from './field';
+import ObjectPool from './object_pool';
 import Table from './table';
 import View from './view';
-import {RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
@@ -58,20 +56,21 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _parentRecordStore: RecordStore;
     /** @internal */
     _parentTable: Table;
+    /** @internal */
+    __linkedRecordsQueryResultPool: ObjectPool<
+        LinkedRecordsQueryResult,
+        typeof LinkedRecordsQueryResult
+    >;
 
     /**
      * @internal
      */
-    constructor(
-        baseData: BaseData,
-        parentRecordStore: RecordStore,
-        parentTable: Table,
-        recordId: string,
-    ) {
-        super(baseData, recordId);
+    constructor(sdk: Sdk, parentRecordStore: RecordStore, parentTable: Table, recordId: string) {
+        super(sdk, recordId);
 
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
+        this.__linkedRecordsQueryResultPool = new ObjectPool(LinkedRecordsQueryResult);
     }
 
     /**
@@ -113,20 +112,16 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _getViewMatching(viewOrViewIdOrViewName: View | string): View {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
-    /**
-     * Gets the cell value of the given field for this record.
-     *
-     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
-     * @example
-     * ```js
-     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
-     * console.log(cellValue);
-     * // => 'cell value'
-     * ```
-     */
-    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
-        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
 
+    /**
+     * @internal
+     *
+     * For use when we need the raw public API cell value. Specifically makes a difference
+     * for lookup fields, where we translate the format to a blocks-specific format in getCellValue.
+     * That format is incompatible with fieldTypeProvider methods, which expect the public API
+     * format - use _getRawCellValue instead.
+     */
+    _getRawCellValue(field: Field): unknown {
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',
@@ -141,37 +136,56 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
 
         if (typeof cellValue === 'object' && cellValue !== null) {
-            if (
-                field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
-                !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
-            ) {
-                const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
-                invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
-                for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
-                    invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
-                    const {valuesByLinkedRecordId} = cellValue as any;
-
-                    invariant(
-                        valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
-                        'valuesByLinkedRecordId',
-                    );
-
-                    const value = valuesByLinkedRecordId[linkedRecordId];
-                    if (Array.isArray(value)) {
-                        for (const v of value) {
-                            cellValueForMigration.push({linkedRecordId, value: v});
-                        }
-                    } else {
-                        cellValueForMigration.push({linkedRecordId, value});
-                    }
-                }
-                return cellValueForMigration;
-            }
-
             return cloneDeep(cellValue);
         } else {
             return cellValue;
         }
+    }
+    /**
+     * Gets the cell value of the given field for this record.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @example
+     * ```js
+     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
+     * console.log(cellValue);
+     * // => 'cell value'
+     * ```
+     */
+    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
+        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+        const cellValue = this._getRawCellValue(field);
+
+        if (
+            typeof cellValue === 'object' &&
+            cellValue !== null &&
+            field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+            !this._sdk.__airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
+        ) {
+            const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
+            invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
+            for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
+                invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
+                const {valuesByLinkedRecordId} = cellValue as any;
+
+                invariant(
+                    valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
+                    'valuesByLinkedRecordId',
+                );
+
+                const value = valuesByLinkedRecordId[linkedRecordId];
+                if (Array.isArray(value)) {
+                    for (const v of value) {
+                        cellValueForMigration.push({linkedRecordId, value: v});
+                    }
+                } else {
+                    cellValueForMigration.push({linkedRecordId, value});
+                }
+            }
+            return cellValueForMigration;
+        }
+
+        return cellValue;
     }
     /**
      * Gets the cell value of the given field for this record, formatted as a `string`.
@@ -193,13 +207,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             field.id,
         );
 
-        const cellValue = this.getCellValue(field.id);
+        const cellValue = this._getRawCellValue(field);
 
         if (cellValue === null || cellValue === undefined) {
             return '';
         } else {
-            const airtableInterface = getAirtableInterface();
-            const appInterface = getSdk().__appInterface;
+            const airtableInterface = this._sdk.__airtableInterface;
+            const appInterface = this._sdk.__appInterface;
             return airtableInterface.fieldTypeProvider.convertCellValueToString(
                 appInterface,
                 cellValue,
@@ -241,8 +255,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
         return airtableInterface.urlConstructor.getAttachmentClientUrl(
             appInterface,
             attachmentId,
@@ -290,7 +304,23 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         opts: RecordQueryResultOpts = {},
     ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
+        const linkedTableId = field.options && field.options.linkedTableId;
+        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
+
+        const linkedTable = this._sdk.base.getTableById(linkedTableId);
+        const linkedRecordStore = this._sdk.base.__getRecordStore(linkedTableId);
+
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
+            linkedTable,
+            linkedRecordStore,
+            opts,
+        );
+        return this.__linkedRecordsQueryResultPool.getObjectForReuse(
+            this,
+            field,
+            normalizedOpts,
+            this._sdk,
+        );
     }
     /**
      * Select and load records referenced in a `multipleRecordLinks` cell value. Returns a query result
@@ -316,11 +346,11 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @example
      * ```js
      * console.log(myRecord.url);
-     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
+     * // => 'https://airtable.com/appxxxxxxxxxxxxxx/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
      * ```
      */
     get url(): string {
-        return this.parentTable._airtableInterface.urlConstructor.getRecordUrl(
+        return this._sdk.__airtableInterface.urlConstructor.getRecordUrl(
             this.id,
             this.parentTable.id,
         );

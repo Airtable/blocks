@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {BaseData} from '../types/base';
+import Sdk from '../sdk';
 import {FieldId} from '../types/field';
+import {NormalizedGroupLevel} from '../types/airtable_interface';
 import {invariant} from '../error_utils';
 import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../private_utils';
-import ObjectPool from './object_pool';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import ViewDataStore from './view_data_store';
 import View from './view';
@@ -13,6 +13,7 @@ const WatchableViewMetadataKeys = {
     allFields: 'allFields' as const,
     visibleFields: 'visibleFields' as const,
     isDataLoaded: 'isDataLoaded' as const,
+    groupLevels: 'groupLevels' as const,
 };
 
 /**
@@ -27,16 +28,22 @@ type WatchableViewMetadataKey = ObjectValues<typeof WatchableViewMetadataKeys>;
 interface ViewMetadata {
     visibleFieldIds: Array<FieldId> | null;
     allFieldIds: Array<FieldId> | null;
+    groupLevels: Array<NormalizedGroupLevel> | null;
 }
 
-const viewMetadataQueryResultPool: ObjectPool<
-    ViewMetadataQueryResult,
-    {view: View}
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult.parentView.id,
-    getKeyFromObjectOptions: ({view}) => view.id,
-    canObjectBeReusedForOptions: () => true,
-});
+/**
+ * @hidden
+ */
+interface GroupLevel {
+    field: Field;
+    fieldId: FieldId;
+    direction: 'asc' | 'desc';
+}
+
+/**
+ * @hidden
+ */
+export type GroupLevels = Array<GroupLevel>;
 
 /**
  * Contains information about a view that isn't loaded by default e.g. field order and visible fields.
@@ -49,7 +56,7 @@ const viewMetadataQueryResultPool: ObjectPool<
  *     const viewMetadata = view.selectMetadata();
  *     await viewMetadata.loadDataAsync();
  *
- *     console.log(viewMetadata.visibleField);
+ *     console.log(viewMetadata.visibleFields);
  *     // => [Field, Field, Field]
  *
  *     console.log(viewMetadata.allFields);
@@ -76,21 +83,9 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     static _shouldLoadDataForKey(key: WatchableViewMetadataKey): boolean {
         return (
             key === WatchableViewMetadataKeys.allFields ||
-            key === WatchableViewMetadataKeys.visibleFields
+            key === WatchableViewMetadataKeys.visibleFields ||
+            key === WatchableViewMetadataKeys.groupLevels
         );
-    }
-
-    /** @internal */
-    static __createOrReuseQueryResult(
-        view: View,
-        viewDataStore: ViewDataStore,
-    ): ViewMetadataQueryResult {
-        const queryResult = viewMetadataQueryResultPool.getObjectForReuse({view});
-        if (queryResult) {
-            return queryResult;
-        }
-
-        return new ViewMetadataQueryResult(view.__baseData, view, viewDataStore);
     }
 
     /** */
@@ -99,12 +94,15 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     readonly _viewDataStore: ViewDataStore;
 
     /** @internal */
-    constructor(baseData: BaseData, parentView: View, viewDataStore: ViewDataStore) {
-        super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
+    constructor(sdk: Sdk, parentView: View, viewDataStore: ViewDataStore) {
+        super(sdk, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;
         this._viewDataStore = viewDataStore;
+    }
 
-        viewMetadataQueryResultPool.registerObjectForReuseWeak(this);
+    /** @internal */
+    get __poolKey() {
+        return this.parentView.id;
     }
 
     /** @internal */
@@ -117,12 +115,14 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
             return {
                 visibleFieldIds: null,
                 allFieldIds: null,
+                groupLevels: null,
             };
         }
 
         return {
             visibleFieldIds: this._viewDataStore.visibleFieldIds,
             allFieldIds: this._viewDataStore.allFieldIds,
+            groupLevels: this._viewDataStore.groupLevels,
         };
     }
 
@@ -136,13 +136,19 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         await this._viewDataStore.loadDataAsync();
         this._viewDataStore.watch('visibleFieldIds', this._onVisibleFieldIdsChange);
         this._viewDataStore.watch('allFieldIds', this._onAllFieldIdsChange);
-        return [WatchableViewMetadataKeys.allFields, WatchableViewMetadataKeys.visibleFields];
+        this._viewDataStore.watch('groupLevels', this._onGroupLevelsChange);
+        return [
+            WatchableViewMetadataKeys.visibleFields,
+            WatchableViewMetadataKeys.allFields,
+            WatchableViewMetadataKeys.groupLevels,
+        ];
     }
 
     /** @internal */
     _unloadData() {
         this._viewDataStore.unwatch('visibleFieldIds', this._onVisibleFieldIdsChange);
         this._viewDataStore.unwatch('allFieldIds', this._onAllFieldIdsChange);
+        this._viewDataStore.unwatch('groupLevels', this._onGroupLevelsChange);
         this._viewDataStore.unloadData();
     }
 
@@ -154,6 +160,11 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     /** @internal */
     _onAllFieldIdsChange = () => {
         this._onChange(WatchableViewMetadataKeys.allFields);
+    };
+
+    /** @internal */
+    _onGroupLevelsChange = () => {
+        this._onChange(WatchableViewMetadataKeys.groupLevels);
     };
 
     /**
@@ -172,6 +183,21 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         const visibleFieldIds = this._data.visibleFieldIds;
         invariant(visibleFieldIds, 'view meta data is not loaded');
         return visibleFieldIds.map(fieldId => this.parentView.parentTable.getFieldById(fieldId));
+    }
+
+    /**
+     * Returns group levels for this view. Watchable.
+     *
+     * @hidden
+     */
+    get groupLevels(): GroupLevels | null {
+        const groupLevels = this._data.groupLevels;
+        return groupLevels
+            ? groupLevels.map(singleConfig => ({
+                  ...singleConfig,
+                  field: this.parentView.parentTable.getFieldById(singleConfig.fieldId),
+              }))
+            : null;
     }
 }
 

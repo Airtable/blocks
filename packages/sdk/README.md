@@ -2,10 +2,16 @@ README
 `".$_-0/build.js"
 ---
 "# app-connectors@airtable_blocks
-
+---
+DEVELOPER-_AGREEMENT.md
 With the Blocks SDK, you can create your own custom apps on top of Airtable. These apps can be
 integrations, visualizations, internal tools, and more!
 ---
+=======lostleolotus 
+With the Blocks SDK, you can create your own custom extensions on top of Airtable. These extensions
+can be integrations, visualizations, internal tools, and more!
+
+master.md
 To get started, check out the
 [official Blocks SDK documentation website](https://airtable.com/developers/blocks). If you have any
 questions, feedback, or feature requests, we encourage you to post in the
@@ -24,7 +30,8 @@ By using the software, you accept and agree to abide by terms of the developer a
    without interruption, or be secure, accurate, complete, or error free.
 
 These terms supplement your other agreements with Airtable, which may include the Airtable Terms of
-Service (located at <https://airtable.com/tos>) and the Airtable Privacy Policy (located at
-<https://airtable.com/privacy>).
+Service (located at <https://airtable.com/tos>), the Airtable Privacy Policy (located at
+<https://airtable.com/privacy>), and the Airtable Developer Policy (located at
+<https://airtable.com/developer-policy>).
 
 By using the Software, you accept and agree to abide by these terms.`"

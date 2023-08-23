@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
-import getSdk from '../get_sdk';
+import Sdk from '../sdk';
 import {AirtableInterface} from '../types/airtable_interface';
-import {BaseData, ModelChange} from '../types/base';
+import {ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {PermissionLevel} from '../types/permission_levels';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
@@ -34,12 +34,16 @@ type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
  *
  * @example
  * ```js
- * import {session} from '@airtable/blocks';
+ * import {useSession} from '@airtable/blocks/ui';
  *
- * if (session.currentUser !== null) {
- *     console.log("The current user's name is", session.currentUser.name);
- * } else {
- *     console.log('This block is being viewed in a public share');
+ * function Username() {
+ *     const session = useSession();
+ *
+ *     if (session.currentUser !== null) {
+ *         return <span>The current user's name is {session.currentUser.name}</span>;
+ *     } else {
+ *         return <span>This extension is being viewed in a public share</span>;
+ *     }
  * }
  * ```
  * @docsPath models/Session
@@ -59,11 +63,15 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @internal
      */
-    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
-        super(baseData, 'session');
-        this._airtableInterface = airtableInterface;
+    constructor(sdk: Sdk) {
+        super(sdk, 'session');
+        this._airtableInterface = sdk.__airtableInterface;
 
-        const {permissionLevel, currentUserId, enabledFeatureNames} = baseData;
+        const {
+            permissionLevel,
+            currentUserId,
+            enabledFeatureNames,
+        } = this._airtableInterface.sdkInitData.baseData;
         this._sessionData = {
             permissionLevel,
             currentUserId,
@@ -81,15 +89,24 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     }
 
     /**
-     * The current user, or `null` if the block is running in a publicly shared base.
+     * The current user, or `null` if the extension is running in a publicly shared base.
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
-     * if (session.currentUser) {
-     *     console.log(session.currentUser.id);
-     *     console.log(session.currentUser.email);
-     *     console.log(session.currentUser.name);
+     * import {useSession} from '@airtable/blocks/ui';
+     *
+     * function CurrentUser() {
+     *     const session = useSession();
+     *
+     *     if (!session.currentUser) {
+     *         return <div>This extension is being used in a public share.</div>;
+     *     }
+     *
+     *     return <ul>
+     *         <li>ID: {session.currentUser.id}</li>
+     *         <li>E-mail: {session.currentUser.email}</li>
+     *         <li>Name: {session.currentUser.name}</li>
+     *     </ul>;
      * }
      * ```
      */
@@ -98,7 +115,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         if (!userId) {
             return null;
         } else {
-            const {base} = getSdk();
+            const {base} = this._sdk;
             return base.getCollaboratorByIdIfExists(userId);
         }
     }
@@ -112,15 +129,25 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const updateRecordsCheckResult = session.checkPermissionsForUpdateRecords();
-     * if (!updateRecordsCheckResult.hasPermission) {
-     *     alert(updateRecordsCheckResult.reasonDisplayString);
+     * function UpdateButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForUpdateRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Update
+     *         </button>
+     *     </div>;
      * }
      */
     checkPermissionsForUpdateRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: undefined,
             records: undefined,
@@ -143,15 +170,25 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const createRecordsCheckResult = session.checkPermissionsForCreateRecords();
-     * if (!createRecordsCheckResult.hasPermission) {
-     *     alert(createRecordsCheckResult.reasonDisplayString);
+     * function CreateButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForCreateRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Create
+     *         </button>
+     *     </div>;
      * }
      */
     checkPermissionsForCreateRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: undefined,
             records: undefined,
@@ -174,15 +211,24 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      *
      * @example
      * ```js
-     * import {session} from '@airtable/blocks';
+     * import {useSession} from '@airtable/blocks/ui';
      *
-     * const deleteRecordsCheckResult = session.checkPermissionsForDeleteRecords();
-     * if (!deleteRecordsCheckResult.hasPermission) {
-     *     alert(deleteRecordsCheckResult.reasonDisplayString);
-     * }
+     * function DeleteButton({onClick}) {
+     *     const session = useSession();
+     *     const updateRecordsCheckResult = session.checkPermissionsForDeleteRecords();
+     *     const deniedReason = updateRecordsCheckResult.hasPermission
+     *         ? <span>{updateRecordsCheckResult.reasonDisplayString}</span>
+     *         : null;
+     *
+     *     return <div>
+     *         {deniedReason}
+     *         <button onClick={onClick} disabled={!!deniedReason}>
+     *             Delete
+     *         </button>
+     *     </div>;
      */
     checkPermissionsForDeleteRecords(): PermissionCheckResult {
-        return getSdk().__mutations.checkPermissionsForMutation({
+        return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: undefined,
             recordIds: undefined,
@@ -196,21 +242,21 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         return this.checkPermissionsForDeleteRecords().hasPermission;
     }
     /**
-     * @internal
-     */
-    get __currentUserId(): UserId | null {
-        return this._sessionData.currentUserId;
-    }
-    /**
-     * @internal
-     */
-    get __rawPermissionLevel(): PermissionLevel {
-        return this._sessionData.permissionLevel;
-    }
-    /**
+     * Returns true if `featureName` is enabled and automatically tracks an exposure.
+     *
      * @internal
      */
     __isFeatureEnabled(featureName: string): boolean {
+        this._airtableInterface.trackExposure(featureName);
+        return this.__peekIfFeatureIsEnabled(featureName);
+    }
+
+    /**
+     * Returns true if `featureName` is enabled; does not track an exposure.
+     *
+     * @internal
+     */
+    __peekIfFeatureIsEnabled(featureName: string): boolean {
         return this._sessionData.enabledFeatureNames.includes(featureName);
     }
 

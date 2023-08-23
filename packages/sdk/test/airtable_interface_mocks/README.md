@@ -6,7 +6,7 @@ interface for the purposes of automated testing.
 
 ## Usage
 
-**Setup** Define a concrete implementation of the abstract `MockAirtableInterface` class.
+**Setup** Define a concrete implementation of the `AbstractMockAirtableInterface` class.
 
 **Verify the SDK's response to messages from the Base** Use the method named `trigger*` to simulate
 messages which originate from a Base, and write tests to confirm that the SDK reacts appropriately.
@@ -19,7 +19,7 @@ induce the SDK to send messages and verify their contents.
 
 -   implement all of the `trigger*` methods
 -   write more tests using this technique
--   extend the Block build process to allow developers to create a build which includes a
-    `MockAirtableInterface` implementation of their own design
+-   extend the Block build process to allow developers to create a build which includes an
+    `AbstractMockAirtableInterface` implementation of their own design
 -   design a higher-level API for Block developers to use, allowing them to elide details like table
     IDs, making their test code more concise and familiar

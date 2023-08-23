@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`submit completes 1`] = `
+"AIRTABLE_BLOCK_ROOT_PATH
+.block/newremote.json
+.block/remote.json
+block.json
+frontend/index.js
+package.json
+"
+`;
+
+exports[`submit completes with custom bundler 1`] = `
+"AIRTABLE_BLOCK_ROOT_PATH
+.block/newremote.json
+.block/remote.json
+block.json
+frontend/index.js
+my-bundler.js
+package.json
+"
+`;
+
+exports[`submit completes with custom bundler in shared dir 1`] = `
+"AIRTABLE_BLOCK_ROOT_PATH
+my-app/.block/newremote.json
+my-app/.block/remote.json
+my-app/block.json
+my-app/frontend/index.js
+my-app/package.json
+shared/my-bundler.js
+"
+`;
+
+exports[`submit completes with sibling shared source 1`] = `
+"AIRTABLE_BLOCK_ROOT_PATH
+my-app/.block/newremote.json
+my-app/.block/remote.json
+my-app/block.json
+my-app/frontend/index.js
+my-app/package.json
+shared/lib/index.js
+"
+`;

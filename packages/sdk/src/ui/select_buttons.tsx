@@ -211,9 +211,10 @@ const SelectButtons = (props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
                 const isSelected = option.value === value;
                 const isOptionDisabled = disabled || option.disabled;
                 const radioId = `${generatedId}-${index}`;
+                const valueJson = optionValueToString(option.value);
                 return (
                     <div
-                        key={optionValueToString(option.value)}
+                        key={`${valueJson}-${option.label}-${index}`}
                         className={optionClassNameForVariant}
                     >
                         <input

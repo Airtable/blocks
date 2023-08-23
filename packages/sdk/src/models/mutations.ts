@@ -1,17 +1,18 @@
-import getSdk from '../get_sdk';
-import {AirtableInterface} from '../types/airtable_interface';
-import getAirtableInterface from '../injected/airtable_interface';
+import {AirtableInterface, BlockRunContextType} from '../types/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import {GlobalConfigUpdate} from '../types/global_config';
 import {FieldId} from '../types/field';
+import Sdk from '../sdk';
 import Session from './session';
 import Base from './base';
 import Field from './field';
+import Table from './table';
 import {
     MAX_FIELD_NAME_LENGTH,
+    MAX_FIELD_DESCRIPTION_LENGTH,
     MAX_TABLE_NAME_LENGTH,
     MAX_NUM_FIELDS_PER_TABLE,
 } from './mutation_constants';
@@ -29,6 +30,8 @@ class Mutations {
     /** @internal */
     _session: Session;
     /** @internal */
+    _sdk: Sdk;
+    /** @internal */
     _base: Base;
     /** @internal */
     _applyModelChanges: (arg1: Array<ModelChange>) => void;
@@ -37,14 +40,15 @@ class Mutations {
 
     /** @hidden */
     constructor(
-        airtableInterface: AirtableInterface,
+        sdk: Sdk,
         session: Session,
         base: Base,
         applyModelChanges: (arg1: ReadonlyArray<ModelChange>) => void,
         applyGlobalConfigUpdates: (arg1: ReadonlyArray<GlobalConfigUpdate>) => void,
     ) {
-        this._airtableInterface = airtableInterface;
+        this._airtableInterface = sdk.__airtableInterface;
         this._session = session;
+        this._sdk = sdk;
         this._base = base;
         this._applyModelChanges = applyModelChanges;
         this._applyGlobalConfigUpdates = applyGlobalConfigUpdates;
@@ -133,10 +137,32 @@ class Mutations {
     }
 
     /** @internal */
+    _assertFieldNameIsValidForMutation(name: string, table: Table) {
+        if (!name) {
+            throw spawnError("Can't create or update field: must provide non-empty name");
+        }
+
+        if (name.length > MAX_FIELD_NAME_LENGTH) {
+            throw spawnError(
+                "Can't create or update field: name '%s' exceeds maximum length of %s characters",
+                name,
+                MAX_FIELD_NAME_LENGTH,
+            );
+        }
+
+        const existingLowercaseFieldNames = table.fields.map(field => field.name.toLowerCase());
+        if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
+            throw spawnError(
+                "Can't create or update field: field with name '%s' already exists",
+                name,
+            );
+        }
+    }
+
+    /** @internal */
     _assertMutationIsValid(mutation: Mutation) {
 
-        const airtableInterface = getAirtableInterface();
-        const appInterface = getSdk().__appInterface;
+        const appInterface = this._sdk.__appInterface;
         const billingPlanGrouping = this._base.__billingPlanGrouping;
 
         switch (mutation.type) {
@@ -179,10 +205,10 @@ class Mutations {
                         }
 
                         if (existingRecord && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                            const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                            const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                                 appInterface,
                                 record.cellValuesByFieldId[fieldId],
-                                existingRecord.getCellValue(fieldId),
+                                existingRecord._getRawCellValue(field),
                                 field._data,
                             );
                             if (!validationResult.isValid) {
@@ -246,7 +272,7 @@ class Mutations {
                             checkedFieldIds.add(fieldId);
                         }
 
-                        const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                        const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                             appInterface,
                             record.cellValuesByFieldId[fieldId],
                             null,
@@ -269,7 +295,7 @@ class Mutations {
             }
 
             case MutationTypes.CREATE_SINGLE_FIELD: {
-                const {tableId, name, config} = mutation;
+                const {tableId, name, config, description} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError("Can't create field: No table with id %s exists", tableId);
@@ -282,30 +308,9 @@ class Mutations {
                     );
                 }
 
-                if (!name) {
-                    throw spawnError("Can't create field: must provide non-empty name");
-                }
+                this._assertFieldNameIsValidForMutation(name, table);
 
-                if (name.length > MAX_FIELD_NAME_LENGTH) {
-                    throw spawnError(
-                        "Can't create field: name '%s' exceeds maximum length of %s characters",
-                        name,
-                        MAX_FIELD_NAME_LENGTH,
-                    );
-                }
-
-                const existingLowercaseFieldNames = table.fields.map(field =>
-                    field.name.toLowerCase(),
-                );
-
-                if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
-                    throw spawnError(
-                        "Can't create field: field with name '%s' already exists",
-                        name,
-                    );
-                }
-
-                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                     appInterface,
                     config,
                     null,
@@ -319,11 +324,18 @@ class Mutations {
                         validationResult.reason,
                     );
                 }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't create field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
+                    );
+                }
                 return;
             }
 
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
-                const {tableId, id, config} = mutation;
+                const {tableId, id, config, opts} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError("Can't update field: No table with id %s exists", tableId);
@@ -334,17 +346,18 @@ class Mutations {
                     throw spawnError("Can't update field: No field with id %s exists", id);
                 }
 
-                const currentConfig = airtableInterface.fieldTypeProvider.getConfig(
+                const currentConfig = this._airtableInterface.fieldTypeProvider.getConfig(
                     appInterface,
                     field._data,
                     field.parentTable.__getFieldNamesById(),
                 );
-                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                     appInterface,
                     config,
                     currentConfig,
                     field._data,
                     billingPlanGrouping,
+                    opts,
                 );
 
                 if (!validationResult.isValid) {
@@ -352,6 +365,45 @@ class Mutations {
                         "Can't update field: invalid field config.\n%s",
                         validationResult.reason,
                     );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION: {
+                const {tableId, id, description} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                if (description && description.length > MAX_FIELD_DESCRIPTION_LENGTH) {
+                    throw spawnError(
+                        "Can't update field: description exceeds maximum length of %s characters",
+                        MAX_FIELD_DESCRIPTION_LENGTH,
+                    );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_NAME: {
+                const {tableId, id, name} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                if (field.name.toLowerCase() !== name.toLowerCase()) {
+                    this._assertFieldNameIsValidForMutation(name, table);
                 }
                 return;
             }
@@ -418,7 +470,7 @@ class Mutations {
                     }
                     lowercaseFieldNames.add(lowercaseFieldName);
 
-                    const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
                         appInterface,
                         field.config,
                         null,
@@ -433,11 +485,22 @@ class Mutations {
                             validationResult.reason,
                         );
                     }
+
+                    if (
+                        field.description &&
+                        field.description.length > MAX_FIELD_DESCRIPTION_LENGTH
+                    ) {
+                        throw spawnError(
+                            "Can't create table: description for field '%s' exceeds maximum length of %s characters",
+                            field.name,
+                            MAX_FIELD_DESCRIPTION_LENGTH,
+                        );
+                    }
                 }
 
                 const primaryField = fields[0];
                 if (
-                    !airtableInterface.fieldTypeProvider.canBePrimary(
+                    !this._airtableInterface.fieldTypeProvider.canBePrimary(
                         appInterface,
                         primaryField.config,
                         billingPlanGrouping,
@@ -450,6 +513,29 @@ class Mutations {
                     );
                 }
 
+                return;
+            }
+            case MutationTypes.UPDATE_VIEW_METADATA: {
+                const {tableId, viewId} = mutation;
+                const {runContext} = this._airtableInterface.sdkInitData;
+
+                if (runContext.type !== BlockRunContextType.VIEW) {
+                    throw spawnError('Setting view metadata is only valid for views');
+                }
+
+                if (runContext.viewId !== viewId || runContext.tableId !== tableId) {
+                    throw spawnError('Custom views can only set view metadata on themselves');
+                }
+
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update metadata: No table with id %s exists", tableId);
+                }
+
+                const view = table.getViewByIdIfExists(viewId);
+                if (!view) {
+                    throw spawnError("Can't update metadata: No view with id %s exists", viewId);
+                }
                 return;
             }
 
@@ -570,6 +656,9 @@ class Mutations {
 
             case MutationTypes.CREATE_SINGLE_FIELD:
             case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.UPDATE_SINGLE_FIELD_DESCRIPTION:
+            case MutationTypes.UPDATE_SINGLE_FIELD_NAME:
+            case MutationTypes.UPDATE_VIEW_METADATA:
             case MutationTypes.CREATE_SINGLE_TABLE: {
                 return [];
             }
