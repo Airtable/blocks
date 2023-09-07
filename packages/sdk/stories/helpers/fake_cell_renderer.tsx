@@ -144,5 +144,7 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
             );
         case FieldType.EXTERNAL_SYNC_SOURCE:
             return <ChoiceToken choice={value || (syncSourceOptions[0] as any)} />;
+        case FieldType.AI_TEXT:
+            return <Text>AI generated text</Text>;
     }
 }

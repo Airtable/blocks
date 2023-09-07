@@ -35,6 +35,7 @@ export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.LAST_MODIFIED_BY]: 'Last modified by',
     [FieldType.BUTTON]: 'Button',
     [FieldType.EXTERNAL_SYNC_SOURCE]: 'Sync source',
+    [FieldType.AI_TEXT]: 'Ai Assist',
 };
 
 export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
@@ -70,4 +71,5 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.LAST_MODIFIED_BY]: 'personalAuto',
     [FieldType.BUTTON]: 'cursor',
     [FieldType.EXTERNAL_SYNC_SOURCE]: 'bolt',
+    [FieldType.AI_TEXT]: 'aiAssistant',
 };
