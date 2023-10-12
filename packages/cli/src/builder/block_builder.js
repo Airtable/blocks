@@ -8,7 +8,7 @@ const fs = require('fs');
 const {promisify} = require('util');
 const {debounce} = require('lodash');
 const fsUtils = require('../helpers/fs_utils');
-const envify = require('envify/custom');
+const envify = require('loose-envify/custom');
 const invariant = require('invariant');
 const babel = require('@babel/core');
 const chokidar = require('chokidar');
@@ -606,7 +606,7 @@ class BlockBuilder {
         }
         return RESULT_OK;
     }
-    _minify(bundle: Buffer): Result<{code: Buffer, map: Buffer}, Error> {
+    async _minifyAsync(bundle: Buffer): Promise<Result<{code: Buffer, map: Buffer}, Error>> {
         const options = {
             mangle: false,
             keep_fnames: true,
@@ -619,10 +619,13 @@ class BlockBuilder {
             },
         };
         const bundleString = bundle.toString();
-        const result = Terser.minify(bundleString, options);
-        if (result.error) {
-            return {err: result.error};
+        let result;
+        try {
+            result = await Terser.minify(bundleString, options);
+        } catch (error) {
+            return {err: error};
         }
+
         return {
             value: {
                 code: Buffer.from(result.code),
@@ -1033,7 +1036,7 @@ class BlockBuilder {
             typeof frontendBundleFileBuffer !== 'string',
             'expect frontendBundleFileBuffer as Buffer',
         );
-        const minifiedFrontendBundleFileResult = this._minify(frontendBundleFileBuffer);
+        const minifiedFrontendBundleFileResult = await this._minifyAsync(frontendBundleFileBuffer);
         if (minifiedFrontendBundleFileResult.err) {
             return minifiedFrontendBundleFileResult;
         }

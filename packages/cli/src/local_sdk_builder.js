@@ -77,7 +77,8 @@ class LocalSdkBuilder {
             await fsUtils.readFileAsync(blockPackageJsonPath, 'utf-8'),
         );
 
-        const sdkPackageVersionString = blockPackageJson.dependencies[SDK_PACKAGE_NAME];
+        const sdkPackageVersionString =
+            blockPackageJson.dependencies && blockPackageJson.dependencies[SDK_PACKAGE_NAME];
         if (!sdkPackageVersionString) {
             return null;
         }

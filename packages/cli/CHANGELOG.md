@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.71...HEAD)
 
-No changes.
+-   Support parsing/bundling newer Javascript features
+-   Allow `block run` to run for blocks that do not have declared dependencies in `package.json`
 
 ## [0.0.71](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.70...@airtable/blocks-cli@0.0.71) - 2023-07-06
 

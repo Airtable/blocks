@@ -7,7 +7,7 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-const envify = require('envify/custom');
+const envify = require('loose-envify/custom');
 const stripAnsi = require('strip-ansi');
 const ErrorCodes = require('../types/error_codes');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
@@ -410,10 +410,11 @@ class BlockServer {
         const nodeModulesDirPath = path.join(blockDirPath, 'node_modules');
         const nodeModulesDirExists = fs.existsSync(nodeModulesDirPath);
         if (!nodeModulesDirExists) {
-            console.log(
-                `Please run 'npm install' in ${blockDirPath} to install packages before running`,
+            console.warn(
+                `node_modules not detected. If you have dependencies, run 'npm install' in ${blockDirPath} to install packages before running`,
             );
-            process.exit(1);
+            // Don't exit since there are some legitimate cases where blocks don't need node_modules (e.g. dependencies
+            // installed in a parent dir)
         }
         // Get the block entry point filepath.
         if (!(entryAttr in this._blockJson)) {
