@@ -383,9 +383,15 @@ function getPreviewUrlForCellValue(url) {
 
 const converters = [
     function getAirtablePreviewUrl(url) {
-        const match = url.match(/airtable\.com(\/embed)?\/(shr[A-Za-z0-9]{14}.*)/);
+        // Match on embed or share link with appId or without appId
+        const match = url.match(
+            /airtable\.com(\/embed)?(\/app[A-Za-z0-9]{14})?\/(shr[A-Za-z0-9]{14}.*)/,
+        );
         if (match) {
-            return `https://airtable.com/embed/${match[2]}`;
+            // Return embed link, and include appId if it exists
+            return match[2]
+                ? `https://airtable.com/embed${match[2]}/${match[3]}`
+                : `https://airtable.com/embed/${match[3]}`;
         }
 
         // URL isn't for an Airtable share
