@@ -9,9 +9,13 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.1...HEAD)
 
 No changes.
+
+## [1.18.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.0...@airtable/blocks@1.18.1) - 2023-11-29
+
+-   Support React 17 as a peer dependency.
 
 ## [1.18.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.17.0...@airtable/blocks@1.18.0) - 2023-09-15
 
