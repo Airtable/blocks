@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks-testing/compare/@airtable/blocks-testing@0.0.5...HEAD)
 
-No changes.
+Support React 17 as a peer dependency.
 
 ## [0.0.5](https://github.com/airtable/blocks-testing/compare/@airtable/blocks-testing@0.0.4...@airtable/blocks-testing@0.0.5) - 2022-09-23
 
