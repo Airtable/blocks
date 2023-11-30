@@ -42,7 +42,7 @@ cat - > package.json <<EOF
         "jest": "^26.6.3",
         "react": "^16.8.0",
         "react-dom": "^16.8.0",
-        "typescript": "latest"
+        "typescript": "^4.9.5"
     }
 }
 EOF

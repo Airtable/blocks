@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks-testing",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Airtable Blocks Testing Library",
     "repository": {
         "type": "git",
@@ -14,7 +14,7 @@
         "types"
     ],
     "scripts": {
-        "ci": "(cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
+        "ci": "echo '--- blocks-testing' && (cd ../sdk && yarn build) && yarn run build && yarn run test:coverage && ./scripts/check_integration_with_sdk.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-testing' --git-tag-prefix='@airtable/blocks-testing@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
@@ -88,8 +88,8 @@
         ]
     },
     "peerDependencies": {
-        "react": "^16.8.0",
-        "react-dom": "^16.8.0",
+        "react": "^16.8.0 || ^17.0.0",
+        "react-dom": "^16.8.0 || ^17.0.0",
         "@airtable/blocks": "^1.5.1"
     },
     "jest": {
