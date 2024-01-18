@@ -17,4 +17,5 @@ export type LambdaEvent = {
     applicationId: string,
     blockInstallationId: string,
     apiBaseUrl: string,
+    region: string | null,
 };

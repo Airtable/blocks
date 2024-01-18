@@ -28,6 +28,7 @@ const EVENT_TEMPLATE: LambdaEvent = Object.freeze({
     applicationId: 'app333333333',
     blockInstallationId: 'bli444444444',
     apiBaseUrl: 'htts://test.com/api/',
+    region: 'us-east-1',
 });
 
 /** Creates a BlocksBackendEventHandler that routes all requests to the provided handler. */
@@ -275,6 +276,7 @@ describe('BlocksBackendEventHandler', function() {
                         path: event.path,
                         body: event.body,
                         headers: event.headers,
+                        region: event.region,
                         _apiBaseUrl: event.apiBaseUrl,
                         _apiAccessPolicyString: event.apiAccessPolicyString,
                         _applicationId: event.applicationId,

@@ -330,6 +330,7 @@ class BlockServerBackendProcessManager {
             blockInstallationId: (apiClient.blockInstallationId: any),
             kvValuesByKey: undefined, // SDK will fetch the kvValuesByKey.
             apiBaseUrl: apiClient.apiBaseUrl,
+            region: '',
         };
         // Lambda invocation is approximately 300ms, so we want the cli to be
         // approximately as slow in order to simulate realistic UX.

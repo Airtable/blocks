@@ -106,6 +106,7 @@ const BACKEND_PROCESS_REQUEST_TEMPLATE: BackendProcessRequest = Object.freeze({
     applicationId: 'app123456',
     blockInstallationId: 'bli123456',
     apiBaseUrl: 'http://dummy',
+    region: 'us-east-1',
 });
 
 describe('Block server backend process', function() {

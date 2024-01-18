@@ -8,6 +8,7 @@ export type BackendRouteRequest = {
     path: string,
     body: mixed,
     headers: {[string]: string},
+    region: string | null,
 
     // Private fields for SDK consumption:
     _apiBaseUrl: string,

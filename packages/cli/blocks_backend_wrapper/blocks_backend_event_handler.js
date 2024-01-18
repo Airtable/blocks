@@ -217,6 +217,7 @@ class BlocksBackendEventHandler {
             path: event.path,
             body: event.body,
             headers: event.headers,
+            region: event.region,
 
             // Private fields for SDK consumption:
             _apiBaseUrl: event.apiBaseUrl,
