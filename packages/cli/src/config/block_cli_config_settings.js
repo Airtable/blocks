@@ -64,10 +64,14 @@ module.exports = {
     // Name of the file used to store user/blocks scoped configs for blocks-cli
     CONFIG_FILE_NAME: '.airtableblocksrc.json',
 
-    // Default server providing backend SDK.
-    BACKEND_SDK_BASE_URL: 'https://airtable.com',
-    // URL path to backend SDK.
-    BACKEND_SDK_URL_PATH: '/js/compiled/esbuild/block_backend_sdk.js',
+    // Constant values to helo formulate the backend block SDK URL
+    // URL path to backend SDK will be composed using the values below. The URL depends on the hyperbase RUN_ENVIRONMENT
+    BACKEND_SDK_BASE_URL_PRODUCTION: 'airtable.com',
+    BACKEND_SDK_BASE_URL_STAGING: 'staging.airtable.com',
+    BACKEND_SDK_BASE_URL_ALPHA: 'alpha-airtable.com',
+    BACKEND_SDK_BASE_URL_BRAVO: 'bravo-airtable.com',
+    BACKEND_SDK_BASE_URL_DEVELOPMENT: 'hyperbasedev.com:3000',
+    BACKEND_SDK_JS_COMPILED_ESBUILD_URL_PATH: '/js/compiled/esbuild',
     // Module path to backend SDK.
     BACKEND_SDK_MODULE: 'block_backend_sdk',
     // How long to cache downloaded backend SDK file on local disk, in milliseconds.

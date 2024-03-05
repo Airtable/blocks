@@ -22,10 +22,10 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteName === null || typeof remoteName === 'string',
         'expects remoteName to be null or a string',
     );
-    const backendSdkBaseUrl = argv.backendSdkBaseUrl || null;
+    const backendSdkUrl = argv.backendSdkUrl || null;
     invariant(
-        backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
-        'expects backendSdkBaseUrl to be null or a string',
+        backendSdkUrl === null || typeof backendSdkUrl === 'string',
+        'expects backendSdkUrl to be null or a string',
     );
     const shouldBackendSdkBypassCache = argv.backendSdkBypassCache || false;
     invariant(
@@ -50,6 +50,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects shouldBypassSameBaseAndBlockChecks to be a boolean',
     );
     if (shouldBypassSameBaseAndBlockChecks) {
+        // eslint-disable-next-line no-console
         console.log(
             '**Warning**: dangerouslyBypassSameBaseAndBlockChecks may lead to configuration corruption if used for the wrong block. Proceed at your own risk',
         );
@@ -101,7 +102,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         apiKey,
         transpileAll,
         blockBuilder,
-        backendSdkBaseUrl,
+        backendSdkUrl,
         shouldBackendSdkBypassCache,
         shouldBypassSameBaseAndBlockChecks,
         blockDevCredentialsPath,

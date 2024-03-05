@@ -10,7 +10,7 @@ export type BackendProcessOptions = {|
     blockJson: BlockJson,
     remoteJson: RemoteJson,
     outputUserTranspiledDirPath: string,
-    backendSdkBaseUrl: string | null,
+    backendSdkUrl: string | null,
     blockDevCredentialsPath: string | null,
     canUseCachedBackendSdk: boolean,
 |};

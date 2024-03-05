@@ -13,7 +13,8 @@ function validateRemoteJson(remoteJson: mixed): ValidationResult {
         typeof remoteJson.baseId === 'string' &&
         (remoteJson.server === undefined || typeof remoteJson.server === 'string') &&
         (remoteJson.apiKeyName === undefined || typeof remoteJson.apiKeyName === 'string') &&
-        (remoteJson.bundleCdn === undefined || typeof remoteJson.bundleCdn === 'string')
+        (remoteJson.bundleCdn === undefined || typeof remoteJson.bundleCdn === 'string') &&
+        (remoteJson.remoteName === undefined || typeof remoteJson.remoteName === 'string')
     ) {
         return {pass: true};
     }

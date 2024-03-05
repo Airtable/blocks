@@ -25,12 +25,12 @@ function requireFromString(src) {
 }
 
 async function requireBackendSdkAsync(
-    backendSdkBaseUrl: string | null,
+    backendSdkUrl: string | null,
     remoteJson: RemoteJson,
     canUseCachedBackendSdk: boolean,
 ) {
     const backendSdkJs = await downloadBackendSdkAsync({
-        backendSdkBaseUrlIfExists: backendSdkBaseUrl,
+        backendSdkUrlIfExists: backendSdkUrl,
         remoteJson,
         canUseCachedBackendSdk,
     });
@@ -61,14 +61,14 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
         outputUserTranspiledDirPath,
         blockJson,
         remoteJson,
-        backendSdkBaseUrl,
+        backendSdkUrl,
         blockDevCredentialsPath,
         canUseCachedBackendSdk,
     } = options;
 
     // Download the backend sdk.
     const BackendBlockSdkWrapper = await requireBackendSdkAsync(
-        backendSdkBaseUrl,
+        backendSdkUrl,
         remoteJson,
         canUseCachedBackendSdk,
     );

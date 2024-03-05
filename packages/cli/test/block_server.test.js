@@ -67,6 +67,7 @@ describe('BlockServer', function() {
                 enableIsolatedBuild: false,
                 enableDeprecatedAbsolutePathImport: false,
                 enableLiveSdkReload: false,
+                backendSdkUrl: null,
                 transpileForAllBrowsers: true,
                 uploadSourceMapsToSentry: false,
             });
@@ -77,6 +78,7 @@ describe('BlockServer', function() {
                 shouldBackendSdkBypassCache: false,
                 shouldBypassSameBaseAndBlockChecks: false,
                 blockDevCredentialsPath: null,
+                backendSdkUrl: null,
                 environment: Environments.DEVELOPMENT,
             });
 

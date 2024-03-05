@@ -36,6 +36,21 @@ async function parseAndValidateRemoteJsonAsync(
     } catch (err) {
         return {err: new Error(`Could not parse ${remoteJsonFileName}`)};
     }
+
+    // We are capturing the remoteName in the RemoteJson object because we will later use it to infer the
+    // hyperbase RunEnvironment for fetching the correct backend blocks SDK (i.e. see downloadBackendSdkAsync() in
+    // the download_backend_sdk_async.js file).
+    // For 1P blocks, we have an internal, albeit loose, "pattern" of using the remoteName to infer the
+    // hyperbase runEnvironment (for example, see https://github.com/Hyperbase/hyperbase/tree/4df2c56dd5feddbb789a490956d079378caabb48/blocks/org_chart/.block
+    // directory for example of the various remote.json flavors).
+    // A couple other notes:
+    //   1/ The remoteName is the "prefix" before the first period in the "remote.json-based" filename (e.g.
+    //      if the filename is staging.remote.json then the hyperbase RunEnvironment is "staging").
+    //   2/ Only a subset of 1P blocks use the backend blocks SDK (e.g. org chart, web clipper, etc).
+    if (remoteName) {
+        remoteJson.remoteName = remoteName;
+    }
+
     const validationResult = validateRemoteJson(remoteJson);
     if (!validationResult.pass) {
         return {err: new Error(validationResult.reason)};

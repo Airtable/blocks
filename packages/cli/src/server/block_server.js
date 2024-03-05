@@ -34,6 +34,10 @@ import type {RequestId, RequestWithRequestId} from './set_request_id_middleware'
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
+/**
+ * This module is ONLY used to serve the `block run` command; it effectively creates an Express server
+ * to serve the block code.
+ */
 class BlockServer {
     _pendingLongPollResolveRejectByRequestId: Map<
         RequestId,
@@ -61,14 +65,14 @@ class BlockServer {
         blockDevCredentialsPath: string | null,
         shouldBackendSdkBypassCache: boolean,
         shouldBypassSameBaseAndBlockChecks: boolean,
-        backendSdkBaseUrl?: string | null,
+        backendSdkUrl: string | null,
         environment: Environment,
     }) {
         const {
             blockBuilder,
             apiKey,
             blockDevCredentialsPath,
-            backendSdkBaseUrl,
+            backendSdkUrl,
             environment,
             shouldBackendSdkBypassCache,
             shouldBypassSameBaseAndBlockChecks,
@@ -89,7 +93,7 @@ class BlockServer {
             blockJson: this._blockJson,
             remoteJson: this._remoteJson,
             outputUserTranspiledDirPath: this._blockBuilder.outputUserTranspiledDirPath,
-            backendSdkBaseUrl: backendSdkBaseUrl || null,
+            backendSdkUrl: backendSdkUrl || null,
             shouldBackendSdkBypassCache,
             blockDevCredentialsPath: this._blockDevCredentialsPath,
             getApiClient: () => this._apiClient,

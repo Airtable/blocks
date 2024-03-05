@@ -28,8 +28,9 @@ module.exports = DummyBackendBlockSdkWrapper;
 `;
 
 // Construct an Express app that serves the backend SDK wrapper code.
+const FAKE_BLOCK_BACKEND_SDK_URL_PATH = `/foo/${blockCliConfigSettings.BACKEND_SDK_MODULE}.js`;
 const backendSdkApp = express();
-backendSdkApp.get(blockCliConfigSettings.BACKEND_SDK_URL_PATH, (req: $Request, res: $Response) => {
+backendSdkApp.get(FAKE_BLOCK_BACKEND_SDK_URL_PATH, (req: $Request, res: $Response) => {
     res.send(BACKEND_SDK_STRING);
 });
 
@@ -66,7 +67,7 @@ function createBackendProcessForTesting(backendSdkServerPort: number) {
             'test',
             'block_with_backend_routes',
         ),
-        backendSdkBaseUrl: `http://localhost:${backendSdkServerPort}`,
+        backendSdkUrl: `http://localhost:${backendSdkServerPort}${FAKE_BLOCK_BACKEND_SDK_URL_PATH}`,
         blockDevCredentialsPath: null,
         canUseCachedBackendSdk: false,
     };

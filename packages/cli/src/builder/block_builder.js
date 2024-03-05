@@ -95,7 +95,7 @@ class BlockBuilder {
     _browserify: browserify;
     _initialBuildResolveIfExists: PromiseResolveFunction<void> | null;
     _blockBuilderJobQueue: BlockBuilderJobQueue;
-    _backendSdkBaseUrl: string | null;
+    _backendSdkUrl: string | null;
     _browserifyCache: {[FilePath]: mixed};
     _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
     _ignoredGlobPatternsFromBlockJson: Array<string>;
@@ -110,7 +110,7 @@ class BlockBuilder {
         enableIsolatedBuild: boolean,
         enableLiveSdkReload: boolean,
         transpileForAllBrowsers?: boolean,
-        backendSdkBaseUrl?: string | null,
+        backendSdkUrl: string | null,
         uploadSourceMapsToSentry: boolean,
     }) {
         this._buildTypeMode = args.buildTypeMode;
@@ -121,7 +121,7 @@ class BlockBuilder {
         this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._enableLiveSdkReload = args.enableLiveSdkReload;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || true;
-        this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
+        this._backendSdkUrl = args.backendSdkUrl || null;
         this._uploadSourceMapsToSentry = args.uploadSourceMapsToSentry;
         this._blockDirPath = getBlockDirPath();
 
@@ -163,6 +163,9 @@ class BlockBuilder {
             enableLiveSdkReload: !!args.sdkPathIfExists,
             blockJson: args.blockJson,
             remoteJson: args.remoteJson,
+            // development BlockBuilder (i.e. aka `block run`) never needs backendSdk because this will
+            // be handled by BlockServer.
+            backendSdkUrl: null,
             transpileForAllBrowsers: args.transpileForAllBrowsers,
             uploadSourceMapsToSentry: false,
         });
@@ -173,7 +176,7 @@ class BlockBuilder {
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
-        backendSdkBaseUrl: string | null,
+        backendSdkUrl: string | null,
         uploadSourceMapsToSentry: boolean,
     }): Promise<BlockBuilder> {
         return new BlockBuilder({
@@ -186,7 +189,7 @@ class BlockBuilder {
             transpileForAllBrowsers: true,
             // RELEASE builds never use live SDK reloading
             enableLiveSdkReload: false,
-            backendSdkBaseUrl: args.backendSdkBaseUrl,
+            backendSdkUrl: args.backendSdkUrl,
             uploadSourceMapsToSentry: args.uploadSourceMapsToSentry,
         });
     }
@@ -759,7 +762,7 @@ class BlockBuilder {
 
         try {
             const backendSdkJs = await downloadBackendSdkAsync({
-                backendSdkBaseUrlIfExists: this._backendSdkBaseUrl,
+                backendSdkUrlIfExists: this._backendSdkUrl,
                 remoteJson: this._remoteJson,
                 canUseCachedBackendSdk: false,
             });

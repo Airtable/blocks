@@ -272,10 +272,10 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockPackageJson,
     );
 
-    const backendSdkBaseUrl = argv.backendSdkBaseUrl || null;
+    const backendSdkUrl = argv.backendSdkUrl || null;
     invariant(
-        backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
-        'expects backendSdkBaseUrl to be null or a string',
+        backendSdkUrl === null || typeof backendSdkUrl === 'string',
+        'expects backendSdkUrl to be null or a string',
     );
 
     const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
@@ -284,7 +284,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteJson,
         enableDeprecatedAbsolutePathImport,
         enableIsolatedBuild,
-        backendSdkBaseUrl,
+        backendSdkUrl,
         uploadSourceMapsToSentry,
     });
 

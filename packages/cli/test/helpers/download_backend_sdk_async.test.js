@@ -40,9 +40,9 @@ describe('downloadBackendSdkAsync', function() {
         await fsUtils.emptyDirAsync(tmpDir);
     });
 
-    it('fetches SDK from provided backendSdkBaseUrlIfExists', async function() {
+    it('fetches SDK directly from the URL if backendSdkUrlIfExists is provided', async function() {
         await downloadBackendSdkAsync({
-            backendSdkBaseUrlIfExists: 'https://foo.com',
+            backendSdkUrlIfExists: 'https://foo.com/fake.js',
             remoteJson: {baseId: 'app123', blockId: 'blk987', server: 'https://do-not-call-me.com'},
             canUseCachedBackendSdk: true,
         });
@@ -50,7 +50,7 @@ describe('downloadBackendSdkAsync', function() {
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://foo.com/js/compiled/esbuild/block_backend_sdk.js',
+                uri: 'https://foo.com/fake.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -58,16 +58,22 @@ describe('downloadBackendSdkAsync', function() {
         );
     });
 
-    it('fetches SDK from remoteJson if backendSdkBaseUrlIfExists is not provided', async function() {
+    it('fetches SDK from staging.airtable.com URL if remoteJson.remoteName is staging', async function() {
         await downloadBackendSdkAsync({
-            remoteJson: {baseId: 'app123', blockId: 'blk987', server: 'https://bar.com'},
+            remoteJson: {
+                baseId: 'app123',
+                blockId: 'blk987',
+                server: 'https://bar.com',
+                remoteName: 'staging',
+            },
             canUseCachedBackendSdk: true,
         });
 
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://bar.com/js/compiled/esbuild/block_backend_sdk.js',
+                uri:
+                    'https://staging.airtable.com/js/compiled/esbuild/staging/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -75,16 +81,21 @@ describe('downloadBackendSdkAsync', function() {
         );
     });
 
-    it('fetches SDK from production airtable.com if backendSdkBaseUrlIfExists is not provided or remoteJson.server is not configured', async function() {
+    it('fetches SDK from alpha-airtable.com URL if remoteJson.remoteName is alpha', async function() {
         await downloadBackendSdkAsync({
-            remoteJson: {baseId: 'app123', blockId: 'blk987'},
+            remoteJson: {
+                baseId: 'app123',
+                blockId: 'blk987',
+                server: 'https://bar.com',
+                remoteName: 'alpha',
+            },
             canUseCachedBackendSdk: true,
         });
 
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://airtable.com/js/compiled/esbuild/block_backend_sdk.js',
+                uri: 'https://alpha-airtable.com/js/compiled/esbuild/alpha/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -92,16 +103,21 @@ describe('downloadBackendSdkAsync', function() {
         );
     });
 
-    it("strips 'api-' from remoteJson.server url", async function() {
+    it('fetches SDK from bravo-airtable.com URL if remoteJson.remoteName is bravo', async function() {
         await downloadBackendSdkAsync({
-            remoteJson: {baseId: 'app123', blockId: 'blk987', server: 'https://api-test.foo.com'},
+            remoteJson: {
+                baseId: 'app123',
+                blockId: 'blk987',
+                server: 'https://bar.com',
+                remoteName: 'bravo',
+            },
             canUseCachedBackendSdk: true,
         });
 
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://test.foo.com/js/compiled/esbuild/block_backend_sdk.js',
+                uri: 'https://bravo-airtable.com/js/compiled/esbuild/bravo/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
@@ -109,16 +125,56 @@ describe('downloadBackendSdkAsync', function() {
         );
     });
 
-    it("strips 'api.' from remoteJson.server url", async function() {
+    it('fetches SDK from hyperbasedev.com:3000 URL if remoteJson.remoteName is development', async function() {
         await downloadBackendSdkAsync({
-            remoteJson: {baseId: 'app123', blockId: 'blk987', server: 'https://api.foo.com'},
+            remoteJson: {
+                baseId: 'app123',
+                blockId: 'blk987',
+                server: 'https://bar.com',
+                remoteName: 'development',
+            },
             canUseCachedBackendSdk: true,
         });
 
         assert(
             postmanRequestFake.calledOnceWithExactly({
                 method: 'GET',
-                uri: 'https://foo.com/js/compiled/esbuild/block_backend_sdk.js',
+                uri:
+                    'https://hyperbasedev.com:3000/js/compiled/esbuild/development/block_backend_sdk.js',
+                headers: {
+                    'User-Agent': blockCliConfigSettings.USER_AGENT,
+                },
+            }),
+        );
+    });
+
+    it('fetches SDK from production airtable.com if if remoteJson.remoteName is not provided', async function() {
+        await downloadBackendSdkAsync({
+            remoteJson: {baseId: 'app123', blockId: 'blk987', remoteName: null},
+            canUseCachedBackendSdk: true,
+        });
+
+        assert(
+            postmanRequestFake.calledOnceWithExactly({
+                method: 'GET',
+                uri: 'https://airtable.com/js/compiled/esbuild/production/block_backend_sdk.js',
+                headers: {
+                    'User-Agent': blockCliConfigSettings.USER_AGENT,
+                },
+            }),
+        );
+    });
+
+    it('fetches SDK from production airtable.com if if remoteJson.remoteName is not a Hyperbase RunEnviornment', async function() {
+        await downloadBackendSdkAsync({
+            remoteJson: {baseId: 'app123', blockId: 'blk987', remoteName: 'blahblah'},
+            canUseCachedBackendSdk: true,
+        });
+
+        assert(
+            postmanRequestFake.calledOnceWithExactly({
+                method: 'GET',
+                uri: 'https://airtable.com/js/compiled/esbuild/production/block_backend_sdk.js',
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },

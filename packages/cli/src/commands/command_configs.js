@@ -87,8 +87,9 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description: '[Beta] Configure which remote to use',
                 type: 'string',
             },
-            'backend-sdk-base-url': {
-                description: 'Base URL to download backend SDK from',
+            'backend-sdk-url': {
+                description: `Fully formed URL for downloading backend blocks SDK. This should only be for 1P Airtable-built Blocks
+\tExample: https://airtable.com/js/compiled/esbuild/production/block_backend_sdk.js`,
                 type: 'string',
                 hidden: true, // hide from --help output
             },
@@ -129,8 +130,9 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description: '[Beta] Configure which remote to use',
                 type: 'string',
             },
-            'backend-sdk-base-url': {
-                description: 'Base URL to download backend SDK from',
+            'backend-sdk-url': {
+                description: `fully formed URL for downloading backend blocks SDK. This should only be for 1P Airtable-built Blocks
+\tExample: https://airtable.com/js/compiled/esbuild/production/block_backend_sdk.js`,
                 type: 'string',
                 hidden: true, // hide from --help output
             },

@@ -34,7 +34,7 @@ class BlockServerBackendProcessManager {
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
     _outputUserTranspiledDirPath: string;
-    _backendSdkBaseUrlIfExists: string | null;
+    _backendSdkUrlIfExists: string | null;
     _shouldBackendSdkBypassCache: boolean;
     _blockDevCredentialsPath: string | null;
     _getApiClient: () => ApiClient;
@@ -53,7 +53,7 @@ class BlockServerBackendProcessManager {
         blockJson: BlockJson,
         remoteJson: RemoteJson,
         outputUserTranspiledDirPath: string,
-        backendSdkBaseUrl: string | null,
+        backendSdkUrl: string | null,
         shouldBackendSdkBypassCache: boolean,
         blockDevCredentialsPath: string | null,
         getApiClient: () => ApiClient,
@@ -61,7 +61,7 @@ class BlockServerBackendProcessManager {
         this._blockJson = args.blockJson;
         this._remoteJson = args.remoteJson;
         this._outputUserTranspiledDirPath = args.outputUserTranspiledDirPath;
-        this._backendSdkBaseUrlIfExists = args.backendSdkBaseUrl;
+        this._backendSdkUrlIfExists = args.backendSdkUrl;
         this._shouldBackendSdkBypassCache = args.shouldBackendSdkBypassCache;
         this._blockDevCredentialsPath = args.blockDevCredentialsPath;
         this._getApiClient = args.getApiClient;
@@ -82,7 +82,7 @@ class BlockServerBackendProcessManager {
             blockJson: this._blockJson,
             remoteJson: this._remoteJson,
             outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
-            backendSdkBaseUrl: this._backendSdkBaseUrlIfExists,
+            backendSdkUrl: this._backendSdkUrlIfExists,
             blockDevCredentialsPath: this._blockDevCredentialsPath,
             canUseCachedBackendSdk: !this._shouldBackendSdkBypassCache,
         };
