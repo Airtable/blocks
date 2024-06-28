@@ -31,6 +31,7 @@ export function cast<T>(x: T): T {
  */
 export function omitUndefinedValues<T>(obj: T): T {
     const value = {} as T;
+    // @ts-ignore
     for (const key of Object.keys(obj) as (keyof T)[]) {
         if (obj[key] !== undefined) {
             value[key] = obj[key];

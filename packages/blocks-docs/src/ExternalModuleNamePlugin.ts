@@ -85,13 +85,13 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
      */
     private onDeclaration(context: Context, reflection: Reflection, node?: ts.Node) {
         if (reflection.kindOf(ReflectionKind.ExternalModule) && node) {
-            let comment = getRawComment(node);
+            const comment = getRawComment(node);
             if (comment) {
                 // Look for @module
-                let match = /@module\s+([\w\u4e00-\u9fa5.\-_/@: "]+)/.exec(comment);
+                const match = /@module\s+([\w\u4e00-\u9fa5.\-_/@: "]+)/.exec(comment);
                 if (match) {
                     // Look for @preferred
-                    let preferred = /@preferred/.exec(comment);
+                    const preferred = /@preferred/.exec(comment);
                     // Set up a list of renames operations to perform when the resolve phase starts
                     this.moduleRenames.push({
                         renameTo: match[1].trim(),
@@ -114,18 +114,18 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
      * @param context  The context object describing the current state the converter is in.
      */
     private onBeginResolve(context: Context) {
-        let projRefs = context.project.reflections;
-        let refsArray: Reflection[] = Object.keys(projRefs).reduce((m, k) => {
+        const projRefs = context.project.reflections;
+        const refsArray: Reflection[] = Object.keys(projRefs).reduce((m, k) => {
             m.push(projRefs[Number(k)]);
             return m;
         }, [] as Array<Reflection>);
 
         // Process each rename
         this.moduleRenames.forEach(item => {
-            let renaming = item.reflection as ContainerReflection;
+            const renaming = item.reflection as ContainerReflection;
 
             // Find or create the module tree until the child's parent (each level is separated by .)
-            let nameParts = item.renameTo.split('.');
+            const nameParts = item.renameTo.split('.');
             let parent: ContainerReflection = context.project;
             for (let i = 0; i < nameParts.length - 1; ++i) {
                 let child: DeclarationReflection | undefined = assertExists(parent.children).find(
@@ -146,7 +146,7 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
             }
 
             // Find an existing module with the child's name in the last parent. Use it as the merge target.
-            let mergeTarget =
+            const mergeTarget =
                 parent.children &&
                 (parent.children.find(
                     ref =>
@@ -156,7 +156,7 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
             // If there wasn't a merge target, change the name of the current module, connect it to the right parent and exit.
             if (!mergeTarget) {
                 renaming.name = nameParts[nameParts.length - 1];
-                let oldParent = renaming.parent as ContainerReflection;
+                const oldParent = renaming.parent as ContainerReflection;
                 const oldParentChildren = assertExists(oldParent.children);
                 for (let i = 0; i < oldParentChildren.length; ++i) {
                     if (oldParentChildren[i] === renaming) {
@@ -174,7 +174,7 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
             }
 
             // Since there is a merge target, relocate all the renaming module's children to the mergeTarget.
-            let childrenOfRenamed = refsArray.filter(ref => ref.parent === renaming);
+            const childrenOfRenamed = refsArray.filter(ref => ref.parent === renaming);
             childrenOfRenamed.forEach((ref: Reflection) => {
                 // update links in both directions
                 ref.parent = mergeTarget;

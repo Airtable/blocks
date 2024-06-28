@@ -148,7 +148,6 @@ module.exports = {
                 ],
             },
         ],
-        'jsdoc/newline-after-description': 'error',
         'jsdoc/no-types': 'error',
 
         'import/first': 'error',

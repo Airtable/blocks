@@ -247,10 +247,6 @@ export class RecordCard extends React.Component<RecordCardProps> {
         attachmentCoverField: PropTypes.instanceOf(Field),
         width: PropTypes.number,
         height: PropTypes.number,
-        onClick: PropTypes.func,
-        hasOnClick: PropTypes.bool,
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func,
         // TODO: add all other mouse events: https://facebook.github.io/react/docs/events.html#mouse-events
         className: PropTypes.string,
         style: PropTypes.object,

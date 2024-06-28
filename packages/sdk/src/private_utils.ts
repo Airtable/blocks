@@ -297,7 +297,7 @@ interface ReadonlyDeepArray<T> extends Array<T | ReadonlyDeepArray<T>> {}
  * @hidden
  */
 export function flattenDeep<T>(array: ReadonlyDeepArray<T>): Array<T> {
-    // $FlowFixMe our version of flow doesn't include a definition for Array.flat yet
+    // @ts-ignore
     return array.flat(Infinity);
 }
 

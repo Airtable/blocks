@@ -14,5 +14,5 @@ steps:
       retry: *retries
       plugins:
           - docker#v5.4.0:
-                image: 'node:14.21.3-buster'
+                image: 'node:18.20.1'
                 mount-ssh-agent: true

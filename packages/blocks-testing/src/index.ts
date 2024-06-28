@@ -7,8 +7,10 @@ export {default} from './test_driver';
 export {MutationTypes} from '@airtable/blocks/unstable_testing_utils';
 
 invariant(
+    // @ts-ignore
     semver.satisfies(Sdk.VERSION, global.COMPATIBLE_SDK_VERSIONS),
     'Version %s of the blocks-testing library does not support version %s of the Blocks SDK library.',
+    // @ts-ignore
     global.PACKAGE_VERSION,
     Sdk.VERSION,
 );

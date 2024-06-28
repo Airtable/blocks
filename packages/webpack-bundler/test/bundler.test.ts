@@ -7,7 +7,7 @@ import {expect, test, FancyTypes} from '@oclif/test';
 import fetch from 'node-fetch';
 
 import createBundler from '../src/index';
-import {ReleaseTaskConsumer, RunTaskConsumer} from '@airtable/blocks-cli-next';
+import {ReleaseTaskConsumer, RunTaskConsumer} from '@airtable/blocks-cli';
 
 describe('run bundler', () => {
     const testBundler = test
@@ -161,6 +161,7 @@ function prepareFixtureTempCopy(fixtureName: string, tempName: string = fixtureN
             }
             fs.rmdirSync(dirOrFilePath);
         } catch (err) {
+            // @ts-ignore
             if (err.code === 'ENOTDIR') {
                 fs.unlinkSync(dirOrFilePath);
             }
@@ -175,6 +176,7 @@ function prepareFixtureTempCopy(fixtureName: string, tempName: string = fixtureN
                 copyRecursively(path.join(src, name), path.join(dest, name));
             }
         } catch (err) {
+            // @ts-ignore
             if (err.code === 'ENOTDIR') {
                 fs.writeFileSync(dest, fs.readFileSync(src));
             } else {

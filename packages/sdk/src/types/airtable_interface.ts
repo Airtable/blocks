@@ -59,7 +59,7 @@ export type BlockRunContext = BlockInstallationPageBlockRunContext | ViewBlockRu
 export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
-    colorsByRecordId: ViewColorsByRecordIdData | null;
+    colorsByRecordId?: ViewColorsByRecordIdData | null;
     // Groups can be undefined if running against an old airtable client
     groups?: Array<GroupData> | null;
     groupLevels?: Array<GroupLevelData> | null;

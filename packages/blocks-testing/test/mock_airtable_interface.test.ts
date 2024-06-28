@@ -186,7 +186,7 @@ describe('MockAirtableInterface', () => {
             const ai = new MockAirtableInterface({base: smallBase});
             const calls: Array<any> = [];
 
-            await new Promise(resolve => {
+            await new Promise<void>(resolve => {
                 ai.on('mutation', (...args: Array<any>) => {
                     calls.push(args);
                     resolve();
@@ -243,6 +243,7 @@ describe('MockAirtableInterface', () => {
         it('emits an event with relevant data', async () => {
             const ai = new MockAirtableInterface({base: smallBase});
 
+            // @ts-ignore TODO(richsinn#blocks_vuln_upgrade): TS error is, "Property 'recordId' does not exist on type 'unknown'." Is this legit?
             const {recordId} = await new Promise(resolve => {
                 ai.on('expandRecord', resolve);
                 ai.expandRecord('tblTable1', 'recb', null);
@@ -267,6 +268,7 @@ describe('MockAirtableInterface', () => {
         it('emits an event with relevant data', async () => {
             const ai = new MockAirtableInterface({base: smallBase});
 
+            // @ts-ignore
             const {tableId, recordIds, fieldIds} = await new Promise(resolve => {
                 ai.on('expandRecordList', resolve);
                 ai.expandRecordList('tblTable1', ['recb', 'recc'], ['fldIceCream']);

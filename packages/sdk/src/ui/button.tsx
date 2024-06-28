@@ -234,8 +234,6 @@ ForwardedRefButton.propTypes = {
     id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    // `onClick` is already defined in `tooltipAnchorPropTypes`, for clarity we list it again.
-    onClick: PropTypes.func,
     type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,

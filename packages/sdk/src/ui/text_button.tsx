@@ -293,8 +293,6 @@ ForwardedRefTextButton.propTypes = {
     children: PropTypes.node,
     id: PropTypes.string,
     tabIndex: PropTypes.number,
-    // `onClick` is already defined in `tooltipAnchorPropTypes`, for clarity we list it again.
-    onClick: PropTypes.func,
     dataAttributes: PropTypes.any,
     className: PropTypes.string,
     style: PropTypes.object,

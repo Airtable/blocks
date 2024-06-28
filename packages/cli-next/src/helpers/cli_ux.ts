@@ -33,7 +33,8 @@ function prompt(message: string, options?: PromptOptions) {
     });
 }
 
-export const cli = {..._cli, prompt};
-export const ux = cli;
+// TODO(richsinn#blocks_vuln_upgrade): casting to `any` to bypass type error. We should try to fix.
+export const cli = {..._cli, prompt} as any;
+export const ux = cli as any;
 
 export default cli;

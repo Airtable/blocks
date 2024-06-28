@@ -31,7 +31,7 @@ describe('Cursor', () => {
         // not influenced by an occurrence that they did not explicitly
         // trigger, delay every test until the automatic `isDataLoaded` event
         // has occurred.
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
             cursor.watch('isDataLoaded', function init() {
                 cursor.unwatch('isDataLoaded', init);
                 resolve();

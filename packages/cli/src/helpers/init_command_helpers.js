@@ -3,6 +3,7 @@ const path = require('path');
 const fsUtils = require('./fs_utils');
 const {createWriteStream} = require('fs');
 const {npmAsync} = require('./node_modules_command_helpers');
+// flow-disable-next-line TODO(richsinn#blocks_vuln_upgrade): Not sure why flow cannot detect this
 const {Octokit} = require('@octokit/rest');
 const request = require('postman-request');
 const tar = require('tar');

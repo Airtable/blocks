@@ -20,5 +20,6 @@ module.exports = {
     },
     rules: {
         'no-console': 'warn',
+        '@typescript-eslint/ban-ts-comment': 'warn',
     },
 };

@@ -159,7 +159,7 @@ class GroupedRecordQueryResult extends RecordQueryResult<GroupedRecordQueryResul
         }
 
         // Otherwise build the recordId's from children groups
-        let recordIds: Array<RecordId> = [];
+        const recordIds: Array<RecordId> = [];
         for (const group of this.groups) {
             recordIds.push(...group.recordIds);
         }

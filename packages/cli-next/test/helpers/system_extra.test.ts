@@ -40,7 +40,7 @@ describe('system_extra', () => {
             };
         };
         const triggerReadTimeUpdate = async (path: string) => {
-            const readPromise = new Promise(resolve => {
+            const readPromise = new Promise<void>(resolve => {
                 fs.watchFile(path, {persistent: false, interval: 100}, function listener() {
                     fs.unwatchFile(path, listener);
                     resolve();

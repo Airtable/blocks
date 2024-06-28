@@ -49,7 +49,7 @@ function stubFindPortAsync(stubOptions: {inUsePorts?: number[]; nextPort?: numbe
     return async function(port?, portOptions?) {
         const ports = Number(portOptions?.adjacentPorts) || 0;
         for (let i = 0; i < ports + 1; i++) {
-            if (stubOptions?.inUsePorts?.includes(port + i)) {
+            if (port && stubOptions?.inUsePorts?.includes(port + i)) {
                 return stubOptions?.nextPort ?? 44444;
             }
         }

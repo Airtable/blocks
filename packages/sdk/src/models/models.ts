@@ -20,6 +20,7 @@ export {recordColoring};
 
 // HACK: aggregators need airtable_interface to initialize - really, they should be a property of
 // base instead of here. to work around that, they're initialized lazily for now:
+// eslint-disable-next-line no-var
 export declare var aggregators: ReturnType<typeof createAggregators>;
 let initializedAggregators: null | typeof aggregators = null;
 Object.defineProperty(exports, 'aggregators', {

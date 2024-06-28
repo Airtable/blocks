@@ -13,7 +13,7 @@ import {
     ReleaseBundleOptions,
     SubmitFindDependenciesOptions,
     SubmitTaskConsumer,
-} from '@airtable/blocks-cli-next';
+} from '@airtable/blocks-cli';
 
 import {
     createWebpackCompilerConfig,
@@ -59,6 +59,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         if (stats?.hasErrors()) {
             const firstError = stats.compilation.getErrors()[0];
             if (firstError.name === 'ModuleNotFoundError') {
+                // @ts-ignore
                 throw decorateModuleNotFoundError(firstError, bundlingOptions.context);
             } else {
                 throw firstError;
@@ -91,6 +92,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         try {
             await promisify(compiler.run.bind(compiler))();
         } catch (err) {
+            // @ts-ignore
             if (err.message !== AIRTABLE_CANCEL_BUILD_ERROR) {
                 throw err;
             }
@@ -119,6 +121,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
                 const firstError = stats.compilation.getErrors()[0];
                 if (firstError.name === 'ModuleNotFoundError') {
                     const decoratedErr = decorateModuleNotFoundError(
+                        // @ts-ignore
                         firstError,
                         bundlingOptions.context,
                     );

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../src/sdk';
 import AbstractModel from '../../src/models/abstract_model';
@@ -26,7 +27,7 @@ describe('Record', () => {
     let recordB: Record;
     let recordC: Record;
 
-    let createdTime = '2020-10-23T16:34:04.281Z';
+    const createdTime = '2020-10-23T16:34:04.281Z';
 
     beforeEach(async () => {
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({

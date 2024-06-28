@@ -83,7 +83,7 @@ export interface ViewData {
     // fieldOrder will be absent until the block explicity loads the view's data.
     fieldOrder?: ViewFieldOrderData;
     // colorsByRecordId will be absent until the block explicity loads the view's data.
-    colorsByRecordId?: ViewColorsByRecordIdData;
+    colorsByRecordId?: ViewColorsByRecordIdData | null;
     // groups will be absent until the block explicity loads the view's data (undefined).
     // groups will be null if groups data is disabled for your context/sdk
     groups?: Array<GroupData> | null;

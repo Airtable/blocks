@@ -11,24 +11,24 @@
         "ci": "echo '--- blocks-docs' && yarn test && (cd ../sdk && yarn build) && yarn build",
         "build:docs": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/typedoc-plugin.js\" --json docs.json ..",
         "build:plugins": "tsc -b ./tsconfig.json",
-        "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src",
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --report-unused-disable-directives --ext .js,.ts,.tsx src",
         "minify": "node ./minify-docs-json.js docs.json",
         "build": "yarn run build:plugins && yarn run build:docs && yarn run minify",
         "test": "yarn lint && yarn types",
         "types": "tsc"
     },
     "dependencies": {
-        "@types/node": "^14.14.31",
         "typedoc": "0.15.4",
         "typedoc-plugin-no-inherit": "~1.1.10",
-        "typescript": "~3.7.5"
+        "typescript": "^5.4.5"
     },
     "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^2.10.0",
-        "@typescript-eslint/parser": "^2.10.0",
-        "eslint": "6.7.2",
-        "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01fef1f",
-        "eslint-plugin-import": "^2.19.1"
+        "@types/node": "^18.19.39",
+        "@typescript-eslint/eslint-plugin": "^7.13.0",
+        "@typescript-eslint/parser": "^7.13.0",
+        "eslint": "^9.5.0",
+        "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01bbfe0",
+        "eslint-plugin-import": "^2.29.1"
     },
     "keywords": [],
     "author": "",
