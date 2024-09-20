@@ -1,3 +1,5 @@
+[![Open in DevZero](https://assets.devzero.io/open-in-devzero.svg)](https://www.devzero.io/dashboard/recipes/new?repo-url=https://github.com/Airtable/blocks)
+
 # @airtable/blocks
 
 With the Blocks SDK, you can create your own custom extensions on top of Airtable. These extensions
