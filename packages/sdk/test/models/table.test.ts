@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
 import Table from '../../src/models/table';

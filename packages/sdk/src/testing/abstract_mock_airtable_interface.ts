@@ -63,7 +63,7 @@ const aggregators: Aggregators = {
 
 /** @internal */
 const fieldTypeProvider: FieldTypeProvider = {
-    isComputed(fieldData: FieldData) {
+    isComputed(fieldData: FieldData): boolean {
         return false;
     },
     validateConfigForUpdate: () => {

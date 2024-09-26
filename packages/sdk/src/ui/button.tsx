@@ -227,7 +227,6 @@ ForwardedRefButton.propTypes = {
     id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    onClick: PropTypes.func,
     type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,

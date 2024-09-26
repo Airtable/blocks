@@ -251,7 +251,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     __applyChangesWithoutTriggeringEvents(
         changes: ReadonlyArray<ModelChange>,
     ): ObjectMap<WatchableCursorKey, boolean> {
-        let changedKeys = {
+        const changedKeys = {
             [WatchableCursorKeys.selectedRecordIds]: false,
             [WatchableCursorKeys.activeTableId]: false,
             [WatchableCursorKeys.activeViewId]: false,

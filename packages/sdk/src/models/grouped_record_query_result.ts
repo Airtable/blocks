@@ -141,7 +141,7 @@ class GroupedRecordQueryResult extends RecordQueryResult<GroupedRecordQueryResul
             return this._data.groupData.visibleRecordIds ?? [];
         }
 
-        let recordIds: Array<RecordId> = [];
+        const recordIds: Array<RecordId> = [];
         for (const group of this.groups) {
             recordIds.push(...group.recordIds);
         }

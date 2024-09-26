@@ -56,6 +56,7 @@ class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataL
 }
 
 describe('useLoadable', () => {
+    // eslint-disable-next-line prefer-const
     let mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
     let sdk: Sdk;
 
@@ -303,7 +304,7 @@ describe('useLoadable', () => {
             const el = document.createElement('div');
             let wrapper: any;
             await act(() => {
-                return new Promise<undefined>(resolve => {
+                return new Promise<void>(resolve => {
                     ReactDOM.render(
                         <Wrapper
                             initialThings={[thing1, thing2]}

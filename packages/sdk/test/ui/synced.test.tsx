@@ -28,6 +28,7 @@ interface RenderArg {
 }
 
 describe('Synced', () => {
+    // eslint-disable-next-line prefer-const
     let spy = jest.fn().mockImplementation(({value, canSetValue}: RenderArg) => {
         return (
             <div>

@@ -61,6 +61,7 @@ export default class BlockSdk {
      *
      * @hidden
      */
+    // @ts-ignore
     static VERSION = global.PACKAGE_VERSION;
 
     /** @internal */
@@ -118,6 +119,7 @@ export default class BlockSdk {
     /** @hidden */
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
+        // @ts-ignore
         airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
 
         const sdkInitData = airtableInterface.sdkInitData;

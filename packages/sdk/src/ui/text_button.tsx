@@ -275,7 +275,6 @@ ForwardedRefTextButton.propTypes = {
     children: PropTypes.node,
     id: PropTypes.string,
     tabIndex: PropTypes.number,
-    onClick: PropTypes.func,
     dataAttributes: PropTypes.any,
     className: PropTypes.string,
     style: PropTypes.object,

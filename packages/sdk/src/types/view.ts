@@ -75,7 +75,7 @@ export interface ViewData {
     isLockedView: boolean;
     visibleRecordIds?: Array<RecordId>;
     fieldOrder?: ViewFieldOrderData;
-    colorsByRecordId?: ViewColorsByRecordIdData;
+    colorsByRecordId?: ViewColorsByRecordIdData | null;
     groups?: Array<GroupData> | null;
     groupLevels?: Array<GroupLevelData> | null;
 }

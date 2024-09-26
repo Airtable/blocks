@@ -52,7 +52,7 @@ describe('LinkedRecordQueryResult', () => {
         query = await sdk.base.tables[0].selectRecordsAsync();
         record = query.getRecordById('recA');
 
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
             sdk.cursor.watch('isDataLoaded', function init() {
                 sdk.cursor.unwatch('isDataLoaded', init);
                 resolve();
@@ -460,6 +460,7 @@ describe('LinkedRecordQueryResult', () => {
             });
 
             if (linked.fields === null) {
+                // eslint-disable-next-line @airtable/blocks/no-throw-new
                 throw new Error('Expected an array, received null.');
             }
 
@@ -1019,7 +1020,7 @@ describe('LinkedRecordQueryResult', () => {
                 const otherQuery = await sdk.base.tables[1].selectRecordsAsync();
                 const spy = jest.fn();
 
-                let lrqr = otherQuery.records[0].selectLinkedRecordsFromCell('fld2ndLinked');
+                const lrqr = otherQuery.records[0].selectLinkedRecordsFromCell('fld2ndLinked');
                 lrqr.watch('cellValues', spy);
                 await lrqr.loadDataAsync();
 

@@ -220,7 +220,7 @@ const SelectButtons = (props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
                         <input
                             type="radio"
                             onChange={isOptionDisabled ? undefined : () => _onChange(option.value)}
-                            disabled={isOptionDisabled}
+                            disabled={!!isOptionDisabled}
                             checked={isSelected}
                             className={cssHelpers.VISUALLY_HIDDEN}
                             id={radioId}

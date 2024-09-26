@@ -27,7 +27,7 @@ export interface SelectOption {
     /** The label for the select option. */
     label: React.ReactNode;
     /** If set to `true`, this option will not be selectable. */
-    disabled?: boolean;
+    disabled?: boolean | null;
 }
 
 export const selectOptionValuePropType = PropTypes.oneOfType([

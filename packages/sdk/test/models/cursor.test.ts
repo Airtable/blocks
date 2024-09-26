@@ -25,7 +25,7 @@ describe('Cursor', () => {
             }),
         );
 
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
             cursor.watch('isDataLoaded', function init() {
                 cursor.unwatch('isDataLoaded', init);
                 resolve();

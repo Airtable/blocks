@@ -34,7 +34,11 @@ type ChangedPathsForObject<T extends object> = {[K in keyof T]?: ChangedPathsFor
     _isDirty?: true;
 };
 /** @internal */
-export type ChangedPathsForType<T> = T extends {} ? ChangedPathsForObject<T> : {_isDirty?: true};
+export type ChangedPathsForType<T> = T extends string | number | boolean | ReadonlyArray<unknown>
+    ? {_isDirty?: true}
+    : T extends {}
+    ? ChangedPathsForObject<T>
+    : never;
 
 /**
  * Model class representing a base.

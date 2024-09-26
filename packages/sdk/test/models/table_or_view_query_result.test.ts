@@ -1177,7 +1177,7 @@ describe('TableOrViewQueryResult', () => {
 
             describe('unsubscribing from cell values in fields', () => {
                 const whenUnsubscribed = () => {
-                    return new Promise(resolve => {
+                    return new Promise<void>(resolve => {
                         mockAirtableInterface.unsubscribeFromCellValuesInFields.mockImplementation(
                             resolve,
                         );
@@ -1426,7 +1426,7 @@ describe('TableOrViewQueryResult', () => {
                     recordColorMode: recordColorModes.bySelectField(field),
                 });
                 const spy = jest.fn();
-                let consoleSpies = [
+                const consoleSpies = [
                     jest.spyOn(console, 'log').mockImplementation(() => {}),
                     jest.spyOn(console, 'warn').mockImplementation(() => {}),
                 ];

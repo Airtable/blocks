@@ -282,7 +282,7 @@ const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
                     <option
                         key={`${valueJson}-${option.label}-${index}`}
                         value={valueJson}
-                        disabled={option.disabled}
+                        disabled={option.disabled ? option.disabled : false}
                     >
                         {option.label}
                     </option>

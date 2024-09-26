@@ -27,7 +27,7 @@ module.exports = {
     ],
     settings: {
         react: {
-            version: '16.8',
+            version: '16.14',
         },
         jsdoc: {
             ignorePrivate: true,
@@ -84,14 +84,14 @@ module.exports = {
         'no-path-concat': 'error',
         'no-proto': 'error',
         'no-prototype-builtins': 'error',
-        'no-redeclare': 'error',
+        'no-redeclare': 'off',
         'no-regex-spaces': 'error',
         'no-script-url': 'error',
         'no-self-assign': 'error',
         'no-self-compare': 'error',
         'no-sequences': 'error',
         'no-shadow-restricted-names': 'error',
-        'no-shadow': 'error',
+        'no-shadow': 'off',
         'no-sparse-arrays': 'error',
         'no-template-curly-in-string': 'error',
         'no-throw-literal': 'error',
@@ -139,7 +139,6 @@ module.exports = {
                 ],
             },
         ],
-        'jsdoc/newline-after-description': 'error',
         'jsdoc/no-types': 'error',
 
         'import/first': 'error',

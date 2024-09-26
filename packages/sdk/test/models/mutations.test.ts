@@ -1666,6 +1666,7 @@ Mock reason"
                     ],
                 })
                 .then(() => {
+                    // eslint-disable-next-line @airtable/blocks/no-throw-new
                     throw new Error('Unexpected fulfillment');
                 });
             const uncaughtException = new Promise<void>(resolve => {

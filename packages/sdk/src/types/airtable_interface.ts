@@ -57,7 +57,7 @@ export type BlockRunContext = BlockInstallationPageBlockRunContext | ViewBlockRu
 export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
-    colorsByRecordId: ViewColorsByRecordIdData | null;
+    colorsByRecordId?: ViewColorsByRecordIdData | null;
     groups?: Array<GroupData> | null;
     groupLevels?: Array<GroupLevelData> | null;
 }

@@ -140,7 +140,7 @@ export function splitStyleProps<AllProps extends {className?: string}, StyleProp
     nonStyleProps: Omit<AllProps, keyof StyleProps>;
 } {
     const stylePropNamesSet: Set<keyof any> = new Set(stylePropNames);
-    const styleProps: any = {...defaultStyleProps} || {};
+    const styleProps: any = {...defaultStyleProps};
     const nonStyleProps: any = {};
     for (const propName of keys(props)) {
         if (stylePropNamesSet.has(propName)) {

@@ -408,7 +408,7 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
                     innerRef={this._cardListInnerWindow}
                     itemData={itemData}
                     itemCount={this.props.records.length}
-                    itemKey={(index, data) => data.records[index].id}
+                    itemKey={(index, data) => data.records[index].id as string}
                     itemSize={RECORD_CARD_ROW_HEIGHT + RECORD_CARD_SPACING}
                     onScroll={this.props.onScroll}
                 >

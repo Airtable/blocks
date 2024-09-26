@@ -58,6 +58,7 @@ describe('invariant', () => {
             return err;
         }
 
+        // eslint-disable-next-line @airtable/blocks/no-throw-new
         throw new Error('expected fn to throw');
     };
 

@@ -17,6 +17,7 @@ export {default as Session} from './session';
 export {default as Cursor} from './cursor';
 export {recordColoring};
 
+// eslint-disable-next-line no-var
 export declare var aggregators: ReturnType<typeof createAggregators>;
 let initializedAggregators: null | typeof aggregators = null;
 Object.defineProperty(exports, 'aggregators', {
