@@ -2,7 +2,7 @@ const path = require('path');
 const runCommandAsync = require('./runCommandAsync');
 
 async function runGitAsync(cwd, ...args) {
-    const {stdout} = await runCommandAsync('git', args, {cwd});
+    const {stdout} = await runCommandAsync('git', args, {cwd, maxBuffer: 2 * 1024 * 1024});
     return stdout.replace(/\n$/, '');
 }
 

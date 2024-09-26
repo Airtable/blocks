@@ -15,13 +15,13 @@ function ensureCleanExit(child, name) {
 module.exports = function runCommandAsync(
     filePath,
     args,
-    {env = process.env, cwd = process.cwd()} = {},
+    {env = process.env, cwd = process.cwd(), maxBuffer = 1024 * 1024} = {},
 ) {
     return new Promise((resolve, reject) => {
         const child = childProcess.execFile(
             filePath,
             args,
-            {stdio: 'pipe', env, cwd},
+            {stdio: 'pipe', env, cwd, maxBuffer},
             (err, stdout, stderr) => {
                 if (err) {
                     console.log({stdout, stderr});
