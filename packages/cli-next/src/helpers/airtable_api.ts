@@ -183,9 +183,9 @@ export abstract class AirtableApi extends FetchApi {
         };
     }
 
-    abstract async createBuildAsync(options: CreateBuildOptions): Promise<CreateBuildResponseJson>;
+    abstract createBuildAsync(options: CreateBuildOptions): Promise<CreateBuildResponseJson>;
 
-    abstract async createReleaseAsync(options: CreateReleaseOptions): Promise<void>;
+    abstract createReleaseAsync(options: CreateReleaseOptions): Promise<void>;
 
     async uploadSubmissionAsync({archiveBuffer}: UploadSubmissionOptions): Promise<string> {
         const {presignedUploadUrl, codeUploadId} = await this._blockCreateCodeUploadAsync();
@@ -206,9 +206,9 @@ export abstract class AirtableApi extends FetchApi {
         return message;
     }
 
-    protected abstract async _blockCreateCodeUploadAsync(): Promise<CodeUploadResponse>;
+    protected abstract _blockCreateCodeUploadAsync(): Promise<CodeUploadResponse>;
 
-    protected abstract async _blockFinalizeCodeUploadAsync(
+    protected abstract _blockFinalizeCodeUploadAsync(
         options: CodeUploadOptions,
     ): Promise<FinalizeCodeUploadResponse>;
 

@@ -26,7 +26,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.3 darwin-arm64 node-v16.17.0
+@airtable/blocks-cli/2.0.5 darwin-arm64 node-v18.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -80,7 +80,7 @@ OPTIONS
 ```
 
 _See code:
-[@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+[@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
 
 ## `block init BLOCKIDENTIFIER BLOCKDIRPATH`
 
@@ -163,7 +163,7 @@ EXAMPLE
 
 ## `block set-api-key [APIKEY]`
 
-Set an api key for an airtable account to upload to
+Set a personal access token (with block:manage scope) for an Airtable account to upload to
 
 ```
 USAGE
@@ -175,8 +175,8 @@ OPTIONS
 
 EXAMPLE
   $ block set-api-key
-  $ block set-api-key APIKEY
-  $ block set-api-key --location app APIKEY
+  $ block set-api-key TOKEN
+  $ block set-api-key --location app TOKEN
 ```
 
 ## `block submit`

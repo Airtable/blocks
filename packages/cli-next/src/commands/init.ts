@@ -224,6 +224,7 @@ const initCommandPackageJsonFilter = [
 function filterKeysInPackageJson<T>(
     packageJson: T,
 ): Pick<T, keyof T & typeof initCommandPackageJsonFilter[any]> {
+    // @ts-ignore
     return Object.entries(packageJson)
         .filter(([key]) => initCommandPackageJsonFilter.includes(key as any))
         .reduce((carry, [key, value]) => {

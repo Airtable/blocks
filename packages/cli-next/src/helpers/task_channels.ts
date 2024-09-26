@@ -134,7 +134,9 @@ enum ApplicationMessageType {
 }
 
 type Values<R extends ObjectMap<string, any>> = R[keyof R];
+// @ts-ignore TODO(richsinn#blocks_vuln_upgrade): We should fix these type definitions, but moving forward to unblock upgrade
 type RequestArgs<R> = Parameters<Values<ChannelMethods<R>>> & any[];
+// @ts-ignore TODO(richsinn#blocks_vuln_upgrade): We should fix these type definitions, but moving forward to unblock upgrade
 type RequestResults<R> = ReturnType<Values<ChannelMethods<R>>> extends Promise<infer P> ? P : never;
 
 type RequestMessage<H> = [

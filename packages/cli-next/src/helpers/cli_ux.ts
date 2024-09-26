@@ -33,7 +33,7 @@ function prompt(message: string, options?: PromptOptions) {
     });
 }
 
-export const cli = {..._cli, prompt};
-export const ux = cli;
+export const cli = {..._cli, prompt} as any;
+export const ux = cli as any;
 
 export default cli;
