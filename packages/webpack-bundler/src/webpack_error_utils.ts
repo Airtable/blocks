@@ -5,6 +5,7 @@ import * as webpack from 'webpack';
 type WebpackError = Pick<
     webpack.Compilation['errors'][number],
     'name' | 'message' | 'stack' | 'loc'
+    // @ts-ignore TODO(richsinn#blocks_vuln_upgrade): We should fix these type definitions, but moving forward to unblock upgrade
 > & {module: Pick<webpack.Compilation['errors'][number]['module'], 'nameForCondition'>};
 
 type ParsedModuleNotFoundError = {
@@ -31,7 +32,7 @@ type SourcePosition = {
 export function decorateModuleNotFoundError(
     webpackError: WebpackError,
     appRootPath: string,
-): Error {
+): Error | WebpackError {
     const parsedError = parseModuleNotFoundError(webpackError);
     if (!parsedError) {
         return webpackError;
@@ -63,11 +64,13 @@ export function decorateModuleNotFoundError(
  */
 function parseModuleNotFoundError(webpackError: WebpackError): ParsedModuleNotFoundError | null {
     try {
+        // @ts-ignore
         const fileContainingError = webpackError.module.nameForCondition();
         const importPathRegexMatch = webpackError.message.match(/Can't resolve ["|'](.+)["|'] in/);
         const importPath =
             importPathRegexMatch && importPathRegexMatch[1] ? importPathRegexMatch[1] : null;
         const errorLocation =
+            // @ts-ignore
             'start' in webpackError.loc &&
             typeof webpackError.loc.start.line === 'number' &&
             typeof webpackError.loc.start.column === 'number' &&

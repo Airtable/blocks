@@ -1,7 +1,7 @@
 # @airtable/blocks-webpack-bundler
 
-This is a webpack bundler that can be used with @airtable/blocks-cli@beta. This bundler allows you
-to customize the webpack config that is used when developing and bundling your Airtable app.
+This is a webpack bundler that can be used with @airtable/blocks-cli. This bundler allows you to
+customize the webpack config that is used when developing and bundling your Airtable app.
 
 ## Installation
 
