@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/blocks-cli",
+    "name": "@airtable/blocks-cli-prev",
     "description": "Official command line tool for Airtable blocks development",
     "version": "0.0.76",
     "homepage": "https://airtable.com/developers/blocks",
