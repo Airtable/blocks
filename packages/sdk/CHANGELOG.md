@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.1...HEAD)
 
-No changes.
+-   Upgrade Typescript version to 5.4.5
+-   Perform routine version upgrade to various packages, including `react` and `eslint`
 
 ## [1.18.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.0...@airtable/blocks@1.18.1) - 2023-11-29
 
