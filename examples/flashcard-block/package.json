@@ -2,18 +2,21 @@
     "name": "@airtable/flashcard-app",
     "version": "1.0.4",
     "scripts": {
-        "lint": "eslint frontend"
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint frontend"
     },
     "dependencies": {
         "@airtable/blocks": "latest",
-        "prop-types": "^15.7.2",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0"
+        "prop-types": "^15.8.1",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0"
     },
     "devDependencies": {
-        "eslint": "^6.8.0",
-        "eslint-plugin-react": "^7.18.3",
-        "eslint-plugin-react-hooks": "^2.4.0"
+        "eslint": "^9.5.0",
+        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-react-hooks": "^5.1.0-rc-cc1ec60d0d-20240607"
+    },
+    "devDependenciesComment": {
+        "eslint-plugin-react-hooks": "using 5.1.0-rc-cc1ec60d0d-20240607 because running into error: https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2156030367"
     },
     "license": "MIT"
 }

@@ -451,6 +451,7 @@ let Main = () => {
         if (!settings.validated.isValid) {
             settings.showSettings = true;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [settings.validated.isValid, settings.showSettings]);
 
     const hasSettingsIssue = settings.showSettings || !settings.validated.isValid;

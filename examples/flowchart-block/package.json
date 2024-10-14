@@ -2,20 +2,20 @@
     "name": "@airtable/flowchart-app",
     "version": "1.0.5",
     "scripts": {
-        "lint": "eslint frontend"
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint frontend"
     },
     "dependencies": {
         "@airtable/blocks": "latest",
         "prop-types": "^15.7.2",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0",
         "save-svg-as-png": "^1.4.14",
         "workerize": "^0.1.7"
     },
     "devDependencies": {
-        "eslint": "^6.8.0",
-        "eslint-plugin-react": "^7.18.3",
-        "eslint-plugin-react-hooks": "^2.4.0"
+        "eslint": "^9.5.0",
+        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-react-hooks": "^4.6.2"
     },
     "license": "MIT"
 }

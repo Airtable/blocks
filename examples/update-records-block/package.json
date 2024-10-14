@@ -6,23 +6,22 @@
     "license": "MIT",
     "scripts": {
         "ci": "echo '--- examples/update-records-blocks' && cd ../../packages/sdk && yarn build && cd - && yarn test",
-        "lint": "eslint frontend",
-        "test": "yarn lint && yarn jest"
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint frontend",
+        "test": "npm run lint && jest --testMatch '**/*.test.jsx'"
     },
     "dependencies": {
-        "@airtable/blocks": "^1.5.1",
-        "react": "^16.9.0",
-        "react-dom": "^16.9.0"
+        "@airtable/blocks": "^1.18.2",
+        "react": "^16.14.0",
+        "react-dom": "^16.14.0"
     },
     "devDependencies": {
-        "@airtable/blocks-testing": "^0.0.5",
-        "@sheerun/mutationobserver-shim": "^0.3.3",
-        "@testing-library/jest-dom": "^5.11.6",
+        "@airtable/blocks-testing": "^0.0.6",
         "@testing-library/react": "^11.2.2",
         "@testing-library/user-event": "^12.5.0",
-        "eslint": "^6.3.0",
-        "eslint-plugin-react": "^7.14.3",
-        "eslint-plugin-react-hooks": "^2.0.1",
-        "jest": "^24.9.0"
+        "eslint": "^9.5.0",
+        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-react-hooks": "^4.6.2",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0"
     }
 }

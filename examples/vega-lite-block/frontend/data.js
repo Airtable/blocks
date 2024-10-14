@@ -362,6 +362,7 @@ export function validateFieldDefinitions(table, specification) {
 
                 try {
                     fieldAsAccessPath = asAccessPath(value.field);
+                    // eslint-disable-next-line no-unused-vars
                 } catch (_) {
                     fieldAsAccessPath = '';
                 }
