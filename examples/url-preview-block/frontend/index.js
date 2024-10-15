@@ -458,9 +458,7 @@ const converters = [
     function getFigmaPreviewUrl(url) {
         // Figma has a regex they recommend matching against
         if (
-            url.match(
-                /(https:\/\/([\w.-]+\.)?)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/,
-            )
+            url.match(/https:\/\/[\w\.-]+\.?figma.com\/([\w-]+)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/)
         ) {
             return `https://www.figma.com/embed?embed_host=astra&url=${url}`;
         }
