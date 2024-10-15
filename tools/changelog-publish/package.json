@@ -15,7 +15,7 @@
     },
     "devDependencies": {
         "flow-bin": "^0.102.0",
-        "jest": "^24.8.0"
+        "jest": "^24.9.0"
     },
     "dependencies": {
         "mdast-util-to-string": "^1.0.6",
