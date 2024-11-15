@@ -29,7 +29,8 @@
         "@types/react-dom": "^16.9.24",
         "@typescript-eslint/eslint-plugin": "^7.13.0",
         "@typescript-eslint/parser": "^7.13.0",
-        "typescript": "^5.4.5"
+        "typescript": "^5.4.5",
+        "psl": "^1.10.0"
     },
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",
