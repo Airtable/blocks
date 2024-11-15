@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.76...HEAD)
 
-No changes.
+-   Resolve psl dependency to ^1.10.0 to address punycode deprecation warnings in Node v21+
 
 ## [0.0.76](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.75...@airtable/blocks-cli@0.0.76) - 2024-07-15
 
