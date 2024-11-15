@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.76...HEAD)
+## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.77...HEAD)
+
+No changes.
+
+## [0.0.77](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.76...@airtable/blocks-cli@0.0.77) - 2024-11-15
 
 -   Resolve psl dependency to ^1.10.0 to address punycode deprecation warnings in Node v21+
 
