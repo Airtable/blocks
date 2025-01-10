@@ -16,3 +16,5 @@ report.[0-9]*.json
 
 # cli-next package testing space
 /packages/cli-next/.test-tmp
+
+*storybook.log

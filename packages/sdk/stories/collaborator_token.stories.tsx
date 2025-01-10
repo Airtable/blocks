@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import React from 'react';
-import {storiesOf} from '@storybook/react';
 import CollaboratorToken, {collaboratorTokenStylePropTypes} from '../src/ui/collaborator_token';
 import Example from './helpers/example';
 import collaboratorOptions from './helpers/collaborator_options';
 
-const stories = storiesOf('CollaboratorToken', module);
+export default {
+    component: CollaboratorToken,
+};
 
 function CollaboratorTokenExample() {
     return (
@@ -46,4 +47,6 @@ function CollaboratorTokenExample() {
     );
 }
 
-stories.add('example', () => <CollaboratorTokenExample />);
+export const _Example = {
+    render: () => <CollaboratorTokenExample />,
+};

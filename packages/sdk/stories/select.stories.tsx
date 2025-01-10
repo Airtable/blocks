@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
 import Select, {selectStylePropTypes} from '../src/ui/select';
 import Tooltip from '../src/ui/tooltip';
@@ -9,7 +8,9 @@ import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
-const stories = storiesOf('Select', module);
+export default {
+    component: Select,
+};
 
 const options = ['Apple', 'Pear', 'Banana'].map(value => ({value, label: value}));
 const longOptions = [
@@ -45,7 +46,7 @@ function SelectExample() {
                 return `
                     import React, {useState} from 'react';
                     import {Select} from '@airtable/blocks/ui';
-                    
+
                     const options = ${JSON.stringify(options)};
 
                     const SelectExample = () => {
@@ -71,7 +72,9 @@ function SelectExample() {
     );
 }
 
-stories.add('example', () => <SelectExample />);
+export const _Example = {
+    render: () => <SelectExample />,
+};
 
 function SelectSyncedExample() {
     const [value, setValue] = useState(options[0].value);
@@ -107,68 +110,97 @@ function SelectSyncedExample() {
     );
 }
 
-stories.add('synced example', () => <SelectSyncedExample />);
+export const SyncedExample = {
+    render: () => <SelectSyncedExample />,
+};
 
-stories.add('sizes', () => (
-    <React.Fragment>
-        <Box maxWidth="160px" margin={3}>
-            <Select size="small" options={options} value={options[0].value} margin={2} />
-            <Select size="default" options={options} value={options[0].value} margin={2} />
-            <Select size="large" options={options} value={options[0].value} margin={2} />
+export const Sizes = {
+    render: () => (
+        <React.Fragment>
+            <Box maxWidth="160px" margin={3}>
+                <Select size="small" options={options} value={options[0].value} margin={2} />
+                <Select size="default" options={options} value={options[0].value} margin={2} />
+                <Select size="large" options={options} value={options[0].value} margin={2} />
+            </Box>
+            <Box maxWidth="320px" margin={3}>
+                <Select
+                    size="small"
+                    options={longOptions}
+                    value={longOptions[0].value}
+                    margin={2}
+                />
+                <Select
+                    size="default"
+                    options={longOptions}
+                    value={longOptions[0].value}
+                    margin={2}
+                />
+                <Select
+                    size="large"
+                    options={longOptions}
+                    value={longOptions[0].value}
+                    margin={2}
+                />
+            </Box>
+        </React.Fragment>
+    ),
+};
+
+export const Disabled = {
+    render: () => (
+        <Box maxWidth="400px" margin={3}>
+            <Select disabled={true} options={options} value={options[0].value} margin={2} />
         </Box>
-        <Box maxWidth="320px" margin={3}>
+    ),
+};
+
+export const LabelOverflow = {
+    render: () => (
+        <Box maxWidth="200px" margin={3}>
             <Select size="small" options={longOptions} value={longOptions[0].value} margin={2} />
             <Select size="default" options={longOptions} value={longOptions[0].value} margin={2} />
             <Select size="large" options={longOptions} value={longOptions[0].value} margin={2} />
         </Box>
-    </React.Fragment>
-));
+    ),
+};
 
-stories.add('disabled', () => (
-    <Box maxWidth="400px" margin={3}>
-        <Select disabled={true} options={options} value={options[0].value} margin={2} />
-    </Box>
-));
+export const Ref = {
+    render: () => (
+        <Box maxWidth="400px" margin={3}>
+            <Select
+                ref={node => {
+                    // eslint-disable-next-line no-console
+                    console.log(node);
+                }}
+                options={options}
+                value={options[0].value}
+            />
+        </Box>
+    ),
+};
 
-stories.add('label overflow', () => (
-    <Box maxWidth="200px" margin={3}>
-        <Select size="small" options={longOptions} value={longOptions[0].value} margin={2} />
-        <Select size="default" options={longOptions} value={longOptions[0].value} margin={2} />
-        <Select size="large" options={longOptions} value={longOptions[0].value} margin={2} />
-    </Box>
-));
+export const InsideFormField = {
+    render: () => (
+        <Box maxWidth="400px" margin={3}>
+            <FormField label="Select field">
+                <Select options={options} value={options[0].value} />
+            </FormField>
+        </Box>
+    ),
+};
 
-stories.add('ref', () => (
-    <Box maxWidth="400px" margin={3}>
-        <Select
-            ref={node => {
-                // eslint-disable-next-line no-console
-                console.log(node);
-            }}
-            options={options}
-            value={options[0].value}
-        />
-    </Box>
-));
-
-stories.add('inside form field', () => (
-    <Box maxWidth="400px" margin={3}>
-        <FormField label="Select field">
-            <Select options={options} value={options[0].value} />
-        </FormField>
-    </Box>
-));
-
-stories.add('with tooltip', () => (
-    <Box maxWidth="400px" margin={3}>
-        <Tooltip
-            content="Tooltip content"
-            placementX={Tooltip.placements.CENTER}
-            placementY={Tooltip.placements.BOTTOM}
-            placementOffsetX={0}
-            placementOffsetY={8}
-        >
-            <Select options={options} value={options[0].value} margin={2} />
-        </Tooltip>
-    </Box>
-));
+export const WithTooltip = {
+    render: () => (
+        <Box maxWidth="400px" margin={3}>
+            <Tooltip
+                content="Tooltip content"
+                placementX={Tooltip.placements.CENTER}
+                placementY={Tooltip.placements.BOTTOM}
+                placementOffsetX={0}
+                placementOffsetY={8}
+            >
+                <Select options={options} value={options[0].value} margin={2} />
+            </Tooltip>
+        </Box>
+    ),
+};

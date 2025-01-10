@@ -16,7 +16,7 @@ import {dataAttributesPropType, DataAttributesProp} from './types/data_attribute
  * @noInheritDoc
  * @docsPath UI/components/Label
  */
-interface LabelProps extends AllStylesProps, AriaProps {
+export interface LabelProps extends AllStylesProps, AriaProps {
     /** The size of the label. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
     /** The `for` attribute. Should contain the `id` of the input. */

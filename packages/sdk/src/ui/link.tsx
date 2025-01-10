@@ -118,7 +118,10 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
  * @docsPath UI/components/Link
  * @noInheritDoc
  */
-interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAnchorElement> {
+export interface LinkProps
+    extends AriaProps,
+        LinkStyleProps,
+        TooltipAnchorProps<HTMLAnchorElement> {
     /** The size of the link. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
     /** The variant of the link, which defines the color. Defaults to `default`. */

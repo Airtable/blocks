@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
 import {dialogStylePropTypes} from '../src/ui/dialog';
 import ConfirmationDialog from '../src/ui/confirmation_dialog';
 import Button from '../src/ui/button';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import Example from './helpers/example';
 
-const stories = storiesOf('ConfirmationDialog', module);
+export default {
+    component: ConfirmationDialog,
+};
 
 function ConfirmationDialogExample() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -42,7 +43,7 @@ function ConfirmationDialogExample() {
                         return (
                             <React.Fragment>
                                 <Button onClick={() => setIsDialogOpen(true)}>Open confirmation dialog</Button>
-                              
+
                                 {isDialogOpen && (
                                     <ConfirmationDialog
                                         ${props}
@@ -84,4 +85,6 @@ function ConfirmationDialogExample() {
     );
 }
 
-stories.add('example', () => <ConfirmationDialogExample />);
+export const _Example = {
+    render: () => <ConfirmationDialogExample />,
+};

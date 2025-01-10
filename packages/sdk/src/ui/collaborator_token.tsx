@@ -50,7 +50,7 @@ export const collaboratorTokenStylePropTypes = {
  * @noInheritDoc
  * @docsPath UI/components/CollaboratorToken
  */
-interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnchorProps {
+export interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnchorProps {
     /** An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data. */
     collaborator: Partial<CollaboratorData>;
     /** Additional class names to apply to the collaborator token. */

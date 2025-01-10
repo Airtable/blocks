@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 // @flow
 import React from 'react';
-import {storiesOf} from '@storybook/react';
 import Loader, {loaderStylePropTypes} from '../src/ui/loader';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
-const stories = storiesOf('Loader', module);
+export default {
+    component: Loader,
+};
 
 function LoaderExample() {
     return (
@@ -38,4 +39,6 @@ function LoaderExample() {
     );
 }
 
-stories.add('example', () => <LoaderExample />);
+export const _Example = {
+    render: () => <LoaderExample />,
+};

@@ -108,7 +108,10 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
  * @noInheritDoc
  * @docsPath UI/components/Button
  */
-interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HTMLButtonElement> {
+export interface ButtonProps
+    extends AriaProps,
+        ButtonStyleProps,
+        TooltipAnchorProps<HTMLButtonElement> {
     /** The size of the button. Defaults to `default`. Can be a responsive prop object. */
     size?: ControlSizeProp;
     /** The variant of the button. Defaults to `default`. */

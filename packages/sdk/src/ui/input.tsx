@@ -199,7 +199,7 @@ export const sharedInputPropTypes = {
  *
  * @docsPath UI/components/Input
  */
-interface InputProps extends SharedInputProps {
+export interface InputProps extends SharedInputProps {
     /** The input's current value. */
     value: string;
 }
