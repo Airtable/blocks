@@ -4404,7 +4404,7 @@ airbnb-prop-types@^2.16.0:
     core-js "^3.6.4"
     invariant "2.2.2"
     joi "17.9.2"
-    path-to-regexp "2.0.0"
+    path-to-regexp "8.2.0"
     postman-request "^2.88.1-postman.19"
     regenerator-runtime "^0.13.3"
     strip-ansi "5.2.0"
@@ -14961,17 +14961,7 @@ path-to-regexp@0.1.12:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.12.tgz#d5e1a12e478a976d432ef3c58d534b9923164bb7"
   integrity sha512-RA1GjUVMnvYFxuqovrEqZoxxW5NUZqbwKtYz/Tt7nXerk0LbLblQmrsgdeOxV5SFHf0UDggjS/bSeOZwt1pmEQ==
 
-path-to-regexp@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-2.0.0.tgz#b77a8168c2e78bc31f3d312d71b1ace97df23870"
-  integrity sha512-DPZblKdQsbV6B3fHknj89h6Nw/Z5zFK0nFX+DVN7y8a+IUHf9taJWvMK+ue0+AEjXrke0KVRCcfm2pOYGSRk8g==
-
-path-to-regexp@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.3.0.tgz#f7f31d32e8518c2660862b644414b6d5c63a611b"
-  integrity sha512-qyCH421YQPS2WFDxDjftfc1ZR5WKQzVzqsp4n9M2kQhVOo/ByahFoUNJfl58kOcEGfQ//7weFTDhm+ss8Ecxgw==
-
-path-to-regexp@^8.1.0:
+path-to-regexp@8.2.0, path-to-regexp@^8.1.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-8.2.0.tgz#73990cc29e57a3ff2a0d914095156df5db79e8b4"
   integrity sha512-TdrF7fW9Rphjq4RjrW0Kp2AW0Ahwu9sRGTkS6bvDi0SCwZlEZYmcfDbEsTz8RVk0EHIS/Vd1bv3JhG+1xZuAyQ==

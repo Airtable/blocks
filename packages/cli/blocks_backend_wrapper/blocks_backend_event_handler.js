@@ -130,15 +130,9 @@ class BlocksBackendEventHandler {
     ): {route: BackendRoute, params: {[string]: string}} | null {
         for (const route of this._blockJson.routes || []) {
             if (route.methods.find(method => method.toLowerCase() === event.method.toLowerCase())) {
-                const keys = [];
-                const re = pathToRegexp(route.urlPath, keys);
-                const match = re.exec(event.path);
+                const match = pathToRegexp.match(route.urlPath)(event.path);
                 if (match) {
-                    const params = keys.reduce((result, key, index) => {
-                        const param = match[index + 1];
-                        result[key.name] = param;
-                        return result;
-                    }, {});
+                    const {params} = match;
                     return {route, params};
                 }
             }

@@ -77,7 +77,7 @@
         "lodash": "^4.17.14",
         "loose-envify": "^1.4.0",
         "npm-package-arg": "^6.1.0",
-        "path-to-regexp": "^3.3.0",
+        "path-to-regexp": "8.2.0",
         "pkg-dir": "^4.2.0",
         "postman-request": "^2.88.1-postman.19",
         "regenerator-runtime": "^0.13.3",
