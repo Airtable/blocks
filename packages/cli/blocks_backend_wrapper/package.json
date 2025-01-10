@@ -10,14 +10,5 @@
         "regenerator-runtime": "^0.13.3",
         "postman-request": "^2.88.1-postman.19",
         "strip-ansi": "5.2.0"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.2.3",
-        "@babel/core": "^7.4.0",
-        "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-        "@babel/plugin-transform-flow-strip-types": "^7.4.4",
-        "@babel/preset-env": "^7.4.2",
-        "mocha": "^10.4.0 ",
-        "sinon": "^18.0.0"
     }
 }
