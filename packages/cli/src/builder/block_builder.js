@@ -54,19 +54,18 @@ const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx|ts|tsx)$/;
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
 const developmentBrowsers: Array<string> = [
-    'chrome 61', // Desktop (electron) app.
     'last 2 chrome versions',
     'last 2 firefox versions',
     'last 1 safari version',
     'last 1 edge version',
 ];
 
-// From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
+// From https://support.airtable.com/docs/what-are-the-technical-requirements-for-using-airtable
 const allSupportedBrowsers: Array<string> = [
-    'firefox >= 29',
-    'chrome >= 32',
-    'safari >= 9',
-    'edge >= 13',
+    'firefox >= 94',
+    'chrome >= 91',
+    'safari >= 14.1',
+    'edge >= 107',
 ];
 
 const DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS = 1000;
@@ -508,12 +507,7 @@ class BlockBuilder {
             '@babel/preset-react',
             '@babel/preset-typescript',
         ];
-        const plugins = [
-            '@babel/plugin-transform-flow-strip-types',
-            '@babel/plugin-proposal-class-properties',
-            '@babel/plugin-proposal-nullish-coalescing-operator',
-            '@babel/plugin-proposal-optional-chaining',
-        ];
+        const plugins = ['@babel/plugin-transform-flow-strip-types'];
 
         // Use the blocks-cli dir as the cwd so babel can properly find presets/plugins.
         return await babel.transformFileAsync(filePath, {

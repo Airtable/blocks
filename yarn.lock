@@ -81,11 +81,6 @@
     js-tokens "^4.0.0"
     picocolors "^1.0.0"
 
-"@babel/compat-data@^7.20.5", "@babel/compat-data@^7.26.5":
-  version "7.26.5"
-  resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.26.5.tgz#df93ac37f4417854130e21d72c66ff3d4b897fc7"
-  integrity sha512-XvcZi1KWf88RVbF9wn8MN6tYFloU5qX8KjuF3E1PVBmJ9eypXfs4GRiJwLuTZL0iSnJUKn1BFPa5BPZZJyFzPg==
-
 "@babel/compat-data@^7.22.6", "@babel/compat-data@^7.24.7":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.24.7.tgz#d23bbea508c3883ba8251fb4164982c36ea577ed"
@@ -209,17 +204,6 @@
   dependencies:
     "@babel/traverse" "^7.24.7"
     "@babel/types" "^7.24.7"
-
-"@babel/helper-compilation-targets@^7.20.7":
-  version "7.26.5"
-  resolved "https://registry.yarnpkg.com/@babel/helper-compilation-targets/-/helper-compilation-targets-7.26.5.tgz#75d92bb8d8d51301c0d49e52a65c9a7fe94514d8"
-  integrity sha512-IXuyn5EkouFJscIDuFF5EsiSolseme1s0CZB+QxVugqJLYmKdxI1VfIBOst0SUu4rnk2Z7kqTwmoO1lp3HIfnA==
-  dependencies:
-    "@babel/compat-data" "^7.26.5"
-    "@babel/helper-validator-option" "^7.25.9"
-    browserslist "^4.24.0"
-    lru-cache "^5.1.1"
-    semver "^6.3.1"
 
 "@babel/helper-compilation-targets@^7.22.6", "@babel/helper-compilation-targets@^7.24.7":
   version "7.24.7"
@@ -389,11 +373,6 @@
   version "7.25.7"
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.25.7.tgz#8ec5b21812d992e1ef88a9b068260537b6f0e36c"
   integrity sha512-eaPZai0PiqCi09pPs3pAFfl/zYgGaE6IdXtYvmf0qlcDTd3WCtO7JWCcRd64e0EQrcYgiHibEZnOGsSY4QSgaw==
-
-"@babel/helper-plugin-utils@^7.25.9":
-  version "7.26.5"
-  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.26.5.tgz#18580d00c9934117ad719392c4f6585c9333cc35"
-  integrity sha512-RS+jZcRdZdRFzMyr+wcsaqOmld1/EqTghfaBGQQd/WnRdzdlvSZ//kF7U8VQTxf1ynZ4cjUcYgjVGx13ewNPMg==
 
 "@babel/helper-remap-async-to-generator@^7.24.7":
   version "7.24.7"
@@ -594,7 +573,7 @@
     "@babel/helper-environment-visitor" "^7.24.7"
     "@babel/helper-plugin-utils" "^7.24.7"
 
-"@babel/plugin-proposal-class-properties@^7.7.0", "@babel/plugin-proposal-class-properties@^7.7.4":
+"@babel/plugin-proposal-class-properties@^7.7.4":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.18.6.tgz#b110f59741895f7ec21a6fff696ec46265c446a3"
   integrity sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==
@@ -609,17 +588,6 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.18.6"
     "@babel/plugin-syntax-nullish-coalescing-operator" "^7.8.3"
-
-"@babel/plugin-proposal-object-rest-spread@^7.6.2":
-  version "7.20.7"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.20.7.tgz#aa662940ef425779c75534a5c41e9d936edc390a"
-  integrity sha512-d2S98yCiLxDVmBmE8UjGcfPvNEUbA1U5q5WxaWFUGRzJSVAZqm5W6MbPct0jxnegUZ0niLeNX+IOzEs7wYg9Dg==
-  dependencies:
-    "@babel/compat-data" "^7.20.5"
-    "@babel/helper-compilation-targets" "^7.20.7"
-    "@babel/helper-plugin-utils" "^7.20.2"
-    "@babel/plugin-syntax-object-rest-spread" "^7.8.3"
-    "@babel/plugin-transform-parameters" "^7.20.7"
 
 "@babel/plugin-proposal-optional-chaining@^7.7.5":
   version "7.21.0"
@@ -1084,13 +1052,6 @@
     "@babel/helper-plugin-utils" "^7.24.7"
     "@babel/helper-skip-transparent-expression-wrappers" "^7.24.7"
     "@babel/plugin-syntax-optional-chaining" "^7.8.3"
-
-"@babel/plugin-transform-parameters@^7.20.7":
-  version "7.25.9"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-parameters/-/plugin-transform-parameters-7.25.9.tgz#b856842205b3e77e18b7a7a1b94958069c7ba257"
-  integrity sha512-wzz6MKwpnshBAiRmn4jR8LYz/g8Ksg0o80XmwZDlordjwEk9SxBzTWC7F5ef1jhbrbOW2DJ5J6ayRukrJmnr0g==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.25.9"
 
 "@babel/plugin-transform-parameters@^7.24.7":
   version "7.24.7"
@@ -4401,12 +4362,10 @@ airbnb-prop-types@^2.16.0:
 "airtable-blocks-backend-wrapper@file:./packages/cli/blocks_backend_wrapper":
   version "0.0.1"
   dependencies:
-    core-js "^3.6.4"
     invariant "2.2.2"
     joi "17.9.2"
     path-to-regexp "8.2.0"
     postman-request "^2.88.1-postman.19"
-    regenerator-runtime "^0.13.3"
     strip-ansi "5.2.0"
 
 ajv-formats@^2.1.1:
@@ -6966,7 +6925,7 @@ core-js@^2.4.0, core-js@^2.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
-core-js@^3.4.8, core-js@^3.6.4, core-js@^3.8.1:
+core-js@^3.4.8, core-js@^3.8.1:
   version "3.37.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.37.1.tgz#d21751ddb756518ac5a00e4d66499df981a62db9"
   integrity sha512-Xn6qmxrQZyB0FFY8E3bgRXei3lWDJHhvI+u0q9TKIYM49G8pAr0FgnnrFRAmsbptZL1yxRADVXn+x5AGsbBfyw==
@@ -7112,7 +7071,7 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-cross-spawn@7.0.6, cross-spawn@^6.0.0, cross-spawn@^6.0.5, cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3, cross-spawn@^7.0.6:
+cross-spawn@^6.0.0, cross-spawn@^6.0.5, cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3, cross-spawn@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
   integrity sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==
@@ -15821,7 +15780,7 @@ regenerator-runtime@^0.11.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
-regenerator-runtime@^0.13.3, regenerator-runtime@^0.13.4:
+regenerator-runtime@^0.13.4:
   version "0.13.11"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
