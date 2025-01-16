@@ -1,4 +1,4 @@
 module.exports = {
-    require: ['@babel/register', 'core-js/stable', 'regenerator-runtime/runtime'],
+    require: ['@babel/register'],
     recursive: true,
 };

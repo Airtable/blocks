@@ -15,8 +15,6 @@
  *     https://airtable.com/appQOxbW7k6mK0Eqd?blocks=bipHcxcRpB0ObTAGo
  */
 
-require('core-js/stable');
-require('regenerator-runtime/runtime');
 const chalk = require('chalk');
 const childProcess = require('child_process');
 const delay = require('delay');

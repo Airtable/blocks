@@ -14,6 +14,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Downgrade flow-typed dependency from 2.6.2 to 2.6.1 to resolve security vulnerability in
     lodash.set
 -   Upgrade mocha to 11.0.1 to address security vulneratiblity in minimist
+-   Remove core-js and regenerator-runtime
 
 ## [0.0.77](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.76...@airtable/blocks-cli@0.0.77) - 2024-11-15
 

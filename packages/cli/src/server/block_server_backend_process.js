@@ -1,7 +1,5 @@
 // @flow
 
-require('core-js/stable');
-require('regenerator-runtime/runtime');
 const invariant = require('invariant');
 const path = require('path');
 const BlocksBackendEventHandler = require('../../blocks_backend_wrapper/blocks_backend_event_handler');

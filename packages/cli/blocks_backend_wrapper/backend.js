@@ -8,14 +8,7 @@
  * This whole folder will just be copied directly into backend deployment packages.
  * All dependencies should be installed directly within this folder (i.e. it should
  * not rely on any hyperbase dependencies), and all requires should be relative.
- *
- * This particular file also cannot contain any async/await code, since it requires
- * regenerator-runtime at the top level. If you add async/await code, it will fail
- * since regenerator runtime will not be defined.
  */
-
-require('core-js/stable');
-require('regenerator-runtime/runtime');
 
 // This is sketchy: some runtime checks for "am I running in Node" check that
 // typeof self === 'undefined', so this breaks that...
