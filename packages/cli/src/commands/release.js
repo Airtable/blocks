@@ -339,8 +339,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         } else {
             await apiClient.createReleaseAsync(buildId, deployId);
         }
-    } catch (err) {
-        throw err;
     } finally {
         await blockBuilder.wipeBaseOutputBuildDirAsync();
     }

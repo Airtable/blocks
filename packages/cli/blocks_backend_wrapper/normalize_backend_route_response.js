@@ -117,7 +117,7 @@ function convertHeadersArrayToObjectIfNecessary(
             );
         }
 
-        if (headers.hasOwnProperty(headerName)) {
+        if (Object.prototype.hasOwnProperty.call(headers, headerName)) {
             headers[headerName].push(headerValue);
         } else {
             headers[headerName] = [headerValue];

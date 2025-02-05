@@ -163,7 +163,7 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
             },
             body: {
                 hasBackend,
-                originalRemoteJson: !!originalRemoteJson
+                originalRemoteJson: originalRemoteJson
                     ? {
                           blockId: originalRemoteJson.blockId,
                           baseId: originalRemoteJson.baseId,

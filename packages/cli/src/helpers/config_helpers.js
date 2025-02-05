@@ -77,7 +77,10 @@ async function _getApiKeyFromConfigIfExistsAsync(
 ): Promise<AirtableApiKeyOrApiKeyByName | null> {
     const configData = await _getConfigIfExistsAsync(location);
 
-    if (configData === null || !configData.hasOwnProperty(ConfigKeys.API_KEY)) {
+    if (
+        configData === null ||
+        !Object.prototype.hasOwnProperty.call(configData, ConfigKeys.API_KEY)
+    ) {
         return null;
     }
     const apiKeyOrApiKeyByRemote = configData[ConfigKeys.API_KEY];

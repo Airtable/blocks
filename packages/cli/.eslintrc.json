@@ -10,7 +10,7 @@
         "plugin:react/recommended",
         "plugin:airtable/recommended"
     ],
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
         "sourceType": "module",
         "ecmaFeatures": {
@@ -25,6 +25,11 @@
         }
     },
     "plugins": ["airtable", "flowtype", "react"],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "rules": {
         "no-case-declarations": "warn",
         "no-debugger": "warn",
@@ -167,6 +172,7 @@
         "react/prop-types": ["warn", {"ignore": ["children", "className", "style"]}],
         "react/react-in-jsx-scope": "error",
         "react/self-closing-comp": "warn",
+
         "flowtype/boolean-style": ["warn", "boolean"],
         "flowtype/define-flow-type": "warn",
         "flowtype/delimiter-dangle": ["warn", "always-multiline"],
