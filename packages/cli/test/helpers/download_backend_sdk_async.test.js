@@ -54,6 +54,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -77,6 +78,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -99,6 +101,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -121,6 +124,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -144,6 +148,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -161,6 +166,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });
@@ -178,6 +184,7 @@ describe('downloadBackendSdkAsync', function() {
                 headers: {
                     'User-Agent': blockCliConfigSettings.USER_AGENT,
                 },
+                brotli: true,
             }),
         );
     });

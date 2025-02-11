@@ -15,6 +15,7 @@ async function _fetchBackendSdkAsync(backendSdkUrl: string): Promise<string> {
     const response: Response = await requestAsync({
         method: 'GET',
         uri: backendSdkUrl,
+        brotli: true,
         headers: {
             'User-Agent': blockCliConfigSettings.USER_AGENT,
         },
