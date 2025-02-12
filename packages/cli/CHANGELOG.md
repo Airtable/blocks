@@ -9,8 +9,10 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.77...HEAD)
+## [0.0.78](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@0.0.77...HEAD)
 
+-   Modernize browser support targets
+-   Update to eslint v8
 -   Downgrade flow-typed dependency from 2.6.2 to 2.6.1 to resolve security vulnerability in
     lodash.set
 -   Upgrade mocha to 11.0.1 to address security vulneratiblity in minimist
