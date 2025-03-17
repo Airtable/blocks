@@ -6,7 +6,7 @@
         "invariant": "2.2.2",
         "joi": "17.9.2",
         "path-to-regexp": "8.2.0",
-        "postman-request": "^2.88.1-postman.19",
+        "postman-request": "^2.88.1-postman.42",
         "strip-ansi": "5.2.0"
     }
 }
