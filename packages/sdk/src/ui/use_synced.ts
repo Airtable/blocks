@@ -1,4 +1,4 @@
-import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
+import {GlobalConfigKey, GlobalConfigValue} from '../shared/types/global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import {useSdk} from './sdk_context';
 

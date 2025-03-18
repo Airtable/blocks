@@ -4,8 +4,8 @@
  */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {ViewportSizeConstraint} from '../types/viewport';
-import Sdk from '../sdk';
+import {ViewportSizeConstraint} from '../base/types/viewport';
+import Sdk from '../base/sdk';
 import {useSdk} from './sdk_context';
 import withHooks from './with_hooks';
 

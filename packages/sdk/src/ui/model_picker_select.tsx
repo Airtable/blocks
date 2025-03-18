@@ -2,9 +2,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {invariant} from '../error_utils';
-import Table from '../models/table';
-import View from '../models/view';
-import Field from '../models/field';
+import Table from '../base/models/table';
+import View from '../base/models/view';
+import Field from '../base/models/field';
 import Select, {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import {SelectOptionValue} from './select_and_select_buttons_helpers';
 import useWatchable from './use_watchable';

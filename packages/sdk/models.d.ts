@@ -1,1 +1,1 @@
-export * from './dist/types/src/models/models';
+export * from './dist/types/src/base/models/models';

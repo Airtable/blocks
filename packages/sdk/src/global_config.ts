@@ -1,6 +1,5 @@
 /** @module @airtable/blocks: globalConfig */ /** */
 import Watchable from './watchable';
-import {AirtableInterface} from './types/airtable_interface';
 import {spawnError} from './error_utils';
 import {
     GlobalConfigPath,
@@ -11,10 +10,12 @@ import {
     GlobalConfigUpdate,
     PartialGlobalConfigUpdate,
     GlobalConfigPathValidationResult,
-} from './types/global_config';
-import {MutationTypes, PermissionCheckResult} from './types/mutations';
+} from './shared/types/global_config';
+import {PermissionCheckResult, MutationTypesCore} from './shared/types/mutations_core';
 import {getValueAtOwnPath} from './private_utils';
-import Sdk from './sdk';
+import {BlockSdkCore} from './shared/sdk_core';
+import {AirtableInterfaceCore} from './shared/types/airtable_interface_core';
+import {SdkMode} from './sdk_mode';
 
 /**
  * You can watch any top-level key in global config. Use '*' to watch every change.
@@ -60,15 +61,15 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return true;
     }
     /** @internal */
-    _sdk: Sdk;
+    _sdk: BlockSdkCore<SdkMode>;
     /** @internal */
     _kvStore: GlobalConfigData;
     /** @internal */
-    _airtableInterface: AirtableInterface;
+    _airtableInterface: AirtableInterfaceCore<SdkMode>;
     /**
      * @internal
      */
-    constructor(initialKvValuesByKey: GlobalConfigData, sdk: Sdk) {
+    constructor(initialKvValuesByKey: GlobalConfigData, sdk: BlockSdkCore<SdkMode>) {
         super();
 
         this._kvStore = initialKvValuesByKey;
@@ -275,7 +276,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         updates?: ReadonlyArray<PartialGlobalConfigUpdate>,
     ): PermissionCheckResult {
         return this._sdk.__mutations.checkPermissionsForMutation({
-            type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+            type: MutationTypesCore.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates: updates
                 ? updates.map(({path, value}) => ({path: path || undefined, value}))
                 : undefined,
@@ -364,7 +365,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
 
         await this._sdk.__mutations.applyMutationAsync({
-            type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+            type: MutationTypesCore.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
             updates,
         });
     }

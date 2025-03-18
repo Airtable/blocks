@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Base from '../models/base';
+import Base from '../base/models/base';
 import {SdkContext} from './sdk_context';
 
 /**

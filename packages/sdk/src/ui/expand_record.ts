@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: expandRecord */ /** */
-import Record from '../models/record';
+import Record from '../base/models/record';
 
 /**
  * Options object for expanding a record.

@@ -1,7 +1,7 @@
 import React from 'react';
 import {values as objectValues} from '../src/private_utils';
 import Icon, {iconStylePropTypes} from '../src/ui/icon';
-import {FieldType} from '../src/types/field';
+import {FieldType} from '../src/shared/types/field';
 import {ReadableFieldTypes, IconNamesByFieldType} from './helpers/field_type';
 import Example from './helpers/example';
 

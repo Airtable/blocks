@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: FieldPicker */ /** */
 import * as React from 'react';
-import Field from '../models/field';
-import {GlobalConfigKey} from '../types/global_config';
+import Field from '../base/models/field';
+import {GlobalConfigKey} from '../shared/types/global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from './field_picker';
 import useSynced from './use_synced';

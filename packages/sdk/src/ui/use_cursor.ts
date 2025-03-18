@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useCursor */ /** */
-import Cursor from '../models/cursor';
+import Cursor from '../base/models/cursor';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

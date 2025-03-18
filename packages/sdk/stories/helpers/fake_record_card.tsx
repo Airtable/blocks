@@ -6,7 +6,7 @@ import Text from '../../src/ui/text';
 import Heading from '../../src/ui/heading';
 import Dialog from '../../src/ui/dialog';
 import Button from '../../src/ui/button';
-import {FieldType} from '../../src/types/field';
+import {FieldType} from '../../src/shared/types/field';
 import FakeCellRenderer from './fake_cell_renderer';
 import {recordCardAttachment} from './attachments';
 import {CONTROL_WIDTH} from './code_utils';

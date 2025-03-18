@@ -1,5 +1,5 @@
 import {spawnError} from '../error_utils';
-import {AirtableInterface} from '../types/airtable_interface';
+import {AirtableInterface} from '../base/types/airtable_interface';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 

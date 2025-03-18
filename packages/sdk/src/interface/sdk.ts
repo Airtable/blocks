@@ -1,0 +1,82 @@
+import {ModelChange} from '../shared/types/base_core';
+import {GlobalConfigUpdate} from '../shared/types/global_config';
+import {BlockSdkCore} from '../shared/sdk_core';
+import {InterfaceSdkMode} from '../sdk_mode';
+import {AppInterface} from '../shared/types/airtable_interface_core';
+import Session from './models/session';
+import Mutations from './models/mutations';
+import Base from './models/base';
+
+// /** Add hidden annotation if uncommenting */
+// type UpdateBatcher = (applyUpdates: () => void) => void;
+
+// /** Add internal annotation if uncommenting */
+// function defaultUpdateBatcher(applyUpdates: () => void) {
+//     applyUpdates();
+// }
+
+/** @hidden */
+export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
+    constructor(airtableInterface: InterfaceSdkMode['AirtableInterfaceT']) {
+        super(airtableInterface);
+
+        this._registerHandlers();
+    }
+    /** @internal */
+    _constructSession(): Session {
+        return new Session(this);
+    }
+    /** @internal */
+    _constructBase(): Base {
+        return new Base(this);
+    }
+    /** @internal */
+    _constructMutations() {
+        return new Mutations(
+            this,
+            this.session,
+            this.base,
+            changes => this.__applyModelChanges(changes),
+            updates => this.__applyGlobalConfigUpdates(updates),
+        );
+    }
+    /** @internal */
+    _registerHandlers() {
+        // base
+        this.__airtableInterface.subscribeToModelUpdates(({changes}) => {
+            this.__applyModelChanges(changes);
+        });
+
+        // global config
+        this.__airtableInterface.subscribeToGlobalConfigUpdates(({updates}) => {
+            this.__applyGlobalConfigUpdates(updates);
+        });
+    }
+    /** @internal */
+    __applyModelChanges(changes: ReadonlyArray<ModelChange>) {
+        // this._runWithUpdateBatching(() => {
+        const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
+        const changedSessionKeys = this.session.__applyChangesWithoutTriggeringEvents(changes);
+        this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
+        this.session.__triggerOnChangeForChangedKeys(changedSessionKeys);
+        // });
+    }
+    /** @internal */
+    __applyGlobalConfigUpdates(updates: ReadonlyArray<GlobalConfigUpdate>) {
+        // this._runWithUpdateBatching(() => {
+        this.globalConfig.__setMultipleKvPaths(updates);
+        // });
+    }
+
+    // /** @internal */
+    // __setBatchedUpdatesFn(newUpdateBatcher: UpdateBatcher) {
+    //     this._runWithUpdateBatching = newUpdateBatcher;
+    // }
+
+    /**
+     * @internal
+     */
+    get __appInterface(): AppInterface {
+        return this.base._baseData.appInterface;
+    }
+}

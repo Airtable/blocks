@@ -4,7 +4,7 @@ import Example from './helpers/example';
 import {cellRendererStylePropTypes} from '../src/ui/cell_renderer';
 import {values} from '../src/private_utils';
 import FakeCellRenderer from './helpers/fake_cell_renderer';
-import {FieldType} from '../src/types/field';
+import {FieldType} from '../src/shared/types/field';
 import {ReadableFieldTypes} from './helpers/field_type';
 
 export default {

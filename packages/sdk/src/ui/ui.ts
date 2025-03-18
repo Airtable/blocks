@@ -46,7 +46,7 @@ export {default as useViewport} from './use_viewport';
 export {default as useGlobalConfig} from './use_global_config';
 export {default as useViewMetadata} from './use_view_metadata';
 export {default as useRecordActionData} from './use_record_action_data';
-export {registerRecordActionDataCallback} from '../perform_record_action';
+export {registerRecordActionDataCallback} from '../base/perform_record_action';
 
 export * from './unstable_standalone_ui';
 

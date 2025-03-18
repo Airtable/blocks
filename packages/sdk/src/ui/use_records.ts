@@ -1,17 +1,17 @@
 /** @module @airtable/blocks/ui: useRecords */ /** */
 import {spawnError} from '../error_utils';
-import {RecordId} from '../types/record';
-import Table from '../models/table';
-import TableOrViewQueryResult from '../models/table_or_view_query_result';
-import LinkedRecordsQueryResult from '../models/linked_records_query_result';
+import {RecordId} from '../shared/types/hyper_ids';
+import Table from '../base/models/table';
+import TableOrViewQueryResult from '../base/models/table_or_view_query_result';
+import LinkedRecordsQueryResult from '../base/models/linked_records_query_result';
 import RecordQueryResult, {
     RecordQueryResultOpts,
     RecordIdQueryResultOpts,
     SingleRecordQueryResultOpts,
-} from '../models/record_query_result';
-import Record from '../models/record';
-import * as RecordColoring from '../models/record_coloring';
-import View from '../models/view';
+} from '../base/models/record_query_result';
+import Record from '../base/models/record';
+import * as RecordColoring from '../base/models/record_coloring';
+import View from '../base/models/view';
 import useLoadable from './use_loadable';
 import useWatchable from './use_watchable';
 

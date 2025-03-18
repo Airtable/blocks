@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useSession */ /** */
-import Session from '../models/session';
+import Session from '../base/models/session';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

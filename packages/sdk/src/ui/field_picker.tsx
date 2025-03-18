@@ -2,9 +2,9 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {values, ObjectMap, has} from '../private_utils';
-import Field from '../models/field';
-import Table from '../models/table';
-import {FieldType} from '../types/field';
+import Field from '../base/models/field';
+import Table from '../base/models/table';
+import {FieldType} from '../shared/types/field';
 import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';

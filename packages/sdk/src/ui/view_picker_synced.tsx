@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: ViewPicker */ /** */
 import * as React from 'react';
-import View from '../models/view';
-import {GlobalConfigKey} from '../types/global_config';
+import View from '../base/models/view';
+import {GlobalConfigKey} from '../shared/types/global_config';
 import ViewPicker, {sharedViewPickerPropTypes, SharedViewPickerProps} from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';

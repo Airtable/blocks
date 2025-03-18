@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Sdk from '../sdk';
+import Sdk from '../base/sdk';
 import {invariant} from '../error_utils';
 
 export const SdkContext = React.createContext<Sdk | null>(null);

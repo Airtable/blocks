@@ -1,8 +1,8 @@
-import {__injectSdkIntoPerformRecordAction} from './perform_record_action';
+import {__injectSdkIntoPerformRecordAction} from './base/perform_record_action';
 import warn, {__injectSdkIntoWarning} from './warning';
 import getAirtableInterface from './injected/airtable_interface';
-import Sdk from './sdk';
-import {__injectSdkIntoCreateAggregators} from './models/create_aggregators';
+import Sdk from './base/sdk';
+import {__injectSdkIntoCreateAggregators} from './base/models/create_aggregators';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 
 /** @internal */
@@ -58,16 +58,16 @@ Object.defineProperty(module.exports, 'UI', {
     },
 });
 
-Object.defineProperty(module.exports, 'models', {
-    enumerable: true,
-    get() {
-        warn(
-            '`import {models} from "@airtable/blocks"` is deprecated. Use `import * as models from "@airtable/blocks/models/models"` instead.',
-        );
-
-        return require('./models/models');
-    },
-});
+// // TODO(#interface-extensions) remove this now? Not great that we were recommending this since it breaks now that we moved this file...
+// Object.defineProperty(module.exports, 'models', {
+//     enumerable: true,
+//     get() {
+//         warn(
+//             '`import {models} from "@airtable/blocks"` is deprecated. Use `import * as models from "@airtable/blocks/models/models"` instead.',
+//         );
+//         return require('./models/models');
+//     },
+// });
 
 /** @internal */
 export function __reset() {

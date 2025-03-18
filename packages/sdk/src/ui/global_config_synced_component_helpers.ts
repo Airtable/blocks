@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import {BlockRunContextType} from '../types/airtable_interface';
-import {GlobalConfigKey} from '../types/global_config';
+import {BlockRunContextType} from '../base/types/airtable_interface';
+import {GlobalConfigKey} from '../shared/types/global_config';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

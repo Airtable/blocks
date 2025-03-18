@@ -4,10 +4,10 @@ import {act} from 'react-dom/test-utils';
 import {useRecords} from '../../src/ui/use_records';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Sdk from '../../src/sdk';
-import Record from '../../src/models/record';
-import Table from '../../src/models/table';
-import {TableId} from '../../src/types/table';
+import Sdk from '../../src/base/sdk';
+import Record from '../../src/base/models/record';
+import Table from '../../src/base/models/table';
+import {TableId} from '../../src/shared/types/hyper_ids';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
 jest.mock('../../src/injected/airtable_interface', () => ({

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useViewport */ /** */
-import Viewport from '../viewport';
+import Viewport from '../base/viewport';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

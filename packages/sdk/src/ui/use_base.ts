@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useBase */ /** */
-import Base from '../models/base';
+import Base from '../base/models/base';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import * as React from 'react';
 import {invariant} from '../error_utils';
-import Sdk from '../sdk';
+import Sdk from '../base/sdk';
 import {globalAlert} from './ui';
 import {baymax} from './baymax_utils';
 import Modal from './modal';

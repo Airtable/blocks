@@ -1,4 +1,4 @@
-import Sdk from './dist/types/src/sdk';
+import Sdk from './dist/types/src/base/sdk';
 
 export const globalConfig: Sdk['globalConfig'];
 export const base: Sdk['base'];

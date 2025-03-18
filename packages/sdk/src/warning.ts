@@ -1,5 +1,6 @@
 import {ObjectMap} from './private_utils';
-import Sdk from './sdk';
+import {BlockSdkCore} from './shared/sdk_core';
+import {SdkMode} from './sdk_mode';
 
 const usedWarnings: ObjectMap<string, true> = {};
 
@@ -14,10 +15,10 @@ export default (msgLines: string | Array<string>) => {
     }
 };
 
-let sdk: Sdk;
+let sdk: BlockSdkCore<SdkMode>;
 
 // The application-level Sdk instance must be injected dynamically to avoid
 // circular dependencies at the time of module resolution.
-export function __injectSdkIntoWarning(_sdk: Sdk) {
+export function __injectSdkIntoWarning(_sdk: BlockSdkCore<SdkMode>) {
     sdk = _sdk;
 }

@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import * as React from 'react';
-import Table from '../models/table';
-import {GlobalConfigKey} from '../types/global_config';
-import Sdk from '../sdk';
+import Table from '../base/models/table';
+import {GlobalConfigKey} from '../shared/types/global_config';
+import Sdk from '../base/sdk';
 import TablePicker, {sharedTablePickerPropTypes, SharedTablePickerProps} from './table_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';

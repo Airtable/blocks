@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {CollaboratorData} from '../types/collaborator';
+import {CollaboratorData} from '../shared/types/collaborator';
 import Box from './box';
 import Text from './text';
 import {baymax} from './baymax_utils';

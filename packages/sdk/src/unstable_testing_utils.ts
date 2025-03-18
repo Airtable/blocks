@@ -1,32 +1,29 @@
-export {BaseData, ModelChange} from './types/base';
+export {ModelChange} from './shared/types/base_core';
+export {BaseData} from './base/types/base';
 
-export {Mutation, MutationTypes} from './types/mutations';
+export {Mutation, MutationTypes} from './base/types/mutations';
 
-export {
-    AppInterface,
-    BlockRunContextType,
-    SdkInitData,
-    PartialViewData,
-} from './types/airtable_interface';
+export {AppInterface} from './shared/types/airtable_interface_core';
+export {BlockRunContextType, SdkInitData, PartialViewData} from './base/types/airtable_interface';
 
-export {RecordData} from './types/record';
+export {RecordData} from './shared/types/record';
 
-export {CursorData} from './types/cursor';
+export {CursorData} from './base/types/cursor';
 
-export {FieldData, FieldType} from './types/field';
+export {FieldData, FieldType} from './shared/types/field';
 
-export {ViewType} from './types/view';
+export {ViewType} from './base/types/view';
 
-export {ViewportSizeConstraint} from './types/viewport';
+export {ViewportSizeConstraint} from './base/types/viewport';
 
 export {
     GlobalConfigUpdate,
     GlobalConfigData,
     GlobalConfigArray,
     GlobalConfigObject,
-} from './types/global_config';
+} from './shared/types/global_config';
 
-export {RequestJson, ResponseJson} from './types/backend_fetch_types';
+export {RequestJson, ResponseJson} from './base/types/backend_fetch_types';
 
-export {default as Sdk} from './sdk';
+export {default as Sdk} from './base/sdk';
 export {AbstractMockAirtableInterface} from './testing/abstract_mock_airtable_interface';

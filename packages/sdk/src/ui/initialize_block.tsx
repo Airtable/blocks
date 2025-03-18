@@ -2,11 +2,11 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {spawnError} from '../error_utils';
-import Sdk from '../sdk';
+import Sdk from '../base/sdk';
 import getAirtableInterface from '../injected/airtable_interface';
-import {BlockRunContextType} from '../types/airtable_interface';
-import Table from '../models/table';
-import View from '../models/view';
+import {BlockRunContextType} from '../base/types/airtable_interface';
+import Table from '../base/models/table';
+import View from '../base/models/view';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;

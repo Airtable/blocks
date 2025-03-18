@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
 import {invariant} from '../error_utils';
-import Record from '../models/record';
-import Field from '../models/field';
+import Record from '../base/models/record';
+import Field from '../base/models/field';
 
 /**
  * Options object for expanding a record picker.
