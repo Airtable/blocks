@@ -26,7 +26,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.5 darwin-arm64 node-v18.20.1
+@airtable/blocks-cli/2.0.6 darwin-arm64 node-v18.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -46,7 +46,7 @@ USAGE
 -   [`block release`](#block-release)
 -   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
 -   [`block run`](#block-run)
--   [`block set-api-key [TOKEN]`](#block-set-api-key-apikey)
+-   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
 -   [`block submit`](#block-submit)
 
 ## `block add-remote BLOCKIDENTIFIER REMOTENAME`
@@ -161,13 +161,13 @@ EXAMPLE
   $ block run
 ```
 
-## `block set-api-key [TOKEN]`
+## `block set-api-key [APIKEY]`
 
 Set a personal access token (with block:manage scope) for an Airtable account to upload to
 
 ```
 USAGE
-  $ block set-api-key [TOKEN]
+  $ block set-api-key [APIKEY]
 
 OPTIONS
   -h, --help             show CLI help

@@ -9,10 +9,10 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.4...HEAD)
+## [2.0.5](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.4...@airtable/blocks-cli@2.0.5)
 
--   Upgrade Typescript version to 5.4.5
--   Perform routine version upgrade to various packages, including `eslint`
+-   Perform routine version upgrade to various dependencies
+-   Update README to say TOKEN instead of APIKEY
 
 ## [2.0.4](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.3...@airtable/blocks-cli@2.0.4)
 
