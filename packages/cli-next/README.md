@@ -26,7 +26,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.5 darwin-arm64 node-v18.20.1
+@airtable/blocks-cli/2.0.6 darwin-arm64 node-v18.20.1
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND

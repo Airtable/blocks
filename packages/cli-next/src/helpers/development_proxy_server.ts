@@ -84,18 +84,14 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         invariant(app, 'dev server must have an express app to proxy');
         invariant(server && secureServer, 'dev server must have ready servers');
 
-        const proxy = createProxyMiddleware(`http://${remoteAddress}`, {
+        const proxy = createProxyMiddleware({
+            target: `http://${remoteAddress}`,
             ws: true,
-            logLevel: 'error',
-
-            logProvider: provider => {
-                return {
-                    log: this.wrapLogFn(provider.log),
-                    debug: this.wrapLogFn(provider.debug),
-                    info: this.wrapLogFn(provider.info),
-                    warn: this.wrapLogFn(provider.warn),
-                    error: this.wrapLogFn(provider.error),
-                };
+            logger: {
+                info: () => {},
+                warn: () => {},
+                // eslint-disable-next-line no-console
+                error: this.wrapLogFn(console.error),
             },
         });
         invariant(proxy.upgrade, 'http proxy must have an upgrade handler');

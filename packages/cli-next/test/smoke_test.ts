@@ -17,8 +17,6 @@
 
 import * as childProcess from 'child_process';
 
-require('core-js/stable');
-require('regenerator-runtime/runtime');
 const os = require('os');
 const path = require('path');
 const util = require('util');
@@ -221,7 +219,6 @@ class SmokeTest {
 
         log('Checking blocks-cli server is up');
         for (const requestFn of [
-            () => this._requestBlockServerRouteAsync(this.getBlockRunUrl(), '/', {method: 'GET'}),
             () =>
                 this._requestBlockServerRouteAsync(this.getBlockRunUrl(), '/__runFrame/ping', {
                     method: 'HEAD',

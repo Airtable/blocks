@@ -291,7 +291,7 @@ export default class Run extends AirtableCommand {
         this.log(chalk.bold(`✅ Server listening at https://localhost:${secureServerPort}`));
 
         const sigintPromise = new Promise<void>(resolve => {
-            process.once('SIGINT', () => {
+            process.on('SIGINT', () => {
                 resolve();
             });
         });
