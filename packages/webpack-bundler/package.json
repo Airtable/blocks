@@ -1,14 +1,14 @@
 {
     "name": "@airtable/blocks-webpack-bundler",
     "description": "Webpack bundler for @airtable/blocks-cli",
-    "version": "0.0.3",
+    "version": "1.0.0",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "peerDependencies": {
-        "@airtable/blocks-cli": "^2.0.0 || >=2.0.0-beta.5"
+        "@airtable/blocks-cli": "^2.0.6"
     },
     "dependencies": {
-        "@airtable/blocks-cli": "2.0.4",
+        "@airtable/blocks-cli": "^2.0.6",
         "@babel/core": "^7.12.13",
         "@babel/preset-env": "^7.12.13",
         "@babel/preset-react": "^7.12.13",
@@ -17,7 +17,7 @@
         "css-loader": "^6.3.0",
         "style-loader": "^3.3.0",
         "webpack": "^5.9.0",
-        "webpack-dev-server": "^3.11.0"
+        "webpack-dev-server": "^4.0.0"
     },
     "devDependencies": {
         "@oclif/config": "^1.17.0",
@@ -25,13 +25,13 @@
         "@types/mocha": "^8.0.4",
         "@types/node": "^18.19.33",
         "@types/node-fetch": "^2.6.11",
-        "@types/webpack-dev-server": "^3.11.1",
+        "@types/webpack-dev-server": "^4.0.0",
         "@typescript-eslint/eslint-plugin": "^7.13.0",
         "@typescript-eslint/parser": "^7.13.0",
+        "chai": "^4.4.1",
         "eslint": "^9.5.0",
         "eslint-plugin-import": "^2.29.1",
-        "mocha": "^5.2.0",
-        "chai": "^4.4.1",
+        "mocha": "^11.0.1",
         "node-fetch": "^2.6.7",
         "nyc": "^15.1.0",
         "ts-node": "10.9.2",

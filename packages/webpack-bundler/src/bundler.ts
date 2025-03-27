@@ -1,9 +1,9 @@
-import {Server} from 'http';
 import {promisify} from 'util';
 
 import * as webpack from 'webpack';
 import * as WebpackDevServer from 'webpack-dev-server';
 
+// @ts-ignore TODO(richsinn#blocks_vuln_upgrade): We should fix these type definitions, but moving forward to unblock upgrade
 import {
     RunTaskConsumer,
     RunDevServerOptions,
@@ -131,7 +131,10 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
                         },
                     });
                 }
-                this.webpackDevServer?.sockWrite(this.webpackDevServer.sockets, 'ok');
+                this.webpackDevServer?.sendMessage(
+                    this.webpackDevServer?.webSocketServer?.clients || [],
+                    'ok',
+                );
             } else {
                 emitBuildState({status: BuildStatus.READY});
             }
@@ -145,28 +148,21 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         });
 
         const webpackDevServer = (this.webpackDevServer = new WebpackDevServer(
-            compiler,
             serverConfig,
+            compiler,
         ));
-        const server = await new Promise<Server>((resolve, reject) => {
-            const httpServer = webpackDevServer.listen(port);
-
-            httpServer.once('listening', () => {
-                resolve(httpServer);
-            });
-            httpServer.once('error', err => {
-                reject(err);
-            });
-        });
-
-        const address = server.address();
-        if (address === null || typeof address !== 'object') {
-            throw new Error('Server must be listening to an ip address');
-        }
-        if (address.port !== port) {
-            throw new Error(
-                `dev server must be listening to given port (${address.port} === ${port})`,
-            );
+        await webpackDevServer.start();
+        const server = webpackDevServer.server;
+        if (server) {
+            const address = server.address();
+            if (address === null || typeof address !== 'object') {
+                throw new Error('Server must be listening to an ip address');
+            }
+            if (address.port !== port) {
+                throw new Error(
+                    `dev server must be listening to given port (${address.port} === ${port})`,
+                );
+            }
         }
     }
 

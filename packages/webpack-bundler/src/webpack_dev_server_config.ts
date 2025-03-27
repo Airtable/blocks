@@ -6,15 +6,10 @@ export interface WebpackDevServerOptions {
 }
 
 export function createWebpackDevServerConfig({port}: WebpackDevServerOptions): Configuration {
-    const unspecifiedConfiguration = {
-        logLevel: 'silent',
-    };
     return {
         port,
-        injectClient: false,
+        client: false,
         hot: false,
-        disableHostCheck: true,
-        clientLogLevel: 'silent',
-        ...unspecifiedConfiguration,
+        allowedHosts: 'all',
     };
 }
