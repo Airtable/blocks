@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: View */ /** */
 import Sdk from '../sdk';
 import {ViewData, ViewType} from '../types/view';
-import {isEnumValue, ObjectValues, FlowAnyObject} from '../../private_utils';
+import {isEnumValue, ObjectValues, FlowAnyObject} from '../../shared/private_utils';
 import {MutationTypes} from '../types/mutations';
 import AbstractModel from '../../shared/models/abstract_model';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';

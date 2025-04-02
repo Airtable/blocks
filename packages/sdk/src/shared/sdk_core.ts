@@ -1,5 +1,5 @@
 import {SdkMode} from '../sdk_mode';
-import GlobalConfig from '../global_config';
+import GlobalConfig from './global_config';
 import {AppInterface} from './types/airtable_interface_core';
 import {BlockInstallationId} from './types/hyper_ids';
 

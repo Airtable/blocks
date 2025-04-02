@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import {ObjectMap} from '../../private_utils';
+import {ObjectMap} from '../private_utils';
 import {FieldId, RecordId} from './hyper_ids';
 
 /** */

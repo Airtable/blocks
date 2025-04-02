@@ -3,7 +3,7 @@ import {
     invariant,
     spawnAbstractMethodError,
     spawnUnknownSwitchCaseError,
-} from '../src/error_utils';
+} from '../src/shared/error_utils';
 
 describe('spawnError', () => {
     it('returns an error with message set to the first argument', () => {

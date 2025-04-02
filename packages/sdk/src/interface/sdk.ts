@@ -6,6 +6,7 @@ import {AppInterface} from '../shared/types/airtable_interface_core';
 import Session from './models/session';
 import Mutations from './models/mutations';
 import Base from './models/base';
+import {BlockRunContext, BlockRunContextType} from './types/airtable_interface';
 
 // /** Add hidden annotation if uncommenting */
 // type UpdateBatcher = (applyUpdates: () => void) => void;
@@ -78,5 +79,11 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
      */
     get __appInterface(): AppInterface {
         return this.base._baseData.appInterface;
+    }
+
+    /** @hidden */
+    getBlockRunContext(): BlockRunContext {
+        // return this.__airtableInterface.sdkInitData.runContext;
+        return {type: BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER};
     }
 }

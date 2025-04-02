@@ -7,7 +7,7 @@
         "url": "https://github.com/Airtable/blocks.git"
     },
     "homepage": "https://airtable.com/developers/blocks",
-    "main": "dist/cjs/index.js",
+    "main": "dist/cjs/base/index.js",
     "types": "index.d.ts",
     "files": [
         "dist",

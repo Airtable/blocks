@@ -1,8 +1,8 @@
 import React from 'react';
-import Heading from '../src/ui/heading';
-import theme from '../src/ui/theme/default_theme';
-import {keys, has} from '../src/private_utils';
-import {allStylesPropTypes} from '../src/ui/system';
+import Heading from '../src/shared/ui/heading';
+import theme from '../src/shared/ui/theme/default_theme';
+import {keys, has} from '../src/shared/private_utils';
+import {allStylesPropTypes} from '../src/shared/ui/system';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 

@@ -1,6 +1,6 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 
-import {__reset, __sdk as sdk} from '../../src';
+import {__reset, __sdk as sdk} from '../../src/base';
 import {FieldId} from '../../src/shared/types/hyper_ids';
 import View from '../../src/base/models/view';
 import ViewMetadataQueryResult from '../../src/base/models/view_metadata_query_result';

@@ -1,8 +1,8 @@
 import {BlockRunContextType} from '../types/airtable_interface';
 import {ModelChange} from '../../shared/types/base_core';
 import {Mutation, MutationTypes} from '../types/mutations';
-import {entries, ObjectMap} from '../../private_utils';
-import {spawnError, spawnUnknownSwitchCaseError} from '../../error_utils';
+import {entries, ObjectMap} from '../../shared/private_utils';
+import {spawnError, spawnUnknownSwitchCaseError} from '../../shared/error_utils';
 import {FieldId} from '../../shared/types/hyper_ids';
 import {
     MAX_FIELD_NAME_LENGTH,

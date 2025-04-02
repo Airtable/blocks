@@ -1,5 +1,5 @@
 import React from 'react';
-import Box, {BoxProps} from '../../src/ui/box';
+import Box, {BoxProps} from '../../src/shared/ui/box';
 
 export default {
     compoent: Box,

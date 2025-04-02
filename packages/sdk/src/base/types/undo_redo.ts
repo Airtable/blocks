@@ -1,4 +1,4 @@
-import {ObjectValues} from '../../private_utils';
+import {ObjectValues} from '../../shared/private_utils';
 
 export const UndoRedoModes = Object.freeze({
     NONE: 'none' as const,

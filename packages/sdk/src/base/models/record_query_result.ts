@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import Colors, {Color} from '../../colors';
+import Colors, {Color} from '../../shared/colors';
 import Sdk from '../sdk';
 import {FieldId, RecordId} from '../../shared/types/hyper_ids';
 import {FieldType} from '../../shared/types/field';
@@ -12,9 +12,9 @@ import {
     cast,
     FlowAnyFunction,
     FlowAnyObject,
-} from '../../private_utils';
-import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../../error_utils';
-import Watchable from '../../watchable';
+} from '../../shared/private_utils';
+import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../../shared/error_utils';
+import Watchable from '../../shared/watchable';
 import {NormalizedGroupLevel} from '../types/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';

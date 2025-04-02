@@ -4,7 +4,7 @@ import {FieldOptions} from '../../shared/types/field';
 import {UpdateFieldOptionsOpts, MutationTypes} from '../types/mutations';
 import {BaseSdkMode} from '../../sdk_mode';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {values} from '../../private_utils';
+import {values} from '../../shared/private_utils';
 import {AggregatorKey} from '../types/aggregators';
 import {Aggregator} from './create_aggregators';
 

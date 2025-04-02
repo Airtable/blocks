@@ -1,1 +1,1 @@
-export * from './dist/types/src/ui/ui';
+export * from './dist/types/src/base/ui/ui';

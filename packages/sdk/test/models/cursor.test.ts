@@ -1,5 +1,5 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {__reset, __sdk} from '../../src';
+import {__reset, __sdk} from '../../src/base';
 import Cursor from '../../src/base/models/cursor';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;

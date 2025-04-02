@@ -1,5 +1,5 @@
 /** @module @airtable/blocks: mutations */ /** */
-import {ObjectValues, ObjectMap} from '../../private_utils';
+import {ObjectValues, ObjectMap} from '../../shared/private_utils';
 import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
 import {
     MutationTypesCore,

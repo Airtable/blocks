@@ -1,9 +1,9 @@
 import React from 'react';
-import {values as objectValues} from '../src/private_utils';
-import {iconNames} from '../src/ui/icon_config';
-import Icon from '../src/ui/icon';
-import Text from '../src/ui/text';
-import Box from '../src/ui/box';
+import {values as objectValues} from '../src/shared/private_utils';
+import {iconNames} from '../src/shared/ui/icon_config';
+import Icon from '../src/shared/ui/icon';
+import Text from '../src/shared/ui/text';
+import Box from '../src/shared/ui/box';
 import IconExample from './icon_example';
 
 export default {

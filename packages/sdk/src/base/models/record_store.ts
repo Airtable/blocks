@@ -10,8 +10,8 @@ import {
     FlowAnyObject,
     cast,
     keys as objectKeys,
-} from '../../private_utils';
-import {invariant, logErrorToSentry} from '../../error_utils';
+} from '../../shared/private_utils';
+import {invariant, logErrorToSentry} from '../../shared/error_utils';
 import Sdk from '../sdk';
 import {TableData} from '../types/table';
 import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';

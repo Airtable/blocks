@@ -1,7 +1,7 @@
 // istanbul ignore file
 /** @module @airtable/blocks/models: Aggregators */ /** */
 import {AggregatorKey} from '../types/aggregators';
-import {spawnError} from '../../error_utils';
+import {spawnError} from '../../shared/error_utils';
 import Sdk from '../sdk';
 import Record from './record';
 import Field from './field';

@@ -4,7 +4,7 @@ import Table from '../src/base/models/table';
 import View from '../src/base/models/view';
 import AbstractModelWithAsyncData from '../src/base/models/abstract_model_with_async_data';
 import Sdk from '../src/base/sdk';
-import {__reset, __sdk as sdk} from '../src';
+import {__reset, __sdk as sdk} from '../src/base';
 import {RequestJson} from '../src/base/types/backend_fetch_types';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;

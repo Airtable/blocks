@@ -1,7 +1,7 @@
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {MutationsCore} from '../../shared/models/mutations_core';
 import {ModelChange} from '../../shared/types/base_core';
-import {spawnError} from '../../error_utils';
+import {spawnError} from '../../shared/error_utils';
 
 /** @hidden */
 class Mutations extends MutationsCore<InterfaceSdkMode> {

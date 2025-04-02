@@ -14,10 +14,12 @@ import TableForInterfaceSdkMode from './interface/models/table';
 import RecordForBaseSdkMode from './base/models/record';
 import {
     AirtableInterface as AirtableInterfaceForBaseSdkMode,
+    BlockRunContext as BlockRunContextForBaseSdkMode,
     SdkInitData as SdkInitDataForBaseSdkMode,
 } from './base/types/airtable_interface';
 import {
     AirtableInterface as AirtableInterfaceForInterfaceSdkMode,
+    // BlockRunContext as BlockRunContextForInterfaceSdkMode,
     SdkInitData as SdkInitDataForInterfaceSdkMode,
 } from './interface/types/airtable_interface';
 import MutationsForBaseSdkMode from './base/models/mutations';
@@ -33,6 +35,7 @@ import SessionForInterfaceSdkMode from './interface/models/session';
 /** @hidden */
 export interface BaseSdkMode {
     mode: 'base';
+    runContextT: BlockRunContextForBaseSdkMode;
     SdkT: BaseBlockSdk;
     SdkInitDataT: SdkInitDataForBaseSdkMode;
     AirtableInterfaceT: AirtableInterfaceForBaseSdkMode;
@@ -53,6 +56,7 @@ export interface BaseSdkMode {
 /** @hidden */
 export interface InterfaceSdkMode {
     mode: 'interface';
+    // runContextT: BlockRunContextForInterfaceSdkMode;
     SdkT: InterfaceBlockSdk;
     SdkInitDataT: SdkInitDataForInterfaceSdkMode;
     AirtableInterfaceT: AirtableInterfaceForInterfaceSdkMode;

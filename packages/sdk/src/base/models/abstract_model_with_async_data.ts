@@ -1,7 +1,12 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import Sdk from '../sdk';
-import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../../private_utils';
-import {invariant} from '../../error_utils';
+import {
+    fireAndForgetPromise,
+    FlowAnyFunction,
+    FlowAnyObject,
+    TimeoutId,
+} from '../../shared/private_utils';
+import {invariant} from '../../shared/error_utils';
 import AbstractModel from '../../shared/models/abstract_model';
 import {BaseSdkMode} from '../../sdk_mode';
 

@@ -1,4 +1,4 @@
-import * as remoteUtils from '../../src/ui/remote_utils';
+import * as remoteUtils from '../../src/shared/ui/remote_utils';
 
 describe('remoteUtils', () => {
     describe('loadCSSFromString', () => {

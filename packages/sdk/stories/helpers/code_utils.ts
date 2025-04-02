@@ -1,4 +1,4 @@
-import {has} from '../../src/private_utils';
+import {has} from '../../src/shared/private_utils';
 
 /**
  * Helper function to turn an object keyed by prop name into JSX properties.

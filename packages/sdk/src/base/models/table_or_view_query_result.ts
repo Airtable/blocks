@@ -8,8 +8,8 @@ import {
     FlowAnyExistential,
     FlowAnyFunction,
     ObjectMap,
-} from '../../private_utils';
-import {invariant, spawnError} from '../../error_utils';
+} from '../../shared/private_utils';
+import {invariant, spawnError} from '../../shared/error_utils';
 import {VisList, NormalizedGroupLevel} from '../types/airtable_interface';
 import {GroupLevelData, GroupData} from '../types/view';
 import Table, {WatchableTableKeys} from './table';

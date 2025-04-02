@@ -1,8 +1,7 @@
 // eslint-disable-next-line import/order
 import {MockAirtableInterface} from './airtable_interface_mocks/mock_airtable_interface';
-import * as sdk from '../src/index';
-import * as UI from '../src/ui/ui';
-
+import * as sdk from '../src/base/index';
+import * as UI from '../src/base/ui/ui';
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../src/injected/airtable_interface', () => ({
     __esModule: true,

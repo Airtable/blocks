@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {ChoiceToken} from '../../src/ui/unstable_standalone_ui';
+import {ChoiceToken} from '../../src/base/ui/unstable_standalone_ui';
 
 describe('ChoiceToken', () => {
     it('renders outside of a blocks context', () => {

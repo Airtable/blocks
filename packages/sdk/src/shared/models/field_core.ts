@@ -1,5 +1,5 @@
 import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
-import {isEnumValue, cloneDeep, ObjectValues, FlowAnyObject} from '../../private_utils';
+import {isEnumValue, cloneDeep, ObjectValues, FlowAnyObject} from '../private_utils';
 import {SdkMode} from '../../sdk_mode';
 import {FieldTypeConfig} from '../types/airtable_interface_core';
 import AbstractModel from './abstract_model';

@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/models: Session */ /** */
-import {invariant} from '../../error_utils';
+import {invariant} from '../error_utils';
 import {CollaboratorData} from '../types/collaborator';
 import {PermissionLevel} from '../types/permission_levels';
-import {isEnumValue, entries, ObjectValues, ObjectMap} from '../../private_utils';
+import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {UserId} from '../types/hyper_ids';
 import {SdkMode} from '../../sdk_mode';
 import {ModelChange} from '../types/base_core';

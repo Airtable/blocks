@@ -1,6 +1,6 @@
 /** @hidden */ /** */
-import {invariant} from '../../error_utils';
-import {TimeoutId} from '../../private_utils';
+import {invariant} from '../../shared/error_utils';
+import {TimeoutId} from '../../shared/private_utils';
 
 const WEAK_RETAIN_TIME_MS = 10000;
 

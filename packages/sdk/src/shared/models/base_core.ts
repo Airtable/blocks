@@ -1,8 +1,8 @@
 import {ModelChange} from '../types/base_core';
 import {CollaboratorData} from '../types/collaborator';
 import {TableId, UserId} from '../types/hyper_ids';
-import {isEnumValue, entries, isDeepEqual, ObjectValues, has} from '../../private_utils';
-import {spawnError, invariant} from '../../error_utils';
+import {isEnumValue, entries, isDeepEqual, ObjectValues, has} from '../private_utils';
+import {spawnError, invariant} from '../error_utils';
 import {SdkMode} from '../../sdk_mode';
 import AbstractModel from './abstract_model';
 

@@ -6,7 +6,7 @@ import {
     MutationTypesCore,
     SetMultipleGlobalConfigPathsMutation,
 } from '../types/mutations_core';
-import {spawnError} from '../../error_utils';
+import {spawnError} from '../error_utils';
 import {AirtableInterfaceCore} from '../types/airtable_interface_core';
 
 // Limit for how many items can be updated from a single batch mutation.

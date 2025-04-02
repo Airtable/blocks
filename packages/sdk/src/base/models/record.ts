@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import {Color} from '../../colors';
+import {Color} from '../../shared/colors';
 import {RecordCore} from '../../shared/models/record_core';
 import {ViewId, RecordId, FieldId} from '../../shared/types/hyper_ids';
 import {BaseSdkMode} from '../../sdk_mode';
@@ -9,12 +9,12 @@ import {
     cloneDeep,
     FlowAnyObject,
     isObjectEmpty,
-} from '../../private_utils';
+} from '../../shared/private_utils';
 import BlockSdk from '../sdk';
 import {RecordData} from '../../shared/types/record';
-import {invariant} from '../../error_utils';
+import {invariant} from '../../shared/error_utils';
 import {FieldType} from '../../shared/types/field';
-import colorUtils from '../../color_utils';
+import colorUtils from '../../shared/color_utils';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import ObjectPool from './object_pool';
 import RecordStore from './record_store';

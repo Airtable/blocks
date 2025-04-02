@@ -1,6 +1,21 @@
 import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 
+// BlockRunContextType, BlockInstallationPageBlockRunContext, ViewBlockRunContext, BlockRunContext
+// must be kept in sync with block_run_context.tsx in hyperbase repo
+/** @hidden */
+export enum BlockRunContextType {
+    PAGE_ELEMENT_IN_QUERY_CONTAINER = 'pageElementInQueryContainer',
+}
+
+/** @hidden */
+export interface PageElementInQueryContainerBlockRunContextType {
+    type: BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER;
+}
+
+/** @hidden */
+export type BlockRunContext = PageElementInQueryContainerBlockRunContextType;
+
 /** @hidden */
 export interface SdkInitData extends SdkInitDataCore {}
 

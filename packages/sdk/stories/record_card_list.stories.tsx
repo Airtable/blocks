@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import React from 'react';
 import Example from './helpers/example';
-import {recordCardListStylePropTypes} from '../src/ui/record_card_list';
-import Box from '../src/ui/box';
+import {recordCardListStylePropTypes} from '../src/base/ui/record_card_list';
+import Box from '../src/shared/ui/box';
 import {FieldType} from '../src/shared/types/field';
 import FakeRecordCard from './helpers/fake_record_card';
-import {RecordCardList} from '../src/ui/ui';
+import {RecordCardList} from '../src/base/ui/ui';
 
 export default {
     component: RecordCardList,

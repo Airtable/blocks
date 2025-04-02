@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import React from 'react';
-import CollaboratorToken, {collaboratorTokenStylePropTypes} from '../src/ui/collaborator_token';
+import CollaboratorToken, {
+    collaboratorTokenStylePropTypes,
+} from '../src/shared/ui/collaborator_token';
 import Example from './helpers/example';
 import collaboratorOptions from './helpers/collaborator_options';
 

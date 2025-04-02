@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {SelectButtons} from '../../src/ui/unstable_standalone_ui';
+import {SelectButtons} from '../../src/base/ui/unstable_standalone_ui';
 
 describe('SelectButtons', () => {
     it('renders outside of a blocks context', () => {

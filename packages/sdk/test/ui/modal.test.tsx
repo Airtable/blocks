@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Modal} from '../../src/ui/unstable_standalone_ui';
+import {Modal} from '../../src/base/ui/unstable_standalone_ui';
 
 describe('Modal', () => {
     it('renders outside of a blocks context', () => {

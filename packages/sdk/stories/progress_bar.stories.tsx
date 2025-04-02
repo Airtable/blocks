@@ -1,8 +1,7 @@
 /* eslint-disable no-console */
 // @flow
-import React, {useState} from 'react';
-import ProgressBar, {progressBarStylePropTypes} from '../src/ui/progress_bar';
-import {keys} from '../src/private_utils';
+import React from 'react';
+import ProgressBar, {progressBarStylePropTypes} from '../src/shared/ui/progress_bar';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 

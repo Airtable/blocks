@@ -8,7 +8,7 @@ import {
 } from '../../src/base/types/airtable_interface';
 import {AbstractMockAirtableInterface} from '../../src/testing/abstract_mock_airtable_interface';
 import {TableId, FieldId} from '../../src/shared/types/hyper_ids';
-import {spawnError} from '../../src/error_utils';
+import {spawnError} from '../../src/shared/error_utils';
 import {CursorData} from '../../src/base/types/cursor';
 import {RecordData} from '../../src/shared/types/record';
 import {RecordActionData} from '../../src/base/types/record_action_data';

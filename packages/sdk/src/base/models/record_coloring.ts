@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Record Coloring */ /** */
-import {ObjectValues} from '../../private_utils';
+import {ObjectValues} from '../../shared/private_utils';
 import Field from './field';
 import View from './view';
 

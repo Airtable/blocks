@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 import React from 'react';
 import {action} from '@storybook/addon-actions';
-import {values, keys} from '../src/private_utils';
-import Box from '../src/ui/box';
-import {iconNames} from '../src/ui/icon_config';
-import TextButton, {textButtonStylePropTypes} from '../src/ui/text_button';
-import Text from '../src/ui/text';
-import Tooltip from '../src/ui/tooltip';
-import useTheme from '../src/ui/theme/use_theme';
-import Example from './helpers/example';
+import {values, keys} from '../src/shared/private_utils';
+import Box from '../src/shared/ui/box';
+import {iconNames} from '../src/shared/ui/icon_config';
+import TextButton, {textButtonStylePropTypes} from '../src/shared/ui/text_button';
+import Text from '../src/shared/ui/text';
+import Tooltip from '../src/shared/ui/tooltip';
+import useTheme from '../src/shared/ui/theme/use_theme';
 import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
+import Example from './helpers/example';
 
 export default {
     component: TextButton,

@@ -1,1 +1,1 @@
-module.exports = require('./dist/cjs/ui/unstable_standalone_ui');
+module.exports = require('./dist/cjs/base/ui/unstable_standalone_ui');

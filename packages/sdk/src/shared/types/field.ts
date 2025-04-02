@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Field */ /** */
-import {Color} from '../../colors';
+import {Color} from '../colors';
 import {TableId, FieldId, ViewId} from './hyper_ids';
 
 /** @hidden */

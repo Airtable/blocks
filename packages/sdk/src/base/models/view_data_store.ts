@@ -6,13 +6,13 @@ import {
     has,
     ObjectMap,
     cloneDeep,
-} from '../../private_utils';
-import {invariant} from '../../error_utils';
+} from '../../shared/private_utils';
+import {invariant} from '../../shared/error_utils';
 import Sdk from '../sdk';
 import {FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
 import {GroupData, GroupLevelData, ViewData} from '../types/view';
 import {AirtableInterface} from '../types/airtable_interface';
-import {Color} from '../../colors';
+import {Color} from '../../shared/colors';
 import {ModelChange} from '../../shared/types/base_core';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import RecordStore from './record_store';

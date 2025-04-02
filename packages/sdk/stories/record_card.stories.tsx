@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import React from 'react';
 import Example from './helpers/example';
-import {recordCardStylePropTypes} from '../src/ui/record_card';
+import {recordCardStylePropTypes} from '../src/base/ui/record_card';
 import FakeRecordCard from './helpers/fake_record_card';
-import {RecordCard} from '../src/ui/ui';
+import {RecordCard} from '../src/base/ui/ui';
 
 export default {
     component: RecordCard,

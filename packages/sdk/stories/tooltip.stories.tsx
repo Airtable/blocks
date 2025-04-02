@@ -1,9 +1,9 @@
 import React from 'react';
-import Tooltip from '../src/ui/tooltip';
-import Button from '../src/ui/button';
-import Example from './helpers/example';
+import Tooltip from '../src/shared/ui/tooltip';
+import Button from '../src/shared/ui/button';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import {injectGlobal} from 'emotion';
+import Example from './helpers/example';
 
 export default {
     component: Tooltip,

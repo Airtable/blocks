@@ -1,13 +1,13 @@
 /** @module @airtable/blocks: viewport */ /** */
-import Watchable from '../watchable';
+import Watchable from '../shared/watchable';
 import {
     isEnumValue,
     debounce,
     ObjectValues,
     FlowAnyFunction,
     FlowAnyObject,
-} from '../private_utils';
-import {invariant} from '../error_utils';
+} from '../shared/private_utils';
+import {invariant} from '../shared/error_utils';
 import {ViewportSizeConstraint} from './types/viewport';
 import {AirtableInterface} from './types/airtable_interface';
 

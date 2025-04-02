@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import Text from '../../src/ui/text';
-import TextButton from '../../src/ui/text_button';
-import Box from '../../src/ui/box';
-import Heading from '../../src/ui/heading';
+import Text from '../../src/shared/ui/text';
+import TextButton from '../../src/shared/ui/text_button';
+import Box from '../../src/shared/ui/box';
+import Heading from '../../src/shared/ui/heading';
 
 interface StylePropListProps {
     stylePropsByCategory: {[category: string]: Array<string>};

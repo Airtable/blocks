@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import Select, {selectStylePropTypes} from '../src/ui/select';
-import {keys} from '../src/private_utils';
-import theme from '../src/ui/theme/default_theme';
+import Select, {selectStylePropTypes} from '../src/shared/ui/select';
+import {keys} from '../src/shared/private_utils';
+import theme from '../src/shared/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import {ViewPicker} from '../src/ui/ui';
+import {ViewPicker} from '../src/base/ui/ui';
 
 export default {
     component: ViewPicker,

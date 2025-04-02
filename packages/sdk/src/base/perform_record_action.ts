@@ -1,5 +1,5 @@
-import {invariant} from '../error_utils';
-import {isEnumValue, ObjectValues} from '../private_utils';
+import {invariant} from '../shared/error_utils';
+import {isEnumValue, ObjectValues} from '../shared/private_utils';
 import {AirtableInterface} from './types/airtable_interface';
 import {RecordActionData, RecordActionDataCallback} from './types/record_action_data';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';

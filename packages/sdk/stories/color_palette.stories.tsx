@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import ColorPalette, {colorPaletteStylePropTypes} from '../src/ui/color_palette';
-import colors from '../src/colors';
+import ColorPalette, {colorPaletteStylePropTypes} from '../src/shared/ui/color_palette';
+import colors from '../src/shared/colors';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 

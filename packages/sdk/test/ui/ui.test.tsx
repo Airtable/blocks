@@ -8,13 +8,13 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 }));
 
 const run = (bindingIdentifier: string) => {
-    const exported = require('../../src/ui/ui')[bindingIdentifier];
+    const exported = require('../../src/base/ui/ui')[bindingIdentifier];
 
     // Verify the truthiness of the exported value as a guard against false
     // positives where binding does not exist in either module.
     expect(exported).toBeTruthy();
 
-    expect(exported).toBe(require('../../src/ui/unstable_standalone_ui')[bindingIdentifier]);
+    expect(exported).toBe(require('../../src/base/ui/unstable_standalone_ui')[bindingIdentifier]);
 };
 
 describe('ui entry point', () => {

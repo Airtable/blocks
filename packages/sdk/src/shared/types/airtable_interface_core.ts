@@ -1,4 +1,4 @@
-import {ObjectMap} from '../../private_utils';
+import {ObjectMap} from '../private_utils';
 import {BlockRunContext} from '../../base/types/airtable_interface';
 import {SdkMode} from '../../sdk_mode';
 import {Stat} from './stat';

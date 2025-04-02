@@ -7,7 +7,7 @@ import {
     CreateMultipleRecordsMutation,
     SetMultipleRecordsCellValuesMutation,
 } from '../../src/base/types/mutations';
-import {__reset, __sdk as sdk} from '../../src';
+import {__reset, __sdk as sdk} from '../../src/base';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

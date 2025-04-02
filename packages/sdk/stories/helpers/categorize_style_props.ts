@@ -1,4 +1,4 @@
-import {entries} from '../../src/private_utils';
+import {entries} from '../../src/shared/private_utils';
 import {
     backgroundColor,
     boxShadow,
@@ -14,7 +14,7 @@ import {
     typographySet,
     display,
     overflow,
-} from '../../src/ui/system/';
+} from '../../src/shared/ui/system';
 
 const categories = {
     // Note that this is slightly different from the actual system organization, which groups border under appearance.

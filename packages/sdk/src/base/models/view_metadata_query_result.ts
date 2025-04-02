@@ -2,8 +2,8 @@
 import Sdk from '../sdk';
 import {FieldId} from '../../shared/types/hyper_ids';
 import {NormalizedGroupLevel} from '../types/airtable_interface';
-import {invariant} from '../../error_utils';
-import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../../private_utils';
+import {invariant} from '../../shared/error_utils';
+import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../../shared/private_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import ViewDataStore from './view_data_store';
 import View from './view';

@@ -1,1 +1,1 @@
-export * from './dist/types/src/ui/unstable_standalone_ui';
+export * from './dist/types/src/base/ui/unstable_standalone_ui';

@@ -1,11 +1,11 @@
 import React from 'react';
-import {keys} from '../src/private_utils';
-import Box from '../src/ui/box';
-import Input from '../src/ui/input';
-import Select from '../src/ui/select';
-import Label from '../src/ui/label';
-import {allStylesPropTypes} from '../src/ui/system';
-import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/shared/private_utils';
+import Box from '../src/shared/ui/box';
+import Input from '../src/shared/ui/input';
+import Select from '../src/shared/ui/select';
+import Label from '../src/shared/ui/label';
+import {allStylesPropTypes} from '../src/shared/ui/system';
+import theme from '../src/shared/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 

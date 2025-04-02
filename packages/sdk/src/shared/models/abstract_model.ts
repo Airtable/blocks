@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {invariant, spawnError} from '../../error_utils';
-import Watchable from '../../watchable';
+import {invariant, spawnError} from '../error_utils';
+import Watchable from '../watchable';
 import {SdkMode} from '../../sdk_mode';
 
 /**

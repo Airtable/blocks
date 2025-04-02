@@ -1,6 +1,6 @@
 import {FieldId} from '../types/hyper_ids';
-import {isEnumValue, entries, has, ObjectValues, ObjectMap} from '../../private_utils';
-import {spawnError} from '../../error_utils';
+import {isEnumValue, entries, has, ObjectValues, ObjectMap} from '../private_utils';
+import {spawnError} from '../error_utils';
 import {SdkMode} from '../../sdk_mode';
 import AbstractModel from './abstract_model';
 import {ChangedPathsForType} from './base_core';

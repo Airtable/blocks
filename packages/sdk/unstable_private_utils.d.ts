@@ -1,1 +1,1 @@
-export * from './dist/types/src/unstable_private_utils';
+export * from './dist/types/src/shared/unstable_private_utils';

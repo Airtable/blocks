@@ -3,8 +3,8 @@ import {TableData} from '../../src/base/types/table';
 import {FieldType, FieldData} from '../../src/shared/types/field';
 import {ViewData, ViewType} from '../../src/base/types/view';
 import {CollaboratorData} from '../../src/shared/types/collaborator';
-import {Color} from '../../src/colors';
-import {ObjectMap, keyBy, getId} from '../../src/private_utils';
+import {Color} from '../../src/shared/colors';
+import {ObjectMap, keyBy, getId} from '../../src/shared/private_utils';
 import {BlockRunContextType, SdkInitData} from '../../src/base/types/airtable_interface';
 
 // There are some values that FixtureData does not cover but SdkInitData

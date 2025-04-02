@@ -1,8 +1,8 @@
 import React from 'react';
-import Heading from '../src/ui/heading';
-import Text from '../src/ui/text';
-import theme from '../src/ui/theme/default_theme';
-import {keys} from '../src/private_utils';
+import Heading from '../src/shared/ui/heading';
+import Text from '../src/shared/ui/text';
+import theme from '../src/shared/ui/theme/default_theme';
+import {keys} from '../src/shared/private_utils';
 
 export default {
     component: Heading,

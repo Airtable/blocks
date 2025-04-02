@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/models: Cursor */ /** */
 import Sdk from '../sdk';
 import {ModelChange} from '../../shared/types/base_core';
-import {isEnumValue, entries, ObjectValues, ObjectMap} from '../../private_utils';
-import {invariant} from '../../error_utils';
+import {isEnumValue, entries, ObjectValues, ObjectMap} from '../../shared/private_utils';
+import {invariant} from '../../shared/error_utils';
 import {RecordId, FieldId, TableId, ViewId} from '../../shared/types/hyper_ids';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Table from './table';

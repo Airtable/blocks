@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 import React, {useState} from 'react';
-import Box from '../src/ui/box';
-import Input from '../src/ui/input';
-import FormField from '../src/ui/form_field';
-import Heading from '../src/ui/heading';
-import Select from '../src/ui/select';
-import {keys} from '../src/private_utils';
-import SelectButtons, {selectButtonsStylePropTypes} from '../src/ui/select_buttons';
-import useTheme from '../src/ui/theme/use_theme';
-import Example from './helpers/example';
+import Box from '../src/shared/ui/box';
+import Input from '../src/shared/ui/input';
+import FormField from '../src/shared/ui/form_field';
+import Heading from '../src/shared/ui/heading';
+import Select from '../src/shared/ui/select';
+import {keys} from '../src/shared/private_utils';
+import SelectButtons, {selectButtonsStylePropTypes} from '../src/shared/ui/select_buttons';
+import useTheme from '../src/shared/ui/theme/use_theme';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
+import Example from './helpers/example';
 
 export default {
     component: SelectButtons,

@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {ObjectMap} from '../../private_utils';
-import {Color} from '../../colors';
+import {ObjectMap} from '../../shared/private_utils';
+import {Color} from '../../shared/colors';
 import {FieldId, RecordId, ViewId} from '../../shared/types/hyper_ids';
 
 /**

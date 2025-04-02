@@ -1,5 +1,5 @@
-import {values} from '../private_utils';
-import {spawnError} from '../error_utils';
+import {values} from '../shared/private_utils';
+import {spawnError} from '../shared/error_utils';
 import {UndoRedoModes, UndoRedoMode} from './types/undo_redo';
 import {AirtableInterface} from './types/airtable_interface';
 

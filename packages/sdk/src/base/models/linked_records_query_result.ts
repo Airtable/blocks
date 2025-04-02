@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType} from '../../shared/types/field';
 import Sdk from '../sdk';
-import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../../private_utils';
-import {invariant} from '../../error_utils';
+import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../../shared/private_utils';
+import {invariant} from '../../shared/error_utils';
 import {FieldId, RecordId} from '../../shared/types/hyper_ids';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,

@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
-import {useRecords} from '../../src/ui/use_records';
+import {useRecords} from '../../src/base/ui/use_records';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../src/base/sdk';

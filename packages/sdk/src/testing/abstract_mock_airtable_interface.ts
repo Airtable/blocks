@@ -17,8 +17,8 @@ import {
     VisList,
 } from '../base/types/airtable_interface';
 import {TableId, FieldId, ViewId, RecordId} from '../shared/types/hyper_ids';
-import {cloneDeep, ObjectMap} from '../private_utils';
-import {spawnError} from '../error_utils';
+import {cloneDeep, ObjectMap} from '../shared/private_utils';
+import {spawnError} from '../shared/error_utils';
 import {FieldData} from '../shared/types/field';
 import {ModelChange} from '../shared/types/base_core';
 import {RecordData} from '../shared/types/record';

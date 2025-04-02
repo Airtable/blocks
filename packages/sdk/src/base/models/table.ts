@@ -1,8 +1,15 @@
 /** @module @airtable/blocks/models: Table */ /** */
 import {TableCore, WatchableTableKeysCore} from '../../shared/models/table_core';
 import {ViewType} from '../types/view';
-import {spawnError} from '../../error_utils';
-import {entries, cast, ObjectMap, keys, isEnumValue, ObjectValues} from '../../private_utils';
+import {spawnError} from '../../shared/error_utils';
+import {
+    entries,
+    cast,
+    ObjectMap,
+    keys,
+    isEnumValue,
+    ObjectValues,
+} from '../../shared/private_utils';
 import BlockSdk from '../sdk';
 import {FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
 import {TableData} from '../types/table';

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {ViewType} from '../../src/base/types/view';
-import {__reset, __sdk as sdk} from '../../src';
+import {__reset, __sdk as sdk} from '../../src/base';
 import AbstractModel from '../../src/shared/models/abstract_model';
 import Base from '../../src/base/models/base';
 import * as RecordColoring from '../../src/base/models/record_coloring';
