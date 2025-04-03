@@ -1,5 +1,6 @@
 import warn, {__injectSdkIntoWarning} from '../shared/warning';
 import getAirtableInterface from '../injected/airtable_interface';
+import {BaseSdkMode} from '../sdk_mode';
 import {__injectSdkIntoPerformRecordAction} from './perform_record_action';
 import Sdk from './sdk';
 import {__injectSdkIntoCreateAggregators} from './models/create_aggregators';
@@ -71,7 +72,7 @@ Object.defineProperty(module.exports, 'UI', {
 
 /** @internal */
 export function __reset() {
-    __sdk = new Sdk(getAirtableInterface());
+    __sdk = new Sdk(getAirtableInterface<BaseSdkMode>());
 
     ({
         base,

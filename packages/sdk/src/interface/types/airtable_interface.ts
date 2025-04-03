@@ -17,7 +17,9 @@ export interface PageElementInQueryContainerBlockRunContextType {
 export type BlockRunContext = PageElementInQueryContainerBlockRunContextType;
 
 /** @hidden */
-export interface SdkInitData extends SdkInitDataCore {}
+export interface SdkInitData extends SdkInitDataCore {
+    runContext: BlockRunContext;
+}
 
 /**
  * AirtableInterface is designed as the communication interface between the

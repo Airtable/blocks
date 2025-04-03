@@ -1,5 +1,4 @@
 import {ObjectMap} from '../private_utils';
-import {BlockRunContext} from '../../base/types/airtable_interface';
 import {SdkMode} from '../../sdk_mode';
 import {Stat} from './stat';
 import {FieldId, BlockInstallationId} from './hyper_ids';
@@ -23,7 +22,6 @@ export interface SdkInitDataCore {
     isFirstRun: boolean;
     intentData: unknown;
     isUsingNewLookupCellValueFormat?: true | undefined;
-    runContext: BlockRunContext;
 }
 
 /** @hidden */

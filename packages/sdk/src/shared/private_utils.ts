@@ -421,7 +421,7 @@ export function isBlockDevelopmentRestrictionEnabled(): boolean {
 export function getLocaleAndDefaultLocale(): {locale?: string; defaultLocale?: string} {
     const sdkInitData = getAirtableInterface().sdkInitData;
     return {
-        locale: sdkInitData.locale,
-        defaultLocale: sdkInitData.defaultLocale,
+        locale: 'locale' in sdkInitData ? sdkInitData.locale : undefined,
+        defaultLocale: 'defaultLocale' in sdkInitData ? sdkInitData.defaultLocale : undefined,
     };
 }

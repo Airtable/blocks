@@ -26,6 +26,7 @@ import {RequestJson, ResponseJson} from './backend_fetch_types';
 export enum BlockRunContextType {
     DASHBOARD_APP = 'dashboardApp',
     VIEW = 'view',
+    PAGE_ELEMENT_IN_QUERY_CONTAINER = 'pageElementInQueryContainer',
 }
 
 /** @hidden */
@@ -92,6 +93,7 @@ export interface NormalizedViewMetadata {
 
 /** @hidden */
 export interface SdkInitData extends SdkInitDataCore {
+    runContext: BlockRunContext;
     baseData: BaseData;
     // NOTE: these don't really make much sense in backend blocks.
     // TODO: figure out what to do with them.
