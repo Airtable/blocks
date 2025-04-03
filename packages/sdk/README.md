@@ -4,9 +4,9 @@ With the Blocks SDK, you can create your own custom extensions on top of Airtabl
 can be integrations, visualizations, internal tools, and more!
 
 To get started, check out the
-[official Blocks SDK documentation website](https://airtable.com/developers/blocks). If you have any
+[official Blocks SDK documentation website](https://airtable.com/developers/extensions). If you have any
 questions, feedback, or feature requests, we encourage you to post in the
-[community forum](https://community.airtable.com/c/developers/custom-blocks-beta/54).
+[community forum](https://community.airtable.com/t5/development-apis/bd-p/development).
 
 This git repository contains a few related projects:
 
