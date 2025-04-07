@@ -40,6 +40,7 @@
         "http-cache-semantics": "^4.1.1",
         "parse-url": "^8.1.0",
         "psl": "^1.10.0",
+        "trim": "1.0.1",
         "typescript": "^5.4.5"
     },
     "scripts": {
