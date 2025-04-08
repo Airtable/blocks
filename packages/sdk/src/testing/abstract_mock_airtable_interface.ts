@@ -21,7 +21,7 @@ import {cloneDeep, ObjectMap} from '../shared/private_utils';
 import {spawnError} from '../shared/error_utils';
 import {FieldData} from '../shared/types/field';
 import {ModelChange} from '../shared/types/base_core';
-import {RecordData} from '../shared/types/record';
+import {RecordData} from '../base/types/record';
 import {ViewportSizeConstraint} from '../base/types/viewport';
 import {PermissionCheckResult} from '../shared/types/mutations_core';
 import {Mutation} from '../base/types/mutations';

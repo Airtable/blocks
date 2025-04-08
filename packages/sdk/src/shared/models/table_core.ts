@@ -31,6 +31,8 @@ export abstract class TableCore<
     /** @internal */
     _parentBase: SdkModeT['BaseT'];
     /** @internal */
+    _recordStore: SdkModeT['RecordStoreT'];
+    /** @internal */
     _fieldModelsById: {[key: string]: SdkModeT['FieldT']};
     /** @internal */
     _cachedFieldNamesById: {[key: string]: string} | null;
@@ -38,9 +40,15 @@ export abstract class TableCore<
     /**
      * @internal
      */
-    constructor(parentBase: SdkModeT['BaseT'], tableId: string, sdk: SdkModeT['SdkT']) {
+    constructor(
+        parentBase: SdkModeT['BaseT'],
+        recordStore: SdkModeT['RecordStoreT'],
+        tableId: string,
+        sdk: SdkModeT['SdkT'],
+    ) {
         super(sdk, tableId);
         this._parentBase = parentBase;
+        this._recordStore = recordStore;
         this._fieldModelsById = {}; // Field instances are lazily created by getFieldById.
         this._cachedFieldNamesById = null;
     }
@@ -364,6 +372,11 @@ export abstract class TableCore<
             // Clear out cached field names in case a field was added/removed/renamed.
             this._cachedFieldNamesById = null;
         }
+
+        // NOTE: Record store onChange triggers must be performed AFTER field onChange triggers to
+        // ensure the column type providers are not stale.
+        this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
+
         return didTableSchemaChange;
     }
     /**

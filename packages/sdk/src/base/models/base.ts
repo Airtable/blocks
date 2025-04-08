@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {BaseCore, ChangedPathsForType} from '../../shared/models/base_core';
+import {BaseCore, ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
 import {MutationTypes} from '../types/mutations';
 import {FieldType} from '../../shared/types/field';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';
 import {BaseSdkMode} from '../../sdk_mode';
 import {TableId} from '../../shared/types/hyper_ids';
-import {ObjectMap, has, entries} from '../../shared/private_utils';
-import {invariant} from '../../shared/error_utils';
+import {entries} from '../../shared/private_utils';
 import {BaseData} from '../types/base';
+import BaseBlockSdk from '../sdk';
 import RecordStore from './record_store';
 import Table from './table';
 
@@ -31,12 +31,19 @@ class Base extends BaseCore<BaseSdkMode> {
     static _className = 'Base';
 
     /** @internal */
-    _tableRecordStoresByTableId: ObjectMap<TableId, RecordStore> = {};
-
-    /** @internal */
     _constructTable(tableId: TableId): Table {
         const recordStore = this.__getRecordStore(tableId);
         return new Table(this, recordStore, tableId, this._sdk);
+    }
+
+    /** @internal */
+    _constructRecordStore(sdk: BaseBlockSdk, tableId: TableId): RecordStore {
+        return new RecordStore(sdk, tableId);
+    }
+
+    /** @internal */
+    _iterateTableIds(): Iterable<TableId> {
+        return this._data.tableOrder;
     }
 
     /**
@@ -212,40 +219,32 @@ class Base extends BaseCore<BaseSdkMode> {
     }
 
     /**
-     * Returns the maximum number of records allowed in each table of this base.
-     */
-    getMaxRecordsPerTable(): number {
-        return this._data.maxRowsPerTable ?? 100000;
-    }
-
-    /**
-     * @internal
-     */
-    __getRecordStore(tableId: TableId): RecordStore {
-        if (has(this._tableRecordStoresByTableId, tableId)) {
-            return this._tableRecordStoresByTableId[tableId];
-        }
-        invariant(this._data.tablesById[tableId], 'table must exist');
-        const newRecordStore = new RecordStore(this._sdk, tableId);
-        this._tableRecordStoresByTableId[tableId] = newRecordStore;
-        return newRecordStore;
-    }
-
-    /**
      * @internal
      */
     __triggerOnChangeForChangedPaths(changedPaths: ChangedPathsForType<BaseData>): void {
         super.__triggerOnChangeForChangedPaths(changedPaths);
 
+        let didSchemaChange = false;
         if (changedPaths.tableOrder) {
+            this._onChange(WatchableBaseKeys.tables);
+            didSchemaChange = true;
+
+            // Clean up deleted tables
+            for (const [tableId, tableModel] of entries(this._tableModelsById)) {
+                if (tableModel.isDeleted) {
+                    delete this._tableModelsById[tableId];
+                }
+            }
+
             for (const [tableId, recordStore] of entries(this._tableRecordStoresByTableId)) {
                 if (recordStore && recordStore.isDeleted) {
                     recordStore.__onDataDeletion();
                     delete this._tableRecordStoresByTableId[tableId];
                 }
             }
-            // Intentionally not calling _onChange here, since super.__triggerOnChangeForChangedPaths
-            // will already call _onChange if `changedPaths.tableOrder` is truthy
+        }
+        if (didSchemaChange) {
+            this._onChange(WatchableBaseKeys.schema);
         }
     }
 }

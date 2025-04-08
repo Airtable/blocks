@@ -4,7 +4,7 @@ import {waitForWatchKeyAsync} from '../test_helpers';
 import {__reset, __sdk as sdk} from '../../src/base';
 import {modes as recordColorModes} from '../../src/base/models/record_coloring';
 import {FieldType} from '../../src/shared/types/field';
-import {RecordData} from '../../src/shared/types/record';
+import {RecordData} from '../../src/base/types/record';
 import Table from '../../src/base/models/table';
 import Field from '../../src/base/models/field';
 import View from '../../src/base/models/view';

@@ -1,19 +1,11 @@
 /** @module @airtable/blocks/models: Record */ /** */
 import {Color} from '../../shared/colors';
-import {RecordCore} from '../../shared/models/record_core';
-import {ViewId, RecordId, FieldId} from '../../shared/types/hyper_ids';
+import {RecordCore, WatchableRecordKeysCore} from '../../shared/models/record_core';
+import {ViewId, FieldId} from '../../shared/types/hyper_ids';
 import {BaseSdkMode} from '../../sdk_mode';
-import {
-    isEnumValue,
-    ObjectValues,
-    cloneDeep,
-    FlowAnyObject,
-    isObjectEmpty,
-} from '../../shared/private_utils';
+import {isEnumValue, ObjectValues, FlowAnyObject, isObjectEmpty} from '../../shared/private_utils';
 import BlockSdk from '../sdk';
-import {RecordData} from '../../shared/types/record';
 import {invariant} from '../../shared/error_utils';
-import {FieldType} from '../../shared/types/field';
 import colorUtils from '../../shared/color_utils';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import ObjectPool from './object_pool';
@@ -24,11 +16,8 @@ import View from './view';
 import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 
 const WatchableRecordKeys = Object.freeze({
-    name: 'name' as const,
+    ...WatchableRecordKeysCore,
     commentCount: 'commentCount' as const,
-    // TODO(kasra): these keys don't have matching getters (not that they should
-    // it's just inconsistent...)
-    cellValues: 'cellValues' as const,
 });
 // TODO: load cell values in field when this is watched? This will
 // cause the CellRenderer component to load cell values, which seems okay,
@@ -66,10 +55,6 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         );
     }
     /** @internal */
-    _parentRecordStore: RecordStore;
-    /** @internal */
-    _parentTable: Table;
-    /** @internal */
     __linkedRecordsQueryResultPool: ObjectPool<
         LinkedRecordsQueryResult,
         typeof LinkedRecordsQueryResult
@@ -84,45 +69,8 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         parentTable: Table,
         recordId: string,
     ) {
-        super(sdk, recordId);
-
-        this._parentRecordStore = parentRecordStore;
-        this._parentTable = parentTable;
+        super(sdk, parentRecordStore, parentTable, recordId);
         this.__linkedRecordsQueryResultPool = new ObjectPool(LinkedRecordsQueryResult);
-    }
-
-    /**
-     * @internal
-     */
-    get _dataOrNullIfDeleted(): RecordData | null {
-        const tableData = this._baseData.tablesById[this.parentTable.id];
-        if (!tableData) {
-            return null;
-        }
-        const recordsById = tableData.recordsById;
-        invariant(recordsById, 'Record data is not loaded');
-        return recordsById[this._id] ?? null;
-    }
-    /**
-     * The table that this record belongs to. Should never change because records aren't moved between tables.
-     *
-     * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @example
-     * ```js
-     * import {useRecords} from '@airtable/blocks/ui';
-     * const records = useRecords(myTable);
-     * console.log(records[0].parentTable.id === myTable.id);
-     * // => true
-     * ```
-     */
-    get parentTable(): Table {
-        return this._parentTable;
-    }
-    /**
-     * @internal
-     */
-    _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field {
-        return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
     /**
      * @internal
@@ -131,83 +79,6 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
 
-    /**
-     * @internal
-     *
-     * For use when we need the raw public API cell value. Specifically makes a difference
-     * for lookup fields, where we translate the format to a blocks-specific format in getCellValue.
-     * That format is incompatible with fieldTypeProvider methods, which expect the public API
-     * format - use _getRawCellValue instead.
-     */
-    _getRawCellValue(field: Field): unknown {
-        invariant(
-            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
-            'Cell values for field %s are not loaded',
-            field.id,
-        );
-
-        const {cellValuesByFieldId} = this._data;
-        if (!cellValuesByFieldId) {
-            return null;
-        }
-        const cellValue =
-            cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
-
-        if (typeof cellValue === 'object' && cellValue !== null) {
-            // Copy non-primitives.
-            // TODO(kasra): maybe freezeDeep instead?
-            return cloneDeep(cellValue);
-        } else {
-            return cellValue;
-        }
-    }
-    /**
-     * Gets the cell value of the given field for this record.
-     *
-     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
-     * @example
-     * ```js
-     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
-     * console.log(cellValue);
-     * // => 'cell value'
-     * ```
-     */
-    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
-        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        const cellValue = this._getRawCellValue(field);
-
-        // HACK: migrate to new public lookup cell value format if needed
-        if (
-            typeof cellValue === 'object' &&
-            cellValue !== null &&
-            field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
-            !this._sdk.__airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
-        ) {
-            const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
-            invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
-            for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
-                invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
-                const {valuesByLinkedRecordId} = cellValue as any;
-
-                invariant(
-                    valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
-                    'valuesByLinkedRecordId',
-                );
-
-                const value = valuesByLinkedRecordId[linkedRecordId];
-                if (Array.isArray(value)) {
-                    for (const v of value) {
-                        cellValueForMigration.push({linkedRecordId, value: v});
-                    }
-                } else {
-                    cellValueForMigration.push({linkedRecordId, value});
-                }
-            }
-            return cellValueForMigration;
-        }
-
-        return cellValue;
-    }
     /**
      * Gets the cell value of the given field for this record, formatted as a `string`.
      *
@@ -221,27 +92,22 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
      */
     getCellValueAsString(fieldOrFieldIdOrFieldName: Field | FieldId | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',
             field.id,
         );
-
-        const cellValue = this._getRawCellValue(field);
-
-        if (cellValue === null || cellValue === undefined) {
-            return '';
-        } else {
-            const airtableInterface = this._sdk.__airtableInterface;
-            const appInterface = this._sdk.__appInterface;
-            return airtableInterface.fieldTypeProvider.convertCellValueToString(
-                appInterface,
-                cellValue,
-                field._data,
-            );
-        }
+        return super.getCellValueAsString(field.id);
     }
+    _getRawCellValue(field: Field): unknown {
+        invariant(
+            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
+            'Cell values for field %s are not loaded',
+            field.id,
+        );
+        return super._getRawCellValue(field);
+    }
+
     /**
      * Returns a URL that is suitable for rendering an attachment on the current client.
      * The URL that is returned will only work for the current user.
@@ -284,7 +150,6 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
             attachmentUrl,
         );
     }
-
     /**
      * Gets the color of this record in a given view, or null if the record has no color in that
      * view.
@@ -378,18 +243,6 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         );
     }
     /**
-     * The primary cell value in this record, formatted as a `string`.
-     *
-     * @example
-     * ```js
-     * console.log(myRecord.name);
-     * // => '42'
-     * ```
-     */
-    get name(): string {
-        return this.getCellValueAsString(this.parentTable.primaryField);
-    }
-    /**
      * The number of comments on this record.
      *
      * @example
@@ -405,40 +258,16 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         return this._data.commentCount;
     }
     /**
-     * The created time of this record.
-     *
-     * @example
-     * ```js
-     * console.log(`
-     *     This record was created at ${myRecord.createdTime.toISOString()}
-     * `);
-     * ```
-     */
-    get createdTime(): Date {
-        return new Date(this._data.createdTime);
-    }
-    /**
      * @internal
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
+        super.__triggerOnChangeForDirtyPaths(dirtyPaths);
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
-
         if (cellValuesByFieldId && !isObjectEmpty(cellValuesByFieldId)) {
-            // TODO: don't trigger changes for fields that aren't supposed to be loaded
-            // (in some cases, e.g. record created, liveapp will send cell values
-            // that we're not subscribed to).
-
-            this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
-
-            if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
-                this._onChange(WatchableRecordKeys.name);
-            }
-
             for (const fieldId of Object.keys(cellValuesByFieldId)) {
                 this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
             }
         }
-
         if (commentCount) {
             this._onChange(WatchableRecordKeys.commentCount);
         }

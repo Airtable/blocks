@@ -35,6 +35,7 @@ interface EntryPoints {
  * initializeBlock(() => <App />);
  * ```
  * @docsPath UI/utils/initializeBlock
+ * @internal
  */
 export function initializeBlock(entryPoints: EntryPoints) {
     const body = typeof document !== 'undefined' ? document.body : null;

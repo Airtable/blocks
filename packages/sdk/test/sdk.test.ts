@@ -321,9 +321,9 @@ describe('sdk', () => {
                 // delay doesn't cause any issues.
 
                 // assert that _unloadData hasn't been called yet.
-                expect(query._recordStore._isDataLoaded).toBe(true);
+                expect(query._recordStore._loader._isDataLoaded).toBe(true);
                 jest.advanceTimersByTime(AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
-                expect(query._recordStore._isDataLoaded).toBe(false);
+                expect(query._recordStore._loader._isDataLoaded).toBe(false);
             });
         });
 

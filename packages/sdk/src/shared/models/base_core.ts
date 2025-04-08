@@ -1,7 +1,7 @@
 import {ModelChange} from '../types/base_core';
 import {CollaboratorData} from '../types/collaborator';
 import {TableId, UserId} from '../types/hyper_ids';
-import {isEnumValue, entries, isDeepEqual, ObjectValues, has} from '../private_utils';
+import {isEnumValue, entries, isDeepEqual, ObjectValues, has, ObjectMap} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
 import {SdkMode} from '../../sdk_mode';
 import AbstractModel from './abstract_model';
@@ -62,6 +62,8 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
     }
     /** @internal */
     _tableModelsById: {[key: string]: SdkModeT['TableT']};
+    /** @internal */
+    _tableRecordStoresByTableId: ObjectMap<TableId, SdkModeT['RecordStoreT']> = {};
     /** @internal */
     __billingPlanGrouping: string;
     /** @internal */
@@ -143,7 +145,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
     get tables(): Array<SdkModeT['TableT']> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const tables: Array<SdkModeT['TableT']> = [];
-        this._data.tableOrder.forEach(tableId => {
+        for (const tableId of this._iterateTableIds()) {
             const table = this.getTableByIdIfExists(tableId);
             // NOTE: A table's ID may be in tableOrder without the table appearing
             // in tablesById, in which case getTableById will return null. This
@@ -152,9 +154,20 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
             if (table) {
                 tables.push(table);
             }
-        });
+        }
         return tables;
     }
+
+    /** @internal */
+    abstract _constructTable(tableId: TableId): SdkModeT['TableT'];
+    /** @internal */
+    abstract _constructRecordStore(
+        sdk: SdkModeT['SdkT'],
+        tableId: TableId,
+    ): SdkModeT['RecordStoreT'];
+    /** @internal */
+    abstract _iterateTableIds(): Iterable<TableId>;
+
     /**
      * The users who have access to this base.
      *
@@ -276,8 +289,6 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
             return this._tableModelsById[tableId];
         }
     }
-    /** @internal */
-    abstract _constructTable(tableId: TableId): SdkModeT['TableT'];
     /**
      * The table matching the given ID. Throws if that table does not exist in this base. Use
      * {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given
@@ -358,6 +369,26 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
     }
 
     /**
+     * Returns the maximum number of records allowed in each table of this base.
+     */
+    getMaxRecordsPerTable(): number {
+        return this._data.maxRowsPerTable ?? 100000;
+    }
+
+    /**
+     * @internal
+     */
+    __getRecordStore(tableId: TableId): SdkModeT['RecordStoreT'] {
+        if (has(this._tableRecordStoresByTableId, tableId)) {
+            return this._tableRecordStoresByTableId[tableId];
+        }
+        invariant(this._data.tablesById[tableId], 'table must exist');
+        const newRecordStore = this._constructRecordStore(this._sdk, tableId);
+        this._tableRecordStoresByTableId[tableId] = newRecordStore;
+        return newRecordStore;
+    }
+
+    /**
      * @internal
      */
     __triggerOnChangeForChangedPaths(
@@ -371,17 +402,6 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
         if (changedPaths.color) {
             this._onChange(WatchableBaseKeys.color);
             didSchemaChange = true;
-        }
-        if (changedPaths.tableOrder) {
-            this._onChange(WatchableBaseKeys.tables);
-            didSchemaChange = true;
-
-            // Clean up deleted tables
-            for (const [tableId, tableModel] of entries(this._tableModelsById)) {
-                if (tableModel.isDeleted) {
-                    delete this._tableModelsById[tableId];
-                }
-            }
         }
         const {tablesById} = changedPaths;
         if (tablesById) {

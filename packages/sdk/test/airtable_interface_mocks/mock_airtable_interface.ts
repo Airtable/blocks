@@ -10,7 +10,7 @@ import {AbstractMockAirtableInterface} from '../../src/testing/abstract_mock_air
 import {TableId, FieldId} from '../../src/shared/types/hyper_ids';
 import {spawnError} from '../../src/shared/error_utils';
 import {CursorData} from '../../src/base/types/cursor';
-import {RecordData} from '../../src/shared/types/record';
+import {RecordData} from '../../src/base/types/record';
 import {RecordActionData} from '../../src/base/types/record_action_data';
 import {RequestJson, ResponseJson} from '../../src/base/types/backend_fetch_types';
 import {GlobalConfigHelpers} from '../../src/shared/types/airtable_interface_core';

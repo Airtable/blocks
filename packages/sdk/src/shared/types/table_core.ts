@@ -1,8 +1,7 @@
 /** @module @airtable/blocks/models: Table */ /** */
 import {ObjectMap} from '../private_utils';
 import {FieldData, FieldPermissionData} from './field';
-import {RecordData} from './record';
-import {TableId, FieldId, RecordId} from './hyper_ids';
+import {TableId, FieldId} from './hyper_ids';
 
 /** @hidden */
 export type TableLock = unknown;
@@ -15,8 +14,6 @@ export interface TableDataCore {
     name: string;
     primaryFieldId: string;
     fieldsById: ObjectMap<FieldId, FieldData>;
-    // recordsById will be absent until the block explicitly loads the table's data.
-    recordsById?: ObjectMap<RecordId, RecordData>;
     description: string | null;
     lock: TableLock | null;
     externalSyncById: ExternalSyncById | null;

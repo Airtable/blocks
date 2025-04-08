@@ -1,17 +1,21 @@
 import BaseBlockSdk from './base/sdk';
 import {BaseData as BaseDataForBaseSdkMode} from './base/types/base';
 import {TableData as TableDataForBaseSdkMode} from './base/types/table';
+import {RecordData as RecordDataForBaseSdkMode} from './base/types/record';
+import {BaseData as BaseDataForInterfaceSdkMode} from './interface/types/base';
+import {TableData as TableDataForInterfaceSdkMode} from './interface/types/table';
+import {RecordData as RecordDataForInterfaceSdkMode} from './interface/types/record';
 import BaseForBaseSdkMode from './base/models/base';
 import BaseForInterfaceSdkMode from './interface/models/base';
 import FieldForBaseSdkMode from './base/models/field';
 import {InterfaceBlockSdk} from './interface/sdk';
-import {BaseDataCore} from './shared/types/base_core';
-import {TableDataCore} from './shared/types/table_core';
-import {FieldCore} from './shared/models/field_core';
-import {RecordCore} from './shared/models/record_core';
 import TableForBaseSdkMode from './base/models/table';
 import TableForInterfaceSdkMode from './interface/models/table';
+import FieldForInterfaceSdkMode from './interface/models/field';
+import RecordForInterfaceSdkMode from './interface/models/record';
 import RecordForBaseSdkMode from './base/models/record';
+import RecordStoreForBaseSdkMode from './base/models/record_store';
+import RecordStoreForInterfaceSdkMode from './interface/models/record_store';
 import {
     AirtableInterface as AirtableInterfaceForBaseSdkMode,
     BlockRunContext as BlockRunContextForBaseSdkMode,
@@ -19,7 +23,7 @@ import {
 } from './base/types/airtable_interface';
 import {
     AirtableInterface as AirtableInterfaceForInterfaceSdkMode,
-    // BlockRunContext as BlockRunContextForInterfaceSdkMode,
+    BlockRunContext as BlockRunContextForInterfaceSdkMode,
     SdkInitData as SdkInitDataForInterfaceSdkMode,
 } from './interface/types/airtable_interface';
 import MutationsForBaseSdkMode from './base/models/mutations';
@@ -46,17 +50,20 @@ export interface BaseSdkMode {
 
     BaseDataT: BaseDataForBaseSdkMode;
     TableDataT: TableDataForBaseSdkMode;
+    RecordDataT: RecordDataForBaseSdkMode;
 
     BaseT: BaseForBaseSdkMode;
     TableT: TableForBaseSdkMode;
     FieldT: FieldForBaseSdkMode;
     RecordT: RecordForBaseSdkMode;
+    /** @internal */
+    RecordStoreT: RecordStoreForBaseSdkMode;
 }
 
 /** @hidden */
 export interface InterfaceSdkMode {
     mode: 'interface';
-    // runContextT: BlockRunContextForInterfaceSdkMode;
+    runContextT: BlockRunContextForInterfaceSdkMode;
     SdkT: InterfaceBlockSdk;
     SdkInitDataT: SdkInitDataForInterfaceSdkMode;
     AirtableInterfaceT: AirtableInterfaceForInterfaceSdkMode;
@@ -67,17 +74,16 @@ export interface InterfaceSdkMode {
     // TODO change to PartialMutationForInterfaceSdkMode once implemented
     PartialMutationT: PartialMutationCore;
 
-    // TODO change to BaseDataForInterfaceSdkMode once implemented
-    BaseDataT: BaseDataCore<TableDataCore>;
-    // TODO change to TableDataForInterfaceSdkMode once implemented
-    TableDataT: TableDataCore;
+    BaseDataT: BaseDataForInterfaceSdkMode;
+    TableDataT: TableDataForInterfaceSdkMode;
+    RecordDataT: RecordDataForInterfaceSdkMode;
 
     BaseT: BaseForInterfaceSdkMode;
     TableT: TableForInterfaceSdkMode;
-    // TODO change to FieldForInterfaceSdkMode once implemented
-    FieldT: FieldCore<this>;
-    // TODO change to RecordForInterfaceSdkMode once implemented
-    RecordT: RecordCore<this>;
+    FieldT: FieldForInterfaceSdkMode;
+    RecordT: RecordForInterfaceSdkMode;
+    /** @internal */
+    RecordStoreT: RecordStoreForInterfaceSdkMode;
 }
 
 /** @hidden */

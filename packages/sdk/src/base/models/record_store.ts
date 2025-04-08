@@ -1,10 +1,8 @@
 import {
-    isEnumValue,
     fireAndForgetPromise,
     entries,
     has,
     values,
-    ObjectValues,
     ObjectMap,
     FlowAnyFunction,
     FlowAnyObject,
@@ -15,26 +13,21 @@ import {invariant, logErrorToSentry} from '../../shared/error_utils';
 import Sdk from '../sdk';
 import {TableData} from '../types/table';
 import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
-import {RecordData} from '../../shared/types/record';
+import {RecordData} from '../types/record';
 import {AirtableInterface} from '../types/airtable_interface';
 import {ChangedPathsForType} from '../../shared/models/base_core';
+import {BaseSdkMode} from '../../sdk_mode';
+import RecordStoreCore, {
+    WatchableCellValuesInFieldKeyPrefix,
+    WatchableRecordStoreKey,
+    WatchableRecordStoreKeys,
+} from '../../shared/models/record_store_core';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
+import Table from './table';
 
-export const WatchableRecordStoreKeys = Object.freeze({
-    records: 'records' as const,
-    recordIds: 'recordIds' as const,
-    cellValues: 'cellValues' as const,
-});
-const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
-
-/**
- * The string case is to accommodate prefix keys
- *
- * @internal
- */
-export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKeys> | string;
+export {WatchableRecordStoreKeys} from '../../shared/models/record_store_core';
 
 /**
  * One RecordStore exists per table, and contains all the record data associated with that table.
@@ -42,52 +35,37 @@ export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKe
  *
  * @internal
  */
-class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordStoreKey> {
+class RecordStore extends RecordStoreCore<BaseSdkMode> {
     static _className = 'RecordStore';
-    static _isWatchableKey(key: string): boolean {
-        return (
-            isEnumValue(WatchableRecordStoreKeys, key) ||
-            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
-        );
-    }
-    static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
-        // "Data" means *all* cell values in the table. If only watching records/recordIds,
-        // we'll just load record metadata (id, createdTime, commentCount).
-        // If only watching specific fields, we'll just load cell values in those
-        // fields. Both of those scenarios are handled manually by this class,
-        // instead of relying on AbstractModelWithAsyncData.
-        return key === WatchableRecordStoreKeys.cellValues;
-    }
 
     readonly tableId: TableId;
     _recordModelsById: ObjectMap<RecordId, Record> = {};
-    readonly _primaryFieldId: FieldId;
-    readonly _airtableInterface: AirtableInterface;
     readonly _viewDataStoresByViewId: ObjectMap<ViewId, ViewDataStore> = {};
-
-    // There is a lot of duplication here and in AbstractModelWithAsyncData.
-    // Alternatively, phase out AbstractModelWithAsyncData as a superclass
-    // and instead create a helper class for managing each part of the data
-    // tree that is loaded.
-    _areCellValuesLoadedByFieldId: ObjectMap<FieldId, boolean | undefined> = {};
-    _pendingCellValuesLoadPromiseByFieldId: ObjectMap<
-        FieldId,
-        Promise<Array<WatchableRecordStoreKey>> | undefined
-    > = {};
-    _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
-
-    _timeoutForRemovingFieldIds: NodeJS.Timeout | null = null;
+    readonly _loader: RecordStoreAsyncLoader;
 
     constructor(sdk: Sdk, tableId: TableId) {
         super(sdk, `${tableId}-RecordStore`);
 
-        this._airtableInterface = sdk.__airtableInterface;
         this.tableId = tableId;
-        // A bit of a hack, but we use the primary field ID to load record
-        // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
-        // ID here instead of calling this.primaryField.id since that would crash
-        // when the table is getting unloaded after being deleted.
-        this._primaryFieldId = this._data.primaryFieldId;
+        // // A bit of a hack, but we use the primary field ID to load record
+        // // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
+        // // ID here instead of calling this.primaryField.id since that would crash
+        // // when the table is getting unloaded after being deleted.
+        // this._primaryFieldId = this._data.primaryFieldId;
+
+        const onChange = this._onChange.bind(this);
+        const clearRecordModels = () => {
+            this._recordModelsById = {};
+        };
+        this._loader = new RecordStoreAsyncLoader(sdk, tableId, onChange, clearRecordModels);
+    }
+
+    _constructRecord(recordId: RecordId, parentTable: Table): Record {
+        return new Record(this._sdk, this, parentTable, recordId);
+    }
+
+    get _dataOrNullIfDeleted(): TableData | null {
+        return this._loader._dataOrNullIfDeleted;
     }
 
     getViewDataStore(viewId: ViewId): ViewDataStore {
@@ -106,9 +84,14 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordStoreKey> {
         const validKeys = super.watch(keys, callback, context);
-        const fieldIdsToLoad = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
+        const fieldIdsToLoad = this._loader._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToLoad.length > 0) {
-            fireAndForgetPromise(this.loadCellValuesInFieldIdsAsync.bind(this, fieldIdsToLoad));
+            fireAndForgetPromise(async () => {
+                await this._loader.loadCellValuesInFieldIdsAsync(
+                    fieldIdsToLoad,
+                    this._onChange.bind(this),
+                );
+            });
         }
         return validKeys;
     }
@@ -119,35 +102,11 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordStoreKey> {
         const validKeys = super.unwatch(keys, callback, context);
-        const fieldIdsToUnload = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
+        const fieldIdsToUnload = this._loader._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToUnload.length > 0) {
-            this.unloadCellValuesInFieldIds(fieldIdsToUnload);
+            this._loader.unloadCellValuesInFieldIds(fieldIdsToUnload);
         }
         return validKeys;
-    }
-
-    _getFieldIdsToLoadFromWatchableKeys(keys: Array<WatchableRecordStoreKey>): Array<string> {
-        const fieldIdsToLoad = [];
-        for (const key of keys) {
-            if (key.startsWith(WatchableCellValuesInFieldKeyPrefix)) {
-                const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
-                fieldIdsToLoad.push(fieldId);
-            } else if (
-                key === WatchableRecordStoreKeys.records ||
-                key === WatchableRecordStoreKeys.recordIds
-            ) {
-                fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
-            }
-        }
-        return fieldIdsToLoad;
-    }
-
-    get _dataOrNullIfDeleted(): TableData | null {
-        return this._baseData.tablesById[this.tableId] ?? null;
-    }
-
-    _onChangeIsDataLoaded() {
-        // noop
     }
 
     /**
@@ -197,26 +156,134 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         }
     }
 
+    /** @internal */
     __onDataDeletion(): void {
         // also need to call unloadCellValuesInFieldIds because otherwise
         // on the hyperbase side, the old record store would still be subscribed
         // to the cell values and it will refuse a request for new subscription
-        for (const fieldId of Object.keys(this._cellValuesRetainCountByFieldId)) {
+        for (const fieldId of Object.keys(this._loader._cellValuesRetainCountByFieldId)) {
             while (
-                this._cellValuesRetainCountByFieldId[fieldId] &&
-                this._cellValuesRetainCountByFieldId[fieldId] > 0
+                this._loader._cellValuesRetainCountByFieldId[fieldId] &&
+                this._loader._cellValuesRetainCountByFieldId[fieldId] > 0
             ) {
-                this.unloadCellValuesInFieldIds([fieldId]);
+                this._loader.unloadCellValuesInFieldIds([fieldId]);
             }
         }
 
-        this._forceUnload();
+        this._loader._forceUnload();
 
         // similarly unsubscribe from the view data.
         // this comes after _forceUnload to avoid over releasing the table data.
         for (const viewDataStore of values(this._viewDataStoresByViewId)) {
             viewDataStore.__onDataDeletion();
         }
+    }
+
+    // #region async data loading
+    // wrapper methods over RecordStoreAsyncLoader
+    get isDeleted(): boolean {
+        return this._loader.isDeleted || super.isDeleted;
+    }
+    get isDataLoaded(): boolean {
+        return !this.isDeleted && this._loader.isDataLoaded;
+    }
+    async loadDataAsync() {
+        return await this._loader.loadDataAsync();
+    }
+    unloadData() {
+        return this._loader.unloadData();
+    }
+    get isRecordMetadataLoaded() {
+        return this._loader.isRecordMetadataLoaded;
+    }
+    async loadRecordMetadataAsync() {
+        return await this._loader.loadRecordMetadataAsync(this._onChange.bind(this));
+    }
+    unloadRecordMetadata() {
+        return this._loader.unloadRecordMetadata();
+    }
+    areCellValuesLoadedForFieldId(fieldId: FieldId): boolean {
+        return this._loader.areCellValuesLoadedForFieldId(fieldId);
+    }
+    async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
+        return await this._loader.loadCellValuesInFieldIdsAsync(
+            fieldIds,
+            this._onChange.bind(this),
+        );
+    }
+    unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
+        return this._loader.unloadCellValuesInFieldIds(fieldIds);
+    }
+    // #endregion
+
+    triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>) {
+        if (this.isRecordMetadataLoaded && dirtyPaths.recordsById) {
+            super.triggerOnChangeForDirtyPaths(dirtyPaths);
+        }
+
+        if (dirtyPaths.viewOrder) {
+            // clean up deleted views
+            for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
+                if (viewDataStore.isDeleted) {
+                    viewDataStore.__onDataDeletion();
+                    delete this._viewDataStoresByViewId[viewId];
+                }
+            }
+        }
+    }
+}
+
+/** @internal */
+class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, string> {
+    static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
+        // "Data" means *all* cell values in the table. If only watching records/recordIds,
+        // we'll just load record metadata (id, createdTime, commentCount).
+        // If only watching specific fields, we'll just load cell values in those
+        // fields. Both of those scenarios are handled manually by this class,
+        // instead of relying on AbstractModelWithAsyncData.
+        return key === WatchableRecordStoreKeys.cellValues;
+    }
+
+    readonly tableId: TableId;
+    readonly _airtableInterface: AirtableInterface;
+    readonly _primaryFieldId: FieldId;
+    readonly _onChange: (key: string) => void;
+    readonly _clearRecordModels: () => void;
+
+    // There is a lot of duplication here and in AbstractModelWithAsyncData.
+    // Alternatively, phase out AbstractModelWithAsyncData as a superclass
+    // and instead create a helper class for managing each part of the data
+    // tree that is loaded.
+    _areCellValuesLoadedByFieldId: ObjectMap<FieldId, boolean | undefined> = {};
+    _pendingCellValuesLoadPromiseByFieldId: ObjectMap<
+        FieldId,
+        Promise<Array<WatchableRecordStoreKey>> | undefined
+    > = {};
+    _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
+
+    _timeoutForRemovingFieldIds: NodeJS.Timeout | null = null;
+
+    constructor(
+        sdk: Sdk,
+        tableId: TableId,
+        onChange: (key: string) => void,
+        clearRecordModels: () => void,
+    ) {
+        super(sdk, `${tableId}-RecordStore`);
+
+        this._airtableInterface = sdk.__airtableInterface;
+        this.tableId = tableId;
+        this._onChange = onChange;
+        this._clearRecordModels = clearRecordModels;
+        // A bit of a hack, but we use the primary field ID to load record
+        // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
+        // ID here instead of calling this.primaryField.id since that would crash
+        // when the table is getting unloaded after being deleted.
+        this._primaryFieldId = this._data.primaryFieldId;
+    }
+
+    _onChangeIsDataLoaded(): void {
+        // noop
     }
 
     /**
@@ -227,14 +294,31 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return !!this._data.recordsById;
     }
 
-    async loadRecordMetadataAsync() {
-        return await this.loadCellValuesInFieldIdsAsync([
-            this._getFieldIdForCausingRecordMetadataToLoad(),
-        ]);
+    async loadRecordMetadataAsync(onChange: (key: WatchableRecordStoreKey) => void) {
+        return await this.loadCellValuesInFieldIdsAsync(
+            [this._getFieldIdForCausingRecordMetadataToLoad()],
+            onChange,
+        );
     }
 
     unloadRecordMetadata() {
         this.unloadCellValuesInFieldIds([this._getFieldIdForCausingRecordMetadataToLoad()]);
+    }
+
+    _getFieldIdsToLoadFromWatchableKeys(keys: Array<WatchableRecordStoreKey>): Array<string> {
+        const fieldIdsToLoad = [];
+        for (const key of keys) {
+            if (key.startsWith(WatchableCellValuesInFieldKeyPrefix)) {
+                const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
+                fieldIdsToLoad.push(fieldId);
+            } else if (
+                key === WatchableRecordStoreKeys.records ||
+                key === WatchableRecordStoreKeys.recordIds
+            ) {
+                fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
+            }
+        }
+        return fieldIdsToLoad;
     }
 
     _getFieldIdForCausingRecordMetadataToLoad(): FieldId {
@@ -249,7 +333,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return this.isDataLoaded || this._areCellValuesLoadedByFieldId[fieldId] || false;
     }
 
-    async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
+    async loadCellValuesInFieldIdsAsync(
+        fieldIds: Array<FieldId>,
+        onChange: (key: WatchableRecordStoreKey) => void,
+    ) {
         this._assertNotForceUnloaded();
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<FieldId> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableRecordStoreKey>>> = [];
@@ -303,7 +390,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 }
 
                 for (const key of changedKeys) {
-                    this._onChange(key);
+                    onChange(key);
                 }
             });
         }
@@ -530,95 +617,12 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             }
         }
         if (!areAnyFieldsLoaded) {
-            this._recordModelsById = {};
+            this._clearRecordModels();
         }
     }
 
-    triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>) {
-        if (this.isRecordMetadataLoaded && dirtyPaths.recordsById) {
-            // Since tables don't have a record order, need to detect if a record
-            // was created or deleted and trigger onChange for records.
-            const dirtyFieldIdsSet: ObjectMap<FieldId, true> = {};
-            const addedRecordIds: Array<RecordId> = [];
-            const removedRecordIds: Array<RecordId> = [];
-            for (const [recordId, dirtyRecordPaths] of entries(dirtyPaths.recordsById) as Array<
-                [RecordId, ChangedPathsForType<RecordData>]
-            >) {
-                if (dirtyRecordPaths && dirtyRecordPaths._isDirty) {
-                    // If the entire record is dirty, it was either created or deleted.
-                    invariant(this._data.recordsById, 'No recordsById');
-
-                    if (has(this._data.recordsById, recordId)) {
-                        addedRecordIds.push(recordId);
-                    } else {
-                        removedRecordIds.push(recordId);
-
-                        const recordModel = this._recordModelsById[recordId];
-                        if (recordModel) {
-                            // Remove the Record model if it was deleted.
-                            delete this._recordModelsById[recordId];
-                        }
-                    }
-                } else {
-                    const recordModel = this._recordModelsById[recordId];
-                    if (recordModel) {
-                        recordModel.__triggerOnChangeForDirtyPaths(dirtyRecordPaths);
-                    }
-                }
-
-                const {cellValuesByFieldId} = dirtyRecordPaths;
-                if (cellValuesByFieldId) {
-                    for (const fieldId of Object.keys(cellValuesByFieldId)) {
-                        dirtyFieldIdsSet[fieldId] = true;
-                    }
-                }
-            }
-
-            // Now that we've composed our created/deleted record ids arrays, let's fire
-            // the records onChange event if any records were created or deleted.
-            if (addedRecordIds.length > 0 || removedRecordIds.length > 0) {
-                this._onChange(WatchableRecordStoreKeys.records, {
-                    addedRecordIds,
-                    removedRecordIds,
-                });
-
-                this._onChange(WatchableRecordStoreKeys.recordIds, {
-                    addedRecordIds,
-                    removedRecordIds,
-                });
-            }
-
-            // NOTE: this is an experimental (and somewhat messy) way to watch
-            // for changes to cells in a table, as an alternative to implementing
-            // full event bubbling. For now, it unblocks the things we want to
-            // build, but we may replace it.
-            // If we keep it, could be more efficient by not calling _onChange
-            // if there are no subscribers.
-            // TODO: don't trigger changes for fields that aren't supposed to be loaded
-            // (in some cases, e.g. record created, liveapp will send cell values
-            // that we're not subscribed to).
-            const fieldIds = Object.freeze(Object.keys(dirtyFieldIdsSet));
-            const recordIds = Object.freeze(Object.keys(dirtyPaths.recordsById));
-            if (fieldIds.length > 0 && recordIds.length > 0) {
-                this._onChange(WatchableRecordStoreKeys.cellValues, {
-                    recordIds,
-                    fieldIds,
-                });
-            }
-            for (const fieldId of fieldIds) {
-                this._onChange(WatchableCellValuesInFieldKeyPrefix + fieldId, recordIds, fieldId);
-            }
-        }
-
-        if (dirtyPaths.viewOrder) {
-            // clean up deleted views
-            for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
-                if (viewDataStore.isDeleted) {
-                    viewDataStore.__onDataDeletion();
-                    delete this._viewDataStoresByViewId[viewId];
-                }
-            }
-        }
+    get _dataOrNullIfDeleted(): TableData | null {
+        return this._baseData.tablesById[this.tableId] ?? null;
     }
 }
 

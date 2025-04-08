@@ -17,8 +17,6 @@ export interface BaseDataCore<TableDataT extends TableDataCore> {
     id: BaseId;
     name: string;
     color: string;
-    tableOrder: Array<TableId>;
-    activeTableId: TableId | null;
     tablesById: ObjectMap<TableId, TableDataT>;
 
     appInterface: AppInterface;

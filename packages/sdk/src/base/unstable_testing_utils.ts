@@ -6,7 +6,7 @@ export {Mutation, MutationTypes} from './types/mutations';
 export {AppInterface} from '../shared/types/airtable_interface_core';
 export {BlockRunContextType, SdkInitData, PartialViewData} from './types/airtable_interface';
 
-export {RecordData} from '../shared/types/record';
+export {RecordData} from './types/record';
 
 export {CursorData} from './types/cursor';
 

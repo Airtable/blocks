@@ -6,5 +6,6 @@ import '..';
 
 export {initializeBlock} from './initialize_block';
 export {default as useBase} from './use_base';
+export {useRecords} from './use_records';
 
 export const globalAlert = new GlobalAlert();

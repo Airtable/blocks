@@ -8,8 +8,8 @@ import {
     SdkInitDataCore,
 } from '../../shared/types/airtable_interface_core';
 import {FieldData} from '../../shared/types/field';
-import {RecordData} from '../../shared/types/record';
 import {BaseSdkMode} from '../../sdk_mode';
+import {RecordData} from './record';
 import {ViewportSizeConstraint} from './viewport';
 import {AggregatorKey} from './aggregators';
 import {BaseData} from './base';

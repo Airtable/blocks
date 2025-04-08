@@ -31,6 +31,7 @@ import useBaseInternal from '../../shared/ui/use_base';
  * ```
  * @docsPath UI/hooks/useBase
  * @hook
+ * @internal
  */
 function useBase() {
     return useBaseInternal<InterfaceSdkMode>();

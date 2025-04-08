@@ -56,17 +56,14 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
         return isEnumValue(WatchableTableKeys, key);
     }
     /** @internal */
-    _recordStore: RecordStore;
-    /** @internal */
     _viewModelsById: {[key: string]: View};
     /** @internal */
     __tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, typeof TableOrViewQueryResult>;
 
     /** @internal */
     constructor(parentBase: Base, recordStore: RecordStore, tableId: string, sdk: BlockSdk) {
-        super(parentBase, tableId, sdk);
+        super(parentBase, recordStore, tableId, sdk);
 
-        this._recordStore = recordStore;
         this._viewModelsById = {}; // View instances are lazily created by getViewById.
         this.__tableOrViewQueryResultPool = new ObjectPool(TableOrViewQueryResult);
     }
@@ -1574,9 +1571,6 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
                 }
             }
         }
-        // NOTE: Record store onChange triggers must be performed AFTER field onChange triggers to
-        // ensure the column type providers are not stale.
-        this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
 
         return didTableSchemaChange;
     }
