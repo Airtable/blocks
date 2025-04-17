@@ -34,4 +34,6 @@ export interface SdkInitData extends SdkInitDataCore {
  */
 export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMode> {
     sdkInitData: SdkInitData;
+
+    expandRecord(tableId: string, recordId: string): void;
 }
