@@ -405,14 +405,22 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
         }
         const {tablesById} = changedPaths;
         if (tablesById) {
-            for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
-                const table = this.getTableByIdIfExists(tableId);
-                if (table && dirtyTablePaths) {
-                    const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
-                        dirtyTablePaths,
-                    );
-                    if (didTableSchemaChange) {
-                        didSchemaChange = true;
+            if (isDeepEqual(tablesById, {_isDirty: true})) {
+                // If the changedPath is that tablesById is dirty in general, we need to
+                // trigger a schema change event. This happens in interface blocks
+                // when we reinitialize the tablesById as a whole due to the QueryModels
+                // changing. See https://github.com/Hyperbase/hyperbase/blob/b50a8992d333bcef3c906d61886fc69727a8e94b/client/components/blocks/block_frame.tsx#L645
+                didSchemaChange = true;
+            } else {
+                for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
+                    const table = this.getTableByIdIfExists(tableId);
+                    if (table && dirtyTablePaths) {
+                        const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
+                            dirtyTablePaths,
+                        );
+                        if (didTableSchemaChange) {
+                            didSchemaChange = true;
+                        }
                     }
                 }
             }
