@@ -32,7 +32,10 @@ import {
     Mutation as MutationForBaseSdkMode,
     PartialMutation as PartialMutationForBaseSdkMode,
 } from './base/types/mutations';
-import {MutationCore, PartialMutationCore} from './shared/types/mutations_core';
+import {
+    Mutation as MutationForInterfaceSdkMode,
+    PartialMutation as PartialMutationForInterfaceSdkMode,
+} from './interface/types/mutations';
 import SesssionForBaseSdkMode from './base/models/session';
 import SessionForInterfaceSdkMode from './interface/models/session';
 
@@ -69,10 +72,8 @@ export interface InterfaceSdkMode {
     AirtableInterfaceT: AirtableInterfaceForInterfaceSdkMode;
     SessionT: SessionForInterfaceSdkMode;
     MutationsModelT: MutationsForInterfaceSdkMode;
-    // TODO change to MutationForInterfaceSdkMode once implemented
-    MutationT: MutationCore;
-    // TODO change to PartialMutationForInterfaceSdkMode once implemented
-    PartialMutationT: PartialMutationCore;
+    MutationT: MutationForInterfaceSdkMode;
+    PartialMutationT: PartialMutationForInterfaceSdkMode;
 
     BaseDataT: BaseDataForInterfaceSdkMode;
     TableDataT: TableDataForInterfaceSdkMode;
