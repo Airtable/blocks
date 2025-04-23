@@ -1,6 +1,7 @@
 import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {BaseDataCore} from '../../shared/types/base_core';
+import {TableId} from '../../shared/types/hyper_ids';
 import {TableData} from './table';
 
 // BlockRunContextType, BlockInstallationPageBlockRunContext, ViewBlockRunContext, BlockRunContext
@@ -24,6 +25,42 @@ export interface SdkInitData extends SdkInitDataCore {
     baseData: BaseDataCore<TableData>;
 }
 
+// Keep in sync with enum in hyperbase repo:
+// https://github.com/Hyperbase/hyperbase/blob/2c0e2ef2cbc6bce7ab33fd913ef3572a83c3892d/client_server_shared/pages/types/block_installation_page_elements/block_installation_page_element_custom_properties_types.tsx
+/** @hidden */
+export enum BlockInstallationPageElementCustomPropertyTypeForAirtableInterface {
+    BOOLEAN = 'boolean',
+    STRING = 'string',
+    ENUM = 'enum',
+    FIELD_ID = 'fieldId',
+}
+
+// Keep in sync with type in hyperbase repo:
+// https://github.com/Hyperbase/hyperbase/blob/2c0e2ef2cbc6bce7ab33fd913ef3572a83c3892d/client_server_shared/pages/types/block_installation_page_elements/block_installation_page_element_custom_properties_types.tsx
+/** @hidden */
+export type BlockInstallationPageElementCustomPropertyForAirtableInterface = {
+    key: string;
+    label: string;
+} & (
+    | {
+          type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.BOOLEAN;
+          defaultValue: boolean;
+      }
+    | {
+          type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.STRING;
+          defaultValue?: string;
+      }
+    | {
+          type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.ENUM;
+          possibleValues: Array<{value: string; label: string}>;
+          defaultValue?: string;
+      }
+    | {
+          type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.FIELD_ID;
+          tableId: TableId;
+      }
+);
+
 /**
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable. The mechanism through which we communicate with Airtable
@@ -36,4 +73,7 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
     sdkInitData: SdkInitData;
 
     expandRecord(tableId: string, recordId: string): void;
+    setCustomPropertiesAsync(
+        properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
+    ): Promise<boolean>;
 }

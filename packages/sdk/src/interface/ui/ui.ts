@@ -8,5 +8,5 @@ export {initializeBlock} from './initialize_block';
 export {default as useBase} from './use_base';
 export {useRecords} from './use_records';
 export {default as expandRecord} from './expand_record';
-
+export {useCustomProperties} from './use_custom_properties';
 export const globalAlert = new GlobalAlert();
