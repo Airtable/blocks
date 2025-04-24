@@ -8,6 +8,8 @@ export type FieldId = string;
 export type ViewId = string;
 /** */
 export type RecordId = string;
+/** */
+export type PageId = string;
 /** @hidden */
 export type BlockInstallationId = string;
 /** @hidden */

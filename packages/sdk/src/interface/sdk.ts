@@ -9,7 +9,6 @@ import Base from './models/base';
 import {
     BlockInstallationPageElementCustomPropertyForAirtableInterface,
     BlockRunContext,
-    BlockRunContextType,
 } from './types/airtable_interface';
 
 // /** Add hidden annotation if uncommenting */
@@ -87,8 +86,7 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
 
     /** @hidden */
     getBlockRunContext(): BlockRunContext {
-        // return this.__airtableInterface.sdkInitData.runContext;
-        return {type: BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER};
+        return this.__airtableInterface.sdkInitData.runContext;
     }
 
     /**

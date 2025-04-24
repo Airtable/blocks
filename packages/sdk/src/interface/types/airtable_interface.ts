@@ -1,10 +1,10 @@
 import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {BaseDataCore} from '../../shared/types/base_core';
-import {TableId} from '../../shared/types/hyper_ids';
+import {TableId, PageId} from '../../shared/types/hyper_ids';
 import {TableData} from './table';
 
-// BlockRunContextType, BlockInstallationPageBlockRunContext, ViewBlockRunContext, BlockRunContext
+// BlockRunContextType, BlockInstallationPageBlockRunContext, BlockRunContext
 // must be kept in sync with block_run_context.tsx in hyperbase repo
 /** @hidden */
 export enum BlockRunContextType {
@@ -14,6 +14,8 @@ export enum BlockRunContextType {
 /** @hidden */
 export interface PageElementInQueryContainerBlockRunContextType {
     type: BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER;
+    pageId: PageId;
+    isPageElementInEditMode: boolean;
 }
 
 /** @hidden */
