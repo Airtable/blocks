@@ -47,34 +47,22 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
     }
 
     readonly tableId: TableId;
-    /** @internal */
     _recordModelsById: ObjectMap<RecordId, SdkModeT['RecordT']> = {};
 
-    /** @internal */
     constructor(sdk: SdkModeT['SdkT'], tableId: TableId) {
         super(sdk, `${tableId}-RecordStore`);
-
-        // this._airtableInterface = sdk.__airtableInterface;
         this.tableId = tableId;
-        // // A bit of a hack, but we use the primary field ID to load record
-        // // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
-        // // ID here instead of calling this.primaryField.id since that would crash
-        // // when the table is getting unloaded after being deleted.
-        // this._primaryFieldId = this._data.primaryFieldId;
     }
 
-    /** @internal */
     abstract _constructRecord(
         recordId: RecordId,
         parentTable: SdkModeT['TableT'],
     ): SdkModeT['RecordT'];
 
-    /** @internal */
     get _dataOrNullIfDeleted(): SdkModeT['TableDataT'] | null {
         return this._baseData.tablesById[this.tableId] ?? null;
     }
 
-    /** @internal */
     watch(
         keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
         callback: FlowAnyFunction,
@@ -84,7 +72,6 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
         return validKeys;
     }
 
-    /** @internal */
     unwatch(
         keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
         callback: FlowAnyFunction,
@@ -96,7 +83,6 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
 
     /**
      * The records in this table.
-     * @internal
      */
     get records(): Array<SdkModeT['RecordT']> {
         const recordsById = this._data.recordsById;
@@ -112,7 +98,6 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
     /**
      * The record IDs in this table. The order is arbitrary since records are
      * only ordered in the context of a specific view.
-     * @internal
      */
     get recordIds(): Array<string> {
         const recordsById = this._data.recordsById;
@@ -120,7 +105,6 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
         return Object.keys(recordsById);
     }
 
-    /** @internal */
     getRecordByIdIfExists(recordId: string): SdkModeT['RecordT'] | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
@@ -141,7 +125,6 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
         }
     }
 
-    /** @internal */
     triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<SdkModeT['TableDataT']>) {
         if (dirtyPaths.recordsById) {
             // Since tables don't have a record order, need to detect if a record

@@ -38,20 +38,11 @@ export {WatchableRecordStoreKeys} from '../../shared/models/record_store_core';
 class RecordStore extends RecordStoreCore<BaseSdkMode> {
     static _className = 'RecordStore';
 
-    readonly tableId: TableId;
-    _recordModelsById: ObjectMap<RecordId, Record> = {};
     readonly _viewDataStoresByViewId: ObjectMap<ViewId, ViewDataStore> = {};
     readonly _loader: RecordStoreAsyncLoader;
 
     constructor(sdk: Sdk, tableId: TableId) {
-        super(sdk, `${tableId}-RecordStore`);
-
-        this.tableId = tableId;
-        // // A bit of a hack, but we use the primary field ID to load record
-        // // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
-        // // ID here instead of calling this.primaryField.id since that would crash
-        // // when the table is getting unloaded after being deleted.
-        // this._primaryFieldId = this._data.primaryFieldId;
+        super(sdk, tableId);
 
         const onChange = this._onChange.bind(this);
         const clearRecordModels = () => {
@@ -109,54 +100,6 @@ class RecordStore extends RecordStoreCore<BaseSdkMode> {
         return validKeys;
     }
 
-    /**
-     * The records in this table. The order is arbitrary since records are
-     * only ordered in the context of a specific view.
-     */
-    get records(): Array<Record> {
-        const recordsById = this._data.recordsById;
-        invariant(recordsById, 'Record metadata is not loaded');
-        const records = Object.keys(recordsById).map(recordId => {
-            const record = this.getRecordByIdIfExists(recordId);
-            invariant(record, 'record');
-            return record;
-        });
-        return records;
-    }
-
-    /**
-     * The record IDs in this table. The order is arbitrary since records are
-     * only ordered in the context of a specific view.
-     */
-    get recordIds(): Array<string> {
-        const recordsById = this._data.recordsById;
-        invariant(recordsById, 'Record metadata is not loaded');
-        return Object.keys(recordsById);
-    }
-
-    getRecordByIdIfExists(recordId: string): Record | null {
-        const recordsById = this._data.recordsById;
-        invariant(recordsById, 'Record metadata is not loaded');
-        invariant(typeof recordId === 'string', 'getRecordById expects a string');
-
-        if (!recordsById[recordId]) {
-            return null;
-        } else {
-            if (this._recordModelsById[recordId]) {
-                return this._recordModelsById[recordId];
-            }
-            const newRecord = new Record(
-                this._sdk,
-                this,
-                this._sdk.base.getTableById(this.tableId),
-                recordId,
-            );
-            this._recordModelsById[recordId] = newRecord;
-            return newRecord;
-        }
-    }
-
-    /** @internal */
     __onDataDeletion(): void {
         // also need to call unloadCellValuesInFieldIds because otherwise
         // on the hyperbase side, the old record store would still be subscribed
