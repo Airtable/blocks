@@ -8,6 +8,8 @@ import {
     FlowAnyObject,
     cast,
     keys as objectKeys,
+    ObjectValues,
+    isEnumValue,
 } from '../../shared/private_utils';
 import {invariant, logErrorToSentry} from '../../shared/error_utils';
 import Sdk from '../sdk';
@@ -19,15 +21,23 @@ import {ChangedPathsForType} from '../../shared/models/base_core';
 import {BaseSdkMode} from '../../sdk_mode';
 import RecordStoreCore, {
     WatchableCellValuesInFieldKeyPrefix,
-    WatchableRecordStoreKey,
-    WatchableRecordStoreKeys,
+    WatchableRecordStoreKeysCore,
 } from '../../shared/models/record_store_core';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
 import Table from './table';
 
-export {WatchableRecordStoreKeys} from '../../shared/models/record_store_core';
+export const WatchableRecordStoreKeys = Object.freeze({
+    ...WatchableRecordStoreKeysCore,
+});
+
+/**
+ * The string case is to accommodate prefix keys
+ *
+ * @internal
+ */
+export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKeys> | string;
 
 /**
  * One RecordStore exists per table, and contains all the record data associated with that table.
@@ -35,8 +45,14 @@ export {WatchableRecordStoreKeys} from '../../shared/models/record_store_core';
  *
  * @internal
  */
-class RecordStore extends RecordStoreCore<BaseSdkMode> {
+class RecordStore extends RecordStoreCore<BaseSdkMode, WatchableRecordStoreKey> {
     static _className = 'RecordStore';
+    static _isWatchableKey(key: string): boolean {
+        return (
+            isEnumValue(WatchableRecordStoreKeys, key) ||
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
+        );
+    }
 
     readonly _viewDataStoresByViewId: ObjectMap<ViewId, ViewDataStore> = {};
     readonly _loader: RecordStoreAsyncLoader;
@@ -98,6 +114,16 @@ class RecordStore extends RecordStoreCore<BaseSdkMode> {
             this._loader.unloadCellValuesInFieldIds(fieldIdsToUnload);
         }
         return validKeys;
+    }
+
+    /**
+     * The record IDs in this table. The order is arbitrary since records are
+     * only ordered in the context of a specific view.
+     */
+    get recordIds(): Array<string> {
+        const recordsById = this._data.recordsById;
+        invariant(recordsById, 'Record metadata is not loaded');
+        return Object.keys(recordsById);
     }
 
     __onDataDeletion(): void {

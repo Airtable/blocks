@@ -13,7 +13,7 @@ import {ChangedPathsForType} from '../../shared/models/base_core';
 import AbstractModel from '../../shared/models/abstract_model';
 import {SdkMode} from '../../sdk_mode';
 
-export const WatchableRecordStoreKeys = Object.freeze({
+export const WatchableRecordStoreKeysCore = Object.freeze({
     records: 'records' as const,
     recordIds: 'recordIds' as const,
     cellValues: 'cellValues' as const,
@@ -25,7 +25,7 @@ export const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
  *
  * @internal
  */
-export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKeys> | string;
+type WatchableRecordStoreKeyCore = ObjectValues<typeof WatchableRecordStoreKeysCore> | string;
 
 /**
  * One RecordStore exists per table, and contains all the record data associated with that table.
@@ -33,15 +33,18 @@ export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKe
  *
  * @internal
  */
-abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
+abstract class RecordStoreCore<
+    SdkModeT extends SdkMode,
+    WatchableKeys extends string = WatchableRecordStoreKeyCore
+> extends AbstractModel<
     SdkModeT,
     SdkModeT['TableDataT'],
-    WatchableRecordStoreKey
+    WatchableRecordStoreKeyCore | WatchableKeys
 > {
-    static _className = 'RecordStore';
+    static _className = 'RecordStoreCore';
     static _isWatchableKey(key: string): boolean {
         return (
-            isEnumValue(WatchableRecordStoreKeys, key) ||
+            isEnumValue(WatchableRecordStoreKeysCore, key) ||
             key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
@@ -64,19 +67,19 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
     }
 
     watch(
-        keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
+        keys: WatchableRecordStoreKeyCore | ReadonlyArray<WatchableRecordStoreKeyCore>,
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
-    ): Array<WatchableRecordStoreKey> {
+    ): Array<WatchableRecordStoreKeyCore> {
         const validKeys = super.watch(keys, callback, context);
         return validKeys;
     }
 
     unwatch(
-        keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
+        keys: WatchableRecordStoreKeyCore | ReadonlyArray<WatchableRecordStoreKeyCore>,
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
-    ): Array<WatchableRecordStoreKey> {
+    ): Array<WatchableRecordStoreKeyCore> {
         const validKeys = super.unwatch(keys, callback, context);
         return validKeys;
     }
@@ -87,7 +90,7 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
     get records(): Array<SdkModeT['RecordT']> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
-        const records = Object.keys(recordsById).map(recordId => {
+        const records = this.recordIds.map(recordId => {
             const record = this.getRecordByIdIfExists(recordId);
             invariant(record, 'record');
             return record;
@@ -96,14 +99,9 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
     }
 
     /**
-     * The record IDs in this table. The order is arbitrary since records are
-     * only ordered in the context of a specific view.
+     * The record IDs in this table.
      */
-    get recordIds(): Array<string> {
-        const recordsById = this._data.recordsById;
-        invariant(recordsById, 'Record metadata is not loaded');
-        return Object.keys(recordsById);
-    }
+    abstract get recordIds(): Array<string>;
 
     getRecordByIdIfExists(recordId: string): SdkModeT['RecordT'] | null {
         const recordsById = this._data.recordsById;
@@ -168,12 +166,12 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
             // Now that we've composed our created/deleted record ids arrays, let's fire
             // the records onChange event if any records were created or deleted.
             if (addedRecordIds.length > 0 || removedRecordIds.length > 0) {
-                this._onChange(WatchableRecordStoreKeys.records, {
+                this._onChange(WatchableRecordStoreKeysCore.records, {
                     addedRecordIds,
                     removedRecordIds,
                 });
 
-                this._onChange(WatchableRecordStoreKeys.recordIds, {
+                this._onChange(WatchableRecordStoreKeysCore.recordIds, {
                     addedRecordIds,
                     removedRecordIds,
                 });
@@ -191,7 +189,7 @@ abstract class RecordStoreCore<SdkModeT extends SdkMode> extends AbstractModel<
             const fieldIds = Object.freeze(Object.keys(dirtyFieldIdsSet));
             const recordIds = Object.freeze(Object.keys(dirtyPaths.recordsById));
             if (fieldIds.length > 0 && recordIds.length > 0) {
-                this._onChange(WatchableRecordStoreKeys.cellValues, {
+                this._onChange(WatchableRecordStoreKeysCore.cellValues, {
                     recordIds,
                     fieldIds,
                 });
