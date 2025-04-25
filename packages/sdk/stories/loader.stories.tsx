@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // @flow
 import React from 'react';
-import Loader, {loaderStylePropTypes} from '../src/shared/ui/loader';
+import Loader, {loaderStylePropTypes} from '../src/base/ui/loader';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import Example from './helpers/example';
 

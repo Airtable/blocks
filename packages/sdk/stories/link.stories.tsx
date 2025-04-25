@@ -1,11 +1,11 @@
 import React from 'react';
 import {values, keys} from '../src/shared/private_utils';
-import Box from '../src/shared/ui/box';
-import {iconNames} from '../src/shared/ui/icon_config';
-import Link, {linkStylePropTypes} from '../src/shared/ui/link';
-import Text from '../src/shared/ui/text';
-import Tooltip from '../src/shared/ui/tooltip';
-import useTheme from '../src/shared/ui/theme/use_theme';
+import Box from '../src/base/ui/box';
+import {iconNames} from '../src/base/ui/icon_config';
+import Link, {linkStylePropTypes} from '../src/base/ui/link';
+import Text from '../src/base/ui/text';
+import Tooltip from '../src/base/ui/tooltip';
+import useTheme from '../src/base/ui/theme/use_theme';
 import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
 import Example from './helpers/example';
 

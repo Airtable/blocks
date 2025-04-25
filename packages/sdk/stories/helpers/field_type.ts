@@ -1,5 +1,5 @@
 import {ObjectMap} from '../../src/shared/private_utils';
-import {IconName} from '../../src/shared/ui/icon_config';
+import {IconName} from '../../src/base/ui/icon_config';
 import {FieldType} from '../../src/shared/types/field';
 
 export const ReadableFieldTypes: ObjectMap<FieldType, string> = {

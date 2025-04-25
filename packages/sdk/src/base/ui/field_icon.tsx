@@ -2,10 +2,10 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import Field from '../models/field';
-import Icon, {sharedIconPropTypes, SharedIconProps} from '../../shared/ui/icon';
-import {IconName} from '../../shared/ui/icon_config';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
+import Icon, {sharedIconPropTypes, SharedIconProps} from './icon';
+import {IconName} from './icon_config';
 
 /**
  * Props for the {@link FieldIcon} component. Also accepts:

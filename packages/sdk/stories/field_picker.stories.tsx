@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import Select, {selectStylePropTypes} from '../src/shared/ui/select';
+import Select, {selectStylePropTypes} from '../src/base/ui/select';
 import {keys} from '../src/shared/private_utils';
-import theme from '../src/shared/ui/theme/default_theme';
+import theme from '../src/base/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 import {FieldPicker} from '../src/base/ui/ui';

@@ -2,12 +2,12 @@
 import * as React from 'react';
 import {invariant} from '../../shared/error_utils';
 import Sdk from '../sdk';
-import {baymax} from '../../shared/ui/baymax_utils';
-import Modal from '../../shared/ui/modal';
-import Loader from '../../shared/ui/loader';
 import withHooks from '../../shared/ui/with_hooks';
 import useWatchable from '../../shared/ui/use_watchable';
 import {SdkContext} from '../../shared/ui/sdk_context';
+import {baymax} from './baymax_utils';
+import Modal from './modal';
+import Loader from './loader';
 import {globalAlert} from './ui';
 
 interface BlockWrapperProps {

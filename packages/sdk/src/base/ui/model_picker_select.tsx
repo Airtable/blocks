@@ -5,9 +5,9 @@ import {invariant} from '../../shared/error_utils';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';
-import Select, {sharedSelectBasePropTypes, SharedSelectBaseProps} from '../../shared/ui/select';
-import {SelectOptionValue} from '../../shared/ui/select_and_select_buttons_helpers';
 import useWatchable from '../../shared/ui/use_watchable';
+import Select, {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
+import {SelectOptionValue} from './select_and_select_buttons_helpers';
 
 type AnyModel = Table | View | Field;
 

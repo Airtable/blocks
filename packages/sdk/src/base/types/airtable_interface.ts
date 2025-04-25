@@ -26,7 +26,6 @@ import {RequestJson, ResponseJson} from './backend_fetch_types';
 export enum BlockRunContextType {
     DASHBOARD_APP = 'dashboardApp',
     VIEW = 'view',
-    PAGE_ELEMENT_IN_QUERY_CONTAINER = 'pageElementInQueryContainer',
 }
 
 /** @hidden */

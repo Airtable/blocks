@@ -1,8 +1,6 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from './error_utils';
-import createResponsivePropType from './ui/system/utils/create_responsive_prop_type';
 
 export {default as isDeepEqual} from 'fast-deep-equal';
 
@@ -72,32 +70,6 @@ export function createEnum<T extends string>(...enumValues: Array<T>): {[K in T]
         spec[value] = value;
     }
     return Object.freeze(spec);
-}
-
-/**
- * Creates a React propType for a provided enum.
- *
- * @hidden
- */
-export function createPropTypeFromEnum<T extends string>(
-    enumData: {[K in T]: T},
-): PropTypes.Requireable<T> {
-    return PropTypes.oneOf(values(enumData));
-}
-
-/**
- * Creates a responsive React propType for a provided enum.
- *
- * This allows the prop to be either a valid enum property, or a map of viewport sizes to valid enum
- * properties.
- *
- * @hidden
- */
-export function createResponsivePropTypeFromEnum<T extends string>(
-    enumData: {[K in T]: T},
-): PropTypes.Validator<any> {
-    const propType: PropTypes.Requireable<T> = createPropTypeFromEnum(enumData);
-    return createResponsivePropType(propType);
 }
 
 /**

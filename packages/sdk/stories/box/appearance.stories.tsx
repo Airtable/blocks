@@ -1,6 +1,6 @@
 import React from 'react';
-import Box from '../../src/shared/ui/box';
-import theme from '../../src/shared/ui/theme/default_theme';
+import Box from '../../src/base/ui/box';
+import theme from '../../src/base/ui/theme/default_theme';
 import {keys} from '../../src/shared/private_utils';
 
 export default {

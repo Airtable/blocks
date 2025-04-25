@@ -12,6 +12,8 @@ import {RecordId} from '../../shared/types/hyper_ids';
 import {ObjectMap} from '../../shared/private_utils';
 import withHooks from '../../shared/ui/with_hooks';
 import useWatchable from '../../shared/ui/use_watchable';
+import {useSdk} from '../../shared/ui/sdk_context';
+import {BaseSdkMode} from '../../sdk_mode';
 import {
     display,
     displayPropTypes,
@@ -33,16 +35,11 @@ import {
     margin,
     marginPropTypes,
     MarginProps,
-} from '../../shared/ui/system';
-import useStyledSystem from '../../shared/ui/use_styled_system';
-import {splitStyleProps} from '../../shared/ui/with_styled_system';
-import {OptionalResponsiveProp} from '../../shared/ui/system/utils/types';
-import {
-    tooltipAnchorPropTypes,
-    TooltipAnchorProps,
-} from '../../shared/ui/types/tooltip_anchor_props';
-import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+} from './system';
+import useStyledSystem from './use_styled_system';
+import {splitStyleProps} from './with_styled_system';
+import {OptionalResponsiveProp} from './system/utils/types';
+import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link CellRenderer} component. Also accepts:

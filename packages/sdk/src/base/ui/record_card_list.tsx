@@ -8,9 +8,9 @@ import {RecordDef} from '../../shared/types/record';
 import Record from '../models/record';
 import Field from '../models/field';
 import View from '../models/view';
-import Box from '../../shared/ui/box';
-import createDetectElementResize from '../../shared/ui/create_detect_element_resize';
-import withStyledSystem from '../../shared/ui/with_styled_system';
+import Box from './box';
+import createDetectElementResize from './create_detect_element_resize';
+import withStyledSystem from './with_styled_system';
 import {
     dimensionsSet,
     dimensionsSetPropTypes,
@@ -24,7 +24,7 @@ import {
     margin,
     marginPropTypes,
     MarginProps,
-} from '../../shared/ui/system';
+} from './system';
 import RecordCard from './record_card';
 
 const RECORD_CARD_ROW_HEIGHT = 80;

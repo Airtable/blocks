@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import ChoiceToken, {choiceTokenStylePropTypes} from '../src/shared/ui/choice_token';
+import ChoiceToken, {choiceTokenStylePropTypes} from '../src/base/ui/choice_token';
 import Example from './helpers/example';
 import choiceOptions from './helpers/choice_options';
 

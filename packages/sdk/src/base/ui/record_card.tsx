@@ -18,15 +18,17 @@ import Field from '../models/field';
 import Record from '../models/record';
 import View from '../models/view';
 import ViewMetadataQueryResult from '../models/view_metadata_query_result';
-import colorUtils from '../../shared/color_utils';
 import Sdk from '../sdk';
 import {RecordId} from '../../shared/types/hyper_ids';
-import {baymax} from '../../shared/ui/baymax_utils';
-import Box from '../../shared/ui/box';
 import useWatchable from '../../shared/ui/use_watchable';
 import withHooks from '../../shared/ui/with_hooks';
-import {isCommandModifierKeyEvent} from '../../shared/ui/key_codes';
-import useStyledSystem from '../../shared/ui/use_styled_system';
+import {useSdk} from '../../shared/ui/sdk_context';
+import {BaseSdkMode} from '../../sdk_mode';
+import colorUtils from '../../shared/color_utils';
+import {baymax} from './baymax_utils';
+import Box from './box';
+import {isCommandModifierKeyEvent} from './key_codes';
+import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
     flexItemSetPropTypes,
@@ -37,11 +39,9 @@ import {
     margin,
     marginPropTypes,
     MarginProps,
-} from '../../shared/ui/system';
-import {splitStyleProps} from '../../shared/ui/with_styled_system';
-import {tooltipAnchorPropTypes} from '../../shared/ui/types/tooltip_anchor_props';
-import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+} from './system';
+import {splitStyleProps} from './with_styled_system';
+import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 import useViewMetadata from './use_view_metadata';
 import CellRenderer from './cell_renderer';
 import expandRecord, {ExpandRecordOpts} from './expand_record';

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import React, {useState} from 'react';
-import FormField from '../src/shared/ui/form_field';
-import Input, {inputStylePropTypes} from '../src/shared/ui/input';
-import Box from '../src/shared/ui/text';
-import theme from '../src/shared/ui/theme/default_theme';
+import FormField from '../src/base/ui/form_field';
+import Input, {inputStylePropTypes} from '../src/base/ui/input';
+import Box from '../src/base/ui/text';
+import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';

@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 // @flow
 import React, {useState} from 'react';
-import Box from '../src/shared/ui/box';
-import Switch, {switchStylePropTypes} from '../src/shared/ui/switch';
-import theme from '../src/shared/ui/theme/default_theme';
+import Box from '../src/base/ui/box';
+import Switch, {switchStylePropTypes} from '../src/base/ui/switch';
+import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';

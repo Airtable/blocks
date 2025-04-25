@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import Dialog, {dialogStylePropTypes} from '../src/shared/ui/dialog';
-import Button from '../src/shared/ui/button';
-import Text from '../src/shared/ui/text';
-import Heading from '../src/shared/ui/heading';
+import Dialog, {dialogStylePropTypes} from '../src/base/ui/dialog';
+import Button from '../src/base/ui/button';
+import Text from '../src/base/ui/text';
+import Heading from '../src/base/ui/heading';
 import Example from './helpers/example';
 import {CONTROL_WIDTH} from './helpers/code_utils';
 

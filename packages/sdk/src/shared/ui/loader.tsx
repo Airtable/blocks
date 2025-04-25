@@ -1,48 +1,12 @@
-/** @module @airtable/blocks/ui: Loader */ /** */
 import PropTypes from 'prop-types';
-import {cx} from 'emotion';
 import * as React from 'react';
-import {compose} from '@styled-system/core';
-import {baymax} from './baymax_utils';
-import useStyledSystem from './use_styled_system';
-import {
-    flexItemSet,
-    flexItemSetPropTypes,
-    FlexItemSetProps,
-    positionSet,
-    positionSetPropTypes,
-    PositionSetProps,
-    margin,
-    marginPropTypes,
-    MarginProps,
-} from './system';
 
 const ORIGINAL_SIZE = 54;
 
 /**
- * Style props for the {@link Loader} component. Accepts:
- * * {@link FlexItemSetProps}
- * * {@link MarginProps}
- * * {@link PositionSetProps}
+ * @internal
  */
-interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
-
-const styleParser = compose(flexItemSet, positionSet, margin);
-
-export const loaderStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
-/**
- * Props for the {@link Loader} component. Also accepts:
- * * {@link LoaderStyleProps}
- *
- * @docsPath UI/components/Loader
- * @noInheritDoc
- */
-export interface LoaderProps extends LoaderStyleProps {
+export interface LoaderProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
     fillColor: string;
     /** A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner. Defaults to `0.3`. */
@@ -55,27 +19,17 @@ export interface LoaderProps extends LoaderStyleProps {
 
 // Override the default props and then just proxy through to our loader.
 /**
- * A loading spinner component.
- *
- * [[ Story id="loader--example" title="Loader example" ]]
- *
- * @docsPath UI/components/Loader
- * @component
+ * @internal
  */
 const Loader = (props: LoaderProps) => {
-    const {fillColor, scale, className, style, ...styleProps} = props;
-    const classNameForStyleProps = useStyledSystem<LoaderStyleProps>(styleProps, styleParser);
+    const {fillColor, scale, className, style} = props;
 
     return (
         <svg
             width={ORIGINAL_SIZE * scale}
             height={ORIGINAL_SIZE * scale}
             viewBox={`0 0 ${ORIGINAL_SIZE} ${ORIGINAL_SIZE}`}
-            className={cx(
-                baymax('animate-spin-scale animate-infinite'),
-                classNameForStyleProps,
-                className,
-            )}
+            className={className}
             style={{
                 shapeRendering: 'geometricPrecision',
                 ...style,
@@ -104,7 +58,6 @@ Loader.propTypes = {
     scale: PropTypes.number.isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
-    ...loaderStylePropTypes,
 };
 
 Loader.defaultProps = {

@@ -1,9 +1,9 @@
 import React from 'react';
 import {action} from '@storybook/addon-actions';
-import Box from '../src/shared/ui/box';
-import Button, {buttonStylePropTypes} from '../src/shared/ui/button';
-import Tooltip from '../src/shared/ui/tooltip';
-import useTheme from '../src/shared/ui/theme/use_theme';
+import Box from '../src/base/ui/box';
+import Button, {buttonStylePropTypes} from '../src/base/ui/button';
+import Tooltip from '../src/base/ui/tooltip';
+import useTheme from '../src/base/ui/theme/use_theme';
 import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';

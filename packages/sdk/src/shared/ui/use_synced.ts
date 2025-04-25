@@ -1,6 +1,6 @@
 import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
-import {useSdk} from './sdk_context';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import {useSdk} from './sdk_context';
 
 /**
  * A hook for syncing a component to {@link GlobalConfig}.

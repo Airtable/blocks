@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {dialogStylePropTypes} from '../src/shared/ui/dialog';
-import ConfirmationDialog from '../src/shared/ui/confirmation_dialog';
-import Button from '../src/shared/ui/button';
+import {dialogStylePropTypes} from '../src/base/ui/dialog';
+import ConfirmationDialog from '../src/base/ui/confirmation_dialog';
+import Button from '../src/base/ui/button';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import Example from './helpers/example';
 

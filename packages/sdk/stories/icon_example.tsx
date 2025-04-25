@@ -1,18 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {css} from 'emotion';
 import {values as objectValues} from '../src/shared/private_utils';
-import {
-    iconNames,
-    IconName,
-    deprecatedIconNameToReplacementName,
-} from '../src/shared/ui/icon_config';
-import Icon, {iconStylePropTypes} from '../src/shared/ui/icon';
-import theme from '../src/shared/ui/theme/default_theme';
-import Text from '../src/shared/ui/text';
-import Box from '../src/shared/ui/box';
+import {iconNames, IconName, deprecatedIconNameToReplacementName} from '../src/base/ui/icon_config';
+import Icon, {iconStylePropTypes} from '../src/base/ui/icon';
+import theme from '../src/base/ui/theme/default_theme';
+import Text from '../src/base/ui/text';
+import Box from '../src/base/ui/box';
 import Example from './helpers/example';
-import Input from '../src/shared/ui/input';
-import cssHelpers from '../src/shared/ui/css_helpers';
+import Input from '../src/base/ui/input';
+import cssHelpers from '../src/base/ui/css_helpers';
 
 const iconNamesArray = objectValues(iconNames);
 

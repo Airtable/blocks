@@ -1,7 +1,7 @@
 import React from 'react';
-import Heading from '../src/shared/ui/heading';
-import Text from '../src/shared/ui/text';
-import theme from '../src/shared/ui/theme/default_theme';
+import Heading from '../src/base/ui/heading';
+import Text from '../src/base/ui/text';
+import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
 
 export default {

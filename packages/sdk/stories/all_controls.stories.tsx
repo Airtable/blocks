@@ -1,13 +1,13 @@
 // @flow
 import React, {useState} from 'react';
-import {ControlSize} from '../src/shared/ui/control_sizes';
-import Box from '../src/shared/ui/box';
-import Button from '../src/shared/ui/button';
-import Input from '../src/shared/ui/input';
-import Select from '../src/shared/ui/select';
-import SelectButtons from '../src/shared/ui/select_buttons';
-import Switch from '../src/shared/ui/switch';
-import {SelectOptionValue} from '../src/shared/ui/select_and_select_buttons_helpers';
+import {ControlSize} from '../src/base/ui/control_sizes';
+import Box from '../src/base/ui/box';
+import Button from '../src/base/ui/button';
+import Input from '../src/base/ui/input';
+import Select from '../src/base/ui/select';
+import SelectButtons from '../src/base/ui/select_buttons';
+import Switch from '../src/base/ui/switch';
+import {SelectOptionValue} from '../src/base/ui/select_and_select_buttons_helpers';
 
 export default {
     title: 'All controls',

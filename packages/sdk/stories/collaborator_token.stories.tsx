@@ -2,7 +2,7 @@
 import React from 'react';
 import CollaboratorToken, {
     collaboratorTokenStylePropTypes,
-} from '../src/shared/ui/collaborator_token';
+} from '../src/base/ui/collaborator_token';
 import Example from './helpers/example';
 import collaboratorOptions from './helpers/collaborator_options';
 

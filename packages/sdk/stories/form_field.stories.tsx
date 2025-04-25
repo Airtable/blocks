@@ -2,15 +2,15 @@
 import React, {useState} from 'react';
 import {values as objectValues} from '../src/shared/private_utils';
 import colors from '../src/shared/colors';
-import ColorPalette from '../src/shared/ui/color_palette';
-import FormField, {formFieldStylePropTypes} from '../src/shared/ui/form_field';
-import Box from '../src/shared/ui/box';
-import Input from '../src/shared/ui/input';
-import Select from '../src/shared/ui/select';
-import SelectButtons from '../src/shared/ui/select_buttons';
+import ColorPalette from '../src/base/ui/color_palette';
+import FormField, {formFieldStylePropTypes} from '../src/base/ui/form_field';
+import Box from '../src/base/ui/box';
+import Input from '../src/base/ui/input';
+import Select from '../src/base/ui/select';
+import SelectButtons from '../src/base/ui/select_buttons';
 import Example from './helpers/example';
 import {CONTROL_WIDTH, createJsxPropsStringFromValuesMap} from './helpers/code_utils';
-import {SelectOptionValue} from '../src/shared/ui/select_and_select_buttons_helpers';
+import {SelectOptionValue} from '../src/base/ui/select_and_select_buttons_helpers';
 
 export default {
     component: FormField,

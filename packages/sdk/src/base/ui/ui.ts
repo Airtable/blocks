@@ -1,5 +1,5 @@
 /** @ignore */
-import GlobalAlert from '../../shared/ui/global_alert';
+import GlobalAlert from './global_alert';
 // Import the top-level entry point so that an Sdk instance is created from the
 // globally-available AirtableInterface instance. This is a requirement of
 // third-party App code. Consumers who cannot provide an implementation of
@@ -10,27 +10,27 @@ import '..';
 export {default as BaseProvider} from './base_provider';
 export {default as colors} from '../../shared/colors';
 export {default as colorUtils} from '../../shared/color_utils';
-export {default as Synced} from '../../shared/ui/synced';
+export {default as Synced} from './synced';
 export {default as TablePicker} from './table_picker';
 export {default as TablePickerSynced} from './table_picker_synced';
 export {default as FieldPicker} from './field_picker';
 export {default as FieldPickerSynced} from './field_picker_synced';
 export {default as ViewPicker} from './view_picker';
 export {default as ViewPickerSynced} from './view_picker_synced';
-export {default as InputSynced} from '../../shared/ui/input_synced';
+export {default as InputSynced} from './input_synced';
 export {default as CellRenderer} from './cell_renderer';
 export {default as expandRecord} from './expand_record';
 export {default as expandRecordList} from './expand_record_list';
 export {default as expandRecordPickerAsync} from './expand_record_picker_async';
-export {default as GlobalAlert} from '../../shared/ui/global_alert';
+export {default as GlobalAlert} from './global_alert';
 export {default as FieldIcon} from './field_icon';
-export {default as ColorPaletteSynced} from '../../shared/ui/color_palette_synced';
-export {default as ProgressBar} from '../../shared/ui/progress_bar';
+export {default as ColorPaletteSynced} from './color_palette_synced';
+export {default as ProgressBar} from './progress_bar';
 export {default as RecordCard} from './record_card';
 export {default as RecordCardList} from './record_card_list';
-export {default as SelectSynced} from '../../shared/ui/select_synced';
-export {default as SelectButtonsSynced} from '../../shared/ui/select_buttons_synced';
-export {default as SwitchSynced} from '../../shared/ui/switch_synced';
+export {default as SelectSynced} from './select_synced';
+export {default as SelectButtonsSynced} from './select_buttons_synced';
+export {default as SwitchSynced} from './switch_synced';
 export {default as ViewportConstraint} from './viewport_constraint';
 export {initializeBlock} from './initialize_block';
 export {default as withHooks} from '../../shared/ui/with_hooks';

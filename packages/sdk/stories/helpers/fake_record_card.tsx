@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {css} from 'emotion';
 
-import Box from '../../src/shared/ui/box';
-import Text from '../../src/shared/ui/text';
-import Heading from '../../src/shared/ui/heading';
-import Dialog from '../../src/shared/ui/dialog';
-import Button from '../../src/shared/ui/button';
+import Box from '../../src/base/ui/box';
+import Text from '../../src/base/ui/text';
+import Heading from '../../src/base/ui/heading';
+import Dialog from '../../src/base/ui/dialog';
+import Button from '../../src/base/ui/button';
 import {FieldType} from '../../src/shared/types/field';
 import FakeCellRenderer from './fake_cell_renderer';
 import {recordCardAttachment} from './attachments';

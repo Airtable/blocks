@@ -14,7 +14,7 @@ import {
     typographySet,
     display,
     overflow,
-} from '../../src/shared/ui/system';
+} from '../../src/base/ui/system';
 
 const categories = {
     // Note that this is slightly different from the actual system organization, which groups border under appearance.

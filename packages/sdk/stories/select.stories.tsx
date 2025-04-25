@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import Box from '../src/shared/ui/box';
-import Select, {selectStylePropTypes} from '../src/shared/ui/select';
-import Tooltip from '../src/shared/ui/tooltip';
-import FormField from '../src/shared/ui/form_field';
-import theme from '../src/shared/ui/theme/default_theme';
+import Box from '../src/base/ui/box';
+import Select, {selectStylePropTypes} from '../src/base/ui/select';
+import Tooltip from '../src/base/ui/tooltip';
+import FormField from '../src/base/ui/form_field';
+import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';

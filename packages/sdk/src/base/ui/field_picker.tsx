@@ -5,10 +5,10 @@ import {values, ObjectMap, has} from '../../shared/private_utils';
 import Field from '../models/field';
 import Table from '../models/table';
 import {FieldType} from '../../shared/types/field';
-import {SharedSelectBaseProps, sharedSelectBasePropTypes} from '../../shared/ui/select';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
+import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**

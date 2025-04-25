@@ -1,61 +1,66 @@
 /** @hidden */ /** */
 import * as React from 'react';
+import {css, keyframes} from 'emotion';
 import {InterfaceBlockSdk} from '../sdk';
-import {baymax} from '../../shared/ui/baymax_utils';
-import Modal from '../../shared/ui/modal';
 import Loader from '../../shared/ui/loader';
 import {SdkContext} from '../../shared/ui/sdk_context';
-import {globalAlert} from './ui';
 
 interface BlockWrapperProps {
     sdk: InterfaceBlockSdk;
     children: React.ReactNode;
 }
 
+const suspenseFallbackClassName = css`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    -ms-grid-row-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+`;
+
+const spinScale = keyframes`
+    0% {
+        transform: rotate(0) scale(1);
+    }
+    50% {
+        transform: rotate(360deg) scale(0.9);
+    }
+    100% {
+        transform: rotate(720deg) scale(1);
+    }
+`;
+
+const animateSpinnerClassName = css`
+    animation-iteration-count: infinite;
+    animation-name: ${spinScale};
+    animation-duration: 1800ms;
+    animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+`;
+
 class BlockWrapper extends React.Component<BlockWrapperProps> {
     /** @internal */
     _minSizeBeforeRender: {width: number | null; height: number | null} | null = null;
     /** @hidden */
-    constructor(props: BlockWrapperProps) {
-        super(props);
-
-        // We watch globalAlert in constructor, instead of using createDataContainer,
-        // because createDataContainer starts watching after the component is mounted.
-        // If we used createDataContainer and some child component in its constructor or
-        // componentDidMount called globalAlert.showReloadPrompt, this component
-        // would not update.
-        // TODO(kasra): maybe change createDataContainer to handle this case
-        // without having to special case it.
-        globalAlert.watch('__alertInfo', () => this.forceUpdate());
-    }
-    /** @hidden */
     render() {
-        const globalAlertInfo = globalAlert.__alertInfo;
-        if (globalAlertInfo) {
-            return (
-                <SdkContext.Provider value={this.props.sdk}>
-                    <Modal
-                        className={baymax('absolute all-0 flex items-center justify-center p2')}
-                        style={{
-                            animation: 'none',
-                            maxWidth: undefined,
-                            maxHeight: undefined,
-                            borderRadius: 0,
-                            boxShadow: 'none',
-                        }}
-                    >
-                        {globalAlertInfo.content}
-                    </Modal>
-                </SdkContext.Provider>
-            );
-        }
-
         return (
             <SdkContext.Provider value={this.props.sdk}>
                 <React.Suspense
                     fallback={
-                        <div className={baymax('absolute all-0 flex items-center justify-center')}>
-                            <Loader />
+                        <div className={suspenseFallbackClassName}>
+                            <Loader className={animateSpinnerClassName} />
                         </div>
                     }
                 >

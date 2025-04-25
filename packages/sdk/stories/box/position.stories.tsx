@@ -1,6 +1,6 @@
 import React from 'react';
-import Box, {BoxProps} from '../../src/shared/ui/box';
-import theme from '../../src/shared/ui/theme/default_theme';
+import Box, {BoxProps} from '../../src/base/ui/box';
+import theme from '../../src/base/ui/theme/default_theme';
 
 export default {
     component: Box,

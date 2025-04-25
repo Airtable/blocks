@@ -2,11 +2,11 @@
 import * as React from 'react';
 import View from '../models/view';
 import {GlobalConfigKey} from '../../shared/types/global_config';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
 import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
+import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
 import ViewPicker, {sharedViewPickerPropTypes, SharedViewPickerProps} from './view_picker';
 
 /**
