@@ -1,14 +1,14 @@
 {
-    "name": "@airtable/blocks-cli-next",
+    "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "2.0.5",
+    "version": "2.0.6",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "bin": {
         "block": "bin/run"
     },
     "dependencies": {
-        "@airtable/blocks-webpack-bundler": ">=0.0.2 || >=0.0.2-beta",
+        "@airtable/blocks-webpack-bundler": "^1.0.0",
         "@oclif/command": "^1.8.0",
         "@oclif/config": "^1.17.0",
         "@oclif/plugin-help": "^3.2.0",
@@ -27,7 +27,7 @@
         "express": "^4.20.0",
         "form-data": "^3.0.0",
         "graceful-fs": "^4.2.4",
-        "http-proxy-middleware": "^1.0.6",
+        "http-proxy-middleware": "^3.0.3",
         "strip-ansi": "^6.0.0",
         "tar": "^6.1.0",
         "tslib": "^1.14.1",
@@ -65,12 +65,12 @@
         "is-windows": "^1.0.2",
         "lodash": "^4.17.21",
         "memfs": "^3.2.0",
-        "mocha": "^5.2.0",
+        "mocha": "^11.1.0",
         "mocha-chai-jest-snapshot": "1.0.1",
         "nock": "^13.0.11",
         "node-fetch": "^2.6.1",
         "nyc": "^15.1.0",
-        "postman-request": "^2.88.1-postman.31",
+        "postman-request": "^2.88.1-postman.42",
         "react": "^17.0.1",
         "ts-node": "8",
         "which": "^2.0.2"

@@ -35,10 +35,13 @@
         "cross-spawn": "^7.0.6",
         "braces": "3.0.3",
         "ejs": "^3.1.10",
+        "elliptic": "^6.6.1",
+        "express": "4.21.2",
+        "http-cache-semantics": "^4.1.1",
         "parse-url": "^8.1.0",
         "psl": "^1.10.0",
-        "typescript": "^5.4.5",
-        "express": "4.21.2"
+        "trim": "1.0.1",
+        "typescript": "^5.4.5"
     },
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",

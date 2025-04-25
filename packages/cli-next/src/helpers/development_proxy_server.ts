@@ -85,24 +85,19 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         invariant(server && secureServer, 'dev server must have ready servers');
 
         // Configure a HTTP and WebSocket proxy to a remote address.
-        const proxy = createProxyMiddleware(`http://${remoteAddress}`, {
+        const proxy = createProxyMiddleware({
+            target: `http://${remoteAddress}`,
             ws: true,
-            logLevel: 'error',
-
             // Messages from the proxy provided by `http-proxy-middleware`
             // should be ignored once the shutdown operation has begun (see
-            // this class's `closeAsync` method), but that  module does not
-            // offer an API for dynamically modifying its logging level. Wrap
-            // each logging function with a version that is sensitive to the
-            // state of this class.
-            logProvider: provider => {
-                return {
-                    log: this.wrapLogFn(provider.log),
-                    debug: this.wrapLogFn(provider.debug),
-                    info: this.wrapLogFn(provider.info),
-                    warn: this.wrapLogFn(provider.warn),
-                    error: this.wrapLogFn(provider.error),
-                };
+            // this class's `closeAsync` method).
+            // Wrap each logging function with a version that is sensitive to the
+            // state of this class. Ignore `info` and `warn` log levels.
+            logger: {
+                info: () => {},
+                warn: () => {},
+                // eslint-disable-next-line no-console
+                error: this.wrapLogFn(console.error),
             },
         });
         invariant(proxy.upgrade, 'http proxy must have an upgrade handler');

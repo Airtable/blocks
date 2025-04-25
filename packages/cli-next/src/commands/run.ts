@@ -307,7 +307,7 @@ export default class Run extends AirtableCommand {
         // writing to the clipboard (a case which is unlikely in real-world
         // settings but highly likely during automated testing).
         const sigintPromise = new Promise<void>(resolve => {
-            process.once('SIGINT', () => {
+            process.on('SIGINT', () => {
                 resolve();
             });
         });
