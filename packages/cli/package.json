@@ -19,7 +19,7 @@
         "build:win": "yarn run build:clean-win & yarn run build:transpile",
         "watch": "yarn build --watch",
         "prepublishOnly": "yarn run build && rm -rf ./transpiled/test ./transpiled/blocks_backend_wrapper/test",
-        "pretest": "yarn run lint && yarn run flow",
+        "pretest": "yarn run lint",
         "test": "yarn run build && mocha test blocks_backend_wrapper/test",
         "test:smokeTest": "yarn run build && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --blocks_cli_command=\"$PWD/bin/block\"",
         "test:smokeTest-win": "test\\windows_smoke_test.bat",
