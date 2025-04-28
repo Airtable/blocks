@@ -116,7 +116,7 @@
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-jsdoc": "^48.2.12",
         "eslint-plugin-react": "^7.34.2",
-        "eslint-plugin-react-hooks": "^4.6.2",
+        "eslint-plugin-react-hooks": "^5.2.0",
         "glob": "^7.1.6",
         "jest": "^24.9.0",
         "lodash.capitalize": "^4.2.1",
