@@ -11,7 +11,6 @@ import {Table} from '../models/table';
 import GlobalConfig from '../../shared/global_config';
 import {Base} from '../models/base';
 import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
-import {useBase} from './use_base';
 
 // This is the public-facing API for custom properties that blocks will pass.
 // It differs slightly from BlockInstallationPageElementCustomPropertyForAirtableInterface
@@ -19,7 +18,10 @@ import {useBase} from './use_base';
 // consumed by hyperbase. For example, for a 'field' custom property, the developer
 // passes a Table model instance, and then we transform that to be a fieldId custom
 // property with a tableId before we pass it to hyperbase.
-/** @hidden */
+/**
+ * TODO document
+ * @hidden
+ */
 type BlockPageElementCustomProperty = {key: string; label: string} & (
     | {type: 'boolean'; defaultValue: boolean}
     | {type: 'string'; defaultValue?: string}
@@ -31,32 +33,58 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
     | {type: 'field'; table: Table}
 );
 
-/** @internal */
-export function useCustomProperties({
-    customProperties,
-}: {
-    customProperties: Array<BlockPageElementCustomProperty>;
-}): {customPropertyValueByKey: {[key: string]: unknown}; errorState: {error: Error} | null} {
+/**
+ * TODO document. Make sure to describe that getCustomProperties
+ * should be wrapped in useCallback.
+ * @hidden
+ */
+export function useCustomProperties(
+    getCustomProperties: (base: Base) => Array<BlockPageElementCustomProperty>,
+): {customPropertyValueByKey: {[key: string]: unknown}; errorState: {error: Error} | null} {
     const sdk = useSdk<InterfaceSdkMode>();
+    const [customProperties, setCustomProperties] = useState<
+        ReadonlyArray<BlockPageElementCustomProperty>
+    >(() => {
+        return getCustomProperties(sdk.base);
+    });
+    const globalConfig = useGlobalConfig();
     const [errorState, setErrorState] = useState<{error: Error} | null>(null);
-    const base = useBase();
 
+    // Create subscription to update custom properties when schema changes
     useEffect(() => {
+        const base = sdk.base;
+        const onSchemaChange = (base: Base) => {
+            const customProperties = getCustomProperties(base);
+            setCustomProperties(customProperties);
+        };
+        base.watch('schema', onSchemaChange);
+        return () => {
+            base.unwatch('schema', onSchemaChange);
+        };
+    }, [sdk, getCustomProperties]);
+
+    // When custom properties change, send a message to hyperbase to update the properties panel
+    const hasError = errorState !== null;
+    useEffect(() => {
+        if (hasError) {
+            return;
+        }
         const customPropertiesForAirtableInterface = customProperties.map(
             convertBlockPageElementCustomPropertyToBlockInstallationPageElementCustomPropertyForAirtableInterface,
         );
         sdk.setCustomPropertiesAsync(customPropertiesForAirtableInterface).catch(error => {
             setErrorState({error});
         });
-    }, [sdk, customProperties]);
+    }, [sdk, customProperties, hasError]);
 
-    const globalConfig = useGlobalConfig();
-    const customPropertyValueByKey = Object.fromEntries(
-        customProperties.map(property => [
-            property.key,
-            getCustomPropertyValue(base, globalConfig, property),
-        ]),
-    );
+    const customPropertyValueByKey = hasError
+        ? {}
+        : Object.fromEntries(
+              customProperties.map(property => [
+                  property.key,
+                  getCustomPropertyValue(sdk.base, globalConfig, property),
+              ]),
+          );
 
     return {
         customPropertyValueByKey,
