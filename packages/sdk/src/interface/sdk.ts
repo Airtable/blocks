@@ -3,9 +3,9 @@ import {GlobalConfigUpdate} from '../shared/types/global_config';
 import {BlockSdkCore} from '../shared/sdk_core';
 import {InterfaceSdkMode} from '../sdk_mode';
 import {AppInterface} from '../shared/types/airtable_interface_core';
-import Session from './models/session';
-import Mutations from './models/mutations';
-import Base from './models/base';
+import {Session} from './models/session';
+import {Mutations} from './models/mutations';
+import {Base} from './models/base';
 import {
     BlockInstallationPageElementCustomPropertyForAirtableInterface,
     BlockRunContext,

@@ -2,11 +2,18 @@ import {BaseCore} from '../../shared/models/base_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {TableId} from '../../shared/types/hyper_ids';
 import {InterfaceBlockSdk} from '../sdk';
-import Table from './table';
-import RecordStore from './record_store';
+import {Table} from './table';
+import {RecordStore} from './record_store';
 
-/** @hidden */
-class Base extends BaseCore<InterfaceSdkMode> {
+/**
+ * Model class representing a base.
+ *
+ * If you want the base model to automatically recalculate whenever the base schema changes, try the
+ * {@link useBase} hook.
+ *
+ * @docsPath models/Base
+ */
+export class Base extends BaseCore<InterfaceSdkMode> {
     /** @internal */
     _constructTable(tableId: TableId): Table {
         const recordStore = this.__getRecordStore(tableId);
@@ -23,5 +30,3 @@ class Base extends BaseCore<InterfaceSdkMode> {
         return Object.keys(this._data.tablesById);
     }
 }
-
-export default Base;

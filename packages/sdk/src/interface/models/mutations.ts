@@ -5,7 +5,7 @@ import {spawnError, spawnUnknownSwitchCaseError} from '../../shared/error_utils'
 import {MutationTypes} from '../types/mutations';
 
 /** @hidden */
-class Mutations extends MutationsCore<InterfaceSdkMode> {
+export class Mutations extends MutationsCore<InterfaceSdkMode> {
     /** @internal */
     _doesMutationExceedBatchSizeLimit(mutation: InterfaceSdkMode['MutationT']): boolean {
         switch (mutation.type) {
@@ -44,5 +44,3 @@ class Mutations extends MutationsCore<InterfaceSdkMode> {
         }
     }
 }
-
-export default Mutations;

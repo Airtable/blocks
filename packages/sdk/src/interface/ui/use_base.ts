@@ -1,6 +1,7 @@
-/** @module @airtable/blocks/ui: useBase */ /** */
+/** @module @airtable/blocks/interface/ui: useBase */ /** */
 import {InterfaceSdkMode} from '../../sdk_mode';
 import useBaseInternal from '../../shared/ui/use_base';
+import {Base} from '../models/base';
 
 /**
  * A hook for connecting a React component to your base's schema. This returns a {@link Base}
@@ -16,7 +17,7 @@ import useBaseInternal from '../../shared/ui/use_base';
  *
  * @example
  * ```js
- * import {useBase} from '@airtable/blocks/ui';
+ * import {useBase} from '@airtable/blocks/interface/ui';
  *
  * // renders a list of tables and automatically updates
  * function TableList() {
@@ -31,10 +32,7 @@ import useBaseInternal from '../../shared/ui/use_base';
  * ```
  * @docsPath UI/hooks/useBase
  * @hook
- * @internal
  */
-function useBase() {
+export function useBase(): Base {
     return useBaseInternal<InterfaceSdkMode>();
 }
-
-export default useBase;

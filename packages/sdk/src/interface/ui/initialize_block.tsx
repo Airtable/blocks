@@ -5,7 +5,7 @@ import {spawnError} from '../../shared/error_utils';
 import {InterfaceBlockSdk} from '../sdk';
 import getAirtableInterface from '../../injected/airtable_interface';
 import {BlockRunContextType} from '../types/airtable_interface';
-import BlockWrapper from './block_wrapper';
+import {BlockWrapper} from './block_wrapper';
 
 let hasBeenInitialized = false;
 
@@ -19,11 +19,11 @@ interface EntryPoints {
 /**
  * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Extensions-specific things.
  *
- * @param getEntryElement A function that returns your React Node.
+ * @param entryPoints An object with an `interface` property which is a function that returns your React Node.
  *
  * @example
  * ```js
- * import {initializeBlock} from '@airtable/blocks/ui';
+ * import {initializeBlock} from '@airtable/blocks/interface/ui';
  * import React from 'react';
  *
  * function App() {
@@ -32,7 +32,7 @@ interface EntryPoints {
  *     );
  * }
  *
- * initializeBlock(() => <App />);
+ * initializeBlock({interface: () => <App />});
  * ```
  * @docsPath UI/utils/initializeBlock
  * @internal
@@ -50,8 +50,6 @@ export function initializeBlock(entryPoints: EntryPoints) {
     const airtableInterface = getAirtableInterface();
 
     let entryElement: React.ReactNode;
-    // runContext can be undefined if running from an old version client version (before 01/2021)
-    // TODO (SeanKeenan): Remove nullish coelescing once old clients are no longer a concern
     const runContext = airtableInterface.sdkInitData.runContext;
     switch (runContext.type) {
         case BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER: {

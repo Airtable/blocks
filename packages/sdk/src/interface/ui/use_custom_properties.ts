@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/interface/ui: useCustomProperties */ /** */
 import {useState, useEffect} from 'react';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {useSdk} from '../../shared/ui/sdk_context';
@@ -6,11 +7,11 @@ import {
     BlockInstallationPageElementCustomPropertyTypeForAirtableInterface,
 } from '../types/airtable_interface';
 import useGlobalConfig from '../../shared/ui/use_global_config';
-import Table from '../models/table';
+import {Table} from '../models/table';
 import GlobalConfig from '../../shared/global_config';
-import Base from '../models/base';
+import {Base} from '../models/base';
 import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
-import useBase from './use_base';
+import {useBase} from './use_base';
 
 // This is the public-facing API for custom properties that blocks will pass.
 // It differs slightly from BlockInstallationPageElementCustomPropertyForAirtableInterface

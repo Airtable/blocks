@@ -7,8 +7,8 @@ import RecordStoreCore, {
 import {TableData} from '../types/table';
 import {ChangedPathsForType} from '../../shared/models/base_core';
 import {isEnumValue, ObjectValues} from '../../shared/private_utils';
-import Table from './table';
-import Record from './record';
+import {Table} from './table';
+import {Record} from './record';
 
 const WatchableRecordStoreKeys = Object.freeze({
     ...WatchableRecordStoreKeysCore,
@@ -28,7 +28,7 @@ type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKeys> | s
  *
  * @internal
  */
-class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableRecordStoreKey> {
+export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableRecordStoreKey> {
     static _className = 'RecordStore';
     static _isWatchableKey(key: string): boolean {
         return (
@@ -55,6 +55,3 @@ class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableRecordStore
         }
     }
 }
-
-/** @internal */
-export default RecordStore;

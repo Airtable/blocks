@@ -50,7 +50,7 @@ const animateSpinnerClassName = css`
     animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
 `;
 
-class BlockWrapper extends React.Component<BlockWrapperProps> {
+export class BlockWrapper extends React.Component<BlockWrapperProps> {
     /** @internal */
     _minSizeBeforeRender: {width: number | null; height: number | null} | null = null;
     /** @hidden */
@@ -70,5 +70,3 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
         );
     }
 }
-
-export default BlockWrapper;

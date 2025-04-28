@@ -1,5 +1,5 @@
-/** @module @airtable/blocks/ui: expandRecord */ /** */
-import Record from '../models/record';
+/** @module @airtable/blocks/interface/ui: expandRecord */ /** */
+import {Record} from '../models/record';
 
 /**
  * Expands the given record in the Airtable UI.
@@ -8,12 +8,12 @@ import Record from '../models/record';
  *
  * @example
  * ```js
- * import {expandRecord} from '@airtable/blocks/ui';
+ * import {expandRecord} from '@airtable/blocks/interface/ui';
  * expandRecord(record);
  * ```
  * @docsPath UI/utils/expandRecord
  */
-function expandRecord(record: Record) {
+export function expandRecord(record: Record): void {
     // TODO(kasra): this will cause the liveapp page to force a refresh if the
     // tableId and recordId are both valid, but the recordId does not
     // exist in the table.
@@ -22,5 +22,3 @@ function expandRecord(record: Record) {
         record.id,
     );
 }
-
-export default expandRecord;

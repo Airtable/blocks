@@ -9,15 +9,17 @@ const WatchableRecordKeys = Object.freeze({
  * Any key within record that can be watched:
  * - `'name'`
  * - `'cellValues'`
- *
- * @hidden
  */
 type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
 
-/** @hidden */
-class Record extends RecordCore<InterfaceSdkMode, WatchableRecordKey> {
+/**
+ * Model class representing a record in a table.
+ *
+ * Do not instantiate. You can get instances of this class by calling {@link useRecords}.
+ *
+ * @docsPath models/Record
+ */
+export class Record extends RecordCore<InterfaceSdkMode, WatchableRecordKey> {
     /** @internal */
     static _className = 'Record';
 }
-
-export default Record;
