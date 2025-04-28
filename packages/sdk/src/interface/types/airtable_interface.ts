@@ -1,7 +1,7 @@
 import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {BaseDataCore} from '../../shared/types/base_core';
-import {TableId, PageId} from '../../shared/types/hyper_ids';
+import {TableId, PageId, FieldId} from '../../shared/types/hyper_ids';
 import {TableData} from './table';
 
 // BlockRunContextType, BlockInstallationPageBlockRunContext, BlockRunContext
@@ -60,6 +60,8 @@ export type BlockInstallationPageElementCustomPropertyForAirtableInterface = {
     | {
           type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.FIELD_ID;
           tableId: TableId;
+          possibleValues?: Array<FieldId>;
+          defaultValue?: FieldId;
       }
 );
 

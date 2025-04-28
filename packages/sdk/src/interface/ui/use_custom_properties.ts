@@ -11,6 +11,7 @@ import {Table} from '../models/table';
 import GlobalConfig from '../../shared/global_config';
 import {Base} from '../models/base';
 import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
+import {Field} from '../models/field';
 
 // This is the public-facing API for custom properties that blocks will pass.
 // It differs slightly from BlockInstallationPageElementCustomPropertyForAirtableInterface
@@ -30,7 +31,13 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
           possibleValues: Array<{value: string; label: string}>;
           defaultValue?: string;
       }
-    | {type: 'field'; table: Table}
+    | {
+          type: 'field';
+          table: Table;
+          /** If not provided, all visible fields in the table will be shown in the dropdown. */
+          possibleValues?: Array<Field>;
+          defaultValue?: Field;
+      }
 );
 
 /**
@@ -125,6 +132,8 @@ function convertBlockPageElementCustomPropertyToBlockInstallationPageElementCust
                 label: property.label,
                 type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.FIELD_ID,
                 tableId: property.table.id,
+                possibleValues: property.possibleValues?.map(field => field.id),
+                defaultValue: property.defaultValue?.id,
             };
         default:
             throw spawnUnknownSwitchCaseError('property type', property, 'type');
@@ -165,7 +174,10 @@ function getCustomPropertyValue(
                 property.table === base.getTableById(property.table.id)
             ) {
                 const fieldModel = property.table.fields.find(field => field.id === rawValue);
-                if (fieldModel) {
+                if (
+                    fieldModel &&
+                    (!property.possibleValues || property.possibleValues.includes(fieldModel))
+                ) {
                     return fieldModel;
                 }
             }
