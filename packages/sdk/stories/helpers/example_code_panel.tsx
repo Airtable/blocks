@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import prettier from 'prettier/standalone';
 import parserBabel from 'prettier/parser-babylon';
-import Box from '../../src/ui/box';
+import Box from '../../src/base/ui/box';
 import CodeBlock from './code_block';
 import useResizablePanel from './use_resizable_panel';
 

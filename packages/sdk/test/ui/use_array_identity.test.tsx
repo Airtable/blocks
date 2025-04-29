@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
-import useArrayIdentity from '../../src/ui/use_array_identity';
+import useArrayIdentity from '../../src/shared/ui/use_array_identity';
 
 describe('useArrayIdentity', () => {
     it("returns the same array instance as long as it's passed a shallow-equal array", async () => {

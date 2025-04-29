@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import ProgressBar from '../../src/ui/progress_bar';
+import ProgressBar from '../../src/base/ui/progress_bar';
 import {getComputedStylePropValue} from '../test_helpers';
 
 describe('ProgressBar', () => {

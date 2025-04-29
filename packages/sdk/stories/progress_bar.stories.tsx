@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 // @flow
-import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
-import ProgressBar, {progressBarStylePropTypes} from '../src/ui/progress_bar';
-import {keys} from '../src/private_utils';
+import React from 'react';
+import ProgressBar, {progressBarStylePropTypes} from '../src/base/ui/progress_bar';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
-const stories = storiesOf('ProgressBar', module);
+export default {
+    component: ProgressBar,
+};
 
 function ProgressBarExample() {
     return (
@@ -40,4 +40,6 @@ function ProgressBarExample() {
     );
 }
 
-stories.add('example', () => <ProgressBarExample />);
+export const _Example = {
+    render: () => <ProgressBarExample />,
+};

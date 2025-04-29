@@ -1,5 +1,5 @@
 import {ReactWrapper} from 'enzyme';
-import Watchable from '../src/watchable';
+import Watchable from '../src/shared/watchable';
 
 /**
  * include a section of code that must pass flow but shouldn't actually be executed. Use it along

@@ -1,8 +1,8 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
-import Watchable from '../../src/watchable';
-import useWatchable from '../../src/ui/use_watchable';
+import Watchable from '../../src/shared/watchable';
+import useWatchable from '../../src/shared/ui/use_watchable';
 
 jest.useFakeTimers();
 

@@ -1,12 +1,13 @@
 import React from 'react';
-import {storiesOf} from '@storybook/react';
-import Tooltip from '../src/ui/tooltip';
-import Button from '../src/ui/button';
-import Example from './helpers/example';
+import Tooltip from '../src/base/ui/tooltip';
+import Button from '../src/base/ui/button';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import {injectGlobal} from 'emotion';
+import Example from './helpers/example';
 
-const stories = storiesOf('Tooltip', module);
+export default {
+    component: Tooltip,
+};
 
 injectGlobal`
     @keyframes opacityFadeIn {
@@ -68,4 +69,6 @@ function TextExample() {
     );
 }
 
-stories.add('example', () => <TextExample />);
+export const _Example = {
+    render: () => <TextExample />,
+};

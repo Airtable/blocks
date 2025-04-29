@@ -1,10 +1,10 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {Synced} from '../../src/ui/ui';
-import {SdkContext} from '../../src/ui/sdk_context';
-import {GlobalConfigUpdate} from '../../src/types/global_config';
-import {__sdk as sdk} from '../../src';
+import {Synced} from '../../src/base/ui/ui';
+import {SdkContext} from '../../src/shared/ui/sdk_context';
+import {GlobalConfigUpdate} from '../../src/shared/types/global_config';
+import {__sdk as sdk} from '../../src/base';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

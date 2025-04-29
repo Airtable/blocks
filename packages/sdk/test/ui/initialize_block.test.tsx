@@ -1,7 +1,7 @@
 import React from 'react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {initializeBlock} from '../../src/ui/ui';
-import {__resetHasBeenInitialized} from '../../src/ui/initialize_block';
+import {initializeBlock} from '../../src/base/ui/ui';
+import {__resetHasBeenInitialized} from '../../src/base/ui/initialize_block';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

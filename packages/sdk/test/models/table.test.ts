@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
-import Table from '../../src/models/table';
-import Field from '../../src/models/field';
-import View from '../../src/models/view';
-import {TableId} from '../../src/types/table';
-import {RecordId} from '../../src/types/record';
-import {ViewId, ViewType} from '../../src/types/view';
-import {FieldId, FieldType} from '../../src/types/field';
-import {MutationTypes} from '../../src/types/mutations';
-import Sdk from '../../src/sdk';
+import Base from '../../src/base/models/base';
+import Table from '../../src/base/models/table';
+import Field from '../../src/base/models/field';
+import View from '../../src/base/models/view';
+import {TableId, FieldId, ViewId, RecordId} from '../../src/shared/types/hyper_ids';
+import {ViewType} from '../../src/base/types/view';
+import {FieldType} from '../../src/shared/types/field';
+import {MutationTypes} from '../../src/base/types/mutations';
+import Sdk from '../../src/base/sdk';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({

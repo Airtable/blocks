@@ -1,14 +1,14 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
+import Base from '../../src/base/models/base';
 import {waitForWatchKeyAsync} from '../test_helpers';
-import {__reset, __sdk as sdk} from '../../src';
-import {modes as recordColorModes} from '../../src/models/record_coloring';
-import {FieldType} from '../../src/types/field';
-import {RecordData} from '../../src/types/record';
-import Table from '../../src/models/table';
-import Field from '../../src/models/field';
-import View from '../../src/models/view';
-import {GroupData, GroupLevelData} from '../../src/types/view';
+import {__reset, __sdk as sdk} from '../../src/base';
+import {modes as recordColorModes} from '../../src/base/models/record_coloring';
+import {FieldType} from '../../src/shared/types/field';
+import {RecordData} from '../../src/base/types/record';
+import Table from '../../src/base/models/table';
+import Field from '../../src/base/models/field';
+import View from '../../src/base/models/view';
+import {GroupData, GroupLevelData} from '../../src/base/types/view';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

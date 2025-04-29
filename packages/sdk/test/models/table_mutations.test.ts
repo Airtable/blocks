@@ -1,8 +1,8 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
-import {MutationTypes} from '../../src/types/mutations';
-import warning from '../../src/warning';
-import Sdk from '../../src/sdk';
+import Base from '../../src/base/models/base';
+import {MutationTypes} from '../../src/base/types/mutations';
+import warning from '../../src/shared/warning';
+import Sdk from '../../src/base/sdk';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -10,7 +10,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
     default: () => mockAirtableInterface,
 }));
 
-jest.mock('../../src/warning', () => jest.fn());
+jest.mock('../../src/shared/warning', () => jest.fn());
 
 describe('Table', () => {
     let base: Base;

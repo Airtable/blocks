@@ -1,15 +1,16 @@
 /* eslint-disable no-console */
 // @flow
 import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
-import Box from '../src/ui/box';
-import Switch, {switchStylePropTypes} from '../src/ui/switch';
-import theme from '../src/ui/theme/default_theme';
-import {keys} from '../src/private_utils';
+import Box from '../src/base/ui/box';
+import Switch, {switchStylePropTypes} from '../src/base/ui/switch';
+import theme from '../src/base/ui/theme/default_theme';
+import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
-const stories = storiesOf('Switch', module);
+export default {
+    component: Switch,
+};
 
 const sharedExampleProps = {
     options: {
@@ -83,7 +84,9 @@ function SwitchExample() {
     );
 }
 
-stories.add('example', () => <SwitchExample />);
+export const _Example = {
+    render: () => <SwitchExample />,
+};
 
 function SwitchSyncedExample() {
     const [isEnabled, setIsEnabled] = useState(true);
@@ -128,227 +131,241 @@ function SwitchSyncedExample() {
     );
 }
 
-stories.add('example synced', () => <SwitchSyncedExample />);
+export const ExampleSynced = {
+    render: () => <SwitchSyncedExample />,
+};
 
-stories.add('sizes', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    size="small"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Small switch"
-                    marginBottom={2}
-                />
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Default switch"
-                    marginBottom={2}
-                />
-                <Switch
-                    size="large"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Large switch"
-                />
-            </Box>
-        );
-    }),
-);
+export const Sizes = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        size="small"
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Small switch"
+                        marginBottom={2}
+                    />
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Default switch"
+                        marginBottom={2}
+                    />
+                    <Switch
+                        size="large"
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Large switch"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('variants', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    variant="default"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Default switch"
-                    marginBottom={2}
-                />
-                <Switch
-                    variant="danger"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Danger switch"
-                />
-            </Box>
-        );
-    }),
-);
+export const Variants = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        variant="default"
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Default switch"
+                        marginBottom={2}
+                    />
+                    <Switch
+                        variant="danger"
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Danger switch"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('disabled', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Inspect me"
-                    disabled={true}
-                />
-            </Box>
-        );
-    }),
-);
+export const Disabled = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Inspect me"
+                        disabled={true}
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('override backgroundColor', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    backgroundColor="transparent"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Transparent"
-                    marginBottom={2}
-                />
-            </Box>
-        );
-    }),
-);
+export const OverrideBackgroundColor = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        backgroundColor="transparent"
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Transparent"
+                        marginBottom={2}
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('override width', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="default (100%)"
-                    marginBottom={2}
-                />
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="fit-content"
-                    width="fit-content"
-                />
-            </Box>
-        );
-    }),
-);
+export const OverrideWidth = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="default (100%)"
+                        marginBottom={2}
+                    />
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="fit-content"
+                        width="fit-content"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('forwarded ref', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    ref={node => console.log(node)}
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Check the console"
-                />
-            </Box>
-        );
-    }),
-);
+export const ForwardedRef = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        ref={node => console.log(node)}
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Check the console"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('responsive size', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    size={{
-                        xsmallViewport: 'small',
-                        mediumViewport: 'default',
-                        largeViewport: 'large',
-                    }}
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Resize the window"
-                />
-            </Box>
-        );
-    }),
-);
+export const ResponsiveSize = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        size={{
+                            xsmallViewport: 'small',
+                            mediumViewport: 'default',
+                            largeViewport: 'large',
+                        }}
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Resize the window"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('custom classname', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Inspect me"
-                    className="user-provided-classname"
-                />
-            </Box>
-        );
-    }),
-);
+export const CustomClassname = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Inspect me"
+                        className="user-provided-classname"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('id attribute', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Inspect me"
-                    id="user-provided-id"
-                />
-            </Box>
-        );
-    }),
-);
+export const IdAttribute = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Inspect me"
+                        id="user-provided-id"
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('style attribute', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Inspect me"
-                    style={{
-                        padding: 0,
-                        height: '50px',
-                        backgroundColor: 'orange',
-                    }}
-                />
-            </Box>
-        );
-    }),
-);
+export const StyleAttribute = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="Inspect me"
+                        style={{
+                            padding: 0,
+                            height: '50px',
+                            backgroundColor: 'orange',
+                        }}
+                    />
+                </Box>
+            );
+        }),
+};
 
-stories.add('errors with no label', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Box>Check the console</Box>
-                <Switch value={isChecked} onChange={setIsChecked} />
-            </Box>
-        );
-    }),
-);
+export const ErrorsWithNoLabel = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Box>Check the console</Box>
+                    <Switch value={isChecked} onChange={setIsChecked} />
+                </Box>
+            );
+        }),
+};
 
-stories.add('truncate', () =>
-    React.createElement(() => {
-        const [isChecked, setIsChecked] = useState(true);
-        return (
-            <Box maxWidth="300px" margin="auto">
-                <Switch
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="string_that_is_really_long_and_should_be_truncated"
-                    marginBottom={2}
-                />
-            </Box>
-        );
-    }),
-);
+export const Truncate = {
+    render: () =>
+        React.createElement(() => {
+            const [isChecked, setIsChecked] = useState(true);
+            return (
+                <Box maxWidth="300px" margin="auto">
+                    <Switch
+                        value={isChecked}
+                        onChange={setIsChecked}
+                        label="string_that_is_really_long_and_should_be_truncated"
+                        marginBottom={2}
+                    />
+                </Box>
+            );
+        }),
+};

@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import {injectGlobal} from 'emotion';
 import capitalize from 'lodash/capitalize';
-import Select from '../../src/ui/select';
-import SelectButtons from '../../src/ui/select_buttons';
-import Switch from '../../src/ui/switch';
-import Box from '../../src/ui/box';
-import Text from '../../src/ui/text';
-import Heading from '../../src/ui/heading';
-import FormField from '../../src/ui/form_field';
-import {spawnUnknownSwitchCaseError} from '../../src/error_utils';
+import Select from '../../src/base/ui/select';
+import SelectButtons from '../../src/base/ui/select_buttons';
+import Switch from '../../src/base/ui/switch';
+import Box from '../../src/base/ui/box';
+import Text from '../../src/base/ui/text';
+import Heading from '../../src/base/ui/heading';
+import FormField from '../../src/base/ui/form_field';
+import {spawnUnknownSwitchCaseError} from '../../src/shared/error_utils';
 import ExampleCodePanel from './example_code_panel';
 import categorizeStyleProps from './categorize_style_props';
 import StylePropList from './style_prop_list';
-import {SelectOptionValue} from '../../src/ui/select_and_select_buttons_helpers';
+import {SelectOptionValue} from '../../src/base/ui/select_and_select_buttons_helpers';
 
 injectGlobal(`
     html {

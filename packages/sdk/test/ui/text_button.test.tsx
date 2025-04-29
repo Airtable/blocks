@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {TextButton} from '../../src/ui/unstable_standalone_ui';
+import {TextButton} from '../../src/base/ui/unstable_standalone_ui';
 
 describe('TextButton', () => {
     it('renders outside of a blocks context', () => {

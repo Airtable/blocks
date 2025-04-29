@@ -1,9 +1,9 @@
-import {spawnError} from '../error_utils';
-import {AirtableInterface} from '../types/airtable_interface';
+import {spawnError} from '../shared/error_utils';
+import {SdkMode} from '../sdk_mode';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 
-let airtableInterface: AirtableInterface | null = null;
+let airtableInterface: SdkMode['AirtableInterfaceT'] | null = null;
 
 const missingAirtableInterfaceErrorMessage = [
     'Error: Extension environment misconfigured',
@@ -19,9 +19,11 @@ const missingAirtableInterfaceErrorMessage = [
 ].join('');
 
 /** @hidden */
-export default function getAirtableInterface(): AirtableInterface {
+export default function getAirtableInterface<
+    SdkModeT extends SdkMode
+>(): SdkModeT['AirtableInterfaceT'] {
     const getAirtableInterfaceAtVersion:
-        | ((arg1: number) => AirtableInterface)
+        | ((arg1: number) => SdkModeT['AirtableInterfaceT'])
         | void = (window as any).__getAirtableInterfaceAtVersion;
 
     if (!airtableInterface) {
@@ -32,5 +34,5 @@ export default function getAirtableInterface(): AirtableInterface {
         airtableInterface = getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);
     }
 
-    return airtableInterface;
+    return airtableInterface as SdkModeT['AirtableInterfaceT'];
 }

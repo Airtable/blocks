@@ -1,12 +1,13 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../src/models/base';
-import Mutations from '../../src/models/mutations';
-import Sdk from '../../src/sdk';
-import Session from '../../src/models/session';
-import {ModelChange} from '../../src/types/base';
-import {FieldType} from '../../src/types/field';
-import {MutationTypes} from '../../src/types/mutations';
-import {BlockRunContextType, FieldTypeConfig} from '../../src/types/airtable_interface';
+import Base from '../../src/base/models/base';
+import Mutations from '../../src/base/models/mutations';
+import Sdk from '../../src/base/sdk';
+import Session from '../../src/base/models/session';
+import {ModelChange} from '../../src/shared/types/base_core';
+import {FieldType} from '../../src/shared/types/field';
+import {MutationTypes} from '../../src/base/types/mutations';
+import {BlockRunContextType} from '../../src/base/types/airtable_interface';
+import {FieldTypeConfig} from '../../src/shared/types/airtable_interface_core';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -14,7 +15,7 @@ jest.mock('../../src/injected/airtable_interface', () => ({
     default: () => mockAirtableInterface,
 }));
 
-jest.mock('../../src/models/mutation_constants', () => ({
+jest.mock('../../src/shared/types/mutation_constants', () => ({
     MAX_NUM_FIELDS_PER_TABLE: 10,
     MAX_FIELD_NAME_LENGTH: 20,
     MAX_FIELD_DESCRIPTION_LENGTH: 50,

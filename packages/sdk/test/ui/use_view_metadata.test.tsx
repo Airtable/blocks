@@ -1,12 +1,12 @@
 import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
-import useViewMetadata from '../../src/ui/use_view_metadata';
+import useViewMetadata from '../../src/base/ui/use_view_metadata';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Sdk from '../../src/sdk';
-import ViewMetadataQueryResult from '../../src/models/view_metadata_query_result';
-import Table from '../../src/models/table';
+import Sdk from '../../src/base/sdk';
+import ViewMetadataQueryResult from '../../src/base/models/view_metadata_query_result';
+import Table from '../../src/base/models/table';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({

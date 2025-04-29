@@ -1,12 +1,11 @@
-import {BaseId} from '../../src/types/base';
-import {TableId, TableData} from '../../src/types/table';
-import {FieldId, FieldType, FieldData} from '../../src/types/field';
-import {ViewData, ViewId, ViewType} from '../../src/types/view';
-import {RecordId} from '../../src/types/record';
-import {CollaboratorData} from '../../src/types/collaborator';
-import {Color} from '../../src/colors';
-import {ObjectMap, keyBy, getId} from '../../src/private_utils';
-import {BlockRunContextType, SdkInitData} from '../../src/types/airtable_interface';
+import {BaseId, TableId, FieldId, ViewId, RecordId} from '../../src/shared/types/hyper_ids';
+import {TableData} from '../../src/base/types/table';
+import {FieldType, FieldData} from '../../src/shared/types/field';
+import {ViewData, ViewType} from '../../src/base/types/view';
+import {CollaboratorData} from '../../src/shared/types/collaborator';
+import {Color} from '../../src/shared/colors';
+import {ObjectMap, keyBy, getId} from '../../src/shared/private_utils';
+import {BlockRunContextType, SdkInitData} from '../../src/base/types/airtable_interface';
 
 const MOCK_BLOCK_INSTALLATION_ID = 'blicPfOILwejF6HL2';
 const MOCK_BLOCK_RUN_CONTEXT_TYPE = BlockRunContextType.DASHBOARD_APP;

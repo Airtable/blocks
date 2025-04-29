@@ -1,11 +1,11 @@
 // eslint-disable-next-line import/order
 import {MockAirtableInterface} from './airtable_interface_mocks/mock_airtable_interface';
-import Table from '../src/models/table';
-import View from '../src/models/view';
-import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
-import Sdk from '../src/sdk';
-import {__reset, __sdk as sdk} from '../src';
-import {RequestJson} from '../src/types/backend_fetch_types';
+import Table from '../src/base/models/table';
+import View from '../src/base/models/view';
+import AbstractModelWithAsyncData from '../src/base/models/abstract_model_with_async_data';
+import Sdk from '../src/base/sdk';
+import {__reset, __sdk as sdk} from '../src/base';
+import {RequestJson} from '../src/base/types/backend_fetch_types';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../src/injected/airtable_interface', () => ({
@@ -312,9 +312,9 @@ describe('sdk', () => {
                 expect(() => newQuery.records).not.toThrow();
 
 
-                expect(query._recordStore._isDataLoaded).toBe(true);
+                expect(query._recordStore._loader._isDataLoaded).toBe(true);
                 jest.advanceTimersByTime(AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
-                expect(query._recordStore._isDataLoaded).toBe(false);
+                expect(query._recordStore._loader._isDataLoaded).toBe(false);
             });
         });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
-import {Select} from '../../src/ui/unstable_standalone_ui';
+import {Select} from '../../src/base/ui/unstable_standalone_ui';
 
 describe('Select', () => {
     it('renders outside of a blocks context', () => {

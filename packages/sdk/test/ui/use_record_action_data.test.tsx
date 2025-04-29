@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import {act} from 'react-dom/test-utils';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Sdk from '../../src/sdk';
-import useRecordActionData from '../../src/ui/use_record_action_data';
-import {RecordActionData} from '../../src/types/record_action_data';
-import {SdkContext} from '../../src/ui/sdk_context';
+import Sdk from '../../src/base/sdk';
+import useRecordActionData from '../../src/base/ui/use_record_action_data';
+import {RecordActionData} from '../../src/base/types/record_action_data';
+import {SdkContext} from '../../src/shared/ui/sdk_context';
 
 describe('useRecordActionData', () => {
     let sdk: Sdk;

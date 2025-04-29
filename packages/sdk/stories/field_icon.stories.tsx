@@ -1,12 +1,14 @@
 import React from 'react';
-import {storiesOf} from '@storybook/react';
-import {values as objectValues} from '../src/private_utils';
-import Icon, {iconStylePropTypes} from '../src/ui/icon';
-import {FieldType} from '../src/types/field';
+import {values as objectValues} from '../src/shared/private_utils';
+import Icon, {iconStylePropTypes} from '../src/base/ui/icon';
+import {FieldType} from '../src/shared/types/field';
 import {ReadableFieldTypes, IconNamesByFieldType} from './helpers/field_type';
 import Example from './helpers/example';
 
-const stories = storiesOf('FieldIcon', module);
+export default {
+    component: Icon,
+    title: 'FieldIcon',
+};
 
 function FieldIconExample() {
     return (
@@ -31,12 +33,12 @@ function FieldIconExample() {
                 const fieldName = ReadableFieldTypes[fieldType];
                 return `
                 import {FieldIcon, useBase, useRecords} from '@airtable/blocks/ui';
-                
+
                 const FieldIconExample = (props) => {
                    const base = useBase();
                    const table = base.getTableByName('All field types');
                    const field = table.getFieldByName('${fieldName} field');
- 
+
                    return (
                         <FieldIcon field={field} size={${size}} />
                    );
@@ -52,4 +54,6 @@ function FieldIconExample() {
     );
 }
 
-stories.add('example', () => <FieldIconExample />);
+export const _Example = {
+    render: () => <FieldIconExample />,
+};

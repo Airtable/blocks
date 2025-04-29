@@ -8,11 +8,11 @@ jest.mock('../../src/injected/airtable_interface', () => ({
 }));
 
 const run = (bindingIdentifier: string) => {
-    const exported = require('../../src/ui/ui')[bindingIdentifier];
+    const exported = require('../../src/base/ui/ui')[bindingIdentifier];
 
     expect(exported).toBeTruthy();
 
-    expect(exported).toBe(require('../../src/ui/unstable_standalone_ui')[bindingIdentifier]);
+    expect(exported).toBe(require('../../src/base/ui/unstable_standalone_ui')[bindingIdentifier]);
 };
 
 describe('ui entry point', () => {

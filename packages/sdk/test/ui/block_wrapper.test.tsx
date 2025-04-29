@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {mount} from 'enzyme';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import BlockWrapper from '../../src/ui/block_wrapper';
-import Sdk from '../../src/sdk';
-import {__reset, __sdk as sdk} from '../../src';
+import BlockWrapper from '../../src/base/ui/block_wrapper';
+import Sdk from '../../src/base/sdk';
+import {__reset, __sdk as sdk} from '../../src/base';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

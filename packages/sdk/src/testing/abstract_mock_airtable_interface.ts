@@ -1,31 +1,33 @@
-import {AggregatorKey} from '../types/aggregators';
+import {AggregatorKey} from '../base/types/aggregators';
+import {
+    AppInterface,
+    FieldTypeConfig,
+    GlobalConfigHelpers,
+} from '../shared/types/airtable_interface_core';
 import {
     AggregatorConfig,
     Aggregators,
     AirtableInterface,
-    AppInterface,
-    FieldTypeConfig,
     FieldTypeProvider,
     SdkInitData,
     UrlConstructor,
-    GlobalConfigHelpers,
     PartialViewData,
     IdGenerator,
     VisList,
-} from '../types/airtable_interface';
-import {cloneDeep, ObjectMap} from '../private_utils';
-import {spawnError} from '../error_utils';
-import {FieldData, FieldId} from '../types/field';
-import {ModelChange} from '../types/base';
-import {RecordData, RecordId} from '../types/record';
-import {TableId} from '../types/table';
-import {ViewId} from '../types/view';
-import {ViewportSizeConstraint} from '../types/viewport';
-import {Mutation, PermissionCheckResult} from '../types/mutations';
-import {NormalizedSortConfig} from '../models/record_query_result';
-import {RequestJson, ResponseJson} from '../types/backend_fetch_types';
-import {CursorData} from '../types/cursor';
-import {RecordActionData} from '../types/record_action_data';
+} from '../base/types/airtable_interface';
+import {TableId, FieldId, ViewId, RecordId} from '../shared/types/hyper_ids';
+import {cloneDeep, ObjectMap} from '../shared/private_utils';
+import {spawnError} from '../shared/error_utils';
+import {FieldData} from '../shared/types/field';
+import {ModelChange} from '../shared/types/base_core';
+import {RecordData} from '../base/types/record';
+import {ViewportSizeConstraint} from '../base/types/viewport';
+import {PermissionCheckResult} from '../shared/types/mutations_core';
+import {Mutation} from '../base/types/mutations';
+import {NormalizedSortConfig} from '../base/models/record_query_result';
+import {RequestJson, ResponseJson} from '../base/types/backend_fetch_types';
+import {CursorData} from '../base/types/cursor';
+import {RecordActionData} from '../base/types/record_action_data';
 const EventEmitter = require('events');
 
 /** @internal */

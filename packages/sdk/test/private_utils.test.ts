@@ -11,7 +11,7 @@ import {
     arrayDifference,
     debounce,
     cast,
-} from '../src/private_utils';
+} from '../src/shared/private_utils';
 import {flowTest} from './test_helpers';
 
 jest.useFakeTimers();

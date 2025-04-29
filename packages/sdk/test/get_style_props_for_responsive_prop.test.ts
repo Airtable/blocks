@@ -1,4 +1,4 @@
-import getStylePropsForResponsiveProp from '../src/ui/system/utils/get_style_props_for_responsive_prop';
+import getStylePropsForResponsiveProp from '../src/base/ui/system/utils/get_style_props_for_responsive_prop';
 
 describe('getStylePropForResponsiveProp', () => {
     it('returns responsive style props for scale', () => {

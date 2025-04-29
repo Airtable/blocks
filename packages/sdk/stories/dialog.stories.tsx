@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
-import Dialog, {dialogStylePropTypes} from '../src/ui/dialog';
-import Button from '../src/ui/button';
-import Text from '../src/ui/text';
-import Heading from '../src/ui/heading';
+import Dialog, {dialogStylePropTypes} from '../src/base/ui/dialog';
+import Button from '../src/base/ui/button';
+import Text from '../src/base/ui/text';
+import Heading from '../src/base/ui/heading';
 import Example from './helpers/example';
 import {CONTROL_WIDTH} from './helpers/code_utils';
 
-const stories = storiesOf('Dialog', module);
+export default {
+    component: Dialog,
+};
 
 function DialogExample() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,11 +33,11 @@ function DialogExample() {
                         return (
                             <React.Fragment>
                                 <Button onClick={() => setIsDialogOpen(true)}>Open dialog</Button>
-                              
+
                                 {isDialogOpen && (
                                     <Dialog onClose={() => setIsDialogOpen(false)} width="${CONTROL_WIDTH}">
                                         ${values.showCloseButton ? '<Dialog.CloseButton />' : ''}
-                                        
+
                                         <Heading>Dialog</Heading>
                                         <Text variant="paragraph">
                                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
@@ -74,4 +75,6 @@ function DialogExample() {
     );
 }
 
-stories.add('example', () => <DialogExample />);
+export const _Example = {
+    render: () => <DialogExample />,
+};

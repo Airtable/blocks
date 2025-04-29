@@ -1,14 +1,14 @@
 /* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {ViewType} from '../../src/types/view';
-import {__reset, __sdk as sdk} from '../../src';
-import AbstractModel from '../../src/models/abstract_model';
-import Base from '../../src/models/base';
-import * as RecordColoring from '../../src/models/record_coloring';
-import Table from '../../src/models/table';
-import View from '../../src/models/view';
-import {MutationTypes} from '../../src/types/mutations';
-import {BlockRunContextType} from '../../src/types/airtable_interface';
+import {ViewType} from '../../src/base/types/view';
+import {__reset, __sdk as sdk} from '../../src/base';
+import AbstractModel from '../../src/shared/models/abstract_model';
+import Base from '../../src/base/models/base';
+import * as RecordColoring from '../../src/base/models/record_coloring';
+import Table from '../../src/base/models/table';
+import View from '../../src/base/models/view';
+import {MutationTypes} from '../../src/base/types/mutations';
+import {BlockRunContextType} from '../../src/base/types/airtable_interface';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

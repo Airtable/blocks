@@ -2,19 +2,18 @@ import {
     Aggregators,
     FieldTypeProvider,
     UrlConstructor,
-    GlobalConfigHelpers,
     IdGenerator,
     VisList,
     PartialViewData,
-} from '../../src/types/airtable_interface';
+} from '../../src/base/types/airtable_interface';
 import {AbstractMockAirtableInterface} from '../../src/testing/abstract_mock_airtable_interface';
-import {TableId} from '../../src/types/table';
-import {FieldId} from '../../src/types/field';
-import {spawnError} from '../../src/error_utils';
-import {CursorData} from '../../src/types/cursor';
-import {RecordData} from '../../src/types/record';
-import {RecordActionData} from '../../src/types/record_action_data';
-import {RequestJson, ResponseJson} from '../../src/types/backend_fetch_types';
+import {TableId, FieldId} from '../../src/shared/types/hyper_ids';
+import {spawnError} from '../../src/shared/error_utils';
+import {CursorData} from '../../src/base/types/cursor';
+import {RecordData} from '../../src/base/types/record';
+import {RecordActionData} from '../../src/base/types/record_action_data';
+import {RequestJson, ResponseJson} from '../../src/base/types/backend_fetch_types';
+import {GlobalConfigHelpers} from '../../src/shared/types/airtable_interface_core';
 import projectTrackerData from './project_tracker';
 import linkedRecordsData from './linked_records';
 import {FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';

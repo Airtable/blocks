@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import React from 'react';
-import {storiesOf} from '@storybook/react';
-import ChoiceToken, {choiceTokenStylePropTypes} from '../src/ui/choice_token';
+import ChoiceToken, {choiceTokenStylePropTypes} from '../src/base/ui/choice_token';
 import Example from './helpers/example';
 import choiceOptions from './helpers/choice_options';
 
-const stories = storiesOf('ChoiceToken', module);
+export default {
+    component: ChoiceToken,
+};
 
 function ChoiceTokenExample() {
     return (
@@ -44,4 +45,6 @@ function ChoiceTokenExample() {
     );
 }
 
-stories.add('example', () => <ChoiceTokenExample />);
+export const _Example = {
+    render: () => <ChoiceTokenExample />,
+};

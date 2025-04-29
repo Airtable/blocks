@@ -1,8 +1,8 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Field from '../../src/models/field';
-import {FieldType} from '../../src/types/field';
-import {__reset, __sdk as sdk} from '../../src';
-import {MutationTypes} from '../../src/types/mutations';
+import Field from '../../src/base/models/field';
+import {FieldType} from '../../src/shared/types/field';
+import {__reset, __sdk as sdk} from '../../src/base';
+import {MutationTypes} from '../../src/base/types/mutations';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;
 jest.mock('../../src/injected/airtable_interface', () => ({

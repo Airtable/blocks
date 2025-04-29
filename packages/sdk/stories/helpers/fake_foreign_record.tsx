@@ -1,5 +1,5 @@
 import React from 'react';
-import Text from '../../src/ui/text';
+import Text from '../../src/base/ui/text';
 
 export default function FakeForeignRecord({children}: {children: React.ReactNode}) {
     return (
