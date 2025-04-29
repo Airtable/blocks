@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import {globalConfig} from '@airtable/blocks';
-import {colors, colorUtils} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks/base';
+import {colors, colorUtils} from '@airtable/blocks/base/ui';
 
 import {DragContext} from './DragWrapper';
 import {

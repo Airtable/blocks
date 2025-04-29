@@ -9,19 +9,22 @@ import {
     RecordId,
     TableId,
     ViewId,
-} from '@airtable/blocks/types';
+} from '@airtable/blocks/base/types';
 import {
     AbstractMockAirtableInterface,
     AppInterface,
     BaseData,
     BlockRunContextType,
     CursorData,
-    GlobalConfigArray,
-    GlobalConfigData,
-    GlobalConfigObject,
-    GlobalConfigUpdate,
     FieldData,
     FieldType,
+    FieldTypeProvider,
+    GlobalConfigArray,
+    GlobalConfigData,
+    GlobalConfigHelpers,
+    GlobalConfigObject,
+    GlobalConfigUpdate,
+    IdGenerator,
     ModelChange,
     Mutation,
     MutationTypes,
@@ -620,7 +623,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         };
     }
 
-    get globalConfigHelpers() {
+    get globalConfigHelpers(): GlobalConfigHelpers {
         const globalConfigHelpers = super.globalConfigHelpers;
 
         globalConfigHelpers.validateAndApplyUpdates = (
@@ -674,7 +677,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         return this._pickRecord(tableId, recordIds, fieldIds, shouldAllowCreatingRecord);
     }
 
-    get fieldTypeProvider() {
+    get fieldTypeProvider(): FieldTypeProvider {
         const fieldTypeProvider = super.fieldTypeProvider;
 
         fieldTypeProvider.convertCellValueToString = (
@@ -799,7 +802,7 @@ export default class MockAirtableInterface extends AbstractMockAirtableInterface
         return recordsById && recordId in recordsById;
     }
 
-    get idGenerator() {
+    get idGenerator(): IdGenerator {
         const idGenerator = super.idGenerator;
 
         idGenerator.generateRecordId = generateGenericId;

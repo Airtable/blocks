@@ -104,6 +104,13 @@
                 "lines": 100,
                 "statements": 100
             }
+        },
+        "moduleNameMapper": {
+            "^@airtable/blocks/unstable_private_utils$": "<rootDir>/../sdk/dist/cjs/shared/unstable_private_utils.js",
+            "^@airtable/blocks/unstable_testing_utils$": "<rootDir>/../sdk/dist/cjs/base/unstable_testing_utils.js",
+            "^@airtable/blocks/base/ui$": "<rootDir>/../sdk/dist/cjs/base/ui/ui.js",
+            "^@airtable/blocks/base/models$": "<rootDir>/../sdk/dist/cjs/base/models/models.js",
+            "^@airtable/blocks/base$": "<rootDir>/../sdk/dist/cjs/base/index.js"
         }
     },
     "release-it": {

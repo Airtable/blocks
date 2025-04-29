@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from 'react';
-import {Box, Heading, Dialog, Text, TextButton} from '@airtable/blocks/ui';
+import {Box, Heading, Dialog, Text, TextButton} from '@airtable/blocks/base/ui';
 import ExternalLink from './ExternalLink';
 
 const URL_GOOGLE_CLOUD_PRICING = 'https://cloud.google.com/maps-platform/pricing';

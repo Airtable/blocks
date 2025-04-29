@@ -1,4 +1,4 @@
-import {loadCSSFromString, colorUtils, colors} from '@airtable/blocks/ui';
+import {loadCSSFromString, colorUtils, colors} from '@airtable/blocks/base/ui';
 
 import {FONT_FAMILY, FONT_SIZE} from './constants';
 
@@ -45,7 +45,7 @@ const css = `
     .TableRow.TableHeader text {
         fill: #ffffff;
     }
-    
+
     .TableRow.draggable {
         cursor: grab;
     }
@@ -70,19 +70,19 @@ const css = `
         stroke: ${colorUtils.getHexForColor(colors.GRAY_BRIGHT)};
         stroke-dasharray: initial;
     }
-    
+
     .Link.highlighted.formula {
         stroke: ${colorUtils.getHexForColor(colors.BLUE_BRIGHT)};
     }
-    
+
     .Link.highlighted.count {
-        stroke: ${colorUtils.getHexForColor(colors.RED_BRIGHT)};        
+        stroke: ${colorUtils.getHexForColor(colors.RED_BRIGHT)};
     }
 
     .Link.highlighted.multipleLookupValues {
         stroke: ${colorUtils.getHexForColor(colors.ORANGE_BRIGHT)};
     }
-    
+
     .Link.highlighted.rollup {
         stroke: ${colorUtils.getHexForColor(colors.PURPLE_BRIGHT)};
     }

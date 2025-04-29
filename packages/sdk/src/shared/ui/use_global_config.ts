@@ -9,7 +9,7 @@ import {useSdk} from './sdk_context';
  *
  * @example
  * ```js
- * import {Button, useGlobalConfig} from '@airtable/blocks/ui';
+ * import {Button, useGlobalConfig} from '@airtable/blocks/base/ui';
  *
  * function SyncedCounter() {
  *     const globalConfig = useGlobalConfig();

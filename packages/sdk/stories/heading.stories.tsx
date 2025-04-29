@@ -42,7 +42,7 @@ function HeadingExample() {
                     sizeOutOfBoundsComment = '';
                 }
                 return `
-                    import {Heading} from '@airtable/blocks/ui';
+                    import {Heading} from '@airtable/blocks/base/ui';
 
                     ${sizeOutOfBoundsComment}
                     const headingExample = (

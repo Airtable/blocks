@@ -1,4 +1,4 @@
-import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
+import {useBase, useGlobalConfig} from '@airtable/blocks/base/ui';
 
 export const ConfigKeys = Object.freeze({
     TABLE_ID: 'tableId',

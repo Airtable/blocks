@@ -33,7 +33,7 @@ function LabelExample() {
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `
-                    import {Label, Box, Input} from '@airtable/blocks/ui';
+                    import {Label, Box, Input} from '@airtable/blocks/base/ui';
 
                     // You might want to consider using \`FormField\` instead.
                     const LabelExample = () => {

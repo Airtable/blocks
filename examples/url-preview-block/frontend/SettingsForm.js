@@ -10,7 +10,7 @@ import {
     Switch,
     TablePickerSynced,
     Text,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {useSettings, ConfigKeys, allowedUrlFieldTypes} from './settings';
 

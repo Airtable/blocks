@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box} from '@airtable/blocks/base/ui';
 
 /**
  * A presentational helper component to render a Box full screen.

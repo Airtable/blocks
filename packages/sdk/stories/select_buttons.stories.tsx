@@ -43,7 +43,7 @@ function SelectButtonsExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {SelectButtons} from '@airtable/blocks/ui';
+                    import {SelectButtons} from '@airtable/blocks/base/ui';
 
                     const options = ${JSON.stringify(options)};
 
@@ -108,7 +108,7 @@ function SelectButtonsSyncedExample() {
 
                 return `
                     import React from 'react';
-                    import {SelectButtonsSynced} from '@airtable/blocks/ui';
+                    import {SelectButtonsSynced} from '@airtable/blocks/base/ui';
 
                     const options = ${JSON.stringify(options)};
 

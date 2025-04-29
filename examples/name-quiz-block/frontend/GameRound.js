@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import {Text, Box, Heading} from '@airtable/blocks/ui';
+import {Text, Box, Heading} from '@airtable/blocks/base/ui';
 
 import Picture from './Picture';
 

@@ -8,7 +8,7 @@ import {
     FieldPickerSynced,
     Box,
     FormField,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import React from 'react';
 
 // This app uses chart.js and the react-chartjs-2 packages.

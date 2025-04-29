@@ -98,7 +98,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
+     * import {base} from '@airtable/blocks/base';
      * console.log('The name of your base is', base.name);
      * ```
      */
@@ -111,7 +111,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
+     * import {base} from '@airtable/blocks/base';
      * console.log('The workspace id of your base is', base.workspaceId);
      * ```
      */
@@ -124,8 +124,8 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * import {Box} from '@airtable/blocks/ui';
+     * import {base} from '@airtable/blocks/base';
+     * import {Box} from '@airtable/blocks/base/ui';
      * const exampleBox = <Box backgroundColor={base.color}> This box's background is the same color as the base background</Box>
      * ```
      */
@@ -138,7 +138,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
+     * import {base} from '@airtable/blocks/base';
      * console.log(`You have ${base.tables.length} tables`);
      * ```
      */
@@ -173,7 +173,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
+     * import {base} from '@airtable/blocks/base';
      * console.log(base.activeCollaborators[0].email);
      * ```
      */

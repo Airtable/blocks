@@ -10,8 +10,8 @@ import {
     FieldPickerSynced,
     TablePickerSynced,
     useSettingsButton,
-} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 
 import {useSettings, ConfigKeys} from './settings';
 import FullScreenBox from './FullScreenBox';

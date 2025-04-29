@@ -10,7 +10,7 @@ export type PrivateColumnType = string;
  *
  * @example
  * ```js
- * import {FieldType} from '@airtable/blocks/models';
+ * import {FieldType} from '@airtable/blocks/base/models';
  * const numberFields = myTable.fields.filter(field => (
  *     field.type === FieldType.NUMBER
  * ));

@@ -1,4 +1,4 @@
-import {FieldType} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/base/models';
 
 // These are the Airtable FieldTypes that are allowed
 // as data sources in the derived data that is passed

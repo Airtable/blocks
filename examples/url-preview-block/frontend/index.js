@@ -1,6 +1,6 @@
 import React, {Fragment, useState, useCallback, useEffect} from 'react';
-import {cursor} from '@airtable/blocks';
-import {ViewType} from '@airtable/blocks/models';
+import {cursor} from '@airtable/blocks/base';
+import {ViewType} from '@airtable/blocks/base/models';
 import {
     initializeBlock,
     registerRecordActionDataCallback,
@@ -15,7 +15,7 @@ import {
     Link,
     Text,
     TextButton,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {useSettings} from './settings';
 import SettingsForm from './SettingsForm';

@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Box, FormField, TablePickerSynced, ViewPickerSynced} from '@airtable/blocks/ui';
+import {Box, FormField, TablePickerSynced, ViewPickerSynced} from '@airtable/blocks/base/ui';
 import {ConfigKeys, ConfigKeysLabels} from './settings';
 import SpecificationEditor from './SpecificationEditor';
 import {DATA_SOURCE_FORM_HEIGHT, CANNOT_SHOW_SPEC_EDITOR} from './constants';

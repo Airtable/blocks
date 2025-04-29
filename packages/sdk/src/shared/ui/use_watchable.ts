@@ -28,7 +28,7 @@ import useArrayIdentity from './use_array_identity';
  *
  * @example
  * ```js
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {useWatchable} from '@airtable/blocks/base/ui';
  *
  * function TableName({table}) {
  *     useWatchable(table, 'name');
@@ -51,7 +51,7 @@ import useArrayIdentity from './use_array_identity';
  *
  * @example
  * ```js
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {useWatchable} from '@airtable/blocks/base/ui';
  *
  * function ActiveView({cursor}) {
  *     useWatchable(cursor, 'activeViewId', () => {

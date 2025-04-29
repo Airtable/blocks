@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {initializeBlock, useSettingsButton, useViewport} from '@airtable/blocks/ui';
+import {initializeBlock, useSettingsButton, useViewport} from '@airtable/blocks/base/ui';
 import ChartContainer from './ChartContainer';
 import FormContainer from './FormContainer';
 import useSettings from './settings';

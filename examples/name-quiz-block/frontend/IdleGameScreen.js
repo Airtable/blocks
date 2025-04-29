@@ -8,7 +8,7 @@ import {
     TextButton,
     useRecords,
     useSettingsButton,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {useSettings, MIN_AMOUNT_OF_PICTURES} from './settings';
 import getListOfNamesWithPictures from './getListOfNamesWithPictures';

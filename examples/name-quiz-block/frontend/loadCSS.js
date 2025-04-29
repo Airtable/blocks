@@ -1,4 +1,4 @@
-import {loadCSSFromString} from '@airtable/blocks/ui';
+import {loadCSSFromString} from '@airtable/blocks/base/ui';
 
 /**
  * A string that contains all of the CSS used in this extension.
@@ -13,7 +13,7 @@ const cssString = `
         }
         100% {
             transform: scale(1);
-        }   
+        }
     }
 
     .GameEmoji {

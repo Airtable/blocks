@@ -16,7 +16,7 @@ function CollaboratorTokenExample() {
             styleProps={Object.keys(collaboratorTokenStylePropTypes)}
             renderCodeFn={() => {
                 return `
-                    import {CollaboratorToken, useBase} from '@airtable/blocks/ui';
+                    import {CollaboratorToken, useBase} from '@airtable/blocks/base/ui';
 
                     const CollaboratorTokenExample = () => {
                         const base = useBase();

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {cursor} from '@airtable/blocks';
+import {cursor} from '@airtable/blocks/base';
 import {
     Box,
     initializeBlock,
@@ -7,7 +7,7 @@ import {
     useSettingsButton,
     useViewport,
     useWatchable,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {useSettings} from './settings';
 import RecordPreview from './RecordPreview';

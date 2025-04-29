@@ -1,7 +1,7 @@
 import React from 'react';
-import {FieldId, RecordId, TableId, ViewId} from '@airtable/blocks/types';
+import {FieldId, RecordId, TableId, ViewId} from '@airtable/blocks/base/types';
 import {ModelChange, Mutation, Sdk} from '@airtable/blocks/unstable_testing_utils';
-import {BaseProvider} from '@airtable/blocks/ui';
+import {BaseProvider} from '@airtable/blocks/base/ui';
 import {invariant} from './error_utils';
 import {
     FixtureData,

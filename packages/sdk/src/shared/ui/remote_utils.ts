@@ -7,7 +7,7 @@ import {invariant} from '../error_utils';
  * @param css The CSS string.
  * @example
  * ```js
- * import {loadCSSFromString} from '@airtable/blocks/ui';
+ * import {loadCSSFromString} from '@airtable/blocks/base/ui';
  * loadCSSFromString('body { background: red; }');
  * ```
  * @docsPath UI/utils/loadCSSFromString
@@ -28,7 +28,7 @@ export function loadCSSFromString(css: string): HTMLStyleElement {
  * @param url The URL of the stylesheet.
  * @example
  * ```js
- * import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
+ * import {loadCSSFromURLAsync} from '@airtable/blocks/base/ui';
  * loadCSSFromURLAsync('https://example.com/style.css');
  * ```
  * @docsPath UI/utils/loadCSSFromURLAsync
@@ -59,7 +59,7 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
  * @param url The URL of the script.
  * @example
  * ```js
- * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * import {loadScriptFromURLAsync} from '@airtable/blocks/base/ui';
  * loadScriptFromURLAsync('https://example.com/script.js');
  * ```
  * @docsPath UI/utils/loadScriptFromURLAsync

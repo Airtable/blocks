@@ -7,7 +7,7 @@ import {
     useLoadable,
     useRecords,
     useWatchable,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import React, {useState} from 'react';
 
 // These values match the recommended template for this example app.

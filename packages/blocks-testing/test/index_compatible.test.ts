@@ -8,7 +8,7 @@
 
 describe('package index', () => {
     it('succeeds for supported versions of the Blocks SDK', async () => {
-        const index = await import('../src/index');
+        const index = await import('../src/index.ts');
         expect(typeof index.default).toBe('function');
     });
 });

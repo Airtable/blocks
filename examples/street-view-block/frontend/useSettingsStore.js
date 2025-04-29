@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useGlobalConfig, useBase} from '@airtable/blocks/ui';
+import {useGlobalConfig, useBase} from '@airtable/blocks/base/ui';
 import {base64EncodeUnicode, base64DecodeUnicode} from './base46unicode';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import useGoogleMapsApiError from './useGoogleMapsApiError';

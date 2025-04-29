@@ -1,5 +1,5 @@
-import {cursor} from '@airtable/blocks';
-import {ViewType} from '@airtable/blocks/models';
+import {cursor} from '@airtable/blocks/base';
+import {ViewType} from '@airtable/blocks/base/models';
 import {
     initializeBlock,
     Box,
@@ -13,7 +13,7 @@ import {
     useWatchable,
     useLoadable,
     useRecordById,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import {GoogleMap, StreetViewPanorama, useLoadScript} from '@react-google-maps/api';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import hash from 'object-hash';

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-// import {globalConfig, base} from '@airtable/blocks';
-import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+// import {globalConfig, base} from '@airtable/blocks/base';
+import {useBase, useGlobalConfig} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 
 // Constants that determine when more pictures are shown in the game.
 export const MIN_AMOUNT_OF_PICTURES = 2;

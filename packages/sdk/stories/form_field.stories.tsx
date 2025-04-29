@@ -34,7 +34,7 @@ function FormFieldExample() {
                         _value ? 'This is a description for this field.' : null,
                 });
                 return `
-                    import {FormField, Input} from '@airtable/blocks/ui';
+                    import {FormField, Input} from '@airtable/blocks/base/ui';
 
                     const FormFieldExample = () => {
                         const [value, setValue] = useState('');

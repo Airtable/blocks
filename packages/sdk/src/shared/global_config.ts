@@ -47,7 +47,7 @@ type WatchableGlobalConfigKey = string;
  *
  * @example
  * ```js
- * import {globalConfig} from '@airtable/blocks';
+ * import {globalConfig} from '@airtable/blocks/base';
  * ```
  * @docsPath models/GlobalConfig
  */
@@ -120,7 +120,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param key A string for the top-level key, or an array of strings describing the path to the value.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {globalConfig} from '@airtable/blocks/base';
      *
      * const topLevelValue = globalConfig.get('topLevelKey');
      * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
@@ -220,7 +220,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {globalConfig} from '@airtable/blocks/base';
      *
      * function updateFavoriteColorIfPossible(color) {
      *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
@@ -323,7 +323,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param updates The paths and values to set.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {globalConfig} from '@airtable/blocks/base';
      *
      * const updates = [
      *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},

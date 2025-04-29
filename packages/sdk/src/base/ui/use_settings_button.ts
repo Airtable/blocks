@@ -14,7 +14,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  *
  * @example
  * ```js
- * import {useSettingsButton} from '@airtable/blocks/ui';
+ * import {useSettingsButton} from '@airtable/blocks/base/ui';
  * import {useState} from 'react';
  *
  * function ComponentWithSettings() {

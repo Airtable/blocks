@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, {Fragment, useEffect, useState} from 'react';
-import {Field, Record} from '@airtable/blocks/models';
-import {Box, Button, expandRecord} from '@airtable/blocks/ui';
+import {Field, Record} from '@airtable/blocks/base/models';
+import {Box, Button, expandRecord} from '@airtable/blocks/base/ui';
 
 import Flashcard from './Flashcard';
 

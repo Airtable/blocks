@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
-import {Field, RecordQueryResult, Table, View} from '@airtable/blocks/models';
+import {Field, RecordQueryResult, Table, View} from '@airtable/blocks/base/models';
 import {
     Box,
     Button,
@@ -14,7 +14,7 @@ import {
     TablePickerSynced,
     Text,
     ViewPickerSynced,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {ExportType} from './index';
 import {allowedFieldTypes, ConfigKeys, LinkStyle, ChartOrientation, RecordShape} from './settings';

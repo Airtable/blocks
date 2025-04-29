@@ -25,7 +25,7 @@ function DialogExample() {
             renderCodeFn={values => {
                 return `
                     import React, { useState } from 'react';
-                    import {Button, Dialog, Heading, Text} from '@airtable/blocks/ui';
+                    import {Button, Dialog, Heading, Text} from '@airtable/blocks/base/ui';
 
                     const DialogExample = () => {
                         const [isDialogOpen, setIsDialogOpen] = useState(false);

@@ -37,7 +37,7 @@ const GlobalAlertInfo = () => {
  * @hidden
  * @example
  * ```js
- * import {globalAlert} from '@airtable/blocks/ui';
+ * import {globalAlert} from '@airtable/blocks/base/ui';
  * globalAlert.showReloadPrompt();
  * ```
  */

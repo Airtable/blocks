@@ -1,4 +1,4 @@
-import {FieldType} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/base/models';
 
 export const AllowedCacheFieldTypes = [FieldType.MULTILINE_TEXT, FieldType.SINGLE_LINE_TEXT];
 

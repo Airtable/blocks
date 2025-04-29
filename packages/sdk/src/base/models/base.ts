@@ -20,7 +20,7 @@ import Table from './table';
  *
  * @example
  * ```js
- * import {base} from '@airtable/blocks';
+ * import {base} from '@airtable/blocks/base';
  *
  * console.log('The name of your base is', base.name);
  * ```

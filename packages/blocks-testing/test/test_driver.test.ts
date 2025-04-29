@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 // eslint-disable-next-line import/order
 import TestDriver, {MutationTypes} from '../src';
-import {Base, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/models';
+import {Base, FieldType, TableOrViewQueryResult, ViewType} from '@airtable/blocks/base/models';
 import {
     expandRecord,
     expandRecordList,
@@ -11,7 +11,7 @@ import {
     useCursor,
     useGlobalConfig,
     useViewport,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import {Mutation} from '@airtable/blocks/unstable_testing_utils';
 
 import {FixtureData} from '../src/mock_airtable_interface';

@@ -7,9 +7,9 @@ import {
     useViewMetadata,
     useWatchable,
     FieldIcon,
-} from '@airtable/blocks/ui';
-import {cursor} from '@airtable/blocks';
-import {FieldType} from '@airtable/blocks/models';
+} from '@airtable/blocks/base/ui';
+import {cursor} from '@airtable/blocks/base';
+import {FieldType} from '@airtable/blocks/base/models';
 import React from 'react';
 
 const FIELD_CELL_WIDTH_PERCENTAGE = '35%';

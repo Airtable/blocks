@@ -164,7 +164,7 @@ export default function IconExample() {
                 }
                 return `
                     import React from 'react';
-                    import {Icon} from '@airtable/blocks/ui';
+                    import {Icon} from '@airtable/blocks/base/ui';
 
                     ${deprecatedWarning}
                     ${exampleCode}

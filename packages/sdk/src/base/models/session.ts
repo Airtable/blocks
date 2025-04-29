@@ -8,7 +8,7 @@ import {MutationTypes} from '../types/mutations';
  *
  * @example
  * ```js
- * import {useSession} from '@airtable/blocks/ui';
+ * import {useSession} from '@airtable/blocks/base/ui';
  *
  * function Username() {
  *     const session = useSession();
@@ -35,7 +35,7 @@ class Session extends SessionCore<BaseSdkMode> {
      *
      * @example
      * ```js
-     * import {useSession} from '@airtable/blocks/ui';
+     * import {useSession} from '@airtable/blocks/base/ui';
      *
      * function UpdateButton({onClick}) {
      *     const session = useSession();
@@ -76,7 +76,7 @@ class Session extends SessionCore<BaseSdkMode> {
      *
      * @example
      * ```js
-     * import {useSession} from '@airtable/blocks/ui';
+     * import {useSession} from '@airtable/blocks/base/ui';
      *
      * function CreateButton({onClick}) {
      *     const session = useSession();
@@ -117,7 +117,7 @@ class Session extends SessionCore<BaseSdkMode> {
      *
      * @example
      * ```js
-     * import {useSession} from '@airtable/blocks/ui';
+     * import {useSession} from '@airtable/blocks/base/ui';
      *
      * function DeleteButton({onClick}) {
      *     const session = useSession();

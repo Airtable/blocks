@@ -1,4 +1,4 @@
-import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
+import {useBase, useGlobalConfig} from '@airtable/blocks/base/ui';
 import {validateFieldDefinitions} from './data';
 import Specification from './Specification';
 import {

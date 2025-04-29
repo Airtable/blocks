@@ -53,7 +53,7 @@ function ColorPaletteExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {ColorPalette, colors} from '@airtable/blocks/ui';
+                    import {ColorPalette, colors} from '@airtable/blocks/base/ui';
 
                     const allowedColors = [colors.BLUE, colors.BLUE_BRIGHT, colors.BLUE_DARK_1, colors.BLUE_LIGHT_1, colors. BLUE_LIGHT_2];
 
@@ -112,7 +112,7 @@ function ColorPaletteSyncedExample() {
 
                 return `
                     import React from 'react';
-                    import {ColorPaletteSynced, colors} from '@airtable/blocks/ui';
+                    import {ColorPaletteSynced, colors} from '@airtable/blocks/base/ui';
 
                     const allowedColors = [colors.BLUE, colors.BLUE_BRIGHT, colors.BLUE_DARK_1, colors.BLUE_LIGHT_1, colors. BLUE_LIGHT_2];
 

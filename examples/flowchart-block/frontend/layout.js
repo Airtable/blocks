@@ -1,5 +1,5 @@
 import workerize from 'workerize';
-import {colorUtils} from '@airtable/blocks/ui';
+import {colorUtils} from '@airtable/blocks/base/ui';
 
 import {LinkStyle, ChartOrientation, RecordShape} from './settings';
 
@@ -116,7 +116,7 @@ export function createLayout(settings) {
         nodes.push(
             `${record.id} [id="${record.id}" label="${displayText}"
             tooltip="${displayText}"
-            fontcolor="${shouldUseLightText ? 'white' : 'black'}" 
+            fontcolor="${shouldUseLightText ? 'white' : 'black'}"
             fillcolor="${recordColor ? colorUtils.getHexForColor(recordColor) : 'white'}"]`,
         );
 

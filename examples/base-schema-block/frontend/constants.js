@@ -1,4 +1,4 @@
-import {FieldType} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/base/models';
 import PropTypes from 'prop-types';
 
 // ================
@@ -13,11 +13,11 @@ export const TABLE_BORDER_RADIUS = 4;
 // Give table headers rounded top-left / top-right corners
 export const TABLE_HEADER_PATH = `
     M 0 ${ROW_HEIGHT}
-    L 0 ${TABLE_BORDER_RADIUS} 
-    A ${TABLE_BORDER_RADIUS} ${TABLE_BORDER_RADIUS} 0 0 1 ${TABLE_BORDER_RADIUS} 0 
-    L ${ROW_WIDTH - TABLE_BORDER_RADIUS} 0 
-    A ${TABLE_BORDER_RADIUS} ${TABLE_BORDER_RADIUS} 0 0 1 ${ROW_WIDTH} ${TABLE_BORDER_RADIUS} 
-    L ${ROW_WIDTH} ${ROW_HEIGHT} 
+    L 0 ${TABLE_BORDER_RADIUS}
+    A ${TABLE_BORDER_RADIUS} ${TABLE_BORDER_RADIUS} 0 0 1 ${TABLE_BORDER_RADIUS} 0
+    L ${ROW_WIDTH - TABLE_BORDER_RADIUS} 0
+    A ${TABLE_BORDER_RADIUS} ${TABLE_BORDER_RADIUS} 0 0 1 ${ROW_WIDTH} ${TABLE_BORDER_RADIUS}
+    L ${ROW_WIDTH} ${ROW_HEIGHT}
     Z
 `;
 

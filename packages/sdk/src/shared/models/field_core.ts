@@ -112,7 +112,7 @@ export abstract class FieldCore<SdkModeT extends SdkMode> extends AbstractModel<
      * @see {@link FieldType}
      * @example
      * ```js
-     * import {FieldType} from '@airtable/blocks/models';
+     * import {FieldType} from '@airtable/blocks/base/models';
      *
      * if (myField.type === FieldType.CURRENCY) {
      *     console.log(myField.options.symbol);

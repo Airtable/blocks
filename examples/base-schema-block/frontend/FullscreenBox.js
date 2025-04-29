@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box} from '@airtable/blocks/base/ui';
 
 /**
  * Utility component to wrap children in a container that fills the full container.

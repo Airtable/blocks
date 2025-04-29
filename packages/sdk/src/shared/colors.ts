@@ -10,7 +10,7 @@ import {ObjectValues} from './private_utils';
  *
  * @example
  * ```js
- * import {Box, colors} from '@airtable/blocks/ui';
+ * import {Box, colors} from '@airtable/blocks/base/ui';
  *
  * <Box backgroundColor={colors.BLUE} />
  * ```

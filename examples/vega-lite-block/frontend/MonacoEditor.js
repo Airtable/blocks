@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {ControlledEditor, monaco as Monaco} from '@monaco-editor/react';
-import {useViewport, useWatchable} from '@airtable/blocks/ui';
+import {useViewport, useWatchable} from '@airtable/blocks/base/ui';
 
 /**
  * isNewErrorList

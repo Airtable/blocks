@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useCallback} from 'react';
-import {globalConfig} from '@airtable/blocks';
+import {globalConfig} from '@airtable/blocks/base';
 import PropTypes from 'prop-types';
 
 import {SvgPanZoomContext} from './SvgPanZoomWrapper';

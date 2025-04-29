@@ -22,7 +22,7 @@ interface BaseProviderProps {
  * ```js
  * import React from 'react';
  * import ReactDOM from 'react-dom';
- * import {BaseProvider} from '@airtable/blocks/ui';
+ * import {BaseProvider} from '@airtable/blocks/base/ui';
  *
  * function getHtmlStringForRecordCard(base, record) {
  *     return ReactDOM.renderToStaticMarkup(

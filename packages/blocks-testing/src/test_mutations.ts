@@ -1,5 +1,5 @@
 import {Mutation, MutationTypes} from '@airtable/blocks/unstable_testing_utils';
-import {FieldId, TableId, ViewId} from '@airtable/blocks/types';
+import {FieldId, TableId, ViewId} from '@airtable/blocks/base/types';
 
 /**
  * Get the type of all the values of an object.

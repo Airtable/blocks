@@ -1,7 +1,7 @@
 import React from 'react';
-import {cursor, session} from '@airtable/blocks';
-import {Box, Text, useRecordById} from '@airtable/blocks/ui';
-import {ViewType} from '@airtable/blocks/models';
+import {cursor, session} from '@airtable/blocks/base';
+import {Box, Text, useRecordById} from '@airtable/blocks/base/ui';
+import {ViewType} from '@airtable/blocks/base/models';
 
 import FullScreenBox from './FullScreenBox';
 import VideoPlayer from './VideoPlayer';

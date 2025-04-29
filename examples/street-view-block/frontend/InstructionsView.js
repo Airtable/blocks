@@ -8,7 +8,7 @@ import {
     Link,
     Text,
     TextButton,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import React, {Fragment, useState} from 'react';
 import {ConfigKeys} from './useSettingsStore';
 import APIKeyInformationDialog from './APIKeyInformationDialog';

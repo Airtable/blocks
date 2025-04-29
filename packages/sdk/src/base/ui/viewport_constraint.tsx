@@ -43,13 +43,13 @@ const didSizeChange = (
  *
  * @example
  * ```js
- * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * import {ViewportConstraint} from '@airtable/blocks/base/ui';
  * <ViewportConstraint minSize={{width: 400}} />
  * ```
  *
  * @example
  * ```js
- * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * import {ViewportConstraint} from '@airtable/blocks/base/ui';
  * <ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
  *      <div>I need a max fullscreen size!</div>
  * </ViewportConstraint>

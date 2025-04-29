@@ -1,5 +1,5 @@
 import React from 'react';
-import {colors, colorUtils, Box, Text} from '@airtable/blocks/ui';
+import {colors, colorUtils, Box, Text} from '@airtable/blocks/base/ui';
 
 export const severityColorCode = level => {
     let colorCode = '';

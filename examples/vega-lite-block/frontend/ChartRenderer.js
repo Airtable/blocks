@@ -1,6 +1,6 @@
 import React from 'react';
 import {VegaLite} from 'react-vega';
-import {useRecords, useViewport} from '@airtable/blocks/ui';
+import {useRecords, useViewport} from '@airtable/blocks/base/ui';
 import {reduceRecords} from './data';
 
 function getUsableInlineData(spec) {

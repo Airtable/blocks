@@ -11,7 +11,7 @@ Sdk.VERSION = '1.4.1';
 
 describe('package index', () => {
     it('fails for unsupported versions of the Blocks SDK', async () => {
-        await expect(import('../src/index')).rejects.toThrowError(
+        await expect(import('../src/index.ts')).rejects.toThrowError(
             /Version .+ of the blocks-testing library does not support version .+ of the Blocks SDK library\./,
         );
     });

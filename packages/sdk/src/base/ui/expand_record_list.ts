@@ -19,7 +19,7 @@ interface ExpandRecordListOpts {
  *
  * @example
  * ```js
- * import {expandRecordList} from '@airtable/blocks/ui';
+ * import {expandRecordList} from '@airtable/blocks/base/ui';
  * expandRecordList([record1, record2, record3]);
  *
  * expandRecordList([record1, record2], {

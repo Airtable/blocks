@@ -10,7 +10,7 @@ import {
     Icon,
     Text,
     ViewPickerSynced,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import React from 'react';
 import printWithoutElementsWithClass from './print_without_elements_with_class';
 

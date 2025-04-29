@@ -1,4 +1,4 @@
-import {initializeBlock} from '@airtable/blocks/ui';
+import {initializeBlock} from '@airtable/blocks/base/ui';
 import React, {ReactElement} from 'react';
 
 // Add the baymax class to the root to use the global baymax styles.

@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {Box, loadScriptFromURLAsync, loadCSSFromURLAsync} from '@airtable/blocks/ui';
+import {Box, loadScriptFromURLAsync, loadCSSFromURLAsync} from '@airtable/blocks/base/ui';
 
 const markersMatch = (aMarkers, bMarkers) => {
     if (aMarkers.length !== bMarkers.length) {

@@ -66,7 +66,7 @@ function TextButtonExample() {
                 );
 
                 return `
-                    import {TextButton} from '@airtable/blocks/ui';
+                    import {TextButton} from '@airtable/blocks/base/ui';
 
                     ${ariaLabelComment}
                     const buttonExample = (

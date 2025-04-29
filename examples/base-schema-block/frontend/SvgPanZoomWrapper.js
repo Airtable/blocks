@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import svgPanZoom from 'svg-pan-zoom';
-import {useViewport} from '@airtable/blocks/ui';
+import {useViewport} from '@airtable/blocks/base/ui';
 
 export const SvgPanZoomContext = React.createContext(null);
 

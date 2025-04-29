@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useBase} from '@airtable/blocks/ui';
+import {useBase} from '@airtable/blocks/base/ui';
 
 export function Hello() {
     const [count, setCount] = useState(0);

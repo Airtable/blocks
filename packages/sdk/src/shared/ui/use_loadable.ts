@@ -61,7 +61,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/base/ui';
  *
  *  function SelectedRecordIds() {
  *      const cursor = useCursor();
@@ -78,7 +78,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- *  import {useLoadable} from '@airtable/blocks/ui';
+ *  import {useLoadable} from '@airtable/blocks/base/ui';
  *
  *  function LoadTwoQueryResults({queryResultA, queryResultB}) {
  *      // load the queryResults:
@@ -91,7 +91,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- *  import {useLoadable, useBase} from '@airtable/blocks/ui';
+ *  import {useLoadable, useBase} from '@airtable/blocks/base/ui';
  *
  *  function LoadAllRecords() {
  *      const base = useBase();

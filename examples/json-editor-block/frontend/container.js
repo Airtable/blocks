@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box} from '@airtable/blocks/base/ui';
 
 // Container element which takes up the full viewport and centers its children.
 export default function Container({children, style}) {

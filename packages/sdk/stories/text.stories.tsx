@@ -44,7 +44,7 @@ function TextExample() {
                 });
 
                 return `
-                    import {Text} from '@airtable/blocks/ui';
+                    import {Text} from '@airtable/blocks/base/ui';
 
                     const textExample = (
                         <Text ${props}>${childrenForVariant[values.variant]}</Text>

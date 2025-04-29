@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box} from '@airtable/blocks/base/ui';
 import BannerBar from './BannerBar';
 import SettingsForm from './SettingsForm';
 import {BANNER_BAR_BOX_HEIGHT} from './constants';

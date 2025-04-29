@@ -1,4 +1,4 @@
-import {FieldType, ViewType} from '@airtable/blocks/models';
+import {FieldType, ViewType} from '@airtable/blocks/base/models';
 import MockAirtableInterface, {FixtureData} from '../src/mock_airtable_interface';
 
 describe('MockAirtableInterface', () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {colorUtils, colors, Box, Icon} from '@airtable/blocks/ui';
+import {colorUtils, colors, Box, Icon} from '@airtable/blocks/base/ui';
 
 function ErrorBox({children}) {
     return (

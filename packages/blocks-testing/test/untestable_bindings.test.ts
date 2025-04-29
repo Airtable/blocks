@@ -1,6 +1,13 @@
 import '../src';
-import {FieldType} from '@airtable/blocks/models';
-import {base, globalConfig, reload, settingsButton, undoRedo, viewport} from '@airtable/blocks';
+import {FieldType} from '@airtable/blocks/base/models';
+import {
+    base,
+    globalConfig,
+    reload,
+    settingsButton,
+    undoRedo,
+    viewport,
+} from '@airtable/blocks/base';
 import {blockStats, trackEvent} from '@airtable/blocks/unstable_private_utils';
 
 const errorMessage = `Unable to simulate behavior

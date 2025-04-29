@@ -25,7 +25,7 @@ function ProgressBarExample() {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
-                    import {ProgressBar} from '@airtable/blocks/ui';
+                    import {ProgressBar} from '@airtable/blocks/base/ui';
 
                     const loaderExample = (
                         <ProgressBar ${props} />

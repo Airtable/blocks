@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
-import {Box, loadCSSFromString} from '@airtable/blocks/ui';
+import {Box, loadCSSFromString} from '@airtable/blocks/base/ui';
 
 // This CSS rule is a workaround for a bug in Chromium. It should be removed
 // when the underlying issue is resolved in the Chromium project:

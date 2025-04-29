@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {initializeBlock, useSettingsButton} from '@airtable/blocks/ui';
-import {viewport} from '@airtable/blocks';
+import {initializeBlock, useSettingsButton} from '@airtable/blocks/base/ui';
+import {viewport} from '@airtable/blocks/base';
 
 import SchemaVisualizer from './SchemaVisualizer';
 import FullscreenBox from './FullscreenBox';

@@ -3,8 +3,14 @@ export {BaseData} from './types/base';
 
 export {Mutation, MutationTypes} from './types/mutations';
 
-export {AppInterface} from '../shared/types/airtable_interface_core';
-export {BlockRunContextType, SdkInitData, PartialViewData} from './types/airtable_interface';
+export {AppInterface, GlobalConfigHelpers} from '../shared/types/airtable_interface_core';
+export {
+    BlockRunContextType,
+    FieldTypeProvider,
+    IdGenerator,
+    SdkInitData,
+    PartialViewData,
+} from './types/airtable_interface';
 
 export {RecordData} from './types/record';
 

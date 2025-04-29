@@ -11,7 +11,8 @@ cd "$work_dir"
 cat - > tsconfig.json <<'EOF'
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
         "target": "es2018",
         "allowSyntheticDefaultImports": true
     },
@@ -29,9 +30,9 @@ cat - > package.json <<EOF
 EOF
 
 cat - > source.ts <<'EOF'
-import * as sdk from '@airtable/blocks';
-import * as ui from '@airtable/blocks/ui';
-import {Box} from '@airtable/blocks/unstable_standalone_ui';
+import * as sdk from '@airtable/blocks/base';
+import * as ui from '@airtable/blocks/base/ui';
+import {Box} from '@airtable/blocks/base/unstable_standalone_ui';
 console.log(sdk);
 EOF
 

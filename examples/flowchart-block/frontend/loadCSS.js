@@ -1,4 +1,4 @@
-import {loadCSSFromString} from '@airtable/blocks/ui';
+import {loadCSSFromString} from '@airtable/blocks/base/ui';
 
 const cssString = `
     span.prompt {

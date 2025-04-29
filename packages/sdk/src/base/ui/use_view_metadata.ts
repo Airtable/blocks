@@ -22,7 +22,7 @@ function useViewMetadata(
  * @param viewOrViewMetadataQueryResult The {@link View} or {@link ViewMetadataQueryResult} to watch and use metadata from.
  * @example
  * ```js
- * import {useBase, useViewMetadata} from '@airtable/blocks/ui';
+ * import {useBase, useViewMetadata} from '@airtable/blocks/base/ui';
  *
  * function ViewFields({view}) {
  *     const viewMetadata = useViewMetadata(view);

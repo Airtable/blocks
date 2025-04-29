@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
-import {FieldType} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/base/models';
 
 import {HighlightContext} from './HighlightWrapper';
 import {LINK_PROP_TYPE} from './constants';

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Box, Text} from '@airtable/blocks/ui';
-import {Field, Record} from '@airtable/blocks/models';
+import {Box, Text} from '@airtable/blocks/base/ui';
+import {Field, Record} from '@airtable/blocks/base/models';
 
 import CustomCellRenderer from './CustomCellRenderer';
 

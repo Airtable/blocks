@@ -69,7 +69,7 @@ function LinkExample() {
                 );
 
                 return `
-                    import {Link} from '@airtable/blocks/ui';
+                    import {Link} from '@airtable/blocks/base/ui';
 
                     ${ariaLabelComment}
                     const linkExample = (

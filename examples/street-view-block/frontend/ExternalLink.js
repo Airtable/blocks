@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from '@airtable/blocks/ui';
+import {Link} from '@airtable/blocks/base/ui';
 
 const ExternalLink = ({children, href, size = 'default'}) => {
     const aProps = {

@@ -2,7 +2,9 @@
     "compilerOptions": {
         "noEmit": true,
         "target": "es2019",
-        "module": "commonjs",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
+        "allowImportingTsExtensions": true,
         "esModuleInterop": true,
         "noImplicitAny": true,
         "strictNullChecks": true,

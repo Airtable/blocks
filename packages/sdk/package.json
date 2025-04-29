@@ -7,27 +7,39 @@
         "url": "https://github.com/Airtable/blocks.git"
     },
     "homepage": "https://airtable.com/developers/blocks",
-    "main": "dist/cjs/base/index.js",
-    "types": "index.d.ts",
     "exports": {
-        ".": {
-            "types": "./index.d.ts",
+        "./unstable_private_utils": {
+            "types": "./dist/types/src/shared/unstable_private_utils.d.ts",
+            "default": "./dist/cjs/shared/unstable_private_utils.js"
+        },
+        "./unstable_testing_utils": {
+            "types": "./dist/types/src/base/unstable_testing_utils.d.ts",
+            "default": "./dist/cjs/base/unstable_testing_utils.js"
+        },
+        "./base/unstable_standalone_ui": {
+            "types": "./dist/types/src/base/ui/unstable_standalone_ui.d.ts",
+            "default": "./dist/cjs/base/ui/unstable_standalone_ui.js"
+        },
+        "./base/types": {
+            "types": "./types.d.ts",
+            "default": "./types.js"
+        },
+        "./base/models": {
+            "types": "./dist/types/src/base/models/models.d.ts",
+            "default": "./dist/cjs/base/models/models.js"
+        },
+        "./base/ui": {
+            "types": "./dist/types/src/base/ui/ui.d.ts",
+            "default": "./dist/cjs/base/ui/ui.js"
+        },
+        "./base": {
+            "types": "./dist/types/src/base/index.d.ts",
             "default": "./dist/cjs/base/index.js"
         },
-        "./models": {
-            "types": "./models.d.ts",
-            "default": "./models.js"
-        },
-        "./ui": {
-            "types": "./ui.d.ts",
-            "default": "./ui.js"
-        },
-        "./unstable_private_utils": "./dist/cjs/shared/unstable_private_utils.js",
-        "./unstable_standalone_ui": "./dist/cjs/base/ui/unstable_standalone_ui.js",
-        "./unstable_testing_utils": "./dist/cjs/base/unstable_testing_utils.js",
-        "./base": "./dist/cjs/base/index.js",
-        "./base/ui": "./dist/cjs/base/ui/ui.js",
-        "./interface/ui": "./dist/cjs/interface/ui/ui.js"
+        "./interface/ui": {
+            "types": "./dist/types/src/interface/ui/ui.d.ts",
+            "default": "./dist/cjs/interface/ui/ui.js"
+        }
     },
     "files": [
         "dist",

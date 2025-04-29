@@ -12,8 +12,8 @@ import {
     Button,
     Box,
     Icon,
-} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 
 export default function TodoApp() {
     const base = useBase();

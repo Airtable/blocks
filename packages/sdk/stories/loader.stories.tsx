@@ -24,7 +24,7 @@ function LoaderExample() {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
-                    import {Loader} from '@airtable/blocks/ui';
+                    import {Loader} from '@airtable/blocks/base/ui';
 
                     const loaderExample = (
                         <Loader ${props} />

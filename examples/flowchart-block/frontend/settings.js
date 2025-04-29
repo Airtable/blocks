@@ -1,5 +1,5 @@
-import {FieldType} from '@airtable/blocks/models';
-import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
+import {FieldType} from '@airtable/blocks/base/models';
+import {useBase, useGlobalConfig} from '@airtable/blocks/base/ui';
 
 export const ConfigKeys = {
     TABLE_ID: 'tableId',

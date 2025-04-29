@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box} from '@airtable/blocks/base/ui';
 
 const FullscreenBox = ({shouldCenterContent = false, ...props}, ref) => {
     return (

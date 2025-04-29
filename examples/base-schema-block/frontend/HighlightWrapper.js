@@ -1,7 +1,7 @@
 import React, {useState, createContext, useContext, useCallback, useEffect, useRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import {Box, Text, colors} from '@airtable/blocks/ui';
+import {Box, Text, colors} from '@airtable/blocks/base/ui';
 
 import {SvgPanZoomContext} from './SvgPanZoomWrapper';
 import {LINK_PROP_TYPE, NODE_PROP_TYPE} from './constants';

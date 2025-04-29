@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {FieldType} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/base/models';
 
 import {FIELD_LABELS_BY_TYPE, LINK_LABELS_BY_TYPE} from './constants';
 

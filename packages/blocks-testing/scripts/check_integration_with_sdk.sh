@@ -43,6 +43,15 @@ cat - > package.json <<EOF
         "react": "^16.8.0",
         "react-dom": "^16.8.0",
         "typescript": "^4.9.5"
+    },
+    "jest": {
+        "moduleNameMapper": {
+            "^@airtable/blocks/unstable_private_utils$": "<rootDir>/node_modules/@airtable/blocks/dist/cjs/shared/unstable_private_utils.js",
+            "^@airtable/blocks/unstable_testing_utils$": "<rootDir>/node_modules/@airtable/blocks/dist/cjs/base/unstable_testing_utils.js",
+            "^@airtable/blocks/base/ui$": "<rootDir>/node_modules/@airtable/blocks/dist/cjs/base/ui/ui.js",
+            "^@airtable/blocks/base/models$": "<rootDir>/node_modules/@airtable/blocks/dist/cjs/base/models/models.js",
+            "^@airtable/blocks/base$": "<rootDir>/node_modules/@airtable/blocks/dist/cjs/base/index.js"
+        }
     }
 }
 EOF

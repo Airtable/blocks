@@ -9,7 +9,7 @@ import {
     TablePickerSynced,
     Text,
     TextButton,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import React, {Fragment} from 'react';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {splitAccessPath} from 'vega-util';
-import {FieldType} from '@airtable/blocks/models';
-import {Box, Link} from '@airtable/blocks/ui';
+import {FieldType} from '@airtable/blocks/base/models';
+import {Box, Link} from '@airtable/blocks/base/ui';
 import {AllowedTypes} from './types';
 import EncodingChannels from './EncodingChannels';
 import visitor from './visitor';

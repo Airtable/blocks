@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {cursor} from '@airtable/blocks';
-import {FieldType, ViewType} from '@airtable/blocks/models';
+import {cursor} from '@airtable/blocks/base';
+import {FieldType, ViewType} from '@airtable/blocks/base/models';
 import {
     colors,
     colorUtils,
@@ -15,7 +15,7 @@ import {
     Loader,
     Text,
     Tooltip,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 import Container from './container';
 import Monaco from './monaco';
 import useDebounced from './useDebounced';

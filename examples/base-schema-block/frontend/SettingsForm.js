@@ -1,6 +1,6 @@
 import React from 'react';
-import {Box, Button, Heading, SwitchSynced} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+import {Box, Button, Heading, SwitchSynced} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 import PropTypes from 'prop-types';
 
 import FullscreenBox from './FullscreenBox';

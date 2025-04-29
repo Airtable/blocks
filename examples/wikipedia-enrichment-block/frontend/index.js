@@ -1,4 +1,4 @@
-import {initializeBlock, useBase, useRecords, Loader, Button, Box} from '@airtable/blocks/ui';
+import {initializeBlock, useBase, useRecords, Loader, Button, Box} from '@airtable/blocks/base/ui';
 import React, {Fragment, useState} from 'react';
 
 // These values match the base for this example: https://airtable.com/shrBJH7LLUMD6ONIf

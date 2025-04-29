@@ -1,4 +1,4 @@
-import {initializeBlock} from '@airtable/blocks/ui';
+import {initializeBlock} from '@airtable/blocks/base/ui';
 import React from 'react';
 
 function HelloWorldTypescriptApp() {

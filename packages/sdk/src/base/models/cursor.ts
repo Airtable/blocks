@@ -45,7 +45,7 @@ interface CursorData {
  * {@link useLoadable} to access them.
  *
  * ```js
- * import {useCursor, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useWatchable} from '@airtable/blocks/base/ui';
  *
  *  function ActiveTableAndView() {
  *      const cursor = useCursor();
@@ -61,7 +61,7 @@ interface CursorData {
  * ```
  *
  * ```js
- * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/base/ui';
  *
  *  function SelectedRecordAndFieldIds() {
  *      const cursor = useCursor();

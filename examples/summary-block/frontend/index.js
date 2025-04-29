@@ -1,4 +1,4 @@
-import {initializeBlock, useBase, useRecords, Box, Text} from '@airtable/blocks/ui';
+import {initializeBlock, useBase, useRecords, Box, Text} from '@airtable/blocks/base/ui';
 import React from 'react';
 
 const TABLE_NAME = 'Opportunities';

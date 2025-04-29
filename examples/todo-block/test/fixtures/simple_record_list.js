@@ -1,4 +1,4 @@
-import {FieldType, ViewType} from '@airtable/blocks/models';
+import {FieldType, ViewType} from '@airtable/blocks/base/models';
 
 export default {
     base: {

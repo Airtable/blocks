@@ -17,7 +17,7 @@ export interface ExpandRecordOpts {
  *
  * @example
  * ```js
- * import {expandRecord} from '@airtable/blocks/ui';
+ * import {expandRecord} from '@airtable/blocks/base/ui';
  * expandRecord(record1, {
  *     records: [record1, record2, record3],
  * });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Link} from '@airtable/blocks/ui';
+import {Box, Link} from '@airtable/blocks/base/ui';
 
 const BannerBarMenuItems = [
     {text: 'Documentation', href: 'https://vega.github.io/vega-lite/docs/'},

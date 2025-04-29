@@ -5,7 +5,7 @@ import {
     RecordActionData,
     RecordId,
     TableId,
-} from '@airtable/blocks/types';
+} from '@airtable/blocks/base/types';
 import {
     AbstractMockAirtableInterface,
     BlockRunContextType,

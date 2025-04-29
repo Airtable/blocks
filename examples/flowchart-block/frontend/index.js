@@ -9,7 +9,7 @@ import {
     useSettingsButton,
     useViewport,
     useWatchable,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {createLayout} from './layout';
 import loadCSS from './loadCSS';
@@ -65,7 +65,7 @@ function FlowchartExtension() {
             graph.current.innerHTML = '<span class="prompt">Add some records to get started</span>';
         } else if (queryResult.records.length > MAX_RECORDS) {
             graph.current.innerHTML = `<span class="prompt">
-                    The flowchart extension can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
+                    The flowchart extension can only visualize up to ${MAX_RECORDS} records. Try deleting some records or
                     filtering them out of the view.
                 </span>`;
         } else {

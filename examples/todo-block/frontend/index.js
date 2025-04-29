@@ -1,5 +1,5 @@
 import React from 'react';
-import {initializeBlock} from '@airtable/blocks/ui';
+import {initializeBlock} from '@airtable/blocks/base/ui';
 
 import TodoApp from './todo-app';
 

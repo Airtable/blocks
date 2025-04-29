@@ -34,7 +34,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  * @example
  * ```js
  * import React from 'react';
- * import {useRecordActionData} from '@airtable/blocks/ui';
+ * import {useRecordActionData} from '@airtable/blocks/base/ui';
  *
  * function LatestRecordAction() {
  *     const recordActionData = useRecordActionData();

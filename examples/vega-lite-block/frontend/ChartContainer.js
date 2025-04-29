@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {Box, Loader} from '@airtable/blocks/ui';
+import {Box, Loader} from '@airtable/blocks/base/ui';
 import ChartRenderer from './ChartRenderer';
 import ErrorRenderer from './ErrorRenderer';
 import {CANNOT_SHOW_EDITOR_OR_CHART} from './constants';

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {Field, FieldType, Record} from '@airtable/blocks/models';
-import {CellRenderer, Text} from '@airtable/blocks/ui';
+import {Field, FieldType, Record} from '@airtable/blocks/base/models';
+import {CellRenderer, Text} from '@airtable/blocks/base/ui';
 
 /**
  * Handles text and attachments to make them larger, but falls back to cell renderer for other

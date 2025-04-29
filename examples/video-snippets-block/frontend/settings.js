@@ -1,5 +1,5 @@
-import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+import {useBase, useGlobalConfig} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 
 export const ConfigKeys = Object.freeze({
     TABLE_ID: 'tableId',

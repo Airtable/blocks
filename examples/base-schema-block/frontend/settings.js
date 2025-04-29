@@ -1,8 +1,8 @@
 import {useState} from 'react';
-import {base} from '@airtable/blocks';
+import {base} from '@airtable/blocks/base';
 import _ from 'lodash';
-import {useWatchable, useGlobalConfig} from '@airtable/blocks/ui';
-import {FieldType} from '@airtable/blocks/models';
+import {useWatchable, useGlobalConfig} from '@airtable/blocks/base/ui';
+import {FieldType} from '@airtable/blocks/base/models';
 
 import parseSchema from './parseSchema';
 import {

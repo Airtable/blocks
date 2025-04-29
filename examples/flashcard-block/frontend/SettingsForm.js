@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
-import {Table} from '@airtable/blocks/models';
+import {Table} from '@airtable/blocks/base/models';
 import {
     Box,
     Button,
@@ -9,7 +9,7 @@ import {
     Heading,
     TablePickerSynced,
     ViewPickerSynced,
-} from '@airtable/blocks/ui';
+} from '@airtable/blocks/base/ui';
 
 import {ConfigKeys} from './settings';
 

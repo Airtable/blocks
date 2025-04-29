@@ -84,7 +84,7 @@ export default class BaseBlockSdk extends BlockSdkCore<BaseSdkMode> {
 
         // Bind the public methods on this class so users can import
         // just the method, e.g.
-        // import {reload} from '@airtable/blocks';
+        // import {reload} from '@airtable/blocks/base';
         this.unstable_fetchAsync = this.unstable_fetchAsync.bind(this);
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);

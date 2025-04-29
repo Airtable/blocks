@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {viewport} from '@airtable/blocks';
-import {initializeBlock, Box, useRecords, useSettingsButton, Text} from '@airtable/blocks/ui';
+import {viewport} from '@airtable/blocks/base';
+import {initializeBlock, Box, useRecords, useSettingsButton, Text} from '@airtable/blocks/base/ui';
 
 import FlashcardContainer from './FlashcardContainer';
 import {useSettings} from './settings';
