@@ -6,6 +6,7 @@
 /docs/.cache/
 /docs/public/
 /examples/*/build
-/packages/blocks-docs/docs.json
+/packages/blocks-docs/docs-base-blocks.json
+/packages/blocks-docs/docs-interface-blocks.json
 /packages/cli-next/test/fixtures/
 /packages/webpack-bundler/test/fixtures/

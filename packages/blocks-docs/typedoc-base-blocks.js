@@ -24,6 +24,8 @@ module.exports = {
         ...makeExclusions(packagesDir, ['sdk', 'blocks-testing']),
         ...makeExclusions(testingDir, ['src', 'types']),
         ...makeExclusions(sdkDir, ['src', 'types']),
+        // Exclude the interface directory in the base blocks documentation.
+        path.resolve(sdkDir, 'src', 'interface') + '/**',
         '**/node_modules/**',
     ],
     readme: './src/api-readme.md',
