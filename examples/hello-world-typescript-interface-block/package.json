@@ -1,0 +1,23 @@
+{
+    "name": "@airtable/hello-world-typescript-interface-extension",
+    "version": "1.0.0",
+    "description": "A typescript version of a hello world app",
+    "author": "",
+    "license": "MIT",
+    "scripts": {
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --ext .js,.jsx,.ts,.tsx frontend"
+    },
+    "dependencies": {
+        "@airtable/blocks": "interface-alpha",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
+        "@typescript-eslint/parser": "^7.18.0",
+        "eslint": "^9.5.0",
+        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "typescript": "^5.4.5"
+    }
+}

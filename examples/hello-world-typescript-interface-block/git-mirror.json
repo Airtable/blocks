@@ -1,0 +1,18 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/interface-extensions-hello-world-typescript.git",
+    "subdirectory": "examples/hello-world-typescript-interface-block",
+    "shouldStripLineComments": false,
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package.json",
+        "README.md"
+    ]
+}
