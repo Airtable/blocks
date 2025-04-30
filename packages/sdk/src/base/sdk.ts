@@ -73,6 +73,9 @@ export default class BaseBlockSdk extends BlockSdkCore<BaseSdkMode> {
     // We set _runWithUpdateBatching to ReactDOM.unstable_batchedUpdates to facilitate this. We
     // don't know for sure though that React is in use on the page, so we leave actually setting
     // this when the developer sets up their block with React, in UI.initializeBlock.
+    //
+    // This can be eliminated if we stop supporting versions of React below 18. In React 18,
+    // updates are always batched by default.
     /** @internal */
     _runWithUpdateBatching: UpdateBatcher = defaultUpdateBatcher;
 

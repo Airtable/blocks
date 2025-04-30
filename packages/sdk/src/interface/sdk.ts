@@ -11,14 +11,6 @@ import {
     BlockRunContext,
 } from './types/airtable_interface';
 
-// /** Add hidden annotation if uncommenting */
-// type UpdateBatcher = (applyUpdates: () => void) => void;
-
-// /** Add internal annotation if uncommenting */
-// function defaultUpdateBatcher(applyUpdates: () => void) {
-//     applyUpdates();
-// }
-
 /** @hidden */
 export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     constructor(airtableInterface: InterfaceSdkMode['AirtableInterfaceT']) {
@@ -58,24 +50,15 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     }
     /** @internal */
     __applyModelChanges(changes: ReadonlyArray<ModelChange>) {
-        // this._runWithUpdateBatching(() => {
         const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
         const changedSessionKeys = this.session.__applyChangesWithoutTriggeringEvents(changes);
         this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
         this.session.__triggerOnChangeForChangedKeys(changedSessionKeys);
-        // });
     }
     /** @internal */
     __applyGlobalConfigUpdates(updates: ReadonlyArray<GlobalConfigUpdate>) {
-        // this._runWithUpdateBatching(() => {
         this.globalConfig.__setMultipleKvPaths(updates);
-        // });
     }
-
-    // /** @internal */
-    // __setBatchedUpdatesFn(newUpdateBatcher: UpdateBatcher) {
-    //     this._runWithUpdateBatching = newUpdateBatcher;
-    // }
 
     /**
      * @internal

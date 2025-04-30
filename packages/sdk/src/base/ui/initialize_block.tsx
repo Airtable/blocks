@@ -107,11 +107,21 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
         );
     }
 
-    sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+    if (ReactDOM.unstable_batchedUpdates) {
+        sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+    }
 
     const container = document.createElement('div');
     body.appendChild(container);
-    ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+
+    // Try to use createRoot API (React 18+)
+    try {
+        const {createRoot} = require('react-dom/client');
+        createRoot(container).render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>);
+    } catch (e) {
+        // Fallback to legacy render for React 16/17
+        ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+    }
 }
 
 let sdk: Sdk;

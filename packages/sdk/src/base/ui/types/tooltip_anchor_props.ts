@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // TODO (stephen): decide which components should be valid tooltip anchors
