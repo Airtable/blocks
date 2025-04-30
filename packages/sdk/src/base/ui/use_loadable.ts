@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: useLoadable */ /** */
 import {useMemo, useEffect} from 'react';
 import {useSubscription} from 'use-subscription';
-import {compact, has} from '../private_utils';
-import {spawnError} from '../error_utils';
-import useArrayIdentity from './use_array_identity';
+import {compact, has} from '../../shared/private_utils';
+import {spawnError} from '../../shared/error_utils';
+import useArrayIdentity from '../../shared/ui/use_array_identity';
 
 // rather than asking for an AbstractModelWithAsyncData, we define a much more specific interface
 // that enforces 'isDataLoaded' as a watchable key.

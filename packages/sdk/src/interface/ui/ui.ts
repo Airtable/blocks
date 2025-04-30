@@ -10,7 +10,6 @@ export {useRecords} from './use_records';
 export {useRunInfo} from './use_run_info';
 export {useSession} from './use_session';
 export {default as useGlobalConfig} from '../../shared/ui/use_global_config';
-export {default as useLoadable} from '../../shared/ui/use_loadable';
 export {default as useSynced} from '../../shared/ui/use_synced';
 export {default as useWatchable} from '../../shared/ui/use_watchable';
 export {default as withHooks} from '../../shared/ui/with_hooks';
