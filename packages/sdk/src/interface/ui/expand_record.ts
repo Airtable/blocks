@@ -9,7 +9,8 @@ import {Record} from '../models/record';
  * @example
  * ```js
  * import {expandRecord} from '@airtable/blocks/interface/ui';
- * expandRecord(record);
+ *
+ * <button onClick={() => expandRecord(record)}>{record.name}</button>
  * ```
  * @docsPath UI/utils/expandRecord
  */

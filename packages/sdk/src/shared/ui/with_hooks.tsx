@@ -53,8 +53,8 @@ import {spawnError} from '../error_utils';
  * @example
  * ```js
  * import React from 'react';
- * import {Record, Table} from '@airtable/blocks/base/models';
- * import {withHooks, useRecords} from '@airtable/blocks/base/ui';
+ * import {Record, Table} from '@airtable/blocks/[placeholder-path]/models';
+ * import {withHooks, useRecords} from '@airtable/blocks/[placeholder-path]/ui';
  * // with typescript, things are a little more complex: we need to provide some type annotations to
  * // indicate which props are injected:
  *

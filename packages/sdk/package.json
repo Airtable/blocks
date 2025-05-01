@@ -36,6 +36,10 @@
             "types": "./dist/types/src/base/index.d.ts",
             "default": "./dist/cjs/base/index.js"
         },
+        "./interface/models": {
+            "types": "./dist/types/src/interface/models/models.d.ts",
+            "default": "./dist/cjs/interface/models/models.js"
+        },
         "./interface/ui": {
             "types": "./dist/types/src/interface/ui/ui.d.ts",
             "default": "./dist/cjs/interface/ui/ui.js"
