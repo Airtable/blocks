@@ -38,7 +38,7 @@ function InputExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {Input} from '@airtable/blocks/ui';
+                    import {Input} from '@airtable/blocks/base/ui';
 
                     const InputExample = () => {
                         const [value, setValue] = useState('');
@@ -85,7 +85,7 @@ function InputSyncedExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {InputSynced} from '@airtable/blocks/ui';
+                    import {InputSynced} from '@airtable/blocks/base/ui';
 
                     const InputSyncedExample = () => {
                         return (

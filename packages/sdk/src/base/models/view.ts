@@ -146,7 +146,7 @@ class View extends AbstractModel<BaseSdkMode, ViewData, WatchableViewKey> {
      * default, records will be coloured according to the view.
      * @example
      * ```js
-     * import {useBase, useRecords} from '@airtable/blocks/UI';
+     * import {useBase, useRecords} from '@airtable/blocks/base/ui';
      * import React from 'react';
      *
      * function TodoList() {

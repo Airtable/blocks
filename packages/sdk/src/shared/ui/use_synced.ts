@@ -9,7 +9,7 @@ import {useSdk} from './sdk_context';
  * @param globalConfigKey
  * @example
  * ```js
- * import {useBase, useSynced} from '@airtable/blocks/ui';
+ * import {useBase, useSynced} from '@airtable/blocks/[placeholder-path]/ui';
  *
  * function CustomInputSynced() {
  *    const [value, setValue, canSetValue] = useSynced('myGlobalConfigKey');

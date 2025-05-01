@@ -14,7 +14,7 @@ function ChoiceTokenExample() {
             styleProps={Object.keys(choiceTokenStylePropTypes)}
             renderCodeFn={() => {
                 return `
-                    import {ChoiceToken, useBase} from '@airtable/blocks/ui';
+                    import {ChoiceToken, useBase} from '@airtable/blocks/base/ui';
 
                     const ChoiceTokenExample = () => {
                         const base = useBase();

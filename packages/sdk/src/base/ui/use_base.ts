@@ -16,7 +16,7 @@ import useBaseInternal from '../../shared/ui/use_base';
  *
  * @example
  * ```js
- * import {useBase} from '@airtable/blocks/ui';
+ * import {useBase} from '@airtable/blocks/base/ui';
  *
  * // renders a list of tables and automatically updates
  * function TableList() {

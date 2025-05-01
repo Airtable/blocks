@@ -139,7 +139,7 @@ export interface ViewMetadataForUpdate {
  * supported record color modes: none, by a view, and by a select field.
  *
  * ```js
- * import {recordColoring} from '@airtable/blocks/models';
+ * import {recordColoring} from '@airtable/blocks/base/models';
  * // No record coloring:
  * const opts = {
  *     recordColorMode: recordColoring.modes.none(),

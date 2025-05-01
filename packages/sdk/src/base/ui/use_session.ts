@@ -13,7 +13,7 @@ import useSessionInternal from '../../shared/ui/use_session';
  *
  * @example
  * ```js
- * import {CollaboratorToken, useSession} from '@airtable/blocks/ui';
+ * import {CollaboratorToken, useSession} from '@airtable/blocks/base/ui';
  *
  * // Says hello to the current user and updates in realtime if the current user's
  * // name or profile pic changes.

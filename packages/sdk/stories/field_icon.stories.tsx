@@ -32,7 +32,7 @@ function FieldIconExample() {
             renderCodeFn={({fieldType, size}) => {
                 const fieldName = ReadableFieldTypes[fieldType];
                 return `
-                import {FieldIcon, useBase, useRecords} from '@airtable/blocks/ui';
+                import {FieldIcon, useBase, useRecords} from '@airtable/blocks/base/ui';
 
                 const FieldIconExample = (props) => {
                    const base = useBase();

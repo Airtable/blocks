@@ -251,7 +251,7 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
      * @param opts Options for the query, such as sorts and fields.
      * @example
      * ```js
-     * import {useBase, useRecords} from '@airtable/blocks/ui';
+     * import {useBase, useRecords} from '@airtable/blocks/base/ui';
      * import React from 'react';
      *
      * function TodoList() {
@@ -316,7 +316,7 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
      * correct type, that view will be returned before checking the other views in the table.
      * @example
      * ```js
-     * import {ViewType} from '@airtable/blocks/models';
+     * import {ViewType} from '@airtable/blocks/base/models';
      * const firstCalendarView = myTable.getFirstViewOfType(ViewType.CALENDAR);
      * if (firstCalendarView !== null) {
      *     console.log(firstCalendarView.name);

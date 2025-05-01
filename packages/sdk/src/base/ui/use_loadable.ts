@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: useLoadable */ /** */
 import {useMemo, useEffect} from 'react';
 import {useSubscription} from 'use-subscription';
-import {compact, has} from '../private_utils';
-import {spawnError} from '../error_utils';
-import useArrayIdentity from './use_array_identity';
+import {compact, has} from '../../shared/private_utils';
+import {spawnError} from '../../shared/error_utils';
+import useArrayIdentity from '../../shared/ui/use_array_identity';
 
 /**
  * A model that can be loaded.
@@ -59,7 +59,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/ui';
+ * import {useCursor, useLoadable, useWatchable} from '@airtable/blocks/base/ui';
  *
  *  function SelectedRecordIds() {
  *      const cursor = useCursor();
@@ -76,7 +76,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- *  import {useLoadable} from '@airtable/blocks/ui';
+ *  import {useLoadable} from '@airtable/blocks/base/ui';
  *
  *  function LoadTwoQueryResults({queryResultA, queryResultB}) {
  *      // load the queryResults:
@@ -89,7 +89,7 @@ interface UseLoadableOpts {
  *
  * @example
  * ```js
- *  import {useLoadable, useBase} from '@airtable/blocks/ui';
+ *  import {useLoadable, useBase} from '@airtable/blocks/base/ui';
  *
  *  function LoadAllRecords() {
  *      const base = useBase();

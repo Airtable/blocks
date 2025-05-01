@@ -85,8 +85,12 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * console.log('The name of your base is', base.name);
+     * import {useBase} from '@airtable/blocks/[placeholder-path]/ui';
+     *
+     * function MyApp() {
+     *     const base = useBase();
+     *     console.log('The name of your base is', base.name);
+     * }
      * ```
      */
     get name(): string {
@@ -98,8 +102,12 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * console.log('The workspace id of your base is', base.workspaceId);
+     * import {useBase} from '@airtable/blocks/[placeholder-path]/ui';
+     *
+     * function MyApp() {
+     *     const base = useBase();
+     *     console.log('The workspace id of your base is', base.workspaceId);
+     * }
      * ```
      */
     get workspaceId(): string {
@@ -111,9 +119,16 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * import {Box} from '@airtable/blocks/ui';
-     * const exampleBox = <Box backgroundColor={base.color}> This box's background is the same color as the base background</Box>
+     * import {colorUtils, useBase} from '@airtable/blocks/[placeholder-path]/ui';
+     *
+     * function MyApp() {
+     *     const base = useBase();
+     *     return (
+     *         <div style={{backgroundColor: colorUtils.getHexForColor(base.color)}}>
+     *             This div's background is the same color as the base background
+     *         </div>
+     *     );
+     * }
      * ```
      */
     get color(): string {
@@ -125,8 +140,12 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * console.log(`You have ${base.tables.length} tables`);
+     * import {useBase} from '@airtable/blocks/[placeholder-path]/ui';
+     *
+     * function MyApp() {
+     *     const base = useBase();
+     *     console.log(`You have ${base.tables.length} tables`);
+     * }
      * ```
      */
     get tables(): Array<SdkModeT['TableT']> {
@@ -155,8 +174,12 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      *
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
-     * console.log(base.activeCollaborators[0].email);
+     * import {useBase} from '@airtable/blocks/[placeholder-path]/ui';
+     *
+     * function MyApp() {
+     *     const base = useBase();
+     *     console.log(base.activeCollaborators[0].email);
+     * }
      * ```
      */
     get activeCollaborators(): Array<CollaboratorData> {

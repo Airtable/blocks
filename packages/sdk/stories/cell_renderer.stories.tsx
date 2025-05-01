@@ -28,7 +28,7 @@ function CellRendererExample() {
             renderCodeFn={({fieldType}) => {
                 const fieldName = ReadableFieldTypes[fieldType];
                 return `
-                import {CellRenderer, useBase, useRecords} from '@airtable/blocks/ui';
+                import {CellRenderer, useBase, useRecords} from '@airtable/blocks/base/ui';
 
                 const CellRendererExample = (props) => {
                    const base = useBase();

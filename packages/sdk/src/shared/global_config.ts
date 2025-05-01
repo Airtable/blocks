@@ -38,10 +38,6 @@ type WatchableGlobalConfigKey = string;
  * The maximum allowed size for a given GlobalConfig instance is 150kB.
  * The maximum number of keys for a given GlobalConfig instance is 1000.
  *
- * @example
- * ```js
- * import {globalConfig} from '@airtable/blocks';
- * ```
  * @docsPath models/GlobalConfig
  */
 class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
@@ -111,10 +107,13 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param key A string for the top-level key, or an array of strings describing the path to the value.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {useGlobalConfig} from '@airtable/blocks/[placeholder-path]/ui';
      *
-     * const topLevelValue = globalConfig.get('topLevelKey');
-     * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
+     * function MyApp() {
+     *     const globalConfig = useGlobalConfig();
+     *     const topLevelValue = globalConfig.get('topLevelKey');
+     *     const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
+     * }
      * ```
      */
     get(key: GlobalConfigKey): unknown {
@@ -210,23 +209,26 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {useGlobalConfig} from '@airtable/blocks/[placeholder-path]/ui';
      *
-     * function updateFavoriteColorIfPossible(color) {
-     *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
-     *         globalConfig.setAsync('favoriteColor', color);
+     * function MyApp() {
+     *     const globalConfig = useGlobalConfig();
+     *     const updateFavoriteColorIfPossible = (color) => {
+     *         if (globalConfig.hasPermissionToSet('favoriteColor', color)) {
+     *             globalConfig.setAsync('favoriteColor', color);
+     *         }
+     *         // The update is now applied within your extension (eg will be
+     *         // reflected in globalConfig) but are still being saved to
+     *         // Airtable servers (e.g. may not be updated for other users yet)
      *     }
-     *     // The update is now applied within your extension (eg will be
-     *     // reflected in globalConfig) but are still being saved to
-     *     // Airtable servers (e.g. may not be updated for other users yet)
-     * }
      *
-     * async function updateFavoriteColorIfPossibleAsync(color) {
-     *     if (globalConfig.hasPermissionToSet('favoriteColor', color)) {
-     *         await globalConfig.setAsync('favoriteColor', color);
+     *     const updateFavoriteColorIfPossibleAsync = async (color) => {
+     *         if (globalConfig.hasPermissionToSet('favoriteColor', color)) {
+     *             await globalConfig.setAsync('favoriteColor', color);
+     *         }
+     *         // globalConfig updates have been saved to Airtable servers.
+     *         alert('favoriteColor has been updated');
      *     }
-     *     // globalConfig updates have been saved to Airtable servers.
-     *     alert('favoriteColor has been updated');
      * }
      * ```
      */
@@ -313,28 +315,31 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @param updates The paths and values to set.
      * @example
      * ```js
-     * import {globalConfig} from '@airtable/blocks';
+     * import {useGlobalConfig} from '@airtable/blocks/[placeholder-path]/ui';
      *
-     * const updates = [
-     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
-     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
-     * ];
+     * function MyApp() {
+     *     const globalConfig = useGlobalConfig();
+     *     const updates = [
+     *         {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *         {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     *     ];
      *
-     * function applyUpdatesIfPossible() {
-     *     if (globalConfig.hasPermissionToSetPaths(updates)) {
-     *         globalConfig.setPathsAsync(updates);
+     *     const applyUpdatesIfPossible = () => {
+     *         if (globalConfig.hasPermissionToSetPaths(updates)) {
+     *             globalConfig.setPathsAsync(updates);
+     *         }
+     *         // The updates are now applied within your extension (eg will be reflected in
+     *         // globalConfig) but are still being saved to Airtable servers (e.g. they
+     *         // may not be updated for other users yet)
      *     }
-     *     // The updates are now applied within your extension (eg will be reflected in
-     *     // globalConfig) but are still being saved to Airtable servers (e.g. they
-     *     // may not be updated for other users yet)
-     * }
      *
-     * async function applyUpdatesIfPossibleAsync() {
-     *     if (globalConfig.hasPermissionToSetPaths(updates)) {
-     *         await globalConfig.setPathsAsync(updates);
+     *     const applyUpdatesIfPossibleAsync = async () => {
+     *         if (globalConfig.hasPermissionToSetPaths(updates)) {
+     *             await globalConfig.setPathsAsync(updates);
+     *         }
+     *         // globalConfig updates have been saved to Airtable servers.
+     *         alert('globalConfig has been updated');
      *     }
-     *     // globalConfig updates have been saved to Airtable servers.
-     *     alert('globalConfig has been updated');
      * }
      * ```
      */

@@ -45,7 +45,7 @@ function SelectExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {Select} from '@airtable/blocks/ui';
+                    import {Select} from '@airtable/blocks/base/ui';
 
                     const options = ${JSON.stringify(options)};
 
@@ -85,7 +85,7 @@ function SelectSyncedExample() {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
-                    import {SelectSynced} from '@airtable/blocks/ui';
+                    import {SelectSynced} from '@airtable/blocks/base/ui';
 
                     const options = ${JSON.stringify(options)};
 

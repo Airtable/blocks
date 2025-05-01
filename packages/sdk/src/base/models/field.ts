@@ -13,7 +13,7 @@ import {Aggregator} from './create_aggregators';
  *
  * @example
  * ```js
- * import {base} from '@airtable/blocks';
+ * import {base} from '@airtable/blocks/base';
  *
  * const table = base.getTableByName('Table 1');
  * const field = table.getFieldByName('Name');
@@ -50,7 +50,7 @@ class Field extends FieldCore<BaseSdkMode> {
      * @param aggregator The aggregator object or aggregator key.
      * @example
      * ```js
-     * import {aggregators} from '@airtable/blocks/models';
+     * import {aggregators} from '@airtable/blocks/base/models';
      * const aggregator = aggregators.totalAttachmentSize;
      *
      * // Using an aggregator object

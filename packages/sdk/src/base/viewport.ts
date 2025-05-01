@@ -53,7 +53,7 @@ const compareWithNulls = (
  *
  * @example
  * ```js
- * import {viewport} from '@airtable/blocks';
+ * import {viewport} from '@airtable/blocks/base';
  * ```
  * @docsPath models/Viewport
  */

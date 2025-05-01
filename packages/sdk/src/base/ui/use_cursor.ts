@@ -17,7 +17,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  *
  * @example
  * ```js
- * import {useBase, useCursor} from '@airtable/blocks/ui';
+ * import {useBase, useCursor} from '@airtable/blocks/base/ui';
  *
  * // renders a list of tables and automatically updates
  * function TableList() {

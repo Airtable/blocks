@@ -31,7 +31,7 @@ type DashboardOrEntryPoints = DashboardEntryElementFunction | EntryPoints;
  *
  * @example
  * ```js
- * import {initializeBlock} from '@airtable/blocks/ui';
+ * import {initializeBlock} from '@airtable/blocks/base/ui';
  * import React from 'react';
  *
  * function App() {
@@ -105,11 +105,19 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
         );
     }
 
-    sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+    if (ReactDOM.unstable_batchedUpdates) {
+        sdk.__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
+    }
 
     const container = document.createElement('div');
     body.appendChild(container);
-    ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+
+    try {
+        const {createRoot} = require('react-dom/client');
+        createRoot(container).render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>);
+    } catch (e) {
+        ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+    }
 }
 
 let sdk: Sdk;

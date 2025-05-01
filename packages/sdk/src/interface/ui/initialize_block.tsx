@@ -35,7 +35,6 @@ interface EntryPoints {
  * initializeBlock({interface: () => <App />});
  * ```
  * @docsPath UI/utils/initializeBlock
- * @internal
  */
 export function initializeBlock(entryPoints: EntryPoints) {
     const body = typeof document !== 'undefined' ? document.body : null;
@@ -78,7 +77,13 @@ export function initializeBlock(entryPoints: EntryPoints) {
 
     const container = document.createElement('div');
     body.appendChild(container);
-    ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+
+    try {
+        const {createRoot} = require('react-dom/client');
+        createRoot(container).render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>);
+    } catch (e) {
+        ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
+    }
 }
 
 let sdk: InterfaceBlockSdk;

@@ -10,9 +10,9 @@ import {ObjectValues} from './private_utils';
  *
  * @example
  * ```js
- * import {Box, colors} from '@airtable/blocks/ui';
+ * import {colors, colorUtils} from '@airtable/blocks/[placeholder-path]/ui';
  *
- * <Box backgroundColor={colors.BLUE} />
+ * <div style={{backgroundColor: colorUtils.getHexForColor(colors.BLUE)}}>Hello world</div>
  * ```
  *
  * @docsPath UI/utils/colors

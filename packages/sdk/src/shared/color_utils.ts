@@ -24,7 +24,7 @@ interface ColorUtils {
      * @param colorString
      * @example
      * ```js
-     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     * import {colorUtils, colors} from '@airtable/blocks/[placeholder-path]/ui';
      *
      * colorUtils.getHexForColor(colors.RED);
      * // => '#ef3061'
@@ -43,7 +43,7 @@ interface ColorUtils {
      * @param colorString
      * @example
      * ```js
-     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     * import {colorUtils, colors} from '@airtable/blocks/[placeholder-path]/ui';
      *
      * colorUtils.getRgbForColor(colors.PURPLE_DARK_1);
      * // => {r: 107, g: 28, b: 176}
@@ -62,7 +62,7 @@ interface ColorUtils {
      * @param colorString
      * @example
      * ```js
-     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     * import {colorUtils, colors} from '@airtable/blocks/[placeholder-path]/ui';
      *
      * colorUtils.shouldUseLightTextOnColor(colors.PINK_LIGHT_1);
      * // => false

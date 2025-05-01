@@ -73,8 +73,8 @@ export const serialize = (mode: RecordColorMode) => {
  * @alias recordColoring.modes
  * @example
  * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- * import {useRecords} from '@airtable/blocks/ui';
+ * import {recordColoring} from '@airtable/blocks/base/models';
+ * import {useRecords} from '@airtable/blocks/base/ui';
  *
  * // no record coloring:
  * const recordColorMode = recordColoring.modes.none();

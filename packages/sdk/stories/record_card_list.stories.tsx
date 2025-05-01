@@ -52,7 +52,7 @@ function RecordCardListExample() {
             styleProps={Object.keys(recordCardListStylePropTypes)}
             renderCodeFn={() => {
                 return `
-                import {RecordCardList, useBase, useRecords} from '@airtable/blocks/ui';
+                import {RecordCardList, useBase, useRecords} from '@airtable/blocks/base/ui';
 
                 const RecordCardListExample = () => {
                    const base = useBase();

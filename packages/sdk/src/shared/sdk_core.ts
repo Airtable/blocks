@@ -7,7 +7,7 @@ import {BlockInstallationId} from './types/hyper_ids';
  * @hidden
  * @example
  * ```js
- * import {runInfo} from '@airtable/blocks';
+ * import {runInfo} from '@airtable/blocks/base';
  * if (runInfo.isFirstRun) {
  *     // The current user just installed this block.
  *     // Take the opportunity to show any onboarding and set
@@ -48,7 +48,7 @@ export abstract class BlockSdkCore<SdkModeT extends SdkMode> {
      *
      * @example
      * ```js
-     * import {installationId} from '@airtable/blocks';
+     * import {installationId} from '@airtable/blocks/base';
      * console.log(installationId);
      * // => 'blifDutUr92OKwnUn'
      * ```
@@ -100,8 +100,8 @@ export abstract class BlockSdkCore<SdkModeT extends SdkMode> {
      * @example
      * ```js
      * import React from 'react';
-     * import {reload} from '@airtable/blocks';
-     * import {Button, initializeBlock} from '@airtable/blocks/ui';
+     * import {reload} from '@airtable/blocks/base';
+     * import {Button, initializeBlock} from '@airtable/blocks/base/ui';
      * function MyBlock() {
      *     return <Button onClick={() => reload()}>Reload</Button>;
      * }

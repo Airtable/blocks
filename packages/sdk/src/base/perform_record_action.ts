@@ -164,7 +164,7 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
  * @example
  * ```js
  * import React, {useEffect, useState} from 'react';
- * import {registerRecordActionDataCallback} from '@airtable/blocks/ui';
+ * import {registerRecordActionDataCallback} from '@airtable/blocks/base/ui';
  *
  * function LatestRecordAction() {
  *     const [recordActionData, setRecordActionData] = useState(null);

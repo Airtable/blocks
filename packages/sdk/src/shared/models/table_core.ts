@@ -63,7 +63,7 @@ export abstract class TableCore<
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
-     * import {base} from '@airtable/blocks';
+     * import {base} from '@airtable/blocks/base';
      * const table = base.getTableByName('Table 1');
      * console.log(table.parentBase.id === base.id);
      * // => true

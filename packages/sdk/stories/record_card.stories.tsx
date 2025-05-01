@@ -15,7 +15,7 @@ function RecordCardExample() {
             styleProps={Object.keys(recordCardStylePropTypes)}
             renderCodeFn={() => {
                 return `
-                import {RecordCard, useBase, useRecords} from '@airtable/blocks/ui';
+                import {RecordCard, useBase, useRecords} from '@airtable/blocks/base/ui';
 
                 const RecordCardExample = () => {
                    const base = useBase();

@@ -12,8 +12,8 @@ import RecordQueryResult, {
 import Record from '../models/record';
 import * as RecordColoring from '../models/record_coloring';
 import View from '../models/view';
-import useLoadable from '../../shared/ui/use_loadable';
 import useWatchable from '../../shared/ui/use_watchable';
+import useLoadable from './use_loadable';
 
 /** */
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
@@ -79,7 +79,7 @@ export function useRecordIds(tableOrViewOrQueryResult: null): null;
  * @param opts? If passing a Table or View, optional {@link RecordIdsQueryResultOpts} to control the results.
  * @example
  * ```js
- *  import {useRecordIds, useBase} from '@airtable/blocks/ui';
+ *  import {useRecordIds, useBase} from '@airtable/blocks/base/ui';
  *
  *  function RecordCount() {
  *      const base = useBase();
@@ -143,7 +143,7 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  * @param opts? If passing a Table or View, optional {@link RecordQueryResultOpts} to control the results.
  * @example
  * ```js
- *  import {useRecords, useBase} from '@airtable/blocks/ui';
+ *  import {useRecords, useBase} from '@airtable/blocks/base/ui';
  *
  *  function GetRecords() {
  *      const base = useBase();
@@ -176,7 +176,7 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  *
  * @example
  * ```js
- *  import {useRecords, useBase} from '@airtable/blocks/ui';
+ *  import {useRecords, useBase} from '@airtable/blocks/base/ui';
  *
  *  function RecordList() {
  *      const base = useBase();
@@ -240,7 +240,7 @@ export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): 
  * @param opts? If passing a Table or View, optional {@link SingleRecordQueryResultOpts} to control the results.
  * @example
  * ```js
- *  import {useRecordById, useRecordIds, useBase} from '@airtable/blocks/ui';
+ *  import {useRecordById, useRecordIds, useBase} from '@airtable/blocks/base/ui';
  *
  *  // this component concerns a single record - it only updates when that specific record updates
  *  function RecordListItem({table, recordId}) {

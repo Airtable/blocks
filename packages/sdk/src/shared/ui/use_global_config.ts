@@ -9,9 +9,10 @@ import {useSdk} from './sdk_context';
  *
  * @example
  * ```js
- * import {Button, useGlobalConfig} from '@airtable/blocks/ui';
+ * import {useGlobalConfig, useRunInfo} from '@airtable/blocks/[placeholder-path]/ui';
  *
  * function SyncedCounter() {
+ *     const runInfo = useRunInfo();
  *     const globalConfig = useGlobalConfig();
  *     const count = globalConfig.get('count');
  *
@@ -19,13 +20,17 @@ import {useSdk} from './sdk_context';
  *     const decrement = () => globalConfig.setAsync('count', count - 1);
  *     const isEnabled = globalConfig.hasPermissionToSet('count');
  *
- *     return (
- *         <React.Fragment>
- *             <Button icon="minus" onClick={decrement} disabled={!isEnabled} ariaLabel="decrease"/>
- *             {count}
- *             <Button icon="plus" onClick={increment} disabled={!isEnabled} ariaLabel="increase"/>
- *         </React.Fragment>
- *     );
+ *     if (runInfo.isPageElementInEditMode) {
+ *         return (
+ *             <div>
+ *                 <button onClick={decrement} disabled={!isEnabled} ariaLabel="decrease">-</button>
+ *                 {count}
+ *                 <button onClick={increment} disabled={!isEnabled} ariaLabel="increase">+</button>
+ *             </div>
+ *         );
+ *     } else {
+ *         return <div>{count}</div>;
+ *     }
  * }
  * ```
  * @docsPath UI/hooks/useGlobalConfig

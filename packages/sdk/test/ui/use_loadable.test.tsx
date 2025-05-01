@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
 import AbstractModelWithAsyncData from '../../src/base/models/abstract_model_with_async_data';
-import useLoadable from '../../src/shared/ui/use_loadable';
+import useLoadable from '../../src/base/ui/use_loadable';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../src/base/sdk';
 

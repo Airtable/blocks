@@ -50,7 +50,7 @@ function SwitchExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {Switch} from '@airtable/blocks/ui';
+                    import {Switch} from '@airtable/blocks/base/ui';
 
                     const SwitchExample = () => {
                         const [isEnabled, setIsEnabled] = useState(true);
@@ -100,7 +100,7 @@ function SwitchSyncedExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {SwitchSynced} from '@airtable/blocks/ui';
+                    import {SwitchSynced} from '@airtable/blocks/base/ui';
 
                     const SwitchSyncedExample = () => {
                         return (

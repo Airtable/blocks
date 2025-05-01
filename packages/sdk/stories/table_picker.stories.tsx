@@ -51,7 +51,7 @@ function TablePickerExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {TablePicker} from '@airtable/blocks/ui';
+                    import {TablePicker} from '@airtable/blocks/base/ui';
 
                     const TablePickerExample = () => {
                         const [table, setTable] = useState(null);
@@ -99,7 +99,7 @@ function TablePickerSyncedExample() {
 
                 return `
                     import React from 'react';
-                    import {TablePickerSynced} from '@airtable/blocks/ui';
+                    import {TablePickerSynced} from '@airtable/blocks/base/ui';
 
                     const TablePickerSyncedExample = () => (
                         <TablePickerSynced globalConfigKey="tableId" ${props} width="${CONTROL_WIDTH}"/>

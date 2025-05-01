@@ -56,7 +56,7 @@ function BoxExample() {
                     : '';
                 const borderProp = border !== 'none' ? `border="${border}"` : '';
                 return `
-                    import {Box, Text} from '@airtable/blocks/ui';
+                    import {Box, Text} from '@airtable/blocks/base/ui';
 
                     const boxExample = (
                         <Box

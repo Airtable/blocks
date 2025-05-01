@@ -35,7 +35,7 @@ function ConfirmationDialogExample() {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `
                     import React, { useState } from 'react';
-                    import {Button, ConfirmationDialog} from '@airtable/blocks/ui';
+                    import {Button, ConfirmationDialog} from '@airtable/blocks/base/ui';
 
                     const DialogExample = () => {
                         const [isDialogOpen, setIsDialogOpen] = useState(false);

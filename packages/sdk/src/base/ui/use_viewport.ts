@@ -10,7 +10,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  *
  * @example
  * ```js
- * import {useViewport} from '@airtable/blocks/ui';
+ * import {useViewport} from '@airtable/blocks/base/ui';
  *
  * function ViewportSize() {
  *      const viewport = useViewport();

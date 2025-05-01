@@ -25,8 +25,8 @@ type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKey
  * @alias settingsButton
  * @example
  * ```js
- * import {settingsButton} from '@airtable/blocks';
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {settingsButton} from '@airtable/blocks/base';
+ * import {useWatchable} from '@airtable/blocks/base/ui';
  *
  * function AppWithSettings({shouldShowSettingsButton}) {
  *     useEffect(() => {

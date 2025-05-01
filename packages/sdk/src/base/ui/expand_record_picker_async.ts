@@ -27,7 +27,7 @@ interface ExpandRecordPickerOpts {
  * @param opts An optional options object.
  * @example
  * ```js
- * import {expandRecordPickerAsync} from '@airtable/blocks/ui';
+ * import {expandRecordPickerAsync} from '@airtable/blocks/base/ui';
  *
  * async function pickRecordsAsync() {
  *     const recordA = await expandRecordPickerAsync([record1, record2, record3]);

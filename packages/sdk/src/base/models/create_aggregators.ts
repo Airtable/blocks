@@ -10,7 +10,7 @@ import Field from './field';
  *
  * @example
  * ```js
- * import {aggregators} from '@airtable/blocks/models';
+ * import {aggregators} from '@airtable/blocks/base/models';
  *
  * // To get a list of aggregators supported for a specific field:
  * const fieldAggregators = myField.availableAggregators;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {JSX} from 'react';
 import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from './error_utils';
 

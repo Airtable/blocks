@@ -47,7 +47,7 @@ function ViewPickerExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {ViewPicker, useBase} from '@airtable/blocks/ui';
+                    import {ViewPicker, useBase} from '@airtable/blocks/base/ui';
 
                     const ViewPickerExample = () => {
                         const [view, setView] = useState(null);
@@ -98,7 +98,7 @@ function ViewPickerSyncedExample() {
 
                 return `
                     import React from 'react';
-                    import {useBase, ViewPickerSynced} from '@airtable/blocks/ui';
+                    import {useBase, ViewPickerSynced} from '@airtable/blocks/base/ui';
 
                     const ViewPickerSyncedExample = () => {
                         const base = useBase();

@@ -8,7 +8,7 @@ import {FieldId, RecordId, ViewId} from '../../shared/types/hyper_ids';
  *
  * @example
  * ```js
- * import {ViewType} from '@airtable/blocks/models';
+ * import {ViewType} from '@airtable/blocks/base/models';
  * const gridViews = myTable.views.filter(view => (
  *     view.type === ViewType.GRID
  * ));

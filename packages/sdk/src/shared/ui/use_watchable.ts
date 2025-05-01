@@ -28,37 +28,18 @@ import useArrayIdentity from './use_array_identity';
  *
  * @example
  * ```js
- * import {useWatchable} from '@airtable/blocks/ui';
+ * import {useWatchable} from '@airtable/blocks/[placeholder-path]/ui';
  *
  * function TableName({table}) {
  *     useWatchable(table, 'name');
  *     return <span>The table name is {table.name}</span>;
  * }
  *
- * function ViewNameAndType({view}) {
- *     useWatchable(view, ['name', 'type']);
- *     return <span>The view name is {view.name} and the type is {view.type}</span>;
- * }
- *
- * function RecordValuesAndColorInViewIfExists({record, field, view}) {
- *     useWatchable(record, ['cellValues', view ? `colorInView:${view.id}` : null]);
+ * function RecordValues({record, field}) {
+ *     useWatchable(record, ['cellValues']);
  *     return <span>
  *         The record has cell value {record.getCellValue(field)} in {field.name}.
- *         {view ? `The record has color ${record.getColorInView(view)} in ${view.name}.` : null}
  *     </span>
- * }
- * ```
- *
- * @example
- * ```js
- * import {useWatchable} from '@airtable/blocks/ui';
- *
- * function ActiveView({cursor}) {
- *     useWatchable(cursor, 'activeViewId', () => {
- *          alert('active view changed!!!')
- *     });
- *
- *     return <span>Active view id: {cursor.activeViewId}</span>;
  * }
  * ```
  * @docsPath UI/hooks/useWatchable

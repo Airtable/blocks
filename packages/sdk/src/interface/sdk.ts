@@ -11,8 +11,6 @@ import {
     BlockRunContext,
 } from './types/airtable_interface';
 
-
-
 /** @hidden */
 export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     constructor(airtableInterface: InterfaceSdkMode['AirtableInterfaceT']) {
@@ -59,7 +57,6 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     __applyGlobalConfigUpdates(updates: ReadonlyArray<GlobalConfigUpdate>) {
         this.globalConfig.__setMultipleKvPaths(updates);
     }
-
 
     /**
      * @internal

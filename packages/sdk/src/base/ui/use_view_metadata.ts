@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: useViewMetadata */ /** */
 import ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import View from '../models/view';
-import useLoadable from '../../shared/ui/use_loadable';
 import useWatchable from '../../shared/ui/use_watchable';
+import useLoadable from './use_loadable';
 
 /** */
 function useViewMetadata(
@@ -22,7 +22,7 @@ function useViewMetadata(
  * @param viewOrViewMetadataQueryResult The {@link View} or {@link ViewMetadataQueryResult} to watch and use metadata from.
  * @example
  * ```js
- * import {useBase, useViewMetadata} from '@airtable/blocks/ui';
+ * import {useBase, useViewMetadata} from '@airtable/blocks/base/ui';
  *
  * function ViewFields({view}) {
  *     const viewMetadata = useViewMetadata(view);

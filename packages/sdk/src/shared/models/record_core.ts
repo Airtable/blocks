@@ -64,7 +64,7 @@ export abstract class RecordCore<
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
-     * import {useRecords} from '@airtable/blocks/ui';
+     * import {useRecords} from '@airtable/blocks/base/ui';
      * const records = useRecords(myTable);
      * console.log(records[0].parentTable.id === myTable.id);
      * // => true

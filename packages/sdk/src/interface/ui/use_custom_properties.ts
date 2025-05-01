@@ -14,8 +14,25 @@ import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
 import {Field} from '../models/field';
 
 /**
- * TODO document
- * @hidden
+ * An object that represents a custom property that a block can set.
+ *
+ * ```
+ * type BlockPageElementCustomProperty = {key: string; label: string} & (
+ *   | {type: 'boolean'; defaultValue: boolean}
+ *   | {type: 'string'; defaultValue?: string}
+ *   | {
+ *       type: 'enum';
+ *       possibleValues: Array<{value: string; label: string}>;
+ *       defaultValue?: string;
+ *     }
+ *   | {
+ *       type: 'field';
+ *       table: Table;
+ *       possibleValues?: Array<Field>; // If not provided, all visible fields in the table will be shown in the dropdown.
+ *       defaultValue?: Field;
+ *     }
+ * );
+ * ```
  */
 type BlockPageElementCustomProperty = {key: string; label: string} & (
     | {type: 'boolean'; defaultValue: boolean}
@@ -35,9 +52,39 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
 );
 
 /**
- * TODO document. Make sure to describe that getCustomProperties
- * should be wrapped in useCallback.
- * @hidden
+ * A hook for integrating configuration settings for your block with the Interface Designer properties
+ * panel. Under the hood, this uses {@link GlobalConfig} to store the custom property values.
+ *
+ * Returns an object with:
+ * - `customPropertyValueByKey`: an object mapping custom property keys to their current value.
+ * - `errorState`: an object with an `error` property if there was an error setting the custom properties
+ *
+ * @param getCustomProperties A function that returns an array of {@link BlockPageElementCustomProperty}.
+ * This function should have a stable identity, so it should either be defined at the top level of the
+ * file or wrapped in useCallback. It will receive an instance of {@link Base} as an argument.
+ *
+ * @example
+ * ```js
+ * import {useCustomProperties} from '@airtable/blocks/interface/ui';
+ *
+ * function getCustomProperties(base: Base) {
+ *     const table = base.tables[0];
+ *     const numberFields = table.fields.filter(field => field.type === FieldType.NUMBER);
+ *     return [
+ *         {key: 'title', label: 'Title', type: 'string', defaultValue: 'Chart'},
+ *         {key: 'xAxis', label: 'X-axis', type: 'field', table, possibleValues: numberFields},
+ *         {key: 'yAxis', label: 'Y-axis', type: 'field', table, possibleValues: numberFields},
+ *         {key: 'color', label: 'Color', type: 'enum', possibleValues: ['red', 'blue', 'green'], defaultValue: 'red'},
+ *         {key: 'showLegend', label: 'Show Legend', type: 'boolean', defaultValue: true},
+ *     ];
+ * }
+ *
+ * function MyApp() {
+ *     const {customPropertyValueByKey, errorState} = useCustomProperties(getCustomProperties);
+ * }
+ * ```
+ * @docsPath UI/hooks/useCustomProperties
+ * @hook
  */
 export function useCustomProperties(
     getCustomProperties: (base: Base) => Array<BlockPageElementCustomProperty>,

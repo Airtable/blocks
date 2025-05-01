@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui: useRecordActionData */ /** */
 import {RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
-import useLoadable from '../../shared/ui/use_loadable';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
+import useLoadable from './use_loadable';
 
 /**
  * A hook to watch "open extension" / "perform record action" events (from button field). Returns
@@ -34,7 +34,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  * @example
  * ```js
  * import React from 'react';
- * import {useRecordActionData} from '@airtable/blocks/ui';
+ * import {useRecordActionData} from '@airtable/blocks/base/ui';
  *
  * function LatestRecordAction() {
  *     const recordActionData = useRecordActionData();

@@ -17,7 +17,7 @@ import {spawnError} from '../error_utils';
  * @example
  * ```js
  * import React from 'react';
- * import {useRecords, withHooks} from '@airtable/blocks/ui';
+ * import {useRecords, withHooks} from '@airtable/blocks/base/ui';
  *
  * // RecordList takes a list of records and renders it
  * class RecordList extends React.Component {
@@ -53,8 +53,8 @@ import {spawnError} from '../error_utils';
  * @example
  * ```js
  * import React from 'react';
- * import {Record, Table} from '@airtable/blocks/models';
- * import {withHooks, useRecords} from '@airtable/blocks/ui';
+ * import {Record, Table} from '@airtable/blocks/[placeholder-path]/models';
+ * import {withHooks, useRecords} from '@airtable/blocks/[placeholder-path]/ui';
  * // with typescript, things are a little more complex: we need to provide some type annotations to
  * // indicate which props are injected:
  *

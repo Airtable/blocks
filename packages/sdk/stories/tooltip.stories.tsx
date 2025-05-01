@@ -50,7 +50,7 @@ function TextExample() {
                 const placementXProp = `placementX={Tooltip.placements.${placementX.toUpperCase()}}`;
                 const placementYProp = `placementY={Tooltip.placements.${placementY.toUpperCase()}}`;
                 return `
-                    import {Tooltip, Button} from '@airtable/blocks/ui';
+                    import {Tooltip, Button} from '@airtable/blocks/base/ui';
 
                     const tooltipExample = (
                         <Tooltip content="Notifications" ${placementXProp} ${placementYProp} ${props}>

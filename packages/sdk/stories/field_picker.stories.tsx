@@ -47,7 +47,7 @@ function FieldPickerExample() {
 
                 return `
                     import React, {useState} from 'react';
-                    import {FieldPicker, useBase} from '@airtable/blocks/ui';
+                    import {FieldPicker, useBase} from '@airtable/blocks/base/ui';
 
                     const FieldPickerExample = () => {
                         const [field, setField] = useState(null);
@@ -98,7 +98,7 @@ function FieldPickerSyncedExample() {
 
                 return `
                     import React from 'react';
-                    import {FieldPickerSynced, useBase} from '@airtable/blocks/ui';
+                    import {FieldPickerSynced, useBase} from '@airtable/blocks/base/ui';
 
                     const FieldPickerSyncedExample = () => {
                         const base = useBase();

@@ -78,7 +78,7 @@ export abstract class SessionCore<SdkModeT extends SdkMode> extends AbstractMode
      *
      * @example
      * ```js
-     * import {useSession} from '@airtable/blocks/ui';
+     * import {useSession} from '@airtable/blocks/[placeholder-path]/ui';
      *
      * function CurrentUser() {
      *     const session = useSession();
