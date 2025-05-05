@@ -1,0 +1,236 @@
+/*
+ * Airtable Interface Extensions Stylesheet
+ * ============================================================
+ * This file provides a baseline set of styles derived from Airtable's design system. 
+ *
+ * How it works:
+ * -------------
+ * - It's imported by default in the main `index.js` file.
+ * - It defines variables (e.g., `var(--colors-foreground-default)`) that you can consume.
+ *
+ * **This Stylesheet is optional!**
+ * --------------------------------
+ * You are *not* required to use these styles. To opt-out:
+ * 1. Remove the `import './style.css';` line from `index.js`.
+ * 2. (Optional) Delete this `style.css` file.
+ *
+ * Using the variables:
+ * --------------------
+ * You can leverage the variables defined here as such:
+ * `.my-custom-button { color: var(--colors-foreground-default); }`
+ */
+
+:root {
+    /* Font family */
+    --font-family-body: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-family-heading: Inter Display, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-family-heading-legacy: GT Eesti Display, -apple-system, system-ui, BlinkMacSystemFont,
+        'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-family-mono: Menlo, Courier, monospace;
+
+    /* Text size */
+    --font-size-body-xsmall: 9px;
+    --font-size-body-small: 11px;
+    --font-size-body-default: 13px;
+    --font-size-body-large: 15px;
+    --font-size-heading-xxsmall: 13px;
+    --font-size-heading-xsmall: 15px;
+    --font-size-heading-small: 17px;
+    --font-size-heading-default: 21px;
+    --font-size-heading-large: 23px;
+    --font-size-heading-xlarge: 27px;
+    --font-size-heading-xxlarge: 31px;
+    --font-size-heading-xxxlarge: 35px;
+
+    /* Text color */
+    --colors-foreground-default: var(--palette-neutral-black);
+    --colors-foreground-subtle: var(--palette-neutral-quiet);
+    --colors-foreground-subtler: var(--palette-neutral-quieter);
+    --colors-foreground-subtlest: var(--palette-neutral-quietest);
+    --colors-foreground-accent-informational: var(--palette-blue-blueDark1);
+    --colors-foreground-accent-notice: var(--palette-yellow-yellowDark1);
+    --colors-foreground-accent-negative: var(--palette-red-redDark1);
+    --colors-foreground-accent-success: var(--palette-green-greenDark1);
+    --colors-foreground-accent-ai: var(--palette-pink-pinkDark1);
+    --colors-hyperlink-default: var(--colors-foreground-default);
+    --colors-hyperlink-subtle: var(--colors-foreground-subtle);
+    --colors-hyperlink-primary: var(--palette-blue-blue);
+
+    /* Background color */
+    --colors-background-default: var(--palette-neutral-white);
+    --colors-background-subtle: var(--palette-neutral-lightGray2);
+    --colors-background-subtler: var(--palette-neutral-lightGray1);
+    --colors-background-raised-surface: var(--palette-neutral-white);
+    --colors-background-raised-surface-hover: var(--palette-neutral-white);
+    --colors-background-raised-popover: var(--palette-neutral-white);
+    --colors-background-raised-control: var(--palette-neutral-white);
+    --colors-background-raised-control-hover: var(--palette-neutral-lightGray3);
+    --colors-background-inset-control: var(--palette-neutral-lightGray2);
+    --colors-background-inset-control-hover: var(--palette-neutral-lightGray3);
+    --colors-background-primary-control: var(--palette-blue-blue);
+    --colors-background-primary-control-emphasis: var(--palette-blue-blueDark1);
+    --colors-background-modal-backdrop: var(--palette-opacity-darken3);
+    --colors-background-selected: var(--palette-opacity-darken1);
+    --colors-background-selected-blue: rgba(22, 110, 225, 0.05);
+    --colors-background-translucent: var(--palette-opacity-lighten2);
+    --colors-background-informational: var(--palette-blue-blueLight3);
+    --colors-background-notice: var(--palette-yellow-yellowLight3);
+    --colors-background-negative: var(--palette-red-redLight3);
+    --colors-background-success: var(--palette-green-greenLight3);
+
+    /* Border color */
+    --colors-border-default: var(--palette-opacity-darken2);
+    --colors-border-subtle: var(--palette-opacity-darken1);
+    --colors-border-emphasis: var(--palette-opacity-darken3);
+    --colors-border-focus: var(--palette-blue-blue);
+    --colors-border-focus-emphasis: var(--palette-blue-blueDark1);
+    --colors-border-negative: var(--palette-red-redDark1);
+    --colors-border-success: var(--palette-green-greenDark1);
+
+    /* Border radius */
+    --radius-round-default: 3px;
+    --radius-round-big: 6px;
+    --radius-round-huge: 14px;
+
+    /* Shadow */
+    --elevation-low: 0px 0px 1px rgba(0, 0, 0, 0.32), 0px 0px 2px rgba(0, 0, 0, 0.08),
+        0px 1px 3px rgba(0, 0, 0, 0.08);
+    --elevation-low-hover: 0px 0px 1px rgba(0, 0, 0, 0.32), 0px 0px 3px rgba(0, 0, 0, 0.11),
+        0px 1px 4px rgba(0, 0, 0, 0.12);
+    --elevation-medium: 0px 0px 1px 0px rgba(0, 0, 0, 0.24), 0px 0px 2px 0px rgba(0, 0, 0, 0.08),
+        0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+    --elevation-medium-hover: 0px 0px 1px 0px rgba(0, 0, 0, 0.48),
+        0px 0px 2px 0px rgba(0, 0, 0, 0.08), 0px 2px 4px 0px rgba(0, 0, 0, 0.12),
+        0px 2px 8px 0px rgba(0, 0, 0, 0.08);
+    --elevation-medium-right: 0px 0px 1px 0px rgba(0, 0, 0, 0.24),
+        0px 0px 2px 0px rgba(0, 0, 0, 0.08), 2px 0px 4px 0px rgba(0, 0, 0, 0.08);
+    --elevation-high: 0px 0px 1px rgba(0, 0, 0, 0.24), 0px 0px 2px rgba(0, 0, 0, 0.16),
+        0px 3px 4px rgba(0, 0, 0, 0.06), 0px 6px 8px rgba(0, 0, 0, 0.06),
+        0px 12px 16px rgba(0, 0, 0, 0.08), 0px 18px 32px rgba(0, 0, 0, 0.06);
+
+    /* Color */
+    --palette-blue-blue: rgb(22, 110, 225);
+    --palette-blue-blueDusty: rgb(59, 102, 163);
+    --palette-blue-blueDark1: rgb(13, 82, 172);
+    --palette-blue-blueLight1: rgb(160, 198, 255);
+    --palette-blue-blueLight2: rgb(209, 226, 255);
+    --palette-blue-blueLight3: rgb(241, 245, 255);
+    --palette-cyan-cyan: rgb(57, 202, 255);
+    --palette-cyan-cyanDusty: rgb(16, 125, 163);
+    --palette-cyan-cyanDark1: rgb(15, 104, 162);
+    --palette-cyan-cyanLight1: rgb(136, 219, 255);
+    --palette-cyan-cyanLight2: rgb(196, 236, 255);
+    --palette-cyan-cyanLight3: rgb(227, 250, 253);
+    --palette-teal-teal: rgb(1, 221, 213);
+    --palette-teal-tealDusty: rgb(13, 127, 120);
+    --palette-teal-tealDark1: rgb(23, 114, 110);
+    --palette-teal-tealLight1: rgb(116, 235, 225);
+    --palette-teal-tealLight2: rgb(193, 245, 240);
+    --palette-teal-tealLight3: rgb(228, 251, 251);
+    --palette-green-green: rgb(4, 138, 14);
+    --palette-green-greenDusty: rgb(64, 124, 74);
+    --palette-green-greenDark1: rgb(0, 100, 0);
+    --palette-green-greenLight1: rgb(154, 224, 149);
+    --palette-green-greenLight2: rgb(207, 245, 209);
+    --palette-green-greenLight3: rgb(230, 252, 232);
+    --palette-yellow-yellow: rgb(255, 186, 5);
+    --palette-yellow-yellowDusty: rgb(162, 104, 17);
+    --palette-yellow-yellowDark1: rgb(175, 96, 2);
+    --palette-yellow-yellowLight1: rgb(255, 214, 107);
+    --palette-yellow-yellowLight2: rgb(255, 234, 182);
+    --palette-yellow-yellowLight3: rgb(255, 246, 221);
+    --palette-orange-orange: rgb(213, 68, 1);
+    --palette-orange-orangeDusty: rgb(148, 77, 55);
+    --palette-orange-orangeDark1: rgb(170, 45, 0);
+    --palette-orange-orangeLight1: rgb(255, 182, 142);
+    --palette-orange-orangeLight2: rgb(255, 224, 204);
+    --palette-orange-orangeLight3: rgb(255, 236, 227);
+    --palette-red-red: rgb(220, 4, 59);
+    --palette-red-redDusty: rgb(153, 69, 90);
+    --palette-red-redDark1: rgb(177, 15, 65);
+    --palette-red-redLight1: rgb(255, 166, 193);
+    --palette-red-redLight2: rgb(255, 212, 224);
+    --palette-red-redLight3: rgb(255, 242, 250);
+    --palette-pink-pink: rgb(221, 4, 168);
+    --palette-pink-pinkDusty: rgb(140, 63, 120);
+    --palette-pink-pinkDark1: rgb(171, 10, 131);
+    --palette-pink-pinkLight1: rgb(247, 151, 239);
+    --palette-pink-pinkLight2: rgb(250, 210, 252);
+    --palette-pink-pinkLight3: rgb(255, 241, 255);
+    --palette-purple-purple: rgb(124, 55, 239);
+    --palette-purple-purpleDusty: rgb(99, 73, 141);
+    --palette-purple-purpleDark1: rgb(98, 49, 174);
+    --palette-purple-purpleLight1: rgb(191, 174, 252);
+    --palette-purple-purpleLight2: rgb(224, 218, 253);
+    --palette-purple-purpleLight3: rgb(252, 243, 255);
+    --palette-gray-grayDusty: rgb(83, 89, 101);
+    --palette-gray-gray25: rgb(249, 250, 251);
+    --palette-gray-gray50: rgb(246, 248, 252);
+    --palette-gray-gray75: rgb(242, 244, 248);
+    --palette-gray-gray100: rgb(229, 233, 240);
+    --palette-gray-gray200: rgb(218, 222, 230);
+    --palette-gray-gray300: rgb(196, 199, 205);
+    --palette-gray-gray400: rgb(151, 154, 160);
+    --palette-gray-gray500: rgb(97, 102, 112);
+    --palette-gray-gray600: rgb(65, 69, 77);
+    --palette-gray-gray700: rgb(49, 53, 62);
+    --palette-gray-gray800: rgb(29, 31, 37);
+    --palette-gray-gray900: rgb(17, 18, 21);
+    --palette-neutral-black: var(--palette-gray-gray800);
+    --palette-neutral-trueBlack: rgb(0, 0, 0);
+    --palette-neutral-dark: var(--palette-gray-gray700);
+    --palette-neutral-quiet: var(--palette-gray-gray500);
+    --palette-neutral-quieter: var(--palette-gray-gray400);
+    --palette-neutral-quietest: var(--palette-gray-gray300);
+    --palette-neutral-white: rgb(255, 255, 255);
+    --palette-neutral-lightGray1: var(--palette-gray-gray50);
+    --palette-neutral-lightGray2: var(--palette-gray-gray75);
+    --palette-neutral-lightGray3: var(--palette-gray-gray100);
+    --palette-neutral-lightGray4: var(--palette-gray-gray200);
+    --palette-opacity-darken1: rgba(0, 0, 0, 0.05);
+    --palette-opacity-darken2: rgba(0, 0, 0, 0.1);
+    --palette-opacity-darken3: rgba(0, 0, 0, 0.25);
+    --palette-opacity-darken4: rgba(0, 0, 0, 0.5);
+    --palette-opacity-darken5: rgba(0, 0, 0, 0.6);
+    --palette-opacity-lighten1: rgba(255, 255, 255, 0.05);
+    --palette-opacity-lighten2: rgba(255, 255, 255, 0.1);
+    --palette-opacity-lighten2-tinted: rgba(195, 212, 249, 0.18);
+    --palette-opacity-lighten3: rgba(255, 255, 255, 0.25);
+    --palette-opacity-lighten3-tinted: rgba(221, 230, 252, 0.26);
+    --palette-opacity-lighten4: rgba(255, 255, 255, 0.5);
+
+    /* Transition */
+    --motion-standard-fast: cubic-bezier(0.2, 0.1, 0.2, 1) 150ms;
+    --motion-standard-default: cubic-bezier(0.2, 0.1, 0.2, 1) 300ms;
+    --motion-standard-medium: cubic-bezier(0.2, 0.1, 0.2, 1) 500ms;
+    --motion-standard-slow: cubic-bezier(0.2, 0.1, 0.2, 1) 1000ms;
+    --motion-decelerate-fast: cubic-bezier(0, 0, 0, 1) 100ms;
+    --motion-decelerate-default: cubic-bezier(0, 0, 0, 1) 250ms;
+    --motion-decelerate-medium: cubic-bezier(0, 0, 0, 1) 400ms;
+    --motion-decelerate-slow: cubic-bezier(0, 0, 0, 1) 800ms;
+    --motion-accelerate-fast: cubic-bezier(0.4, 0, 1, 1) 100ms;
+    --motion-accelerate-default: cubic-bezier(0.4, 0, 1, 1) 200ms;
+    --motion-accelerate-medium: cubic-bezier(0.4, 0, 1, 1) 300ms;
+    --motion-accelerate-slow: cubic-bezier(0.4, 0, 1, 1) 700ms;
+    --motion-linear-default: cubic-bezier(0, 0, 1, 1) 1000ms;
+    --motion-linear-medium: cubic-bezier(0, 0, 1, 1) 2000ms;
+    --motion-linear-slow: cubic-bezier(0, 0, 1, 1) 5000ms;
+}
+
+/*
+ * Global Body Styles
+ * ------------------
+ * Sets some base page styles (background, text color, font).
+ * Modify as needed.
+ */
+body {
+    background-color: var(--colors-background-default);
+    color: var(--colors-foreground-default);
+    font-family: var(--font-family-body);
+    margin: 0;
+}

@@ -1,6 +1,6 @@
 {
-    "name": "@airtable/hello-world-interface-extension",
-    "version": "0.0.1",
+    "name": "@airtable/heatmap-interface-block",
+    "version": "0.0.0",
     "scripts": {
         "lint": "ESLINT_USE_FLAT_CONFIG=false eslint frontend"
     },
