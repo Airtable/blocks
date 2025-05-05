@@ -1,0 +1,21 @@
+{
+    "name": "@airtable/sliding-bar-chart-interface-block",
+    "version": "0.0.0",
+    "scripts": {
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint frontend"
+    },
+    "dependencies": {
+        "@airtable/blocks": "interface-alpha",
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.0",
+        "@mui/material": "^7.0.2",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
+    },
+    "devDependencies": {
+        "eslint": "^9.5.0",
+        "eslint-plugin-react": "^7.34.2",
+        "eslint-plugin-react-hooks": "^5.2.0"
+    },
+    "license": "MIT"
+}
