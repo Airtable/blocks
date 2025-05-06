@@ -10,6 +10,7 @@
         "frontend/**/*",
         "media/**/*",
         "eslint.config.mjs",
+        "tsconfig.json",
         ".gitignore",
         "block.json",
         "LICENSE.md",
