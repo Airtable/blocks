@@ -3,6 +3,7 @@
     "authorEmail": "apps@airtable.com",
     "remote": "git@github.com:Airtable/interface-extensions-heatmap.git",
     "subdirectory": "examples/heatmap-interface-block",
+    "branch": "main",
     "shouldStripLineComments": false,
     "global": [
         ".block/**/*",

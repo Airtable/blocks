@@ -161,7 +161,7 @@ async function syncScopedTagBetweenReposAsync(
         );
 
         console.log('Pushing changes...');
-        await git.pushAsync(tmpDestinationPath);
+        await git.pushAsync(tmpDestinationPath, config.branch);
     }
 
     console.log('Done!');

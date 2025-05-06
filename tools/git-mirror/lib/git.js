@@ -74,11 +74,11 @@ module.exports = {
         );
         await runGitAsync(cwd, 'tag', name);
     },
-    async pushAsync(cwd) {
+    async pushAsync(cwd, branch) {
         // This pushes to the the public mirror at https://github.com/airtable/blocks,
         // FIXME_MAIN update the default branch of that public-facing repository; it'll
         // be tricky. Details/discussion are in this doc:
         // https://docs.google.com/document/d/10nzMV73L5pl2cXRu1GKTepSO4gMkWss4Hw3YWiDkBbg/edit#heading=h.urgi97elgt9t
-        await runGitAsync(cwd, 'push', '--tags', 'origin', 'master');
+        await runGitAsync(cwd, 'push', '--tags', 'origin', branch || 'master');
     },
 };

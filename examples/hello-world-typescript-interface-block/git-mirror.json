@@ -3,6 +3,7 @@
     "authorEmail": "apps@airtable.com",
     "remote": "git@github.com:Airtable/interface-extensions-hello-world-typescript.git",
     "subdirectory": "examples/hello-world-typescript-interface-block",
+    "branch": "main",
     "shouldStripLineComments": false,
     "global": [
         ".block/**/*",

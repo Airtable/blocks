@@ -3,6 +3,7 @@
     "authorEmail": "apps@airtable.com",
     "remote": "git@github.com:Airtable/interface-extensions-sliding-bar-chart.git",
     "subdirectory": "examples/sliding-bar-chart-interface-block",
+    "branch": "main",
     "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
