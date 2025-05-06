@@ -9,7 +9,7 @@
         ".block/**/*",
         "frontend/**/*",
         "media/**/*",
-        ".eslintrc.js",
+        "eslint.config.mjs",
         ".gitignore",
         "block.json",
         "LICENSE.md",
