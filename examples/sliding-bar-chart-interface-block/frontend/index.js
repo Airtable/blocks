@@ -6,7 +6,7 @@ import {
     useCustomProperties,
     useRecords,
 } from '@airtable/blocks/interface/ui';
-import React, {useState, useMemo} from 'react';
+import {useEffect, useState, useMemo} from 'react';
 import Slider from '@mui/material/Slider';
 import {stateColors} from './colors';
 import './style.css';
@@ -18,7 +18,7 @@ function SlidingBarChart() {
 
     const [ref, setRef] = useState(null);
     const [width, setWidth] = useState(0);
-    React.useEffect(() => {
+    useEffect(() => {
         if (ref) {
             setWidth(ref.clientWidth);
             function handleResize() {

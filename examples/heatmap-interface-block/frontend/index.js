@@ -1,4 +1,3 @@
-import React from 'react';
 import {FieldType} from '@airtable/blocks/interface/models';
 import {
     expandRecord,

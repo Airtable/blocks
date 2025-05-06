@@ -1,5 +1,4 @@
 import {initializeBlock} from '@airtable/blocks/interface/ui';
-import React from 'react';
 import './style.css';
 
 function HelloWorldApp() {

@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "module": "preserve",
+        "noEmit": true,
+        "verbatimModuleSyntax": true,
+        "esModuleInterop": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitOverride": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["frontend"],
+    "exclude": ["node_modules"]
+}
