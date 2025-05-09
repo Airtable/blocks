@@ -9,6 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
+## [2.0.7](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.6...@airtable/blocks-cli@2.0.7)
+
+-   Bump dependency on `@airtable/blocks-webpack-bundler` so that `{runtime: 'automatic'}` is set on
+    `@babel/preset-react` configuration.
+
+## [2.0.6](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.5...@airtable/blocks-cli@2.0.6)
+
+-   Upgrade various dependencies.
+
 ## [2.0.5](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.4...@airtable/blocks-cli@2.0.5)
 
 -   Perform routine version upgrade to various dependencies
