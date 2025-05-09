@@ -22,7 +22,7 @@ export function createJavascriptAssetConfig(): JavascriptAssetOptions {
             configFile: false,
             presets: [
                 [require.resolve('@babel/preset-env'), presetEnvOptions],
-                require.resolve('@babel/preset-react'),
+                [require.resolve('@babel/preset-react'), {runtime: 'automatic'}],
                 require.resolve('@babel/preset-typescript'),
             ],
             plugins: [],

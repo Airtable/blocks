@@ -35,14 +35,14 @@ describe('run bundler', () => {
         .prepareFixture('bundler_react_jsx')
         .runBundlerServer()
         .readServerBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes(/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_\d+__\.jsx\)\(ReactApp/)
         .it('bundles react components with server');
 
     testBundler
         .prepareFixture('bundler_react_jsx')
         .runBundlerPass()
         .readDiskBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes(/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_\d+__\.jsx\)\(ReactApp/)
         .it('bundles react components to disk');
 
     testBundler
@@ -93,14 +93,14 @@ describe('run bundler', () => {
         .prepareFixture('bundler_react_tsx')
         .runBundlerServer()
         .readServerBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes(/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_\d+__\.jsx\)\(ReactApp/)
         .it('bundles react typescript components with server');
 
     testBundler
         .prepareFixture('bundler_react_tsx')
         .runBundlerPass()
         .readDiskBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes(/react_jsx_runtime__WEBPACK_IMPORTED_MODULE_\d+__\.jsx\)\(ReactApp/)
         .it('bundles react typescript components to disk');
 
     testBundler
@@ -295,13 +295,14 @@ function readBundleFromDisk(): FancyTypes.Plugin<{tmpPath: string; bundle: strin
     };
 }
 
-function bundleIncludes(expectString: string): FancyTypes.Plugin<{bundle: string}> {
+function bundleIncludes(expectString: string | RegExp): FancyTypes.Plugin<{bundle: string}> {
     return {
         run(ctx) {
-            expect(ctx.bundle.includes(expectString)).to.equal(
-                true,
-                `bundle includes ${expectString}`,
-            );
+            const result =
+                typeof expectString === 'string'
+                    ? ctx.bundle.includes(expectString)
+                    : expectString.test(ctx.bundle);
+            expect(result).to.equal(true, `bundle includes ${expectString}`);
         },
     };
 }
