@@ -1,6 +1,6 @@
 import path from 'path';
 import os from 'os';
-import cpx from 'cpx';
+import cpx from 'cpx2';
 
 import {BLOCK_FILE_NAME, SDK_PACKAGE_NAME} from '../settings';
 import {
