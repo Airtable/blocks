@@ -213,7 +213,7 @@ interface RecordCardListScrollEvent {
  * @docsPath UI/components/RecordCardList
  */
 
-interface RecordCardListProps {
+export interface RecordCardListProps {
     /** Records to display in card list. */
     records: Array<Record> | Array<RecordDef>;
     /** Scroll event handler for the list window. */
@@ -245,7 +245,7 @@ interface RecordCardListProps {
  *
  * @noInheritDoc
  */
-interface RecordCardListStyleProps
+export interface RecordCardListStyleProps
     extends DimensionsSetProps,
         FlexItemSetProps,
         PositionSetProps,

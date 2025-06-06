@@ -29,7 +29,7 @@ type TableOrViewOrQueryResult = Table | View | AnyQueryResult;
  * @param opts
  * @internal
  */
-function _useUnwatchedRecordQueryResult(
+function useUnwatchedRecordQueryResult(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     functionNameForErrors: string,
     opts?: RecordQueryResultOpts,
@@ -108,7 +108,7 @@ export function useRecordIds(
               }
             : opts;
 
-    const queryResult = _useUnwatchedRecordQueryResult(
+    const queryResult = useUnwatchedRecordQueryResult(
         tableOrViewOrQueryResult,
         'useRecordIds',
         generatedOpts,
@@ -202,11 +202,7 @@ export function useRecords(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordQueryResultOpts,
 ): Array<Record> | null {
-    const queryResult = _useUnwatchedRecordQueryResult(
-        tableOrViewOrQueryResult,
-        'useRecords',
-        opts,
-    );
+    const queryResult = useUnwatchedRecordQueryResult(tableOrViewOrQueryResult, 'useRecords', opts);
 
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
     return queryResult ? queryResult.records : null;
@@ -275,7 +271,7 @@ export function useRecordById(
     recordId: RecordId,
     opts?: SingleRecordQueryResultOpts,
 ): Record | null {
-    const queryResult = _useUnwatchedRecordQueryResult(
+    const queryResult = useUnwatchedRecordQueryResult(
         tableOrViewOrQueryResult,
         'useRecordById',
         opts,
@@ -297,7 +293,7 @@ export function useRecordQueryResult(
     tableOrViewOrQueryResult: TableOrViewOrQueryResult | null,
     opts?: RecordQueryResultOpts,
 ): RecordQueryResult | null {
-    const queryResult = _useUnwatchedRecordQueryResult(
+    const queryResult = useUnwatchedRecordQueryResult(
         tableOrViewOrQueryResult,
         'useRecordQueryResult',
         opts,

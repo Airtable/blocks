@@ -32,7 +32,7 @@ export const sharedTablePickerPropTypes = {
  *
  * @docsPath UI/components/TablePicker
  */
-interface TablePickerProps extends SharedTablePickerProps {
+export interface TablePickerProps extends SharedTablePickerProps {
     /** The selected table model. */
     table?: Table | null;
 }

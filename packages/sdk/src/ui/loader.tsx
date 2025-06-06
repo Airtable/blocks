@@ -42,7 +42,7 @@ export const loaderStylePropTypes = {
  * @docsPath UI/components/Loader
  * @noInheritDoc
  */
-interface LoaderProps extends LoaderStyleProps {
+export interface LoaderProps extends LoaderStyleProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
     fillColor: string;
     /** A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner. Defaults to `0.3`. */

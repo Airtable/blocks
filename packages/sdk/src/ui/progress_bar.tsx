@@ -97,7 +97,7 @@ export const progressBarStylePropTypes = {
  * @docsPath UI/components/ProgressBar
  * @noInheritDoc
  */
-interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
+export interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
     /** A CSS color, such as `#ff9900`. Defaults to a blue color. */
     barColor?: string;
     /** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range. */

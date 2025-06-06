@@ -1,13 +1,15 @@
 /* eslint-disable no-console */
 import React from 'react';
-import {storiesOf} from '@storybook/react';
 import Example from './helpers/example';
 import {recordCardListStylePropTypes} from '../src/ui/record_card_list';
 import Box from '../src/ui/box';
 import {FieldType} from '../src/types/field';
 import FakeRecordCard from './helpers/fake_record_card';
+import {RecordCardList} from '../src/ui/ui';
 
-const stories = storiesOf('RecordCardList', module);
+export default {
+    component: RecordCardList,
+};
 
 function RecordCardListExample() {
     const fieldTypes = [
@@ -51,7 +53,7 @@ function RecordCardListExample() {
             renderCodeFn={() => {
                 return `
                 import {RecordCardList, useBase, useRecords} from '@airtable/blocks/ui';
-                
+
                 const RecordCardListExample = () => {
                    const base = useBase();
                    const table = base.getTableByName('Programmers');
@@ -99,4 +101,6 @@ function RecordCardListExample() {
     );
 }
 
-stories.add('example', () => <RecordCardListExample />);
+export const _Example = {
+    render: () => <RecordCardListExample />,
+};

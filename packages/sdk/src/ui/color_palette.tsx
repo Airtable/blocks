@@ -101,7 +101,7 @@ export const sharedColorPalettePropTypes = {
  *
  * @docsPath UI/components/ColorPalette
  */
-interface ColorPaletteProps extends SharedColorPaletteProps {
+export interface ColorPaletteProps extends SharedColorPaletteProps {
     /** The current selected {@link Color} option. */
     color?: string | null;
 }

@@ -135,7 +135,7 @@ export const sharedSelectButtonsPropTypes = {
  *
  * @docsPath UI/components/SelectButtons
  */
-interface SelectButtonsProps extends SharedSelectButtonsProps {
+export interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
 }

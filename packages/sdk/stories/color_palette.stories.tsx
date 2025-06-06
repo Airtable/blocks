@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {storiesOf} from '@storybook/react';
 import ColorPalette, {colorPaletteStylePropTypes} from '../src/ui/color_palette';
 import colors from '../src/colors';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
-const stories = storiesOf('ColorPalette', module);
+export default {
+    component: ColorPalette,
+};
 
 const squareMarginOptions: Array<string> = ['2px', '4px', '8px'];
 
@@ -81,7 +82,9 @@ function ColorPaletteExample() {
     );
 }
 
-stories.add('example', () => <ColorPaletteExample />);
+export const _Example = {
+    render: () => <ColorPaletteExample />,
+};
 
 function ColorPaletteSyncedExample() {
     const allowedColors = [
@@ -136,4 +139,6 @@ function ColorPaletteSyncedExample() {
     );
 }
 
-stories.add('synced example', () => <ColorPaletteSyncedExample />);
+export const SyncedExample = {
+    render: () => <ColorPaletteSyncedExample />,
+};

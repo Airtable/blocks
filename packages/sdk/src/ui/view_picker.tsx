@@ -41,7 +41,7 @@ export const sharedViewPickerPropTypes = {
  *
  * @docsPath UI/components/ViewPicker
  */
-interface ViewPickerProps extends SharedViewPickerProps {
+export interface ViewPickerProps extends SharedViewPickerProps {
     /** The selected view model. */
     view?: View | null;
 }

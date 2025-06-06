@@ -113,7 +113,7 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
  * @noInheritDoc
  * @docsPath UI/components/TextButton
  */
-interface TextButtonProps
+export interface TextButtonProps
     extends TooltipAnchorProps<HTMLSpanElement>,
         AriaProps,
         TextButtonStyleProps {

@@ -94,7 +94,7 @@ export interface SharedSwitchProps extends TooltipAnchorProps, SwitchStyleProps 
  *
  * @docsPath UI/components/Switch
  */
-interface SwitchProps extends SharedSwitchProps {
+export interface SwitchProps extends SharedSwitchProps {
     /** If set to `true`, the switch will be switchd on. */
     value: boolean;
 }

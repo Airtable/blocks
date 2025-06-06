@@ -59,7 +59,7 @@ interface ChoiceOption {
  * @docsPath UI/components/ChoiceToken
  * @noInheritDoc
  */
-interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
+export interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
     /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
     choice: ChoiceOption;
     /** Additional styles to apply to the choice token. */

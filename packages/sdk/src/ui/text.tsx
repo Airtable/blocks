@@ -64,7 +64,7 @@ export function useTextStyle(
  * @noInheritDoc
  * @docsPath UI/components/Text
  */
-interface TextProps extends AriaProps, AllStylesProps {
+export interface TextProps extends AriaProps, AllStylesProps {
     /** The element that is rendered. Defaults to `p`. */
     as?:
         | 'p'

@@ -94,7 +94,7 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
  * @docsPath UI/components/Heading
  * @noInheritDoc
  */
-interface HeadingProps extends AllStylesProps, AriaProps {
+export interface HeadingProps extends AllStylesProps, AriaProps {
     /** The `role` attribute. */
     role?: string;
     /** The element that is rendered. Defaults to `h3`. */

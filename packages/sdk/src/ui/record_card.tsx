@@ -124,7 +124,7 @@ CellValueAndFieldLabel.propTypes = {
  * @noInheritDoc
  * @docsPath UI/components/RecordCard
  */
-interface RecordCardProps extends RecordCardStyleProps {
+export interface RecordCardProps extends RecordCardStyleProps {
     /** Record to display in the card. */
     record: Record | RecordDef;
     /** The view model to use for field order and record coloring. */

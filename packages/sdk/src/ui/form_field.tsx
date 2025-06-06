@@ -67,7 +67,7 @@ export const formFieldStylePropTypes = {
  * @noInheritDoc
  * @docsPath UI/components/FormField
  */
-interface FormFieldProps extends FormFieldStyleProps {
+export interface FormFieldProps extends FormFieldStyleProps {
     /** The `id` attribute. */
     id?: string;
     /** Additional class names to apply to the form field. */

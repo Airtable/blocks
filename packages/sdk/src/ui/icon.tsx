@@ -83,7 +83,7 @@ export const sharedIconPropTypes = {
  * Props for the {@link Icon} component. Also accepts:
  * * {@link IconStyleProps}
  */
-interface IconProps extends SharedIconProps {
+export interface IconProps extends SharedIconProps {
     /** The name of the icon. For more details, see the {@link IconName|list of supported icons}. */
     name: IconName;
     /** @internal */

@@ -41,7 +41,7 @@ export const sharedFieldPickerPropTypes = {
  *
  * @docsPath UI/components/FieldPicker
  */
-interface FieldPickerProps extends SharedFieldPickerProps {
+export interface FieldPickerProps extends SharedFieldPickerProps {
     /** The selected field model. */
     field?: Field | null;
 }
