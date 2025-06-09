@@ -2,6 +2,8 @@ import {get, Scale} from '@styled-system/core';
 import {spawnError} from '../../../../shared/error_utils';
 
 /** @internal */
+
+// eslint-disable-next-line airtable/is-returns-boolean
 function isNumber(n: unknown): n is number {
     return typeof n === 'number' && !isNaN(n);
 }

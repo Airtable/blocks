@@ -8,6 +8,8 @@ import * as React from 'react';
 export type SelectOptionValue = string | number | boolean | null | undefined;
 
 /** @internal */
+
+// eslint-disable-next-line airtable/is-returns-boolean
 export function isSelectOptionValue(value: unknown): value is SelectOptionValue {
     return (
         value === null ||

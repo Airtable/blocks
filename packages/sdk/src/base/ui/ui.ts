@@ -30,6 +30,7 @@ export {default as ViewportConstraint} from './viewport_constraint';
 export {initializeBlock} from './initialize_block';
 export {default as withHooks} from '../../shared/ui/with_hooks';
 export {default as useLoadable} from './use_loadable';
+export {useColorScheme} from '../../shared/ui/use_color_scheme';
 export {useRecordIds, useRecords, useRecordById, useRecordQueryResult} from './use_records';
 export {default as useBase} from './use_base';
 export {default as useCursor} from './use_cursor';

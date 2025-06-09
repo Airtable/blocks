@@ -7,4 +7,5 @@ import {RecordData} from './record';
 export interface TableData extends TableDataCore {
     recordsById: ObjectMap<RecordId, RecordData>;
     recordOrder: Array<RecordId>;
+    isRecordExpansionEnabled: boolean;
 }

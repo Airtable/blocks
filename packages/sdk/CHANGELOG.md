@@ -9,9 +9,18 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.2...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.19.0...HEAD)
 
 No changes.
+
+## [1.19.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.2...@airtable/blocks@1.19.0) - 2025-06-06
+
+-   Add `useColorScheme` React hook, making a user's light/dark mode preference available in
+    JavaScript. Airtable will also set
+    [`color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme) on extension
+    iframes, so
+    [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
+    media queries will match the user's Airtable preferences before browser-wide settings.
 
 ## [1.18.2](https://github.com/airtable/blocks/compare/@airtable/blocks@1.18.1...@airtable/blocks@1.18.2) - 2024-09-25
 

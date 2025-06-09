@@ -110,6 +110,8 @@ export function initializeBlock(getEntryElement: DashboardOrEntryPoints) {
     }
 
     const container = document.createElement('div');
+    container.style.height = '100%';
+    container.style.width = '100%';
     body.appendChild(container);
 
     try {
