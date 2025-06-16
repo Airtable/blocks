@@ -1,12 +1,12 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {UserId} from '../../src/shared/types/hyper_ids';
 import {PermissionLevel, PermissionLevels} from '../../src/shared/types/permission_levels';
+import {MutationTypes} from '../../src/base/types/mutations';
 import {
-    MutationTypes,
     DeleteMultipleRecordsMutation,
     CreateMultipleRecordsMutation,
     SetMultipleRecordsCellValuesMutation,
-} from '../../src/base/types/mutations';
+} from '../../src/shared/types/mutations_core';
 import {__reset, __sdk as sdk} from '../../src/base';
 
 let mockAirtableInterface: jest.Mocked<MockAirtableInterface>;

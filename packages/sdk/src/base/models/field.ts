@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {FieldCore} from '../../shared/models/field_core';
-import {FieldOptions} from '../../shared/types/field';
+import {FieldOptions} from '../../shared/types/field_core';
 import {UpdateFieldOptionsOpts, MutationTypes} from '../types/mutations';
 import {BaseSdkMode} from '../../sdk_mode';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';

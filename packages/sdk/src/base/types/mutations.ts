@@ -1,6 +1,6 @@
 /** @module @airtable/blocks: mutations */ /** */
-import {ObjectValues, ObjectMap} from '../../shared/private_utils';
-import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
+import {ObjectValues} from '../../shared/private_utils';
+import {TableId, FieldId, ViewId} from '../../shared/types/hyper_ids';
 import {
     MutationTypesCore,
     MutationCore,
@@ -12,9 +12,6 @@ import {NormalizedViewMetadata} from './airtable_interface';
 /** @hidden */
 export const MutationTypes = Object.freeze({
     ...MutationTypesCore,
-    SET_MULTIPLE_RECORDS_CELL_VALUES: 'setMultipleRecordsCellValues' as const,
-    DELETE_MULTIPLE_RECORDS: 'deleteMultipleRecords' as const,
-    CREATE_MULTIPLE_RECORDS: 'createMultipleRecords' as const,
     CREATE_SINGLE_FIELD: 'createSingleField' as const,
     UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
     UPDATE_SINGLE_FIELD_DESCRIPTION: 'updateSingleFieldDescription' as const,
@@ -25,91 +22,6 @@ export const MutationTypes = Object.freeze({
 
 /** @hidden */
 export type MutationType = ObjectValues<typeof MutationTypes>;
-
-/**
- * The Mutation emitted when the App modifies one or more {@link Record|Records}.
- *
- * @docsPath testing/mutations/SetMultipleRecordsCellValuesMutation
- */
-export interface SetMultipleRecordsCellValuesMutation {
-    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
-    readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
-    /** The identifier for the @link Table in which Records are being modified */
-    readonly tableId: TableId;
-    /** The Records being modified */
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
-    }>;
-    /** @hidden */
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
-}
-
-/** @hidden */
-export interface PartialSetMultipleRecordsCellValuesMutation {
-    readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
-    readonly tableId: TableId | undefined;
-    readonly records:
-        | ReadonlyArray<{
-              readonly id: RecordId | undefined;
-              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
-          }>
-        | undefined;
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
-}
-
-/**
- * The Mutation emitted when the App deletes one or more {@link Record|Records}.
- *
- * @docsPath testing/mutations/DeleteMultipleRecordsMutation
- */
-export interface DeleteMultipleRecordsMutation {
-    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
-    readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
-    /** The identifier for the Table in which Records are being deleted */
-    readonly tableId: TableId;
-    /** The identifiers for records being deleted */
-    readonly recordIds: ReadonlyArray<RecordId>;
-}
-
-/** @hidden */
-export interface PartialDeleteMultipleRecordsMutation {
-    readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | undefined;
-    readonly recordIds: ReadonlyArray<RecordId> | undefined;
-}
-
-/**
- * The Mutation emitted when the App creates one or more {@link Record|Records}.
- *
- * @docsPath testing/mutations/CreateMultipleRecordsMutation
- */
-export interface CreateMultipleRecordsMutation {
-    /** This Mutation's [discriminant property](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) */
-    readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
-    /** The identifier for the Table in which Records are being created */
-    readonly tableId: TableId;
-    /** The records being created */
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
-    }>;
-    /** @hidden */
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
-}
-
-/** @hidden */
-export interface PartialCreateMultipleRecordsMutation {
-    readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | undefined;
-    readonly records:
-        | ReadonlyArray<{
-              readonly id: RecordId | undefined;
-              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
-          }>
-        | undefined;
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
-}
 
 /**
  * The Mutation emitted when the App creates a {@link Field}.
@@ -291,9 +203,6 @@ export interface PartialUpdateViewMetadataMutation {
 /** @hidden */
 export type Mutation =
     | MutationCore
-    | SetMultipleRecordsCellValuesMutation
-    | DeleteMultipleRecordsMutation
-    | CreateMultipleRecordsMutation
     | CreateSingleFieldMutation
     | UpdateSingleFieldConfigMutation
     | UpdateSingleFieldDescriptionMutation
@@ -304,9 +213,6 @@ export type Mutation =
 /** @hidden */
 export type PartialMutation =
     | PartialMutationCore
-    | PartialSetMultipleRecordsCellValuesMutation
-    | PartialDeleteMultipleRecordsMutation
-    | PartialCreateMultipleRecordsMutation
     | PartialCreateSingleFieldMutation
     | PartialUpdateSingleFieldConfigMutation
     | PartialUpdateSingleFieldDescriptionMutation

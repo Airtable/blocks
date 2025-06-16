@@ -2,14 +2,14 @@ import {ObjectMap} from '../private_utils';
 import {SdkMode} from '../../sdk_mode';
 import {Stat} from './stat';
 import {FieldId, BlockInstallationId} from './hyper_ids';
-import {FieldType, FieldData} from './field';
+import {FieldType, FieldDataCore} from './field_core';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
     GlobalConfigPath,
     GlobalConfigPathValidationResult,
 } from './global_config';
-import {BaseDataCore, ModelChange, BasePermissionData} from './base_core';
+import {BaseDataCore, ModelChange} from './base_core';
 import {TableDataCore} from './table_core';
 import {PermissionCheckResult} from './mutations_core';
 
@@ -33,33 +33,33 @@ export interface FieldTypeConfig {
 }
 /** @hidden */
 export interface FieldTypeProviderCore {
-    isComputed(fieldData: FieldData): boolean;
+    isComputed(fieldData: FieldDataCore): boolean;
     validateCellValueForUpdate(
         appInterface: AppInterface,
         newCellValue: unknown,
         currentCellValue: unknown,
-        fieldData: FieldData,
+        fieldData: FieldDataCore,
     ): CellValueValidationResult;
     getConfig(
         appInterface: AppInterface,
-        fieldData: FieldData,
+        fieldData: FieldDataCore,
         fieldNamesById: ObjectMap<FieldId, string>,
     ): FieldTypeConfig;
     convertStringToCellValue(
         appInterface: AppInterface,
         string: string,
-        fieldData: FieldData,
+        fieldData: FieldDataCore,
         opts?: {parseDateCellValueInColumnTimeZone?: boolean},
     ): unknown;
     convertCellValueToString(
         appInterface: AppInterface,
         cellValue: unknown,
-        fieldData: FieldData,
+        fieldData: FieldDataCore,
     ): string;
     getCellRendererData(
         appInterface: AppInterface,
         cellValue: unknown,
-        fieldData: FieldData,
+        fieldData: FieldDataCore,
         shouldWrap: boolean,
     ): {cellValueHtml: string; attributes: {[key: string]: unknown}};
 }
@@ -100,7 +100,7 @@ export interface AirtableInterfaceCore<SdkModeT extends SdkMode> {
     applyMutationAsync(mutation: SdkModeT['MutationT'], opts?: {holdForMs?: number}): Promise<void>;
     checkPermissionsForMutation(
         mutation: SdkModeT['PartialMutationT'],
-        basePermissionData: BasePermissionData,
+        basePermissionData: SdkModeT['BasePermissionDataT'],
     ): PermissionCheckResult;
 
     /**

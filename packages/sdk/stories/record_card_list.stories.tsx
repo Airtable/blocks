@@ -3,7 +3,7 @@ import React from 'react';
 import Example from './helpers/example';
 import {recordCardListStylePropTypes} from '../src/base/ui/record_card_list';
 import Box from '../src/base/ui/box';
-import {FieldType} from '../src/shared/types/field';
+import {FieldType} from '../src/shared/types/field_core';
 import FakeRecordCard from './helpers/fake_record_card';
 import {RecordCardList} from '../src/base/ui/ui';
 

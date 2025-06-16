@@ -1,7 +1,6 @@
 import {BlockRunContextType} from '../types/airtable_interface';
 import {ModelChange} from '../../shared/types/base_core';
 import {Mutation, MutationTypes} from '../types/mutations';
-import {entries, ObjectMap} from '../../shared/private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../../shared/error_utils';
 import {FieldId} from '../../shared/types/hyper_ids';
 import {
@@ -10,26 +9,21 @@ import {
     MAX_TABLE_NAME_LENGTH,
     MAX_NUM_FIELDS_PER_TABLE,
 } from '../../shared/types/mutation_constants';
-import {MutationsCore, MUTATIONS_MAX_BATCH_SIZE} from '../../shared/models/mutations_core';
+import {MutationsCore} from '../../shared/models/mutations_core';
 import {BaseSdkMode} from '../../sdk_mode';
 import Table from './table';
-import Field from './field';
+import RecordStore from './record_store';
 
 /** @hidden */
 class Mutations extends MutationsCore<BaseSdkMode> {
     /** @internal */
-    _doesMutationExceedBatchSizeLimit(mutation: Mutation): boolean {
-        switch (mutation.type) {
-            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES:
-            case MutationTypes.CREATE_MULTIPLE_RECORDS:
-                return mutation.records.length > MUTATIONS_MAX_BATCH_SIZE;
-            case MutationTypes.DELETE_MULTIPLE_RECORDS:
-                return mutation.recordIds.length > MUTATIONS_MAX_BATCH_SIZE;
-            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
-                return mutation.updates.length > MUTATIONS_MAX_BATCH_SIZE;
-            default:
-                return false;
-        }
+    _isRecordStoreReadyForMutations(recordStore: RecordStore): boolean {
+        return recordStore.isRecordMetadataLoaded;
+    }
+
+    /** @internal */
+    _isFieldAvailableForMutation(recordStore: RecordStore, fieldId: FieldId): boolean {
+        return recordStore.areCellValuesLoadedForFieldId(fieldId);
     }
 
     /** @internal */
@@ -39,131 +33,11 @@ class Mutations extends MutationsCore<BaseSdkMode> {
         const billingPlanGrouping = this._base.__billingPlanGrouping;
 
         switch (mutation.type) {
-            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
-                const {tableId, records} = mutation;
-                const table = this._base.getTableByIdIfExists(tableId);
-                if (!table) {
-                    throw spawnError("Can't set cell values: No table with id %s exists", tableId);
-                }
-
-                const recordStore = this._base.__getRecordStore(tableId);
-
-                const checkedFieldIds = new Set();
-
-                for (const record of records) {
-                    let existingRecord = null;
-                    if (recordStore.isRecordMetadataLoaded) {
-                        existingRecord = recordStore.getRecordByIdIfExists(record.id);
-                        if (!existingRecord) {
-                            throw spawnError(
-                                "Can't set cell values: No record with id %s exists",
-                                record.id,
-                            );
-                        }
-                    }
-
-                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
-                        const field = table.getFieldByIdIfExists(fieldId);
-                        if (!field) {
-                            throw spawnError(
-                                "Can't set cell values: No field with id %s exists in table '%s'",
-                                fieldId,
-                                table.name,
-                            );
-                        }
-
-                        if (!checkedFieldIds.has(fieldId)) {
-                            this._assertFieldIsValidForMutation(field);
-                            checkedFieldIds.add(fieldId);
-                        }
-
-                        if (existingRecord && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                            const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                                appInterface,
-                                record.cellValuesByFieldId[fieldId],
-                                existingRecord._getRawCellValue(field),
-                                field._data,
-                            );
-                            if (!validationResult.isValid) {
-                                throw spawnError(
-                                    "Can't set cell values: invalid cell value for field '%s'.\n%s",
-                                    field.name,
-                                    validationResult.reason,
-                                );
-                            }
-                        }
-                    }
-                }
-                return;
-            }
-
+            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
+            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES:
+            case MutationTypes.CREATE_MULTIPLE_RECORDS:
             case MutationTypes.DELETE_MULTIPLE_RECORDS: {
-                const {tableId, recordIds} = mutation;
-                const table = this._base.getTableByIdIfExists(tableId);
-                if (!table) {
-                    throw spawnError("Can't delete records: No table with id %s exists", tableId);
-                }
-
-                const recordStore = this._base.__getRecordStore(tableId);
-                if (recordStore.isRecordMetadataLoaded) {
-                    for (const recordId of recordIds) {
-                        const record = recordStore.getRecordByIdIfExists(recordId);
-                        if (!record) {
-                            throw spawnError(
-                                "Can't delete records: No record with id %s exists in table '%s'",
-                                recordId,
-                                table.name,
-                            );
-                        }
-                    }
-                }
-                return;
-            }
-
-            case MutationTypes.CREATE_MULTIPLE_RECORDS: {
-                const {tableId, records} = mutation;
-                const checkedFieldIds = new Set();
-
-                const table = this._base.getTableByIdIfExists(tableId);
-                if (!table) {
-                    throw spawnError("Can't create records: No table with id %s exists", tableId);
-                }
-
-                for (const record of records) {
-                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
-                        const field = table.getFieldByIdIfExists(fieldId);
-                        if (!field) {
-                            throw spawnError(
-                                "Can't create records: No field with id %s exists in table '%s'",
-                                fieldId,
-                                table.name,
-                            );
-                        }
-
-                        if (!checkedFieldIds.has(fieldId)) {
-                            this._assertFieldIsValidForMutation(field);
-                            checkedFieldIds.add(fieldId);
-                        }
-
-                        const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                            appInterface,
-                            record.cellValuesByFieldId[fieldId],
-                            null,
-                            field._data,
-                        );
-                        if (!validationResult.isValid) {
-                            throw spawnError(
-                                "Can't create records: invalid cell value for field '%s'.\n%s",
-                                field.name,
-                                validationResult.reason,
-                            );
-                        }
-                    }
-                }
-                return;
-            }
-
-            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
+                super._assertMutationIsValid(mutation);
                 return;
             }
 
@@ -418,16 +292,6 @@ class Mutations extends MutationsCore<BaseSdkMode> {
     }
 
     /** @internal */
-    _assertFieldIsValidForMutation(field: Field) {
-        if (field.isComputed) {
-            throw spawnError(
-                "Can't set cell values: Field '%s' is computed and cannot be set",
-                field.name,
-            );
-        }
-    }
-
-    /** @internal */
     _assertFieldNameIsValidForMutation(name: string, table: Table) {
         if (!name) {
             throw spawnError("Can't create or update field: must provide non-empty name");
@@ -453,52 +317,9 @@ class Mutations extends MutationsCore<BaseSdkMode> {
     /** @internal */
     _getOptimisticModelChangesForMutation(mutation: Mutation): Array<ModelChange> {
         switch (mutation.type) {
-            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
-                const {tableId, records} = mutation;
-                const recordStore = this._base.__getRecordStore(tableId);
-
-                return records.flatMap(record =>
-                    Object.keys(record.cellValuesByFieldId)
-                        .filter(fieldId => recordStore.areCellValuesLoadedForFieldId(fieldId))
-                        .map(fieldId => ({
-                            path: [
-                                'tablesById',
-                                tableId,
-                                'recordsById',
-                                record.id,
-                                'cellValuesByFieldId',
-                                fieldId,
-                            ],
-                            value: record.cellValuesByFieldId[fieldId],
-                        })),
-                );
-            }
-
-            case MutationTypes.DELETE_MULTIPLE_RECORDS: {
-                const {tableId, recordIds} = mutation;
-                const recordStore = this._base.__getRecordStore(tableId);
-
-                if (!recordStore.isRecordMetadataLoaded) {
-                    return [];
-                }
-
-                return [
-                    ...recordIds.map(recordId => ({
-                        path: ['tablesById', tableId, 'recordsById', recordId],
-                        value: undefined,
-                    })),
-                    ...this._base.getTableById(tableId).views.flatMap(view => {
-                        const viewDataStore = recordStore.getViewDataStore(view.id);
-                        if (!viewDataStore.isDataLoaded) {
-                            return [];
-                        }
-                        return viewDataStore.__generateChangesForParentTableDeleteMultipleRecords(
-                            recordIds,
-                        );
-                    }),
-                ];
-            }
-
+            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
+            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES:
+                return super._getOptimisticModelChangesForMutation(mutation);
             case MutationTypes.CREATE_MULTIPLE_RECORDS: {
                 const {tableId, records} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
@@ -507,24 +328,9 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                     return [];
                 }
 
+                const superChanges = super._getOptimisticModelChangesForMutation(mutation);
                 return [
-                    ...records.map(record => {
-                        const filteredCellValuesByFieldId: ObjectMap<FieldId, unknown> = {};
-                        for (const [fieldId, cellValue] of entries(record.cellValuesByFieldId)) {
-                            if (recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                                filteredCellValuesByFieldId[fieldId] = cellValue;
-                            }
-                        }
-                        return {
-                            path: ['tablesById', tableId, 'recordsById', record.id],
-                            value: {
-                                id: record.id,
-                                cellValuesByFieldId: filteredCellValuesByFieldId,
-                                commentCount: 0,
-                                createdTime: new Date().toJSON(),
-                            },
-                        };
-                    }),
+                    ...superChanges,
                     ...this._base.getTableById(tableId).views.flatMap(view => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
@@ -536,11 +342,26 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                     }),
                 ];
             }
+            case MutationTypes.DELETE_MULTIPLE_RECORDS: {
+                const {tableId, recordIds} = mutation;
+                const recordStore = this._base.__getRecordStore(tableId);
+                if (!recordStore.isRecordMetadataLoaded) {
+                    return [];
+                }
 
-            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
-                throw spawnError(
-                    'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
-                );
+                const superChanges = super._getOptimisticModelChangesForMutation(mutation);
+                return [
+                    ...superChanges,
+                    ...this._base.getTableById(tableId).views.flatMap(view => {
+                        const viewDataStore = recordStore.getViewDataStore(view.id);
+                        if (!viewDataStore.isDataLoaded) {
+                            return [];
+                        }
+                        return viewDataStore.__generateChangesForParentTableDeleteMultipleRecords(
+                            recordIds,
+                        );
+                    }),
+                ];
             }
 
             case MutationTypes.CREATE_SINGLE_FIELD:

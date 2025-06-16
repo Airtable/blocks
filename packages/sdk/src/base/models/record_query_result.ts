@@ -2,7 +2,7 @@
 import Colors, {Color} from '../../shared/colors';
 import Sdk from '../sdk';
 import {FieldId, RecordId} from '../../shared/types/hyper_ids';
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import {
     isEnumValue,
     assertEnumValue,

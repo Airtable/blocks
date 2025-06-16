@@ -9,7 +9,7 @@ import {CONTROL_WIDTH} from './code_utils';
 import choiceOptions from './choice_options';
 import syncSourceOptions from './sync_source_options';
 import collaboratorOptions from './collaborator_options';
-import {FieldType} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
 import attachments from './attachments';
 import FakeForeignRecord from './fake_foreign_record';
 

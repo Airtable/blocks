@@ -66,7 +66,7 @@
         "ci": "echo '--- sdk' && yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run build:docs && git add CHANGELOG.md ../blocks-docs/docs.json",
-        "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
+        "release": "node ./scripts/interface-alpha-release.js",
         "types": "tsc",
         "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
         "lint:quiet": "yarn run lint --quiet",
@@ -175,20 +175,6 @@
                 "lines": 100,
                 "statements": 100
             }
-        }
-    },
-    "release-it": {
-        "git": {
-            "tagName": "@airtable/blocks@${version}",
-            "commitMessage": "Release @airtable/blocks@${version}"
-        },
-        "hooks": {
-            "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
-            "after:bump": "yarn build && rm -rf dist/types/{stories,test}",
-            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version}"
-        },
-        "npm": {
-            "access": "public"
         }
     }
 }

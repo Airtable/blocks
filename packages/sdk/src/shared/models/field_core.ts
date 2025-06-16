@@ -1,4 +1,4 @@
-import {FieldData, FieldType, FieldOptions, FieldConfig} from '../types/field';
+import {FieldType, FieldOptions, FieldConfig} from '../types/field_core';
 import {isEnumValue, cloneDeep, ObjectValues, FlowAnyObject} from '../private_utils';
 import {SdkMode} from '../../sdk_mode';
 import {FieldTypeConfig} from '../types/airtable_interface_core';
@@ -26,7 +26,7 @@ export type WatchableFieldKey = ObjectValues<typeof WatchableFieldKeys>;
 /** @hidden */
 export abstract class FieldCore<SdkModeT extends SdkMode> extends AbstractModel<
     SdkModeT,
-    FieldData,
+    SdkModeT['FieldDataT'],
     WatchableFieldKey
 > {
     /** @internal */
@@ -52,7 +52,7 @@ export abstract class FieldCore<SdkModeT extends SdkMode> extends AbstractModel<
     /**
      * @internal
      */
-    get _dataOrNullIfDeleted(): FieldData | null {
+    get _dataOrNullIfDeleted(): SdkModeT['FieldDataT'] | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         return tableData?.fieldsById[this._id] ?? null;
     }

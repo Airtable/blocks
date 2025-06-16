@@ -7,7 +7,7 @@ import {spawnError} from '../../shared/error_utils';
 import Sdk from '../sdk';
 import Record from '../models/record';
 import Field from '../models/field';
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import {RecordId} from '../../shared/types/hyper_ids';
 import {ObjectMap} from '../../shared/private_utils';
 import withHooks from '../../shared/ui/with_hooks';

@@ -6,7 +6,7 @@ import Field from '../../src/base/models/field';
 import View from '../../src/base/models/view';
 import {TableId, FieldId, ViewId, RecordId} from '../../src/shared/types/hyper_ids';
 import {ViewType} from '../../src/base/types/view';
-import {FieldType} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
 import {MutationTypes} from '../../src/base/types/mutations';
 import Sdk from '../../src/base/sdk';
 

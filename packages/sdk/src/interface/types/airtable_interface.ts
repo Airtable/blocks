@@ -1,7 +1,7 @@
 import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
 import {BaseDataCore} from '../../shared/types/base_core';
-import {TableId, PageId, FieldId} from '../../shared/types/hyper_ids';
+import {TableId, PageId, FieldId, RecordId} from '../../shared/types/hyper_ids';
 import {TableData} from './table';
 
 /** @hidden */
@@ -23,6 +23,11 @@ export type BlockRunContext = PageElementInQueryContainerBlockRunContextType;
 export interface SdkInitData extends SdkInitDataCore {
     runContext: BlockRunContext;
     baseData: BaseDataCore<TableData>;
+}
+
+/** @hidden */
+export interface IdGenerator {
+    generateRecordId(): string;
 }
 
 /** @hidden */
@@ -68,9 +73,15 @@ export type BlockInstallationPageElementCustomPropertyForAirtableInterface = {
  * @hidden
  */
 export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMode> {
-    sdkInitData: SdkInitData;
+    idGenerator: IdGenerator;
 
     expandRecord(tableId: string, recordId: string): void;
+    fetchForeignRecordsAsync(
+        tableId: string,
+        recordId: string,
+        fieldId: string,
+        filterString: string,
+    ): Promise<{records: ReadonlyArray<{recordId: RecordId; displayName: string}>}>;
     setCustomPropertiesAsync(
         properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
     ): Promise<boolean>;

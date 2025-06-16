@@ -18,8 +18,8 @@ import {
 import {TableId, FieldId, ViewId, RecordId} from '../shared/types/hyper_ids';
 import {cloneDeep, ObjectMap} from '../shared/private_utils';
 import {spawnError} from '../shared/error_utils';
-import {FieldData} from '../shared/types/field';
 import {ModelChange} from '../shared/types/base_core';
+import {FieldData} from '../base/types/field';
 import {RecordData} from '../base/types/record';
 import {ViewportSizeConstraint} from '../base/types/viewport';
 import {PermissionCheckResult} from '../shared/types/mutations_core';

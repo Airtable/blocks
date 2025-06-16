@@ -1,6 +1,7 @@
 import {BaseId, TableId, FieldId, ViewId, RecordId} from '../../src/shared/types/hyper_ids';
 import {TableData} from '../../src/base/types/table';
-import {FieldType, FieldData} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
+import {FieldData} from '../../src/base/types/field';
 import {ViewData, ViewType} from '../../src/base/types/view';
 import {CollaboratorData} from '../../src/shared/types/collaborator';
 import {Color} from '../../src/shared/colors';

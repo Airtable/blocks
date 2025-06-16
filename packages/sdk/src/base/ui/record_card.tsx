@@ -12,7 +12,7 @@ import {
 } from '../../shared/private_utils';
 import {invariant, spawnError} from '../../shared/error_utils';
 import {AttachmentData} from '../../shared/types/attachment';
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import {RecordDef} from '../../shared/types/record';
 import Field from '../models/field';
 import Record from '../models/record';

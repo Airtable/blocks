@@ -1,5 +1,5 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {FieldType} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
 import {MutationTypes} from '../../src/base/types/mutations';
 import Base from '../../src/base/models/base';
 import Sdk from '../../src/base/sdk';

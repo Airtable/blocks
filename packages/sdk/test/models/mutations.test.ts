@@ -4,7 +4,7 @@ import Mutations from '../../src/base/models/mutations';
 import Sdk from '../../src/base/sdk';
 import Session from '../../src/base/models/session';
 import {ModelChange} from '../../src/shared/types/base_core';
-import {FieldType} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
 import {MutationTypes} from '../../src/base/types/mutations';
 import {BlockRunContextType} from '../../src/base/types/airtable_interface';
 import {FieldTypeConfig} from '../../src/shared/types/airtable_interface_core';

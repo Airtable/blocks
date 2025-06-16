@@ -8,6 +8,8 @@ import {
 } from '../types/mutations_core';
 import {spawnError} from '../error_utils';
 import {AirtableInterfaceCore} from '../types/airtable_interface_core';
+import {entries, ObjectMap} from '../private_utils';
+import {FieldId} from '../types/hyper_ids';
 
 export const MUTATIONS_MAX_BATCH_SIZE = 50;
 
@@ -127,11 +129,245 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
     }
 
     /** @internal */
-    abstract _doesMutationExceedBatchSizeLimit(mutation: SdkModeT['MutationT']): boolean;
+    protected _doesMutationExceedBatchSizeLimit(mutation: SdkModeT['MutationT']): boolean {
+        switch (mutation.type) {
+            case MutationTypesCore.SET_MULTIPLE_RECORDS_CELL_VALUES:
+            case MutationTypesCore.CREATE_MULTIPLE_RECORDS:
+                return mutation.records.length > MUTATIONS_MAX_BATCH_SIZE;
+            case MutationTypesCore.DELETE_MULTIPLE_RECORDS:
+                return mutation.recordIds.length > MUTATIONS_MAX_BATCH_SIZE;
+            case MutationTypesCore.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
+                return mutation.updates.length > MUTATIONS_MAX_BATCH_SIZE;
+            default:
+                return false;
+        }
+    }
+
     /** @internal */
-    abstract _assertMutationIsValid(mutation: SdkModeT['MutationT']): void;
+    _assertFieldIsValidForMutation(field: SdkModeT['FieldT']): void {
+        if (field.isComputed) {
+            throw spawnError(
+                "Can't set cell values: Field '%s' is computed and cannot be set",
+                field.name,
+            );
+        }
+    }
+
     /** @internal */
-    abstract _getOptimisticModelChangesForMutation(
+    protected _assertMutationIsValid(mutation: SdkModeT['MutationT']): void {
+
+        const appInterface = this._sdk.__appInterface;
+
+        switch (mutation.type) {
+            case MutationTypesCore.SET_MULTIPLE_RECORDS_CELL_VALUES: {
+                const {tableId, records} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't set cell values: No table with id %s exists", tableId);
+                }
+
+                const recordStore = this._base.__getRecordStore(tableId);
+
+                const checkedFieldIds = new Set();
+
+                for (const record of records) {
+                    let existingRecord = null;
+                    if (this._isRecordStoreReadyForMutations(recordStore)) {
+                        existingRecord = recordStore.getRecordByIdIfExists(record.id);
+                        if (!existingRecord) {
+                            throw spawnError(
+                                "Can't set cell values: No record with id %s exists",
+                                record.id,
+                            );
+                        }
+                    }
+
+                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
+                        const field = table.getFieldByIdIfExists(fieldId);
+                        if (!field) {
+                            throw spawnError(
+                                "Can't set cell values: No field with id %s exists in table '%s'",
+                                fieldId,
+                                table.name,
+                            );
+                        }
+
+                        if (!checkedFieldIds.has(fieldId)) {
+                            this._assertFieldIsValidForMutation(field);
+                            checkedFieldIds.add(fieldId);
+                        }
+
+                        if (
+                            existingRecord &&
+                            this._isFieldAvailableForMutation(recordStore, field.id)
+                        ) {
+                            const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                                appInterface,
+                                record.cellValuesByFieldId[fieldId],
+                                existingRecord._getRawCellValue(field),
+                                field._data,
+                            );
+                            if (!validationResult.isValid) {
+                                throw spawnError(
+                                    "Can't set cell values: invalid cell value for field '%s'.\n%s",
+                                    field.name,
+                                    validationResult.reason,
+                                );
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            case MutationTypesCore.DELETE_MULTIPLE_RECORDS: {
+                const {tableId, recordIds} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't delete records: No table with id %s exists", tableId);
+                }
+
+                const recordStore = this._base.__getRecordStore(tableId);
+                if (this._isRecordStoreReadyForMutations(recordStore)) {
+                    for (const recordId of recordIds) {
+                        const record = recordStore.getRecordByIdIfExists(recordId);
+                        if (!record) {
+                            throw spawnError(
+                                "Can't delete records: No record with id %s exists in table '%s'",
+                                recordId,
+                                table.name,
+                            );
+                        }
+                    }
+                }
+                return;
+            }
+
+            case MutationTypesCore.CREATE_MULTIPLE_RECORDS: {
+                const {tableId, records} = mutation;
+                const checkedFieldIds = new Set();
+
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't create records: No table with id %s exists", tableId);
+                }
+
+                for (const record of records) {
+                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
+                        const field = table.getFieldByIdIfExists(fieldId);
+                        if (!field) {
+                            throw spawnError(
+                                "Can't create records: No field with id %s exists in table '%s'",
+                                fieldId,
+                                table.name,
+                            );
+                        }
+
+                        if (!checkedFieldIds.has(fieldId)) {
+                            this._assertFieldIsValidForMutation(field);
+                            checkedFieldIds.add(fieldId);
+                        }
+
+                        const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                            appInterface,
+                            record.cellValuesByFieldId[fieldId],
+                            null,
+                            field._data,
+                        );
+                        if (!validationResult.isValid) {
+                            throw spawnError(
+                                "Can't create records: invalid cell value for field '%s'.\n%s",
+                                field.name,
+                                validationResult.reason,
+                            );
+                        }
+                    }
+                }
+                return;
+            }
+
+            case MutationTypesCore.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
+                return;
+            }
+            default:
+                throw spawnError('unhandled mutation type: %s', mutation.type);
+        }
+    }
+
+    /** @internal */
+    protected _getOptimisticModelChangesForMutation(
         mutation: SdkModeT['MutationT'],
-    ): Array<ModelChange>;
+    ): Array<ModelChange> {
+        switch (mutation.type) {
+            case MutationTypesCore.SET_MULTIPLE_RECORDS_CELL_VALUES: {
+                const {tableId, records} = mutation;
+                const recordStore = this._base.__getRecordStore(tableId);
+
+                return records.flatMap(record =>
+                    Object.keys(record.cellValuesByFieldId)
+                        .filter(fieldId => this._isFieldAvailableForMutation(recordStore, fieldId))
+                        .map(fieldId => ({
+                            path: [
+                                'tablesById',
+                                tableId,
+                                'recordsById',
+                                record.id,
+                                'cellValuesByFieldId',
+                                fieldId,
+                            ],
+                            value: record.cellValuesByFieldId[fieldId],
+                        })),
+                );
+            }
+
+            case MutationTypesCore.DELETE_MULTIPLE_RECORDS: {
+                const {tableId, recordIds} = mutation;
+                return recordIds.map(recordId => ({
+                    path: ['tablesById', tableId, 'recordsById', recordId],
+                    value: undefined,
+                }));
+            }
+
+            case MutationTypesCore.CREATE_MULTIPLE_RECORDS: {
+                const {tableId, records} = mutation;
+                const recordStore = this._base.__getRecordStore(tableId);
+
+                return records.map(record => {
+                    const filteredCellValuesByFieldId: ObjectMap<FieldId, unknown> = {};
+                    for (const [fieldId, cellValue] of entries(record.cellValuesByFieldId)) {
+                        if (this._isFieldAvailableForMutation(recordStore, fieldId)) {
+                            filteredCellValuesByFieldId[fieldId] = cellValue;
+                        }
+                    }
+
+                    return {
+                        path: ['tablesById', tableId, 'recordsById', record.id],
+                        value: {
+                            id: record.id,
+                            cellValuesByFieldId: filteredCellValuesByFieldId,
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
+                        },
+                    };
+                });
+            }
+
+            case MutationTypesCore.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
+                throw spawnError(
+                    'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
+                );
+            }
+
+            default:
+                throw spawnError('unhandled mutation type: %s', mutation.type);
+        }
+    }
+
+    /** @internal */
+    abstract _isRecordStoreReadyForMutations(recordStore: SdkModeT['RecordStoreT']): boolean;
+    /** @internal */
+    abstract _isFieldAvailableForMutation(
+        recordStore: SdkModeT['RecordStoreT'],
+        fieldId: FieldId,
+    ): boolean;
 }

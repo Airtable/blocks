@@ -16,7 +16,8 @@ export {RecordData} from './types/record';
 
 export {CursorData} from './types/cursor';
 
-export {FieldData, FieldType} from '../shared/types/field';
+export {FieldData} from './types/field';
+export {FieldType} from '../shared/types/field_core';
 
 export {ViewType} from './types/view';
 

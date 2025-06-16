@@ -2,7 +2,7 @@
 import {ObjectMap} from '../private_utils';
 import {AppInterface} from './airtable_interface_core';
 import {PermissionLevel} from './permission_levels';
-import {TableDataCore, TablePermissionData} from './table_core';
+import {TableDataCore, TablePermissionDataCore} from './table_core';
 import {CollaboratorData} from './collaborator';
 import {TableId, UserId, BaseId} from './hyper_ids';
 
@@ -36,7 +36,7 @@ export interface BaseDataCore<TableDataT extends TableDataCore> {
 }
 
 /** @hidden */
-export interface BasePermissionData {
+export interface BasePermissionDataCore<TablePermissionDataT extends TablePermissionDataCore> {
     readonly permissionLevel: PermissionLevel;
-    readonly tablesById: ObjectMap<TableId, TablePermissionData>;
+    readonly tablesById: ObjectMap<TableId, TablePermissionDataT>;
 }

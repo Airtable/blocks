@@ -7,6 +7,7 @@ import {isEnumValue, ObjectValues, FlowAnyObject, isObjectEmpty} from '../../sha
 import BlockSdk from '../sdk';
 import {invariant} from '../../shared/error_utils';
 import colorUtils from '../../shared/color_utils';
+import {FieldType} from '../../shared/types/field_core';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import ObjectPool from './object_pool';
 import RecordStore from './record_store';
@@ -95,7 +96,7 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
         );
         return super.getCellValueAsString(field.id);
     }
-    _getRawCellValue(field: Field): unknown {
+    _getRawCellValue(field: {id: FieldId; type: FieldType}): unknown {
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',

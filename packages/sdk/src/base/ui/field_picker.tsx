@@ -4,7 +4,7 @@ import * as React from 'react';
 import {values, ObjectMap, has} from '../../shared/private_utils';
 import Field from '../models/field';
 import Table from '../models/table';
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';

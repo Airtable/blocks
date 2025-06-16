@@ -1,5 +1,5 @@
 /** @ignore */ /** */
-export {FieldType, FieldConfig} from '../../shared/types/field';
+export {FieldType, FieldConfig} from '../../shared/types/field_core';
 export {Base} from './base';
 export {Table} from './table';
 export {Field} from './field';

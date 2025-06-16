@@ -1,6 +1,6 @@
 import {ObjectMap} from '../../src/shared/private_utils';
 import {IconName} from '../../src/base/ui/icon_config';
-import {FieldType} from '../../src/shared/types/field';
+import {FieldType} from '../../src/shared/types/field_core';
 
 export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.SINGLE_LINE_TEXT]: 'Single line text',

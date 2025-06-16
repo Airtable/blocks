@@ -2,7 +2,7 @@ import {SdkMode} from '../../sdk_mode';
 import {cloneDeep, FlowAnyObject, isEnumValue, isObjectEmpty, ObjectValues} from '../private_utils';
 import {invariant} from '../error_utils';
 import {FieldId, RecordId} from '../types/hyper_ids';
-import {FieldType} from '../types/field';
+import {FieldType} from '../types/field_core';
 import AbstractModel from './abstract_model';
 import {FieldCore} from './field_core';
 
@@ -91,7 +91,7 @@ export abstract class RecordCore<
      * That format is incompatible with fieldTypeProvider methods, which expect the public API
      * format - use _getRawCellValue instead.
      */
-    _getRawCellValue(field: SdkModeT['FieldT']): unknown {
+    _getRawCellValue(field: {id: FieldId; type: FieldType}): unknown {
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
             return null;

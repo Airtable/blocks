@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Base */ /** */
 import {BaseCore, ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
 import {MutationTypes} from '../types/mutations';
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';
 import {BaseSdkMode} from '../../sdk_mode';
 import {TableId} from '../../shared/types/hyper_ids';

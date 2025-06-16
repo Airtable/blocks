@@ -1183,7 +1183,7 @@ export enum FieldType {
 /** @hidden */
 export type FieldLock = unknown;
 /** @hidden */
-export interface FieldData {
+export interface FieldDataCore {
     id: FieldId;
     name: string;
     type: PrivateColumnType;
@@ -1194,7 +1194,7 @@ export interface FieldData {
 }
 
 /** @hidden */
-export interface FieldPermissionData {
+export interface FieldPermissionDataCore {
     readonly id: FieldId;
     readonly name: string;
     readonly type: PrivateColumnType;

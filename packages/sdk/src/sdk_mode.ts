@@ -1,9 +1,17 @@
 import BaseBlockSdk from './base/sdk';
-import {BaseData as BaseDataForBaseSdkMode} from './base/types/base';
+import {
+    BaseData as BaseDataForBaseSdkMode,
+    BasePermissionData as BasePermissionDataForBaseSdkMode,
+} from './base/types/base';
 import {TableData as TableDataForBaseSdkMode} from './base/types/table';
+import {FieldData as FieldDataForBaseSdkMode} from './base/types/field';
 import {RecordData as RecordDataForBaseSdkMode} from './base/types/record';
-import {BaseData as BaseDataForInterfaceSdkMode} from './interface/types/base';
+import {
+    BaseData as BaseDataForInterfaceSdkMode,
+    BasePermissionData as BasePermissionDataForInterfaceSdkMode,
+} from './interface/types/base';
 import {TableData as TableDataForInterfaceSdkMode} from './interface/types/table';
+import {FieldData as FieldDataForInterfaceSdkMode} from './interface/types/field';
 import {RecordData as RecordDataForInterfaceSdkMode} from './interface/types/record';
 import BaseForBaseSdkMode from './base/models/base';
 import {Base as BaseForInterfaceSdkMode} from './interface/models/base';
@@ -53,7 +61,10 @@ export interface BaseSdkMode {
 
     BaseDataT: BaseDataForBaseSdkMode;
     TableDataT: TableDataForBaseSdkMode;
+    FieldDataT: FieldDataForBaseSdkMode;
     RecordDataT: RecordDataForBaseSdkMode;
+
+    BasePermissionDataT: BasePermissionDataForBaseSdkMode;
 
     BaseT: BaseForBaseSdkMode;
     TableT: TableForBaseSdkMode;
@@ -77,7 +88,10 @@ export interface InterfaceSdkMode {
 
     BaseDataT: BaseDataForInterfaceSdkMode;
     TableDataT: TableDataForInterfaceSdkMode;
+    FieldDataT: FieldDataForInterfaceSdkMode;
     RecordDataT: RecordDataForInterfaceSdkMode;
+
+    BasePermissionDataT: BasePermissionDataForInterfaceSdkMode;
 
     BaseT: BaseForInterfaceSdkMode;
     TableT: TableForInterfaceSdkMode;

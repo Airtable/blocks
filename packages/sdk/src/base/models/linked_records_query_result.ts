@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import {FieldType} from '../../shared/types/field';
+import {FieldType} from '../../shared/types/field_core';
 import Sdk from '../sdk';
 import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
