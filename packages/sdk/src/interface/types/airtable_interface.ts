@@ -81,7 +81,7 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
         recordId: string,
         fieldId: string,
         filterString: string,
-    ): Promise<{records: ReadonlyArray<{recordId: RecordId; displayName: string}>}>;
+    ): Promise<{records: ReadonlyArray<{id: RecordId; name: string}>}>;
     setCustomPropertiesAsync(
         properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
     ): Promise<boolean>;

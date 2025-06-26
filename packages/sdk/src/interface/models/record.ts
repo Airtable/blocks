@@ -40,7 +40,7 @@ export class Record extends RecordCore<InterfaceSdkMode, WatchableRecordKey> {
         field: Field,
         filterString: string,
     ): Promise<{
-        records: ReadonlyArray<{recordId: RecordId; displayName: string}>;
+        records: ReadonlyArray<{id: RecordId; name: string}>;
     }> {
         const parentTable = this.parentTable;
         if (field.parentTable !== parentTable) {
