@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // @flow
 import React from 'react';
-import Loader, {loaderStylePropTypes} from '../src/base/ui/loader';
+import Loader from '../src/base/ui/loader';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import Example from './helpers/example';
 
@@ -19,7 +19,6 @@ function LoaderExample() {
                     options: [0.3, 0.5],
                 },
             }}
-            styleProps={Object.keys(loaderStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
 

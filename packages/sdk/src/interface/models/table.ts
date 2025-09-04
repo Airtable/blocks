@@ -1,7 +1,8 @@
 import {TableCore} from '../../shared/models/table_core';
 import {InterfaceSdkMode} from '../../sdk_mode';
-import {FieldId} from '../../shared/types/hyper_ids';
+import {FieldId, RecordId} from '../../shared/types/hyper_ids';
 import {PermissionCheckResult} from '../../shared/types/mutations_core';
+import {FieldType} from '../../shared/types/field_core';
 import {Field} from './field';
 
 /**
@@ -66,5 +67,31 @@ export class Table extends TableCore<InterfaceSdkMode> {
      */
     hasPermissionToExpandRecords(): boolean {
         return this.checkPermissionToExpandRecords().hasPermission;
+    }
+
+    /** @internal */
+    _adjustCellValueForFieldIfNecessary(
+        field: Field,
+        cellValue: unknown,
+        onGenerateIdForNewForeignRecord: (recordId: RecordId) => void,
+    ): unknown {
+        if (field.type !== FieldType.MULTIPLE_RECORD_LINKS || !Array.isArray(cellValue)) {
+            return cellValue;
+        }
+        return cellValue.map(item => {
+            if (typeof item !== 'object' || item === null) {
+                return item;
+            }
+
+            if (!item.id) {
+                const newForeignRecordId = this.parentBase.__sdk.__airtableInterface.idGenerator.generateRecordId();
+                onGenerateIdForNewForeignRecord(newForeignRecordId);
+                return {
+                    ...item,
+                    id: newForeignRecordId,
+                };
+            }
+            return item;
+        });
     }
 }

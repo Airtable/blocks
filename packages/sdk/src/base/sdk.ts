@@ -1,8 +1,6 @@
 /** @hidden */ /** */
 
 
-import * as React from 'react';
-import PropTypes from 'prop-types';
 import {ModelChange} from '../shared/types/base_core';
 import {GlobalConfigUpdate} from '../shared/types/global_config';
 import {BlockSdkCore} from '../shared/sdk_core';
@@ -17,10 +15,6 @@ import UndoRedo from './undo_redo';
 import {PerformRecordAction} from './perform_record_action';
 import {AirtableInterface, BlockRunContext} from './types/airtable_interface';
 import {RequestJson, ResponseJson} from './types/backend_fetch_types';
-
-if (!(React as any).PropTypes) {
-    (React as any).PropTypes = PropTypes;
-}
 
 /** @hidden */
 type UpdateBatcher = (applyUpdates: () => void) => void;

@@ -1,4 +1,3 @@
-import {ReactWrapper} from 'enzyme';
 import Watchable from '../src/shared/watchable';
 
 /**
@@ -8,12 +7,22 @@ import Watchable from '../src/shared/watchable';
 export function flowTest(description: string, fn: () => unknown): void {
 }
 
-export function getComputedStylePropValue<Props extends {}>(
-    wrapper: ReactWrapper<Props>,
-    styleProp: string,
-): string {
-    const domNode = wrapper.getDOMNode();
-    return getComputedStyle(domNode).getPropertyValue(styleProp);
+export function createPromiseWithResolveAndReject<T>(): {
+    promise: Promise<T>;
+    resolve: (value: T) => void;
+    reject: (error: any) => void;
+} {
+    let resolve: (value: T) => void;
+    let reject: (error: any) => void;
+    const promise = new Promise<T>((_resolve, _reject) => {
+        resolve = _resolve;
+        reject = _reject;
+    });
+    return {promise, resolve: resolve!, reject: reject!};
+}
+
+export function getComputedStylePropValue(element: Element, styleProp: string): string {
+    return getComputedStyle(element).getPropertyValue(styleProp);
 }
 
 export function waitForWatchKeyAsync<Key extends string>(

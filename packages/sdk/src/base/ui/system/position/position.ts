@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/ui/system: Position */ /** */
 import {system, Config} from '@styled-system/core';
 import {PositionProperty} from '../utils/csstype';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
@@ -13,4 +12,3 @@ export interface PositionProps {
 export const config: Config = {position: true};
 
 export const position = system(config);
-export const positionPropTypes = createStylePropTypes(position.propNames);

@@ -1,5 +1,4 @@
 /** @hidden */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -9,15 +8,11 @@ import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
 import {
     dimensionsSet,
-    dimensionsSetPropTypes,
     DimensionsSetProps,
     display,
-    displayPropTypes,
     flexContainerSet,
-    flexContainerSetPropTypes,
     FlexContainerSetProps,
     spacingSet,
-    spacingSetPropTypes,
     SpacingSetProps,
 } from './system';
 import {OptionalResponsiveProp} from './system/utils/types';
@@ -63,13 +58,6 @@ export interface ModalStyleProps
 
 const styleParser = compose(dimensionsSet, display, flexContainerSet, spacingSet);
 
-export const modalStylePropTypes = {
-    ...dimensionsSetPropTypes,
-    ...displayPropTypes,
-    ...flexContainerSetPropTypes,
-    ...spacingSetPropTypes,
-};
-
 /**
  * Generic modal component with minimal styling.
  *
@@ -77,14 +65,6 @@ export const modalStylePropTypes = {
  */
 
 export class Modal extends React.Component<ModalProps> {
-    /** @hidden */
-    static propTypes = {
-        onClose: PropTypes.func,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        backgroundClassName: PropTypes.string,
-        backgroundStyle: PropTypes.object,
-    };
     /** @internal */
     _background: HTMLDivElement | null;
     /** @internal */
@@ -155,7 +135,9 @@ export class Modal extends React.Component<ModalProps> {
 
         return ReactDOM.createPortal(
             <div
-                ref={el => (this._background = el)}
+                ref={el => {
+                    this._background = el;
+                }}
                 className={cx(
                     baymax('fixed all-0 darken3 flex items-center justify-center'),
                     backgroundClassName,
@@ -184,7 +166,6 @@ export class Modal extends React.Component<ModalProps> {
 export default withStyledSystem<ModalProps, ModalStyleProps, Modal, {}>(
     Modal,
     styleParser,
-    modalStylePropTypes,
     {
         display: 'block',
         width: '100%',

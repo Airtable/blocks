@@ -1,4 +1,6 @@
 /** @ignore */
+import '../assert_run_context';
+
 import GlobalAlert from './global_alert';
 import '..';
 

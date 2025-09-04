@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Select, {selectStylePropTypes} from '../src/base/ui/select';
+import Select from '../src/base/ui/select';
 import {keys} from '../src/shared/private_utils';
 import theme from '../src/base/ui/theme/default_theme';
 import Example from './helpers/example';
@@ -34,7 +34,7 @@ const sharedModelPickerExampleProps = {
             defaultValue: false,
         },
     },
-    styleProps: Object.keys(selectStylePropTypes),
+    styleProps: [] as string[],
 } as const;
 
 function ViewPickerExample() {

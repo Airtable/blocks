@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import CollaboratorToken, {
-    collaboratorTokenStylePropTypes,
-} from '../src/base/ui/collaborator_token';
+import CollaboratorToken from '../src/base/ui/collaborator_token';
 import Example from './helpers/example';
 import collaboratorOptions from './helpers/collaborator_options';
 
@@ -13,7 +11,6 @@ export default {
 function CollaboratorTokenExample() {
     return (
         <Example
-            styleProps={Object.keys(collaboratorTokenStylePropTypes)}
             renderCodeFn={() => {
                 return `
                     import {CollaboratorToken, useBase} from '@airtable/blocks/base/ui';

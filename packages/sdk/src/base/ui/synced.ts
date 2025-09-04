@@ -1,5 +1,4 @@
 /** @hidden */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {GlobalConfigKey, GlobalConfigValue} from '../../shared/types/global_config';
 import {SdkMode} from '../../sdk_mode';
@@ -21,11 +20,6 @@ interface SyncedProps<SdkModeT extends SdkMode> {
 
 /** @hidden */
 export class Synced<SdkModeT extends SdkMode> extends React.Component<SyncedProps<SdkModeT>> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        render: PropTypes.func.isRequired,
-    };
     /** @hidden */
     constructor(props: SyncedProps<SdkModeT>) {
         super(props);

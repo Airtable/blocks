@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import * as React from 'react';
 
 const ORIGINAL_SIZE = 54;
@@ -8,9 +7,9 @@ const ORIGINAL_SIZE = 54;
  */
 export interface LoaderProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
-    fillColor: string;
+    fillColor?: string;
     /** A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner. Defaults to `0.3`. */
-    scale: number;
+    scale?: number;
     /** Additional class names to apply to the loading spinner. */
     className?: string;
     /** Additional styles to apply to the loading spinner. */
@@ -20,9 +19,7 @@ export interface LoaderProps {
 /**
  * @internal
  */
-const Loader = (props: LoaderProps) => {
-    const {fillColor, scale, className, style} = props;
-
+const Loader = ({fillColor = '#888', scale = 0.3, className, style}: LoaderProps) => {
     return (
         <svg
             width={ORIGINAL_SIZE * scale}
@@ -50,18 +47,6 @@ const Loader = (props: LoaderProps) => {
             </g>
         </svg>
     );
-};
-
-Loader.propTypes = {
-    fillColor: PropTypes.string.isRequired,
-    scale: PropTypes.number.isRequired,
-    className: PropTypes.string,
-    style: PropTypes.object,
-};
-
-Loader.defaultProps = {
-    fillColor: '#888',
-    scale: 0.3,
 };
 
 export default Loader;

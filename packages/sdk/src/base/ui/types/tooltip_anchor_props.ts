@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 /** @hidden */
 export interface TooltipAnchorProps<T = HTMLElement> {
@@ -12,10 +11,3 @@ export interface TooltipAnchorProps<T = HTMLElement> {
     /** @hidden */
     hasOnClick?: boolean;
 }
-
-export const tooltipAnchorPropTypes = {
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    onClick: PropTypes.func,
-    hasOnClick: PropTypes.bool,
-};

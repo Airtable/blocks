@@ -1,6 +1,6 @@
 import React from 'react';
 import {values as objectValues} from '../src/shared/private_utils';
-import Icon, {iconStylePropTypes} from '../src/base/ui/icon';
+import Icon from '../src/base/ui/icon';
 import {FieldType} from '../src/shared/types/field_core';
 import {ReadableFieldTypes, IconNamesByFieldType} from './helpers/field_type';
 import Example from './helpers/example';
@@ -28,7 +28,6 @@ function FieldIconExample() {
                     defaultValue: 16,
                 },
             }}
-            styleProps={Object.keys(iconStylePropTypes)}
             renderCodeFn={({fieldType, size}) => {
                 const fieldName = ReadableFieldTypes[fieldType];
                 return `

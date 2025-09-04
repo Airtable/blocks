@@ -1,11 +1,10 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import Table from '../models/table';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
-import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
+import {SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**
@@ -19,13 +18,6 @@ export interface SharedTablePickerProps extends SharedSelectBaseProps {
     /** A function to be called when the selected table changes. */
     onChange?: (tableModel: Table | null) => void;
 }
-
-export const sharedTablePickerPropTypes = {
-    shouldAllowPickingNone: PropTypes.bool,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    ...sharedSelectBasePropTypes,
-};
 
 /**
  * Props for the {@link TablePicker} component. Also accepts:
@@ -83,10 +75,5 @@ const TablePicker = (props: TablePickerProps, ref: React.Ref<HTMLSelectElement>)
 const ForwardedRefTablePicker = React.forwardRef<HTMLSelectElement, TablePickerProps>(TablePicker);
 
 ForwardedRefTablePicker.displayName = 'TablePicker';
-
-ForwardedRefTablePicker.propTypes = {
-    table: PropTypes.instanceOf(Table),
-    ...sharedTablePickerPropTypes,
-};
 
 export default ForwardedRefTablePicker;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Dialog, {dialogStylePropTypes} from '../src/base/ui/dialog';
+import Dialog from '../src/base/ui/dialog';
 import Button from '../src/base/ui/button';
 import Text from '../src/base/ui/text';
 import Heading from '../src/base/ui/heading';
@@ -21,7 +21,6 @@ function DialogExample() {
                     defaultValue: true,
                 },
             }}
-            styleProps={Object.keys(dialogStylePropTypes)}
             renderCodeFn={values => {
                 return `
                     import React, { useState } from 'react';

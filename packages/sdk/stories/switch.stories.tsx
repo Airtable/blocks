@@ -2,7 +2,7 @@
 // @flow
 import React, {useState} from 'react';
 import Box from '../src/base/ui/box';
-import Switch, {switchStylePropTypes} from '../src/base/ui/switch';
+import Switch from '../src/base/ui/switch';
 import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
 import Example from './helpers/example';
@@ -35,7 +35,7 @@ const sharedExampleProps = {
             defaultValue: false,
         },
     },
-    styleProps: Object.keys(switchStylePropTypes),
+    styleProps: [] as string[],
 } as const;
 
 function SwitchExample() {

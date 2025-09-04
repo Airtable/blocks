@@ -4,7 +4,7 @@ import {action} from '@storybook/addon-actions';
 import {values, keys} from '../src/shared/private_utils';
 import Box from '../src/base/ui/box';
 import {iconNames} from '../src/base/ui/icon_config';
-import TextButton, {textButtonStylePropTypes} from '../src/base/ui/text_button';
+import TextButton from '../src/base/ui/text_button';
 import Text from '../src/base/ui/text';
 import Tooltip from '../src/base/ui/tooltip';
 import useTheme from '../src/base/ui/theme/use_theme';
@@ -46,7 +46,6 @@ function TextButtonExample() {
                     defaultValue: true,
                 },
             }}
-            styleProps={Object.keys(textButtonStylePropTypes)}
             renderCodeFn={({hasLabel, ...restOfValues}) => {
                 const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
                     icon: value => (value ? 'edit' : null),

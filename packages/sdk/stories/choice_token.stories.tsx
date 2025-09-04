@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
-import ChoiceToken, {choiceTokenStylePropTypes} from '../src/base/ui/choice_token';
+import ChoiceToken from '../src/base/ui/choice_token';
 import Example from './helpers/example';
 import choiceOptions from './helpers/choice_options';
 
@@ -11,7 +11,6 @@ export default {
 function ChoiceTokenExample() {
     return (
         <Example
-            styleProps={Object.keys(choiceTokenStylePropTypes)}
             renderCodeFn={() => {
                 return `
                     import {ChoiceToken, useBase} from '@airtable/blocks/base/ui';

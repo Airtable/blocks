@@ -1,12 +1,11 @@
 /** @hidden */ /** */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {invariant} from '../../shared/error_utils';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';
 import useWatchable from '../../shared/ui/use_watchable';
-import Select, {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
+import Select, {SharedSelectBaseProps} from './select';
 import {SelectOptionValue} from './select_and_select_buttons_helpers';
 
 type AnyModel = Table | View | Field;
@@ -71,22 +70,5 @@ const ForwardedRefModelPickerSelect = React.forwardRef<
 >(ModelPickerSelect);
 
 ForwardedRefModelPickerSelect.displayName = 'ModelPickerSelect';
-
-ForwardedRefModelPickerSelect.propTypes = {
-    models: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-            PropTypes.instanceOf(Table).isRequired,
-            PropTypes.instanceOf(View).isRequired,
-            PropTypes.instanceOf(Field).isRequired,
-        ]).isRequired,
-    ).isRequired,
-    selectedModelId: PropTypes.string,
-    modelKeysToWatch: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    shouldAllowPickingNone: PropTypes.bool,
-    shouldAllowPickingModelFn: PropTypes.func,
-    onChange: PropTypes.func.isRequired,
-    placeholder: PropTypes.string.isRequired,
-    ...sharedSelectBasePropTypes,
-};
 
 export default ForwardedRefModelPickerSelect;

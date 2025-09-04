@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {cx} from 'emotion';
-import hoistNonReactStatic from 'hoist-non-react-statics';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 import {styleFn} from '@styled-system/core';
 import {cast, keys} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
@@ -23,13 +23,10 @@ import useStyledSystem from './use_styled_system';
  * import withStyledSystem from './with_styled_system';
  * import {
  *     flexContainerSet,
- *     flexContainerSetPropTypes,
  *     FlexContainerSetProps,
  *     flexItemSet,
  *     FlexItemSetProps,
- *     flexItemSetPropTypes,
  *     margin,
- *     marginPropTypes,
  *     MarginProps,
  * } from './system';
  *
@@ -47,11 +44,6 @@ import useStyledSystem from './use_styled_system';
  *     margin,
  * );
  *
- * const myComponentStylePropTypes = {
- *     ...flexContainerSetPropTypes,
- *     ...flexItemSetPropTypes,
- *     ...marginPropTypes,
- * };
  *
  * class MyComponent extends React.Component<Props, void> {
  *     static staticProp = 'STATIC';
@@ -68,7 +60,6 @@ import useStyledSystem from './use_styled_system';
  * export default withStyledSystem<Props, MyComponentStyleProps, MyComponent, { staticProp: string }>(
  *     MyComponent,
  *     styleParser,
- *     myComponentStylePropTypes,
  *     {
  *         // Optional default style props.
  *         margin: 3
@@ -84,13 +75,10 @@ export default function withStyledSystem<
 >(
     Component:
         | ((new (props: Props) => React.Component) & {displayName?: string})
-        | React.RefForwardingComponent<Instance, Props>
-        | React.FunctionComponent<Props>,
+        | React.ComponentType<Props>,
     styleParser: styleFn,
-    stylePropTypes: {[key: string]: unknown},
     defaultStyleProps?: StyleProps,
-): React.RefForwardingComponent<Instance, Props & StyleProps & React.RefAttributes<Instance>> &
-    Statics {
+): React.ForwardRefExoticComponent<Props & StyleProps & React.RefAttributes<Instance>> & Statics {
     const WithStyledSystem = React.forwardRef<
         Instance,
         Props & StyleProps & React.RefAttributes<Instance>
@@ -109,13 +97,9 @@ export default function withStyledSystem<
             />
         );
     });
-    (WithStyledSystem as any).propTypes = {
-        ...(Component as any).propTypes,
-        ...stylePropTypes,
-    };
     const componentName = Component.displayName || Component.name || 'Component';
     WithStyledSystem.displayName = `WithStyledSystem(${componentName})`;
-    hoistNonReactStatic(WithStyledSystem, Component);
+    hoistNonReactStatics(WithStyledSystem, Component);
     return WithStyledSystem as any;
 }
 
@@ -132,7 +116,7 @@ export default function withStyledSystem<
  * @param defaultStyleProps Default values for style props.
  */
 export function splitStyleProps<AllProps extends {className?: string}, StyleProps extends {}>(
-    props: AllProps,
+    props: React.PropsWithoutRef<AllProps>,
     stylePropNames: Array<string> = [],
     defaultStyleProps?: StyleProps,
 ): {

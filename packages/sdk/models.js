@@ -1,1 +1,1 @@
-module.exports = require('./dist/cjs/base/models/models');
+export * from './dist/esm/base/models/models';

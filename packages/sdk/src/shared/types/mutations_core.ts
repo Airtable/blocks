@@ -52,7 +52,10 @@ export interface SetMultipleRecordsCellValuesMutation {
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
     /** @hidden */
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
+    readonly opts?: {
+        readonly parseDateCellValueInColumnTimeZone?: boolean;
+        readonly includesForeignRowsThatShouldBeCreated?: boolean;
+    };
 }
 
 /** @hidden */
@@ -65,7 +68,10 @@ export interface PartialSetMultipleRecordsCellValuesMutation {
               readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
           }>
         | undefined;
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
+    readonly opts?: {
+        readonly parseDateCellValueInColumnTimeZone?: boolean;
+        readonly includesForeignRowsThatShouldBeCreated?: boolean;
+    };
 }
 
 /**
@@ -105,7 +111,10 @@ export interface CreateMultipleRecordsMutation {
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
     /** @hidden */
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
+    readonly opts?: {
+        readonly parseDateCellValueInColumnTimeZone?: boolean;
+        readonly includesForeignRowsThatShouldBeCreated?: boolean;
+    };
 }
 
 /** @hidden */
@@ -118,7 +127,10 @@ export interface PartialCreateMultipleRecordsMutation {
               readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
           }>
         | undefined;
-    readonly opts?: {parseDateCellValueInColumnTimeZone?: boolean};
+    readonly opts?: {
+        readonly parseDateCellValueInColumnTimeZone?: boolean;
+        readonly includesForeignRowsThatShouldBeCreated?: boolean;
+    };
 }
 
 /** @hidden */

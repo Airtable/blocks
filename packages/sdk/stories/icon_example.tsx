@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {css} from 'emotion';
 import {values as objectValues} from '../src/shared/private_utils';
 import {iconNames, IconName, deprecatedIconNameToReplacementName} from '../src/base/ui/icon_config';
-import Icon, {iconStylePropTypes} from '../src/base/ui/icon';
+import Icon from '../src/base/ui/icon';
 import theme from '../src/base/ui/theme/default_theme';
 import Text from '../src/base/ui/text';
 import Box from '../src/base/ui/box';
@@ -136,7 +136,6 @@ export default function IconExample() {
                     defaultValue: 16,
                 },
             }}
-            styleProps={Object.keys(iconStylePropTypes)}
             renderCodeFn={values => {
                 let exampleCode;
                 let deprecatedWarning = '';

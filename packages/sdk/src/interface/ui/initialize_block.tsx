@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: initializeBlock */ /** */
 import * as React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import {spawnError} from '../../shared/error_utils';
 import {InterfaceBlockSdk} from '../sdk';
 import getAirtableInterface from '../../injected/airtable_interface';
@@ -80,12 +80,7 @@ export function initializeBlock(entryPoints: EntryPoints) {
     container.style.width = '100%';
     body.appendChild(container);
 
-    try {
-        const {createRoot} = require('react-dom/client');
-        createRoot(container).render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>);
-    } catch (e) {
-        ReactDOM.render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>, container);
-    }
+    createRoot(container).render(<BlockWrapper sdk={sdk}>{entryElement}</BlockWrapper>);
 }
 
 let sdk: InterfaceBlockSdk;

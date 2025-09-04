@@ -261,13 +261,29 @@ export abstract class TableCore<
     /** @internal */
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(
         cellValuesByFieldIdOrName: ObjectMap<FieldId | string, unknown>,
+        onGenerateIdForNewForeignRecord: (recordId: RecordId) => void,
     ): ObjectMap<FieldId, unknown> {
         return Object.fromEntries(
             entries(cellValuesByFieldIdOrName).map(([fieldIdOrName, cellValue]) => {
                 const field = this.__getFieldMatching(fieldIdOrName);
-                return [field.id, cellValue];
+                return [
+                    field.id,
+                    this._adjustCellValueForFieldIfNecessary(
+                        field,
+                        cellValue,
+                        onGenerateIdForNewForeignRecord,
+                    ),
+                ];
             }),
         );
+    }
+    /** @internal */
+    _adjustCellValueForFieldIfNecessary(
+        field: SdkModeT['FieldT'],
+        cellValue: unknown,
+        onGenerateIdForNewForeignRecord: (recordId: RecordId) => void,
+    ): unknown {
+        return cellValue;
     }
     /**
      * @internal
@@ -579,10 +595,14 @@ export abstract class TableCore<
             readonly fields: ObjectMap<FieldId | string, unknown>;
         }>,
     ): Promise<void> {
+        let includesForeignRowsThatShouldBeCreated = false;
         const recordsWithCellValuesByFieldId = records.map(record => ({
             id: record.id,
             cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
                 record.fields,
+                () => {
+                    includesForeignRowsThatShouldBeCreated = true;
+                },
             ),
         }));
 
@@ -590,7 +610,10 @@ export abstract class TableCore<
             type: MutationTypesCore.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
             records: recordsWithCellValuesByFieldId,
-            opts: {parseDateCellValueInColumnTimeZone: true},
+            opts: {
+                parseDateCellValueInColumnTimeZone: true,
+                includesForeignRowsThatShouldBeCreated,
+            },
         });
     }
     /**
@@ -658,17 +681,26 @@ export abstract class TableCore<
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
+        let includesForeignRowsThatShouldBeCreated = false;
+        const recordsWithCellValuesByFieldId = records
+            ? records.map(record => ({
+                  id: record.id || undefined,
+                  cellValuesByFieldId: record.fields
+                      ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields, () => {
+                            includesForeignRowsThatShouldBeCreated = true;
+                        })
+                      : undefined,
+              }))
+            : undefined;
+
         return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypesCore.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
-            records: records
-                ? records.map(record => ({
-                      id: record.id || undefined,
-                      cellValuesByFieldId: record.fields
-                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
-                          : undefined,
-                  }))
-                : undefined,
+            records: recordsWithCellValuesByFieldId,
+            opts: {
+                parseDateCellValueInColumnTimeZone: true,
+                includesForeignRowsThatShouldBeCreated,
+            },
         });
     }
     /**
@@ -1167,6 +1199,7 @@ export abstract class TableCore<
     async createRecordsAsync(
         records: ReadonlyArray<{fields: ObjectMap<FieldId | string, unknown>}>,
     ): Promise<Array<RecordId>> {
+        let includesForeignRowsThatShouldBeCreated = false;
         const recordsToCreate = records.map(recordDef => {
             const recordDefKeys = keys(recordDef);
             let fields: ObjectMap<FieldId | string, unknown>;
@@ -1179,7 +1212,12 @@ export abstract class TableCore<
             }
             return {
                 id: this._sdk.__airtableInterface.idGenerator.generateRecordId(),
-                cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(fields),
+                cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+                    fields,
+                    () => {
+                        includesForeignRowsThatShouldBeCreated = true;
+                    },
+                ),
             };
         });
 
@@ -1187,7 +1225,10 @@ export abstract class TableCore<
             type: MutationTypesCore.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
             records: recordsToCreate,
-            opts: {parseDateCellValueInColumnTimeZone: true},
+            opts: {
+                parseDateCellValueInColumnTimeZone: true,
+                includesForeignRowsThatShouldBeCreated,
+            },
         });
 
         return recordsToCreate.map(record => record.id);
@@ -1240,17 +1281,26 @@ export abstract class TableCore<
             readonly fields?: ObjectMap<FieldId | string, unknown | void> | void;
         }>,
     ): PermissionCheckResult {
+        let includesForeignRowsThatShouldBeCreated = false;
+        const recordsWithCellValuesByFieldId = records
+            ? records.map(record => ({
+                  id: undefined,
+                  cellValuesByFieldId: record.fields
+                      ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields, () => {
+                            includesForeignRowsThatShouldBeCreated = true;
+                        })
+                      : undefined,
+              }))
+            : undefined;
+
         return this._sdk.__mutations.checkPermissionsForMutation({
             type: MutationTypesCore.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
-            records: records
-                ? records.map(record => ({
-                      id: undefined,
-                      cellValuesByFieldId: record.fields
-                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
-                          : undefined,
-                  }))
-                : undefined,
+            records: recordsWithCellValuesByFieldId,
+            opts: {
+                parseDateCellValueInColumnTimeZone: true,
+                includesForeignRowsThatShouldBeCreated,
+            },
         });
     }
     /**

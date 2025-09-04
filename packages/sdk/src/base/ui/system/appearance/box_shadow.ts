@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Appearance */ /** */
 import {system, Config} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {BoxShadowProperty} from '../utils/csstype';
 import {OptionalResponsiveProp} from '../utils/types';
 
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const boxShadow = system(config);
-export const boxShadowPropTypes = createStylePropTypes(boxShadow.propNames);

@@ -2,7 +2,6 @@
 import {system, Config} from '@styled-system/core';
 import {DisplayProperty} from './utils/csstype';
 import {OptionalResponsiveProp} from './utils/types';
-import createStylePropTypes from './utils/create_style_prop_types';
 
 /**
  * Style prop for the display type of an element.
@@ -17,4 +16,3 @@ export interface DisplayProps {
 const config: Config = {display: true};
 
 export const display = system(config);
-export const displayPropTypes = createStylePropTypes(display.propNames);

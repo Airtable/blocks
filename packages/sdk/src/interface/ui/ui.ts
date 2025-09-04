@@ -1,3 +1,5 @@
+import '../assert_run_context';
+
 import '..';
 
 export {expandRecord} from './expand_record';

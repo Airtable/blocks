@@ -3,8 +3,7 @@ import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
 import {GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import Input, {sharedInputPropTypes, SharedInputProps, SupportedInputType} from './input';
+import Input, {SharedInputProps, SupportedInputType} from './input';
 
 /**
  * Props for the {@link InputSynced} component. Also accepts:
@@ -65,11 +64,6 @@ const InputSynced = (props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) 
 };
 
 const ForwardedRefInputSynced = React.forwardRef<HTMLInputElement, InputSyncedProps>(InputSynced);
-
-ForwardedRefInputSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedInputPropTypes,
-};
 
 ForwardedRefInputSynced.displayName = 'InputSynced';
 

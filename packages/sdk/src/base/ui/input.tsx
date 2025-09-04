@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: Input */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -9,27 +8,20 @@ import useStyledSystem from './use_styled_system';
 import useFormField from './use_form_field';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {ControlSizeProp, controlSizePropType, ControlSize, useInputSize} from './control_sizes';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {ControlSizeProp, ControlSize, useInputSize} from './control_sizes';
 
 /** @internal */
 type InputVariant = EnumType<typeof InputVariant>;
@@ -78,15 +70,6 @@ export interface InputStyleProps
         MarginProps {}
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
-
-export const inputStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 /**
  * Props shared between the {@link Input} and {@link InputSynced} components.
@@ -164,34 +147,6 @@ export const SupportedInputType = createEnum(
  * Supported types for the {@link Input} component. See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types) for more information.
  */
 type SupportedInputType = EnumType<typeof SupportedInputType>;
-
-export const sharedInputPropTypes = {
-    size: controlSizePropType,
-    type: createPropTypeFromEnum(SupportedInputType),
-    placeholder: PropTypes.string,
-    disabled: PropTypes.bool,
-    required: PropTypes.bool,
-    spellCheck: PropTypes.bool,
-    tabIndex: PropTypes.oneOfType([PropTypes.number]),
-    autoFocus: PropTypes.bool,
-    max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    maxLength: PropTypes.number,
-    min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    minLength: PropTypes.number,
-    step: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    pattern: PropTypes.string,
-    readOnly: PropTypes.bool,
-    autoComplete: PropTypes.string,
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-    onFocus: PropTypes.func,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    ...inputStylePropTypes,
-    ...tooltipAnchorPropTypes,
-};
 
 /**
  * Props for the {@link Input} component. Also accepts:
@@ -298,11 +253,6 @@ const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
 };
 
 const ForwardedRefInput = React.forwardRef<HTMLInputElement, InputProps>(Input);
-
-ForwardedRefInput.propTypes = {
-    value: PropTypes.string.isRequired,
-    ...sharedInputPropTypes,
-};
 
 ForwardedRefInput.displayName = 'Input';
 

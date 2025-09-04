@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {dialogStylePropTypes} from '../src/base/ui/dialog';
 import ConfirmationDialog from '../src/base/ui/confirmation_dialog';
 import Button from '../src/base/ui/button';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
@@ -30,7 +29,6 @@ function ConfirmationDialogExample() {
                     defaultValue: false,
                 },
             }}
-            styleProps={Object.keys(dialogStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `

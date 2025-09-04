@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
 import Example from './helpers/example';
-import {cellRendererStylePropTypes} from '../src/base/ui/cell_renderer';
 import {values} from '../src/shared/private_utils';
 import FakeCellRenderer from './helpers/fake_cell_renderer';
 import {FieldType} from '../src/shared/types/field_core';
@@ -24,7 +23,6 @@ function CellRendererExample() {
                     renderLabel: (fieldType: any) => ReadableFieldTypes[fieldType as FieldType],
                 },
             }}
-            styleProps={Object.keys(cellRendererStylePropTypes)}
             renderCodeFn={({fieldType}) => {
                 const fieldName = ReadableFieldTypes[fieldType];
                 return `

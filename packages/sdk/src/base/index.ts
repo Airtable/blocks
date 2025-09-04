@@ -1,9 +1,10 @@
+import './assert_run_context';
+
 import warn, {__injectSdkIntoWarning} from '../shared/warning';
 import getAirtableInterface from '../injected/airtable_interface';
 import {BaseSdkMode} from '../sdk_mode';
 import {__injectSdkIntoPerformRecordAction} from './perform_record_action';
 import Sdk from './sdk';
-import {__injectSdkIntoCreateAggregators} from './models/create_aggregators';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 
 /** @internal */
@@ -70,7 +71,6 @@ export function __reset() {
         unstable_fetchAsync,
     } = __sdk);
 
-    __injectSdkIntoCreateAggregators(__sdk);
     __injectSdkIntoPerformRecordAction(__sdk);
     __injectSdkIntoInitializeBlock(__sdk);
     __injectSdkIntoWarning(__sdk);

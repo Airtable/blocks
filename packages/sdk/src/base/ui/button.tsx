@@ -1,42 +1,33 @@
 /** @module @airtable/blocks/ui: Button */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import {OptionalResponsiveProp} from './system/utils/types';
-import createResponsivePropType from './system/utils/create_responsive_prop_type';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
     display,
 } from './system';
 import useTheme from './theme/use_theme';
-import {ControlSize, ControlSizeProp, controlSizePropType, useButtonSize} from './control_sizes';
-import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {IconName, iconNamePropType} from './icon_config';
+import {ControlSize, ControlSizeProp, useButtonSize} from './control_sizes';
+import {AriaProps} from './types/aria_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {IconName} from './icon_config';
 import Icon from './icon';
 import cssHelpers from './css_helpers';
 import Box from './box';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 /**
  * Style props for the {@link Button} component. Also accepts:
@@ -62,16 +53,6 @@ interface ButtonStyleProps
 
 const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
-export const buttonStylePropTypes = {
-    display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /**
  * Variants for the {@link Button} component:
  *
@@ -93,7 +74,6 @@ export const buttonStylePropTypes = {
  */
 type ButtonVariant = EnumType<typeof ButtonVariant>;
 const ButtonVariant = createEnum('default', 'primary', 'secondary', 'danger');
-const buttonVariantPropType = createPropTypeFromEnum(ButtonVariant);
 
 /** @internal */
 function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): string {
@@ -223,22 +203,6 @@ const Button = (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
 };
 
 const ForwardedRefButton = React.forwardRef<HTMLButtonElement, ButtonProps>(Button);
-
-ForwardedRefButton.propTypes = {
-    size: controlSizePropType,
-    variant: buttonVariantPropType,
-    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
-    id: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
-    disabled: PropTypes.bool,
-    tabIndex: PropTypes.number,
-    children: PropTypes.node,
-    ...buttonStylePropTypes,
-    ...tooltipAnchorPropTypes,
-    ...ariaPropTypes,
-};
 
 ForwardedRefButton.displayName = 'Button';
 

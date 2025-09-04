@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import ColorPalette, {colorPaletteStylePropTypes} from '../src/base/ui/color_palette';
+import ColorPalette from '../src/base/ui/color_palette';
 import colors from '../src/shared/colors';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
@@ -24,7 +24,7 @@ const sharedColorPaletteExampleProps = {
             defaultValue: false,
         },
     },
-    styleProps: Object.keys(colorPaletteStylePropTypes),
+    styleProps: [] as string[],
 } as const;
 
 function ColorPaletteExample() {

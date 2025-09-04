@@ -6,8 +6,7 @@ import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from './field_picker';
+import FieldPicker, {SharedFieldPickerProps} from './field_picker';
 
 /**
  * Props for the {@link FieldPickerSynced} component. Also accepts:
@@ -67,10 +66,5 @@ const ForwardedRefFieldPickerSynced = React.forwardRef<HTMLSelectElement, FieldP
 );
 
 ForwardedRefFieldPickerSynced.displayName = 'FieldPickerSynced';
-
-ForwardedRefFieldPickerSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedFieldPickerPropTypes,
-};
 
 export default ForwardedRefFieldPickerSynced;

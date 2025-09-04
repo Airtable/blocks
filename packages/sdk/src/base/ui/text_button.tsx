@@ -1,43 +1,34 @@
 /** @module @airtable/blocks/ui: TextButton */ /** */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
-import {ariaPropTypes, AriaProps} from './types/aria_props';
-import createResponsivePropType from './system/utils/create_responsive_prop_type';
+import {AriaProps} from './types/aria_props';
 import {OptionalResponsiveProp} from './system/utils/types';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     spacingSet,
-    spacingSetPropTypes,
     SpacingSetProps,
     display,
 } from './system';
-import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
-import {IconName, iconNamePropType} from './icon_config';
+import {useTextStyle, TextSize, TextSizeProp} from './text';
+import {IconName} from './icon_config';
 import Icon from './icon';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 import cssHelpers from './css_helpers';
 import Box from './box';
 import {DataAttributesProp} from './types/data_attributes_prop';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 /**
  * Style props for the {@link TextButton} component. Also accepts:
@@ -71,16 +62,6 @@ const styleParser = compose(
     spacingSet,
 );
 
-export const textButtonStylePropTypes = {
-    display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...spacingSetPropTypes,
-};
-
 /**
  * Variants for the {@link TextButton} component:
  *
@@ -98,7 +79,6 @@ export const textButtonStylePropTypes = {
  */
 type TextButtonVariant = EnumType<typeof TextButtonVariant>;
 const TextButtonVariant = createEnum('default', 'dark', 'light');
-const textButtonVariantPropType = createPropTypeFromEnum(TextButtonVariant);
 
 /** @internal */
 function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.default): string {
@@ -267,23 +247,6 @@ const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => 
 };
 
 const ForwardedRefTextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(TextButton);
-
-ForwardedRefTextButton.propTypes = {
-    size: textSizePropType,
-    variant: textButtonVariantPropType,
-    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
-    disabled: PropTypes.bool,
-    children: PropTypes.node,
-    id: PropTypes.string,
-    tabIndex: PropTypes.number,
-    dataAttributes: PropTypes.any,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    'aria-selected': PropTypes.bool,
-    ...textButtonStylePropTypes,
-    ...ariaPropTypes,
-    ...tooltipAnchorPropTypes,
-};
 
 ForwardedRefTextButton.displayName = 'TextButton';
 

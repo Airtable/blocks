@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: Select */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 
 /**
@@ -31,12 +30,6 @@ export interface SelectOption {
     /** If set to `true`, this option will not be selectable. */
     disabled?: boolean | null;
 }
-
-export const selectOptionValuePropType = PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.bool,
-]) as PropTypes.Validator<NonNullable<SelectOptionValue>>;
 
 export const validateOptions = (options: Array<SelectOption>) => {
     if (options) {

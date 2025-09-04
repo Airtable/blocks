@@ -1,5 +1,4 @@
 import {createEnum, EnumType} from '../../shared/private_utils';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 export const iconNamesArray = [
     'aiAssistant',
@@ -181,7 +180,6 @@ export const deprecatedIconNameToReplacementName = new Map([['blocks', 'apps']])
  * [[ Story id="icon--example" title="Icon example" height="576px"]]
  */
 export type IconName = EnumType<typeof iconNames>;
-export const iconNamePropType = createPropTypeFromEnum(iconNames);
 
 export const phosphorIconConfig = {
     AddressBook:

@@ -1,44 +1,34 @@
 /** @module @airtable/blocks/ui: Link */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
-import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
-import createResponsivePropType from './system/utils/create_responsive_prop_type';
+import {AriaProps} from './types/aria_props';
+import {DataAttributesProp} from './types/data_attributes_prop';
 import {OptionalResponsiveProp} from './system/utils/types';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     fontWeight,
-    fontWeightPropTypes,
     FontWeightProps,
     spacingSet,
-    spacingSetPropTypes,
     SpacingSetProps,
     display,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
-import {IconName, iconNamePropType} from './icon_config';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {useTextStyle, TextSize, TextSizeProp} from './text';
+import {IconName} from './icon_config';
 import Icon from './icon';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 /**
  * Style props for the {@link Link} component. Also accepts:
@@ -75,17 +65,6 @@ const styleParser = compose(
     spacingSet,
 );
 
-export const linkStylePropTypes = {
-    display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'] as const)),
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...fontWeightPropTypes,
-    ...spacingSetPropTypes,
-};
-
 /**
  * Variants for the {@link Link} component:
  *
@@ -103,7 +82,6 @@ export const linkStylePropTypes = {
  */
 type LinkVariant = EnumType<typeof LinkVariant>;
 const LinkVariant = createEnum('default', 'dark', 'light');
-const linkVariantPropType = createPropTypeFromEnum(LinkVariant);
 
 /** @internal */
 function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
@@ -276,22 +254,6 @@ const Link = (props: LinkProps, ref: React.Ref<HTMLAnchorElement>) => {
 };
 
 const ForwardedRefLink = React.forwardRef<HTMLAnchorElement, LinkProps>(Link);
-
-ForwardedRefLink.propTypes = {
-    size: textSizePropType,
-    variant: linkVariantPropType,
-    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
-    href: PropTypes.string.isRequired,
-    target: PropTypes.string,
-    tabIndex: PropTypes.number,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    children: PropTypes.node,
-    dataAttributes: dataAttributesPropType,
-    ...tooltipAnchorPropTypes,
-    ...linkStylePropTypes,
-    ...ariaPropTypes,
-};
 
 ForwardedRefLink.displayName = 'Link';
 

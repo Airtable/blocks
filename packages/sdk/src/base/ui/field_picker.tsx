@@ -1,14 +1,13 @@
 /** @module @airtable/blocks/ui: FieldPicker */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import {values, ObjectMap, has} from '../../shared/private_utils';
+import {ObjectMap, has} from '../../shared/private_utils';
 import Field from '../models/field';
 import Table from '../models/table';
 import {FieldType} from '../../shared/types/field_core';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
-import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
+import {SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**
@@ -26,15 +25,6 @@ export interface SharedFieldPickerProps extends SharedSelectBaseProps {
     /** A function to be called when the selected field changes. */
     onChange?: (fieldModel: Field | null) => void;
 }
-
-export const sharedFieldPickerPropTypes = {
-    table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldType)).isRequired),
-    shouldAllowPickingNone: PropTypes.bool,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    ...sharedSelectBasePropTypes,
-};
 
 /**
  * Props for the {@link FieldPicker} component. Also accepts:
@@ -124,10 +114,5 @@ const FieldPicker = (props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>)
 const ForwardedRefFieldPicker = React.forwardRef<HTMLSelectElement, FieldPickerProps>(FieldPicker);
 
 ForwardedRefFieldPicker.displayName = 'FieldPicker';
-
-ForwardedRefFieldPicker.propTypes = {
-    field: PropTypes.instanceOf(Field),
-    ...sharedFieldPickerPropTypes,
-};
 
 export default ForwardedRefFieldPicker;

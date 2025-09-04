@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: ChoiceToken */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -11,16 +10,13 @@ import useStyledSystem from './use_styled_system';
 import useTextColorForBackgroundColor from './use_text_color_for_background_color';
 import {
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link ChoiceToken} component. Accepts:
@@ -33,12 +29,6 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
 interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(flexItemSet, positionSet, margin);
-
-export const choiceTokenStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 const DEFAULT_CHOICE_COLOR = 'gray';
 
@@ -117,18 +107,6 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
             </Box>
         </Box>
     );
-};
-
-ChoiceToken.propTypes = {
-    choice: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string.isRequired,
-        color: PropTypes.string,
-    }).isRequired,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    ...tooltipAnchorPropTypes,
-    ...choiceTokenStylePropTypes,
 };
 
 export default ChoiceToken;

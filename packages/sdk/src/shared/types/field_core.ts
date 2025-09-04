@@ -396,9 +396,27 @@ export enum FieldType {
      * The currently linked record IDs and their primary cell values from the linked table.
      *
      * **Cell write format**
+     * {base-only}
      * ```js
-     * Array<{ id: RecordId }>
+     * Array<{ id: RecordId; name?: string }>
      * ```
+     * {/base-only}
+     * {interface-only}
+     * ```js
+     * Array<{ id: RecordId; name?: string } | { name: string }>
+     * ```
+     * {/interface-only}
+     *
+     * Pass an array of objects with an `id` property that is the RecordId of the records
+     * in the linked table. The `name` property is optional and does not affect which
+     * record(s) are linked, but is recommended for better user experience. The block will
+     * initially use the `name` to optimistically update the cell value, before the response
+     * from the server is received.
+     *
+     * {interface-only}
+     * If you pass an object without an `id` property, the `name` will be used to create a
+     * new record in the linked table.
+     * {/interface-only}
      *
      * **Field options read format**
      * ```js

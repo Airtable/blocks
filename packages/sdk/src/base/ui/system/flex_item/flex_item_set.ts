@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Flex item */ /** */
 import {system} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as flexConfig, FlexProps} from './flex';
 import {config as flexGrowConfig, FlexGrowProps} from './flex_grow';
 import {config as flexShrinkConfig, FlexShrinkProps} from './flex_shrink';
@@ -32,5 +31,3 @@ export const flexItemSet = system({
     ...justifySelfConfig,
     ...orderConfig,
 });
-
-export const flexItemSetPropTypes = createStylePropTypes(flexItemSet.propNames);

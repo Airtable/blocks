@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, {useState} from 'react';
 import FormField from '../src/base/ui/form_field';
-import Input, {inputStylePropTypes} from '../src/base/ui/input';
+import Input from '../src/base/ui/input';
 import Box from '../src/base/ui/text';
 import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
@@ -25,7 +25,7 @@ const sharedExampleProps = {
             defaultValue: false,
         },
     },
-    styleProps: Object.keys(inputStylePropTypes),
+    styleProps: [] as string[],
 } as const;
 
 function InputExample() {

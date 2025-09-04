@@ -2,8 +2,7 @@
 import * as React from 'react';
 import {GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import Switch, {sharedSwitchPropTypes, SharedSwitchProps} from './switch';
+import Switch, {SharedSwitchProps} from './switch';
 
 /**
  * Props for the {@link SwitchSynced} component. Also accepts:
@@ -47,11 +46,6 @@ const SwitchSynced = (props: SwitchSyncedProps, ref: React.Ref<HTMLDivElement>) 
 };
 
 const ForwardedRefSwitchSynced = React.forwardRef(SwitchSynced);
-
-ForwardedRefSwitchSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedSwitchPropTypes,
-};
 
 ForwardedRefSwitchSynced.displayName = 'SwitchSynced';
 

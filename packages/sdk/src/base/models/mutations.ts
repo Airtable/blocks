@@ -11,6 +11,7 @@ import {
 } from '../../shared/types/mutation_constants';
 import {MutationsCore} from '../../shared/models/mutations_core';
 import {BaseSdkMode} from '../../sdk_mode';
+import {RecordData} from '../types/record';
 import Table from './table';
 import RecordStore from './record_store';
 
@@ -24,6 +25,14 @@ class Mutations extends MutationsCore<BaseSdkMode> {
     /** @internal */
     _isFieldAvailableForMutation(recordStore: RecordStore, fieldId: FieldId): boolean {
         return recordStore.areCellValuesLoadedForFieldId(fieldId);
+    }
+
+    /** @internal */
+    _getDefaultRecordProperties(): Partial<RecordData> {
+        return {
+            commentCount: 0,
+            createdTime: new Date().toJSON(),
+        };
     }
 
     /** @internal */

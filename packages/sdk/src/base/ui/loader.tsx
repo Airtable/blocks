@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: Loader */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -8,13 +7,10 @@ import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
 
@@ -28,12 +24,6 @@ interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginPro
 
 const styleParser = compose(flexItemSet, positionSet, margin);
 
-export const loaderStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /**
  * Props for the {@link Loader} component. Also accepts:
  * * {@link LoaderStyleProps}
@@ -43,9 +33,9 @@ export const loaderStylePropTypes = {
  */
 export interface LoaderProps extends LoaderStyleProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
-    fillColor: string;
+    fillColor?: string;
     /** A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner. Defaults to `0.3`. */
-    scale: number;
+    scale?: number;
     /** Additional class names to apply to the loading spinner. */
     className?: string;
     /** Additional styles to apply to the loading spinner. */
@@ -60,8 +50,13 @@ export interface LoaderProps extends LoaderStyleProps {
  * @docsPath UI/components/Loader
  * @component
  */
-const Loader = (props: LoaderProps) => {
-    const {fillColor, scale, className, style, ...styleProps} = props;
+const Loader = ({
+    fillColor = '#888',
+    scale = 0.3,
+    className,
+    style,
+    ...styleProps
+}: LoaderProps) => {
     const classNameForStyleProps = useStyledSystem<LoaderStyleProps>(styleProps, styleParser);
     return (
         <LoaderCore
@@ -75,19 +70,6 @@ const Loader = (props: LoaderProps) => {
             style={style}
         />
     );
-};
-
-Loader.propTypes = {
-    fillColor: PropTypes.string.isRequired,
-    scale: PropTypes.number.isRequired,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    ...loaderStylePropTypes,
-};
-
-Loader.defaultProps = {
-    fillColor: '#888',
-    scale: 0.3,
 };
 
 export default Loader;

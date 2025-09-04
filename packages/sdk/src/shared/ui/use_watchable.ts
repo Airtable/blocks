@@ -15,10 +15,12 @@ import useArrayIdentity from './use_array_identity';
  * This is a low-level tool that you should only use when you specifically need it. There are more
  * convenient model-specific hooks available:
  *
- * * For {@link Base}, {@link Table}, {@link View}, or {@link Field}, use {@link useBase}.
- * * For {@link RecordQueryResult} or {@link Record}, use {@link useRecords}, {@link useRecordIds}, or {@link useRecordById}.
+ * * For {@link Base}, {@link Table}, {base-only} {@link View},{/base-only}or {@link Field}, use {@link useBase}.
+ * * For {base-only}{@link RecordQueryResult} or {/base-only}{@link Record}, use {@link useRecords}, {@link useRecordIds}, or {@link useRecordById}.
+ * {base-only}
  * * For {@link Viewport}, use {@link useViewport}.
  * * For {@link SettingsButton}, use {@link useSettingsButton}.
+ * {/base-only}
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *

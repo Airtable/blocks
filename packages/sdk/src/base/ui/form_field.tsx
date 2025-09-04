@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui: FormField */ /** */
 import React, {useState} from 'react';
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
 import {getLocallyUniqueId} from '../../shared/private_utils';
@@ -11,22 +10,16 @@ import {FormFieldContext} from './use_form_field';
 import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     spacingSet,
-    spacingSetPropTypes,
     SpacingSetProps,
 } from './system';
 
@@ -50,15 +43,6 @@ interface FormFieldStyleProps
         SpacingSetProps {}
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, spacingSet);
-
-export const formFieldStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...spacingSetPropTypes,
-};
 
 /**
  * Props for the {@link FormField} component. Also accepts:
@@ -152,17 +136,6 @@ const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
 };
 
 const ForwardedRefFormField = React.forwardRef<HTMLDivElement, FormFieldProps>(FormField);
-
-ForwardedRefFormField.propTypes = {
-    id: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    label: PropTypes.node,
-    htmlFor: PropTypes.string,
-    description: PropTypes.node,
-    children: PropTypes.node,
-    ...formFieldStylePropTypes,
-};
 
 ForwardedRefFormField.displayName = 'FormField';
 

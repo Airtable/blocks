@@ -154,7 +154,7 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
     }
 
     /** @internal */
-    protected _assertMutationIsValid(mutation: SdkModeT['MutationT']): void {
+    _assertMutationIsValid(mutation: SdkModeT['MutationT']): void {
 
         const appInterface = this._sdk.__appInterface;
 
@@ -343,10 +343,9 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
                     return {
                         path: ['tablesById', tableId, 'recordsById', record.id],
                         value: {
+                            ...this._getDefaultRecordProperties(),
                             id: record.id,
                             cellValuesByFieldId: filteredCellValuesByFieldId,
-                            commentCount: 0,
-                            createdTime: new Date().toJSON(),
                         },
                     };
                 });
@@ -370,4 +369,6 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
         recordStore: SdkModeT['RecordStoreT'],
         fieldId: FieldId,
     ): boolean;
+    /** @internal */
+    abstract _getDefaultRecordProperties(): Partial<SdkModeT['RecordDataT']>;
 }

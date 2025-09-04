@@ -6,7 +6,6 @@ import {ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useStyledSystem from './use_styled_system';
 import {allStylesParser} from './system';
-import {createResponsivePropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 /**
  * Sizes for the {@link Button}, {@link Input}, {@link Select}, {@link SelectButtons}, and {@link Switch} components.
@@ -18,7 +17,6 @@ export const ControlSize = createEnum('small', 'default', 'large');
  * Size prop for the {@link Button}, {@link Input}, {@link Select}, {@link SelectButtons}, and {@link Switch} components.
  */
 export type ControlSizeProp = ResponsiveProp<ControlSize>;
-export const controlSizePropType = createResponsivePropTypeFromEnum(ControlSize);
 
 /** @internal */
 export function useButtonSize(controlSizeProp: ControlSizeProp): string {

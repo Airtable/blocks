@@ -5,18 +5,8 @@ import {InterfaceBlockSdk} from './sdk';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 
 /** @internal */
-export let __sdk: InterfaceBlockSdk;
-export let base: InterfaceBlockSdk['base'];
-export let globalConfig: InterfaceBlockSdk['globalConfig'];
-export let installationId: InterfaceBlockSdk['installationId'];
-export let reload: InterfaceBlockSdk['reload'];
-export let runInfo: InterfaceBlockSdk['runInfo'];
-
-/** @internal */
 export function __reset() {
-    __sdk = new InterfaceBlockSdk(getAirtableInterface<InterfaceSdkMode>());
-
-    ({base, globalConfig, installationId, reload, runInfo} = __sdk);
+    const __sdk = new InterfaceBlockSdk(getAirtableInterface<InterfaceSdkMode>());
 
     __injectSdkIntoInitializeBlock(__sdk);
     __injectSdkIntoWarning(__sdk);

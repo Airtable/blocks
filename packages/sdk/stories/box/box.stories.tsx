@@ -3,7 +3,6 @@ import Box from '../../src/base/ui/box';
 import Text from '../../src/base/ui/text';
 import theme from '../../src/base/ui/theme/default_theme';
 import Example from '../helpers/example';
-import {allStylesPropTypes} from '../../src/base/ui/system';
 import {keys} from '../../src/shared/private_utils';
 import {createJsxPropsStringFromValuesMap} from '../helpers/code_utils';
 
@@ -48,7 +47,6 @@ function BoxExample() {
                     defaultValue: false,
                 },
             }}
-            styleProps={Object.keys(allStylesPropTypes)}
             renderCodeFn={({isFlexCentered, border, ...restOfValues}) => {
                 const props = createJsxPropsStringFromValuesMap(restOfValues as any);
                 const flexProps = isFlexCentered

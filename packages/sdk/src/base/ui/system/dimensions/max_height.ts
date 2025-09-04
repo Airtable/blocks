@@ -2,7 +2,6 @@
 import {system, Config} from '@styled-system/core';
 import {MaxHeightProperty} from '../utils/csstype';
 import {OptionalResponsiveProp, Length} from '../utils/types';
-import createStylePropTypes from '../utils/create_style_prop_types';
 
 /** */
 export interface MaxHeightProps {
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const maxHeight = system(config);
-export const maxHeightPropTypes = createStylePropTypes(maxHeight.propNames);

@@ -1,14 +1,13 @@
 /** @module @airtable/blocks/ui: ViewPicker */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import {values, ObjectMap} from '../../shared/private_utils';
+import {ObjectMap} from '../../shared/private_utils';
 import View from '../models/view';
 import Table from '../models/table';
 import {ViewType} from '../types/view';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
-import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
+import {SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**
@@ -26,15 +25,6 @@ export interface SharedViewPickerProps extends SharedSelectBaseProps {
     /** A function to be called when the selected view changes. */
     onChange?: (viewModel: View | null) => void;
 }
-
-export const sharedViewPickerPropTypes = {
-    table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewType)).isRequired),
-    shouldAllowPickingNone: PropTypes.bool,
-    placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    ...sharedSelectBasePropTypes,
-};
 
 /**
  * Props for the {@link ViewPicker} component. Also accepts:
@@ -115,10 +105,5 @@ const ViewPicker = (props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) =
 const ForwardedRefViewPicker = React.forwardRef<HTMLSelectElement, ViewPickerProps>(ViewPicker);
 
 ForwardedRefViewPicker.displayName = 'ViewPicker';
-
-ForwardedRefViewPicker.propTypes = {
-    view: PropTypes.instanceOf(View),
-    ...sharedViewPickerPropTypes,
-};
 
 export default ForwardedRefViewPicker;

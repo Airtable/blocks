@@ -3,8 +3,7 @@ import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
 import {GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import Select, {sharedSelectPropTypes, SharedSelectProps} from './select';
+import Select, {SharedSelectProps} from './select';
 
 /**
  * Props for the {@link SelectSynced} component. Also accepts:
@@ -70,10 +69,5 @@ const ForwardedRefSelectSynced = React.forwardRef<HTMLSelectElement, SelectSynce
 );
 
 ForwardedRefSelectSynced.displayName = 'SelectSynced';
-
-ForwardedRefSelectSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedSelectPropTypes,
-};
 
 export default ForwardedRefSelectSynced;

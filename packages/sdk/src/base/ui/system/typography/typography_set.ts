@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Typography */ /** */
 import {system} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as fontFamilyConfig, FontFamilyProps} from './font_family';
 import {config as fontSizeConfig, FontSizeProps} from './font_size';
 import {config as fontStyleConfig, FontStyleProps} from './font_style';
@@ -41,5 +40,3 @@ export const typographySet = system({
     ...textDecorationConfig,
     ...textTransformConfig,
 });
-
-export const typographySetPropTypes = createStylePropTypes(typographySet.propNames);

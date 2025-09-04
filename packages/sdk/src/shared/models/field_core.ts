@@ -103,7 +103,8 @@ export abstract class FieldCore<SdkModeT extends SdkMode> extends AbstractModel<
     /**
      * The configuration options of the field. The structure of the field's
      * options depend on the field's type. `null` if the field has no options.
-     * Can be watched.
+     * See {@link FieldType} for more information on the options for each field
+     * type. Can be watched.
      *
      * @see {@link FieldType}
      * @example
@@ -143,6 +144,7 @@ export abstract class FieldCore<SdkModeT extends SdkMode> extends AbstractModel<
 
     /**
      * The type and options of the field to make type narrowing `FieldOptions` easier.
+     * See {@link FieldType} for more information on the options for each field type.
      *
      * @see {@link FieldConfig}
      * @example

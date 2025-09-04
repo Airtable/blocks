@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Flex container */ /** */
 import {system, Config} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {FlexWrapProperty} from '../utils/csstype';
 import {OptionalResponsiveProp} from '../utils/types';
 
@@ -13,4 +12,3 @@ export interface FlexWrapProps {
 export const config: Config = {flexWrap: true};
 
 export const flexWrap = system(config);
-export const flexWrapPropTypes = createStylePropTypes(flexWrap.propNames);

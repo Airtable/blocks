@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Typography */ /** */
 import {system, Config} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {FontFamilyProperty} from '../utils/csstype';
 import {OptionalResponsiveProp} from '../utils/types';
 
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const fontFamily = system(config);
-export const fontFamilyPropTypes = createStylePropTypes(fontFamily.propNames);

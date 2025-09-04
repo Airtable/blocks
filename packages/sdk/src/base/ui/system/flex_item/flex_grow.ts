@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Flex item */ /** */
 import {system, Config} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {GlobalsNumber} from '../utils/csstype';
 import {OptionalResponsiveProp} from '../utils/types';
 
@@ -13,4 +12,3 @@ export interface FlexGrowProps {
 export const config: Config = {flexGrow: true};
 
 export const flexGrow = system(config);
-export const flexGrowPropTypes = createStylePropTypes(flexGrow.propNames);

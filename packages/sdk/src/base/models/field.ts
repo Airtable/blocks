@@ -39,8 +39,8 @@ class Field extends FieldCore<BaseSdkMode> {
             airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
 
-        const {aggregators} = require('./models');
-        return values(aggregators).filter(aggregator => {
+        const base = this.parentTable.parentBase;
+        return values(base.aggregators).filter(aggregator => {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
@@ -50,8 +50,9 @@ class Field extends FieldCore<BaseSdkMode> {
      * @param aggregator The aggregator object or aggregator key.
      * @example
      * ```js
-     * import {aggregators} from '@airtable/blocks/base/models';
-     * const aggregator = aggregators.totalAttachmentSize;
+     * import {base} from '@airtable/blocks/base';
+     *
+     * const aggregator = base.aggregators.totalAttachmentSize;
      *
      * // Using an aggregator object
      * console.log(myAttachmentField.isAggregatorAvailable(aggregator));

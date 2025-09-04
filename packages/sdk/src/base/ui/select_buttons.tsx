@@ -1,14 +1,12 @@
 /** @module @airtable/blocks/ui: SelectButtons */ /** */
 import {cx} from 'emotion';
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../../shared/error_utils';
 import {createEnum, EnumType, getLocallyUniqueId} from '../../shared/private_utils';
 import {
     validateOptions,
     optionValueToString,
-    selectOptionValuePropType,
     SelectOption,
     SelectOptionValue,
 } from './select_and_select_buttons_helpers';
@@ -17,31 +15,20 @@ import useTheme from './theme/use_theme';
 import cssHelpers from './css_helpers';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {
-    ControlSizeProp,
-    controlSizePropType,
-    ControlSize,
-    useSelectButtonsSize,
-} from './control_sizes';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {ControlSizeProp, ControlSize, useSelectButtonsSize} from './control_sizes';
 
 /** @internal */
 type SelectButtonsVariant = EnumType<typeof SelectButtonsVariant>;
@@ -74,15 +61,6 @@ export interface SelectButtonsStyleProps
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
-export const selectButtonsStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /**
  * Props shared between the {@link SelectButtons} and {@link SelectButtonsSynced} components.
  *
@@ -108,26 +86,6 @@ export interface SharedSelectButtonsProps extends SelectButtonsStyleProps, Toolt
     /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
 }
-
-export const sharedSelectButtonsPropTypes = {
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: selectOptionValuePropType,
-            label: PropTypes.node.isRequired,
-            disabled: PropTypes.bool,
-        }).isRequired,
-    ).isRequired,
-    onChange: PropTypes.func,
-    disabled: PropTypes.bool,
-    size: controlSizePropType,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    ...selectButtonsStylePropTypes,
-    ...tooltipAnchorPropTypes,
-    ...selectButtonsStylePropTypes,
-};
 
 /**
  * Props for the {@link SelectButtons} component. Also accepts:
@@ -239,11 +197,6 @@ const SelectButtons = (props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
 const ForwardedRefSelectButtons = React.forwardRef<HTMLDivElement, SelectButtonsProps>(
     SelectButtons,
 );
-
-ForwardedRefSelectButtons.propTypes = {
-    value: selectOptionValuePropType,
-    ...sharedSelectButtonsPropTypes,
-};
 
 ForwardedRefSelectButtons.displayName = 'SelectButtons';
 

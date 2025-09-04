@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: RecordCardList */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {FixedSizeList} from 'react-window';
 import {compose} from '@styled-system/core';
@@ -13,16 +12,12 @@ import createDetectElementResize from './create_detect_element_resize';
 import withStyledSystem from './with_styled_system';
 import {
     dimensionsSet,
-    dimensionsSetPropTypes,
     DimensionsSetProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
 import RecordCard from './record_card';
@@ -114,26 +109,6 @@ function RecordCardItemRenderer(props: RecordCardItemRendererProps) {
         />
     );
 }
-
-RecordCardItemRenderer.propTypes = {
-    data: PropTypes.shape({
-        records: PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.instanceOf(Record), PropTypes.object]),
-        ).isRequired,
-        fields: PropTypes.arrayOf(PropTypes.instanceOf(Field)),
-        view: PropTypes.instanceOf(View),
-        attachmentCoverField: PropTypes.instanceOf(Field),
-        onClick: PropTypes.func,
-        onMouseEnter: PropTypes.func,
-        onMouseLeave: PropTypes.func,
-        width: PropTypes.number.isRequired,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    }),
-    index: PropTypes.number.isRequired,
-    style: PropTypes.object,
-    className: PropTypes.string,
-};
 
 /**
  * Utility function to measure scrollbar size.
@@ -253,13 +228,6 @@ export interface RecordCardListStyleProps
 
 const styleParser = compose(dimensionsSet, flexItemSet, positionSet, margin);
 
-export const recordCardListStylePropTypes = {
-    ...dimensionsSetPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /** @hidden */
 interface RecordCardListState {
     cardListWidth: number;
@@ -276,24 +244,6 @@ interface RecordCardListState {
  * @component
  */
 export class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
-    /** @hidden */
-    static propTypes = {
-        records: PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.instanceOf(Record), PropTypes.object]),
-        ).isRequired,
-
-        onScroll: PropTypes.func,
-        onRecordClick: PropTypes.func,
-        onRecordMouseEnter: PropTypes.func,
-        onRecordMouseLeave: PropTypes.func,
-
-        fields: PropTypes.arrayOf(PropTypes.instanceOf(Field).isRequired),
-        view: PropTypes.instanceOf(View),
-        attachmentCoverField: PropTypes.instanceOf(Field),
-
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
     /** @internal */
     _container: {current: HTMLElement | null};
     /** @internal */
@@ -424,5 +374,4 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
 export default withStyledSystem<RecordCardListProps, RecordCardListStyleProps, RecordCardList, {}>(
     RecordCardList,
     styleParser,
-    recordCardListStylePropTypes,
 );

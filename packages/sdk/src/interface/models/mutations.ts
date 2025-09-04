@@ -2,6 +2,7 @@ import {InterfaceSdkMode} from '../../sdk_mode';
 import {MutationsCore} from '../../shared/models/mutations_core';
 import {ModelChange} from '../../shared/types/base_core';
 import {Mutation, MutationTypes} from '../types/mutations';
+import {RecordData} from '../types/record';
 
 /** @hidden */
 export class Mutations extends MutationsCore<InterfaceSdkMode> {
@@ -13,6 +14,13 @@ export class Mutations extends MutationsCore<InterfaceSdkMode> {
     /** @internal */
     _isFieldAvailableForMutation(): boolean {
         return true;
+    }
+
+    /** @internal */
+    _getDefaultRecordProperties(): Partial<RecordData> {
+        return {
+            createdTime: new Date().toJSON(),
+        };
     }
 
     /** @internal */

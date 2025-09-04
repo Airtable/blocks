@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: Switch */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import React from 'react';
 import {compose} from '@styled-system/core';
@@ -7,34 +6,25 @@ import {createEnum, EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     spacingSet,
-    spacingSetPropTypes,
     SpacingSetProps,
     display,
-    displayPropTypes,
     backgroundColor,
-    backgroundColorPropTypes,
     BackgroundColorProps,
 } from './system';
 import {OptionalResponsiveProp} from './system/utils/types';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 import useTheme from './theme/use_theme';
 import {useSwitchSize, ControlSizeProp, ControlSize} from './control_sizes';
-import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
 
 /**
  * Variants for the {@link Switch} component:
@@ -49,7 +39,6 @@ import {createPropTypeFromEnum} from './system/utils/enum_prop_type_utils';
  */
 type SwitchVariant = EnumType<typeof SwitchVariant>;
 const SwitchVariant = createEnum('default', 'danger');
-const switchVariantPropType = createPropTypeFromEnum(SwitchVariant);
 
 /** @internal */
 function useSwitchVariant(variant: SwitchVariant = SwitchVariant.default) {
@@ -99,33 +88,6 @@ export interface SwitchProps extends SharedSwitchProps {
     /** If set to `true`, the switch will be switchd on. */
     value: boolean;
 }
-
-export const switchStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...spacingSetPropTypes,
-    ...backgroundColorPropTypes,
-    ...displayPropTypes,
-};
-
-export const sharedSwitchPropTypes = {
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    label: PropTypes.node,
-    onChange: PropTypes.func,
-    tabIndex: PropTypes.number,
-    variant: switchVariantPropType,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    'aria-label': PropTypes.string,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    ...tooltipAnchorPropTypes,
-    ...switchStylePropTypes,
-};
 
 /**
  * Style props for the {@link Switch} component. Also accepts:
@@ -264,11 +226,6 @@ const Switch = (props: SwitchProps, ref: React.Ref<HTMLDivElement>) => {
 };
 
 const ForwardedRefSwitch = React.forwardRef(Switch);
-
-ForwardedRefSwitch.propTypes = {
-    value: PropTypes.bool.isRequired,
-    ...sharedSwitchPropTypes,
-};
 
 ForwardedRefSwitch.displayName = 'Switch';
 

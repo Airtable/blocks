@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import {BlockRunContextType} from '../../base/types/airtable_interface';
 import {GlobalConfigKey} from '../types/global_config';
 import {BaseSdkMode} from '../../sdk_mode';
@@ -7,10 +6,6 @@ import {useSdk} from './sdk_context';
 
 /** @hidden */
 const globalConfigSyncedComponentHelpers = {
-    globalConfigKeyPropType: PropTypes.oneOfType([
-        PropTypes.string.isRequired,
-        PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    ]).isRequired,
     useDefaultWatchesForSyncedComponent(globalConfigKey: GlobalConfigKey): void {
         const sdk = useSdk();
         const {globalConfig, session} = sdk;

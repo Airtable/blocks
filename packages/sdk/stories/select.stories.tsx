@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Box from '../src/base/ui/box';
-import Select, {selectStylePropTypes} from '../src/base/ui/select';
+import Select from '../src/base/ui/select';
 import Tooltip from '../src/base/ui/tooltip';
 import FormField from '../src/base/ui/form_field';
 import theme from '../src/base/ui/theme/default_theme';
@@ -32,7 +32,7 @@ const sharedSelectExampleProps = {
             defaultValue: false,
         },
     },
-    styleProps: Object.keys(selectStylePropTypes),
+    styleProps: [] as string[],
 } as const;
 
 function SelectExample() {

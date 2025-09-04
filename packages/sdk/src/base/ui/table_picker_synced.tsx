@@ -7,8 +7,7 @@ import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import TablePicker, {sharedTablePickerPropTypes, SharedTablePickerProps} from './table_picker';
+import TablePicker, {SharedTablePickerProps} from './table_picker';
 
 /**
  * Props for the {@link TablePickerSynced} component. Also accepts:
@@ -63,10 +62,5 @@ const ForwardedRefTablePickerSynced = React.forwardRef<HTMLSelectElement, TableP
 );
 
 ForwardedRefTablePickerSynced.displayName = 'TablePickerSynced';
-
-ForwardedRefTablePickerSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedTablePickerPropTypes,
-};
 
 export default ForwardedRefTablePickerSynced;

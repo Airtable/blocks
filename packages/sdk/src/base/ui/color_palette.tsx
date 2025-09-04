@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: ColorPalette */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -12,25 +11,19 @@ import createDetectElementResize from './create_detect_element_resize';
 import withStyledSystem from './with_styled_system';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
@@ -58,15 +51,6 @@ export interface ColorPaletteStyleProps
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
-export const colorPaletteStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /**
  * Props shared between the {@link ColorPalette} and {@link ColorPaletteSynced} components.
  */
@@ -84,16 +68,6 @@ export interface SharedColorPaletteProps extends ColorPaletteStyleProps, Tooltip
     /** If set to `true`, the color palette will not allow color selection. */
     disabled?: boolean;
 }
-
-export const sharedColorPalettePropTypes = {
-    allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onChange: PropTypes.func,
-    squareMargin: PropTypes.number,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    disabled: PropTypes.bool,
-    ...tooltipAnchorPropTypes,
-};
 
 /**
  * Props for the {@link ColorPalette} component. Also accepts:
@@ -121,11 +95,6 @@ interface ColorPaletteState {
  * @docsPath UI/components/ColorPalette
  */
 export class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState> {
-    /** @hidden */
-    static propTypes = {
-        color: PropTypes.string,
-        ...sharedColorPalettePropTypes,
-    };
     /** @hidden */
     static defaultProps = {
         squareMargin: 4,
@@ -288,4 +257,4 @@ export default withStyledSystem<
     ColorPaletteStyleProps,
     ColorPalette,
     {}
->(ColorPalette, styleParser, colorPaletteStylePropTypes);
+>(ColorPalette, styleParser, {});

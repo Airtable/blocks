@@ -1,28 +1,23 @@
 /** @module @airtable/blocks/ui: Icon */ /** */
 import React from 'react';
-import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {cx} from 'emotion';
 import warning from '../../shared/warning';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
     width,
     WidthProps,
     height,
     HeightProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {
-    iconNamePropType,
     IconName,
     legacyIconNameToPhosphorIconName,
     phosphorIconConfig,
@@ -40,12 +35,6 @@ import {
 export interface IconStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(flexItemSet, positionSet, margin, width, height);
-
-export const iconStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 /**
  * Props shared between the {@link Icon} and {@link FieldIcon} components.
@@ -67,17 +56,6 @@ export interface SharedIconProps extends IconStyleProps, TooltipAnchorProps<SVGS
     /** Additional styles to apply to the icon path. */
     pathStyle?: React.CSSProperties;
 }
-
-export const sharedIconPropTypes = {
-    size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    fillColor: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    pathClassName: PropTypes.string,
-    pathStyle: PropTypes.object,
-    ...tooltipAnchorPropTypes,
-    ...iconStylePropTypes,
-};
 
 /**
  * Props for the {@link Icon} component. Also accepts:
@@ -162,12 +140,6 @@ const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
 };
 
 const ForwardedRefIcon = React.forwardRef<SVGSVGElement, IconProps>(Icon);
-
-ForwardedRefIcon.propTypes = {
-    name: iconNamePropType.isRequired,
-    suppressWarning: PropTypes.bool,
-    ...sharedIconPropTypes,
-};
 
 ForwardedRefIcon.displayName = 'Icon';
 

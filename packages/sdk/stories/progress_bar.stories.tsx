@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // @flow
 import React from 'react';
-import ProgressBar, {progressBarStylePropTypes} from '../src/base/ui/progress_bar';
+import ProgressBar from '../src/base/ui/progress_bar';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
@@ -20,7 +20,6 @@ function ProgressBarExample() {
                     defaultValue: 0.5,
                 },
             }}
-            styleProps={Object.keys(progressBarStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
 

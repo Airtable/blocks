@@ -2,7 +2,7 @@ import React from 'react';
 import {values, keys} from '../src/shared/private_utils';
 import Box from '../src/base/ui/box';
 import {iconNames} from '../src/base/ui/icon_config';
-import Link, {linkStylePropTypes} from '../src/base/ui/link';
+import Link from '../src/base/ui/link';
 import Text from '../src/base/ui/text';
 import Tooltip from '../src/base/ui/tooltip';
 import useTheme from '../src/base/ui/theme/use_theme';
@@ -44,7 +44,6 @@ function LinkExample() {
                     defaultValue: true,
                 },
             }}
-            styleProps={Object.keys(linkStylePropTypes)}
             renderCodeFn={({hasLabel, ...restOfValues}) => {
                 const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
                     icon: value => (value ? 'home' : null),

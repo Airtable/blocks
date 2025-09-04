@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: CollaboratorToken */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -11,16 +10,13 @@ import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
@@ -36,12 +32,6 @@ const UNKNOWN_PROFILE_PIC_URL =
 interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(flexItemSet, positionSet, margin);
-
-export const collaboratorTokenStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 /**
  * Props for the {@link CollaboratorToken} component. Also accepts:
@@ -145,20 +135,6 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     });
 
     return <StaticCollaboratorToken {...props} isActive={isActive} />;
-};
-
-CollaboratorToken.propTypes = {
-    collaborator: PropTypes.shape({
-        id: PropTypes.string,
-        email: PropTypes.string,
-        name: PropTypes.string,
-        profilePicUrl: PropTypes.string,
-        status: PropTypes.string,
-    }).isRequired,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    ...tooltipAnchorPropTypes,
-    ...collaboratorTokenStylePropTypes,
 };
 
 CollaboratorToken.Static = StaticCollaboratorToken;

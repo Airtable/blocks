@@ -8,7 +8,6 @@ import {
     MarginLeftProperty,
 } from '../utils/csstype';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
@@ -89,4 +88,3 @@ export const config: Config = {
 };
 
 export const margin = system(config);
-export const marginPropTypes = createStylePropTypes(margin.propNames);

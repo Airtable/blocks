@@ -4,7 +4,6 @@ import Box from '../src/base/ui/box';
 import Input from '../src/base/ui/input';
 import Select from '../src/base/ui/select';
 import Label from '../src/base/ui/label';
-import {allStylesPropTypes} from '../src/base/ui/system';
 import theme from '../src/base/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
@@ -29,7 +28,6 @@ function LabelExample() {
                     options: ['default', 'light'],
                 },
             }}
-            styleProps={Object.keys(allStylesPropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `

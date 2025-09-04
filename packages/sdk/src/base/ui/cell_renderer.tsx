@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: CellRenderer */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -16,30 +15,23 @@ import {useSdk} from '../../shared/ui/sdk_context';
 import {BaseSdkMode} from '../../sdk_mode';
 import {
     display,
-    displayPropTypes,
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
 import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
 import {OptionalResponsiveProp} from './system/utils/types';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link CellRenderer} component. Also accepts:
@@ -64,16 +56,6 @@ interface CellRendererStyleProps
 }
 
 const styleParser = compose(display, flexItemSet, margin, maxWidth, minWidth, positionSet, width);
-
-export const cellRendererStylePropTypes = {
-    ...displayPropTypes,
-    ...flexItemSetPropTypes,
-    ...marginPropTypes,
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...positionSetPropTypes,
-    ...widthPropTypes,
-};
 
 /**
  * Props for the {@link CellRenderer} component. Also accepts:
@@ -114,20 +96,6 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
  * @docsPath UI/components/CellRenderer
  */
 export class CellRenderer extends React.Component<CellRendererProps> {
-    /** @hidden */
-    static propTypes = {
-        record: PropTypes.instanceOf(Record),
-        cellValue: PropTypes.any,
-        field: PropTypes.instanceOf(Field).isRequired,
-        shouldWrap: PropTypes.bool,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        cellClassName: PropTypes.string,
-        cellStyle: PropTypes.object,
-        renderInvalidCellValue: PropTypes.func,
-        ...tooltipAnchorPropTypes,
-        ...cellRendererStylePropTypes,
-    };
     /** @hidden */
     static defaultProps = {
         shouldWrap: true,

@@ -1,12 +1,11 @@
 /** @module @airtable/blocks/ui: Box */ /** */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import useStyledSystem from './use_styled_system';
-import {allStylesPropTypes, AllStylesProps} from './system/index';
-import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
+import {AllStylesProps} from './system/index';
+import {AriaProps} from './types/aria_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Props for the Box component. Also accepts:
@@ -115,39 +114,6 @@ const Box = (props: BoxProps, ref: React.Ref<HTMLElement>) => {
 };
 
 const ForwardedRefBox = React.forwardRef<HTMLElement, BoxProps>(Box);
-
-(ForwardedRefBox as any).propTypes = {
-    as: PropTypes.oneOf([
-        'div',
-        'span',
-        'section',
-        'main',
-        'nav',
-        'header',
-        'footer',
-        'aside',
-        'article',
-        'address',
-        'hgroup',
-        'blockquote',
-        'figure',
-        'figcaption',
-        'ol',
-        'ul',
-        'li',
-        'pre',
-    ]),
-    id: PropTypes.string,
-    children: PropTypes.node,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    tabIndex: PropTypes.number,
-    role: PropTypes.string,
-    dataAttributes: dataAttributesPropType,
-    ...ariaPropTypes,
-    ...tooltipAnchorPropTypes,
-    ...allStylesPropTypes,
-};
 
 ForwardedRefBox.displayName = 'Box';
 

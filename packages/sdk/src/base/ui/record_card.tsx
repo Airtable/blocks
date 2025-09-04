@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: RecordCard */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -31,17 +30,13 @@ import {isCommandModifierKeyEvent} from './key_codes';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
 import {splitStyleProps} from './with_styled_system';
-import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 import useViewMetadata from './use_view_metadata';
 import CellRenderer from './cell_renderer';
 import expandRecord, {ExpandRecordOpts} from './expand_record';
@@ -59,12 +54,6 @@ const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(flexItemSet, positionSet, margin);
-
-export const recordCardStylePropTypes = {
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 const CARD_PADDING = 12;
 
@@ -114,15 +103,6 @@ const CellValueAndFieldLabel = ({
             />
         </Box>
     );
-};
-
-CellValueAndFieldLabel.propTypes = {
-    record: PropTypes.instanceOf(Record),
-
-    cellValue: PropTypes.any,
-    field: PropTypes.instanceOf(Field).isRequired,
-    width: PropTypes.number.isRequired,
-    renderInvalidCellValue: PropTypes.func,
 };
 
 /**
@@ -230,23 +210,6 @@ const calculateAttachmentDimensionsAndMargin = (
  * @component
  */
 export class RecordCard extends React.Component<RecordCardProps> {
-    /** @hidden */
-    static propTypes = {
-        record: PropTypes.oneOfType([PropTypes.instanceOf(Record), PropTypes.object]),
-
-        fields: PropTypes.arrayOf(PropTypes.instanceOf(Field).isRequired),
-        view: PropTypes.instanceOf(View),
-
-        attachmentCoverField: PropTypes.instanceOf(Field),
-        width: PropTypes.number,
-        height: PropTypes.number,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        expandRecordOptions: PropTypes.object,
-        renderInvalidCellValue: PropTypes.func,
-        ...tooltipAnchorPropTypes,
-        ...recordCardStylePropTypes,
-    };
     /** @hidden */
     static defaultProps = {
         width: 568,

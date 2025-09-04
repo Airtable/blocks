@@ -1,7 +1,7 @@
 import React from 'react';
 import {action} from '@storybook/addon-actions';
 import Box from '../src/base/ui/box';
-import Button, {buttonStylePropTypes} from '../src/base/ui/button';
+import Button from '../src/base/ui/button';
 import Tooltip from '../src/base/ui/tooltip';
 import useTheme from '../src/base/ui/theme/use_theme';
 import {keys} from '../src/shared/private_utils';
@@ -43,7 +43,6 @@ function ButtonExample() {
                     defaultValue: true,
                 },
             }}
-            styleProps={Object.keys(buttonStylePropTypes)}
             renderCodeFn={({hasLabel, ...values}) => {
                 const props = createJsxPropsStringFromValuesMap(values as any, {
                     icon: value => (value ? 'edit' : null),

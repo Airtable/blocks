@@ -74,7 +74,7 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
  *         {key: 'title', label: 'Title', type: 'string', defaultValue: 'Chart'},
  *         {key: 'xAxis', label: 'X-axis', type: 'field', table, possibleValues: numberFields},
  *         {key: 'yAxis', label: 'Y-axis', type: 'field', table, possibleValues: numberFields},
- *         {key: 'color', label: 'Color', type: 'enum', possibleValues: ['red', 'blue', 'green'], defaultValue: 'red'},
+ *         {key: 'color', label: 'Color', type: 'enum', possibleValues: [{value: 'red', label: 'Red'}, {value: 'blue', label: 'Blue'}, {value: 'green', label: 'Green'}], defaultValue: 'red'},
  *         {key: 'showLegend', label: 'Show Legend', type: 'boolean', defaultValue: true},
  *     ];
  * }

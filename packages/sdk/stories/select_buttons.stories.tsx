@@ -6,7 +6,7 @@ import FormField from '../src/base/ui/form_field';
 import Heading from '../src/base/ui/heading';
 import Select from '../src/base/ui/select';
 import {keys} from '../src/shared/private_utils';
-import SelectButtons, {selectButtonsStylePropTypes} from '../src/base/ui/select_buttons';
+import SelectButtons from '../src/base/ui/select_buttons';
 import useTheme from '../src/base/ui/theme/use_theme';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 import Example from './helpers/example';
@@ -37,7 +37,6 @@ function SelectButtonsExample() {
                     defaultValue: false,
                 },
             }}
-            styleProps={Object.keys(selectButtonsStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
@@ -102,7 +101,6 @@ function SelectButtonsSyncedExample() {
                     defaultValue: false,
                 },
             }}
-            styleProps={Object.keys(selectButtonsStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
 

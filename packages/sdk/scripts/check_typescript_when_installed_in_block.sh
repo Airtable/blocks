@@ -11,9 +11,9 @@ cd "$work_dir"
 cat - > tsconfig.json <<'EOF'
 {
     "compilerOptions": {
-        "module": "NodeNext",
-        "moduleResolution": "nodenext",
-        "target": "es2018",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "target": "es2019",
         "allowSyntheticDefaultImports": true
     },
     "include": ["source.ts"]
@@ -24,7 +24,7 @@ cat - > package.json <<EOF
 {
     "dependencies": {
         "@airtable/blocks": "$package_file_path",
-        "typescript": "^4.9.5"
+        "typescript": "^5.4.5"
     }
 }
 EOF

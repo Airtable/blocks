@@ -2,7 +2,6 @@
  * @module @airtable/blocks/ui: ViewportConstraint
  * @docsPath UI/components/ViewportConstraint
  */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {ViewportSizeConstraint} from '../types/viewport';
 import Sdk from '../sdk';
@@ -58,19 +57,6 @@ const didSizeChange = (
  * @component
  */
 class ViewportConstraint extends React.Component<ViewportConstraintProps> {
-    /** @hidden */
-    static propTypes = {
-        minSize: PropTypes.shape({
-            width: PropTypes.number,
-            height: PropTypes.number,
-        }),
-        maxFullscreenSize: PropTypes.shape({
-            width: PropTypes.number,
-            height: PropTypes.number,
-        }),
-        children: PropTypes.node,
-    };
-
     /** @internal */
     _removeMinSizeConstraintFn: (() => void) | null = null;
     /** @internal */

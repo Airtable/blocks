@@ -3,11 +3,7 @@ import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
 import {GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
-import SelectButtons, {
-    sharedSelectButtonsPropTypes,
-    SharedSelectButtonsProps,
-} from './select_buttons';
+import SelectButtons, {SharedSelectButtonsProps} from './select_buttons';
 
 /**
  * Props for the {@link SelectButtonsSynced} component. Also accepts:
@@ -68,11 +64,6 @@ const SelectButtonsSynced = (props: SelectButtonsSyncedProps, ref: React.Ref<HTM
 const ForwardedRefSelectButtonsSynced = React.forwardRef<HTMLDivElement, SelectButtonsSyncedProps>(
     SelectButtonsSynced,
 );
-
-ForwardedRefSelectButtonsSynced.propTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    ...sharedSelectButtonsPropTypes,
-};
 
 ForwardedRefSelectButtonsSynced.displayName = 'SelectButtonsSynced';
 

@@ -2,7 +2,6 @@
 import {system, Config} from '@styled-system/core';
 import {MinHeightProperty} from '../utils/csstype';
 import {OptionalResponsiveProp, Length} from '../utils/types';
-import createStylePropTypes from '../utils/create_style_prop_types';
 
 /** */
 export interface MinHeightProps {
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const minHeight = system(config);
-export const minHeightPropTypes = createStylePropTypes(minHeight.propNames);

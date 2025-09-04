@@ -2,13 +2,8 @@
 import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
 import {GlobalConfigKey} from '../../shared/types/global_config';
-import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
 import Synced from './synced';
-import ColorPalette, {
-    colorPaletteStylePropTypes,
-    sharedColorPalettePropTypes,
-    SharedColorPaletteProps,
-} from './color_palette';
+import ColorPalette, {SharedColorPaletteProps} from './color_palette';
 
 /**
  * Props for the {@link ColorPaletteSynced} component. Also accepts:
@@ -32,12 +27,6 @@ interface ColorPaletteSyncedProps extends SharedColorPaletteProps {
  * @groupPath UI/components/ColorPalette
  */
 class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...colorPaletteStylePropTypes,
-        ...sharedColorPalettePropTypes,
-    };
     /** @hidden */
     render() {
         const {globalConfigKey, disabled, onChange, ...restOfProps} = this.props;

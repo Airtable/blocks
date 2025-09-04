@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/types: Aria props */ /** */
 import {AriaAttributes} from 'react';
-import PropTypes from 'prop-types';
 
 /** */
 export interface AriaProps {
@@ -21,15 +20,3 @@ export interface AriaProps {
     /** Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live region. */
     ['aria-live']?: AriaAttributes['aria-live'];
 }
-
-/** @internal */
-export const ariaPropTypes = {
-    'aria-label': PropTypes.string,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    'aria-controls': PropTypes.string,
-    'aria-expanded': PropTypes.bool,
-    'aria-haspopup': PropTypes.bool,
-    'aria-hidden': PropTypes.bool,
-    'aria-live': PropTypes.oneOf(['off', 'assertive', 'polite'] as const),
-};

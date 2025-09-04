@@ -1,20 +1,15 @@
 /** @module @airtable/blocks/ui: Heading */ /** */
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {invariant} from '../../shared/error_utils';
 import {has, createEnum, ObjectMap, keys, EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
-import {allStylesPropTypes, AllStylesProps} from './system/index';
+import {AllStylesProps} from './system/index';
 import {ResponsiveProp, ResponsiveKey} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
-import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
-import {
-    createPropTypeFromEnum,
-    createResponsivePropTypeFromEnum,
-} from './system/utils/enum_prop_type_utils';
+import {AriaProps} from './types/aria_props';
+import {DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Sizes for the {@link Heading} component.
@@ -26,7 +21,6 @@ const HeadingSize = createEnum('xsmall', 'small', 'default', 'large', 'xlarge', 
  * Size prop for the {@link Heading} component.
  */
 type HeadingSizeProp = ResponsiveProp<HeadingSize>;
-const headingSizePropType = createResponsivePropTypeFromEnum(HeadingSize);
 
 /**
  * Variant prop for the {@link Heading} component.
@@ -35,7 +29,6 @@ const headingSizePropType = createResponsivePropTypeFromEnum(HeadingSize);
  */
 type HeadingVariant = EnumType<typeof HeadingVariant>;
 const HeadingVariant = createEnum('default', 'caps');
-const headingVariantPropType = createPropTypeFromEnum(HeadingVariant);
 
 /** @internal */
 function warnIfHeadingSizeOutOfRangeForVariant(
@@ -171,20 +164,6 @@ const Heading = (props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) => {
 };
 
 const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(Heading);
-
-ForwardedRefHeading.propTypes = {
-    as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const),
-    size: headingSizePropType,
-    variant: headingVariantPropType,
-    children: PropTypes.node,
-    id: PropTypes.string,
-    role: PropTypes.string,
-    dataAttributes: dataAttributesPropType,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    ...allStylesPropTypes,
-    ...ariaPropTypes,
-};
 
 ForwardedRefHeading.displayName = 'Heading';
 

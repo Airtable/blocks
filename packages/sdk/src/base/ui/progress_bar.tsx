@@ -1,5 +1,4 @@
 /** @module @airtable/blocks/ui: ProgressBar */ /** */
-import PropTypes from 'prop-types';
 import {cx, css} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
@@ -9,36 +8,27 @@ import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     backgroundColor,
-    backgroundColorPropTypes,
     BackgroundColorProps,
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     height,
-    heightPropTypes,
     HeightProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
     display,
-    displayPropTypes,
 } from './system';
 import {OptionalResponsiveProp} from './system/utils/types';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 import theme from './theme/default_theme';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link ProgressBar} component. Also accepts:
@@ -77,18 +67,6 @@ const styleParser = compose(
     margin,
     display,
 );
-
-export const progressBarStylePropTypes = {
-    ...backgroundColorPropTypes,
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...heightPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-    ...displayPropTypes,
-};
 
 /**
  * Props for the {@link ProgressBar} component. Also accepts:
@@ -133,19 +111,26 @@ const progressBarClassName = css({
  * @docsPath UI/components/ProgressBar
  * @component
  */
-const ProgressBar = (props: ProgressBarProps) => {
-    const {
-        barColor = theme.colors.blueBright,
-        progress,
-        onMouseEnter,
-        onMouseLeave,
-        onClick,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        hasOnClick,
-        className,
-        style,
-        ...styleProps
-    } = props;
+const ProgressBar = ({
+    barColor = colors.BLUE_BRIGHT,
+    progress,
+    onMouseEnter,
+    onMouseLeave,
+    onClick,
+    hasOnClick,
+    className,
+    style,
+    backgroundColor = colors.GRAY_LIGHT_1,
+    width = '100%',
+    height = 4,
+    ...props
+}: ProgressBarProps) => {
+    const styleProps = {
+        backgroundColor,
+        width,
+        height,
+        ...props,
+    };
 
     const clampedProgressValue = clamp(progress, 0, 1) * 100;
     const classNameForStyleProps = useStyledSystem<ProgressBarStyleProps>(styleProps, styleParser);
@@ -168,22 +153,6 @@ const ProgressBar = (props: ProgressBarProps) => {
             />
         </div>
     );
-};
-
-ProgressBar.propTypes = {
-    progress: PropTypes.number.isRequired,
-    barColor: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    ...tooltipAnchorPropTypes,
-    ...progressBarStylePropTypes,
-};
-
-ProgressBar.defaultProps = {
-    barColor: colors.BLUE_BRIGHT,
-    backgroundColor: colors.GRAY_LIGHT_1,
-    width: '100%',
-    height: 4,
 };
 
 export default ProgressBar;

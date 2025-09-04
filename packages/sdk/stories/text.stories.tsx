@@ -2,7 +2,6 @@ import React from 'react';
 import Text from '../src/base/ui/text';
 import theme from '../src/base/ui/theme/default_theme';
 import {keys} from '../src/shared/private_utils';
-import {allStylesPropTypes} from '../src/base/ui/system';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
@@ -36,7 +35,6 @@ function TextExample() {
                     options: ['default', 'light'],
                 },
             }}
-            styleProps={Object.keys(allStylesPropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap({
                     ...values,

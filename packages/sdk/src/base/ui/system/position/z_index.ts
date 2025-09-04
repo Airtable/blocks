@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/ui/system: Position */ /** */
 import {system, Config} from '@styled-system/core';
 import {ZIndexProperty} from '../utils/csstype';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const zIndex = system(config);
-export const zIndexPropTypes = createStylePropTypes(zIndex.propNames);

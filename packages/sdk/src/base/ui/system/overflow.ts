@@ -2,7 +2,6 @@
 import {system, Config} from '@styled-system/core';
 import {OverflowProperty, OverflowXProperty, OverflowYProperty} from './utils/csstype';
 import {OptionalResponsiveProp} from './utils/types';
-import createStylePropTypes from './utils/create_style_prop_types';
 
 /**
  * Style props for the overflow behavior of an element.
@@ -21,4 +20,3 @@ export interface OverflowProps {
 const config: Config = {overflow: true, overflowY: true, overflowX: true};
 
 export const overflow = system(config);
-export const overflowPropTypes = createStylePropTypes(overflow.propNames);

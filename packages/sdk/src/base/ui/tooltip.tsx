@@ -1,8 +1,6 @@
 /** @module @airtable/blocks/ui: Tooltip */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
-import {values} from '../../shared/private_utils';
 import {baymax} from './baymax_utils';
 import Popover, {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
 import Text from './text';
@@ -60,28 +58,6 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
     static fitInWindowModes = Popover.fitInWindowModes;
 
     /** @hidden */
-    static propTypes = {
-        children: PropTypes.element.isRequired,
-        content: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-        placementX: PropTypes.oneOf([
-            Popover.placements.LEFT,
-            Popover.placements.CENTER,
-            Popover.placements.RIGHT,
-        ]),
-        placementY: PropTypes.oneOf([
-            Popover.placements.TOP,
-            Popover.placements.CENTER,
-            Popover.placements.BOTTOM,
-        ]),
-        placementOffsetX: PropTypes.number,
-        placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(values(Popover.fitInWindowModes)),
-        shouldHideTooltipOnClick: PropTypes.bool,
-        disabled: PropTypes.bool,
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-    /** @hidden */
     static defaultProps = {
         placementX: Popover.placements.RIGHT,
         placementY: Popover.placements.CENTER,
@@ -105,7 +81,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         this._renderTooltipContent = this._renderTooltipContent.bind(this);
     }
     /** @internal */
-    _onMouseEnter(e: React.MouseEvent) {
+    _onMouseEnter(e: React.MouseEvent<HTMLElement>) {
         this._showTooltip();
         const originalOnMouseEnter = this.props.children.props.onMouseEnter;
         if (originalOnMouseEnter) {
@@ -113,7 +89,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
     }
     /** @internal */
-    _onMouseLeave(e: React.MouseEvent) {
+    _onMouseLeave(e: React.MouseEvent<HTMLElement>) {
         this._hideTooltip();
         const originalOnMouseLeave = this.props.children.props.onMouseLeave;
         if (originalOnMouseLeave) {
@@ -121,7 +97,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
     }
     /** @internal */
-    _onClick(e: React.MouseEvent | React.KeyboardEvent) {
+    _onClick(e: React.MouseEvent<HTMLElement>) {
         const {shouldHideTooltipOnClick, children} = this.props;
         if (shouldHideTooltipOnClick) {
             this._hideTooltip();

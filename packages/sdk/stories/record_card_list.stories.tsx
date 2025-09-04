@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react';
 import Example from './helpers/example';
-import {recordCardListStylePropTypes} from '../src/base/ui/record_card_list';
 import Box from '../src/base/ui/box';
 import {FieldType} from '../src/shared/types/field_core';
 import FakeRecordCard from './helpers/fake_record_card';
@@ -49,7 +48,6 @@ function RecordCardListExample() {
 
     return (
         <Example
-            styleProps={Object.keys(recordCardListStylePropTypes)}
             renderCodeFn={() => {
                 return `
                 import {RecordCardList, useBase, useRecords} from '@airtable/blocks/base/ui';

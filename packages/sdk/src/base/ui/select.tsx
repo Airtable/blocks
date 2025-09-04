@@ -1,44 +1,36 @@
 /** @module @airtable/blocks/ui: Select */ /** */
 import {cx} from 'emotion';
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
 import useFormField from './use_form_field';
 import {
     maxWidth,
-    maxWidthPropTypes,
     MaxWidthProps,
     minWidth,
-    minWidthPropTypes,
     MinWidthProps,
     width,
-    widthPropTypes,
     WidthProps,
     flexItemSet,
-    flexItemSetPropTypes,
     FlexItemSetProps,
     positionSet,
-    positionSetPropTypes,
     PositionSetProps,
     margin,
-    marginPropTypes,
     MarginProps,
 } from './system';
 import {OptionalResponsiveProp} from './system/utils/types';
 import useTheme from './theme/use_theme';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-    selectOptionValuePropType,
     SelectOptionValue,
     SelectOption,
 } from './select_and_select_buttons_helpers';
 import useStyledSystem from './use_styled_system';
-import {useSelectSize, ControlSize, ControlSizeProp, controlSizePropType} from './control_sizes';
+import {useSelectSize, ControlSize, ControlSizeProp} from './control_sizes';
 
 /** @hidden */
 type SelectVariant = EnumType<typeof SelectVariant>;
@@ -115,31 +107,6 @@ export interface SharedSelectBaseProps
     ['aria-describedby']?: string;
 }
 
-export const selectStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
-export const sharedSelectBasePropTypes = {
-    size: controlSizePropType,
-    autoFocus: PropTypes.bool,
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    name: PropTypes.string,
-    tabIndex: PropTypes.number,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    'aria-label': PropTypes.string,
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
-    ...tooltipAnchorPropTypes,
-    ...selectStylePropTypes,
-};
-
 /**
  * Props shared between the {@link Select} and {@link SelectSynced} components.
  */
@@ -149,18 +116,6 @@ export interface SharedSelectProps extends SharedSelectBaseProps {
     /** A function to be called when the selected option changes. */
     onChange?: (value: SelectOptionValue) => unknown;
 }
-
-export const sharedSelectPropTypes = {
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: selectOptionValuePropType,
-            label: PropTypes.node.isRequired,
-            disabled: PropTypes.bool,
-        }).isRequired,
-    ).isRequired,
-    onChange: PropTypes.func,
-    ...sharedSelectBasePropTypes,
-};
 
 /**
  * Props for the {@link Select} component. Also accepts:
@@ -295,10 +250,5 @@ const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
 const ForwardedRefSelect = React.forwardRef<HTMLSelectElement, SelectProps>(Select);
 
 ForwardedRefSelect.displayName = 'Select';
-
-ForwardedRefSelect.propTypes = {
-    value: selectOptionValuePropType,
-    ...sharedSelectPropTypes,
-};
 
 export default ForwardedRefSelect;

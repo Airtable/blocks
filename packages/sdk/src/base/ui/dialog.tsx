@@ -1,19 +1,10 @@
 /** @module @airtable/blocks/ui: Dialog */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
 import Modal from './modal';
 import DialogCloseButton from './dialog_close_button';
-import {
-    dimensionsSetPropTypes,
-    DimensionsSetProps,
-    displayPropTypes,
-    flexContainerSetPropTypes,
-    FlexContainerSetProps,
-    spacingSetPropTypes,
-    SpacingSetProps,
-} from './system';
+import {DimensionsSetProps, FlexContainerSetProps, SpacingSetProps} from './system';
 import {OptionalResponsiveProp} from './system/utils/types';
 
 /**
@@ -33,12 +24,14 @@ export interface DialogStyleProps
     display?: OptionalResponsiveProp<'block' | 'flex'>;
 }
 
-export const dialogStylePropTypes = {
-    ...dimensionsSetPropTypes,
-    ...displayPropTypes,
-    ...flexContainerSetPropTypes,
-    ...spacingSetPropTypes,
-};
+/** @internal */
+const DialogContext = React.createContext<{onDialogClose: (() => void) | null}>({
+    onDialogClose: null,
+});
+/** @internal */
+export function useDialogContext() {
+    return React.useContext(DialogContext);
+}
 
 /**
  * Props for the {@link Dialog} component. Also accepts:
@@ -74,30 +67,11 @@ interface DialogProps extends DialogStyleProps {
 class Dialog extends React.Component<DialogProps> {
     /** @hidden */
     static CloseButton = DialogCloseButton;
-    /** @hidden */
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        backgroundClassName: PropTypes.string,
-        backgroundStyle: PropTypes.object,
-        children: PropTypes.node.isRequired,
-        ...dialogStylePropTypes,
-    };
-    /** @hidden */
-    static childContextTypes = {
-        onDialogClose: PropTypes.func,
-    };
+
     /** @hidden */
     constructor(props: DialogProps) {
         super(props);
         this._onKeyDown = this._onKeyDown.bind(this);
-    }
-    /** @hidden */
-    getChildContext() {
-        return {
-            onDialogClose: this.props.onClose,
-        };
     }
     /** @hidden */
     componentDidMount() {
@@ -134,7 +108,13 @@ class Dialog extends React.Component<DialogProps> {
                 backgroundStyle={backgroundStyle}
                 {...restOfProps}
             >
-                {children}
+                <DialogContext.Provider
+                    value={{
+                        onDialogClose: onClose,
+                    }}
+                >
+                    {children}
+                </DialogContext.Provider>
             </Modal>
         );
     }

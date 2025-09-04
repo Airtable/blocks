@@ -2,7 +2,6 @@
 import {system, Config} from '@styled-system/core';
 import {BorderRadiusProperty} from '../utils/csstype';
 import {OptionalResponsiveProp, Length} from '../utils/types';
-import createStylePropTypes from '../utils/create_style_prop_types';
 
 /** */
 export interface BorderRadiusProps {
@@ -18,4 +17,3 @@ export const config: Config = {
 };
 
 export const borderRadius = system(config);
-export const borderRadiusPropTypes = createStylePropTypes(borderRadius.propNames);

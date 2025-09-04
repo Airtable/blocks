@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {values as objectValues} from '../src/shared/private_utils';
 import colors from '../src/shared/colors';
 import ColorPalette from '../src/base/ui/color_palette';
-import FormField, {formFieldStylePropTypes} from '../src/base/ui/form_field';
+import FormField from '../src/base/ui/form_field';
 import Box from '../src/base/ui/box';
 import Input from '../src/base/ui/input';
 import Select from '../src/base/ui/select';
@@ -27,7 +27,6 @@ function FormFieldExample() {
                     defaultValue: false,
                 },
             }}
-            styleProps={Object.keys(formFieldStylePropTypes)}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values, {
                     description: _value =>

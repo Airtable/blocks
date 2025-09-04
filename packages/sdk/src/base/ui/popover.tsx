@@ -1,9 +1,8 @@
 /** @module @airtable/blocks/ui: Popover */ /** */
-import PropTypes from 'prop-types';
 import {cx} from 'emotion';
-import ReactDOM from 'react-dom';
+import {createRoot, Root} from 'react-dom/client';
 import * as React from 'react';
-import {values, ObjectValues, FlowAnyObject, FlowAnyFunction} from '../../shared/private_utils';
+import {ObjectValues, FlowAnyObject, FlowAnyFunction} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
 import {baymax} from './baymax_utils';
 import createDetectElementResize from './create_detect_element_resize';
@@ -104,28 +103,6 @@ class Popover extends React.Component<PopoverProps> {
     static fitInWindowModes = FitInWindowModes;
 
     /** @hidden */
-    static propTypes = {
-        children: PropTypes.element.isRequired,
-        renderContent: PropTypes.func.isRequired,
-        placementX: PropTypes.oneOf([
-            PopoverPlacements.LEFT,
-            PopoverPlacements.CENTER,
-            PopoverPlacements.RIGHT,
-        ]),
-        placementY: PropTypes.oneOf([
-            PopoverPlacements.TOP,
-            PopoverPlacements.CENTER,
-            PopoverPlacements.BOTTOM,
-        ]),
-        placementOffsetX: PropTypes.number,
-        placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(values(FitInWindowModes)),
-        onClose: PropTypes.func,
-        isOpen: PropTypes.bool,
-        backgroundClassName: PropTypes.string,
-        backgroundStyle: PropTypes.object,
-    };
-    /** @hidden */
     static defaultProps = {
         placementX: PopoverPlacements.CENTER,
         placementY: PopoverPlacements.BOTTOM,
@@ -135,7 +112,11 @@ class Popover extends React.Component<PopoverProps> {
         isOpen: true,
     };
     /** @internal */
+    _reactRoot: null | Root;
+    /** @internal */
     _container: null | HTMLElement;
+    /** @internal */
+    _anchor: null | HTMLElement;
     /** @internal */
     _background: null | HTMLDivElement;
     /** @internal */
@@ -147,11 +128,14 @@ class Popover extends React.Component<PopoverProps> {
         | {addResizeListener: FlowAnyFunction; removeResizeListener: FlowAnyFunction}
         | null
         | undefined;
+
     /** @hidden */
     constructor(props: PopoverProps) {
         super(props);
 
+        this._reactRoot = null;
         this._container = null;
+        this._anchor = null;
         this._background = null;
         this._popoverContent = null;
         this._mouseDownOutsidePopover = false;
@@ -198,6 +182,7 @@ class Popover extends React.Component<PopoverProps> {
         container.style.position = 'relative';
         invariant(document.body, 'no document body');
         document.body.appendChild(container);
+        this._reactRoot = createRoot(container);
 
         window.addEventListener('scroll', this._refreshContainerAsync);
 
@@ -220,15 +205,10 @@ class Popover extends React.Component<PopoverProps> {
             );
         }
 
-        ReactDOM.unmountComponentAtNode(container);
+        this._reactRoot?.unmount();
         container.remove();
 
         this._container = null;
-    }
-    /** @internal */
-    get _anchor() {
-        // eslint-disable-next-line react/no-find-dom-node
-        return ReactDOM.findDOMNode(this);
     }
     /** @internal */
     async _refreshContainerAsync() {
@@ -374,9 +354,11 @@ class Popover extends React.Component<PopoverProps> {
     }
     /** @internal */
     async _renderPopoverAtPositionAsync(left: number, top: number) {
-        let content = this.props.renderContent();
+        let content: React.ReactElement<any> = this.props.renderContent();
         content = React.cloneElement(content, {
-            ref: (el: HTMLElement | null) => (this._popoverContent = el),
+            ref: (el: HTMLElement | null) => {
+                this._popoverContent = el;
+            },
             style: {
                 ...content.props.style,
                 position: 'absolute',
@@ -388,24 +370,24 @@ class Popover extends React.Component<PopoverProps> {
         const backgroundClassName = cx(baymax('fixed all-0'), this.props.backgroundClassName);
         const backgroundStyle = this.props.backgroundStyle;
 
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
             const container = this._container;
             invariant(container, 'container must exist');
-            ReactDOM.unstable_renderSubtreeIntoContainer(
-                this,
-                (
-                    <div
-                        ref={el => (this._background = el)}
-                        className={backgroundClassName}
-                        style={backgroundStyle}
-                        onMouseDown={this._onMouseDown}
-                        onMouseUp={this._onMouseUp}
-                    >
-                        {content}
-                    </div>
-                ) as any,
-                container,
-                resolve,
+            const root = this._reactRoot;
+            invariant(root, 'root must exist');
+            root.render(
+                <div
+                    ref={el => {
+                        this._background = el;
+                        resolve();
+                    }}
+                    className={backgroundClassName}
+                    style={backgroundStyle}
+                    onMouseDown={this._onMouseDown}
+                    onMouseUp={this._onMouseUp}
+                >
+                    {content}
+                </div>,
             );
         });
     }
@@ -432,7 +414,15 @@ class Popover extends React.Component<PopoverProps> {
     }
     /** @hidden */
     render() {
-        return this.props.children;
+        return (
+            <div
+                ref={el => {
+                    this._anchor = el;
+                }}
+            >
+                {this.props.children}
+            </div>
+        );
     }
 }
 

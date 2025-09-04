@@ -94,13 +94,11 @@ import {spawnError} from '../error_utils';
 export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:
         | ((new (props: Props) => React.Component) & {displayName?: string})
-        | React.RefForwardingComponent<Instance, Props>
-        | React.FunctionComponent<Props>,
+        | React.ComponentType<Props>,
     getAdditionalPropsToInject: (
-        props: Omit<Props, keyof InjectedProps>,
+        props: React.PropsWithoutRef<Omit<Props, keyof InjectedProps>>,
     ) => InjectedProps & {ref?: React.Ref<Instance>},
-): React.RefForwardingComponent<
-    Instance,
+): React.ForwardRefExoticComponent<
     Omit<Props, keyof InjectedProps> & React.RefAttributes<Instance>
 > {
     if (!getAdditionalPropsToInject) {
@@ -125,13 +123,13 @@ export default function withHooks<InjectedProps, Props extends InjectedProps, In
 
             return (instance: Instance | null): void => {
                 if (injectedRef && typeof injectedRef === 'object') {
-                    (injectedRef as React.MutableRefObject<Instance | null>).current = instance;
+                    (injectedRef as React.RefObject<Instance | null>).current = instance;
                 } else if (typeof injectedRef === 'function') {
                     injectedRef(instance);
                 }
 
                 if (forwardedRef && typeof forwardedRef === 'object') {
-                    (forwardedRef as React.MutableRefObject<Instance | null>).current = instance;
+                    (forwardedRef as React.RefObject<Instance | null>).current = instance;
                 } else if (typeof forwardedRef === 'function') {
                     forwardedRef(instance);
                 }

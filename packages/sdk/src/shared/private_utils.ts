@@ -1,4 +1,3 @@
-import React, {JSX} from 'react';
 import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from './error_utils';
 
@@ -22,25 +21,6 @@ export type ObjectValues<T extends object> = T[keyof T];
 
 /** @hidden */
 export type TimeoutId = ReturnType<typeof setTimeout>;
-
-/**
- * Extract the type of `ref` from a react component
- *
- * @hidden
- */
-export type ReactRefType<C> = C extends React.Component
-    ? C
-    : C extends new (props: any) => React.Component
-    ? C
-    : C extends React.RefForwardingComponent<infer T, any>
-    ? T
-    : (C extends React.JSXElementConstructor<{ref?: infer R}>
-        ? R
-        : C extends keyof JSX.IntrinsicElements
-        ? JSX.IntrinsicElements[C]['ref']
-        : unknown) extends React.Ref<infer T> | string | undefined
-    ? T
-    : unknown;
 
 /**
  * Allows creating an object map type with a dynamic key type.

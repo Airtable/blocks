@@ -10,8 +10,6 @@ import Heading from '../../src/base/ui/heading';
 import FormField from '../../src/base/ui/form_field';
 import {spawnUnknownSwitchCaseError} from '../../src/shared/error_utils';
 import ExampleCodePanel from './example_code_panel';
-import categorizeStyleProps from './categorize_style_props';
-import StylePropList from './style_prop_list';
 import {SelectOptionValue} from '../../src/base/ui/select_and_select_buttons_helpers';
 
 injectGlobal(`
@@ -63,7 +61,6 @@ type OptionMapType<T extends OptionMap> = {[K in keyof T]: OptionType<T[K]>};
 
 interface Props<T extends OptionMap> {
     options?: T;
-    styleProps?: Array<string>;
     children: (values: OptionMapType<T>) => React.ReactNode;
     renderCodeFn?: (values: OptionMapType<T>) => string;
     containerPadding?: number;
@@ -175,10 +172,6 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                     <Text textColor="light" fontStyle="italic">
                         This example has no options.
                     </Text>
-                )}
-
-                {props.styleProps && (
-                    <StylePropList stylePropsByCategory={categorizeStyleProps(props.styleProps)} />
                 )}
             </Box>
         </Box>

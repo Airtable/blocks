@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/ui: Dialog */ /** */
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import Dialog, {DialogStyleProps, dialogStylePropTypes} from './dialog';
+import Dialog, {DialogStyleProps} from './dialog';
 import Heading from './heading';
 import Text from './text';
 import Button from './button';
@@ -55,23 +54,6 @@ interface ConfirmationDialogProps extends DialogStyleProps {
  * @docsPath UI/components/ConfirmationDialog
  */
 class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
-    /** @hidden */
-    static propTypes = {
-        title: PropTypes.string.isRequired,
-        body: PropTypes.node,
-        cancelButtonText: PropTypes.string,
-        confirmButtonText: PropTypes.string,
-        isConfirmActionDangerous: PropTypes.bool,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        backgroundClassName: PropTypes.string,
-        backgroundStyle: PropTypes.object,
-        onCancel: PropTypes.func.isRequired,
-        onConfirm: PropTypes.func.isRequired,
-        isCancelButtonDisabled: PropTypes.bool,
-        isConfirmButtonDisabled: PropTypes.bool,
-        ...dialogStylePropTypes,
-    };
     /** @hidden */
     static defaultProps = {
         cancelButtonText: 'Cancel',

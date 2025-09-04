@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui/system: Position */ /** */
 import {system} from '@styled-system/core';
-import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as positionConfig, PositionProps} from './position';
 import {config as topConfig, TopProps} from './top';
 import {config as rightConfig, RightProps} from './right';
@@ -29,5 +28,3 @@ export const positionSet = system({
     ...leftConfig,
     ...zIndexConfig,
 });
-
-export const positionSetPropTypes = createStylePropTypes(positionSet.propNames);
