@@ -10,13 +10,13 @@ import Field from './field';
  *
  * @example
  * ```js
- * import {base} from '@airtable/blocks/base';
+ * import {aggregators} from '@airtable/blocks/base/models';
  *
  * // To get a list of aggregators supported for a specific field:
  * const fieldAggregators = myField.availableAggregators;
  *
  * // To compute the total attachment size of an attachment field:
- * const aggregator = base.aggregators.totalAttachmentSize;
+ * const aggregator = aggregators.totalAttachmentSize;
  * const value = aggregator.aggregate(myRecords, myAttachmentField);
  * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
  * ```
@@ -48,12 +48,7 @@ export interface Aggregators {
     [key: string]: Aggregator;
 }
 
-const aggregate = (
-    sdk: Sdk,
-    aggregatorKey: AggregatorKey,
-    records: Array<Record>,
-    field: Field,
-) => {
+const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
         throw spawnError(
             'The %s aggregator is not available for %s fields',
@@ -72,12 +67,7 @@ const aggregate = (
     );
 };
 
-const aggregateToString = (
-    sdk: Sdk,
-    aggregatorKey: AggregatorKey,
-    records: Array<Record>,
-    field: Field,
-) => {
+const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
         throw spawnError(
             'The %s aggregator is not available for %s fields',
@@ -107,7 +97,7 @@ const aggregateToString = (
  *
  * @hidden
  */
-export default function createAggregators(sdk: Sdk) {
+export default function createAggregators() {
     const {__airtableInterface: airtableInterface} = sdk;
     const aggregators: Aggregators = {};
     const aggregatorKeys = airtableInterface.aggregators.getAllAvailableAggregatorKeys();
@@ -118,12 +108,18 @@ export default function createAggregators(sdk: Sdk) {
             key,
             displayName: config.displayName,
             shortDisplayName: config.shortDisplayName,
-            aggregate: aggregate.bind(null, sdk, key),
-            aggregateToString: aggregateToString.bind(null, sdk, key),
+            aggregate: aggregate.bind(null, key),
+            aggregateToString: aggregateToString.bind(null, key),
         });
     }
 
     Object.freeze(aggregators);
 
     return aggregators;
+}
+
+let sdk: Sdk;
+
+export function __injectSdkIntoCreateAggregators(_sdk: Sdk) {
+    sdk = _sdk;
 }

@@ -83,9 +83,7 @@ function restorePackageJsonVersion(originalVersion) {
  * Does a "test run" of modifying package.json and restoring it.
  */
 function verifyPackageJsonModification(versionString) {
-    // Update and then restore and make sure it doesn't result in any unexpected changes
     restorePackageJsonVersion(updatePackageJsonVersion(versionString));
-    // Verify there are no uncommitted changes after the modification and restoration
     const statusAfterRestore = execCommand('git status --porcelain');
     if (statusAfterRestore) {
         console.error('❌ Error: Package.json modification resulted in unexpected changes');
@@ -115,7 +113,6 @@ function verifyWorkingDirectory() {
  * Checks if a git tag with this tagName already exists.
  */
 function checkGitTag(tagName) {
-    // git tag --list returns matching tag names, empty string if none exist
     const existingTag = execCommand(`git tag --list ${tagName}`).trim();
     if (existingTag) {
         console.error(`❌ Error: Git tag ${tagName} already exists`);
@@ -161,13 +158,11 @@ async function main() {
             process.exit(0);
         }
 
-        // Verify that the git tag doesn't already exist
         const gitTagName = `@airtable/blocks@${versionString}`;
         checkGitTag(gitTagName);
 
         verifyPackageJsonModification(versionString);
 
-        // Update package.json with the new version
         originalVersion = updatePackageJsonVersion(versionString);
 
         const npmRegistry = 'https://registry.npmjs.org/';
@@ -209,7 +204,6 @@ async function main() {
         );
     } catch (error) {
         console.error('Error during release process:', error);
-        // Restore package.json version if we modified it
         if (originalVersion) {
             restorePackageJsonVersion(originalVersion);
         }

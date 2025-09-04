@@ -2,7 +2,6 @@
     "name": "@airtable/blocks",
     "version": "1.19.0",
     "description": "Airtable Blocks SDK",
-    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/Airtable/blocks.git"
@@ -11,15 +10,15 @@
     "exports": {
         "./unstable_private_utils": {
             "types": "./dist/types/src/shared/unstable_private_utils.d.ts",
-            "default": "./dist/esm/shared/unstable_private_utils.js"
+            "default": "./dist/cjs/shared/unstable_private_utils.js"
         },
         "./unstable_testing_utils": {
             "types": "./dist/types/src/base/unstable_testing_utils.d.ts",
-            "default": "./dist/esm/base/unstable_testing_utils.js"
+            "default": "./dist/cjs/base/unstable_testing_utils.js"
         },
         "./base/unstable_standalone_ui": {
             "types": "./dist/types/src/base/ui/unstable_standalone_ui.d.ts",
-            "default": "./dist/esm/base/ui/unstable_standalone_ui.js"
+            "default": "./dist/cjs/base/ui/unstable_standalone_ui.js"
         },
         "./base/types": {
             "types": "./types.d.ts",
@@ -27,23 +26,23 @@
         },
         "./base/models": {
             "types": "./dist/types/src/base/models/models.d.ts",
-            "default": "./dist/esm/base/models/models.js"
+            "default": "./dist/cjs/base/models/models.js"
         },
         "./base/ui": {
             "types": "./dist/types/src/base/ui/ui.d.ts",
-            "default": "./dist/esm/base/ui/ui.js"
+            "default": "./dist/cjs/base/ui/ui.js"
         },
         "./base": {
             "types": "./dist/types/src/base/index.d.ts",
-            "default": "./dist/esm/base/index.js"
+            "default": "./dist/cjs/base/index.js"
         },
         "./interface/models": {
             "types": "./dist/types/src/interface/models/models.d.ts",
-            "default": "./dist/esm/interface/models/models.js"
+            "default": "./dist/cjs/interface/models/models.js"
         },
         "./interface/ui": {
             "types": "./dist/types/src/interface/ui/ui.d.ts",
-            "default": "./dist/esm/interface/ui/ui.js"
+            "default": "./dist/cjs/interface/ui/ui.js"
         }
     },
     "files": [
@@ -67,7 +66,7 @@
         "ci": "echo '--- sdk' && yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run build:docs && git add CHANGELOG.md ../blocks-docs/docs.json",
-        "release": "node ./scripts/interface-alpha-release.cjs",
+        "release": "node ./scripts/interface-alpha-release.js",
         "types": "tsc",
         "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
         "lint:quiet": "yarn run lint --quiet",
@@ -76,7 +75,7 @@
         "test": "yarn run build && yarn run jest",
         "test:coverage": "yarn run test --coverage",
         "build:clean": "rm -rf dist",
-        "build:babel": "babel src --out-dir dist/esm --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
+        "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
         "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",

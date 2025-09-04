@@ -10,7 +10,6 @@ import {BaseData} from '../types/base';
 import BaseBlockSdk from '../sdk';
 import RecordStore from './record_store';
 import Table from './table';
-import createAggregators, {Aggregators} from './create_aggregators';
 
 /**
  * Model class representing a base.
@@ -31,8 +30,6 @@ class Base extends BaseCore<BaseSdkMode> {
     /** @internal */
     static _className = 'Base';
 
-    _aggregators: Aggregators | null = null;
-
     /** @internal */
     _constructTable(tableId: TableId): Table {
         const recordStore = this.__getRecordStore(tableId);
@@ -47,29 +44,6 @@ class Base extends BaseCore<BaseSdkMode> {
     /** @internal */
     _iterateTableIds(): Iterable<TableId> {
         return this._data.tableOrder;
-    }
-
-    /**
-     * Aggregators can be used to compute aggregates for cell values.
-     *
-     * @example
-     * ```js
-     * import {base} from '@airtable/blocks/base';
-     *
-     * // To get a list of aggregators supported for a specific field:
-     * const fieldAggregators = myField.availableAggregators;
-     *
-     * // To compute the total attachment size of an attachment field:
-     * const aggregator = base.aggregators.totalAttachmentSize;
-     * const value = aggregator.aggregate(myRecords, myAttachmentField);
-     * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
-     * ```
-     */
-    get aggregators(): Aggregators {
-        if (!this._aggregators) {
-            this._aggregators = createAggregators(this._sdk);
-        }
-        return this._aggregators;
     }
 
     /**

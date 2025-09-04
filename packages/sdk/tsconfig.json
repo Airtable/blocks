@@ -2,8 +2,7 @@
     "compilerOptions": {
         "noEmit": true,
         "target": "es2019",
-        "module": "esnext",
-        "moduleResolution": "bundler",
+        "module": "commonjs",
         "esModuleInterop": true,
         "noImplicitAny": true,
         "strictNullChecks": true,

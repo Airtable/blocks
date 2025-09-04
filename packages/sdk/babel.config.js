@@ -1,4 +1,3 @@
-// Transpile for node 18 and the set of browsers currently supported by Airtable
 const targets = {
     node: '18',
     firefox: '94',
@@ -9,7 +8,7 @@ const targets = {
 
 module.exports = {
     presets: ['@babel/typescript', ['@babel/env', {targets}], '@babel/react'],
-    plugins: [['transform-define', require('./global_constants.cjs')]],
+    plugins: [['transform-define', require('./global_constants')]],
     parserOpts: {
         allowAwaitOutsideFunction: true,
     },

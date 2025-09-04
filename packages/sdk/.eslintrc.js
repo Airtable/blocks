@@ -84,7 +84,6 @@ module.exports = {
         'no-path-concat': 'error',
         'no-proto': 'error',
         'no-prototype-builtins': 'error',
-        // Turning off as recommended by https://typescript-eslint.io/rules/no-redeclare/#ignoredeclarationmerge
         'no-redeclare': 'off',
         'no-regex-spaces': 'error',
         'no-script-url': 'error',
@@ -111,7 +110,6 @@ module.exports = {
         'no-with': 'error',
         'one-var-declaration-per-line': 'error',
         'prefer-spread': 'error',
-        // let prettier handle this instead:
         quotes: 'off',
         radix: 'error',
         'require-yield': 'off',
@@ -122,7 +120,6 @@ module.exports = {
         'airtable/no-missing-async-suffix': 'warn',
         'airtable/no-missing-await': 'warn',
         'airtable/no-process-domain': 'warn',
-        // TODO(alex): re-enable this. It has a bug when used with typescript-eslint
         'airtable/noopener-noreferrer': 'off',
         '@airtable/blocks/no-throw-new': 'error',
         '@airtable/blocks/no-node-modules-invariant': 'error',
