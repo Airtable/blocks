@@ -9,6 +9,6 @@ if ((window as any).__getAirtableInterfaceAtVersion) {
         runContextType !== BlockRunContextType.DASHBOARD_APP &&
         runContextType !== BlockRunContextType.VIEW
     ) {
-        throw spawnError('Unexpected import when running block in base');
+        throw spawnError('Unexpected import when running block in interface');
     }
 }
