@@ -46,7 +46,7 @@ function stubCreateServer(): any {
 }
 
 function stubFindPortAsync(stubOptions: {inUsePorts?: number[]; nextPort?: number} = {}): any {
-    return async function(port?, portOptions?) {
+    return async function (port?, portOptions?) {
         const ports = Number(portOptions?.adjacentPorts) || 0;
         for (let i = 0; i < ports + 1; i++) {
             if (port && stubOptions?.inUsePorts?.includes(port + i)) {
@@ -68,9 +68,8 @@ describe('run', () => {
         .stub(runModule, 'createRunTaskAsync', stubCreateRunTaskAsync)
         .stub(userAgentModule, 'createUserAgentAsync', () => 'airtable-cli-user-agent/1.0.0')
         .withFiles({
-            '/home/projects/my-app/node_modules/fake-dependency/index.js': Buffer.from(
-                '// fake dependency',
-            ),
+            '/home/projects/my-app/node_modules/fake-dependency/index.js':
+                Buffer.from('// fake dependency'),
             '/home/projects/my-app/.block/remote.json': Buffer.from(
                 '{"baseId": "abcd", "blockId": "1234"}',
             ),
@@ -81,7 +80,7 @@ describe('run', () => {
     testRunCommand
         .answer('Server listening', {signal: 'SIGINT'})
         .command(['run'])
-        .it('runs', ctx => {
+        .it('runs', (ctx) => {
             expect(ctx.stdout).to.contain('Server listening');
         });
 
@@ -90,7 +89,7 @@ describe('run', () => {
         .answer('Server listening', {signal: 'SIGINT'})
         .command(['run'])
         .filePresence('/home/projects/my-app/.tmp/index.js', true)
-        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
+        .wroteFile('/home/projects/my-app/.tmp/index.js', (content) => content.length > 0)
         .it('creates an entry point');
 
     testRunCommand
@@ -107,7 +106,7 @@ describe('run', () => {
             stubFindPortAsync({inUsePorts: [9000], nextPort: 9002}),
         )
         .command(['run'])
-        .it('finds next preferred port on checking in use port 9000', ctx => {
+        .it('finds next preferred port on checking in use port 9000', (ctx) => {
             expect(ctx.stderr).to.contain('(https) 9002');
             expect(ctx.stderr).to.contain('(http) 9003');
         });
@@ -120,7 +119,7 @@ describe('run', () => {
             stubFindPortAsync({inUsePorts: [9001], nextPort: 9002}),
         )
         .command(['run'])
-        .it('finds next preferred port on checking adjacent in use port 9001', ctx => {
+        .it('finds next preferred port on checking adjacent in use port 9001', (ctx) => {
             expect(ctx.stderr).to.contain('(https) 9002');
             expect(ctx.stderr).to.contain('(http) 9003');
         });
@@ -128,7 +127,7 @@ describe('run', () => {
     testRunCommand
         .answer('Server listening', {signal: 'SIGINT'})
         .command(['run', '--port=1234'])
-        .it('uses ports provided in flags', ctx => {
+        .it('uses ports provided in flags', (ctx) => {
             expect(ctx.stderr).to.contain('(https) 1234');
             expect(ctx.stderr).to.contain('(http) 1235');
         });
@@ -142,7 +141,7 @@ describe('run', () => {
         })
         .answer('Server listening', {signal: 'SIGINT'})
         .command(['run', '--remote', 'newremote'])
-        .it('runs with newremote remote', ctx => {
+        .it('runs with newremote remote', (ctx) => {
             expect(ctx.stderr).to.contain('/newremote.remote.json');
         });
 

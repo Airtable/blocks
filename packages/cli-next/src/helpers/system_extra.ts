@@ -232,7 +232,7 @@ export async function watchFileAsync(sys: System, path: string): Promise<WhenMod
     };
     let isWatching = false;
 
-    const viaFsWatch = new Promise<void>(resolve => {
+    const viaFsWatch = new Promise<void>((resolve) => {
         let watcher: ReturnType<typeof sys.fs.watch>;
         const handler = async () => {
             if (!(await hasChanged())) {
@@ -253,7 +253,7 @@ export async function watchFileAsync(sys: System, path: string): Promise<WhenMod
         return {whenModified: viaFsWatch};
     }
 
-    const viaFsWatchFile = new Promise<void>(resolve => {
+    const viaFsWatchFile = new Promise<void>((resolve) => {
         const listener = async () => {
             if (!(await hasChanged())) {
                 return;

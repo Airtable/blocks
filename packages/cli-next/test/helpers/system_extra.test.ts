@@ -40,7 +40,7 @@ describe('system_extra', () => {
             };
         };
         const triggerReadTimeUpdate = async (path: string) => {
-            const readPromise = new Promise<void>(resolve => {
+            const readPromise = new Promise<void>((resolve) => {
                 fs.watchFile(path, {persistent: false, interval: 100}, function listener() {
                     fs.unwatchFile(path, listener);
                     resolve();
@@ -50,7 +50,7 @@ describe('system_extra', () => {
             while (!(await isFulfilledAsync(readPromise))) {
                 const {atime, mtime} = fs.statSync(path);
                 fs.utimesSync(path, new Date(atime.getTime() + 1), mtime);
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise((resolve) => setTimeout(resolve, 200));
             }
         };
 

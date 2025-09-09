@@ -184,7 +184,7 @@ export default class Submit extends AirtableCommand {
 
         const filesOnly = (
             await Promise.all(
-                uniqueItems.map(file =>
+                uniqueItems.map((file) =>
                     sys.fs
                         .readdirAsync(file)
                         .then(() => null)
@@ -194,7 +194,7 @@ export default class Submit extends AirtableCommand {
         ).filter(Boolean) as string[];
 
         const commonRootPath = filesOnly
-            .map(file => sys.path.dirname(file))
+            .map((file) => sys.path.dirname(file))
             .reduce((carry, dir) => {
                 while (!dir.startsWith(carry)) {
                     const lastCarry = carry;
@@ -228,7 +228,7 @@ export default class Submit extends AirtableCommand {
                 name,
             });
         }
-        const fileStreamClosedPromise = new Promise(resolve => {
+        const fileStreamClosedPromise = new Promise((resolve) => {
             output.on('close', resolve);
         });
         await zip.finalize();
@@ -313,7 +313,7 @@ async function projectFilesAsync(sys: System, dir: string): Promise<string[]> {
     } else if (stat.isDirectory()) {
         const entries = await sys.fs.readdirAsync(dir);
         const nested = await Promise.all(
-            entries.map(entry => projectFilesAsync(sys, sys.path.join(dir, entry))),
+            entries.map((entry) => projectFilesAsync(sys, sys.path.join(dir, entry))),
         );
         return ([] as string[]).concat(...nested);
     } else {

@@ -36,7 +36,7 @@ export function unwrapResult<T, E extends {} = Error>(result: Result<T, E>): T {
 export function unwrapResultFunctor<Args extends any[], T>(
     fn: (...args: Args) => Result<T>,
 ): (...args: Args) => T {
-    return function(...args: Args) {
+    return function (...args: Args) {
         return unwrapResult(fn(...args));
     };
 }

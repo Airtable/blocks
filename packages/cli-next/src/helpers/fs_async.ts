@@ -18,15 +18,15 @@ export type CallbackFS = Pick<
 
 /** Add `*Async` suffix to fs functions. */
 export interface AsyncFS {
-    copyFileAsync: typeof originalFs.promises['copyFile'];
-    mkdirAsync: typeof originalFs.promises['mkdir'];
-    statAsync: typeof originalFs.promises['stat'];
-    readdirAsync: typeof originalFs.promises['readdir'];
-    readFileAsync: typeof originalFs.promises['readFile'];
-    renameAsync: typeof originalFs.promises['rename'];
-    rmdirAsync: typeof originalFs.promises['rmdir'];
-    unlinkAsync: typeof originalFs.promises['unlink'];
-    writeFileAsync: typeof originalFs.promises['writeFile'];
+    copyFileAsync: (typeof originalFs.promises)['copyFile'];
+    mkdirAsync: (typeof originalFs.promises)['mkdir'];
+    statAsync: (typeof originalFs.promises)['stat'];
+    readdirAsync: (typeof originalFs.promises)['readdir'];
+    readFileAsync: (typeof originalFs.promises)['readFile'];
+    renameAsync: (typeof originalFs.promises)['rename'];
+    rmdirAsync: (typeof originalFs.promises)['rmdir'];
+    unlinkAsync: (typeof originalFs.promises)['unlink'];
+    writeFileAsync: (typeof originalFs.promises)['writeFile'];
 }
 
 export function asyncify(callbackFs: CallbackFS): AsyncFS {

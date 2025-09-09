@@ -119,10 +119,13 @@ function withFiles(files: {[path: string]: Buffer | null}) {
 
 function withJSON<T>(data: {[path: string]: T}) {
     return withFiles(
-        Object.entries(data).reduce((carry, [key, value]) => {
-            carry[key] = Buffer.from(JSON.stringify(value));
-            return carry;
-        }, {} as {[key in keyof typeof data]: Buffer}),
+        Object.entries(data).reduce(
+            (carry, [key, value]) => {
+                carry[key] = Buffer.from(JSON.stringify(value));
+                return carry;
+            },
+            {} as {[key in keyof typeof data]: Buffer},
+        ),
     );
 }
 
@@ -150,7 +153,7 @@ function wroteUserConfigFile(expectConfig: Partial<UserConfig>) {
 }
 
 function wroteJsonFile(path: string | ((sys: System) => string), expectJson: any) {
-    return wroteFile(path, expectContent => {
+    return wroteFile(path, (expectContent) => {
         const actualJson = JSON.parse(expectContent.toString());
         expect(actualJson).deep.equal(expectJson);
     });

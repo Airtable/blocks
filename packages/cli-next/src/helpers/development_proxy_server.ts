@@ -113,7 +113,7 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
             return () => {};
         }
 
-        return function(this: any, ...args: Array<any>) {
+        return function (this: any, ...args: Array<any>) {
             if (that.isSilenced) {
                 return;
             }

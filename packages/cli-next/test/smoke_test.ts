@@ -115,7 +115,7 @@ class SmokeTest {
         console.log(chalk.dim(`$ ${command} ${args.join(' ')}`));
         let commandProcess;
         let runProcessPid: number = 0;
-        const commandResultPromise = new Promise(resolve => {
+        const commandResultPromise = new Promise((resolve) => {
             commandProcess = childProcess.execFile(
                 command,
                 args,
@@ -133,8 +133,8 @@ class SmokeTest {
 
             this._childProcessPids.add(runProcessPid);
             commandProcess.on('exit', () => this._childProcessPids.delete(runProcessPid));
-            commandProcess.stdout!.on('data', data => console.log(data.trim()));
-            commandProcess.stderr!.on('data', data => console.error(data.trim()));
+            commandProcess.stdout!.on('data', (data) => console.log(data.trim()));
+            commandProcess.stderr!.on('data', (data) => console.error(data.trim()));
         }) as CommandResultPromise;
         return {runProcessPid, commandResultPromise, command, args, cwd};
     }
@@ -299,7 +299,7 @@ class SmokeTest {
     }
 
     async _cleanUpAsync() {
-        this._childProcessPids.forEach(pid => {
+        this._childProcessPids.forEach((pid) => {
             try {
                 kill(pid);
             } catch (e) {

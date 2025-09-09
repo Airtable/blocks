@@ -70,7 +70,7 @@ export function spawnUserError<T extends {type: string}>(errorInfo: T): UserErro
         value: errorInfo,
     });
 
-    return (err as unknown) as UserError<T>;
+    return err as unknown as UserError<T>;
 }
 
 /**

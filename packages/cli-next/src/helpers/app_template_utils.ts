@@ -51,7 +51,7 @@ export async function extractTarballAsync(
         withFileTypes: true,
         encoding: 'utf8',
     });
-    const templateDir = entries.find(dirent => dirent.isDirectory());
+    const templateDir = entries.find((dirent) => dirent.isDirectory());
     invariant(templateDir !== undefined, 'template does not contain a directory');
 
     return sys.path.join(destinationDir, templateDir.name);

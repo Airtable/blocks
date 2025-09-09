@@ -37,11 +37,11 @@ import {
     USER_CONFIG_FILE_NAME,
 } from '../../src/settings';
 
-describe('verbose_message', function() {
+describe('verbose_message', function () {
     test.it('at least one test per message type', () => {
         const tests = testMessages();
         const missingTest = Object.values(MessageName).filter(
-            type => !tests[type] || tests[type].length === 0,
+            (type) => !tests[type] || tests[type].length === 0,
         );
         expect(missingTest).to.deep.equal([]);
     });

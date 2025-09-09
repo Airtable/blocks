@@ -8,7 +8,7 @@ describe('set-api-key', () => {
     test.stdout()
         .command(['set-api-key', 'keyAPI12345678910'])
         .wroteUserConfigFile({airtableApiKey: {default: 'keyAPI12345678910'}})
-        .it('runs set-api-key keyAPI12345678910', ctx => {
+        .it('runs set-api-key keyAPI12345678910', (ctx) => {
             expect(ctx.stdout).to.contain('Personal access token saved');
         });
 
@@ -23,7 +23,7 @@ describe('set-api-key', () => {
                     'pat1234567890abcd.1234567890123456789012345678901234567890123456789012345678901234',
             },
         })
-        .it('runs set-api-key pat1234567890abcd', ctx => {
+        .it('runs set-api-key pat1234567890abcd', (ctx) => {
             expect(ctx.stdout).to.contain('Personal access token saved');
         });
 
@@ -32,7 +32,7 @@ describe('set-api-key', () => {
         .answer('What is your Airtable', {stdin: 'keyAPI12345678910'})
         .command(['set-api-key'])
         .wroteUserConfigFile({airtableApiKey: {default: 'keyAPI12345678910'}})
-        .it('runs set-api-key', ctx => {
+        .it('runs set-api-key', (ctx) => {
             expect(ctx.stdout).to.contain('Personal access token saved');
         });
 

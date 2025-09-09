@@ -42,9 +42,8 @@ describe('submit', () => {
             '/home/projects/shared/package.json': {},
         })
         .withFiles({
-            '/node/env-12.20.1/lib/node_modules/@airtable/blocks-cli/lib/bundler.js': Buffer.from(
-                '',
-            ),
+            '/node/env-12.20.1/lib/node_modules/@airtable/blocks-cli/lib/bundler.js':
+                Buffer.from(''),
             '/home/projects/my-app/frontend/index.js': Buffer.from(''),
             '/home/projects/shared/lib/index.js': Buffer.from(''),
         })
@@ -191,7 +190,7 @@ describe('submit', () => {
 
 function createStubs() {
     function _stubResolveBuiltinModuleAsync(): any {
-        return async function(
+        return async function (
             sys: System,
             workingDir: string,
             ...modulePath: string[]
@@ -201,7 +200,7 @@ function createStubs() {
     }
 
     function _stubCreateSubmitTaskAsync(files: string[] = []): any {
-        return function(sys: System, context: any, producer: SubmitTaskProducer) {
+        return function (sys: System, context: any, producer: SubmitTaskProducer) {
             (async () => {
                 await Promise.resolve();
                 await producer.readyAsync();

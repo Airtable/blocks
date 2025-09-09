@@ -220,14 +220,14 @@ export abstract class AirtableApi extends FetchApi {
 
         const {error, errors}: ErrorResponseJson = await response.json();
         if (Array.isArray(errors) && errors.length > 1) {
-            if (errors.some(errObj => errObj && typeof errObj.message === 'string')) {
+            if (errors.some((errObj) => errObj && typeof errObj.message === 'string')) {
                 throw spawnUserError<AirtableApiErrorInfo>({
                     type: AirtableApiErrorName.AIRTABLE_API_ERROR_STATUS_AND_MESSAGES,
                     status,
                     errors,
                 });
             }
-            const errorMessages = errors.map(err => createAirtableApiError({status, error: err}));
+            const errorMessages = errors.map((err) => createAirtableApiError({status, error: err}));
             throw spawnUserError<AirtableApiErrorInfo>({
                 type: AirtableApiErrorName.AIRTABLE_API_MULTIPLE_ERRORS,
                 errors: errorMessages,

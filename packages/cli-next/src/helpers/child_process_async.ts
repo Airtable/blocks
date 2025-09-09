@@ -172,10 +172,7 @@ export async function dangerouslyCrossSpawnAndReturnTrimmedOutputAsync(
         child.stdout.pipe(lineStream);
         resolveChildExit(child)
             .then(() => {
-                const trimmedOutput = lineStream
-                    .read()
-                    .toString()
-                    .trim();
+                const trimmedOutput = lineStream.read().toString().trim();
                 resolve(trimmedOutput);
             })
             .catch(reject);

@@ -124,7 +124,7 @@ export const MessageName = {
 } as const;
 
 /* eslint-disable @typescript-eslint/no-redeclare */
-export type MessageName = typeof MessageName[keyof typeof MessageName];
+export type MessageName = (typeof MessageName)[keyof typeof MessageName];
 /* eslint-enable @typescript-eslint/no-redeclare */
 
 export type MessageInfo =
@@ -297,8 +297,9 @@ If you want to update the remote, please run {cyan.bold block remove-remote ${re
 
         // config_remote.ts
         remoteConfigIsNotValid({message, file}) {
-            return this.util.chalk`❌ ${file ??
-                `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`} ${message}`;
+            return this.util.chalk`❌ ${
+                file ?? `${BLOCK_CONFIG_DIR_NAME}/${REMOTE_JSON_BASE_FILE_PATH}`
+            } ${message}`;
         },
 
         // commands/run.ts

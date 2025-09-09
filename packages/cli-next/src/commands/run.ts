@@ -181,8 +181,7 @@ export default class Run extends AirtableCommand {
             setBlockInstallationId(id: string) {
                 if (blockInstallationId !== id) {
                     logMessage({
-                        type:
-                            DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION,
+                        type: DevelopmentRunFrameMessageName.DEVELOPMENT_RUN_FRAME_NEW_BLOCK_INSTALLATION,
                     });
                     blockInstallationId = id;
                 }
@@ -290,7 +289,7 @@ export default class Run extends AirtableCommand {
 
         this.log(chalk.bold(`✅ Server listening at https://localhost:${secureServerPort}`));
 
-        const sigintPromise = new Promise<void>(resolve => {
+        const sigintPromise = new Promise<void>((resolve) => {
             process.on('SIGINT', () => {
                 resolve();
             });

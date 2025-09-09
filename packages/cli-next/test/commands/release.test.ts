@@ -60,9 +60,8 @@ describe('release', () => {
             '/home/projects/my-app/block.json': {frontendEntry: 'index.js'},
         })
         .withFiles({
-            '/home/projects/my-app/node_modules/fake-dependency/index.js': Buffer.from(
-                '// fake dependency',
-            ),
+            '/home/projects/my-app/node_modules/fake-dependency/index.js':
+                Buffer.from('// fake dependency'),
             '/home/projects/my-app/index.js': Buffer.from('// hello world'),
         });
 
@@ -84,7 +83,7 @@ describe('release', () => {
             },
         });
 
-    testReleaseCommand.command(['release']).it('releases', ctx => {
+    testReleaseCommand.command(['release']).it('releases', (ctx) => {
         expect(ctx.stderr).to.contain('Releasing');
     });
 
@@ -104,7 +103,7 @@ describe('release', () => {
         .stubDirectoryRemoval()
         .command(['release'])
         .filePresence('/home/projects/my-app/.tmp/index.js', true)
-        .wroteFile('/home/projects/my-app/.tmp/index.js', content => content.length > 0)
+        .wroteFile('/home/projects/my-app/.tmp/index.js', (content) => content.length > 0)
         .it('creates an entry point');
 
     testReleaseCommand
@@ -140,7 +139,7 @@ describe('release', () => {
             },
         })
         .command(['release', '--remote', 'newremote'])
-        .it('releases with newremote remote', ctx => {
+        .it('releases with newremote remote', (ctx) => {
             expect(ctx.stderr).to.contain('/newremote.remote.json');
         });
 
@@ -256,7 +255,8 @@ function createStubs() {
                 Pick<
                     airtableLegacyBlockApiModule.AirtableLegacyBlockApi,
                     'createBuildAsync' | 'createReleaseAsync'
-                > {
+                >
+        {
             private options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions;
 
             constructor(options: airtableLegacyBlockApiModule.AirtableLegacyBlockApiBaseOptions) {
@@ -303,7 +303,8 @@ function createStubs() {
                 Pick<
                     airtableBlockV2ApiModule.AirtableBlockV2Api,
                     'createBuildAsync' | 'createReleaseAsync'
-                > {
+                >
+        {
             constructor(options: airtableBlockV2ApiModule.AirtableBlockV2ApiBaseOptions) {
                 if (methods.constructorOptions) {
                     methods.constructorOptions(options);

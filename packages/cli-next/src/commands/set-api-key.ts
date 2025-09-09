@@ -13,6 +13,7 @@ import {
     isValidApiKeyName,
     writeApiKeyAsync,
 } from '../helpers/system_api_key';
+import {AIRTABLE_CREATE_TOKENS_URL} from '../settings';
 
 export default class SetApiKey extends AirtableCommand {
     static description =
@@ -63,7 +64,7 @@ $ block set-api-key --location app TOKEN
                 this.logMessage({type: AirtableApiErrorName.AIRTABLE_API_KEY_MALFORMED});
             }
             apiKey = await cli.prompt(
-                'What is your Airtable personal access token (with block:manage scope)?',
+                `What is your Airtable personal access token (with block:manage scope)? You can generate one at ${AIRTABLE_CREATE_TOKENS_URL}.`,
                 {
                     type: 'mask',
                     required: true,

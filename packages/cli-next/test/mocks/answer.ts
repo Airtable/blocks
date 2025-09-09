@@ -27,7 +27,7 @@ class IterableAsyncQueue<T> {
     }
     async *[Symbol.asyncIterator]() {
         while (
-            (await new Promise(resolve => {
+            (await new Promise((resolve) => {
                 this.push = (...items) => {
                     this.items.push(...items);
                     resolve(true);
@@ -49,7 +49,11 @@ class IterableAsyncQueue<T> {
 function spyStreamWrites(stream: Writable) {
     const dataIterable = new IterableAsyncQueue<string>();
     const write = stream.write;
-    stream.write = function(this: Writable, message: string | Uint8Array, ...args: any[]): boolean {
+    stream.write = function (
+        this: Writable,
+        message: string | Uint8Array,
+        ...args: any[]
+    ): boolean {
         dataIterable.push(
             ArrayBuffer.isView(message) ? new TextDecoder().decode(message) : message,
         );
@@ -57,7 +61,7 @@ function spyStreamWrites(stream: Writable) {
     };
 
     const end = stream.end;
-    stream.end = function(this: Writable, ...args: Array<any>): ReturnType<typeof end> {
+    stream.end = function (this: Writable, ...args: Array<any>): ReturnType<typeof end> {
         if (typeof args[0] === 'string') {
             dataIterable.push(args[0]);
         } else if (Buffer.isBuffer(args[0])) {
@@ -113,7 +117,7 @@ function spyNewListeners(realEmitter: EventEmitter) {
     for (const methodName of methodNames) {
         const realMethod = (savedState[methodName] = realEmitter[methodName]);
 
-        realEmitter[methodName] = function(
+        realEmitter[methodName] = function (
             this: any,
             event: string | symbol,
             listener: (...args: any[]) => void,
@@ -211,9 +215,9 @@ function testPluginFrom(
 
 function castPromptTest(prompt: string | RegExp): PromptTest {
     if (typeof prompt === 'string') {
-        return data => data.includes(prompt);
+        return (data) => data.includes(prompt);
     }
-    return data => prompt.test(data);
+    return (data) => prompt.test(data);
 }
 
 /**

@@ -26,6 +26,8 @@ export const BUNDLE_FILE_NAME = 'bundle.js';
 
 export const AIRTABLE_API_URL = 'https://api.airtable.com';
 
+export const AIRTABLE_CREATE_TOKENS_URL = 'https://airtable.com/create/tokens';
+
 export const GLOBAL_REACT_VARIABLE_NAME = '_airtableReact';
 export const GLOBAL_REACT_DOM_VARIABLE_NAME = '_airtableReactDOM';
 export const GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME = '_airtableReactDOMServer';

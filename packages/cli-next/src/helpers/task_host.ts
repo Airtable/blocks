@@ -24,7 +24,7 @@ mainAsync(require(bridgePath).default, createEntryLoadAndCreate(entryPath));
 
 export async function mainAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
-    Consumer extends ChannelMethods<Consumer> & TeardownRequest
+    Consumer extends ChannelMethods<Consumer> & TeardownRequest,
 >(
     bridgeEntry: (
         producerChannel: RequestChannel<Producer>,

@@ -1,10 +1,10 @@
 import * as originalFs from 'fs';
 
 export interface NonAsyncFs {
-    existsSync: typeof originalFs['existsSync'];
-    unwatchFile: typeof originalFs['unwatchFile'];
-    watch: typeof originalFs['watch'];
-    watchFile: typeof originalFs['watchFile'];
+    existsSync: (typeof originalFs)['existsSync'];
+    unwatchFile: (typeof originalFs)['unwatchFile'];
+    watch: (typeof originalFs)['watch'];
+    watchFile: (typeof originalFs)['watchFile'];
 }
 
 export default {

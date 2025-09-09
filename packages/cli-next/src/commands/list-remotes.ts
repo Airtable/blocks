@@ -38,7 +38,7 @@ export default class ListRemotes extends AirtableCommand {
             .readdirAsync(sys.path.join(appRootPath, BLOCK_CONFIG_DIR_NAME))
             .catch(() => []);
 
-        const remoteFiles = blockConfigFiles.filter(file =>
+        const remoteFiles = blockConfigFiles.filter((file) =>
             file.endsWith(REMOTE_JSON_BASE_FILE_PATH),
         );
 
@@ -49,7 +49,7 @@ export default class ListRemotes extends AirtableCommand {
         }
 
         const remoteConfigs = await Promise.all(
-            remoteFiles.map(async file => {
+            remoteFiles.map(async (file) => {
                 const config = await readRemoteConfigAsync(
                     sys,
                     sys.path.join(appRootPath, BLOCK_CONFIG_DIR_NAME, file),
@@ -74,12 +74,12 @@ export default class ListRemotes extends AirtableCommand {
                 get: (remote: RemoteConfig) => `${remote.baseId}/${remote.blockId}`,
             },
         };
-        if (remoteConfigs.some(remote => Boolean(remote.server))) {
+        if (remoteConfigs.some((remote) => Boolean(remote.server))) {
             columns.server = {
                 get: (remote: RemoteConfig) => remote.server ?? '',
             };
         }
-        if (remoteConfigs.some(remote => Boolean(remote.apiKeyName))) {
+        if (remoteConfigs.some((remote) => Boolean(remote.apiKeyName))) {
             columns['Api key name'] = {
                 get: (remote: RemoteConfig) => remote.apiKeyName ?? '',
             };

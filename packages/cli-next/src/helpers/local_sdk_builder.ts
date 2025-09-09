@@ -146,7 +146,7 @@ export class LocalSdkBuilder {
         return new Promise((resolve, reject) => {
             child.on('error', reject);
             child.on('exit', reject);
-            child.stdout.on('data', chunk => {
+            child.stdout.on('data', (chunk) => {
                 if (chunk.toString('utf-8').includes('Successfully compiled')) {
                     resolve();
                 }

@@ -90,7 +90,7 @@ function stubBindPort({
     };
 }
 
-function findPortAsyncPlugin(...args: Parameters<typeof findPortAsyncModule['findPortAsync']>) {
+function findPortAsyncPlugin(...args: Parameters<(typeof findPortAsyncModule)['findPortAsync']>) {
     return mapFancyTestAsyncPlugin({
         async runAsync(ctx: {findPortAsyncResult: number}) {
             ctx.findPortAsyncResult = await findPortAsyncModule.findPortAsync(...args);

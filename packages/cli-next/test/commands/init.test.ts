@@ -21,7 +21,7 @@ describe('init', () => {
         .stdout()
         .stderr()
         .enableDebug('block-cli*:init')
-        .do(ctx => ctx.system.process.chdir('/home/projects'))
+        .do((ctx) => ctx.system.process.chdir('/home/projects'))
         .withFiles({'/home/projects/my-app': null})
         .stub(
             appTemplateUtilsModule,
@@ -39,15 +39,15 @@ describe('init', () => {
 
     testInitCommand
         .command(['init', 'app1234/blk5678', 'my-app'])
-        .wroteFile('/home/projects/my-app/block.json', content => content.length > 0)
+        .wroteFile('/home/projects/my-app/block.json', (content) => content.length > 0)
         .wroteFile(
             '/home/projects/my-app/node_modules/@airtable/blocks/package.json',
-            content => content.length > 0,
+            (content) => content.length > 0,
         )
         .wroteJsonFile('/home/projects/my-app/package.json', {
             dependencies: {'@airtable/blocks': '2.0.0'},
         })
-        .it('initializes', ctx => {
+        .it('initializes', (ctx) => {
             expect(ctx.stderr).to.contain(
                 `${(/\/[^/]*$/.exec(INIT_DEFAULT_TEMPLATE_URL) ?? [])[0]}.tar.gz`,
             );
@@ -62,7 +62,7 @@ describe('init', () => {
             '--template',
             'https://github.com/Airtable/fantasy-block',
         ])
-        .it('initializes with template flag', ctx => {
+        .it('initializes with template flag', (ctx) => {
             expect(ctx.stderr).to.contain('fantasy-block.tar.gz');
         });
 
@@ -71,7 +71,7 @@ describe('init', () => {
         .answer('What is your Airtable', {stdin: 'keyAPI12345678910'})
         .command(['init', 'app1234/blk5678', 'my-app'])
         .wroteUserConfigFile({airtableApiKey: {default: 'keyAPI12345678910'}})
-        .it('runs set-api-key if no key is set', ctx => {
+        .it('runs set-api-key if no key is set', (ctx) => {
             expect(ctx.stderr).to.contain('no api key has been set');
         });
 

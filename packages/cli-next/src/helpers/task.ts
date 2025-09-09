@@ -50,7 +50,7 @@ export async function resolveBuiltinModuleAsync(
  */
 export async function createTaskAsync<
     Producer extends ChannelMethods<Producer> & HandshakeRequest,
-    Consumer extends ChannelMethods<Consumer> & TeardownRequest
+    Consumer extends ChannelMethods<Consumer> & TeardownRequest,
 >(
     sys: System,
     producer: Producer,

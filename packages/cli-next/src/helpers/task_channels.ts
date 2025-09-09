@@ -46,7 +46,7 @@ class QueueAsyncIterable<T> {
     private async shiftAsync(): Promise<T | typeof queueClosedSymbol> {
         while (this._queue.length === 0) {
             invariant(this._resolveShift === null, 'one shifter at a time');
-            await new Promise<void>(resolve => {
+            await new Promise<void>((resolve) => {
                 this._resolveShift = resolve;
             });
             this._resolveShift = null;
@@ -151,7 +151,8 @@ type ResponseMessage<H> =
     | [ApplicationMessageType.ERROR, number, SerializedError];
 
 class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
-    implements RequestChannel<Remote> {
+    implements RequestChannel<Remote>
+{
     private _inner: Channel<RequestMessage<Remote>, ResponseMessage<Remote>>;
     private _nextId: number = 0;
 
@@ -166,7 +167,7 @@ class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
     async requestAsync<
         Name extends CallableKeys<ChannelMethods<Remote>>,
         Method extends Remote[Name],
-        Return extends ReturnType<Method>
+        Return extends ReturnType<Method>,
     >(
         method: Name,
         ...args: Parameters<Method>
@@ -195,7 +196,7 @@ class RequestChannelImplementation<Remote extends ChannelMethods<Remote>>
  * messages).
  */
 class ResponseChannelImplementation<
-    Local extends {[key: string]: (...args: any[]) => Promise<any>}
+    Local extends {[key: string]: (...args: any[]) => Promise<any>},
 > {
     private _inner: Channel<ResponseMessage<Local>, RequestMessage<Local>>;
     private _handles: Local;
@@ -293,11 +294,12 @@ export type ChannelArg =
 
 type ChannelReturn = Promise<ChannelArg | void> | ChannelArg | void;
 
-type Anonymize<T> = T extends Promise<infer P>
-    ? Promise<Anonymize<P>>
-    : T extends ObjectMap<any, any>
-    ? {[key in keyof T]: Anonymize<T[key]>}
-    : T;
+type Anonymize<T> =
+    T extends Promise<infer P>
+        ? Promise<Anonymize<P>>
+        : T extends ObjectMap<any, any>
+          ? {[key in keyof T]: Anonymize<T[key]>}
+          : T;
 
 /**
  * A function with argument and return types that can be sent over a channel.
@@ -335,7 +337,7 @@ export interface RequestChannel<T extends ChannelMethods<T>> {
     requestAsync<
         N extends CallableKeys<ChannelMethods<T>>,
         F extends T[N],
-        R extends ReturnType<F>
+        R extends ReturnType<F>,
     >(
         method: N,
         ...args: Parameters<F>
@@ -352,7 +354,7 @@ export class RequestChannelAdapter<T extends ChannelMethods<T>> implements Reque
     async requestAsync<
         N extends CallableKeys<ChannelMethods<T>>,
         F extends T[N],
-        R extends ReturnType<F>
+        R extends ReturnType<F>,
     >(method: N, ...args: Parameters<F> & any[]): Promise<R extends Promise<infer P> ? P : never> {
         return await this._remote[method](...args);
     }

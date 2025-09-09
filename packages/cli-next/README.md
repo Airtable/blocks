@@ -4,12 +4,12 @@ Command line tool for Airtable Blocks development.
 
 <!-- toc -->
 
--   [@airtable/blocks-cli](#airtableblocks-cli)
--   [Installation](#installation)
--   [Usage](#usage)
--   [Commands](#commands)
--   [New features in v2](#new-features-in-v2)
-    <!-- tocstop -->
+- [@airtable/blocks-cli](#airtableblocks-cli)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Commands](#commands)
+- [New features in v2](#new-features-in-v2)
+  <!-- tocstop -->
 
 # Installation
 
@@ -26,7 +26,7 @@ $ npm install -g @airtable/blocks-cli
 $ block COMMAND
 running command...
 $ block (-v|--version|version)
-@airtable/blocks-cli/2.0.8 darwin-arm64 node-v22.14.0
+@airtable/blocks-cli/2.0.9 darwin-arm64 node-v22.14.0
 $ block --help [COMMAND]
 USAGE
   $ block COMMAND
@@ -39,15 +39,15 @@ USAGE
 
 <!-- commands -->
 
--   [`block add-remote BLOCKIDENTIFIER REMOTENAME`](#block-add-remote-blockidentifier-remotename)
--   [`block help [COMMAND]`](#block-help-command)
--   [`block init BLOCKIDENTIFIER BLOCKDIRPATH`](#block-init-blockidentifier-blockdirpath)
--   [`block list-remotes`](#block-list-remotes)
--   [`block release`](#block-release)
--   [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
--   [`block run`](#block-run)
--   [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
--   [`block submit`](#block-submit)
+- [`block add-remote BLOCKIDENTIFIER REMOTENAME`](#block-add-remote-blockidentifier-remotename)
+- [`block help [COMMAND]`](#block-help-command)
+- [`block init BLOCKIDENTIFIER BLOCKDIRPATH`](#block-init-blockidentifier-blockdirpath)
+- [`block list-remotes`](#block-list-remotes)
+- [`block release`](#block-release)
+- [`block remove-remote REMOTENAME`](#block-remove-remote-remotename)
+- [`block run`](#block-run)
+- [`block set-api-key [APIKEY]`](#block-set-api-key-apikey)
+- [`block submit`](#block-submit)
 
 ## `block add-remote BLOCKIDENTIFIER REMOTENAME`
 

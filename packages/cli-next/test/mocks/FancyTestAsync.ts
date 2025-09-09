@@ -25,25 +25,25 @@ export function mapFancyTestAsyncPlugin<T>(plugin: AsyncPlugin<T>): Plugin<T> {
     const wrapped: Plugin<T> = {};
     if (plugin.initAsync) {
         const initAsync = plugin.initAsync.bind(plugin);
-        wrapped.init = ctx => initAsync(ctx);
+        wrapped.init = (ctx) => initAsync(ctx);
     } else if (plugin.init) {
         wrapped.init = plugin.init.bind(plugin);
     }
     if (plugin.runAsync) {
         const runAsync = plugin.runAsync.bind(plugin);
-        wrapped.run = ctx => runAsync(ctx);
+        wrapped.run = (ctx) => runAsync(ctx);
     } else if (plugin.run) {
         wrapped.run = plugin.run.bind(plugin);
     }
     if (plugin.catchAsync) {
         const catchAsync = plugin.catchAsync.bind(plugin);
-        wrapped.catch = ctx => catchAsync(ctx);
+        wrapped.catch = (ctx) => catchAsync(ctx);
     } else if (plugin.catch) {
         wrapped.catch = plugin.catch.bind(plugin);
     }
     if (plugin.finallyAsync) {
         const finallyAsync = plugin.finallyAsync.bind(plugin);
-        wrapped.finally = ctx => finallyAsync(ctx);
+        wrapped.finally = (ctx) => finallyAsync(ctx);
     } else if (plugin.finally) {
         wrapped.finally = plugin.finally.bind(plugin);
     }
