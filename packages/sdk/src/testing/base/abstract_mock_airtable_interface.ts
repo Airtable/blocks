@@ -1,34 +1,34 @@
-import {AggregatorKey} from '../../base/types/aggregators';
+import EventEmitter from 'events';
+import {type AggregatorKey} from '../../base/types/aggregators';
 import {
-    AppInterface,
-    FieldTypeConfig,
-    GlobalConfigHelpers,
+    type AppInterface,
+    type FieldTypeConfig,
+    type GlobalConfigHelpers,
 } from '../../shared/types/airtable_interface_core';
 import {
-    AggregatorConfig,
-    Aggregators,
-    AirtableInterface,
-    FieldTypeProvider,
-    SdkInitData,
-    UrlConstructor,
-    PartialViewData,
-    IdGenerator,
-    VisList,
+    type AggregatorConfig,
+    type Aggregators,
+    type AirtableInterface,
+    type FieldTypeProvider,
+    type SdkInitData,
+    type UrlConstructor,
+    type PartialViewData,
+    type IdGenerator,
+    type VisList,
 } from '../../base/types/airtable_interface';
-import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
-import {cloneDeep, ObjectMap} from '../../shared/private_utils';
+import {type TableId, type FieldId, type ViewId, type RecordId} from '../../shared/types/hyper_ids';
+import {cloneDeep, type ObjectMap} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
-import {ModelChange} from '../../shared/types/base_core';
-import {FieldData} from '../../base/types/field';
-import {RecordData} from '../../base/types/record';
-import {ViewportSizeConstraint} from '../../base/types/viewport';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {Mutation} from '../../base/types/mutations';
-import {NormalizedSortConfig} from '../../base/models/record_query_result';
-import {RequestJson, ResponseJson} from '../../base/types/backend_fetch_types';
-import {CursorData} from '../../base/types/cursor';
-import {RecordActionData} from '../../base/types/record_action_data';
-const EventEmitter = require('events');
+import {type ModelChange} from '../../shared/types/base_core';
+import {type FieldData} from '../../base/types/field';
+import {type RecordData} from '../../base/types/record';
+import {type ViewportSizeConstraint} from '../../base/types/viewport';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type Mutation} from '../../base/types/mutations';
+import {type NormalizedSortConfig} from '../../base/models/record_query_result';
+import {type RequestJson, type ResponseJson} from '../../base/types/backend_fetch_types';
+import {type CursorData} from '../../base/types/cursor';
+import {type RecordActionData} from '../../base/types/record_action_data';
 
 /** @internal */
 const aggregators: Aggregators = {
@@ -154,8 +154,10 @@ const idGenerator: IdGenerator = {
  *
  * @hidden
  */
-export abstract class AbstractMockAirtableInterface extends EventEmitter
-    implements AirtableInterface {
+export abstract class AbstractMockAirtableInterface
+    extends EventEmitter
+    implements AirtableInterface
+{
     sdkInitData!: SdkInitData;
 
     private _initData: SdkInitData;
@@ -224,7 +226,7 @@ export abstract class AbstractMockAirtableInterface extends EventEmitter
         };
     }
 
-    subscribeToModelUpdates(fn: Function) {
+    subscribeToModelUpdates(fn: (...args: any[]) => void) {
         this.on('modelupdates', fn);
     }
 

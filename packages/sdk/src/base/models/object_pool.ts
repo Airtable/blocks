@@ -1,6 +1,6 @@
 /** @hidden */ /** */
 import {invariant} from '../../shared/error_utils';
-import {TimeoutId} from '../../shared/private_utils';
+import {type TimeoutId} from '../../shared/private_utils';
 
 const WEAK_RETAIN_TIME_MS = 10000;
 
@@ -71,7 +71,7 @@ class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
         if (!pooledObjects) {
             return false;
         }
-        const index = pooledObjects.findIndex(stored => stored.object === object);
+        const index = pooledObjects.findIndex((stored) => stored.object === object);
         if (index === -1) {
             return false;
         }

@@ -2,9 +2,13 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import Popover, {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
+import Popover, {
+    type PopoverPlacementX,
+    type PopoverPlacementY,
+    type FitInWindowMode,
+} from './popover';
 import Text from './text';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 

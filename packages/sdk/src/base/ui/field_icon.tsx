@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui: FieldIcon */ /** */
 import * as React from 'react';
-import Field from '../models/field';
+import type Field from '../models/field';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import Icon, {SharedIconProps} from './icon';
-import {IconName} from './icon_config';
+import {type BaseSdkMode} from '../../sdk_mode';
+import Icon, {type SharedIconProps} from './icon';
+import {type IconName} from './icon_config';
 
 /**
  * Props for the {@link FieldIcon} component. Also accepts:

@@ -1,10 +1,10 @@
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {spawnError} from '../../shared/error_utils';
 import {RecordCore, WatchableRecordKeysCore} from '../../shared/models/record_core';
-import {ObjectValues} from '../../shared/private_utils';
+import {type ObjectValues} from '../../shared/private_utils';
 import {FieldType} from '../../shared/types/field_core';
-import {RecordId} from '../../shared/types/hyper_ids';
-import {Field} from './field';
+import {type RecordId} from '../../shared/types/hyper_ids';
+import {type Field} from './field';
 
 const WatchableRecordKeys = Object.freeze({
     ...WatchableRecordKeysCore,

@@ -1,8 +1,8 @@
-import {ObjectValues} from '../../shared/private_utils';
+import {type ObjectValues} from '../../shared/private_utils';
 import {
-    MutationCore,
+    type MutationCore,
     MutationTypesCore,
-    PartialMutationCore,
+    type PartialMutationCore,
 } from '../../shared/types/mutations_core';
 
 /** @hidden */

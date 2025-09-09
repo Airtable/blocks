@@ -1,16 +1,16 @@
 /** @module @airtable/blocks/ui/system: Appearance */ /** */
-import {system, Config} from '@styled-system/core';
+import {system, type Config} from '@styled-system/core';
 import {
-    BorderProperty,
-    BorderWidthProperty,
-    BorderStyleProperty,
-    BorderColorProperty,
-    BorderTopProperty,
-    BorderRightProperty,
-    BorderBottomProperty,
-    BorderLeftProperty,
+    type BorderProperty,
+    type BorderWidthProperty,
+    type BorderStyleProperty,
+    type BorderColorProperty,
+    type BorderTopProperty,
+    type BorderRightProperty,
+    type BorderBottomProperty,
+    type BorderLeftProperty,
 } from '../utils/csstype';
-import {OptionalResponsiveProp, Length} from '../utils/types';
+import {type OptionalResponsiveProp, type Length} from '../utils/types';
 
 /** */
 export interface BorderProps {

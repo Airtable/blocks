@@ -1,21 +1,21 @@
 /** @module @airtable/blocks: globalConfig */ /** */
-import {SdkMode} from '../sdk_mode';
+import {type SdkMode} from '../sdk_mode';
 import Watchable from './watchable';
 import {spawnError} from './error_utils';
 import {
-    GlobalConfigPath,
-    GlobalConfigKey,
-    PartialGlobalConfigKey,
-    GlobalConfigValue,
-    GlobalConfigData,
-    GlobalConfigUpdate,
-    PartialGlobalConfigUpdate,
-    GlobalConfigPathValidationResult,
+    type GlobalConfigPath,
+    type GlobalConfigKey,
+    type PartialGlobalConfigKey,
+    type GlobalConfigValue,
+    type GlobalConfigData,
+    type GlobalConfigUpdate,
+    type PartialGlobalConfigUpdate,
+    type GlobalConfigPathValidationResult,
 } from './types/global_config';
-import {PermissionCheckResult, MutationTypesCore} from './types/mutations_core';
+import {type PermissionCheckResult, MutationTypesCore} from './types/mutations_core';
 import {getValueAtOwnPath} from './private_utils';
-import {BlockSdkCore} from './sdk_core';
-import {AirtableInterfaceCore} from './types/airtable_interface_core';
+import {type BlockSdkCore} from './sdk_core';
+import {type AirtableInterfaceCore} from './types/airtable_interface_core';
 
 /**
  * You can watch any top-level key in global config. Use '*' to watch every change.
@@ -365,13 +365,11 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * this shouldn't be called directly - instead, use this._sdk.__applyGlobalConfigUpdates()
      */
     __setMultipleKvPaths(updates: ReadonlyArray<GlobalConfigUpdate>) {
-        const {
-            newKvStore,
-            changedTopLevelKeys,
-        } = this._airtableInterface.globalConfigHelpers.validateAndApplyUpdates(
-            updates,
-            this._kvStore,
-        );
+        const {newKvStore, changedTopLevelKeys} =
+            this._airtableInterface.globalConfigHelpers.validateAndApplyUpdates(
+                updates,
+                this._kvStore,
+            );
 
         this._kvStore = newKvStore;
 

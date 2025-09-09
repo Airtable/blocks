@@ -48,7 +48,7 @@ function TextButtonExample() {
             }}
             renderCodeFn={({hasLabel, ...restOfValues}) => {
                 const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
-                    icon: value => (value ? 'edit' : null),
+                    icon: (value) => (value ? 'edit' : null),
                 });
 
                 const ariaLabel = hasLabel ? '' : 'aria-label="Edit"';
@@ -156,7 +156,7 @@ export const WithIcon = {
 export const WithAllIcons = {
     render: () => (
         <Box>
-            {values(iconNames).map(iconName => (
+            {values(iconNames).map((iconName) => (
                 <Box key={iconName}>
                     <TextButton icon={iconName} padding={1} margin={1} onClick={() => {}}>
                         {iconName.substr(0, 1).toUpperCase()}

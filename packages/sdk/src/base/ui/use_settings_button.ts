@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: useSettingsButton */ /** */
 import {useEffect} from 'react';
-import {FlowAnyFunction} from '../../shared/private_utils';
+import {type FlowAnyFunction} from '../../shared/private_utils';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 
 /**
  * A hook for using the settings button that lives outside the extension's viewport. It will show

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: Select */ /** */
-import * as React from 'react';
+import type * as React from 'react';
 
 /**
  * Supported value types for {@link SelectOption}.
@@ -37,8 +37,7 @@ export const validateOptions = (options: Array<SelectOption>) => {
             if (typeof option.value === 'object' && option.value !== null) {
                 return {
                     isValid: false,
-                    reason:
-                        'option value must be a string, number, boolean, null, or undefined. Got an object.',
+                    reason: 'option value must be a string, number, boolean, null, or undefined. Got an object.',
                 };
             }
         }

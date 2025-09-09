@@ -1,14 +1,14 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import Sdk from '../sdk';
+import type Sdk from '../sdk';
 import {
     fireAndForgetPromise,
-    FlowAnyFunction,
-    FlowAnyObject,
-    TimeoutId,
+    type FlowAnyFunction,
+    type FlowAnyObject,
+    type TimeoutId,
 } from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
 import AbstractModel from '../../shared/models/abstract_model';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 
 /**
  * Abstract superclass for all Blocks SDK models that need to fetch async data.
@@ -17,7 +17,7 @@ import {BaseSdkMode} from '../../sdk_mode';
  */
 abstract class AbstractModelWithAsyncData<
     DataType,
-    WatchableKey extends string
+    WatchableKey extends string,
 > extends AbstractModel<BaseSdkMode, DataType, WatchableKey> {
     /** @internal */
     static __DATA_UNLOAD_DELAY_MS = 1000;
@@ -138,7 +138,7 @@ abstract class AbstractModelWithAsyncData<
             return;
         }
         if (!this._pendingDataLoadPromise) {
-            this._pendingDataLoadPromise = this._loadDataAsync().then(changedKeys => {
+            this._pendingDataLoadPromise = this._loadDataAsync().then((changedKeys) => {
                 this._isDataLoaded = true;
                 this._pendingDataLoadPromise = null;
 

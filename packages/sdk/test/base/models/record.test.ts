@@ -2,13 +2,13 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../../src/base/sdk';
 import AbstractModel from '../../../src/shared/models/abstract_model';
-import Base from '../../../src/base/models/base';
-import Field from '../../../src/base/models/field';
-import LinkedRecordsQueryResult from '../../../src/base/models/linked_records_query_result';
+import type Base from '../../../src/base/models/base';
+import type Field from '../../../src/base/models/field';
+import type LinkedRecordsQueryResult from '../../../src/base/models/linked_records_query_result';
 import Record from '../../../src/base/models/record';
-import RecordQueryResult from '../../../src/base/models/record_query_result';
-import Table from '../../../src/base/models/table';
-import View from '../../../src/base/models/view';
+import type RecordQueryResult from '../../../src/base/models/record_query_result';
+import type Table from '../../../src/base/models/table';
+import type View from '../../../src/base/models/view';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
 jest.mock('../../../src/injected/airtable_interface', () => {
@@ -1105,7 +1105,7 @@ describe('Record', () => {
             it('throws for invalid field specifiers', () => {
                 expect(() => {
                     recordB.selectLinkedRecordsFromCell(field.name, {
-                        fields: [(1.0004 as unknown) as string],
+                        fields: [1.0004 as unknown as string],
                     });
                 }).toThrowErrorMatchingInlineSnapshot(
                     `"Invalid value for field, expected a field, id, or name but got: 1.0004"`,

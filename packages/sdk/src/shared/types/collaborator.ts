@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {UserId} from './hyper_ids';
+import {type UserId} from './hyper_ids';
 
 /**
  * An object representing a collaborator. You should not create these objects from scratch, but

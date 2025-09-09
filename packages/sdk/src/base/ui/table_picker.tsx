@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import * as React from 'react';
-import Table from '../models/table';
+import type Table from '../models/table';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import {SharedSelectBaseProps} from './select';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**

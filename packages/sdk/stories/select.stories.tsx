@@ -12,12 +12,12 @@ export default {
     component: Select,
 };
 
-const options = ['Apple', 'Pear', 'Banana'].map(value => ({value, label: value}));
+const options = ['Apple', 'Pear', 'Banana'].map((value) => ({value, label: value}));
 const longOptions = [
     'Xavier Institute for Higher Learning',
     'Awesome cats from internet',
     'Business ideas I will build one day',
-].map(value => ({value, label: value}));
+].map((value) => ({value, label: value}));
 
 const sharedSelectExampleProps = {
     options: {
@@ -40,7 +40,7 @@ function SelectExample() {
     return (
         <Example
             {...sharedSelectExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -57,12 +57,12 @@ function SelectExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <Select
                         options={options}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />
@@ -81,7 +81,7 @@ function SelectSyncedExample() {
     return (
         <Example
             {...sharedSelectExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -95,12 +95,12 @@ function SelectSyncedExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <Select
                         options={options}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />
@@ -168,7 +168,7 @@ export const Ref = {
     render: () => (
         <Box maxWidth="400px" margin={3}>
             <Select
-                ref={node => {
+                ref={(node) => {
                     // eslint-disable-next-line no-console
                     console.log(node);
                 }}

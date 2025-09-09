@@ -10,7 +10,7 @@ export default {
 export const BackgroundColor = {
     render: () => (
         <React.Fragment>
-            {Object.keys(theme.colors).map(colorKey => (
+            {Object.keys(theme.colors).map((colorKey) => (
                 <Box key={colorKey} backgroundColor={colorKey} padding={2}>
                     {colorKey}
                 </Box>
@@ -23,7 +23,7 @@ export const BorderRadius = {
     render: () => (
         <React.Fragment>
             Themed border radius
-            {Object.keys(theme.radii).map(radiusKey => (
+            {Object.keys(theme.radii).map((radiusKey) => (
                 <Box
                     key={radiusKey}
                     borderRadius={radiusKey}
@@ -44,7 +44,7 @@ export const BorderRadius = {
 export const Border = {
     render: () => (
         <React.Fragment>
-            {Object.keys(theme.borders).map(borderKey => (
+            {Object.keys(theme.borders).map((borderKey) => (
                 <Box key={borderKey} border={borderKey} padding={3} margin={2}>
                     {borderKey}
                 </Box>
@@ -70,7 +70,7 @@ export const BoxShadow = {
 export const Opacity = {
     render: () => (
         <Box backgroundColor="black" overflow="hidden">
-            {keys(theme.opacities).map(opacityKey => (
+            {keys(theme.opacities).map((opacityKey) => (
                 <Box
                     key={opacityKey}
                     opacity={opacityKey}

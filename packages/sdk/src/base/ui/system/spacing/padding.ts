@@ -1,14 +1,14 @@
 /** @module @airtable/blocks/ui/system: Spacing */ /** */
-import {system, Config} from '@styled-system/core';
+import {system, type Config} from '@styled-system/core';
 import {
-    PaddingProperty,
-    PaddingTopProperty,
-    PaddingRightProperty,
-    PaddingBottomProperty,
-    PaddingLeftProperty,
+    type PaddingProperty,
+    type PaddingTopProperty,
+    type PaddingRightProperty,
+    type PaddingBottomProperty,
+    type PaddingLeftProperty,
 } from '../utils/csstype';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
-import {OptionalResponsiveProp, Length} from '../utils/types';
+import {type OptionalResponsiveProp, type Length} from '../utils/types';
 
 /** */
 export interface PaddingProps {

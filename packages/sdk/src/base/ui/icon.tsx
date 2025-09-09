@@ -6,19 +6,19 @@ import warning from '../../shared/warning';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
     width,
-    WidthProps,
+    type WidthProps,
     height,
-    HeightProps,
+    type HeightProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {
-    IconName,
+    type IconName,
     legacyIconNameToPhosphorIconName,
     phosphorIconConfig,
     deprecatedIconNameToReplacementName,

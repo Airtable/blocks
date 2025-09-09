@@ -27,9 +27,9 @@ function FormFieldExample() {
                     defaultValue: false,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values, {
-                    description: _value =>
+                    description: (_value) =>
                         _value ? 'This is a description for this field.' : null,
                 });
                 return `
@@ -46,7 +46,7 @@ function FormFieldExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <FormField
                     label="Text field"
                     description={
@@ -54,7 +54,7 @@ function FormFieldExample() {
                     }
                     width={CONTROL_WIDTH}
                 >
-                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                    <Input value={value} onChange={(e) => setValue(e.target.value)} />
                 </FormField>
             )}
         </Example>
@@ -71,7 +71,7 @@ export const TextInputField = {
             const [value, setValue] = useState('');
             return (
                 <FormField label="Text Input field">
-                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                    <Input value={value} onChange={(e) => setValue(e.target.value)} />
                 </FormField>
             );
         }),
@@ -88,7 +88,7 @@ export const SelectField = {
             ];
             return (
                 <FormField label="Select field">
-                    <Select value={value} options={options} onChange={val => setValue(val)} />
+                    <Select value={value} options={options} onChange={(val) => setValue(val)} />
                 </FormField>
             );
         }),
@@ -111,7 +111,7 @@ export const WithDescription = {
                         </React.Fragment>
                     }
                 >
-                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                    <Input value={value} onChange={(e) => setValue(e.target.value)} />
                 </FormField>
             );
         }),
@@ -123,7 +123,7 @@ export const CustomClassName = {
             const [value, setValue] = useState('');
             return (
                 <FormField className="custom-class-name" label="Inspect to see custom class name">
-                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                    <Input value={value} onChange={(e) => setValue(e.target.value)} />
                 </FormField>
             );
         }),
@@ -135,7 +135,7 @@ export const CustomId = {
             const [value, setValue] = useState('');
             return (
                 <FormField id="custom-id" label="Inspect to see custom ID">
-                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                    <Input value={value} onChange={(e) => setValue(e.target.value)} />
                 </FormField>
             );
         }),
@@ -147,7 +147,7 @@ export const ForwardedRef = {
             return (
                 <FormField
                     id="custom-id"
-                    ref={node => {
+                    ref={(node) => {
                         // eslint-disable-next-line no-console
                         console.log(node);
                     }}
@@ -191,13 +191,13 @@ export const MultipleFormfields = {
                         label="Text input"
                         description="Insert values by wrapping the field name in brackets"
                     >
-                        <Input value={textValue} onChange={e => setTextValue(e.target.value)} />
+                        <Input value={textValue} onChange={(e) => setTextValue(e.target.value)} />
                     </FormField>
                     <FormField label="Select">
                         <Select
                             value={selectValue}
                             options={selectOptions}
-                            onChange={val => setSelectValue(val)}
+                            onChange={(val) => setSelectValue(val)}
                         />
                     </FormField>
                     <FormField
@@ -214,7 +214,7 @@ export const MultipleFormfields = {
                         <SelectButtons
                             value={coolLevel}
                             options={selectButtonsOptions}
-                            onChange={val => setCoolLevel(val)}
+                            onChange={(val) => setCoolLevel(val)}
                         />
                     </FormField>
                 </div>
@@ -229,7 +229,7 @@ export const Width100InsideContainer = {
             return (
                 <Box border="thick" width="500px" display="flex">
                     <FormField label="Sample formfield" description="Width should fill container">
-                        <Input value={value} onChange={e => setValue(e.target.value)} />
+                        <Input value={value} onChange={(e) => setValue(e.target.value)} />
                     </FormField>
                 </Box>
             );

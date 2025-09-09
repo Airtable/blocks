@@ -1,10 +1,10 @@
-import {FieldId, RecordId} from '../types/hyper_ids';
-import {isEnumValue, entries, has, ObjectValues, ObjectMap, keys} from '../private_utils';
+import {type FieldId, type RecordId} from '../types/hyper_ids';
+import {isEnumValue, entries, has, type ObjectValues, type ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
-import {SdkMode} from '../../sdk_mode';
-import {MutationTypesCore, PermissionCheckResult} from '../types/mutations_core';
+import {type SdkMode} from '../../sdk_mode';
+import {MutationTypesCore, type PermissionCheckResult} from '../types/mutations_core';
 import AbstractModel from './abstract_model';
-import {ChangedPathsForType} from './base_core';
+import {type ChangedPathsForType} from './base_core';
 import {FieldCore} from './field_core';
 
 export const WatchableTableKeysCore = Object.freeze({
@@ -19,7 +19,7 @@ type WatchableTableKeyCore = ObjectValues<typeof WatchableTableKeysCore>;
 /** @hidden */
 export abstract class TableCore<
     SdkModeT extends SdkMode,
-    WatchableKeys extends string = WatchableTableKeyCore
+    WatchableKeys extends string = WatchableTableKeyCore,
 > extends AbstractModel<SdkModeT, SdkModeT['TableDataT'], WatchableTableKeyCore | WatchableKeys> {
     /** @internal */
     static _className = 'TableCore';
@@ -596,7 +596,7 @@ export abstract class TableCore<
         }>,
     ): Promise<void> {
         let includesForeignRowsThatShouldBeCreated = false;
-        const recordsWithCellValuesByFieldId = records.map(record => ({
+        const recordsWithCellValuesByFieldId = records.map((record) => ({
             id: record.id,
             cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
                 record.fields,
@@ -683,7 +683,7 @@ export abstract class TableCore<
     ): PermissionCheckResult {
         let includesForeignRowsThatShouldBeCreated = false;
         const recordsWithCellValuesByFieldId = records
-            ? records.map(record => ({
+            ? records.map((record) => ({
                   id: record.id || undefined,
                   cellValuesByFieldId: record.fields
                       ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields, () => {
@@ -900,7 +900,7 @@ export abstract class TableCore<
     async deleteRecordsAsync(
         recordsOrRecordIds: ReadonlyArray<SdkModeT['RecordT'] | RecordId>,
     ): Promise<void> {
-        const recordIds = recordsOrRecordIds.map(recordOrRecordId =>
+        const recordIds = recordsOrRecordIds.map((recordOrRecordId) =>
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
 
@@ -945,7 +945,7 @@ export abstract class TableCore<
             type: MutationTypesCore.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
             recordIds: recordsOrRecordIds
-                ? recordsOrRecordIds.map(recordOrRecordId =>
+                ? recordsOrRecordIds.map((recordOrRecordId) =>
                       typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
                   )
                 : undefined,
@@ -1200,7 +1200,7 @@ export abstract class TableCore<
         records: ReadonlyArray<{fields: ObjectMap<FieldId | string, unknown>}>,
     ): Promise<Array<RecordId>> {
         let includesForeignRowsThatShouldBeCreated = false;
-        const recordsToCreate = records.map(recordDef => {
+        const recordsToCreate = records.map((recordDef) => {
             const recordDefKeys = keys(recordDef);
             let fields: ObjectMap<FieldId | string, unknown>;
             if (recordDefKeys.length === 1 && recordDefKeys[0] === 'fields') {
@@ -1231,7 +1231,7 @@ export abstract class TableCore<
             },
         });
 
-        return recordsToCreate.map(record => record.id);
+        return recordsToCreate.map((record) => record.id);
     }
     /**
      * Checks whether the current user has permission to create the specified records.
@@ -1283,7 +1283,7 @@ export abstract class TableCore<
     ): PermissionCheckResult {
         let includesForeignRowsThatShouldBeCreated = false;
         const recordsWithCellValuesByFieldId = records
-            ? records.map(record => ({
+            ? records.map((record) => ({
                   id: undefined,
                   cellValuesByFieldId: record.fields
                       ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields, () => {

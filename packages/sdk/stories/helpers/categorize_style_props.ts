@@ -36,7 +36,7 @@ const categories = {
 
 let categoriesByStyleProp: {[styleProp: string]: string} = {};
 for (const [category, styleProps] of entries(categories)) {
-    styleProps.forEach(styleProp => (categoriesByStyleProp[styleProp] = category));
+    styleProps.forEach((styleProp) => (categoriesByStyleProp[styleProp] = category));
 }
 
 /**
@@ -49,11 +49,11 @@ for (const [category, styleProps] of entries(categories)) {
  *     'Typography': ['fontSize'],
  * }
  */
-export default function categorizeStyleProps(
-    styleProps: Array<string>,
-): {[category: string]: Array<string>} {
+export default function categorizeStyleProps(styleProps: Array<string>): {
+    [category: string]: Array<string>;
+} {
     const result: {[category: string]: Array<string>} = {};
-    styleProps.forEach(styleProp => {
+    styleProps.forEach((styleProp) => {
         const category = categoriesByStyleProp[styleProp];
         if (!result[category]) {
             result[category] = [];

@@ -1,7 +1,7 @@
 import {TableCore} from '../../shared/models/table_core';
-import {InterfaceSdkMode} from '../../sdk_mode';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type InterfaceSdkMode} from '../../sdk_mode';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {FieldType} from '../../shared/types/field_core';
 import {Field} from './field';
 
@@ -78,13 +78,14 @@ export class Table extends TableCore<InterfaceSdkMode> {
         if (field.type !== FieldType.MULTIPLE_RECORD_LINKS || !Array.isArray(cellValue)) {
             return cellValue;
         }
-        return cellValue.map(item => {
+        return cellValue.map((item) => {
             if (typeof item !== 'object' || item === null) {
                 return item;
             }
 
             if (!item.id) {
-                const newForeignRecordId = this.parentBase.__sdk.__airtableInterface.idGenerator.generateRecordId();
+                const newForeignRecordId =
+                    this.parentBase.__sdk.__airtableInterface.idGenerator.generateRecordId();
                 onGenerateIdForNewForeignRecord(newForeignRecordId);
                 return {
                     ...item,

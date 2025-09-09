@@ -1,12 +1,12 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {Base} from '../../../src/interface/models/base';
+import {type Base} from '../../../src/interface/models/base';
 import {Mutations} from '../../../src/interface/models/mutations';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
-import {ModelChange} from '../../../src/shared/types/base_core';
+import {type ModelChange} from '../../../src/shared/types/base_core';
 import {MutationTypes} from '../../../src/interface/types/mutations';
 import {Session} from '../../../src/interface/models/session';
-import {FieldId, RecordId} from '../../../src/shared/types/hyper_ids';
-import {ObjectMap} from '../../../src/shared/private_utils';
+import {type FieldId, type RecordId} from '../../../src/shared/types/hyper_ids';
+import {type ObjectMap} from '../../../src/shared/private_utils';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../../src/injected/airtable_interface', () => ({
@@ -412,7 +412,7 @@ describe('Mutations (Interface)', () => {
 
                 const modelChanges = mutations._getOptimisticModelChangesForMutation(mutation);
 
-                const recordOrderChange = modelChanges.find(change =>
+                const recordOrderChange = modelChanges.find((change) =>
                     change.path.includes('recordOrder'),
                 );
                 expect(recordOrderChange).toBeDefined();
@@ -435,7 +435,7 @@ describe('Mutations (Interface)', () => {
 
                 const modelChanges = mutations._getOptimisticModelChangesForMutation(mutation);
 
-                const recordOrderChange = modelChanges.find(change =>
+                const recordOrderChange = modelChanges.find((change) =>
                     change.path.includes('recordOrder'),
                 );
                 expect(recordOrderChange).toBeDefined();
@@ -451,7 +451,7 @@ describe('Mutations (Interface)', () => {
 
                 const modelChanges = mutations._getOptimisticModelChangesForMutation(mutation);
 
-                const recordOrderChange = modelChanges.find(change =>
+                const recordOrderChange = modelChanges.find((change) =>
                     change.path.includes('recordOrder'),
                 );
                 expect(recordOrderChange).toBeDefined();
@@ -591,7 +591,7 @@ describe('Mutations (Interface)', () => {
 
             describe('loaded records', () => {
                 beforeEach(() => {
-                    Object.values(mockRecordsById).forEach(record => {
+                    Object.values(mockRecordsById).forEach((record) => {
                         makeRecord(record.id, record.cellValuesByFieldId, record.createdTime);
                     });
                 });
@@ -723,7 +723,7 @@ Mock reason"
 
             describe('loaded records', () => {
                 beforeEach(async () => {
-                    Object.values(mockRecordsById).forEach(record => {
+                    Object.values(mockRecordsById).forEach((record) => {
                         makeRecord(record.id, record.cellValuesByFieldId, record.createdTime);
                     });
                 });
@@ -909,7 +909,7 @@ Mock reason"
 
             describe('loaded records', () => {
                 beforeEach(async () => {
-                    Object.values(mockRecordsById).forEach(record => {
+                    Object.values(mockRecordsById).forEach((record) => {
                         makeRecord(record.id, record.cellValuesByFieldId, record.createdTime);
                     });
                 });
@@ -1027,7 +1027,7 @@ Mock reason"
                 mutations.applyMutationAsync({
                     type: 'foo' as typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
                     tableId: 'tblNonExistentTableId',
-                    recordIds: [(circular as unknown) as string],
+                    recordIds: [circular as unknown as string],
                 }),
             ).rejects.toThrowErrorMatchingInlineSnapshot(`"unhandled mutation type: foo"`);
             expect(applyModelChanges.mock.calls.length).toBe(0);
@@ -1047,7 +1047,7 @@ Mock reason"
             });
 
             function flushPromises() {
-                return new Promise(resolve => setImmediate(resolve));
+                return new Promise((resolve) => setImmediate(resolve));
             }
 
             it('produces an uncaught exception when synchronization failures occur and a state change has been optimistically applied', async () => {

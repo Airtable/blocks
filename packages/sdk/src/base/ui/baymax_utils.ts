@@ -450,7 +450,7 @@ export function baymax(baymaxClassNames: string): string {
     return baymaxClassNames
         .split(/\s+/)
         .filter(Boolean)
-        .map(baymaxClassName => {
+        .map((baymaxClassName) => {
             if (has(emotionClassNameByBaymaxClassName, baymaxClassName)) {
                 return emotionClassNameByBaymaxClassName[baymaxClassName];
             } else {

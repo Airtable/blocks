@@ -1,12 +1,18 @@
-import {BaseId, TableId, FieldId, ViewId, RecordId} from '../../../src/shared/types/hyper_ids';
-import {TableData} from '../../../src/base/types/table';
-import {FieldType} from '../../../src/shared/types/field_core';
-import {FieldData} from '../../../src/base/types/field';
-import {ViewData, ViewType} from '../../../src/base/types/view';
-import {CollaboratorData} from '../../../src/shared/types/collaborator';
-import {Color} from '../../../src/shared/colors';
-import {ObjectMap, keyBy, getId} from '../../../src/shared/private_utils';
-import {BlockRunContextType, SdkInitData} from '../../../src/base/types/airtable_interface';
+import {
+    type BaseId,
+    type TableId,
+    type FieldId,
+    type ViewId,
+    type RecordId,
+} from '../../../src/shared/types/hyper_ids';
+import {type TableData} from '../../../src/base/types/table';
+import {type FieldType} from '../../../src/shared/types/field_core';
+import {type FieldData} from '../../../src/base/types/field';
+import {type ViewData, type ViewType} from '../../../src/base/types/view';
+import {type CollaboratorData} from '../../../src/shared/types/collaborator';
+import {type Color} from '../../../src/shared/colors';
+import {type ObjectMap, keyBy, getId} from '../../../src/shared/private_utils';
+import {BlockRunContextType, type SdkInitData} from '../../../src/base/types/airtable_interface';
 
 const MOCK_BLOCK_INSTALLATION_ID = 'blicPfOILwejF6HL2';
 const MOCK_BLOCK_RUN_CONTEXT_TYPE = BlockRunContextType.DASHBOARD_APP;
@@ -32,7 +38,7 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
             name,
             color: color ?? MOCK_BASE_COLOR,
             activeTableId: tables[0].id,
-            tableOrder: tables.map(t => t.id),
+            tableOrder: tables.map((t) => t.id),
             tablesById: keyBy<TableData, string>(
                 tables.map(convertTableFixtureDataToTableData),
                 getId,
@@ -41,13 +47,13 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
             currentUserId: MOCK_CURRENT_USER_ID,
             enabledFeatureNames: [],
             collaboratorsById: keyBy(
-                collaborators.map(c => {
+                collaborators.map((c) => {
                     const {email, profilePicUrl} = c;
                     return {id: c.id, name: c.name, email, profilePicUrl};
                 }),
                 getId,
             ),
-            activeCollaboratorIds: collaborators.filter(c => c.isActive).map(c => c.id),
+            activeCollaboratorIds: collaborators.filter((c) => c.isActive).map((c) => c.id),
             cursorData: null,
             billingPlanGrouping: MOCK_BILLING_GROUP,
             appInterface: {},
@@ -74,7 +80,7 @@ function convertTableFixtureDataToTableData(tableFixtureData: TableFixtureData):
         primaryFieldId: fields[0].id,
         fieldsById: keyBy<FieldData, string>(fields.map(convertFieldFixtureDataToFieldData), getId),
         activeViewId: views[0].id,
-        viewOrder: views.map(v => v.id),
+        viewOrder: views.map((v) => v.id),
         viewsById: keyBy(views.map(convertViewFixtureDataToViewData), getId),
         recordsById: undefined, 
         lock: null,

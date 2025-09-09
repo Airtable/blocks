@@ -1,12 +1,12 @@
 /** @module @airtable/blocks/ui: FieldPicker */ /** */
 import * as React from 'react';
-import Field from '../models/field';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import type Field from '../models/field';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import FieldPicker, {SharedFieldPickerProps} from './field_picker';
+import {type BaseSdkMode} from '../../sdk_mode';
+import FieldPicker, {type SharedFieldPickerProps} from './field_picker';
 
 /**
  * Props for the {@link FieldPickerSynced} component. Also accepts:
@@ -50,7 +50,7 @@ const FieldPickerSynced = (props: FieldPickerSyncedProps, ref: React.Ref<HTMLSel
             ref={ref}
             table={table}
             field={_getFieldFromGlobalConfigValue()}
-            onChange={field => {
+            onChange={(field) => {
                 setFieldId(field ? field.id : null);
                 if (onChange) {
                     onChange(field);

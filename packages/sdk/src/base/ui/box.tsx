@@ -2,10 +2,10 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import useStyledSystem from './use_styled_system';
-import {AllStylesProps} from './system/index';
-import {AriaProps} from './types/aria_props';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {DataAttributesProp} from './types/data_attributes_prop';
+import {type AllStylesProps} from './system/index';
+import {type AriaProps} from './types/aria_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Props for the Box component. Also accepts:

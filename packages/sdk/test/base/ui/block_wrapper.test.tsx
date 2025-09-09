@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {render as rtlRender, act} from '@testing-library/react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import BlockWrapper from '../../../src/base/ui/block_wrapper';
-import Sdk from '../../../src/base/sdk';
+import type Sdk from '../../../src/base/sdk';
 import {__reset, __sdk as sdk} from '../../../src/base';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 

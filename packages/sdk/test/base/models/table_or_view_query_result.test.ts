@@ -1,14 +1,14 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../../src/base/models/base';
+import type Base from '../../../src/base/models/base';
 import {waitForWatchKeyAsync} from '../../test_helpers';
 import {__reset, __sdk as sdk} from '../../../src/base';
 import {modes as recordColorModes} from '../../../src/base/models/record_coloring';
 import {FieldType} from '../../../src/shared/types/field_core';
-import {RecordData} from '../../../src/base/types/record';
-import Table from '../../../src/base/models/table';
-import Field from '../../../src/base/models/field';
-import View from '../../../src/base/models/view';
-import {GroupData, GroupLevelData} from '../../../src/base/types/view';
+import {type RecordData} from '../../../src/base/types/record';
+import type Table from '../../../src/base/models/table';
+import type Field from '../../../src/base/models/field';
+import type View from '../../../src/base/models/view';
+import {type GroupData, type GroupLevelData} from '../../../src/base/types/view';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
 jest.mock('../../../src/injected/airtable_interface', () => {
@@ -102,7 +102,7 @@ const mockRecordData = (
 
 const mockVisListRecordOrderOnce = (recordIds: Array<string>) => {
     const {createVisList} = mockAirtableInterface;
-    createVisList.mockImplementationOnce(function(this: any, ...args) {
+    createVisList.mockImplementationOnce(function (this: any, ...args) {
         const visList = createVisList.apply(this as any, args);
         (visList.getOrderedRecordIds as jest.Mock).mockReturnValue(recordIds);
         return visList;
@@ -1182,7 +1182,7 @@ describe('TableOrViewQueryResult', () => {
 
             describe('unsubscribing from cell values in fields', () => {
                 const whenUnsubscribed = () => {
-                    return new Promise<void>(resolve => {
+                    return new Promise<void>((resolve) => {
                         mockAirtableInterface.unsubscribeFromCellValuesInFields.mockImplementation(
                             resolve,
                         );

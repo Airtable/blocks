@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/interface/ui: useRunInfo */ /** */
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {useSdk} from '../../shared/ui/sdk_context';
 
 /**

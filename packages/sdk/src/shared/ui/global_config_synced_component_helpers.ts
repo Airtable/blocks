@@ -1,6 +1,6 @@
 import {BlockRunContextType} from '../../base/types/airtable_interface';
-import {GlobalConfigKey} from '../types/global_config';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type GlobalConfigKey} from '../types/global_config';
+import {type BaseSdkMode} from '../../sdk_mode';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

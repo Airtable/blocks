@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Flex container */ /** */
-import {system, Config} from '@styled-system/core';
-import {FlexDirectionProperty} from '../utils/csstype';
-import {OptionalResponsiveProp} from '../utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type FlexDirectionProperty} from '../utils/csstype';
+import {type OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface FlexDirectionProps {

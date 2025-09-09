@@ -1,8 +1,12 @@
 /** @module @airtable/blocks/ui: Popover */ /** */
 import {cx} from 'emotion';
-import {createRoot, Root} from 'react-dom/client';
+import {createRoot, type Root} from 'react-dom/client';
 import * as React from 'react';
-import {ObjectValues, FlowAnyObject, FlowAnyFunction} from '../../shared/private_utils';
+import {
+    type ObjectValues,
+    type FlowAnyObject,
+    type FlowAnyFunction,
+} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
 import {baymax} from './baymax_utils';
 import createDetectElementResize from './create_detect_element_resize';
@@ -370,14 +374,14 @@ class Popover extends React.Component<PopoverProps> {
         const backgroundClassName = cx(baymax('fixed all-0'), this.props.backgroundClassName);
         const backgroundStyle = this.props.backgroundStyle;
 
-        return new Promise<void>(resolve => {
+        return new Promise<void>((resolve) => {
             const container = this._container;
             invariant(container, 'container must exist');
             const root = this._reactRoot;
             invariant(root, 'root must exist');
             root.render(
                 <div
-                    ref={el => {
+                    ref={(el) => {
                         this._background = el;
                         resolve();
                     }}
@@ -416,7 +420,7 @@ class Popover extends React.Component<PopoverProps> {
     render() {
         return (
             <div
-                ref={el => {
+                ref={(el) => {
                     this._anchor = el;
                 }}
             >

@@ -1,7 +1,7 @@
-import {FieldType, FieldOptions, FieldConfig} from '../types/field_core';
-import {isEnumValue, cloneDeep, ObjectValues, FlowAnyObject} from '../private_utils';
-import {SdkMode} from '../../sdk_mode';
-import {FieldTypeConfig} from '../types/airtable_interface_core';
+import {FieldType, type FieldOptions, type FieldConfig} from '../types/field_core';
+import {isEnumValue, cloneDeep, type ObjectValues, type FlowAnyObject} from '../private_utils';
+import {type SdkMode} from '../../sdk_mode';
+import {type FieldTypeConfig} from '../types/airtable_interface_core';
 import AbstractModel from './abstract_model';
 
 const WatchableFieldKeys = Object.freeze({

@@ -29,7 +29,7 @@ function ConfirmationDialogExample() {
                     defaultValue: false,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `
                     import React, { useState } from 'react';
@@ -59,7 +59,7 @@ function ConfirmationDialogExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <React.Fragment>
                         <Button onClick={() => setIsDialogOpen(true)}>

@@ -2,10 +2,10 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import useStyledSystem from './use_styled_system';
-import {allStylesParser, AllStylesProps} from './system/index';
-import {AriaProps} from './types/aria_props';
-import {TextSize, TextSizeProp, useTextStyle} from './text';
-import {DataAttributesProp} from './types/data_attributes_prop';
+import {allStylesParser, type AllStylesProps} from './system/index';
+import {type AriaProps} from './types/aria_props';
+import {TextSize, type TextSizeProp, useTextStyle} from './text';
+import {type DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Props for the {@link Label} component. Also accepts:

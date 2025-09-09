@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import * as React from 'react';
-import Table from '../models/table';
-import {GlobalConfigKey} from '../../shared/types/global_config';
-import Sdk from '../sdk';
+import type Table from '../models/table';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
+import type Sdk from '../sdk';
 import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import TablePicker, {SharedTablePickerProps} from './table_picker';
+import {type BaseSdkMode} from '../../sdk_mode';
+import TablePicker, {type SharedTablePickerProps} from './table_picker';
 
 /**
  * Props for the {@link TablePickerSynced} component. Also accepts:
@@ -46,7 +46,7 @@ const TablePickerSynced = (props: TablePickerSyncedProps, ref: React.Ref<HTMLSel
             {...restOfProps}
             ref={ref}
             table={_getTableFromGlobalConfigValue(sdk, tableId)}
-            onChange={table => {
+            onChange={(table) => {
                 setTableId(table ? table.id : null);
                 if (onChange) {
                     onChange(table);

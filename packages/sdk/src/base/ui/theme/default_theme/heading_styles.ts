@@ -1,5 +1,5 @@
-import {ObjectMap} from '../../../../shared/private_utils';
-import {TypographySetProps, MarginProps} from '../../system';
+import {type ObjectMap} from '../../../../shared/private_utils';
+import {type TypographySetProps, type MarginProps} from '../../system';
 
 /** @hidden */
 type HeadingVariant = 'default' | 'caps';

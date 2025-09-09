@@ -3,35 +3,35 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../../shared/error_utils';
-import Sdk from '../sdk';
-import Record from '../models/record';
-import Field from '../models/field';
+import type Sdk from '../sdk';
+import type Record from '../models/record';
+import type Field from '../models/field';
 import {FieldType} from '../../shared/types/field_core';
-import {RecordId} from '../../shared/types/hyper_ids';
-import {ObjectMap} from '../../shared/private_utils';
+import {type RecordId} from '../../shared/types/hyper_ids';
+import {type ObjectMap} from '../../shared/private_utils';
 import withHooks from '../../shared/ui/with_hooks';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import {
     display,
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
 import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
-import {OptionalResponsiveProp} from './system/utils/types';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type OptionalResponsiveProp} from './system/utils/types';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link CellRenderer} component. Also accepts:
@@ -167,12 +167,13 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             cellValueToRender = record.getCellValue(field.id);
         } else {
             if (!field.isComputed) {
-                const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                    appInterface,
-                    cellValue,
-                    null,
-                    field._data,
-                );
+                const validationResult =
+                    airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                        appInterface,
+                        cellValue,
+                        null,
+                        field._data,
+                    );
                 if (!validationResult.isValid) {
                     if (renderInvalidCellValue) {
                         return (
@@ -255,7 +256,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
 
 export default withHooks<{className?: string; sdk: Sdk}, CellRendererProps, CellRenderer>(
     CellRenderer,
-    props => {
+    (props) => {
         const {styleProps, nonStyleProps} = splitStyleProps<
             Omit<CellRendererProps, 'sdk'>,
             CellRendererStyleProps

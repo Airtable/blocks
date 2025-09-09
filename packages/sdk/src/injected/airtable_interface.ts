@@ -1,5 +1,5 @@
 import {spawnError} from '../shared/error_utils';
-import {SdkMode} from '../sdk_mode';
+import {type SdkMode} from '../sdk_mode';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 
@@ -20,11 +20,10 @@ const missingAirtableInterfaceErrorMessage = [
 
 /** @hidden */
 export default function getAirtableInterface<
-    SdkModeT extends SdkMode
+    SdkModeT extends SdkMode,
 >(): SdkModeT['AirtableInterfaceT'] {
-    const getAirtableInterfaceAtVersion:
-        | ((arg1: number) => SdkModeT['AirtableInterfaceT'])
-        | void = (window as any).__getAirtableInterfaceAtVersion;
+    const getAirtableInterfaceAtVersion: ((arg1: number) => SdkModeT['AirtableInterfaceT']) | void =
+        (window as any).__getAirtableInterfaceAtVersion;
 
     if (!airtableInterface) {
         if (!getAirtableInterfaceAtVersion) {

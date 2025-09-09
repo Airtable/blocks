@@ -1,8 +1,8 @@
 import {BlockRunContextType} from '../types/airtable_interface';
-import {ModelChange} from '../../shared/types/base_core';
-import {Mutation, MutationTypes} from '../types/mutations';
+import {type ModelChange} from '../../shared/types/base_core';
+import {type Mutation, MutationTypes} from '../types/mutations';
 import {spawnError, spawnUnknownSwitchCaseError} from '../../shared/error_utils';
-import {FieldId} from '../../shared/types/hyper_ids';
+import {type FieldId} from '../../shared/types/hyper_ids';
 import {
     MAX_FIELD_NAME_LENGTH,
     MAX_FIELD_DESCRIPTION_LENGTH,
@@ -10,10 +10,10 @@ import {
     MAX_NUM_FIELDS_PER_TABLE,
 } from '../../shared/types/mutation_constants';
 import {MutationsCore} from '../../shared/models/mutations_core';
-import {BaseSdkMode} from '../../sdk_mode';
-import {RecordData} from '../types/record';
-import Table from './table';
-import RecordStore from './record_store';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type RecordData} from '../types/record';
+import type Table from './table';
+import type RecordStore from './record_store';
 
 /** @hidden */
 class Mutations extends MutationsCore<BaseSdkMode> {
@@ -66,13 +66,14 @@ class Mutations extends MutationsCore<BaseSdkMode> {
 
                 this._assertFieldNameIsValidForMutation(name, table);
 
-                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
-                    appInterface,
-                    config,
-                    null,
-                    null,
-                    billingPlanGrouping,
-                );
+                const validationResult =
+                    this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                        appInterface,
+                        config,
+                        null,
+                        null,
+                        billingPlanGrouping,
+                    );
 
                 if (!validationResult.isValid) {
                     throw spawnError(
@@ -107,14 +108,15 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                     field._data,
                     field.parentTable.__getFieldNamesById(),
                 );
-                const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
-                    appInterface,
-                    config,
-                    currentConfig,
-                    field._data,
-                    billingPlanGrouping,
-                    opts,
-                );
+                const validationResult =
+                    this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                        appInterface,
+                        config,
+                        currentConfig,
+                        field._data,
+                        billingPlanGrouping,
+                        opts,
+                    );
 
                 if (!validationResult.isValid) {
                     throw spawnError(
@@ -179,7 +181,7 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                     );
                 }
 
-                const existingLowercaseTableNames = this._base.tables.map(table =>
+                const existingLowercaseTableNames = this._base.tables.map((table) =>
                     table.name.toLowerCase(),
                 );
 
@@ -226,13 +228,14 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                     }
                     lowercaseFieldNames.add(lowercaseFieldName);
 
-                    const validationResult = this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
-                        appInterface,
-                        field.config,
-                        null,
-                        null,
-                        billingPlanGrouping,
-                    );
+                    const validationResult =
+                        this._airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                            appInterface,
+                            field.config,
+                            null,
+                            null,
+                            billingPlanGrouping,
+                        );
 
                     if (!validationResult.isValid) {
                         throw spawnError(
@@ -314,7 +317,7 @@ class Mutations extends MutationsCore<BaseSdkMode> {
             );
         }
 
-        const existingLowercaseFieldNames = table.fields.map(field => field.name.toLowerCase());
+        const existingLowercaseFieldNames = table.fields.map((field) => field.name.toLowerCase());
         if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
             throw spawnError(
                 "Can't create or update field: field with name '%s' already exists",
@@ -340,13 +343,13 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                 const superChanges = super._getOptimisticModelChangesForMutation(mutation);
                 return [
                     ...superChanges,
-                    ...this._base.getTableById(tableId).views.flatMap(view => {
+                    ...this._base.getTableById(tableId).views.flatMap((view) => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];
                         }
                         return viewDataStore.__generateChangesForParentTableAddMultipleRecords(
-                            records.map(record => record.id),
+                            records.map((record) => record.id),
                         );
                     }),
                 ];
@@ -361,7 +364,7 @@ class Mutations extends MutationsCore<BaseSdkMode> {
                 const superChanges = super._getOptimisticModelChangesForMutation(mutation);
                 return [
                     ...superChanges,
-                    ...this._base.getTableById(tableId).views.flatMap(view => {
+                    ...this._base.getTableById(tableId).views.flatMap((view) => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];

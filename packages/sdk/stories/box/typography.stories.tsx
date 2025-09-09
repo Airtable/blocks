@@ -10,7 +10,7 @@ export default {
 export const FontFamily = {
     render: () => (
         <React.Fragment>
-            {keys(theme.fontFamilies).map(fontFamilyKey => (
+            {keys(theme.fontFamilies).map((fontFamilyKey) => (
                 <Box key={fontFamilyKey} fontFamily={fontFamilyKey}>
                     {fontFamilyKey}: {theme.fontFamilies[fontFamilyKey]}
                 </Box>

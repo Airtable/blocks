@@ -34,7 +34,7 @@ function ChoiceTokenExample() {
             {() => {
                 return (
                     <React.Fragment>
-                        {choiceOptions.map(choice => (
+                        {choiceOptions.map((choice) => (
                             <ChoiceToken key={choice.id} choice={choice as any} marginRight={1} />
                         ))}
                     </React.Fragment>

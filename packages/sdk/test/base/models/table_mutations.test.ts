@@ -1,5 +1,5 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../../src/base/models/base';
+import type Base from '../../../src/base/models/base';
 import {MutationTypes} from '../../../src/base/types/mutations';
 import warning from '../../../src/shared/warning';
 import Sdk from '../../../src/base/sdk';

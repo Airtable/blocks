@@ -1,14 +1,14 @@
-import {ModelChange} from '../shared/types/base_core';
-import {GlobalConfigUpdate} from '../shared/types/global_config';
+import {type ModelChange} from '../shared/types/base_core';
+import {type GlobalConfigUpdate} from '../shared/types/global_config';
 import {BlockSdkCore} from '../shared/sdk_core';
-import {InterfaceSdkMode} from '../sdk_mode';
-import {AppInterface} from '../shared/types/airtable_interface_core';
+import {type InterfaceSdkMode} from '../sdk_mode';
+import {type AppInterface} from '../shared/types/airtable_interface_core';
 import {Session} from './models/session';
 import {Mutations} from './models/mutations';
 import {Base} from './models/base';
 import {
-    BlockInstallationPageElementCustomPropertyForAirtableInterface,
-    BlockRunContext,
+    type BlockInstallationPageElementCustomPropertyForAirtableInterface,
+    type BlockRunContext,
 } from './types/airtable_interface';
 
 /** @hidden */
@@ -32,8 +32,8 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
             this,
             this.session,
             this.base,
-            changes => this.__applyModelChanges(changes),
-            updates => this.__applyGlobalConfigUpdates(updates),
+            (changes) => this.__applyModelChanges(changes),
+            (updates) => this.__applyGlobalConfigUpdates(updates),
         );
     }
     /** @internal */

@@ -60,7 +60,7 @@ function TextExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <Tooltip content="Notifications" {...(values as any)}>
                     <Button icon="bell" aria-label="Notifications" />
                 </Tooltip>

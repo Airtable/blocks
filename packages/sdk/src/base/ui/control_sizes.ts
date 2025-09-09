@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui/system: Control sizes */ /** */
 import {compose, system} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import useTheme from './theme/use_theme';
-import {ResponsiveProp} from './system/utils/types';
+import {type ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useStyledSystem from './use_styled_system';
 import {allStylesParser} from './system';

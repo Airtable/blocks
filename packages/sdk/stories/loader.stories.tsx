@@ -19,7 +19,7 @@ function LoaderExample() {
                     options: [0.3, 0.5],
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -31,7 +31,7 @@ function LoaderExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return <Loader {...values} />;
             }}
         </Example>

@@ -4,7 +4,7 @@ import {render, act} from '@testing-library/react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../../src/base/sdk';
 import useRecordActionData from '../../../src/base/ui/use_record_action_data';
-import {RecordActionData} from '../../../src/base/types/record_action_data';
+import {type RecordActionData} from '../../../src/base/types/record_action_data';
 import {SdkContext} from '../../../src/shared/ui/sdk_context';
 import {createPromiseWithResolveAndReject} from '../../test_helpers';
 

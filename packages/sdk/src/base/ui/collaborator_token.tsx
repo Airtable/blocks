@@ -2,7 +2,7 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {CollaboratorData} from '../../shared/types/collaborator';
+import {type CollaboratorData} from '../../shared/types/collaborator';
 import useBase from '../../shared/ui/use_base';
 import Box from './box';
 import Text from './text';
@@ -10,13 +10,13 @@ import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
@@ -130,7 +130,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const base = useBase();
 
     const activeCollaborators = base.activeCollaborators;
-    const isActive = activeCollaborators.some(activeCollaborator => {
+    const isActive = activeCollaborators.some((activeCollaborator) => {
         return activeCollaborator.id === props.collaborator.id;
     });
 

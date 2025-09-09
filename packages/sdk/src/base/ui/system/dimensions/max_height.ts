@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Dimensions */ /** */
-import {system, Config} from '@styled-system/core';
-import {MaxHeightProperty} from '../utils/csstype';
-import {OptionalResponsiveProp, Length} from '../utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type MaxHeightProperty} from '../utils/csstype';
+import {type OptionalResponsiveProp, type Length} from '../utils/types';
 
 /** */
 export interface MaxHeightProps {

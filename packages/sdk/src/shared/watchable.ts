@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {getLocallyUniqueId, FlowAnyExistential, FlowAnyObject} from './private_utils';
+import {getLocallyUniqueId, type FlowAnyExistential, type FlowAnyObject} from './private_utils';
 import {spawnError} from './error_utils';
 
 /**
@@ -124,7 +124,7 @@ class Watchable<WatchableKey extends string> {
         for (const key of validKeys) {
             const watchers = this._changeWatchersByKey[key];
             if (watchers) {
-                const filteredWatchers = watchers.filter(watcher => {
+                const filteredWatchers = watchers.filter((watcher) => {
                     return watcher.callback !== callback || watcher.context !== context;
                 });
                 if (filteredWatchers.length > 0) {

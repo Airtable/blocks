@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: useRecordActionData */ /** */
-import {RecordActionData} from '../types/record_action_data';
+import {type RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import useLoadable from './use_loadable';
 
 /**

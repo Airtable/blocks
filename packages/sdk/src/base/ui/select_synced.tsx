@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: Select */ /** */
 import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import Select, {SharedSelectProps} from './select';
+import Select, {type SharedSelectProps} from './select';
 
 /**
  * Props for the {@link SelectSynced} component. Also accepts:
@@ -50,7 +50,7 @@ const SelectSynced = (props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement
             {...restOfProps}
             ref={ref}
             value={selectValue}
-            onChange={newValue => {
+            onChange={(newValue) => {
                 if (newValue === undefined) {
                     newValue = null;
                 }

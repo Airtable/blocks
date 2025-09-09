@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: useCursor */ /** */
-import Cursor from '../models/cursor';
+import type Cursor from '../models/cursor';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 
 /**
  * A hook for connecting a React component to your base's cursor. This returns a {@link Cursor}

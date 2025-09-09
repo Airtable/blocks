@@ -2,29 +2,29 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type OptionalResponsiveProp} from './system/utils/types';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
     display,
 } from './system';
 import useTheme from './theme/use_theme';
-import {ControlSize, ControlSizeProp, useButtonSize} from './control_sizes';
-import {AriaProps} from './types/aria_props';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {IconName} from './icon_config';
+import {ControlSize, type ControlSizeProp, useButtonSize} from './control_sizes';
+import {type AriaProps} from './types/aria_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type IconName} from './icon_config';
 import Icon from './icon';
 import cssHelpers from './css_helpers';
 import Box from './box';

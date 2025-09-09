@@ -3,13 +3,13 @@ import Watchable from '../shared/watchable';
 import {
     isEnumValue,
     debounce,
-    ObjectValues,
-    FlowAnyFunction,
-    FlowAnyObject,
+    type ObjectValues,
+    type FlowAnyFunction,
+    type FlowAnyObject,
 } from '../shared/private_utils';
 import {invariant} from '../shared/error_utils';
-import {ViewportSizeConstraint} from './types/viewport';
-import {AirtableInterface} from './types/airtable_interface';
+import {type ViewportSizeConstraint} from './types/viewport';
+import {type AirtableInterface} from './types/airtable_interface';
 
 const WatchableViewportKeys = Object.freeze({
     isFullscreen: 'isFullscreen' as const,

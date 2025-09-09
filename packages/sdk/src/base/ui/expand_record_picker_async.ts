@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
 import {invariant} from '../../shared/error_utils';
-import Record from '../models/record';
-import Field from '../models/field';
+import type Record from '../models/record';
+import type Field from '../models/field';
 
 /**
  * Options object for expanding a record picker.
@@ -55,7 +55,7 @@ async function expandRecordPickerAsync(
     const tableId = records[0].parentTable.id;
     const sdk = records[0].parentTable.parentBase.__sdk;
 
-    const recordIds = records.map(record => {
+    const recordIds = records.map((record) => {
         invariant(record.parentTable.id === tableId, 'all records must belong to the same table');
 
         return record.id;
@@ -63,7 +63,7 @@ async function expandRecordPickerAsync(
 
     const fieldIds =
         opts && opts.fields
-            ? opts.fields.map(field => {
+            ? opts.fields.map((field) => {
                   invariant(
                       field.parentTable.id === tableId,
                       'all fields must belong to the same table',

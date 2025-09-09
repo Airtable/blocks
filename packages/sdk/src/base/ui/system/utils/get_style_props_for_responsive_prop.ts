@@ -1,7 +1,7 @@
 import {invariant} from '../../../../shared/error_utils';
-import {values, has, ObjectMap, keys} from '../../../../shared/private_utils';
-import {AllStylesProps} from '..';
-import {ResponsivePropObject} from './types';
+import {values, has, type ObjectMap, keys} from '../../../../shared/private_utils';
+import {type AllStylesProps} from '..';
+import {type ResponsivePropObject} from './types';
 
 /**
  * Given a styled system scale, convert a responsive prop object into a style props object.

@@ -8,27 +8,27 @@ import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     backgroundColor,
-    BackgroundColorProps,
+    type BackgroundColorProps,
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     height,
-    HeightProps,
+    type HeightProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
     display,
 } from './system';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type OptionalResponsiveProp} from './system/utils/types';
 import Box from './box';
 import theme from './theme/default_theme';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link ProgressBar} component. Also accepts:

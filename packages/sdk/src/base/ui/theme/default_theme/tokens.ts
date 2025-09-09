@@ -1,5 +1,5 @@
-import {ObjectMap} from '../../../../shared/private_utils';
-import {Color} from '../../../../shared/colors';
+import {type ObjectMap} from '../../../../shared/private_utils';
+import {type Color} from '../../../../shared/colors';
 
 export const colors = {
     white: 'hsl(0, 0%, 100%)',

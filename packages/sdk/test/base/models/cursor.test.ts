@@ -30,7 +30,7 @@ describe('Cursor', () => {
             }),
         );
 
-        return new Promise<void>(resolve => {
+        return new Promise<void>((resolve) => {
             cursor.watch('isDataLoaded', function init() {
                 cursor.unwatch('isDataLoaded', init);
                 resolve();
@@ -276,7 +276,7 @@ describe('Cursor', () => {
 
     describe('#watch', () => {
         test('key: selectedRecordIds', async () => {
-            const watched = new Promise(resolve => {
+            const watched = new Promise((resolve) => {
                 cursor.watch('selectedRecordIds', resolve);
             });
 
@@ -291,7 +291,7 @@ describe('Cursor', () => {
         });
 
         test('key: selectedFieldIds', () => {
-            const watched = new Promise(resolve => {
+            const watched = new Promise((resolve) => {
                 cursor.watch('selectedFieldIds', resolve);
             });
 
@@ -326,7 +326,7 @@ describe('Cursor', () => {
             });
 
             test('null - updates activeTableId', async () => {
-                const tableId = new Promise(resolve => {
+                const tableId = new Promise((resolve) => {
                     cursor.watch('activeTableId', resolve);
                 });
 
@@ -343,7 +343,7 @@ describe('Cursor', () => {
             });
 
             test('null - updates activeViewId', async () => {
-                const viewId = new Promise(resolve => {
+                const viewId = new Promise((resolve) => {
                     cursor.watch('activeViewId', resolve);
                 });
 
@@ -361,7 +361,7 @@ describe('Cursor', () => {
         });
 
         test('key: activeViewId', async () => {
-            const watched = new Promise(resolve => {
+            const watched = new Promise((resolve) => {
                 cursor.watch('activeViewId', resolve);
             });
 
@@ -376,7 +376,7 @@ describe('Cursor', () => {
         });
 
         test('key: isDataLoaded', () => {
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 cursor.watch('isDataLoaded', resolve);
                 cursor.unloadData();
             });

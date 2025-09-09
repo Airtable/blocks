@@ -2,26 +2,26 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import useTheme from './theme/use_theme';
 import useStyledSystem from './use_styled_system';
 import useFormField from './use_form_field';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {ControlSizeProp, ControlSize, useInputSize} from './control_sizes';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type ControlSizeProp, ControlSize, useInputSize} from './control_sizes';
 
 /** @internal */
 type InputVariant = EnumType<typeof InputVariant>;

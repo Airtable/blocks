@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import * as React from 'react';
 import {css, keyframes} from 'emotion';
-import {InterfaceBlockSdk} from '../sdk';
+import {type InterfaceBlockSdk} from '../sdk';
 import Loader from '../../shared/ui/loader';
 import {SdkContext} from '../../shared/ui/sdk_context';
 

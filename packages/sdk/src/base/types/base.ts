@@ -1,7 +1,7 @@
-import {BaseDataCore, BasePermissionDataCore} from '../../shared/types/base_core';
-import {TableId} from '../../shared/types/hyper_ids';
-import {TableData, TablePermissionData} from './table';
-import {CursorData} from './cursor';
+import {type BaseDataCore, type BasePermissionDataCore} from '../../shared/types/base_core';
+import {type TableId} from '../../shared/types/hyper_ids';
+import {type TableData, type TablePermissionData} from './table';
+import {type CursorData} from './cursor';
 
 /** @hidden */
 export interface BaseData extends BaseDataCore<TableData> {

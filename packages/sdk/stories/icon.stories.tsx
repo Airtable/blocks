@@ -25,7 +25,7 @@ export const SmallSizeWillRenderMicroIcon = {
 export const AllIcons = {
     render: () => (
         <React.Fragment>
-            {objectValues(iconNames).map(iconName => {
+            {objectValues(iconNames).map((iconName) => {
                 return (
                     <Box key={iconName} display="flex">
                         <Box width="240px" display="flex" alignItems="center">

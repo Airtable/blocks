@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/interface/ui: useRecords */ /** */
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {useSdk} from '../../shared/ui/sdk_context';
 import useWatchable from '../../shared/ui/use_watchable';
-import {Record} from '../models/record';
-import {Table} from '../models/table';
+import {type Record} from '../models/record';
+import {type Table} from '../models/table';
 
 /**
  * A hook for working with all of the records (including cell values) in a

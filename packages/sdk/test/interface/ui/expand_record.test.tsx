@@ -4,8 +4,8 @@ import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_i
 import {expandRecord, useBase, useRecords} from '../../../src/interface/ui/ui';
 import {SdkContext} from '../../../src/shared/ui/sdk_context';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
-import {FieldId, RecordId} from '../../../src/shared/types/hyper_ids';
-import {ObjectMap} from '../../../src/shared/private_utils';
+import {type FieldId, type RecordId} from '../../../src/shared/types/hyper_ids';
+import {type ObjectMap} from '../../../src/shared/private_utils';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 import {createPromiseWithResolveAndReject} from '../../test_helpers';
 

@@ -8,14 +8,14 @@ import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
 import {
     dimensionsSet,
-    DimensionsSetProps,
+    type DimensionsSetProps,
     display,
     flexContainerSet,
-    FlexContainerSetProps,
+    type FlexContainerSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
 } from './system';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type OptionalResponsiveProp} from './system/utils/types';
 
 /**
  * Props for the {@link Modal} component. Also accepts:
@@ -135,7 +135,7 @@ export class Modal extends React.Component<ModalProps> {
 
         return ReactDOM.createPortal(
             <div
-                ref={el => {
+                ref={(el) => {
                     this._background = el;
                 }}
                 className={cx(

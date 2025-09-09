@@ -43,9 +43,9 @@ function SwitchExample() {
     return (
         <Example
             {...sharedExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values, {
-                    backgroundColor: value => (value ? 'transparent' : null),
+                    backgroundColor: (value) => (value ? 'transparent' : null),
                 });
 
                 return `
@@ -72,7 +72,7 @@ function SwitchExample() {
                 return (
                     <Switch
                         value={isEnabled}
-                        onChange={newValue => setIsEnabled(newValue)}
+                        onChange={(newValue) => setIsEnabled(newValue)}
                         label="Is switch enabled"
                         {...values}
                         backgroundColor={backgroundColor ? 'transparent' : undefined}
@@ -93,9 +93,9 @@ function SwitchSyncedExample() {
     return (
         <Example
             {...sharedExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values, {
-                    backgroundColor: value => (value ? 'transparent' : null),
+                    backgroundColor: (value) => (value ? 'transparent' : null),
                 });
 
                 return `
@@ -119,7 +119,7 @@ function SwitchSyncedExample() {
                 return (
                     <Switch
                         value={isEnabled}
-                        onChange={newValue => setIsEnabled(newValue)}
+                        onChange={(newValue) => setIsEnabled(newValue)}
                         label="Is switch enabled"
                         backgroundColor={backgroundColor ? 'transparent' : undefined}
                         {...values}
@@ -254,7 +254,7 @@ export const ForwardedRef = {
             return (
                 <Box maxWidth="300px" margin="auto">
                     <Switch
-                        ref={node => console.log(node)}
+                        ref={(node) => console.log(node)}
                         value={isChecked}
                         onChange={setIsChecked}
                         label="Check the console"

@@ -3,22 +3,22 @@ import {
     entries,
     has,
     values,
-    ObjectMap,
-    FlowAnyFunction,
-    FlowAnyObject,
+    type ObjectMap,
+    type FlowAnyFunction,
+    type FlowAnyObject,
     cast,
     keys as objectKeys,
-    ObjectValues,
+    type ObjectValues,
     isEnumValue,
 } from '../../shared/private_utils';
 import {invariant, logErrorToSentry} from '../../shared/error_utils';
-import Sdk from '../sdk';
-import {TableData} from '../types/table';
-import {TableId, FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
-import {RecordData} from '../types/record';
-import {AirtableInterface} from '../types/airtable_interface';
-import {ChangedPathsForType} from '../../shared/models/base_core';
-import {BaseSdkMode} from '../../sdk_mode';
+import type Sdk from '../sdk';
+import {type TableData} from '../types/table';
+import {type TableId, type FieldId, type ViewId, type RecordId} from '../../shared/types/hyper_ids';
+import {type RecordData} from '../types/record';
+import {type AirtableInterface} from '../types/airtable_interface';
+import {type ChangedPathsForType} from '../../shared/models/base_core';
+import {type BaseSdkMode} from '../../sdk_mode';
 import RecordStoreCore, {
     WatchableCellValuesInFieldKeyPrefix,
     WatchableRecordStoreKeysCore,
@@ -26,7 +26,7 @@ import RecordStoreCore, {
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
-import Table from './table';
+import type Table from './table';
 
 export const WatchableRecordStoreKeys = Object.freeze({
     ...WatchableRecordStoreKeysCore,
@@ -299,16 +299,14 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
             }
         }
         if (fieldIdsWhichAreNotAlreadyLoadedOrLoading.length > 0) {
-            const loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise = this._loadCellValuesInFieldIdsAsync(
-                fieldIdsWhichAreNotAlreadyLoadedOrLoading,
-            );
+            const loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise =
+                this._loadCellValuesInFieldIdsAsync(fieldIdsWhichAreNotAlreadyLoadedOrLoading);
             pendingLoadPromises.push(loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise);
             for (const fieldId of fieldIdsWhichAreNotAlreadyLoadedOrLoading) {
-                this._pendingCellValuesLoadPromiseByFieldId[
-                    fieldId
-                ] = loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise;
+                this._pendingCellValuesLoadPromiseByFieldId[fieldId] =
+                    loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise;
             }
-            loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise.then(changedKeys => {
+            loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise.then((changedKeys) => {
                 for (const fieldId of fieldIdsWhichAreNotAlreadyLoadedOrLoading) {
                     this._areCellValuesLoadedByFieldId[fieldId] = true;
                     this._pendingCellValuesLoadPromiseByFieldId[fieldId] = undefined;
@@ -326,12 +324,11 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
     async _loadCellValuesInFieldIdsAsync(
         fieldIds: Array<FieldId>,
     ): Promise<Array<WatchableRecordStoreKey>> {
-        const {
-            recordsById: newRecordsById,
-        } = await this._airtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync(
-            this.tableId,
-            fieldIds,
-        );
+        const {recordsById: newRecordsById} =
+            await this._airtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync(
+                this.tableId,
+                fieldIds,
+            );
 
         if (!this._data.recordsById) {
             this._data.recordsById = {};
@@ -374,7 +371,9 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
             }
         }
 
-        const changedKeys = fieldIds.map(fieldId => WatchableCellValuesInFieldKeyPrefix + fieldId);
+        const changedKeys = fieldIds.map(
+            (fieldId) => WatchableCellValuesInFieldKeyPrefix + fieldId,
+        );
         changedKeys.push(WatchableRecordStoreKeys.records);
         changedKeys.push(WatchableRecordStoreKeys.recordIds);
         changedKeys.push(WatchableRecordStoreKeys.cellValues);
@@ -412,7 +411,7 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
         }
         if (fieldIdsWithZeroRetainCount.length > 0) {
             this._timeoutForRemovingFieldIds = setTimeout(() => {
-                const fieldIdsToUnload = fieldIdsWithZeroRetainCount.filter(fieldId => {
+                const fieldIdsToUnload = fieldIdsWithZeroRetainCount.filter((fieldId) => {
                     return (
                         this._cellValuesRetainCountByFieldId[fieldId] === 0 &&
                         this._areCellValuesLoadedByFieldId[fieldId]
@@ -471,7 +470,7 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
     _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds?: Array<FieldId>) {
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
-            values(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
+            values(this._areCellValuesLoadedByFieldId).some((isLoaded) => isLoaded);
 
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
@@ -484,7 +483,7 @@ class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, strin
                 } else {
                     const fieldIds = Object.keys(this._data.fieldsById);
                     fieldIdsToClear = fieldIds.filter(
-                        fieldId => !this._areCellValuesLoadedByFieldId[fieldId],
+                        (fieldId) => !this._areCellValuesLoadedByFieldId[fieldId],
                     );
                 }
                 const {recordsById} = this._data;

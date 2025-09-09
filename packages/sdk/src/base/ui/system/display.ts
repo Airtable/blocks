@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Display */ /** */
-import {system, Config} from '@styled-system/core';
-import {DisplayProperty} from './utils/csstype';
-import {OptionalResponsiveProp} from './utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type DisplayProperty} from './utils/csstype';
+import {type OptionalResponsiveProp} from './utils/types';
 
 /**
  * Style prop for the display type of an element.

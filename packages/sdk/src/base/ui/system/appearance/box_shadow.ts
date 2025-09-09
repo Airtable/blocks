@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Appearance */ /** */
-import {system, Config} from '@styled-system/core';
-import {BoxShadowProperty} from '../utils/csstype';
-import {OptionalResponsiveProp} from '../utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type BoxShadowProperty} from '../utils/csstype';
+import {type OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface BoxShadowProps {

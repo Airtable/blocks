@@ -1,10 +1,15 @@
 /* eslint-disable no-unused-expressions */
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../../src/base/models/base';
-import Table from '../../../src/base/models/table';
+import type Base from '../../../src/base/models/base';
+import type Table from '../../../src/base/models/table';
 import Field from '../../../src/base/models/field';
 import View from '../../../src/base/models/view';
-import {TableId, FieldId, ViewId, RecordId} from '../../../src/shared/types/hyper_ids';
+import {
+    type TableId,
+    type FieldId,
+    type ViewId,
+    type RecordId,
+} from '../../../src/shared/types/hyper_ids';
 import {ViewType} from '../../../src/base/types/view';
 import {FieldType} from '../../../src/shared/types/field_core';
 import {MutationTypes} from '../../../src/base/types/mutations';
@@ -27,7 +32,9 @@ jest.mock('../../../src/injected/airtable_interface', () => {
 const mockAirtableInterface = getAirtableInterface() as jest.Mocked<MockAirtableInterface>;
 
 const deleteTable = (id: TableId) => {
-    const newOrder = ['tblDesignProjects', 'tblTasks', 'tblClients'].filter(other => other !== id);
+    const newOrder = ['tblDesignProjects', 'tblTasks', 'tblClients'].filter(
+        (other) => other !== id,
+    );
 
     mockAirtableInterface.triggerModelUpdates([
         {path: ['tableOrder'], value: newOrder},
@@ -42,7 +49,7 @@ const deleteView = (id: ViewId) => {
         'viwPrjctCompleted',
         'viwPrjctCalendar',
         'viwPrjctDueDates',
-    ].filter(other => other !== id);
+    ].filter((other) => other !== id);
 
     mockAirtableInterface.triggerModelUpdates([
         {
@@ -212,7 +219,7 @@ describe('Table', () => {
             mockApplyMutationAsync = mockAirtableInterface.applyMutationAsync;
             mockGetFieldById = jest
                 .spyOn(table, 'getFieldById')
-                .mockImplementation(fieldId => new Field(sdk, table, fieldId));
+                .mockImplementation((fieldId) => new Field(sdk, table, fieldId));
         });
 
         it('accepts null field options and omits them from config', async () => {
@@ -1977,7 +1984,7 @@ describe('Table', () => {
         it('throws for invalid field specifiers', () => {
             expect(() => {
                 table.selectRecords({
-                    fields: [(1.0003 as unknown) as string],
+                    fields: [1.0003 as unknown as string],
                 });
             }).toThrowErrorMatchingInlineSnapshot(
                 `"Invalid value for field, expected a field, id, or name but got: 1.0003"`,

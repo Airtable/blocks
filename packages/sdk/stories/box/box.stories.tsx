@@ -23,7 +23,7 @@ function BoxExample() {
                     type: 'select',
                     label: 'Background color',
                     options: ['white', 'lightGray1', 'lightGray2', 'lightGray3', 'lightGray4'],
-                    renderLabel: v => v,
+                    renderLabel: (v) => v,
                 },
                 border: {
                     type: 'selectButtons',
@@ -39,7 +39,7 @@ function BoxExample() {
                     type: 'select',
                     label: 'Padding',
                     options: theme.space.map((value, index) => index),
-                    renderLabel: option => `${option} (${theme.space[option as any]}px)`,
+                    renderLabel: (option) => `${option} (${theme.space[option as any]}px)`,
                 },
                 isFlexCentered: {
                     type: 'switch',
@@ -107,7 +107,7 @@ export const Display = {
                 'flex' as const,
                 'inline-flex' as const,
                 'table' as const,
-            ].map(display => (
+            ].map((display) => (
                 <Box key={display} display={display} border="default" padding={2} margin={2}>
                     {display}
                 </Box>
@@ -155,7 +155,7 @@ export const As = {
                 'ul' as const,
                 'li' as const,
                 'pre' as const,
-            ].map(as => (
+            ].map((as) => (
                 <Box key={as} as={as}>
                     {as}
                 </Box>

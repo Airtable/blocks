@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useBase */ /** */
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import useBaseInternal from '../../shared/ui/use_base';
 
 /**

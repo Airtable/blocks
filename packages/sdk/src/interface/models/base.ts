@@ -1,7 +1,7 @@
 import {BaseCore} from '../../shared/models/base_core';
-import {InterfaceSdkMode} from '../../sdk_mode';
-import {TableId} from '../../shared/types/hyper_ids';
-import {InterfaceBlockSdk} from '../sdk';
+import {type InterfaceSdkMode} from '../../sdk_mode';
+import {type TableId} from '../../shared/types/hyper_ids';
+import {type InterfaceBlockSdk} from '../sdk';
 import {Table} from './table';
 import {RecordStore} from './record_store';
 

@@ -1,4 +1,4 @@
-import {SdkMode} from '../../sdk_mode';
+import {type SdkMode} from '../../sdk_mode';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

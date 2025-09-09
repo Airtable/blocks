@@ -2,33 +2,33 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
-import {AriaProps} from './types/aria_props';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type AriaProps} from './types/aria_props';
+import {type OptionalResponsiveProp} from './system/utils/types';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
     display,
 } from './system';
-import {useTextStyle, TextSize, TextSizeProp} from './text';
-import {IconName} from './icon_config';
+import {useTextStyle, TextSize, type TextSizeProp} from './text';
+import {type IconName} from './icon_config';
 import Icon from './icon';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import cssHelpers from './css_helpers';
 import Box from './box';
-import {DataAttributesProp} from './types/data_attributes_prop';
+import {type DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Style props for the {@link TextButton} component. Also accepts:

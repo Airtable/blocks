@@ -1,20 +1,20 @@
 /** @module @airtable/blocks/models: View */ /** */
-import Sdk from '../sdk';
-import {ViewData, ViewType} from '../types/view';
-import {isEnumValue, ObjectValues, FlowAnyObject} from '../../shared/private_utils';
+import type Sdk from '../sdk';
+import {type ViewData, type ViewType} from '../types/view';
+import {isEnumValue, type ObjectValues, type FlowAnyObject} from '../../shared/private_utils';
 import {MutationTypes} from '../types/mutations';
 import AbstractModel from '../../shared/models/abstract_model';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type BaseSdkMode} from '../../sdk_mode';
 import ObjectPool from './object_pool';
-import Table from './table';
+import type Table from './table';
 import RecordQueryResult, {
     normalizeSortsOrGroups,
-    RecordQueryResultOpts,
-    ViewMetadataForUpdate,
+    type RecordQueryResultOpts,
+    type ViewMetadataForUpdate,
 } from './record_query_result';
-import TableOrViewQueryResult from './table_or_view_query_result';
-import ViewDataStore from './view_data_store';
+import type TableOrViewQueryResult from './table_or_view_query_result';
+import type ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
 import * as RecordColoring from './record_coloring';
 

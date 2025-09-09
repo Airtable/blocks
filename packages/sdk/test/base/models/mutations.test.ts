@@ -1,13 +1,13 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import Base from '../../../src/base/models/base';
+import type Base from '../../../src/base/models/base';
 import Mutations from '../../../src/base/models/mutations';
 import Sdk from '../../../src/base/sdk';
 import Session from '../../../src/base/models/session';
-import {ModelChange} from '../../../src/shared/types/base_core';
+import {type ModelChange} from '../../../src/shared/types/base_core';
 import {FieldType} from '../../../src/shared/types/field_core';
 import {MutationTypes} from '../../../src/base/types/mutations';
 import {BlockRunContextType} from '../../../src/base/types/airtable_interface';
-import {FieldTypeConfig} from '../../../src/shared/types/airtable_interface_core';
+import {type FieldTypeConfig} from '../../../src/shared/types/airtable_interface_core';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
 jest.mock('../../../src/injected/airtable_interface', () => {
@@ -144,11 +144,12 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
-                    () => {
-                        return {isValid: false, reason: 'Mock reason'};
-                    },
-                );
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                        () => {
+                            return {isValid: false, reason: 'Mock reason'};
+                        },
+                    );
 
                 const config = {
                     type: FieldType.CHECKBOX,
@@ -255,11 +256,12 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
-                    () => {
-                        return {isValid: false, reason: 'Mock reason'};
-                    },
-                );
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                        () => {
+                            return {isValid: false, reason: 'Mock reason'};
+                        },
+                    );
 
                 const oldConfig = {
                     type: FieldType.CHECKBOX,
@@ -367,9 +369,10 @@ describe('Mutations', () => {
                     },
                 };
 
-                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockReturnValue(
-                    {isValid: true},
-                );
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockReturnValue(
+                        {isValid: true},
+                    );
                 mockAirtableInterface.fieldTypeProvider.getConfig.mockReturnValue(oldSelectConfig);
 
                 mutations._assertMutationIsValid({
@@ -630,11 +633,12 @@ describe('Mutations', () => {
                     "Can't create table: field name 'new field with name that is too long' exceeds maximum length of 20 characters",
                 );
 
-                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
-                    () => {
-                        return {isValid: false, reason: 'Mock reason'};
-                    },
-                );
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                        () => {
+                            return {isValid: false, reason: 'Mock reason'};
+                        },
+                    );
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -706,11 +710,10 @@ describe('Mutations', () => {
             });
 
             it('checks the primary field', () => {
-                const mockCanBePrimary = mockAirtableInterface.fieldTypeProvider.canBePrimary.mockImplementation(
-                    () => {
+                const mockCanBePrimary =
+                    mockAirtableInterface.fieldTypeProvider.canBePrimary.mockImplementation(() => {
                         return false;
-                    },
-                );
+                    });
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -1635,7 +1638,7 @@ Mock reason"
                 mutations.applyMutationAsync({
                     type: 'foo' as typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
                     tableId: 'tblNonExistentTableId',
-                    recordIds: [(circular as unknown) as string],
+                    recordIds: [circular as unknown as string],
                 }),
             ).rejects.toThrowErrorMatchingInlineSnapshot(`"Unknown value foo for mutation type"`);
             expect(applyModelChanges.mock.calls.length).toBe(0);
@@ -1663,7 +1666,7 @@ Mock reason"
             });
 
             function flushPromises() {
-                return new Promise(resolve => setImmediate(resolve));
+                return new Promise((resolve) => setImmediate(resolve));
             }
 
             it('produces an uncaught exception when synchronization failures occur and a state change has been optimistically applied', async () => {

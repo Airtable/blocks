@@ -2,23 +2,23 @@
 import {compose} from '@styled-system/core';
 import {
     appearanceSet,
-    AppearanceSetProps,
+    type AppearanceSetProps,
     dimensionsSet,
-    DimensionsSetProps,
+    type DimensionsSetProps,
     flexContainerSet,
-    FlexContainerSetProps,
+    type FlexContainerSetProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
     typographySet,
-    TypographySetProps,
+    type TypographySetProps,
     display,
-    DisplayProps,
+    type DisplayProps,
     overflow,
-    OverflowProps,
+    type OverflowProps,
 } from './index';
 
 /**

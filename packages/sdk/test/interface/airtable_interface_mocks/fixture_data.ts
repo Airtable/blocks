@@ -1,11 +1,19 @@
-import {BaseId, TableId, FieldId, RecordId} from '../../../src/shared/types/hyper_ids';
-import {TableData} from '../../../src/interface/types/table';
+import {
+    type BaseId,
+    type TableId,
+    type FieldId,
+    type RecordId,
+} from '../../../src/shared/types/hyper_ids';
+import {type TableData} from '../../../src/interface/types/table';
 import {FieldType} from '../../../src/shared/types/field_core';
-import {FieldData} from '../../../src/interface/types/field';
-import {CollaboratorData} from '../../../src/shared/types/collaborator';
-import {ObjectMap, keyBy, getId} from '../../../src/shared/private_utils';
-import {BlockRunContextType, SdkInitData} from '../../../src/interface/types/airtable_interface';
-import {RecordData} from '../../../src/interface/types/record';
+import {type FieldData} from '../../../src/interface/types/field';
+import {type CollaboratorData} from '../../../src/shared/types/collaborator';
+import {type ObjectMap, keyBy, getId} from '../../../src/shared/private_utils';
+import {
+    BlockRunContextType,
+    type SdkInitData,
+} from '../../../src/interface/types/airtable_interface';
+import {type RecordData} from '../../../src/interface/types/record';
 
 const MOCK_BLOCK_INSTALLATION_ID = 'blicPfOILwejF6HL2';
 const MOCK_BLOCK_RUN_CONTEXT_TYPE = BlockRunContextType.PAGE_ELEMENT_IN_QUERY_CONTAINER;
@@ -42,13 +50,13 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
             currentUserId: MOCK_CURRENT_USER_ID,
             enabledFeatureNames: [],
             collaboratorsById: keyBy(
-                collaborators.map(c => {
+                collaborators.map((c) => {
                     const {email, profilePicUrl} = c;
                     return {id: c.id, name: c.name, email, profilePicUrl};
                 }),
                 getId,
             ),
-            activeCollaboratorIds: collaborators.filter(c => c.isActive).map(c => c.id),
+            activeCollaboratorIds: collaborators.filter((c) => c.isActive).map((c) => c.id),
             billingPlanGrouping: MOCK_BILLING_GROUP,
             appInterface: {},
             isBlockDevelopmentRestrictionEnabled: false,
@@ -70,7 +78,7 @@ function convertTableFixtureDataToTableData(tableFixtureData: TableFixtureData):
             records.map(convertRecordFixtureDataToRecordData),
             getId,
         ),
-        recordOrder: records.map(r => r.id),
+        recordOrder: records.map((r) => r.id),
         lock: null,
         externalSyncById: null,
         isRecordExpansionEnabled: true,

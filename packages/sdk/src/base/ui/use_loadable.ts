@@ -127,10 +127,10 @@ export default function useLoadable(
         return compacted;
     }, [constModels]);
 
-    const areAllModelsLoaded = compactModels.every(model => model.isDataLoaded);
+    const areAllModelsLoaded = compactModels.every((model) => model.isDataLoaded);
 
     if (shouldSuspend && !areAllModelsLoaded) {
-        const suspensePromise = Promise.all(compactModels.map(model => model.loadDataAsync()))
+        const suspensePromise = Promise.all(compactModels.map((model) => model.loadDataAsync()))
             .then(() => {
                 setTimeout(() => {
                     for (const model of compactModels) {
@@ -138,7 +138,7 @@ export default function useLoadable(
                     }
                 }, SUSPENSE_CLEAN_UP_MS);
             })
-            .catch(error => {
+            .catch((error) => {
                 // eslint-disable-next-line no-console
                 console.error(error);
                 throw error;
@@ -149,7 +149,7 @@ export default function useLoadable(
 
     const modelIsLoadedSubscription = useMemo(
         () => ({
-            getCurrentValue: () => compactModels.map(model => model.isDataLoaded).join(','),
+            getCurrentValue: () => compactModels.map((model) => model.isDataLoaded).join(','),
             subscribe: (onChange: () => void) => {
                 for (const model of compactModels) {
                     model.watch('isDataLoaded', onChange);

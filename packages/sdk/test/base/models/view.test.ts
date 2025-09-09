@@ -3,9 +3,9 @@ import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_i
 import {ViewType} from '../../../src/base/types/view';
 import {__reset, __sdk as sdk} from '../../../src/base';
 import AbstractModel from '../../../src/shared/models/abstract_model';
-import Base from '../../../src/base/models/base';
+import type Base from '../../../src/base/models/base';
 import * as RecordColoring from '../../../src/base/models/record_coloring';
-import Table from '../../../src/base/models/table';
+import type Table from '../../../src/base/models/table';
 import View from '../../../src/base/models/view';
 import {MutationTypes} from '../../../src/base/types/mutations';
 import {BlockRunContextType} from '../../../src/base/types/airtable_interface';
@@ -497,7 +497,7 @@ describe('View', () => {
             it('throws for invalid field specifiers', () => {
                 expect(() => {
                     view.selectRecords({
-                        fields: [(1.0004 as unknown) as string],
+                        fields: [1.0004 as unknown as string],
                     });
                 }).toThrowErrorMatchingInlineSnapshot(
                     `"Invalid value for field, expected a field, id, or name but got: 1.0004"`,
@@ -659,7 +659,7 @@ describe('View', () => {
         describe('#watch()', () => {
             test('#watch(invalid key) throws', () => {
                 expect(() =>
-                    view.watch(('isDeleted' as unknown) as 'name', () => {}),
+                    view.watch('isDeleted' as unknown as 'name', () => {}),
                 ).toThrowErrorMatchingInlineSnapshot(`"Invalid key to watch for View: isDeleted"`);
             });
 

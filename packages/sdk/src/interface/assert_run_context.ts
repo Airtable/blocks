@@ -1,5 +1,5 @@
 import getAirtableInterface from '../injected/airtable_interface';
-import {InterfaceSdkMode} from '../sdk_mode';
+import {type InterfaceSdkMode} from '../sdk_mode';
 import {spawnError} from '../shared/error_utils';
 import {BlockRunContextType} from './types/airtable_interface';
 

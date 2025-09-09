@@ -1,8 +1,8 @@
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {MutationsCore} from '../../shared/models/mutations_core';
-import {ModelChange} from '../../shared/types/base_core';
-import {Mutation, MutationTypes} from '../types/mutations';
-import {RecordData} from '../types/record';
+import {type ModelChange} from '../../shared/types/base_core';
+import {type Mutation, MutationTypes} from '../types/mutations';
+import {type RecordData} from '../types/record';
 
 /** @hidden */
 export class Mutations extends MutationsCore<InterfaceSdkMode> {
@@ -37,7 +37,7 @@ export class Mutations extends MutationsCore<InterfaceSdkMode> {
                     {
                         path: ['tablesById', tableId, 'recordOrder'],
                         value: recordStore.recordIds.filter(
-                            recordId => !deletedRecordIdsSet.has(recordId),
+                            (recordId) => !deletedRecordIdsSet.has(recordId),
                         ),
                     },
                     ...super._getOptimisticModelChangesForMutation(mutation),

@@ -1,19 +1,19 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType} from '../../shared/types/field_core';
-import Sdk from '../sdk';
-import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../../shared/private_utils';
+import type Sdk from '../sdk';
+import {type FlowAnyFunction, type FlowAnyObject, type ObjectMap} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import RecordQueryResult, {
-    WatchableRecordQueryResultKey,
-    NormalizedRecordQueryResultOpts,
+    type WatchableRecordQueryResultKey,
+    type NormalizedRecordQueryResultOpts,
 } from './record_query_result';
-import TableOrViewQueryResult from './table_or_view_query_result';
+import type TableOrViewQueryResult from './table_or_view_query_result';
 
-import Table from './table';
-import Field from './field';
-import Record from './record';
-import RecordStore from './record_store';
+import type Table from './table';
+import type Field from './field';
+import type Record from './record';
+import type RecordStore from './record_store';
 
 export const getLinkedTableId = (field: Field): string => {
     const options = field.options;
@@ -135,7 +135,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     get records(): Array<Record> {
         invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
 
-        return this.recordIds.map(recordId => {
+        return this.recordIds.map((recordId) => {
             const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
             invariant(record, 'No record for id: %s', recordId);
             return record;
@@ -181,9 +181,9 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<
-            WatchableRecordQueryResultKey
-        >;
+        const arrayKeys = (
+            Array.isArray(keys) ? keys : [keys]
+        ) as ReadonlyArray<WatchableRecordQueryResultKey>;
 
         for (const key of arrayKeys) {
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
@@ -236,7 +236,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         const fieldIds =
             this._normalizedOpts.fieldIdsOrNullIfAllFields ||
-            this.parentTable.fields.map(field => field.id);
+            this.parentTable.fields.map((field) => field.id);
 
         for (const fieldId of fieldIds) {
             changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
@@ -290,7 +290,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
     /** @internal */
     get _cellValueWatchCountByFieldId(): Readonly<{[key: string]: number}> {
         const countByFieldId: ObjectMap<FieldId, number> = {};
-        const watchKeys = Object.keys(this._changeWatchersByKey).filter(key => {
+        const watchKeys = Object.keys(this._changeWatchersByKey).filter((key) => {
             return key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix);
         });
         for (const watchKey of watchKeys) {
@@ -427,7 +427,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         if (changes && changes.fieldIds && changes.recordIds) {
             const recordIdsSet = this._getOrGenerateRecordIdsSet();
-            const recordIds = changes.recordIds.filter(id => recordIdsSet[id] === true);
+            const recordIds = changes.recordIds.filter((id) => recordIdsSet[id] === true);
             if (recordIds.length) {
                 this._onChange('cellValues', {fieldIds: changes.fieldIds, recordIds});
             }
@@ -455,7 +455,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
                 if (Array.isArray(recordIds)) {
                     const recordIdsSet = this._getOrGenerateRecordIdsSet();
                     const filteredRecordIds = recordIds.filter(
-                        id => typeof id === 'string' && recordIdsSet[id] === true,
+                        (id) => typeof id === 'string' && recordIdsSet[id] === true,
                     );
                     if (filteredRecordIds.length) {
                         this._onChange(
@@ -573,7 +573,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult<LinkedRecordsQueryResul
 
         if (this._normalizedOpts.sorts && this._normalizedOpts.sorts.length) {
             this._computedFilteredSortedRecordIds = this._linkedQueryResult.recordIds.filter(
-                recordId => recordIdsSet[recordId] === true,
+                (recordId) => recordIdsSet[recordId] === true,
             );
         } else {
             this._computedFilteredSortedRecordIds = Object.keys(recordIdsSet);

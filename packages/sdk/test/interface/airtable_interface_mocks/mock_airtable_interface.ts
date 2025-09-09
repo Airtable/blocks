@@ -1,10 +1,10 @@
-import {FieldTypeProvider, IdGenerator} from '../../../src/base/types/airtable_interface';
+import {type FieldTypeProvider, type IdGenerator} from '../../../src/base/types/airtable_interface';
 import {AbstractMockAirtableInterface} from '../../../src/testing/interface/abstract_mock_airtable_interface';
 import {spawnError} from '../../../src/shared/error_utils';
-import {GlobalConfigHelpers} from '../../../src/shared/types/airtable_interface_core';
+import {type GlobalConfigHelpers} from '../../../src/shared/types/airtable_interface_core';
 import projectTrackerData from './project_tracker';
 import linkedRecordsData from './linked_records';
-import {FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';
+import {type FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';
 
 const resetSpies = (target: {[key: string]: any}, names: string[]) => {
     for (const name of names) {

@@ -1,8 +1,11 @@
-import {AirtableInterfaceCore, SdkInitDataCore} from '../../shared/types/airtable_interface_core';
-import {InterfaceSdkMode} from '../../sdk_mode';
-import {BaseDataCore} from '../../shared/types/base_core';
-import {TableId, PageId, FieldId, RecordId} from '../../shared/types/hyper_ids';
-import {TableData} from './table';
+import {
+    type AirtableInterfaceCore,
+    type SdkInitDataCore,
+} from '../../shared/types/airtable_interface_core';
+import {type InterfaceSdkMode} from '../../sdk_mode';
+import {type BaseDataCore} from '../../shared/types/base_core';
+import {type TableId, type PageId, type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {type TableData} from './table';
 
 /** @hidden */
 export enum BlockRunContextType {

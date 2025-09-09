@@ -93,12 +93,8 @@ function SelectableIconWithLabel({
 
 export default function IconExample() {
     const [searchQuery, setSearchQuery] = useState('');
-    const preppedSearchQuery = searchQuery
-        .toLowerCase()
-        .trim()
-        .split(' ')
-        .join('');
-    const filteredIconNamesArray = iconNamesArray.filter(name => {
+    const preppedSearchQuery = searchQuery.toLowerCase().trim().split(' ').join('');
+    const filteredIconNamesArray = iconNamesArray.filter((name) => {
         return name.toLowerCase().includes(preppedSearchQuery);
     });
 
@@ -136,15 +132,14 @@ export default function IconExample() {
                     defaultValue: 16,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 let exampleCode;
                 let deprecatedWarning = '';
                 if (checkedIconName) {
                     if (deprecatedIconNameToReplacementName.has(checkedIconName)) {
                         deprecatedWarning = '// DEPRECATED';
-                        const alternative = deprecatedIconNameToReplacementName.get(
-                            checkedIconName,
-                        );
+                        const alternative =
+                            deprecatedIconNameToReplacementName.get(checkedIconName);
                         if (alternative) {
                             deprecatedWarning += `: use <Icon name="${alternative}" .../> instead.\n`;
                         }
@@ -166,11 +161,11 @@ export default function IconExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <div
                         className={wrapperClassName}
-                        onKeyDown={e => {
+                        onKeyDown={(e) => {
                             if (e.ctrlKey || e.altKey || e.metaKey) {
                                 return;
                             }
@@ -198,7 +193,7 @@ export default function IconExample() {
                             {/* TODO (jay): This should be a combobox, but we don't allow the right aria props. */}
                             <Input
                                 value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search for icons..."
                             />
                         </Box>
@@ -211,7 +206,7 @@ export default function IconExample() {
                         >
                             {filteredIconNamesArray.length > 0 ? (
                                 <React.Fragment>
-                                    {filteredIconNamesArray.map(iconName => {
+                                    {filteredIconNamesArray.map((iconName) => {
                                         return (
                                             <SelectableIconWithLabel
                                                 key={iconName}

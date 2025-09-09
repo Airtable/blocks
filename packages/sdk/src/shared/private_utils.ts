@@ -108,7 +108,7 @@ export function entries<Obj extends object>(obj: Obj): Array<[keyof Obj, ObjectV
  * @hidden
  */
 export function fireAndForgetPromise(fn: () => Promise<unknown>) {
-    fn().catch(err => {
+    fn().catch((err) => {
         setTimeout(() => {
             throw err;
         }, 0);
@@ -324,7 +324,7 @@ export function getValueAtOwnPath(value: unknown, path: ReadonlyArray<string>): 
 /** @hidden */
 export function arrayDifference<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): Array<T> {
     const bSet = new Set(b);
-    return a.filter(item => !bSet.has(item));
+    return a.filter((item) => !bSet.has(item));
 }
 
 /** @hidden */

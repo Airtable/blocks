@@ -1,8 +1,8 @@
 /** @module @airtable/blocks/ui: useViewport */ /** */
-import Viewport from '../viewport';
+import type Viewport from '../viewport';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 
 /**
  * Returns the current {@link Viewport} object and updates whenever the viewport size, constraints,

@@ -12,7 +12,7 @@ export default {
 export const DefaultSizes = {
     render: () => (
         <React.Fragment>
-            {keys(theme.textStyles.default).map(textSize => (
+            {keys(theme.textStyles.default).map((textSize) => (
                 <Text key={textSize} size={textSize}>
                     The brown fox jumped over the lazy dog
                 </Text>
@@ -24,7 +24,7 @@ export const DefaultSizes = {
 export const ParagraphSizes = {
     render: () => (
         <React.Fragment>
-            {keys(theme.textStyles.paragraph).map(textSize => (
+            {keys(theme.textStyles.paragraph).map((textSize) => (
                 <Box key={textSize} marginBottom="40px">
                     <Text variant="paragraph" size={textSize} maxWidth="40em">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

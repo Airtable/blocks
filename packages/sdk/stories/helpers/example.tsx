@@ -48,10 +48,10 @@ type ArrayType<T extends Array<any>> = T extends Array<infer U> ? U : never;
 type OptionType<T extends Option> = T extends SelectOption
     ? ArrayType<T['options']>
     : T extends SwitchOption
-    ? boolean
-    : T extends SelectButtonsOption
-    ? ArrayType<T['options']>
-    : never;
+      ? boolean
+      : T extends SelectButtonsOption
+        ? ArrayType<T['options']>
+        : never;
 
 type Option = SelectOption | SwitchOption | SelectButtonsOption;
 interface OptionMap {
@@ -113,7 +113,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                     Props
                 </Heading>
                 {options ? (
-                    Object.keys(options).map(optionKey => {
+                    Object.keys(options).map((optionKey) => {
                         const option = options[optionKey];
                         switch (option.type) {
                             case 'select':
@@ -123,7 +123,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                                 const sharedProps = {
                                     size: 'small' as const,
                                     value: String(values[optionKey]),
-                                    options: option.options.map(String).map(value => ({
+                                    options: option.options.map(String).map((value) => ({
                                         label: renderLabel(value),
                                         value,
                                     })),
@@ -160,7 +160,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                                         key={optionKey}
                                         label={option.label}
                                         value={values[optionKey]}
-                                        onChange={newValue => _setValue(optionKey, newValue)}
+                                        onChange={(newValue) => _setValue(optionKey, newValue)}
                                         marginBottom={2}
                                     />
                                 );

@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import {ObjectMap} from '../private_utils';
-import {FieldId, RecordId} from './hyper_ids';
+import {type ObjectMap} from '../private_utils';
+import {type FieldId, type RecordId} from './hyper_ids';
 
 /** */
 export type RecordDef = ObjectMap<FieldId, unknown>;

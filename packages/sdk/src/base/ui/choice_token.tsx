@@ -2,7 +2,7 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {Color} from '../../shared/colors';
+import {type Color} from '../../shared/colors';
 import {baymax} from './baymax_utils';
 import Box from './box';
 import Text from './text';
@@ -10,13 +10,13 @@ import useStyledSystem from './use_styled_system';
 import useTextColorForBackgroundColor from './use_text_color_for_background_color';
 import {
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * Style props for the {@link ChoiceToken} component. Accepts:

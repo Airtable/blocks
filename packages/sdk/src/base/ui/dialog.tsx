@@ -4,8 +4,8 @@ import * as React from 'react';
 import {baymax} from './baymax_utils';
 import Modal from './modal';
 import DialogCloseButton from './dialog_close_button';
-import {DimensionsSetProps, FlexContainerSetProps, SpacingSetProps} from './system';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type DimensionsSetProps, type FlexContainerSetProps, type SpacingSetProps} from './system';
+import {type OptionalResponsiveProp} from './system/utils/types';
 
 /**
  * Style props shared between the {@link Dialog} and {@link ConfirmationDialog} components. Also accepts:

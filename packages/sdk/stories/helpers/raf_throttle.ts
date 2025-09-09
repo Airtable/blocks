@@ -1,6 +1,4 @@
-function rafThrottle(
-    callback: () => void,
-): (() => void) & {
+function rafThrottle(callback: () => void): (() => void) & {
     cancel: () => void;
 } {
     let requestId: number | null = null;
@@ -17,7 +15,7 @@ function rafThrottle(
         callback.apply(context, args);
     };
 
-    const throttled = function(this: unknown, ...args: Array<unknown>) {
+    const throttled = function (this: unknown, ...args: Array<unknown>) {
         lastArgs = args;
         // eslint-disable-next-line consistent-this
         lastContext = this;

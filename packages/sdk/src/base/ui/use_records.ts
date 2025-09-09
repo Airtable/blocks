@@ -1,15 +1,15 @@
 /** @module @airtable/blocks/ui: useRecords */ /** */
 import {spawnError} from '../../shared/error_utils';
-import {RecordId} from '../../shared/types/hyper_ids';
+import {type RecordId} from '../../shared/types/hyper_ids';
 import Table from '../models/table';
-import TableOrViewQueryResult from '../models/table_or_view_query_result';
-import LinkedRecordsQueryResult from '../models/linked_records_query_result';
+import type TableOrViewQueryResult from '../models/table_or_view_query_result';
+import type LinkedRecordsQueryResult from '../models/linked_records_query_result';
 import RecordQueryResult, {
-    RecordQueryResultOpts,
-    RecordIdQueryResultOpts,
-    SingleRecordQueryResultOpts,
+    type RecordQueryResultOpts,
+    type RecordIdQueryResultOpts,
+    type SingleRecordQueryResultOpts,
 } from '../models/record_query_result';
-import Record from '../models/record';
+import type Record from '../models/record';
 import * as RecordColoring from '../models/record_coloring';
 import View from '../models/view';
 import useWatchable from '../../shared/ui/use_watchable';

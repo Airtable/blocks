@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {invariant, spawnError} from '../error_utils';
 import Watchable from '../watchable';
-import {SdkMode} from '../../sdk_mode';
+import {type SdkMode} from '../../sdk_mode';
 
 /**
  * Abstract superclass for all models. You won't use this class directly.
@@ -11,7 +11,7 @@ import {SdkMode} from '../../sdk_mode';
 abstract class AbstractModel<
     SdkModeT extends SdkMode,
     DataType,
-    WatchableKey extends string
+    WatchableKey extends string,
 > extends Watchable<WatchableKey> {
     /** @internal */
     static _className = 'AbstractModel';

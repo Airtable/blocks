@@ -4,8 +4,8 @@ import useViewMetadata from '../../../src/base/ui/use_view_metadata';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../../src/base/sdk';
-import ViewMetadataQueryResult from '../../../src/base/models/view_metadata_query_result';
-import Table from '../../../src/base/models/table';
+import type ViewMetadataQueryResult from '../../../src/base/models/view_metadata_query_result';
+import type Table from '../../../src/base/models/table';
 import {createPromiseWithResolveAndReject} from '../../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();

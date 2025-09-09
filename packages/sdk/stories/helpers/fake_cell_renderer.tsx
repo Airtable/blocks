@@ -40,7 +40,7 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
         case FieldType.MULTIPLE_SELECTS:
             return (
                 <React.Fragment>
-                    {choiceOptions.map(choice => (
+                    {choiceOptions.map((choice) => (
                         <ChoiceToken key={choice.id} choice={choice as any} marginRight={1} />
                     ))}
                 </React.Fragment>
@@ -50,7 +50,7 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
         case FieldType.MULTIPLE_COLLABORATORS:
             return (
                 <React.Fragment>
-                    {collaboratorOptions.map(collaborator => (
+                    {collaboratorOptions.map((collaborator) => (
                         <CollaboratorToken.Static
                             key={collaborator.id}
                             collaborator={collaborator}

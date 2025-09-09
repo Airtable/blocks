@@ -11,19 +11,19 @@ import createDetectElementResize from './create_detect_element_resize';
 import withStyledSystem from './with_styled_system';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
@@ -217,7 +217,7 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
                     flexWrap="wrap"
                     margin={`${-squareMargin}px`}
                 >
-                    {allowedColors.map(allowedColor => (
+                    {allowedColors.map((allowedColor) => (
                         <label
                             key={allowedColor}
                             onClick={disabled ? undefined : () => this._onChange(allowedColor)}

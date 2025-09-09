@@ -1,4 +1,4 @@
-import Watchable from '../src/shared/watchable';
+import type Watchable from '../src/shared/watchable';
 
 /**
  * include a section of code that must pass flow but shouldn't actually be executed. Use it along
@@ -29,7 +29,7 @@ export function waitForWatchKeyAsync<Key extends string>(
     model: Watchable<Key>,
     key: Key,
 ): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         const handler = () => {
             model.unwatch(key, handler);
             resolve();

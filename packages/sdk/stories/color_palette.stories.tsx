@@ -40,9 +40,9 @@ function ColorPaletteExample() {
     return (
         <Example
             {...sharedColorPaletteExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values, {
-                    squareMargin: margin => {
+                    squareMargin: (margin) => {
                         if (margin === '4px') {
                             return null;
                         }
@@ -71,7 +71,7 @@ function ColorPaletteExample() {
                     <ColorPalette
                         color={color}
                         allowedColors={allowedColors}
-                        onChange={newColor => setColor(newColor as string)}
+                        onChange={(newColor) => setColor(newColor as string)}
                         squareMargin={squareMarginNumericValue}
                         {...values}
                         width="150px"
@@ -98,9 +98,9 @@ function ColorPaletteSyncedExample() {
     return (
         <Example
             {...sharedColorPaletteExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values, {
-                    squareMargin: margin => {
+                    squareMargin: (margin) => {
                         if (margin === '4px') {
                             return null;
                         }
@@ -128,7 +128,7 @@ function ColorPaletteSyncedExample() {
                     <ColorPalette
                         color={color}
                         allowedColors={allowedColors}
-                        onChange={newColor => setColor(newColor as string)}
+                        onChange={(newColor) => setColor(newColor as string)}
                         squareMargin={squareMarginNumericValue}
                         {...values}
                         width="150px"

@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import * as React from 'react';
-import {GlobalConfigKey, GlobalConfigValue} from '../../shared/types/global_config';
-import {SdkMode} from '../../sdk_mode';
+import {type GlobalConfigKey, type GlobalConfigValue} from '../../shared/types/global_config';
+import {type SdkMode} from '../../sdk_mode';
 import withHooks from '../../shared/ui/with_hooks';
 import {useSdk} from '../../shared/ui/sdk_context';
 import globalConfigSyncedComponentHelpers from '../../shared/ui/global_config_synced_component_helpers';
@@ -45,7 +45,7 @@ export class Synced<SdkModeT extends SdkMode> extends React.Component<SyncedProp
 
 export default withHooks<{sdk: SdkMode['SdkT']}, SyncedProps<SdkMode>, Synced<SdkMode>>(
     Synced,
-    props => {
+    (props) => {
         globalConfigSyncedComponentHelpers.useDefaultWatchesForSyncedComponent(
             props.globalConfigKey,
         );

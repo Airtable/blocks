@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/models: Field */ /** */
-import {Color} from '../colors';
-import {TableId, FieldId, ViewId} from './hyper_ids';
+import {type Color} from '../colors';
+import {type TableId, type FieldId, type ViewId} from './hyper_ids';
 
 /** @hidden */
 export type PrivateColumnType = string;

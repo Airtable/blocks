@@ -3,7 +3,7 @@ import {useMemo, useRef} from 'react';
 import {useSubscription} from 'use-subscription';
 import {spawnError} from '../error_utils';
 import {compact} from '../private_utils';
-import Watchable from '../watchable';
+import type Watchable from '../watchable';
 import useArrayIdentity from './use_array_identity';
 
 /**
@@ -72,7 +72,8 @@ export default function useWatchable<Keys extends string>(
 
     const watchSubscription = useMemo(() => {
         return {
-            getCurrentValue: () => compactModels.map(model => model.__getWatchableKey()).join(','),
+            getCurrentValue: () =>
+                compactModels.map((model) => model.__getWatchableKey()).join(','),
             subscribe: (notifyChange: () => void) => {
                 let isDisabled = false;
 

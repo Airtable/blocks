@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: Input */ /** */
 import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import Input, {SharedInputProps, SupportedInputType} from './input';
+import Input, {type SharedInputProps, SupportedInputType} from './input';
 
 /**
  * Props for the {@link InputSynced} component. Also accepts:

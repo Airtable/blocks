@@ -2,35 +2,35 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
 import useFormField from './use_form_field';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {OptionalResponsiveProp} from './system/utils/types';
+import {type OptionalResponsiveProp} from './system/utils/types';
 import useTheme from './theme/use_theme';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-    SelectOptionValue,
-    SelectOption,
+    type SelectOptionValue,
+    type SelectOption,
 } from './select_and_select_buttons_helpers';
 import useStyledSystem from './use_styled_system';
-import {useSelectSize, ControlSize, ControlSizeProp} from './control_sizes';
+import {useSelectSize, ControlSize, type ControlSizeProp} from './control_sizes';
 
 /** @hidden */
 type SelectVariant = EnumType<typeof SelectVariant>;

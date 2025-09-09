@@ -10,11 +10,11 @@ export default {
     component: TablePicker,
 };
 
-const tableOptions = ['Tasks', 'Projects', 'Teams'].map(value => ({
+const tableOptions = ['Tasks', 'Projects', 'Teams'].map((value) => ({
     value,
     label: value,
 }));
-const fieldOptions = ['Name', 'Notes', 'Attachments'].map(value => ({
+const fieldOptions = ['Name', 'Notes', 'Attachments'].map((value) => ({
     value,
     label: value,
 }));
@@ -46,7 +46,7 @@ function TablePickerExample() {
     return (
         <Example
             {...sharedModelPickerExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -61,7 +61,7 @@ function TablePickerExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a table...';
 
                 return (
@@ -75,7 +75,7 @@ function TablePickerExample() {
                             ...tableOptions,
                         ]}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />
@@ -94,7 +94,7 @@ function TablePickerSyncedExample() {
     return (
         <Example
             {...sharedModelPickerExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -107,7 +107,7 @@ function TablePickerSyncedExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a table...';
 
                 return (
@@ -121,7 +121,7 @@ function TablePickerSyncedExample() {
                             ...tableOptions,
                         ]}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />

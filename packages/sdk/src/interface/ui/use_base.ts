@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/interface/ui: useBase */ /** */
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import useBaseInternal from '../../shared/ui/use_base';
-import {Base} from '../models/base';
+import {type Base} from '../models/base';
 
 /**
  * A hook for connecting a React component to your base's schema. This returns a {@link Base}

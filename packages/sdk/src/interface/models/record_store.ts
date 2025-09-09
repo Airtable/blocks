@@ -1,13 +1,13 @@
-import {RecordId} from '../../shared/types/hyper_ids';
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type RecordId} from '../../shared/types/hyper_ids';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import RecordStoreCore, {
     WatchableCellValuesInFieldKeyPrefix,
     WatchableRecordStoreKeysCore,
 } from '../../shared/models/record_store_core';
-import {TableData} from '../types/table';
-import {ChangedPathsForType} from '../../shared/models/base_core';
-import {isEnumValue, ObjectValues} from '../../shared/private_utils';
-import {Table} from './table';
+import {type TableData} from '../types/table';
+import {type ChangedPathsForType} from '../../shared/models/base_core';
+import {isEnumValue, type ObjectValues} from '../../shared/private_utils';
+import {type Table} from './table';
 import {Record} from './record';
 
 const WatchableRecordStoreKeys = Object.freeze({

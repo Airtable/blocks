@@ -1197,10 +1197,8 @@ export interface StandardShorthandPropertiesHyphen<TLength = string | 0> {
     transition?: TransitionProperty;
 }
 
-export type StandardPropertiesHyphen<TLength = string | 0> = StandardLonghandPropertiesHyphen<
-    TLength
-> &
-    StandardShorthandPropertiesHyphen<TLength>;
+export type StandardPropertiesHyphen<TLength = string | 0> =
+    StandardLonghandPropertiesHyphen<TLength> & StandardShorthandPropertiesHyphen<TLength>;
 
 export interface VendorLonghandPropertiesHyphen<TLength = string | 0> {
     ['-ms-transition-property']?: TransitionPropertyProperty;
@@ -2099,10 +2097,8 @@ export interface StandardShorthandPropertiesFallback<TLength = string | 0> {
     transition?: TransitionProperty | Array<TransitionProperty>;
 }
 
-export type StandardPropertiesFallback<TLength = string | 0> = StandardLonghandPropertiesFallback<
-    TLength
-> &
-    StandardShorthandPropertiesFallback<TLength>;
+export type StandardPropertiesFallback<TLength = string | 0> =
+    StandardLonghandPropertiesFallback<TLength> & StandardShorthandPropertiesFallback<TLength>;
 
 export interface VendorLonghandPropertiesFallback<TLength = string | 0> {
     WebkitAnimationIterationCount?:
@@ -2441,10 +2437,8 @@ export interface VendorShorthandPropertiesFallback<TLength = string | 0> {
     WebkitTransition?: TransitionProperty | Array<TransitionProperty>;
 }
 
-export type VendorPropertiesFallback<TLength = string | 0> = VendorLonghandPropertiesFallback<
-    TLength
-> &
-    VendorShorthandPropertiesFallback<TLength>;
+export type VendorPropertiesFallback<TLength = string | 0> =
+    VendorLonghandPropertiesFallback<TLength> & VendorShorthandPropertiesFallback<TLength>;
 
 export interface ObsoletePropertiesFallback<TLength = string | 0> {
     MozBorderRadiusBottomright?:
@@ -3169,10 +3163,9 @@ export interface StandardShorthandPropertiesHyphenFallback<TLength = string | 0>
     transition?: TransitionProperty | Array<TransitionProperty>;
 }
 
-export type StandardPropertiesHyphenFallback<
-    TLength = string | 0
-> = StandardLonghandPropertiesHyphenFallback<TLength> &
-    StandardShorthandPropertiesHyphenFallback<TLength>;
+export type StandardPropertiesHyphenFallback<TLength = string | 0> =
+    StandardLonghandPropertiesHyphenFallback<TLength> &
+        StandardShorthandPropertiesHyphenFallback<TLength>;
 
 export interface VendorLonghandPropertiesHyphenFallback<TLength = string | 0> {
     ['-ms-transform-origin']?:
@@ -3607,10 +3600,9 @@ export interface VendorShorthandPropertiesHyphenFallback<TLength = string | 0> {
     ['-webkit-transition']?: TransitionProperty | Array<TransitionProperty>;
 }
 
-export type VendorPropertiesHyphenFallback<
-    TLength = string | 0
-> = VendorLonghandPropertiesHyphenFallback<TLength> &
-    VendorShorthandPropertiesHyphenFallback<TLength>;
+export type VendorPropertiesHyphenFallback<TLength = string | 0> =
+    VendorLonghandPropertiesHyphenFallback<TLength> &
+        VendorShorthandPropertiesHyphenFallback<TLength>;
 
 export interface ObsoletePropertiesHyphenFallback<TLength = string | 0> {
     ['-moz-border-radius-bottomleft']?:
@@ -3818,12 +3810,11 @@ export interface SvgPropertiesHyphenFallback<TLength = string | 0> {
     ['writing-mode']?: WritingModeProperty | Array<WritingModeProperty>;
 }
 
-export type PropertiesHyphenFallback<TLength = string | 0> = StandardPropertiesHyphenFallback<
-    TLength
-> &
-    VendorPropertiesHyphenFallback<TLength> &
-    ObsoletePropertiesHyphenFallback<TLength> &
-    SvgPropertiesHyphenFallback<TLength>;
+export type PropertiesHyphenFallback<TLength = string | 0> =
+    StandardPropertiesHyphenFallback<TLength> &
+        VendorPropertiesHyphenFallback<TLength> &
+        ObsoletePropertiesHyphenFallback<TLength> &
+        SvgPropertiesHyphenFallback<TLength>;
 
 export interface CounterStyle {
     additiveSymbols?: string;

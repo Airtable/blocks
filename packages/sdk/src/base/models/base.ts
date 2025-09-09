@@ -1,15 +1,16 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {BaseCore, ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
+import {BaseCore, type ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
 import {MutationTypes} from '../types/mutations';
-import {FieldType} from '../../shared/types/field_core';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {BaseSdkMode} from '../../sdk_mode';
-import {TableId} from '../../shared/types/hyper_ids';
+import {type FieldType} from '../../shared/types/field_core';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type TableId} from '../../shared/types/hyper_ids';
 import {entries} from '../../shared/private_utils';
-import {BaseData} from '../types/base';
-import BaseBlockSdk from '../sdk';
+import {type BaseData} from '../types/base';
+import type BaseBlockSdk from '../sdk';
 import RecordStore from './record_store';
 import Table from './table';
+import createAggregators, {type Aggregators} from './create_aggregators';
 
 /**
  * Model class representing a base.
@@ -31,6 +32,9 @@ class Base extends BaseCore<BaseSdkMode> {
     static _className = 'Base';
 
     /** @internal */
+    _aggregators: Aggregators | null = null;
+
+    /** @internal */
     _constructTable(tableId: TableId): Table {
         const recordStore = this.__getRecordStore(tableId);
         return new Table(this, recordStore, tableId, this._sdk);
@@ -44,6 +48,29 @@ class Base extends BaseCore<BaseSdkMode> {
     /** @internal */
     _iterateTableIds(): Iterable<TableId> {
         return this._data.tableOrder;
+    }
+
+    /**
+     * Aggregators can be used to compute aggregates for cell values.
+     *
+     * @example
+     * ```js
+     * import {base} from '@airtable/blocks/base';
+     *
+     * // To get a list of aggregators supported for a specific field:
+     * const fieldAggregators = myField.availableAggregators;
+     *
+     * // To compute the total attachment size of an attachment field:
+     * const aggregator = base.aggregators.totalAttachmentSize;
+     * const value = aggregator.aggregate(myRecords, myAttachmentField);
+     * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
+     * ```
+     */
+    get aggregators(): Aggregators {
+        if (!this._aggregators) {
+            this._aggregators = createAggregators(this._sdk);
+        }
+        return this._aggregators;
     }
 
     /**
@@ -80,7 +107,7 @@ class Base extends BaseCore<BaseSdkMode> {
             type: MutationTypes.CREATE_SINGLE_TABLE,
             id: undefined, 
             name: name,
-            fields: fields?.map(field => {
+            fields: fields?.map((field) => {
                 return {
                     name: field.name,
                     config: field.type
@@ -194,7 +221,7 @@ class Base extends BaseCore<BaseSdkMode> {
             id: tableId,
             type: MutationTypes.CREATE_SINGLE_TABLE,
             name,
-            fields: fields.map(field => {
+            fields: fields.map((field) => {
                 return {
                     name: field.name,
                     config: {

@@ -1,6 +1,6 @@
 /** @hidden */ /** */
 import * as React from 'react';
-import {isEnumValue, ObjectValues} from '../../shared/private_utils';
+import {isEnumValue, type ObjectValues} from '../../shared/private_utils';
 import Watchable from '../../shared/watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {baymax} from './baymax_utils';

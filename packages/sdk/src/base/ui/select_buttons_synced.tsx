@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: SelectButtons */ /** */
 import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
-import SelectButtons, {SharedSelectButtonsProps} from './select_buttons';
+import SelectButtons, {type SharedSelectButtonsProps} from './select_buttons';
 
 /**
  * Props for the {@link SelectButtonsSynced} component. Also accepts:
@@ -50,7 +50,7 @@ const SelectButtonsSynced = (props: SelectButtonsSyncedProps, ref: React.Ref<HTM
             {...restOfProps}
             ref={ref}
             value={selectValue}
-            onChange={newValue => {
+            onChange={(newValue) => {
                 setValue(newValue);
                 if (onChange) {
                     onChange(newValue);

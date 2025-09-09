@@ -4,9 +4,9 @@ import {useRecords} from '../../../src/base/ui/use_records';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../../src/base/sdk';
-import Record from '../../../src/base/models/record';
-import Table from '../../../src/base/models/table';
-import {TableId} from '../../../src/shared/types/hyper_ids';
+import type Record from '../../../src/base/models/record';
+import type Table from '../../../src/base/models/table';
+import {type TableId} from '../../../src/shared/types/hyper_ids';
 import {createPromiseWithResolveAndReject} from '../../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();

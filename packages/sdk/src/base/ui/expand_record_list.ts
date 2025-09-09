@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: expandRecordList */ /** */
 import {invariant} from '../../shared/error_utils';
-import Record from '../models/record';
-import Field from '../models/field';
+import type Record from '../models/record';
+import type Field from '../models/field';
 
 /**
  * Options object for expanding a record list.
@@ -35,7 +35,7 @@ function expandRecordList(records: Array<Record>, opts?: ExpandRecordListOpts) {
 
     const tableId = records[0].parentTable.id;
 
-    const recordIds = records.map(record => {
+    const recordIds = records.map((record) => {
         invariant(record.parentTable.id === tableId, 'all records must belong to the same table');
 
         return record.id;
@@ -43,7 +43,7 @@ function expandRecordList(records: Array<Record>, opts?: ExpandRecordListOpts) {
 
     const fieldIds =
         opts && opts.fields
-            ? opts.fields.map(field => {
+            ? opts.fields.map((field) => {
                   invariant(
                       field.parentTable.id === tableId,
                       'all fields must belong to the same table',

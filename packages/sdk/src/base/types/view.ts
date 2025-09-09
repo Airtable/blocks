@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {ObjectMap} from '../../shared/private_utils';
-import {Color} from '../../shared/colors';
-import {FieldId, RecordId, ViewId} from '../../shared/types/hyper_ids';
+import {type ObjectMap} from '../../shared/private_utils';
+import {type Color} from '../../shared/colors';
+import {type FieldId, type RecordId, type ViewId} from '../../shared/types/hyper_ids';
 
 /**
  * An enum of Airtable's view types

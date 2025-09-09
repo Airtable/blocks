@@ -1,7 +1,7 @@
 /** @module @airtable/blocks: mutations */ /** */
-import {ObjectMap} from '../private_utils';
-import {FieldId, RecordId, TableId} from './hyper_ids';
-import {GlobalConfigUpdate, GlobalConfigValue} from './global_config';
+import {type ObjectMap} from '../private_utils';
+import {type FieldId, type RecordId, type TableId} from './hyper_ids';
+import {type GlobalConfigUpdate, type GlobalConfigValue} from './global_config';
 
 /** @hidden */
 export const MutationTypesCore = Object.freeze({

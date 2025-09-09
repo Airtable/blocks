@@ -4,10 +4,10 @@ import {useRecords} from '../../../src/interface/ui/use_records';
 
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
-import {Record} from '../../../src/interface/models/record';
-import {Table} from '../../../src/interface/models/table';
-import {FieldId, RecordId} from '../../../src/shared/types/hyper_ids';
-import {ObjectMap} from '../../../src/shared/private_utils';
+import {type Record} from '../../../src/interface/models/record';
+import {type Table} from '../../../src/interface/models/table';
+import {type FieldId, type RecordId} from '../../../src/shared/types/hyper_ids';
+import {type ObjectMap} from '../../../src/shared/private_utils';
 import {BlockWrapper} from '../../../src/interface/ui/block_wrapper';
 import {createPromiseWithResolveAndReject} from '../../test_helpers';
 

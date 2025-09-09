@@ -1,17 +1,17 @@
 /** @module @airtable/blocks/interface/ui: useCustomProperties */ /** */
 import {useState, useEffect} from 'react';
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {
-    BlockInstallationPageElementCustomPropertyForAirtableInterface,
+    type BlockInstallationPageElementCustomPropertyForAirtableInterface,
     BlockInstallationPageElementCustomPropertyTypeForAirtableInterface,
 } from '../types/airtable_interface';
 import useGlobalConfig from '../../shared/ui/use_global_config';
-import {Table} from '../models/table';
-import GlobalConfig from '../../shared/global_config';
-import {Base} from '../models/base';
+import {type Table} from '../models/table';
+import type GlobalConfig from '../../shared/global_config';
+import {type Base} from '../models/base';
 import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
-import {Field} from '../models/field';
+import {type Field} from '../models/field';
 
 /**
  * An object that represents a custom property that a block can set.
@@ -118,7 +118,7 @@ export function useCustomProperties(
         const customPropertiesForAirtableInterface = customProperties.map(
             convertBlockPageElementCustomPropertyToBlockInstallationPageElementCustomPropertyForAirtableInterface,
         );
-        sdk.setCustomPropertiesAsync(customPropertiesForAirtableInterface).catch(error => {
+        sdk.setCustomPropertiesAsync(customPropertiesForAirtableInterface).catch((error) => {
             setErrorState({error});
         });
     }, [sdk, customProperties, hasError]);
@@ -126,7 +126,7 @@ export function useCustomProperties(
     const customPropertyValueByKey = hasError
         ? {}
         : Object.fromEntries(
-              customProperties.map(property => [
+              customProperties.map((property) => [
                   property.key,
                   getCustomPropertyValue(sdk.base, globalConfig, property),
               ]),
@@ -171,7 +171,7 @@ function convertBlockPageElementCustomPropertyToBlockInstallationPageElementCust
                 label: property.label,
                 type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.FIELD_ID,
                 tableId: property.table.id,
-                possibleValues: property.possibleValues?.map(field => field.id),
+                possibleValues: property.possibleValues?.map((field) => field.id),
                 defaultValue: property.defaultValue?.id,
             };
         default:
@@ -202,7 +202,7 @@ function getCustomPropertyValue(
         case 'enum':
             if (
                 typeof rawValue === 'string' &&
-                property.possibleValues.some(value => value.value === rawValue)
+                property.possibleValues.some((value) => value.value === rawValue)
             ) {
                 return rawValue;
             }
@@ -212,7 +212,7 @@ function getCustomPropertyValue(
                 typeof rawValue === 'string' &&
                 property.table === base.getTableById(property.table.id)
             ) {
-                const fieldModel = property.table.fields.find(field => field.id === rawValue);
+                const fieldModel = property.table.fields.find((field) => field.id === rawValue);
                 if (
                     fieldModel &&
                     (!property.possibleValues || property.possibleValues.includes(fieldModel))

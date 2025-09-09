@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Dimensions */ /** */
-import {system, Config} from '@styled-system/core';
-import {MinWidthProperty} from '../utils/csstype';
-import {OptionalResponsiveProp, Length} from '../utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type MinWidthProperty} from '../utils/csstype';
+import {type OptionalResponsiveProp, type Length} from '../utils/types';
 
 /** */
 export interface MinWidthProps {

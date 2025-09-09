@@ -17,7 +17,7 @@ export default {
 
 function SelectButtonsExample() {
     const {selectButtonsSizes} = useTheme();
-    const options = ['Banana', 'Apple', 'Orange'].map(value => ({
+    const options = ['Banana', 'Apple', 'Orange'].map((value) => ({
         value: value.toLowerCase(),
         label: value,
     }));
@@ -37,7 +37,7 @@ function SelectButtonsExample() {
                     defaultValue: false,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -62,10 +62,10 @@ function SelectButtonsExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <SelectButtons
                     value={value}
-                    onChange={newValue => setValue(newValue as string)}
+                    onChange={(newValue) => setValue(newValue as string)}
                     options={options}
                     {...values}
                     width={CONTROL_WIDTH}
@@ -81,7 +81,7 @@ export const _Example = {
 
 function SelectButtonsSyncedExample() {
     const {selectButtonsSizes} = useTheme();
-    const options = ['Banana', 'Apple', 'Orange'].map(value => ({
+    const options = ['Banana', 'Apple', 'Orange'].map((value) => ({
         value: value.toLowerCase(),
         label: value,
     }));
@@ -101,7 +101,7 @@ function SelectButtonsSyncedExample() {
                     defaultValue: false,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -123,10 +123,10 @@ function SelectButtonsSyncedExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <SelectButtons
                     value={value}
-                    onChange={newValue => setValue(newValue as string)}
+                    onChange={(newValue) => setValue(newValue as string)}
                     options={options}
                     {...values}
                     width={CONTROL_WIDTH}
@@ -144,7 +144,7 @@ export const Sizes = {
     render: () =>
         React.createElement(() => {
             const [value, setValue] = React.useState('Banana');
-            const options = ['Banana', 'Apple', 'Orange'].map(_value => ({
+            const options = ['Banana', 'Apple', 'Orange'].map((_value) => ({
                 value: _value,
                 label: _value,
             }));
@@ -154,21 +154,21 @@ export const Sizes = {
                         <SelectButtons
                             size="small"
                             value={value}
-                            onChange={val => setValue(val as string)}
+                            onChange={(val) => setValue(val as string)}
                             options={options}
                             marginBottom={2}
                         />
                         <SelectButtons
                             size="default"
                             value={value}
-                            onChange={val => setValue(val as string)}
+                            onChange={(val) => setValue(val as string)}
                             options={options}
                             marginBottom={2}
                         />
                         <SelectButtons
                             size="large"
                             value={value}
-                            onChange={val => setValue(val as string)}
+                            onChange={(val) => setValue(val as string)}
                             options={options}
                             marginBottom={2}
                         />
@@ -183,7 +183,7 @@ export const Disabled = {
         React.createElement(() => {
             const [value, setValue] = React.useState('Banana');
             const [value2, setValue2] = React.useState('Boston');
-            const options = ['Banana', 'Apple', 'Orange'].map(_value => ({
+            const options = ['Banana', 'Apple', 'Orange'].map((_value) => ({
                 value: _value,
                 label: _value,
             }));
@@ -198,14 +198,14 @@ export const Disabled = {
                     <SelectButtons
                         disabled={true}
                         value={value}
-                        onChange={val => setValue(val as string)}
+                        onChange={(val) => setValue(val as string)}
                         options={options}
                         marginBottom={3}
                     />
                     <Heading size="xsmall">Single option disabled</Heading>
                     <SelectButtons
                         value={value2}
-                        onChange={val => setValue2(val as string)}
+                        onChange={(val) => setValue2(val as string)}
                         options={options2}
                     />
                 </Box>
@@ -217,18 +217,18 @@ export const ForwardedRef = {
     render: () =>
         React.createElement(() => {
             const [value, setValue] = React.useState('Check');
-            const options = ['Check', 'The', 'Console'].map(_value => ({
+            const options = ['Check', 'The', 'Console'].map((_value) => ({
                 value: _value,
                 label: _value,
             }));
             return (
                 <Box width={400} margin="auto">
                     <SelectButtons
-                        ref={node => {
+                        ref={(node) => {
                             console.log(node);
                         }}
                         value={value}
-                        onChange={val => setValue(val as string)}
+                        onChange={(val) => setValue(val as string)}
                         options={options}
                         marginBottom={3}
                     />
@@ -241,7 +241,7 @@ export const ResponsiveSize = {
     render: () =>
         React.createElement(() => {
             const [value, setValue] = React.useState('Resize');
-            const options = ['Resize', 'The', 'Window'].map(_value => ({
+            const options = ['Resize', 'The', 'Window'].map((_value) => ({
                 value: _value,
                 label: _value,
             }));
@@ -254,7 +254,7 @@ export const ResponsiveSize = {
                             largeViewport: 'large',
                         }}
                         value={value}
-                        onChange={val => setValue(val as string)}
+                        onChange={(val) => setValue(val as string)}
                         options={options}
                         marginBottom={3}
                     />
@@ -268,7 +268,7 @@ export const TruncatedText = {
         React.createElement(() => {
             const [value, setValue] = React.useState('neat');
             const options = ['Some really long text that just keeps going', 'neat', 'cool'].map(
-                _value => ({
+                (_value) => ({
                     value: _value,
                     label: _value,
                 }),
@@ -277,7 +277,7 @@ export const TruncatedText = {
                 <Box margin="auto" width="250px">
                     <SelectButtons
                         value={value}
-                        onChange={val => setValue(val as string)}
+                        onChange={(val) => setValue(val as string)}
                         options={options}
                         marginBottom={3}
                     />
@@ -293,15 +293,15 @@ export const TabBehaviorForManyInputs = {
             const [veggie, setVeggie] = React.useState('Squash');
             const [fruit, setFruit] = React.useState('Apple');
             const [junkfood, setJunkfood] = React.useState('Candy');
-            const veggies = ['Bok choy', 'Squash', 'Carrot', 'Broccoli'].map(value => ({
+            const veggies = ['Bok choy', 'Squash', 'Carrot', 'Broccoli'].map((value) => ({
                 value,
                 label: value,
             }));
-            const fruits = ['Banana', 'Apple', 'Orange'].map(value => ({
+            const fruits = ['Banana', 'Apple', 'Orange'].map((value) => ({
                 value,
                 label: value,
             }));
-            const junkfoods = ['Pizza', 'Milkshake', 'Burger', 'Candy', 'Soda'].map(value => ({
+            const junkfoods = ['Pizza', 'Milkshake', 'Burger', 'Candy', 'Soda'].map((value) => ({
                 value,
                 label: value,
             }));
@@ -309,11 +309,11 @@ export const TabBehaviorForManyInputs = {
                 <React.Fragment>
                     <Box width={400} margin="auto">
                         <FormField label="Enter a food">
-                            <Input value={food} onChange={e => setFood(e.target.value)} />
+                            <Input value={food} onChange={(e) => setFood(e.target.value)} />
                         </FormField>
                         <SelectButtons
                             value={veggie}
-                            onChange={val => setVeggie(val as string)}
+                            onChange={(val) => setVeggie(val as string)}
                             options={veggies}
                             marginBottom={2}
                         />
@@ -321,12 +321,12 @@ export const TabBehaviorForManyInputs = {
                             <Select
                                 options={fruits}
                                 value={fruit}
-                                onChange={val => setFruit(val as string)}
+                                onChange={(val) => setFruit(val as string)}
                             ></Select>
                         </FormField>
                         <SelectButtons
                             value={junkfood}
-                            onChange={val => setJunkfood(val as string)}
+                            onChange={(val) => setJunkfood(val as string)}
                             options={junkfoods}
                             marginBottom={2}
                         />

@@ -15,7 +15,7 @@ export default {
 };
 
 const sizes = [ControlSize.small, ControlSize.default, ControlSize.large];
-const options = ['Apple', 'Pear', 'Banana'].map(value => ({value, label: value}));
+const options = ['Apple', 'Pear', 'Banana'].map((value) => ({value, label: value}));
 
 function capitalize(str: string) {
     return str[0].toUpperCase() + str.slice(1);
@@ -28,7 +28,7 @@ export const Sizes = {
         const [selectValue, setSelectValue] = useState<SelectOptionValue | null>(null);
         return (
             <React.Fragment>
-                {sizes.map(size => (
+                {sizes.map((size) => (
                     <Box
                         key={size}
                         display="flex"
@@ -40,7 +40,7 @@ export const Sizes = {
                             marginBottom={2}
                             size={size}
                             value={value}
-                            onChange={e => setValue(e.target.value)}
+                            onChange={(e) => setValue(e.target.value)}
                             placeholder={`${capitalize(size)} input`}
                         />
                         <Select
@@ -51,7 +51,7 @@ export const Sizes = {
                                 ...options,
                             ]}
                             value={selectValue}
-                            onChange={newSelectValue =>
+                            onChange={(newSelectValue) =>
                                 setSelectValue(newSelectValue ? newSelectValue : null)
                             }
                         />
@@ -60,7 +60,7 @@ export const Sizes = {
                             size={size}
                             options={options}
                             value={selectValue}
-                            onChange={newSelectValue =>
+                            onChange={(newSelectValue) =>
                                 setSelectValue(newSelectValue ? newSelectValue : null)
                             }
                         />

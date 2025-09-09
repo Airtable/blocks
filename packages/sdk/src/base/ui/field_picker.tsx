@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/ui: FieldPicker */ /** */
 import * as React from 'react';
-import {ObjectMap, has} from '../../shared/private_utils';
-import Field from '../models/field';
-import Table from '../models/table';
-import {FieldType} from '../../shared/types/field_core';
+import {type ObjectMap, has} from '../../shared/private_utils';
+import type Field from '../models/field';
+import type Table from '../models/table';
+import {type FieldType} from '../../shared/types/field_core';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import {SharedSelectBaseProps} from './select';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**
@@ -90,7 +90,7 @@ const FieldPicker = (props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>)
     };
 
     const models = table.fields
-        .filter(field => field !== table.primaryField)
+        .filter((field) => field !== table.primaryField)
         .sort((a, b) => {
             return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
         });

@@ -21,7 +21,7 @@ function DialogExample() {
                     defaultValue: true,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 return `
                     import React, { useState } from 'react';
                     import {Button, Dialog, Heading, Text} from '@airtable/blocks/base/ui';
@@ -52,7 +52,7 @@ function DialogExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <React.Fragment>
                         <Button onClick={() => setIsDialogOpen(true)}>Open dialog</Button>

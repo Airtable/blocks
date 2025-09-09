@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/ui: ViewPicker */ /** */
 import * as React from 'react';
-import {ObjectMap} from '../../shared/private_utils';
-import View from '../models/view';
-import Table from '../models/table';
+import {type ObjectMap} from '../../shared/private_utils';
+import type View from '../models/view';
+import type Table from '../models/table';
 import {ViewType} from '../types/view';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import {SharedSelectBaseProps} from './select';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 
 /**

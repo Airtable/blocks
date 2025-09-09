@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import {styleFn} from '@styled-system/core';
+import {type styleFn} from '@styled-system/core';
 import {cast, keys} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 
@@ -71,7 +71,7 @@ export default function withStyledSystem<
     Props extends {className?: string},
     StyleProps extends {},
     Instance,
-    Statics extends {}
+    Statics extends {},
 >(
     Component:
         | ((new (props: Props) => React.Component) & {displayName?: string})

@@ -1,32 +1,33 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import Sdk from '../sdk';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
+import type Sdk from '../sdk';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {
     has,
     arrayDifference,
-    FlowAnyObject,
-    FlowAnyExistential,
-    FlowAnyFunction,
-    ObjectMap,
+    type FlowAnyObject,
+    type FlowAnyExistential,
+    type FlowAnyFunction,
+    type ObjectMap,
 } from '../../shared/private_utils';
 import {invariant, spawnError} from '../../shared/error_utils';
-import {VisList, NormalizedGroupLevel} from '../types/airtable_interface';
-import {GroupLevelData, GroupData} from '../types/view';
+import {type VisList, type NormalizedGroupLevel} from '../types/airtable_interface';
+import {type GroupLevelData, type GroupData} from '../types/view';
 import Table, {WatchableTableKeys} from './table';
-import View from './view';
+import type View from './view';
 import RecordQueryResult, {
-    WatchableRecordQueryResultKey,
-    NormalizedRecordQueryResultOpts,
-    NormalizedSortConfig,
+    type WatchableRecordQueryResultKey,
+    type NormalizedRecordQueryResultOpts,
+    type NormalizedSortConfig,
 } from './record_query_result';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
-import Field from './field';
-import Record from './record';
+import type Field from './field';
+import type Record from './record';
 import ObjectPool from './object_pool';
-import RecordStore, {WatchableRecordStoreKeys} from './record_store';
+import type RecordStore from './record_store';
+import {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 import GroupedRecordQueryResult from './grouped_record_query_result';
-import {GroupLevels} from './view_metadata_query_result';
+import {type GroupLevels} from './view_metadata_query_result';
 
 /** @hidden */
 interface TableOrViewQueryResultData {
@@ -203,7 +204,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         const {groupLevels} = this._data; 
         invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
         return groupLevels
-            ? groupLevels.map(singleLevel => ({
+            ? groupLevels.map((singleLevel) => ({
                   ...singleLevel,
                   field: this.parentTable.getFieldById(singleLevel.fieldId),
               }))
@@ -248,12 +249,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     get _cellValuesForSortWatchKeys(): Array<string> {
-        return this._sorts ? this._sorts.map(sort => `cellValuesInField:${sort.fieldId}`) : [];
+        return this._sorts ? this._sorts.map((sort) => `cellValuesInField:${sort.fieldId}`) : [];
     }
     /** @internal */
     get _cellValuesForGroupWatchKeys(): Array<string> {
         return this._groupLevels
-            ? this._groupLevels.map(group => `cellValuesInField:${group.fieldId}`)
+            ? this._groupLevels.map((group) => `cellValuesInField:${group.fieldId}`)
             : [];
     }
     /** @internal */
@@ -443,7 +444,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         const fieldIds =
             this._normalizedOpts.fieldIdsOrNullIfAllFields ||
-            this._table.fields.map(field => field.id);
+            this._table.fields.map((field) => field.id);
 
         for (const fieldId of fieldIds) {
             changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
@@ -632,8 +633,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     ) {
         if (model instanceof ViewDataStore) {
             invariant(this._orderedRecordIds, '_orderedRecordIds unset');
-            const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
-                .visibleRecordIds;
+            const visibleRecordIds = this._recordStore.getViewDataStore(
+                model.viewId,
+            ).visibleRecordIds;
             const addedRecordIds = arrayDifference(visibleRecordIds, this._orderedRecordIds);
             const removedRecordIds = arrayDifference(this._orderedRecordIds, visibleRecordIds);
             updates = {addedRecordIds, removedRecordIds};
@@ -697,7 +699,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         invariant(recordIds.length > 0, 'field ID set without a corresponding record ID');
 
         const visListRecordIdsSet = new Set(visList.getOrderedRecordIds());
-        const recordIdsToMove = recordIds.filter(recordId => visListRecordIdsSet.has(recordId));
+        const recordIdsToMove = recordIds.filter((recordId) => visListRecordIdsSet.has(recordId));
 
         visList.removeRecordIds(recordIdsToMove);
         this._addRecordIdsToVisList(recordIdsToMove);
@@ -723,7 +725,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
 
         const {addedFieldIds, removedFieldIds} = updates;
-        const fieldIdsSet = new Set(this._sorts.map(sort => sort.fieldId));
+        const fieldIdsSet = new Set(this._sorts.map((sort) => sort.fieldId));
 
         let wereAnyFieldsCreatedOrDeleted = false;
         for (const fieldId of addedFieldIds) {
@@ -737,7 +739,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
 
         if (!wereAnyFieldsCreatedOrDeleted) {
-            wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
+            wereAnyFieldsCreatedOrDeleted = removedFieldIds.some((fieldId) =>
                 fieldIdsSet.has(fieldId),
             );
         }
@@ -790,7 +792,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             if (!this._sourceModelGroups || !groupLevels) {
                 return null;
             }
-            return this._sourceModelGroups.map(groupData => {
+            return this._sourceModelGroups.map((groupData) => {
                 const group = this.__groupedRecordQueryResultPool.getObjectForReuse(
                     this,
                     groupData,
@@ -828,8 +830,8 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         const airtableInterface = this._sdk.__airtableInterface;
         const appInterface = this._sdk.__appInterface;
 
-        const recordDatas = this._sourceModelRecords.map(record => record._data);
-        const fieldDatas = this._table.fields.map(field => field._data);
+        const recordDatas = this._sourceModelRecords.map((record) => record._data);
+        const fieldDatas = this._table.fields.map((field) => field._data);
         const filteredSorts = this._getSortsWithDeletedFieldsFiltered();
 
         this._visList = airtableInterface.createVisList(
@@ -843,7 +845,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     _getSortsWithDeletedFieldsFiltered(): Array<NormalizedSortConfig> {
         invariant(this._sorts, 'No sorts');
 
-        return this._sorts.filter(sort => {
+        return this._sorts.filter((sort) => {
             const field = this._table.getFieldByIdIfExists(sort.fieldId);
             return !!field;
         });

@@ -1,19 +1,19 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
-import Sdk from '../sdk';
-import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../../shared/private_utils';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import type Sdk from '../sdk';
+import {type FlowAnyFunction, type FlowAnyObject, type ObjectMap} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
-import {GroupData} from '../types/view';
-import {NormalizedGroupLevel} from '../types/airtable_interface';
+import {type GroupData} from '../types/view';
+import {type NormalizedGroupLevel} from '../types/airtable_interface';
 import RecordQueryResult, {
-    WatchableRecordQueryResultKey,
-    NormalizedRecordQueryResultOpts,
+    type WatchableRecordQueryResultKey,
+    type NormalizedRecordQueryResultOpts,
 } from './record_query_result';
 
-import Table from './table';
-import Field from './field';
+import type Table from './table';
+import type Field from './field';
 import ObjectPool from './object_pool';
-import TableOrViewQueryResult from './table_or_view_query_result';
+import type TableOrViewQueryResult from './table_or_view_query_result';
 
 /** @hidden */
 
@@ -80,7 +80,7 @@ class GroupedRecordQueryResult extends RecordQueryResult<GroupedRecordQueryResul
         this._groupLevels = groupLevel;
         const groupLevelDataSlicedForChildren = this._groupLevels.slice(1);
         this._orderedChildrenGroups = groupData.groups
-            ? groupData.groups.map(singleGroupData => {
+            ? groupData.groups.map((singleGroupData) => {
                   const group = this.__groupedRecordQueryResultPool.getObjectForReuse(
                       this,
                       singleGroupData,

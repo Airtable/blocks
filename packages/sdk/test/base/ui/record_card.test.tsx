@@ -54,9 +54,8 @@ describe('RecordCard', () => {
     it('correctly requests UI config', async () => {
         const table = sdk.base.getTable('Design projects');
         const result = await table.selectRecordsAsync();
-        const {
-            fieldsById,
-        } = mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects;
+        const {fieldsById} =
+            mockAirtableInterface.sdkInitData.baseData.tablesById.tblDesignProjects;
         const {getUiConfig} = mockAirtableInterface.fieldTypeProvider;
 
         render(

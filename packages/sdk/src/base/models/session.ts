@@ -1,6 +1,6 @@
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import {SessionCore} from '../../shared/models/session_core';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {MutationTypes} from '../types/mutations';
 
 /**

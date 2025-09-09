@@ -1,20 +1,25 @@
 /** @module @airtable/blocks/models: Record */ /** */
-import {Color} from '../../shared/colors';
+import {type Color} from '../../shared/colors';
 import {RecordCore, WatchableRecordKeysCore} from '../../shared/models/record_core';
-import {ViewId, FieldId} from '../../shared/types/hyper_ids';
-import {BaseSdkMode} from '../../sdk_mode';
-import {isEnumValue, ObjectValues, FlowAnyObject, isObjectEmpty} from '../../shared/private_utils';
-import BlockSdk from '../sdk';
+import {type ViewId, type FieldId} from '../../shared/types/hyper_ids';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {
+    isEnumValue,
+    type ObjectValues,
+    type FlowAnyObject,
+    isObjectEmpty,
+} from '../../shared/private_utils';
+import type BlockSdk from '../sdk';
 import {invariant} from '../../shared/error_utils';
 import colorUtils from '../../shared/color_utils';
-import {FieldType} from '../../shared/types/field_core';
+import {type FieldType} from '../../shared/types/field_core';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import ObjectPool from './object_pool';
-import RecordStore from './record_store';
-import Field from './field';
-import Table from './table';
-import View from './view';
-import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
+import type RecordStore from './record_store';
+import type Field from './field';
+import type Table from './table';
+import type View from './view';
+import RecordQueryResult, {type RecordQueryResultOpts} from './record_query_result';
 
 const WatchableRecordKeys = Object.freeze({
     ...WatchableRecordKeysCore,

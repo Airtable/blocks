@@ -3,22 +3,22 @@ import * as React from 'react';
 import {FixedSizeList} from 'react-window';
 import {compose} from '@styled-system/core';
 import {invariant, spawnError} from '../../shared/error_utils';
-import {RecordDef} from '../../shared/types/record';
+import {type RecordDef} from '../../shared/types/record';
 import Record from '../models/record';
-import Field from '../models/field';
-import View from '../models/view';
+import type Field from '../models/field';
+import type View from '../models/view';
 import Box from './box';
 import createDetectElementResize from './create_detect_element_resize';
 import withStyledSystem from './with_styled_system';
 import {
     dimensionsSet,
-    DimensionsSetProps,
+    type DimensionsSetProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
 import RecordCard from './record_card';
 
@@ -304,10 +304,8 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
     _updateCardListSizeIfNeeded = () => {
         invariant(this._container.current, 'No container to update card list size');
 
-        const {
-            width: cardListWidth,
-            height: cardListHeight,
-        } = this._container.current.getBoundingClientRect();
+        const {width: cardListWidth, height: cardListHeight} =
+            this._container.current.getBoundingClientRect();
 
         invariant(
             this._cardListInnerWindow.current,

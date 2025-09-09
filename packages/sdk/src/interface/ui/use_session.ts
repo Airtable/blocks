@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useSession */ /** */
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import useSessionInternal from '../../shared/ui/use_session';
-import {Session} from '../models/session';
+import {type Session} from '../models/session';
 
 /**
  * A hook for connecting a React component to the current session. This returns a {@link Session}

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useGlobalConfig */ /** */
-import GlobalConfig from '../global_config';
+import type GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
 import {useSdk} from './sdk_context';
 

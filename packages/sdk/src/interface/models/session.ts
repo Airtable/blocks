@@ -1,4 +1,4 @@
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {SessionCore} from '../../shared/models/session_core';
 
 /**

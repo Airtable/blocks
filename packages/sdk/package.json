@@ -2,6 +2,7 @@
     "name": "@airtable/blocks",
     "version": "1.19.0",
     "description": "Airtable Blocks SDK",
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/Airtable/blocks.git"
@@ -10,15 +11,15 @@
     "exports": {
         "./unstable_private_utils": {
             "types": "./dist/types/src/shared/unstable_private_utils.d.ts",
-            "default": "./dist/cjs/shared/unstable_private_utils.js"
+            "default": "./dist/esm/shared/unstable_private_utils.js"
         },
         "./unstable_testing_utils": {
             "types": "./dist/types/src/base/unstable_testing_utils.d.ts",
-            "default": "./dist/cjs/base/unstable_testing_utils.js"
+            "default": "./dist/esm/base/unstable_testing_utils.js"
         },
         "./base/unstable_standalone_ui": {
             "types": "./dist/types/src/base/ui/unstable_standalone_ui.d.ts",
-            "default": "./dist/cjs/base/ui/unstable_standalone_ui.js"
+            "default": "./dist/esm/base/ui/unstable_standalone_ui.js"
         },
         "./base/types": {
             "types": "./types.d.ts",
@@ -26,23 +27,23 @@
         },
         "./base/models": {
             "types": "./dist/types/src/base/models/models.d.ts",
-            "default": "./dist/cjs/base/models/models.js"
+            "default": "./dist/esm/base/models/models.js"
         },
         "./base/ui": {
             "types": "./dist/types/src/base/ui/ui.d.ts",
-            "default": "./dist/cjs/base/ui/ui.js"
+            "default": "./dist/esm/base/ui/ui.js"
         },
         "./base": {
             "types": "./dist/types/src/base/index.d.ts",
-            "default": "./dist/cjs/base/index.js"
+            "default": "./dist/esm/base/index.js"
         },
         "./interface/models": {
             "types": "./dist/types/src/interface/models/models.d.ts",
-            "default": "./dist/cjs/interface/models/models.js"
+            "default": "./dist/esm/interface/models/models.js"
         },
         "./interface/ui": {
             "types": "./dist/types/src/interface/ui/ui.d.ts",
-            "default": "./dist/cjs/interface/ui/ui.js"
+            "default": "./dist/esm/interface/ui/ui.js"
         }
     },
     "files": [
@@ -66,16 +67,16 @@
         "ci": "echo '--- sdk' && yarn run build && yarn run test:coverage && ./scripts/check_typescript_when_installed_in_block.sh",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run build:docs && git add CHANGELOG.md ../blocks-docs/docs.json",
-        "release": "node ./scripts/interface-alpha-release.js",
+        "release": "node ./scripts/interface-alpha-release.cjs",
         "types": "tsc",
-        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
+        "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
         "lint:quiet": "yarn run lint --quiet",
         "jest": "node --unhandled-rejections=strict ./node_modules/.bin/jest",
         "jest:watch": "jest --watch",
         "test": "yarn run build && yarn run jest",
         "test:coverage": "yarn run test --coverage",
         "build:clean": "rm -rf dist",
-        "build:babel": "babel src --out-dir dist/cjs --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
+        "build:babel": "babel src --out-dir dist/esm --extensions=.js,.ts,.tsx --ignore='**/*.d.ts'",
         "watch:babel": "yarn run build:babel --watch --source-maps inline",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
@@ -100,6 +101,7 @@
         "@babel/preset-env": "^7.7.6",
         "@babel/preset-react": "^7.7.4",
         "@babel/preset-typescript": "^7.7.4",
+        "@eslint/compat": "^1.3.2",
         "@storybook/addon-actions": "^8.4.7",
         "@storybook/addon-links": "^8.4.7",
         "@storybook/addon-webpack5-compiler-babel": "^3.0.5",
@@ -123,27 +125,27 @@
         "@types/react-window": "^1.8.8",
         "@types/styled-system": "^5.1.4",
         "@types/styled-system__core": "^5.1.6",
-        "@typescript-eslint/eslint-plugin": "^7.13.0",
-        "@typescript-eslint/parser": "^7.13.0",
         "babel-eslint": "^11.0.0-beta.0",
         "babel-loader": "^8.0.6",
         "babel-plugin-transform-define": "^1.3.1",
         "concurrently": "^5.0.0",
-        "eslint": "^9.5.0",
+        "eslint": "^9.34.0",
         "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#01bbfe0",
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-jsdoc": "^48.2.12",
         "eslint-plugin-react": "^7.34.2",
         "eslint-plugin-react-hooks": "^5.2.0",
         "glob": "^7.1.6",
+        "globals": "^16.3.0",
         "jest": "^24.9.0",
         "jest-environment-jsdom-sixteen": "^2.0.0",
         "lodash.capitalize": "^4.2.1",
         "lodash.clamp": "^4.0.3",
-        "prettier": "^1.19.1",
+        "prettier": "^3.6.2",
         "prism-react-renderer": "^1.0.2",
         "storybook": "^8.4.7",
-        "typescript": "^5.4.5"
+        "typescript": "^5.4.5",
+        "typescript-eslint": "^8.42.0"
     },
     "dependencies": {
         "@babel/runtime": "^7.7.6",

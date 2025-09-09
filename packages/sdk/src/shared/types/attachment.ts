@@ -1,4 +1,4 @@
-import {AttachmentId} from './hyper_ids';
+import {type AttachmentId} from './hyper_ids';
 
 /** @hidden */
 export interface AttachmentData {

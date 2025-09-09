@@ -1,9 +1,16 @@
-import {ModelChange} from '../types/base_core';
-import {CollaboratorData} from '../types/collaborator';
-import {TableId, UserId} from '../types/hyper_ids';
-import {isEnumValue, entries, isDeepEqual, ObjectValues, has, ObjectMap} from '../private_utils';
+import {type ModelChange} from '../types/base_core';
+import {type CollaboratorData} from '../types/collaborator';
+import {type TableId, type UserId} from '../types/hyper_ids';
+import {
+    isEnumValue,
+    entries,
+    isDeepEqual,
+    type ObjectValues,
+    has,
+    type ObjectMap,
+} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
-import {SdkMode} from '../../sdk_mode';
+import {type SdkMode} from '../../sdk_mode';
 import AbstractModel from './abstract_model';
 
 
@@ -32,8 +39,8 @@ type ChangedPathsForObject<T extends object> = {[K in keyof T]?: ChangedPathsFor
 export type ChangedPathsForType<T> = T extends string | number | boolean | ReadonlyArray<unknown>
     ? {_isDirty?: true}
     : T extends {}
-    ? ChangedPathsForObject<T>
-    : never;
+      ? ChangedPathsForObject<T>
+      : never;
 
 /** @hidden */
 export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
@@ -183,7 +190,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      * ```
      */
     get activeCollaborators(): Array<CollaboratorData> {
-        return this._data.activeCollaboratorIds.map(collaboratorId =>
+        return this._data.activeCollaboratorIds.map((collaboratorId) =>
             this.getCollaboratorById(collaboratorId),
         );
     }
@@ -412,9 +419,8 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
                 for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
                     const table = this.getTableByIdIfExists(tableId);
                     if (table && dirtyTablePaths) {
-                        const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
-                            dirtyTablePaths,
-                        );
+                        const didTableSchemaChange =
+                            table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
                         if (didTableSchemaChange) {
                             didSchemaChange = true;
                         }

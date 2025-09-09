@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {ObjectMap} from '../private_utils';
-import {AppInterface} from './airtable_interface_core';
-import {PermissionLevel} from './permission_levels';
-import {TableDataCore, TablePermissionDataCore} from './table_core';
-import {CollaboratorData} from './collaborator';
-import {TableId, UserId, BaseId} from './hyper_ids';
+import {type ObjectMap} from '../private_utils';
+import {type AppInterface} from './airtable_interface_core';
+import {type PermissionLevel} from './permission_levels';
+import {type TableDataCore, type TablePermissionDataCore} from './table_core';
+import {type CollaboratorData} from './collaborator';
+import {type TableId, type UserId, type BaseId} from './hyper_ids';
 
 /** @hidden */
 export interface ModelChange {

@@ -2,14 +2,14 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import {invariant} from '../../shared/error_utils';
-import {has, createEnum, ObjectMap, keys, EnumType} from '../../shared/private_utils';
+import {has, createEnum, type ObjectMap, keys, type EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
-import {AllStylesProps} from './system/index';
-import {ResponsiveProp, ResponsiveKey} from './system/utils/types';
+import {type AllStylesProps} from './system/index';
+import {type ResponsiveProp, type ResponsiveKey} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
-import {AriaProps} from './types/aria_props';
-import {DataAttributesProp} from './types/data_attributes_prop';
+import {type AriaProps} from './types/aria_props';
+import {type DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Sizes for the {@link Heading} component.

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/interface/ui: expandRecord */ /** */
-import {Record} from '../models/record';
+import {type Record} from '../models/record';
 
 /**
  * Expands the given record in the Airtable UI.

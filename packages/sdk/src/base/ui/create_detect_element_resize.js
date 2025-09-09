@@ -28,31 +28,31 @@ export default function createDetectElementResize(nonce) {
     var startEvents;
     var pfx;
     if (!attachEvent) {
-        var requestFrame = (function() {
+        var requestFrame = (function () {
             var raf =
                 _window.requestAnimationFrame ||
                 _window.mozRequestAnimationFrame ||
                 _window.webkitRequestAnimationFrame ||
-                function(fn) {
+                function (fn) {
                     return _window.setTimeout(fn, 20);
                 };
-            return function(fn) {
+            return function (fn) {
                 return raf(fn);
             };
         })();
 
-        var cancelFrame = (function() {
+        var cancelFrame = (function () {
             var cancel =
                 _window.cancelAnimationFrame ||
                 _window.mozCancelAnimationFrame ||
                 _window.webkitCancelAnimationFrame ||
                 _window.clearTimeout;
-            return function(id) {
+            return function (id) {
                 return cancel(id);
             };
         })();
 
-        resetTriggers = function(element) {
+        resetTriggers = function (element) {
             var triggers = element.__resizeTriggers__,
                 expand = triggers.firstElementChild,
                 contract = triggers.lastElementChild,
@@ -65,14 +65,14 @@ export default function createDetectElementResize(nonce) {
             expand.scrollTop = expand.scrollHeight;
         };
 
-        checkTriggers = function(element) {
+        checkTriggers = function (element) {
             return (
                 element.offsetWidth !== element.__resizeLast__.width ||
                 element.offsetHeight !== element.__resizeLast__.height
             );
         };
 
-        scrollListener = function(e) {
+        scrollListener = function (e) {
             if (
                 e.target.className.indexOf('contract-trigger') < 0 &&
                 e.target.className.indexOf('expand-trigger') < 0
@@ -85,11 +85,11 @@ export default function createDetectElementResize(nonce) {
             if (this.__resizeRAF__) {
                 cancelFrame(this.__resizeRAF__);
             }
-            this.__resizeRAF__ = requestFrame(function() {
+            this.__resizeRAF__ = requestFrame(function () {
                 if (checkTriggers(element)) {
                     element.__resizeLast__.width = element.offsetWidth;
                     element.__resizeLast__.height = element.offsetHeight;
-                    element.__resizeListeners__.forEach(function(fn) {
+                    element.__resizeListeners__.forEach(function (fn) {
                         fn.call(element, e);
                     });
                 }
@@ -136,7 +136,7 @@ export default function createDetectElementResize(nonce) {
         animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
     }
 
-    var createStyles = function() {
+    var createStyles = function () {
         if (!document.getElementById('detectElementResize')) {
             var css =
                     (animationKeyframes ? animationKeyframes : '') +
@@ -164,7 +164,7 @@ export default function createDetectElementResize(nonce) {
         }
     };
 
-    var addResizeListener = function(element, fn) {
+    var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent('onresize', fn);
         } else {
@@ -204,7 +204,7 @@ export default function createDetectElementResize(nonce) {
         }
     };
 
-    var removeResizeListener = function(element, fn) {
+    var removeResizeListener = function (element, fn) {
         if (attachEvent) {
             element.detachEvent('onresize', fn);
         } else {

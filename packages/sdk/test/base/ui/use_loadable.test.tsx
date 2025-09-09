@@ -8,7 +8,7 @@ import Sdk from '../../../src/base/sdk';
 jest.useFakeTimers();
 
 async function tickAsync() {
-    await new Promise(resolve => process.nextTick(resolve));
+    await new Promise((resolve) => process.nextTick(resolve));
     jest.advanceTimersByTime(0);
 }
 
@@ -38,7 +38,7 @@ class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataL
     }
 
     async _loadDataAsync(): Promise<Array<'name' | 'isDataLoaded'>> {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             this._resolve = resolve;
         });
     }
@@ -125,7 +125,7 @@ describe('useLoadable', () => {
             const {container: el, unmount} = await new Promise<{
                 container: HTMLElement;
                 unmount: () => void;
-            }>(resolve => {
+            }>((resolve) => {
                 act(() => {
                     const {container, unmount} = render(
                         <Suspense fallback={<span>suspended</span>}>
@@ -164,8 +164,9 @@ describe('useLoadable', () => {
             const status = things
                 .map(
                     (thing, i) =>
-                        `${i}: ${thing.isDataLoaded ? 'loaded' : 'not loaded'}, ${thing.name ||
-                            'no name'}`,
+                        `${i}: ${thing.isDataLoaded ? 'loaded' : 'not loaded'}, ${
+                            thing.name || 'no name'
+                        }`,
                 )
                 .join('; ');
 
@@ -307,12 +308,12 @@ describe('useLoadable', () => {
             const {container: el, unmount} = await new Promise<{
                 container: HTMLElement;
                 unmount: () => void;
-            }>(resolve => {
+            }>((resolve) => {
                 act(() => {
                     const {container, unmount} = render(
                         <Wrapper
                             initialThings={[thing1, thing2]}
-                            ref={wrapperRef => {
+                            ref={(wrapperRef) => {
                                 wrapper = wrapperRef;
                             }}
                         />,

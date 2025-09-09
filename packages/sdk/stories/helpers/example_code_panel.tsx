@@ -1,6 +1,6 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useState} from 'react';
 import prettier from 'prettier/standalone';
-import parserBabel from 'prettier/parser-babylon';
+import * as prettierPluginBabel from 'prettier/plugins/babel';
 import Box from '../../src/base/ui/box';
 import CodeBlock from './code_block';
 import useResizablePanel from './use_resizable_panel';
@@ -35,14 +35,15 @@ export default function ExampleCodePanel({code, onHeightChange, minHeight, initi
         onHeightChange(height);
     }, [height]);
 
-    const formattedCode = useMemo(
-        () =>
-            prettier.format(code, {
+    const [formattedCode, setFormattedCode] = useState<string | null>(null);
+    useEffect(() => {
+        prettier
+            .format(code, {
                 parser: 'babel',
-                plugins: [parserBabel],
-            }),
-        [code],
-    );
+                plugins: [prettierPluginBabel],
+            })
+            .then(setFormattedCode);
+    }, [code]);
 
     return (
         <React.Fragment>
@@ -72,7 +73,7 @@ export default function ExampleCodePanel({code, onHeightChange, minHeight, initi
                         {handlebars}
                     </Box>
                 </div>
-                {isExpanded && (
+                {isExpanded && formattedCode && (
                     <Box overflowY="auto" flex="auto" padding={3} paddingY="20px">
                         <CodeBlock code={formattedCode} />
                     </Box>

@@ -12,7 +12,7 @@ export default {
 export const DefaultSizes = {
     render: () => (
         <React.Fragment>
-            {keys(theme.headingStyles.default).map(size => (
+            {keys(theme.headingStyles.default).map((size) => (
                 <React.Fragment key={size}>
                     <Heading key={size} size={size} marginTop="1em">
                         The brown fox jumped over the lazy dog
@@ -37,7 +37,7 @@ export const DefaultSizes = {
 export const CapsSizes = {
     render: () => (
         <React.Fragment>
-            {keys(theme.headingStyles.caps).map(size => (
+            {keys(theme.headingStyles.caps).map((size) => (
                 <Heading key={size} size={size} variant="caps">
                     The brown fox jumped over the lazy dog
                 </Heading>

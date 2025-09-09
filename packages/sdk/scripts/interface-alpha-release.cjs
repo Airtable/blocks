@@ -42,10 +42,7 @@ function checkRemoteSync() {
 
 function createVersionString() {
     const gitSha = execCommand('git rev-parse HEAD').substring(0, 9);
-    const date = new Date()
-        .toISOString()
-        .slice(0, 10)
-        .replace(/-/g, '');
+    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     return `0.0.0-experimental-${gitSha}-${date}`;
 }
 
@@ -53,8 +50,8 @@ function createVersionString() {
  * Prompts the user with a y/n question, and resolves if the user answers 'y'.
  */
 function promptUser(rl, questionString) {
-    return new Promise(resolve => {
-        rl.question(questionString, answer => {
+    return new Promise((resolve) => {
+        rl.question(questionString, (answer) => {
             resolve(answer.toLowerCase() === 'y');
         });
     });
@@ -83,7 +80,9 @@ function restorePackageJsonVersion(originalVersion) {
  * Does a "test run" of modifying package.json and restoring it.
  */
 function verifyPackageJsonModification(versionString) {
+    // Update and then restore and make sure it doesn't result in any unexpected changes
     restorePackageJsonVersion(updatePackageJsonVersion(versionString));
+    // Verify there are no uncommitted changes after the modification and restoration
     const statusAfterRestore = execCommand('git status --porcelain');
     if (statusAfterRestore) {
         console.error('❌ Error: Package.json modification resulted in unexpected changes');
@@ -113,6 +112,7 @@ function verifyWorkingDirectory() {
  * Checks if a git tag with this tagName already exists.
  */
 function checkGitTag(tagName) {
+    // git tag --list returns matching tag names, empty string if none exist
     const existingTag = execCommand(`git tag --list ${tagName}`).trim();
     if (existingTag) {
         console.error(`❌ Error: Git tag ${tagName} already exists`);
@@ -121,8 +121,8 @@ function checkGitTag(tagName) {
 }
 
 function getNpmOtp(rl) {
-    return new Promise(resolve => {
-        rl.question('Enter npm one-time password: ', answer => {
+    return new Promise((resolve) => {
+        rl.question('Enter npm one-time password: ', (answer) => {
             resolve(answer.trim());
         });
     });
@@ -143,11 +143,6 @@ async function main() {
         checkUncommittedChanges();
         checkRemoteSync();
 
-        console.log('Building and testing...');
-        execCommand('yarn build');
-        execCommand('yarn test');
-        execCommand('rm -rf dist/types/{stories,test}');
-
         const versionString = createVersionString();
         const confirmed = await promptUser(
             rl,
@@ -158,12 +153,19 @@ async function main() {
             process.exit(0);
         }
 
+        // Verify that the git tag doesn't already exist
         const gitTagName = `@airtable/blocks@${versionString}`;
         checkGitTag(gitTagName);
 
         verifyPackageJsonModification(versionString);
 
+        // Update package.json with the new version
         originalVersion = updatePackageJsonVersion(versionString);
+
+        console.log('Building and testing...');
+        execCommand('yarn build');
+        execCommand('yarn test');
+        execCommand('rm -rf dist/types/{stories,test}');
 
         const npmRegistry = 'https://registry.npmjs.org/';
         const npmTagName = 'interface-alpha-next';
@@ -204,6 +206,7 @@ async function main() {
         );
     } catch (error) {
         console.error('Error during release process:', error);
+        // Restore package.json version if we modified it
         if (originalVersion) {
             restorePackageJsonVersion(originalVersion);
         }

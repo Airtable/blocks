@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {spawnError} from '../../shared/error_utils';
-import {InterfaceBlockSdk} from '../sdk';
+import {type InterfaceBlockSdk} from '../sdk';
 import getAirtableInterface from '../../injected/airtable_interface';
 import {BlockRunContextType} from '../types/airtable_interface';
 import {BlockWrapper} from './block_wrapper';

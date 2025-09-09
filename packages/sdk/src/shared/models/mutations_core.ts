@@ -1,15 +1,15 @@
-import {SdkMode} from '../../sdk_mode';
-import {ModelChange} from '../types/base_core';
-import {GlobalConfigUpdate} from '../types/global_config';
+import {type SdkMode} from '../../sdk_mode';
+import {type ModelChange} from '../types/base_core';
+import {type GlobalConfigUpdate} from '../types/global_config';
 import {
-    PermissionCheckResult,
+    type PermissionCheckResult,
     MutationTypesCore,
-    SetMultipleGlobalConfigPathsMutation,
+    type SetMultipleGlobalConfigPathsMutation,
 } from '../types/mutations_core';
 import {spawnError} from '../error_utils';
-import {AirtableInterfaceCore} from '../types/airtable_interface_core';
-import {entries, ObjectMap} from '../private_utils';
-import {FieldId} from '../types/hyper_ids';
+import {type AirtableInterfaceCore} from '../types/airtable_interface_core';
+import {entries, type ObjectMap} from '../private_utils';
+import {type FieldId} from '../types/hyper_ids';
 
 export const MUTATIONS_MAX_BATCH_SIZE = 50;
 
@@ -201,12 +201,13 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
                             existingRecord &&
                             this._isFieldAvailableForMutation(recordStore, field.id)
                         ) {
-                            const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                                appInterface,
-                                record.cellValuesByFieldId[fieldId],
-                                existingRecord._getRawCellValue(field),
-                                field._data,
-                            );
+                            const validationResult =
+                                this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                                    appInterface,
+                                    record.cellValuesByFieldId[fieldId],
+                                    existingRecord._getRawCellValue(field),
+                                    field._data,
+                                );
                             if (!validationResult.isValid) {
                                 throw spawnError(
                                     "Can't set cell values: invalid cell value for field '%s'.\n%s",
@@ -268,12 +269,13 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
                             checkedFieldIds.add(fieldId);
                         }
 
-                        const validationResult = this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                            appInterface,
-                            record.cellValuesByFieldId[fieldId],
-                            null,
-                            field._data,
-                        );
+                        const validationResult =
+                            this._airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                                appInterface,
+                                record.cellValuesByFieldId[fieldId],
+                                null,
+                                field._data,
+                            );
                         if (!validationResult.isValid) {
                             throw spawnError(
                                 "Can't create records: invalid cell value for field '%s'.\n%s",
@@ -303,10 +305,12 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
                 const {tableId, records} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
 
-                return records.flatMap(record =>
+                return records.flatMap((record) =>
                     Object.keys(record.cellValuesByFieldId)
-                        .filter(fieldId => this._isFieldAvailableForMutation(recordStore, fieldId))
-                        .map(fieldId => ({
+                        .filter((fieldId) =>
+                            this._isFieldAvailableForMutation(recordStore, fieldId),
+                        )
+                        .map((fieldId) => ({
                             path: [
                                 'tablesById',
                                 tableId,
@@ -322,7 +326,7 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
 
             case MutationTypesCore.DELETE_MULTIPLE_RECORDS: {
                 const {tableId, recordIds} = mutation;
-                return recordIds.map(recordId => ({
+                return recordIds.map((recordId) => ({
                     path: ['tablesById', tableId, 'recordsById', recordId],
                     value: undefined,
                 }));
@@ -332,7 +336,7 @@ export abstract class MutationsCore<SdkModeT extends SdkMode> {
                 const {tableId, records} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
 
-                return records.map(record => {
+                return records.map((record) => {
                     const filteredCellValuesByFieldId: ObjectMap<FieldId, unknown> = {};
                     for (const [fieldId, cellValue] of entries(record.cellValuesByFieldId)) {
                         if (this._isFieldAvailableForMutation(recordStore, fieldId)) {

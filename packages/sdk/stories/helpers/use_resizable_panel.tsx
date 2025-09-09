@@ -65,7 +65,7 @@ export default function useResizablePanel({
                     containerRef.current.parentNode.getBoundingClientRect().top + (topOffset || 0);
                 const newMaxHeight = window.innerHeight - parentNodeTop;
                 setMaxHeight(newMaxHeight);
-                setHeight(_height => clamp(_height, minHeight, newMaxHeight));
+                setHeight((_height) => clamp(_height, minHeight, newMaxHeight));
             }
         });
 

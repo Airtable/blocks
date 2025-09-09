@@ -1,11 +1,11 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 
 import {__reset, __sdk as sdk} from '../../../src/base';
-import {FieldId} from '../../../src/shared/types/hyper_ids';
-import View from '../../../src/base/models/view';
-import ViewMetadataQueryResult from '../../../src/base/models/view_metadata_query_result';
+import {type FieldId} from '../../../src/shared/types/hyper_ids';
+import type View from '../../../src/base/models/view';
+import type ViewMetadataQueryResult from '../../../src/base/models/view_metadata_query_result';
 import {waitForWatchKeyAsync} from '../../test_helpers';
-import {NormalizedGroupLevel} from '../../../src/base/types/airtable_interface';
+import {type NormalizedGroupLevel} from '../../../src/base/types/airtable_interface';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
 jest.mock('../../../src/injected/airtable_interface', () => {
@@ -171,7 +171,7 @@ describe('ViewMetadataQueryResult', () => {
         });
 
         it('unsubscribes from AirtableInterface: cell values in fields', async () => {
-            const args = await new Promise(resolve => {
+            const args = await new Promise((resolve) => {
                 result.unloadData();
                 mockAirtableInterface.unsubscribeFromCellValuesInFields.mockImplementation(
                     (..._args) => resolve(_args),
@@ -184,7 +184,7 @@ describe('ViewMetadataQueryResult', () => {
         });
 
         it('unsubscribes from AirtableInterface: view data', async () => {
-            const args = await new Promise(resolve => {
+            const args = await new Promise((resolve) => {
                 result.unloadData();
                 mockAirtableInterface.unsubscribeFromViewData.mockImplementation((..._args) =>
                     resolve(_args),

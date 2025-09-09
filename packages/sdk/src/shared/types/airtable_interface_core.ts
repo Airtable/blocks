@@ -1,17 +1,17 @@
-import {ObjectMap} from '../private_utils';
-import {SdkMode} from '../../sdk_mode';
-import {Stat} from './stat';
-import {FieldId, BlockInstallationId} from './hyper_ids';
-import {FieldType, FieldDataCore} from './field_core';
+import {type ObjectMap} from '../private_utils';
+import {type SdkMode} from '../../sdk_mode';
+import {type Stat} from './stat';
+import {type FieldId, type BlockInstallationId} from './hyper_ids';
+import {type FieldType, type FieldDataCore} from './field_core';
 import {
-    GlobalConfigUpdate,
-    GlobalConfigData,
-    GlobalConfigPath,
-    GlobalConfigPathValidationResult,
+    type GlobalConfigUpdate,
+    type GlobalConfigData,
+    type GlobalConfigPath,
+    type GlobalConfigPathValidationResult,
 } from './global_config';
-import {BaseDataCore, ModelChange} from './base_core';
-import {TableDataCore} from './table_core';
-import {PermissionCheckResult} from './mutations_core';
+import {type BaseDataCore, type ModelChange} from './base_core';
+import {type TableDataCore} from './table_core';
+import {type PermissionCheckResult} from './mutations_core';
 
 /** @hidden */
 export interface SdkInitDataCore {

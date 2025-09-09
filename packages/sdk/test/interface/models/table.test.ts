@@ -1,8 +1,8 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
-import {Base} from '../../../src/interface/models/base';
-import {Table} from '../../../src/interface/models/table';
+import {type Base} from '../../../src/interface/models/base';
+import {type Table} from '../../../src/interface/models/table';
 import {Field} from '../../../src/interface/models/field';
-import {TableId, FieldId, RecordId} from '../../../src/shared/types/hyper_ids';
+import {type TableId, type FieldId, type RecordId} from '../../../src/shared/types/hyper_ids';
 import {MutationTypes} from '../../../src/interface/types/mutations';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
 
@@ -13,7 +13,9 @@ jest.mock('../../../src/injected/airtable_interface', () => ({
 }));
 
 const deleteTable = (id: TableId) => {
-    const newOrder = ['tblDesignProjects', 'tblTasks', 'tblClients'].filter(other => other !== id);
+    const newOrder = ['tblDesignProjects', 'tblTasks', 'tblClients'].filter(
+        (other) => other !== id,
+    );
 
     mockAirtableInterface.triggerModelUpdates([
         {path: ['tableOrder'], value: newOrder},

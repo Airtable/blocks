@@ -1,7 +1,11 @@
 /** @module @airtable/blocks/ui/system: Overflow */ /** */
-import {system, Config} from '@styled-system/core';
-import {OverflowProperty, OverflowXProperty, OverflowYProperty} from './utils/csstype';
-import {OptionalResponsiveProp} from './utils/types';
+import {system, type Config} from '@styled-system/core';
+import {
+    type OverflowProperty,
+    type OverflowXProperty,
+    type OverflowYProperty,
+} from './utils/csstype';
+import {type OptionalResponsiveProp} from './utils/types';
 
 /**
  * Style props for the overflow behavior of an element.

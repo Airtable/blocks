@@ -22,7 +22,7 @@ const config = {
         options: {},
     },
 
-    webpackFinal: async config => {
+    webpackFinal: async (config) => {
         return config;
     },
 };

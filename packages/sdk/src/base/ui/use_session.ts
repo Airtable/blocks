@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useSession */ /** */
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import useSessionInternal from '../../shared/ui/use_session';
 
 /**

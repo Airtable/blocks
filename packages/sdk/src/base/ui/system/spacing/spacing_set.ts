@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui/system: Spacing */ /** */
 import {system} from '@styled-system/core';
-import {config as marginConfig, MarginProps} from './margin';
-import {config as paddingConfig, PaddingProps} from './padding';
+import {config as marginConfig, type MarginProps} from './margin';
+import {config as paddingConfig, type PaddingProps} from './padding';
 
 /**
  * Style props for the spacing of an element.

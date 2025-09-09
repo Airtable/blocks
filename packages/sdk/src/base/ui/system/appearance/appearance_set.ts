@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui/system: Appearance */ /** */
 import {system} from '@styled-system/core';
-import {config as backgroundColorConfig, BackgroundColorProps} from './background_color';
-import {config as borderConfig, BorderProps} from './border';
-import {config as borderRadiusConfig, BorderRadiusProps} from './border_radius';
-import {config as boxShadowConfig, BoxShadowProps} from './box_shadow';
-import {config as opacityConfig, OpacityProps} from './opacity';
+import {config as backgroundColorConfig, type BackgroundColorProps} from './background_color';
+import {config as borderConfig, type BorderProps} from './border';
+import {config as borderRadiusConfig, type BorderRadiusProps} from './border_radius';
+import {config as boxShadowConfig, type BoxShadowProps} from './box_shadow';
+import {config as opacityConfig, type OpacityProps} from './opacity';
 
 /**
  * Style props for the visual appearance of an element.

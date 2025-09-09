@@ -80,7 +80,7 @@ export default function CodeBlock({code}: {code: string}) {
     const formattedExampleCodeString = code
         .trim()
         .split('\n')
-        .filter(line => !line.startsWith('```'))
+        .filter((line) => !line.startsWith('```'))
         .join('\n');
     return (
         <div>

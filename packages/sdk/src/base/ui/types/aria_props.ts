@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui/types: Aria props */ /** */
-import {AriaAttributes} from 'react';
+import {type AriaAttributes} from 'react';
 
 /** */
 export interface AriaProps {

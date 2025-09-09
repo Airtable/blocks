@@ -2,7 +2,7 @@ import React from 'react';
 import {act, render} from '@testing-library/react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {expandRecordPickerAsync, useBase, useRecords} from '../../../src/base/ui/ui';
-import {Record} from '../../../src/base/models/models';
+import {type Record} from '../../../src/base/models/models';
 import {SdkContext} from '../../../src/shared/ui/sdk_context';
 import {__sdk as sdk} from '../../../src/base';
 import getAirtableInterface from '../../../src/injected/airtable_interface';

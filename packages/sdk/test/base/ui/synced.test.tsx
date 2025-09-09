@@ -3,7 +3,7 @@ import {render} from '@testing-library/react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {Synced} from '../../../src/base/ui/ui';
 import {SdkContext} from '../../../src/shared/ui/sdk_context';
-import {GlobalConfigUpdate} from '../../../src/shared/types/global_config';
+import {type GlobalConfigUpdate} from '../../../src/shared/types/global_config';
 import {__sdk as sdk} from '../../../src/base';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
@@ -66,7 +66,7 @@ describe('Synced', () => {
             </TestProvider>,
         );
 
-        const updates = await new Promise(resolve => {
+        const updates = await new Promise((resolve) => {
             const impl = (_updates: readonly GlobalConfigUpdate[]) => {
                 resolve(_updates);
                 return {

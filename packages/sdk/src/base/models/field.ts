@@ -1,12 +1,12 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {FieldCore} from '../../shared/models/field_core';
-import {FieldOptions} from '../../shared/types/field_core';
-import {UpdateFieldOptionsOpts, MutationTypes} from '../types/mutations';
-import {BaseSdkMode} from '../../sdk_mode';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type FieldOptions} from '../../shared/types/field_core';
+import {type UpdateFieldOptionsOpts, MutationTypes} from '../types/mutations';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {values} from '../../shared/private_utils';
-import {AggregatorKey} from '../types/aggregators';
-import {Aggregator} from './create_aggregators';
+import {type AggregatorKey} from '../types/aggregators';
+import {type Aggregator} from './create_aggregators';
 
 /**
  * Model class representing a field in a table.
@@ -39,8 +39,8 @@ class Field extends FieldCore<BaseSdkMode> {
             airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
 
-        const {aggregators} = require('./models');
-        return values(aggregators).filter(aggregator => {
+        const base = this.parentTable.parentBase;
+        return values(base.aggregators).filter((aggregator) => {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
@@ -50,8 +50,9 @@ class Field extends FieldCore<BaseSdkMode> {
      * @param aggregator The aggregator object or aggregator key.
      * @example
      * ```js
-     * import {aggregators} from '@airtable/blocks/base/models';
-     * const aggregator = aggregators.totalAttachmentSize;
+     * import {base} from '@airtable/blocks/base';
+     *
+     * const aggregator = base.aggregators.totalAttachmentSize;
      *
      * // Using an aggregator object
      * console.log(myAttachmentField.isAggregatorAvailable(aggregator));
@@ -66,11 +67,10 @@ class Field extends FieldCore<BaseSdkMode> {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
 
         const airtableInterface = this._sdk.__airtableInterface;
-        const availableAggregatorKeys = airtableInterface.aggregators.getAvailableAggregatorKeysForField(
-            this._data,
-        );
+        const availableAggregatorKeys =
+            airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data);
 
-        return availableAggregatorKeys.some(key => key === aggregatorKey);
+        return availableAggregatorKeys.some((key) => key === aggregatorKey);
     }
 
     /**

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: colors */ /** */
-import {ObjectValues} from './private_utils';
+import {type ObjectValues} from './private_utils';
 /**
  * Airtable color names.
  *

@@ -1,22 +1,22 @@
 import {
-    Aggregators,
-    FieldTypeProvider,
-    UrlConstructor,
-    IdGenerator,
-    VisList,
-    PartialViewData,
+    type Aggregators,
+    type FieldTypeProvider,
+    type UrlConstructor,
+    type IdGenerator,
+    type VisList,
+    type PartialViewData,
 } from '../../../src/base/types/airtable_interface';
 import {AbstractMockAirtableInterface} from '../../../src/testing/base/abstract_mock_airtable_interface';
-import {TableId, FieldId} from '../../../src/shared/types/hyper_ids';
+import {type TableId, type FieldId} from '../../../src/shared/types/hyper_ids';
 import {spawnError} from '../../../src/shared/error_utils';
-import {CursorData} from '../../../src/base/types/cursor';
-import {RecordData} from '../../../src/base/types/record';
-import {RecordActionData} from '../../../src/base/types/record_action_data';
-import {RequestJson, ResponseJson} from '../../../src/base/types/backend_fetch_types';
-import {GlobalConfigHelpers} from '../../../src/shared/types/airtable_interface_core';
+import {type CursorData} from '../../../src/base/types/cursor';
+import {type RecordData} from '../../../src/base/types/record';
+import {type RecordActionData} from '../../../src/base/types/record_action_data';
+import {type RequestJson, type ResponseJson} from '../../../src/base/types/backend_fetch_types';
+import {type GlobalConfigHelpers} from '../../../src/shared/types/airtable_interface_core';
 import projectTrackerData from './project_tracker';
 import linkedRecordsData from './linked_records';
-import {FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';
+import {type FixtureData, convertFixtureDataToSdkInitData} from './fixture_data';
 
 const resetSpies = (target: {[key: string]: any}, names: string[]) => {
     for (const name of names) {

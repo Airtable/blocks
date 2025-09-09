@@ -1,4 +1,4 @@
-import {InterfaceSdkMode} from '../../sdk_mode';
+import {type InterfaceSdkMode} from '../../sdk_mode';
 import {FieldCore} from '../../shared/models/field_core';
 
 /**

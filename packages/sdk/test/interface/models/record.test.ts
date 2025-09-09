@@ -1,10 +1,10 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
 import AbstractModel from '../../../src/shared/models/abstract_model';
-import {Base} from '../../../src/interface/models/base';
+import {type Base} from '../../../src/interface/models/base';
 import {Record} from '../../../src/interface/models/record';
-import {Table} from '../../../src/interface/models/table';
-import {ObjectMap} from '../../../src/shared/private_utils';
+import {type Table} from '../../../src/interface/models/table';
+import {type ObjectMap} from '../../../src/shared/private_utils';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
 jest.mock('../../../src/injected/airtable_interface', () => ({

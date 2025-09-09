@@ -183,7 +183,7 @@ describe('useWatchable', () => {
         it('re-renders when a watched key changes', () => {
             const Component = ({things}: {things: Array<Thing>}) => {
                 useWatchable(things, ['name']);
-                return <span>{things.map(thing => thing.name).join(', ')}</span>;
+                return <span>{things.map((thing) => thing.name).join(', ')}</span>;
             };
 
             const thing1 = new Thing('one');
@@ -213,7 +213,7 @@ describe('useWatchable', () => {
             const Component = ({things}: {things: Array<Thing>}) => {
                 useWatchable(things, ['name', 'spice', null]);
                 return (
-                    <span>{things.map(thing => `${thing.name} ${thing.spice}`).join(', ')}</span>
+                    <span>{things.map((thing) => `${thing.name} ${thing.spice}`).join(', ')}</span>
                 );
             };
 
@@ -233,7 +233,7 @@ describe('useWatchable', () => {
             const callback = jest.fn();
             const Component = ({things}: {things: Array<Thing>}) => {
                 useWatchable(things, ['name'], callback);
-                return <span>{things.map(thing => thing.name).join(', ')}</span>;
+                return <span>{things.map((thing) => thing.name).join(', ')}</span>;
             };
 
             const thing1 = new Thing('one');
@@ -252,7 +252,7 @@ describe('useWatchable', () => {
         it("won't let ref-count hit 0 when changing keys/models", () => {
             const Component = ({things, keys}: {things: Array<Thing>; keys: Array<ThingKey>}) => {
                 useWatchable(things, keys);
-                return <span>{things.map(thing => thing.name).join(', ')}</span>;
+                return <span>{things.map((thing) => thing.name).join(', ')}</span>;
             };
 
             const thing1 = new Thing('one');

@@ -6,21 +6,21 @@ import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
 import {
     borderRadius,
-    BorderRadiusProps,
+    type BorderRadiusProps,
     dimensionsSet,
-    DimensionsSetProps,
+    type DimensionsSetProps,
     display,
-    DisplayProps,
+    type DisplayProps,
     flexContainerSet,
-    FlexContainerSetProps,
+    type FlexContainerSetProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Icon from './icon';
 import {useDialogContext} from './dialog';
 

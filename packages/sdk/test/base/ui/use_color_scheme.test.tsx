@@ -4,7 +4,7 @@ import {useColorScheme} from '../../../src/shared/ui/use_color_scheme';
 
 describe('useColorScheme', () => {
     it('returns light by default when the actual color scheme is unknown', () => {
-        window.matchMedia = jest.fn().mockImplementation(query => {
+        window.matchMedia = jest.fn().mockImplementation((query) => {
             return {
                 matches: false,
                 addEventListener: jest.fn(),
@@ -20,7 +20,7 @@ describe('useColorScheme', () => {
     });
 
     it('returns dark when the actual color scheme is dark', () => {
-        window.matchMedia = jest.fn().mockImplementation(query => {
+        window.matchMedia = jest.fn().mockImplementation((query) => {
             if (query.includes('dark')) {
                 return {
                     matches: true,
@@ -48,7 +48,7 @@ describe('useColorScheme', () => {
         let isCurrentlyDarkMode = true;
         const darkChangeListeners: Array<MockMediaQueryListEventListener> = [];
         const lightChangeListeners: Array<MockMediaQueryListEventListener> = [];
-        window.matchMedia = jest.fn().mockImplementation(query => {
+        window.matchMedia = jest.fn().mockImplementation((query) => {
             if (query.includes('dark')) {
                 return {
                     matches: isCurrentlyDarkMode,
@@ -91,8 +91,8 @@ describe('useColorScheme', () => {
         act(() => {
             isCurrentlyDarkMode = false;
 
-            darkChangeListeners.forEach(listenerFn => listenerFn(darkChangeEvent));
-            lightChangeListeners.forEach(listenerFn => listenerFn(lightChangeEvent));
+            darkChangeListeners.forEach((listenerFn) => listenerFn(darkChangeEvent));
+            lightChangeListeners.forEach((listenerFn) => listenerFn(lightChangeEvent));
         });
         expect(getByText('light')).toBeInTheDocument();
     });

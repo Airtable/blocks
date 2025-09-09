@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: expandRecord */ /** */
-import Record from '../models/record';
+import type Record from '../models/record';
 
 /**
  * Options object for expanding a record.
@@ -28,7 +28,7 @@ function expandRecord(record: Record, opts?: ExpandRecordOpts) {
 
     let recordIds = null;
     if (opts && opts.records) {
-        recordIds = opts.records.map(r => r.id);
+        recordIds = opts.records.map((r) => r.id);
     }
 
     record.parentTable.parentBase.__sdk.__airtableInterface.expandRecord(

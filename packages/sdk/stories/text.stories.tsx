@@ -35,7 +35,7 @@ function TextExample() {
                     options: ['default', 'light'],
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap({
                     ...values,
                     maxWidth: values.variant === 'paragraph' ? '30em' : null,
@@ -50,7 +50,7 @@ function TextExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <Text {...values} maxWidth={values.variant === 'paragraph' ? '30em' : null}>
                     {childrenForVariant[values.variant]}
                 </Text>
@@ -89,7 +89,7 @@ export const As = {
                 'time' as const,
                 'var' as const,
                 'blockquote' as const,
-            ].map(as => (
+            ].map((as) => (
                 <Text key={as} as={as}>
                     {as}
                 </Text>
@@ -111,7 +111,7 @@ export const Ref = {
     render: () => (
         <React.Fragment>
             <Text
-                ref={node => {
+                ref={(node) => {
                     // eslint-disable-next-line no-console
                     console.log(node);
                 }}

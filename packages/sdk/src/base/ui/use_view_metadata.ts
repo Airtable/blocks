@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: useViewMetadata */ /** */
-import ViewMetadataQueryResult from '../models/view_metadata_query_result';
+import type ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import View from '../models/view';
 import useWatchable from '../../shared/ui/use_watchable';
 import useLoadable from './use_loadable';

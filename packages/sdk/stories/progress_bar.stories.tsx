@@ -20,7 +20,7 @@ function ProgressBarExample() {
                     defaultValue: 0.5,
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -32,7 +32,7 @@ function ProgressBarExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return <ProgressBar {...values} width={CONTROL_WIDTH} />;
             }}
         </Example>

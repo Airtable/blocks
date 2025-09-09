@@ -1,12 +1,12 @@
 /** @module @airtable/blocks/ui: ViewPicker */ /** */
 import * as React from 'react';
-import View from '../models/view';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import type View from '../models/view';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import useSynced from '../../shared/ui/use_synced';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
-import ViewPicker, {SharedViewPickerProps} from './view_picker';
+import {type BaseSdkMode} from '../../sdk_mode';
+import ViewPicker, {type SharedViewPickerProps} from './view_picker';
 
 /**
  * Props for the {@link ViewPickerSynced} component. Also accepts:
@@ -50,7 +50,7 @@ const ViewPickerSynced = (props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelec
             ref={ref}
             table={table}
             view={_getViewFromGlobalConfigValue()}
-            onChange={view => {
+            onChange={(view) => {
                 setViewId(view ? view.id : null);
                 if (onChange) {
                     onChange(view);

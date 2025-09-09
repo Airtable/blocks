@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Record Coloring */ /** */
-import {ObjectValues} from '../../shared/private_utils';
-import Field from './field';
-import View from './view';
+import {type ObjectValues} from '../../shared/private_utils';
+import type Field from './field';
+import type View from './view';
 
 /**
  * An enum of the different types of {@link recordColoring.modes}

@@ -1,7 +1,7 @@
 import {css} from 'emotion';
-import {styleFn} from '@styled-system/core';
+import {type styleFn} from '@styled-system/core';
 import useTheme from './theme/use_theme';
-import {allStylesParser, AllStylesProps} from './system/index';
+import {allStylesParser, type AllStylesProps} from './system/index';
 
 /** @internal */
 export default function useStyledSystem<T = AllStylesProps>(

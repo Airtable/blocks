@@ -33,7 +33,7 @@ function InputExample() {
     return (
         <Example
             {...sharedExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -56,11 +56,11 @@ function InputExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <Input
                         value={value}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         placeholder="Placeholder"
                         {...values}
                         width={CONTROL_WIDTH}
@@ -80,7 +80,7 @@ function InputSyncedExample() {
     return (
         <Example
             {...sharedExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -100,11 +100,11 @@ function InputSyncedExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 return (
                     <Input
                         value={value}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         placeholder="Placeholder"
                         {...values}
                         width={CONTROL_WIDTH}
@@ -128,19 +128,19 @@ export const Sizes = {
                     <Input
                         value={value}
                         size={'small'}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         margin={2}
                     />
                     <Input
                         value={value}
                         size={'default'}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         margin={2}
                     />
                     <Input
                         value={value}
                         size={'large'}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                         margin={2}
                     />
                 </Box>
@@ -158,7 +158,7 @@ export const InsideFormField = {
                         <Input
                             value={value}
                             size={'small'}
-                            onChange={e => setValue(e.target.value)}
+                            onChange={(e) => setValue(e.target.value)}
                         />
                     </FormField>
                 </Box>
@@ -173,10 +173,10 @@ export const WithRef = {
             return (
                 <Box margin="auto" width={300}>
                     <Input
-                        ref={node => console.log(node)}
+                        ref={(node) => console.log(node)}
                         value={value}
                         size={'small'}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                     />
                 </Box>
             );
@@ -190,14 +190,14 @@ export const ResponsiveSizing = {
             return (
                 <Box margin="auto" width={300}>
                     <Input
-                        ref={node => console.log(node)}
+                        ref={(node) => console.log(node)}
                         value={value}
                         size={{
                             xsmallViewport: 'small',
                             mediumViewport: 'default',
                             largeViewport: 'large',
                         }}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                     />
                 </Box>
             );
@@ -211,10 +211,10 @@ export const Disabled = {
             return (
                 <Box margin="auto" width={300}>
                     <Input
-                        ref={node => console.log(node)}
+                        ref={(node) => console.log(node)}
                         value={value}
                         disabled={true}
-                        onChange={e => setValue(e.target.value)}
+                        onChange={(e) => setValue(e.target.value)}
                     />
                 </Box>
             );

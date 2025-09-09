@@ -1,11 +1,11 @@
 // eslint-disable-next-line import/order
 import {MockAirtableInterface} from './airtable_interface_mocks/mock_airtable_interface';
-import Table from '../../src/base/models/table';
-import View from '../../src/base/models/view';
+import type Table from '../../src/base/models/table';
+import type View from '../../src/base/models/view';
 import AbstractModelWithAsyncData from '../../src/base/models/abstract_model_with_async_data';
 import Sdk from '../../src/base/sdk';
 import {__reset, __sdk as sdk} from '../../src/base';
-import {RequestJson} from '../../src/base/types/backend_fetch_types';
+import {type RequestJson} from '../../src/base/types/backend_fetch_types';
 import getAirtableInterface from '../../src/injected/airtable_interface';
 
 jest.mock('../../src/injected/airtable_interface', () => {
@@ -651,9 +651,9 @@ describe('sdk', () => {
             let view: View;
 
             beforeEach(() => {
-                view = (sdk.base.tables.find(
-                    ({id}) => id === 'tblDesignProjects',
-                ) as Table).views.find(({id}) => id === 'viwPrjctCompleted') as View;
+                view = (
+                    sdk.base.tables.find(({id}) => id === 'tblDesignProjects') as Table
+                ).views.find(({id}) => id === 'viwPrjctCompleted') as View;
             });
 
             it('notifies base "schema" watchers', () => {

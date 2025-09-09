@@ -3,11 +3,11 @@
  * @docsPath UI/components/ViewportConstraint
  */ /** */
 import * as React from 'react';
-import {ViewportSizeConstraint} from '../types/viewport';
-import Sdk from '../sdk';
+import {type ViewportSizeConstraint} from '../types/viewport';
+import type Sdk from '../sdk';
 import withHooks from '../../shared/ui/with_hooks';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 
 /** An object specifying a width and/or height for the block's viewport. */
 type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
@@ -123,9 +123,8 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
         this._removeMaxFullscreenSizeConstraint();
         const {maxFullscreenSize} = this.props;
         if (maxFullscreenSize) {
-            this._removeMaxFullscreenSizeConstrainFn = this.props.sdk.viewport.addMaxFullscreenSize(
-                maxFullscreenSize,
-            );
+            this._removeMaxFullscreenSizeConstrainFn =
+                this.props.sdk.viewport.addMaxFullscreenSize(maxFullscreenSize);
         }
     }
 
@@ -137,7 +136,7 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
 
 export default withHooks<{sdk: Sdk}, ViewportConstraintProps, ViewportConstraint>(
     ViewportConstraint,
-    props => {
+    (props) => {
         return {
             sdk: useSdk<BaseSdkMode>(),
         };

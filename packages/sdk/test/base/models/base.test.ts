@@ -1,7 +1,7 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {FieldType} from '../../../src/shared/types/field_core';
 import {MutationTypes} from '../../../src/base/types/mutations';
-import Base from '../../../src/base/models/base';
+import type Base from '../../../src/base/models/base';
 import Sdk from '../../../src/base/sdk';
 import Table from '../../../src/base/models/table';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
@@ -511,7 +511,7 @@ describe('Base', () => {
         let mockGetTableById: any;
 
         beforeEach(() => {
-            mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
+            mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation((tableId) => {
                 const recordStore = undefined as any;
                 return new Table(base, recordStore, tableId, sdk);
             });

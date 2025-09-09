@@ -1,9 +1,9 @@
 /** @module @airtable/blocks/ui: ColorPalette */ /** */
 import * as React from 'react';
 import {spawnError} from '../../shared/error_utils';
-import {GlobalConfigKey} from '../../shared/types/global_config';
+import {type GlobalConfigKey} from '../../shared/types/global_config';
 import Synced from './synced';
-import ColorPalette, {SharedColorPaletteProps} from './color_palette';
+import ColorPalette, {type SharedColorPaletteProps} from './color_palette';
 
 /**
  * Props for the {@link ColorPaletteSynced} component. Also accepts:
@@ -46,7 +46,7 @@ class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
                         <ColorPalette
                             {...restOfProps}
                             color={currentColor}
-                            onChange={newValue => {
+                            onChange={(newValue) => {
                                 setValue(newValue);
                                 if (onChange) {
                                     onChange(newValue);

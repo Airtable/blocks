@@ -2,16 +2,16 @@ import {
     isEnumValue,
     entries,
     has,
-    ObjectValues,
-    ObjectMap,
-    FlowAnyFunction,
-    FlowAnyObject,
+    type ObjectValues,
+    type ObjectMap,
+    type FlowAnyFunction,
+    type FlowAnyObject,
 } from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
-import {TableId, FieldId, RecordId} from '../../shared/types/hyper_ids';
-import {ChangedPathsForType} from '../../shared/models/base_core';
+import {type TableId, type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {type ChangedPathsForType} from '../../shared/models/base_core';
 import AbstractModel from '../../shared/models/abstract_model';
-import {SdkMode} from '../../sdk_mode';
+import {type SdkMode} from '../../sdk_mode';
 
 export const WatchableRecordStoreKeysCore = Object.freeze({
     records: 'records' as const,
@@ -35,7 +35,7 @@ type WatchableRecordStoreKeyCore = ObjectValues<typeof WatchableRecordStoreKeysC
  */
 abstract class RecordStoreCore<
     SdkModeT extends SdkMode,
-    WatchableKeys extends string = WatchableRecordStoreKeyCore
+    WatchableKeys extends string = WatchableRecordStoreKeyCore,
 > extends AbstractModel<
     SdkModeT,
     SdkModeT['TableDataT'],
@@ -90,7 +90,7 @@ abstract class RecordStoreCore<
     get records(): Array<SdkModeT['RecordT']> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
-        const records = this.recordIds.map(recordId => {
+        const records = this.recordIds.map((recordId) => {
             const record = this.getRecordByIdIfExists(recordId);
             invariant(record, 'record');
             return record;

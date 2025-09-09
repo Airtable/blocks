@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import * as React from 'react';
 import {invariant} from '../../shared/error_utils';
-import Sdk from '../sdk';
+import type Sdk from '../sdk';
 import withHooks from '../../shared/ui/with_hooks';
 import useWatchable from '../../shared/ui/use_watchable';
 import {SdkContext} from '../../shared/ui/sdk_context';

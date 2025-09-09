@@ -1,9 +1,9 @@
 import {invariant} from '../shared/error_utils';
-import {isEnumValue, ObjectValues} from '../shared/private_utils';
-import {AirtableInterface} from './types/airtable_interface';
-import {RecordActionData, RecordActionDataCallback} from './types/record_action_data';
+import {isEnumValue, type ObjectValues} from '../shared/private_utils';
+import {type AirtableInterface} from './types/airtable_interface';
+import {type RecordActionData, type RecordActionDataCallback} from './types/record_action_data';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
-import Sdk from './sdk';
+import type Sdk from './sdk';
 
 /** @hidden */
 export const WatchablePerformRecordActionKeys = Object.freeze({
@@ -120,9 +120,10 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
     async _loadDataAsync(): Promise<[]> {
         if (!this._hasRegisteredHandler) {
             this._hasRegisteredHandler = true;
-            this.recordActionData = await this._airtableInterface.fetchAndSubscribeToPerformRecordActionAsync(
-                this._handlePerformRecordAction,
-            );
+            this.recordActionData =
+                await this._airtableInterface.fetchAndSubscribeToPerformRecordActionAsync(
+                    this._handlePerformRecordAction,
+                );
         }
 
         return [];

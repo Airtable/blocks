@@ -1,22 +1,22 @@
 import {
     isEnumValue,
-    ObjectValues,
-    FlowAnyExistential,
-    FlowAnyObject,
+    type ObjectValues,
+    type FlowAnyExistential,
+    type FlowAnyObject,
     has,
-    ObjectMap,
+    type ObjectMap,
     cloneDeep,
 } from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
-import Sdk from '../sdk';
-import {FieldId, ViewId, RecordId} from '../../shared/types/hyper_ids';
-import {GroupData, GroupLevelData, ViewData} from '../types/view';
-import {AirtableInterface} from '../types/airtable_interface';
-import {Color} from '../../shared/colors';
-import {ModelChange} from '../../shared/types/base_core';
+import type Sdk from '../sdk';
+import {type FieldId, type ViewId, type RecordId} from '../../shared/types/hyper_ids';
+import {type GroupData, type GroupLevelData, type ViewData} from '../types/view';
+import {type AirtableInterface} from '../types/airtable_interface';
+import {type Color} from '../../shared/colors';
+import {type ModelChange} from '../../shared/types/base_core';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
-import RecordStore from './record_store';
-import Record from './record';
+import type RecordStore from './record_store';
+import type Record from './record';
 
 export const WatchableViewDataStoreKeys = Object.freeze({
     visibleRecords: 'visibleRecords' as const,
@@ -159,7 +159,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
             recordIdsToDeleteSet[recordId] = true;
         }
         const newVisibleRecordIds = this.visibleRecordIds.filter(
-            recordId => !recordIdsToDeleteSet[recordId],
+            (recordId) => !recordIdsToDeleteSet[recordId],
         );
 
         const changePayload = [
@@ -202,10 +202,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
             return groups;
         }
 
-        return groups.map(group => {
+        return groups.map((group) => {
             if (group.visibleRecordIds) {
                 group.visibleRecordIds = group.visibleRecordIds.filter(
-                    id => !recordIdsToDeleteSet[id],
+                    (id) => !recordIdsToDeleteSet[id],
                 );
             }
             this.__recursivelyRemoveRecordsFromGroupsInPlace(group.groups, recordIdsToDeleteSet);
@@ -240,7 +240,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         const visibleRecordIds = this._data.visibleRecordIds;
         invariant(visibleRecordIds, 'View data is not loaded');
 
-        return visibleRecordIds.map(recordId => {
+        return visibleRecordIds.map((recordId) => {
             const record = this.parentRecordStore.getRecordByIdIfExists(recordId);
             invariant(record, 'Record in view does not exist');
             return record;

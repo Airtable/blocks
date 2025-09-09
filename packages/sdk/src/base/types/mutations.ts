@@ -1,13 +1,13 @@
 /** @module @airtable/blocks: mutations */ /** */
-import {ObjectValues} from '../../shared/private_utils';
-import {TableId, FieldId, ViewId} from '../../shared/types/hyper_ids';
+import {type ObjectValues} from '../../shared/private_utils';
+import {type TableId, type FieldId, type ViewId} from '../../shared/types/hyper_ids';
 import {
     MutationTypesCore,
-    MutationCore,
-    PartialMutationCore,
+    type MutationCore,
+    type PartialMutationCore,
 } from '../../shared/types/mutations_core';
-import {FieldTypeConfig} from '../../shared/types/airtable_interface_core';
-import {NormalizedViewMetadata} from './airtable_interface';
+import {type FieldTypeConfig} from '../../shared/types/airtable_interface_core';
+import {type NormalizedViewMetadata} from './airtable_interface';
 
 /** @hidden */
 export const MutationTypes = Object.freeze({

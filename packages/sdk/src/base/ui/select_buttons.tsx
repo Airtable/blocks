@@ -3,32 +3,32 @@ import {cx} from 'emotion';
 import React, {useEffect, useState} from 'react';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../../shared/error_utils';
-import {createEnum, EnumType, getLocallyUniqueId} from '../../shared/private_utils';
+import {createEnum, type EnumType, getLocallyUniqueId} from '../../shared/private_utils';
 import {
     validateOptions,
     optionValueToString,
-    SelectOption,
-    SelectOptionValue,
+    type SelectOption,
+    type SelectOptionValue,
 } from './select_and_select_buttons_helpers';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
 import cssHelpers from './css_helpers';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {ControlSizeProp, ControlSize, useSelectButtonsSize} from './control_sizes';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type ControlSizeProp, ControlSize, useSelectButtonsSize} from './control_sizes';
 
 /** @internal */
 type SelectButtonsVariant = EnumType<typeof SelectButtonsVariant>;

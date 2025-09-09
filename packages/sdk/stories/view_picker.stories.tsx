@@ -10,7 +10,7 @@ export default {
     component: ViewPicker,
 };
 
-const viewOptions = ['All tasks', 'Grouped by status', 'Incomplete tasks'].map(value => ({
+const viewOptions = ['All tasks', 'Grouped by status', 'Incomplete tasks'].map((value) => ({
     value,
     label: value,
 }));
@@ -42,7 +42,7 @@ function ViewPickerExample() {
     return (
         <Example
             {...sharedModelPickerExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -60,7 +60,7 @@ function ViewPickerExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a view...';
 
                 return (
@@ -74,7 +74,7 @@ function ViewPickerExample() {
                             ...viewOptions,
                         ]}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />
@@ -93,7 +93,7 @@ function ViewPickerSyncedExample() {
     return (
         <Example
             {...sharedModelPickerExampleProps}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
@@ -110,7 +110,7 @@ function ViewPickerSyncedExample() {
                 `;
             }}
         >
-            {values => {
+            {(values) => {
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a view...';
 
                 return (
@@ -124,7 +124,7 @@ function ViewPickerSyncedExample() {
                             ...viewOptions,
                         ]}
                         value={value}
-                        onChange={newValue => setValue(newValue as string)}
+                        onChange={(newValue) => setValue(newValue as string)}
                         {...values}
                         width={CONTROL_WIDTH}
                     />

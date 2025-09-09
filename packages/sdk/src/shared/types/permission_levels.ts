@@ -1,4 +1,4 @@
-import {ObjectValues} from '../private_utils';
+import {type ObjectValues} from '../private_utils';
 
 /** @hidden */
 export const PermissionLevels = Object.freeze({

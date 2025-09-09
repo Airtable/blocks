@@ -1,12 +1,12 @@
 /** @hidden */ /** */
 import * as React from 'react';
 import {invariant} from '../../shared/error_utils';
-import Table from '../models/table';
-import View from '../models/view';
-import Field from '../models/field';
+import type Table from '../models/table';
+import type View from '../models/view';
+import type Field from '../models/field';
 import useWatchable from '../../shared/ui/use_watchable';
-import Select, {SharedSelectBaseProps} from './select';
-import {SelectOptionValue} from './select_and_select_buttons_helpers';
+import Select, {type SharedSelectBaseProps} from './select';
+import {type SelectOptionValue} from './select_and_select_buttons_helpers';
 
 type AnyModel = Table | View | Field;
 
@@ -44,7 +44,7 @@ function ModelPickerSelect<Model extends AnyModel>(
 
     const options = [
         {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
-        ...models.map(model => {
+        ...models.map((model) => {
             return {
                 value: model.id,
                 label: model.name,

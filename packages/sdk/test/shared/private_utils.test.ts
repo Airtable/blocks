@@ -138,13 +138,13 @@ describe('flattenDeep', () => {
 
 describe('keyBy', () => {
     it('converts arrays into objects keyed by the result of a given function', () => {
-        expect(keyBy([1, 2, 3, 4], o => String(o))).toEqual({
+        expect(keyBy([1, 2, 3, 4], (o) => String(o))).toEqual({
             '1': 1,
             '2': 2,
             '3': 3,
             '4': 4,
         });
-        expect(keyBy([{id: 1}, {id: 2}, {id: 3}, {id: 4}], o => String(o.id))).toEqual({
+        expect(keyBy([{id: 1}, {id: 2}, {id: 3}, {id: 4}], (o) => String(o.id))).toEqual({
             '1': {id: 1},
             '2': {id: 2},
             '3': {id: 3},
@@ -161,7 +161,7 @@ describe('keyBy', () => {
                     {id: 3, group: 'a'},
                     {id: 4, group: 'b'},
                 ],
-                o => o.group,
+                (o) => o.group,
             ),
         ).toEqual({
             a: {id: 3, group: 'a'},
@@ -172,8 +172,8 @@ describe('keyBy', () => {
 
 describe('uniqBy', () => {
     it('removes non-unique array elements based on a given function', () => {
-        expect(uniqBy([1, 2, 3, 4], o => o)).toEqual([1, 2, 3, 4]);
-        expect(uniqBy([1, 1, 1, 1], o => o)).toEqual([1]);
+        expect(uniqBy([1, 2, 3, 4], (o) => o)).toEqual([1, 2, 3, 4]);
+        expect(uniqBy([1, 1, 1, 1], (o) => o)).toEqual([1]);
         expect(
             uniqBy(
                 [
@@ -182,7 +182,7 @@ describe('uniqBy', () => {
                     {id: 3, group: 'a'},
                     {id: 4, group: 'b'},
                 ],
-                o => o.group,
+                (o) => o.group,
             ),
         ).toEqual([
             {id: 1, group: 'a'},

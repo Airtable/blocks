@@ -1,24 +1,29 @@
-import {NormalizedSortConfig} from '../models/record_query_result';
-import {TableId, RecordId, ViewId} from '../../shared/types/hyper_ids';
+import {type NormalizedSortConfig} from '../models/record_query_result';
+import {type TableId, type RecordId, type ViewId} from '../../shared/types/hyper_ids';
 import {
-    AirtableInterfaceCore,
-    AppInterface,
-    FieldTypeProviderCore,
-    FieldTypeConfig,
-    SdkInitDataCore,
+    type AirtableInterfaceCore,
+    type AppInterface,
+    type FieldTypeProviderCore,
+    type FieldTypeConfig,
+    type SdkInitDataCore,
 } from '../../shared/types/airtable_interface_core';
-import {BaseSdkMode} from '../../sdk_mode';
-import {FieldData} from './field';
-import {RecordData} from './record';
-import {ViewportSizeConstraint} from './viewport';
-import {AggregatorKey} from './aggregators';
-import {BaseData} from './base';
-import {CursorData} from './cursor';
-import {RecordActionData, RecordActionDataCallback} from './record_action_data';
-import {UndoRedoMode} from './undo_redo';
-import {UpdateFieldOptionsOpts} from './mutations';
-import {GroupData, ViewColorsByRecordIdData, ViewFieldOrderData, GroupLevelData} from './view';
-import {RequestJson, ResponseJson} from './backend_fetch_types';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type FieldData} from './field';
+import {type RecordData} from './record';
+import {type ViewportSizeConstraint} from './viewport';
+import {type AggregatorKey} from './aggregators';
+import {type BaseData} from './base';
+import {type CursorData} from './cursor';
+import {type RecordActionData, type RecordActionDataCallback} from './record_action_data';
+import {type UndoRedoMode} from './undo_redo';
+import {type UpdateFieldOptionsOpts} from './mutations';
+import {
+    type GroupData,
+    type ViewColorsByRecordIdData,
+    type ViewFieldOrderData,
+    type GroupLevelData,
+} from './view';
+import {type RequestJson, type ResponseJson} from './backend_fetch_types';
 
 /** @hidden */
 export enum BlockRunContextType {

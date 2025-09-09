@@ -1,4 +1,4 @@
-import {get, Scale} from '@styled-system/core';
+import {get, type Scale} from '@styled-system/core';
 import {spawnError} from '../../../../shared/error_utils';
 
 /** @internal */

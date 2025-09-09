@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {invariant} from '../error_utils';
-import {SdkMode} from '../../sdk_mode';
+import {type SdkMode} from '../../sdk_mode';
 
 export const SdkContext = React.createContext<SdkMode['SdkT'] | null>(null);
 export const useSdk = <SdkModeT extends SdkMode>(): SdkModeT['SdkT'] => {

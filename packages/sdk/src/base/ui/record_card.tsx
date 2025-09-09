@@ -6,23 +6,23 @@ import {
     isNullOrUndefinedOrEmpty,
     keyBy,
     uniqBy,
-    FlowAnyObject,
+    type FlowAnyObject,
     has,
 } from '../../shared/private_utils';
 import {invariant, spawnError} from '../../shared/error_utils';
-import {AttachmentData} from '../../shared/types/attachment';
+import {type AttachmentData} from '../../shared/types/attachment';
 import {FieldType} from '../../shared/types/field_core';
-import {RecordDef} from '../../shared/types/record';
-import Field from '../models/field';
+import {type RecordDef} from '../../shared/types/record';
+import type Field from '../models/field';
 import Record from '../models/record';
-import View from '../models/view';
-import ViewMetadataQueryResult from '../models/view_metadata_query_result';
-import Sdk from '../sdk';
-import {RecordId} from '../../shared/types/hyper_ids';
+import type View from '../models/view';
+import type ViewMetadataQueryResult from '../models/view_metadata_query_result';
+import type Sdk from '../sdk';
+import {type RecordId} from '../../shared/types/hyper_ids';
 import useWatchable from '../../shared/ui/use_watchable';
 import withHooks from '../../shared/ui/with_hooks';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {BaseSdkMode} from '../../sdk_mode';
+import {type BaseSdkMode} from '../../sdk_mode';
 import colorUtils from '../../shared/color_utils';
 import {baymax} from './baymax_utils';
 import Box from './box';
@@ -30,16 +30,16 @@ import {isCommandModifierKeyEvent} from './key_codes';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     margin,
-    MarginProps,
+    type MarginProps,
 } from './system';
 import {splitStyleProps} from './with_styled_system';
 import useViewMetadata from './use_view_metadata';
 import CellRenderer from './cell_renderer';
-import expandRecord, {ExpandRecordOpts} from './expand_record';
+import expandRecord, {type ExpandRecordOpts} from './expand_record';
 
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
@@ -314,7 +314,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         ) {
             return attachmentCoverField;
         } else if (attachmentCoverField === undefined) {
-            const firstAttachmentFieldInView = fieldsToUse.find(field => {
+            const firstAttachmentFieldInView = fieldsToUse.find((field) => {
                 return this._isAttachment(field);
             });
             if (firstAttachmentFieldInView === undefined) {
@@ -341,12 +341,13 @@ export class RecordCard extends React.Component<RecordCardProps> {
                 const airtableInterface = this.props.sdk.__airtableInterface;
                 const appInterface = this.props.sdk.__appInterface;
 
-                const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                    appInterface,
-                    cellValue,
-                    null,
-                    field._data,
-                );
+                const validationResult =
+                    airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                        appInterface,
+                        cellValue,
+                        null,
+                        field._data,
+                    );
                 if (!validationResult.isValid) {
                     throw spawnError(validationResult.reason);
                 }
@@ -374,7 +375,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
 
         let fieldsToUse: Array<Field>;
         if (fields) {
-            fieldsToUse = fields.filter(field => !field.isDeleted);
+            fieldsToUse = fields.filter((field) => !field.isDeleted);
         } else if (viewMetadata && !viewMetadata.isDeleted) {
             fieldsToUse = viewMetadata.visibleFields;
         } else if (record && record instanceof Record && !record.isDeleted) {
@@ -384,13 +385,13 @@ export class RecordCard extends React.Component<RecordCardProps> {
             console.warn('RecordCard: no fields, view, or record, so rendering an empty card'); // eslint-disable-line no-console
             fieldsToUse = [];
         }
-        return uniqBy(fieldsToUse, field => field.id);
+        return uniqBy(fieldsToUse, (field) => field.id);
     }
     /** @internal */
     _getPossibleFieldsForCard(): Array<Field> {
         const fields = this._getFields();
 
-        return fields.filter(field => {
+        return fields.filter((field) => {
             return !field.isPrimaryField;
         });
     }
@@ -449,9 +450,9 @@ export class RecordCard extends React.Component<RecordCardProps> {
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
-        const fieldsById = keyBy(fieldsToUse, o => o.id);
+        const fieldsById = keyBy(fieldsToUse, (o) => o.id);
 
-        return widthAndFieldIdArray.map(widthAndFieldId => {
+        return widthAndFieldIdArray.map((widthAndFieldId) => {
             const field = fieldsById[widthAndFieldId.fieldId];
             return (
                 <CellValueAndFieldLabel
@@ -466,17 +467,8 @@ export class RecordCard extends React.Component<RecordCardProps> {
     }
     /** @hidden */
     render() {
-        const {
-            record,
-            view,
-            width,
-            height,
-            onClick,
-            onMouseEnter,
-            onMouseLeave,
-            className,
-            style,
-        } = this.props;
+        const {record, view, width, height, onClick, onMouseEnter, onMouseLeave, className, style} =
+            this.props;
 
         if (record && record instanceof Record && record.isDeleted) {
             return null;
@@ -619,7 +611,7 @@ export default withHooks<
     {viewMetadata: ViewMetadataQueryResult | null; sdk: Sdk},
     RecordCardProps,
     RecordCard
->(RecordCard, props => {
+>(RecordCard, (props) => {
     const {styleProps, nonStyleProps} = splitStyleProps<
         Omit<RecordCardProps, 'viewMetadata' | 'sdk'>,
         RecordCardStyleProps

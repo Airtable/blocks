@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: Dialog */ /** */
 import * as React from 'react';
-import Dialog, {DialogStyleProps} from './dialog';
+import Dialog, {type DialogStyleProps} from './dialog';
 import Heading from './heading';
 import Text from './text';
 import Button from './button';

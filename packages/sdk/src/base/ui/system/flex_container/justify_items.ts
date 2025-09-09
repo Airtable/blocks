@@ -1,8 +1,8 @@
 /** @hidden */ /** */
 
-import {system, Config} from '@styled-system/core';
-import {JustifyItemsProperty} from '../utils/csstype';
-import {OptionalResponsiveProp} from '../utils/types';
+import {system, type Config} from '@styled-system/core';
+import {type JustifyItemsProperty} from '../utils/csstype';
+import {type OptionalResponsiveProp} from '../utils/types';
 
 /** @hidden */
 export interface JustifyItemsProps {

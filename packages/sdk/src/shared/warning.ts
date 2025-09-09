@@ -1,6 +1,6 @@
-import {SdkMode} from '../sdk_mode';
-import {ObjectMap} from './private_utils';
-import {BlockSdkCore} from './sdk_core';
+import {type SdkMode} from '../sdk_mode';
+import {type ObjectMap} from './private_utils';
+import {type BlockSdkCore} from './sdk_core';
 
 const usedWarnings: ObjectMap<string, true> = {};
 

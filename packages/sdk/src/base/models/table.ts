@@ -1,23 +1,23 @@
 /** @module @airtable/blocks/models: Table */ /** */
 import {TableCore, WatchableTableKeysCore} from '../../shared/models/table_core';
-import {ViewType} from '../types/view';
+import {type ViewType} from '../types/view';
 import {spawnError} from '../../shared/error_utils';
-import {entries, cast, isEnumValue, ObjectValues} from '../../shared/private_utils';
-import BlockSdk from '../sdk';
-import {FieldId, ViewId} from '../../shared/types/hyper_ids';
-import {TableData} from '../types/table';
-import {FieldType, FieldOptions} from '../../shared/types/field_core';
+import {entries, cast, isEnumValue, type ObjectValues} from '../../shared/private_utils';
+import type BlockSdk from '../sdk';
+import {type FieldId, type ViewId} from '../../shared/types/hyper_ids';
+import {type TableData} from '../types/table';
+import {type FieldType, type FieldOptions} from '../../shared/types/field_core';
 import {MutationTypes} from '../types/mutations';
-import {BaseSdkMode} from '../../sdk_mode';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {ChangedPathsForType} from '../../shared/models/base_core';
-import RecordStore from './record_store';
-import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
+import {type BaseSdkMode} from '../../sdk_mode';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type ChangedPathsForType} from '../../shared/models/base_core';
+import type RecordStore from './record_store';
+import RecordQueryResult, {type RecordQueryResultOpts} from './record_query_result';
 import Field from './field';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import View from './view';
 import ObjectPool from './object_pool';
-import Base from './base';
+import type Base from './base';
 
 export const WatchableTableKeys = Object.freeze({
     ...WatchableTableKeysCore,
@@ -83,10 +83,11 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
         view?: View | null;
     }): Promise<{[key: string]: unknown}> {
         const viewId = opts && opts.view ? opts.view.id : null;
-        const cellValuesByFieldId = await this._sdk.__airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
-            this._id,
-            viewId,
-        );
+        const cellValuesByFieldId =
+            await this._sdk.__airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
+                this._id,
+                viewId,
+            );
         return cellValuesByFieldId;
     }
 
@@ -101,7 +102,7 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
      */
     get views(): Array<View> {
         const views: Array<View> = [];
-        this._data.viewOrder.forEach(viewId => {
+        this._data.viewOrder.forEach((viewId) => {
             const view = this.getViewById(viewId);
             views.push(view);
         });
@@ -337,7 +338,7 @@ class Table extends TableCore<BaseSdkMode, WatchableTableKey> {
         }
 
         return (
-            this.views.find(view => {
+            this.views.find((view) => {
                 return allowedViewTypes.includes(view.type);
             }) ?? null
         );

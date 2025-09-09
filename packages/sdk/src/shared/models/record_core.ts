@@ -1,7 +1,13 @@
-import {SdkMode} from '../../sdk_mode';
-import {cloneDeep, FlowAnyObject, isEnumValue, isObjectEmpty, ObjectValues} from '../private_utils';
+import {type SdkMode} from '../../sdk_mode';
+import {
+    cloneDeep,
+    type FlowAnyObject,
+    isEnumValue,
+    isObjectEmpty,
+    type ObjectValues,
+} from '../private_utils';
 import {invariant} from '../error_utils';
-import {FieldId, RecordId} from '../types/hyper_ids';
+import {type FieldId, type RecordId} from '../types/hyper_ids';
 import {FieldType} from '../types/field_core';
 import AbstractModel from './abstract_model';
 import {FieldCore} from './field_core';
@@ -17,7 +23,7 @@ type WatchableRecordKeyCore = ObjectValues<typeof WatchableRecordKeysCore>;
 /** @hidden */
 export abstract class RecordCore<
     SdkModeT extends SdkMode,
-    WatchableKeys extends string = WatchableRecordKeyCore
+    WatchableKeys extends string = WatchableRecordKeyCore,
 > extends AbstractModel<SdkModeT, SdkModeT['RecordDataT'], WatchableRecordKeyCore | WatchableKeys> {
     /** @internal */
     static _className = 'RecordCore';

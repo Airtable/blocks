@@ -45,7 +45,7 @@ function ButtonExample() {
             }}
             renderCodeFn={({hasLabel, ...values}) => {
                 const props = createJsxPropsStringFromValuesMap(values as any, {
-                    icon: value => (value ? 'edit' : null),
+                    icon: (value) => (value ? 'edit' : null),
                 });
 
                 const ariaLabel = hasLabel ? '' : 'aria-label="Edit"';
@@ -249,7 +249,7 @@ export const Truncate = {
 export const Display = {
     render: () => (
         <Box padding={4}>
-            {(['flex', 'inline-flex', 'none'] as const).map(display => (
+            {(['flex', 'inline-flex', 'none'] as const).map((display) => (
                 <Button key={display} display={display} margin={2}>
                     {display}
                 </Button>
@@ -262,7 +262,7 @@ export const Ref = {
     render: () => (
         <React.Fragment>
             <Button
-                ref={node => {
+                ref={(node) => {
                     // eslint-disable-next-line no-console
                     console.log(node);
                 }}

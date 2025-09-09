@@ -1,4 +1,4 @@
-import {Color} from '../../shared/colors';
+import {type Color} from '../../shared/colors';
 import useTheme from './theme/use_theme';
 
 /** @internal */

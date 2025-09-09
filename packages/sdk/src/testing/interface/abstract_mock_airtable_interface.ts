@@ -1,23 +1,23 @@
+import EventEmitter from 'events';
 import {
-    AppInterface,
-    FieldTypeConfig,
-    FieldTypeProviderCore,
-    GlobalConfigHelpers,
+    type AppInterface,
+    type FieldTypeConfig,
+    type FieldTypeProviderCore,
+    type GlobalConfigHelpers,
 } from '../../shared/types/airtable_interface_core';
 import {
-    AirtableInterface,
-    SdkInitData,
-    IdGenerator,
-    BlockInstallationPageElementCustomPropertyForAirtableInterface,
+    type AirtableInterface,
+    type SdkInitData,
+    type IdGenerator,
+    type BlockInstallationPageElementCustomPropertyForAirtableInterface,
 } from '../../interface/types/airtable_interface';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
-import {cloneDeep, ObjectMap} from '../../shared/private_utils';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {cloneDeep, type ObjectMap} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
-import {ModelChange} from '../../shared/types/base_core';
-import {FieldData} from '../../interface/types/field';
-import {PermissionCheckResult} from '../../shared/types/mutations_core';
-import {Mutation} from '../../interface/types/mutations';
-const EventEmitter = require('events');
+import {type ModelChange} from '../../shared/types/base_core';
+import {type FieldData} from '../../interface/types/field';
+import {type PermissionCheckResult} from '../../shared/types/mutations_core';
+import {type Mutation} from '../../interface/types/mutations';
 
 /** @internal */
 const fieldTypeProvider: FieldTypeProviderCore = {
@@ -79,8 +79,10 @@ const idGenerator: IdGenerator = {
  *
  * @hidden
  */
-export abstract class AbstractMockAirtableInterface extends EventEmitter
-    implements AirtableInterface {
+export abstract class AbstractMockAirtableInterface
+    extends EventEmitter
+    implements AirtableInterface
+{
     sdkInitData!: SdkInitData;
 
     private _initData: SdkInitData;
@@ -141,7 +143,7 @@ export abstract class AbstractMockAirtableInterface extends EventEmitter
         return Promise.resolve(true);
     }
 
-    subscribeToModelUpdates(fn: Function) {
+    subscribeToModelUpdates(fn: (...args: any[]) => void) {
         this.on('modelupdates', fn);
     }
 

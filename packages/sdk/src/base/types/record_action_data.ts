@@ -1,4 +1,4 @@
-import {TableId, RecordId, ViewId} from '../../shared/types/hyper_ids';
+import {type TableId, type RecordId, type ViewId} from '../../shared/types/hyper_ids';
 
 /**
  * The data format used by {@link useRecordActionData} and {@link registerRecordActionDataCallback}

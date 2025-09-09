@@ -1,6 +1,6 @@
 import {ViewType} from '../../../src/base/types/view';
 import {FieldType} from '../../../src/shared/types/field_core';
-import {FixtureData} from './fixture_data';
+import {type FixtureData} from './fixture_data';
 
 const linkedRecords: FixtureData = {
     base: {

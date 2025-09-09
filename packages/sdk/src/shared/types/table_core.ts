@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Table */ /** */
-import {TableId} from './hyper_ids';
+import {type TableId} from './hyper_ids';
 
 /** @hidden */
 export type TableLock = unknown;

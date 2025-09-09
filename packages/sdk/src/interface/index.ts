@@ -1,6 +1,6 @@
 import {__injectSdkIntoWarning} from '../shared/warning';
 import getAirtableInterface from '../injected/airtable_interface';
-import {InterfaceSdkMode} from '../sdk_mode';
+import {type InterfaceSdkMode} from '../sdk_mode';
 import {InterfaceBlockSdk} from './sdk';
 import {__injectSdkIntoInitializeBlock} from './ui/initialize_block';
 

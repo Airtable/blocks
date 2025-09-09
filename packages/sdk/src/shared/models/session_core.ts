@@ -1,11 +1,11 @@
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
-import {CollaboratorData} from '../types/collaborator';
-import {PermissionLevel} from '../types/permission_levels';
-import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
-import {UserId} from '../types/hyper_ids';
-import {SdkMode} from '../../sdk_mode';
-import {ModelChange} from '../types/base_core';
+import {type CollaboratorData} from '../types/collaborator';
+import {type PermissionLevel} from '../types/permission_levels';
+import {isEnumValue, entries, type ObjectValues, type ObjectMap} from '../private_utils';
+import {type UserId} from '../types/hyper_ids';
+import {type SdkMode} from '../../sdk_mode';
+import {type ModelChange} from '../types/base_core';
 import AbstractModel from './abstract_model';
 
 /** @hidden */
@@ -52,11 +52,8 @@ export abstract class SessionCore<SdkModeT extends SdkMode> extends AbstractMode
         super(sdk, 'session');
         this._airtableInterface = sdk.__airtableInterface;
 
-        const {
-            permissionLevel,
-            currentUserId,
-            enabledFeatureNames,
-        } = this._airtableInterface.sdkInitData.baseData;
+        const {permissionLevel, currentUserId, enabledFeatureNames} =
+            this._airtableInterface.sdkInitData.baseData;
         this._sessionData = {
             permissionLevel,
             currentUserId,

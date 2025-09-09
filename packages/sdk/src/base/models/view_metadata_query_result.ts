@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/models: View */ /** */
-import Sdk from '../sdk';
-import {FieldId} from '../../shared/types/hyper_ids';
-import {NormalizedGroupLevel} from '../types/airtable_interface';
+import type Sdk from '../sdk';
+import {type FieldId} from '../../shared/types/hyper_ids';
+import {type NormalizedGroupLevel} from '../types/airtable_interface';
 import {invariant} from '../../shared/error_utils';
-import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../../shared/private_utils';
+import {isEnumValue, getLocallyUniqueId, type ObjectValues} from '../../shared/private_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
-import ViewDataStore from './view_data_store';
-import View from './view';
-import Field from './field';
+import type ViewDataStore from './view_data_store';
+import type View from './view';
+import type Field from './field';
 
 const WatchableViewMetadataKeys = {
     allFields: 'allFields' as const,
@@ -173,7 +173,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     get allFields(): Array<Field> {
         const allFieldIds = this._data.allFieldIds;
         invariant(allFieldIds, 'view meta data is not loaded');
-        return allFieldIds.map(fieldId => this.parentView.parentTable.getFieldById(fieldId));
+        return allFieldIds.map((fieldId) => this.parentView.parentTable.getFieldById(fieldId));
     }
 
     /**
@@ -182,7 +182,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     get visibleFields(): Array<Field> {
         const visibleFieldIds = this._data.visibleFieldIds;
         invariant(visibleFieldIds, 'view meta data is not loaded');
-        return visibleFieldIds.map(fieldId => this.parentView.parentTable.getFieldById(fieldId));
+        return visibleFieldIds.map((fieldId) => this.parentView.parentTable.getFieldById(fieldId));
     }
 
     /**
@@ -193,7 +193,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     get groupLevels(): GroupLevels | null {
         const groupLevels = this._data.groupLevels;
         return groupLevels
-            ? groupLevels.map(singleConfig => ({
+            ? groupLevels.map((singleConfig) => ({
                   ...singleConfig,
                   field: this.parentView.parentTable.getFieldById(singleConfig.fieldId),
               }))

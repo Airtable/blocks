@@ -1,10 +1,10 @@
 /** @hidden */ /** */
 
 
-import {ModelChange} from '../shared/types/base_core';
-import {GlobalConfigUpdate} from '../shared/types/global_config';
+import {type ModelChange} from '../shared/types/base_core';
+import {type GlobalConfigUpdate} from '../shared/types/global_config';
 import {BlockSdkCore} from '../shared/sdk_core';
-import {BaseSdkMode} from '../sdk_mode';
+import {type BaseSdkMode} from '../sdk_mode';
 import Viewport from './viewport';
 import Base from './models/base';
 import Session from './models/session';
@@ -13,8 +13,8 @@ import Cursor from './models/cursor';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {PerformRecordAction} from './perform_record_action';
-import {AirtableInterface, BlockRunContext} from './types/airtable_interface';
-import {RequestJson, ResponseJson} from './types/backend_fetch_types';
+import {type AirtableInterface, type BlockRunContext} from './types/airtable_interface';
+import {type RequestJson, type ResponseJson} from './types/backend_fetch_types';
 
 /** @hidden */
 type UpdateBatcher = (applyUpdates: () => void) => void;
@@ -83,8 +83,8 @@ export default class BaseBlockSdk extends BlockSdkCore<BaseSdkMode> {
             this,
             this.session,
             this.base,
-            changes => this.__applyModelChanges(changes),
-            updates => this.__applyGlobalConfigUpdates(updates),
+            (changes) => this.__applyModelChanges(changes),
+            (updates) => this.__applyGlobalConfigUpdates(updates),
         );
     }
     /** @internal */

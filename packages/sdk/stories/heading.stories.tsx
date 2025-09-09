@@ -29,7 +29,7 @@ function HeadingExample() {
                     options: ['default', 'light'],
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 let sizeOutOfBoundsComment;
                 if (values.variant === 'caps' && !has(theme.headingStyles.caps, values.size)) {
@@ -49,7 +49,7 @@ function HeadingExample() {
                 `;
             }}
         >
-            {values => <Heading {...values}>The brown fox jumped over the lazy dog</Heading>}
+            {(values) => <Heading {...values}>The brown fox jumped over the lazy dog</Heading>}
         </Example>
     );
 }
@@ -68,7 +68,7 @@ export const As = {
                 'h4' as const,
                 'h5' as const,
                 'h6' as const,
-            ].map(as => (
+            ].map((as) => (
                 <Heading key={as} as={as}>
                     {as}
                 </Heading>
@@ -81,7 +81,7 @@ export const Ref = {
     render: () => (
         <React.Fragment>
             <Heading
-                ref={node => {
+                ref={(node) => {
                     // eslint-disable-next-line no-console
                     console.log(node);
                 }}

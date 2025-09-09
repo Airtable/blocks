@@ -10,17 +10,17 @@ import {FormFieldContext} from './use_form_field';
 import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
 } from './system';
 
 /**

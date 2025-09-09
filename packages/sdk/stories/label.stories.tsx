@@ -28,7 +28,7 @@ function LabelExample() {
                     options: ['default', 'light'],
                 },
             }}
-            renderCodeFn={values => {
+            renderCodeFn={(values) => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 return `
                     import {Label, Box, Input} from '@airtable/blocks/base/ui';
@@ -47,12 +47,12 @@ function LabelExample() {
                 `;
             }}
         >
-            {values => (
+            {(values) => (
                 <Box width={CONTROL_WIDTH}>
                     <Label htmlFor="my-input" {...values}>
                         Label
                     </Label>
-                    <Input id="my-input" value={value} onChange={e => setValue(e.target.value)} />
+                    <Input id="my-input" value={value} onChange={(e) => setValue(e.target.value)} />
                 </Box>
             )}
         </Example>
@@ -89,7 +89,7 @@ export const Ref = {
     render: () => (
         <React.Fragment>
             <Label
-                ref={node => {
+                ref={(node) => {
                     // eslint-disable-next-line no-console
                     console.log(node);
                 }}

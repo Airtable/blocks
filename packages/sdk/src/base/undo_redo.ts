@@ -1,7 +1,7 @@
 import {values} from '../shared/private_utils';
 import {spawnError} from '../shared/error_utils';
-import {UndoRedoModes, UndoRedoMode} from './types/undo_redo';
-import {AirtableInterface} from './types/airtable_interface';
+import {UndoRedoModes, type UndoRedoMode} from './types/undo_redo';
+import {type AirtableInterface} from './types/airtable_interface';
 
 /** @hidden */
 class UndoRedo {

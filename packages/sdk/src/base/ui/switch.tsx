@@ -2,29 +2,29 @@
 import {cx} from 'emotion';
 import React from 'react';
 import {compose} from '@styled-system/core';
-import {createEnum, EnumType} from '../../shared/private_utils';
+import {createEnum, type EnumType} from '../../shared/private_utils';
 import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
-    MaxWidthProps,
+    type MaxWidthProps,
     minWidth,
-    MinWidthProps,
+    type MinWidthProps,
     width,
-    WidthProps,
+    type WidthProps,
     flexItemSet,
-    FlexItemSetProps,
+    type FlexItemSetProps,
     positionSet,
-    PositionSetProps,
+    type PositionSetProps,
     spacingSet,
-    SpacingSetProps,
+    type SpacingSetProps,
     display,
     backgroundColor,
-    BackgroundColorProps,
+    type BackgroundColorProps,
 } from './system';
-import {OptionalResponsiveProp} from './system/utils/types';
-import {TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {type OptionalResponsiveProp} from './system/utils/types';
+import {type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import useTheme from './theme/use_theme';
-import {useSwitchSize, ControlSizeProp, ControlSize} from './control_sizes';
+import {useSwitchSize, type ControlSizeProp, ControlSize} from './control_sizes';
 
 /**
  * Variants for the {@link Switch} component:

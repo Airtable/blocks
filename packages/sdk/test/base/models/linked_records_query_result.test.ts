@@ -1,8 +1,8 @@
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import {__reset, __sdk as sdk} from '../../../src/base';
-import Record from '../../../src/base/models/record';
-import RecordQueryResult from '../../../src/base/models/record_query_result';
-import LinkedRecordsQueryResult from '../../../src/base/models/linked_records_query_result';
+import type Record from '../../../src/base/models/record';
+import type RecordQueryResult from '../../../src/base/models/record_query_result';
+import type LinkedRecordsQueryResult from '../../../src/base/models/linked_records_query_result';
 import {simulateTimersAndClearAfterEachTest, waitForWatchKeyAsync} from '../../test_helpers';
 import getAirtableInterface from '../../../src/injected/airtable_interface';
 
@@ -28,7 +28,7 @@ describe('LinkedRecordQueryResult', () => {
     simulateTimersAndClearAfterEachTest();
 
     beforeEach(async () => {
-        mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(tableId => {
+        mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation((tableId) => {
             const first = tableId === 'tblFirst';
             const recId = first ? 'recA' : 'recB';
             const fieldId = first ? 'fld1stLinked' : 'fld2ndLinked';
@@ -57,7 +57,7 @@ describe('LinkedRecordQueryResult', () => {
         query = await sdk.base.tables[0].selectRecordsAsync();
         record = query.getRecordById('recA');
 
-        return new Promise<void>(resolve => {
+        return new Promise<void>((resolve) => {
             sdk.cursor.watch('isDataLoaded', function init() {
                 sdk.cursor.unwatch('isDataLoaded', init);
                 resolve();
@@ -164,7 +164,7 @@ describe('LinkedRecordQueryResult', () => {
 
         it('false following change in field type (unloaded)', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 linked.watch('isDataLoaded', resolve);
                 linked.unloadData();
             });
@@ -371,7 +371,7 @@ describe('LinkedRecordQueryResult', () => {
 
         it('reports an error when the result has been unloaded', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 linked.watch('isDataLoaded', resolve);
 
                 linked.unloadData();
@@ -416,7 +416,7 @@ describe('LinkedRecordQueryResult', () => {
 
         it('reports an error when the result has been unloaded', async () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fld1stLinked');
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 linked.watch('isDataLoaded', resolve);
 
                 linked.unloadData();
@@ -531,7 +531,7 @@ describe('LinkedRecordQueryResult', () => {
 
             await linked.loadDataAsync();
 
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 linked.watch('isDataLoaded', resolve);
 
                 linked.unloadData(); 
@@ -544,7 +544,7 @@ describe('LinkedRecordQueryResult', () => {
 
             await linked.loadDataAsync();
 
-            await new Promise(resolve => {
+            await new Promise((resolve) => {
                 linked.watch('isDataLoaded', resolve);
 
                 linked.unloadData();
@@ -1112,7 +1112,7 @@ describe('LinkedRecordQueryResult', () => {
             it('triggers loading', async () => {
                 const linked2 = record.selectLinkedRecordsFromCell('fld1stLinked');
 
-                const result = await new Promise(resolve => {
+                const result = await new Promise((resolve) => {
                     linked2.watch(
                         'cellValuesInField:fld2ndPrimary',
                         (...args: [LinkedRecordsQueryResult, string]) => resolve(args),

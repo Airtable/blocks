@@ -1,31 +1,31 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import Colors, {Color} from '../../shared/colors';
-import Sdk from '../sdk';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
+import Colors, {type Color} from '../../shared/colors';
+import type Sdk from '../sdk';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {FieldType} from '../../shared/types/field_core';
 import {
     isEnumValue,
     assertEnumValue,
     getLocallyUniqueId,
-    ObjectValues,
-    ObjectMap,
+    type ObjectValues,
+    type ObjectMap,
     cast,
-    FlowAnyFunction,
-    FlowAnyObject,
+    type FlowAnyFunction,
+    type FlowAnyObject,
 } from '../../shared/private_utils';
 import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../../shared/error_utils';
-import Watchable from '../../shared/watchable';
-import {NormalizedGroupLevel} from '../types/airtable_interface';
+import type Watchable from '../../shared/watchable';
+import {type NormalizedGroupLevel} from '../types/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
-import Table from './table';
+import type Table from './table';
 import Field from './field';
-import Record from './record';
-import RecordStore from './record_store';
+import type Record from './record';
+import type RecordStore from './record_store';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
     serialize as serializeColorMode,
-    RecordColorMode,
+    type RecordColorMode,
 } from './record_coloring';
 
 const WatchableRecordQueryResultKeys = Object.freeze({
@@ -277,7 +277,7 @@ export function normalizeSortsOrGroups(
     if (sortsOrGroups === undefined || sortsOrGroups === null) {
         return sortsOrGroups;
     }
-    return sortsOrGroups.map(sortOrGroup => _normalizeSortOrGroup(table, sortOrGroup));
+    return sortsOrGroups.map((sortOrGroup) => _normalizeSortOrGroup(table, sortOrGroup));
 }
 
 /**
@@ -495,7 +495,7 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
      * Can be watched.
      */
     get records(): Array<Record> {
-        return this.recordIds.map(recordId => {
+        return this.recordIds.map((recordId) => {
             const record = this._recordStore.getRecordByIdIfExists(recordId);
             invariant(record, 'Record missing in table');
             return record;
@@ -669,8 +669,8 @@ abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncDa
             this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors],
             'method may only be called when `recordColors` key has been watched',
         );
-        const watchCount = this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors]
-            .length;
+        const watchCount =
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors].length;
         if (!this._recordColorChangeHandler && watchCount >= 1) {
             this._watchRecordColors();
         }

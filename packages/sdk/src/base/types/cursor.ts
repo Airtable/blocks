@@ -1,5 +1,5 @@
-import {ObjectMap} from '../../shared/private_utils';
-import {FieldId, RecordId} from '../../shared/types/hyper_ids';
+import {type ObjectMap} from '../../shared/private_utils';
+import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 
 /** @hidden */
 export interface CursorData {

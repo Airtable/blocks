@@ -10,3 +10,6 @@
 /packages/blocks-docs/docs-interface-blocks.json
 /packages/cli-next/test/fixtures/
 /packages/webpack-bundler/test/fixtures/
+flow-typed
+.nyc_output
+.test-tmp
