@@ -1,0 +1,64 @@
+{
+    "name": "@airtable/blocks-esbuild-bundler",
+    "description": "Esbuild bundler for @airtable/blocks-cli",
+    "version": "0.0.1",
+    "homepage": "https://airtable.com/developers/blocks",
+    "author": "Airtable",
+    "peerDependencies": {
+        "@airtable/blocks-cli": "^2.0.10"
+    },
+    "dependencies": {
+        "@airtable/blocks-cli": "^2.0.10",
+        "esbuild": "^0.25.9"
+    },
+    "devDependencies": {
+        "@oclif/config": "^1.17.0",
+        "@oclif/test": "^1.2.7",
+        "@types/mocha": "^8.0.4",
+        "@types/node": "^18.19.33",
+        "@types/node-fetch": "^2.6.11",
+        "@typescript-eslint/eslint-plugin": "^7.13.0",
+        "@typescript-eslint/parser": "^7.13.0",
+        "chai": "^4.4.1",
+        "eslint": "^9.5.0",
+        "eslint-plugin-import": "^2.29.1",
+        "mocha": "^11.0.1",
+        "node-fetch": "^2.6.7",
+        "nyc": "^15.1.0",
+        "ts-node": "10.9.2",
+        "typescript": "^5.4.5"
+    },
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "files": [
+        "/dist"
+    ],
+    "license": "UNLICENSED",
+    "main": "dist/index.js",
+    "scripts": {
+        "ci": "echo '--- esbuild-bundler' && (cd ../cli-next && yarn build) && yarn test",
+        "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts --config .eslintrc.js",
+        "pack:typescript": "rm -rf dist && rm -f tsconfig.tsbuildinfo && tsc",
+        "prepack": "yarn install && yarn run pack:typescript",
+        "test": "yarn lint && yarn test:types && yarn test:unit",
+        "test:cov-report": "nyc --reporter=text --reporter=html --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+        "test:types": "tsc --project tsconfig-testing.json",
+        "test:unit": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+        "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
+    },
+    "types": "dist/index.d.ts",
+    "release-it": {
+        "git": {
+            "tagName": "@airtable/blocks-esbuild-bundler@${version}",
+            "commitMessage": "Release @airtable/blocks-esbuild-bundler@${version}"
+        },
+        "hooks": {
+            "before:init": "../../bin/check-repo-for-release",
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks-esbuild-bundler@${version}"
+        },
+        "publishConfig": {
+            "access": "public"
+        }
+    }
+}
