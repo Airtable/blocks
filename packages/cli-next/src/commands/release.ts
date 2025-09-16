@@ -250,7 +250,6 @@ export default class Release extends AirtableCommand {
         const build = await airtableApi.createBuildAsync({
             s3,
             frontendBundle,
-            backendBundle: null,
         });
 
         cli.action.stop();

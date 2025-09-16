@@ -10,8 +10,7 @@ import {
 } from './airtable_api';
 import {FetchInit} from './fetch_api';
 import {S3SignedUploadInfo} from './s3_api';
-import {invariant, spawnUserError} from './error_utils';
-import {ReleaseCommandErrorInfo, ReleaseCommandErrorName} from './release_messages';
+import {invariant} from './error_utils';
 
 export interface AirtableBlockV2ApiBaseOptions extends AirtableApiOptions {
     blockId: string;
@@ -82,14 +81,7 @@ export class AirtableBlockV2Api extends AirtableApi {
     async createBuildAsync({
         s3,
         frontendBundle,
-        backendBundle,
     }: CreateBuildOptions): Promise<CreateBuildResponseJson> {
-        if (backendBundle) {
-            throw spawnUserError<ReleaseCommandErrorInfo>({
-                type: ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK2_BACKEND_UNSUPPORTED,
-            });
-        }
-
         const build = await this._blockBuildStartAsync();
 
         await s3.uploadBundleAsync({
@@ -100,16 +92,7 @@ export class AirtableBlockV2Api extends AirtableApi {
         return build;
     }
 
-    async createReleaseAsync({
-        buildId,
-        deployId,
-        developerComment,
-    }: CreateReleaseOptions): Promise<void> {
-        if (deployId) {
-            throw spawnUserError<ReleaseCommandErrorInfo>({
-                type: ReleaseCommandErrorName.RELEASE_COMMAND_BLOCK2_BACKEND_UNSUPPORTED,
-            });
-        }
+    async createReleaseAsync({buildId, developerComment}: CreateReleaseOptions): Promise<void> {
         invariant(developerComment, 'developerComment is required for releasing a v2 block');
         await this.blockCreateReleaseAsync({
             buildId,

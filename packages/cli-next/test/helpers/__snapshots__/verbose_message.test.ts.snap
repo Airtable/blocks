@@ -86,8 +86,6 @@ exports[`verbose_message formats initCommandUnknownError 1`] = `"❌ Something f
 
 exports[`verbose_message formats releaseCommandBlock1CommentUnsupported 1`] = `"❌ This block cannot be released with a comment. Run [36m[1mblock release[22m[39m without [36m[1m--comment[22m[39m."`;
 
-exports[`verbose_message formats releaseCommandBlock2BackendUnsupported 1`] = `"❌ V2 blocks does not support backend routes."`;
-
 exports[`verbose_message formats releaseCommandDeveloperCommentPrompt 1`] = `"Enter a comment describing the changes in this release"`;
 
 exports[`verbose_message formats remoteCommandAddedNew 1`] = `"✅ Successfully added a new remote at .block/newremote.remote.json!"`;

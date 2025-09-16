@@ -12,15 +12,12 @@ interface EntryPointOptions {
     destination: string;
     userEntryPoint: string;
     gitHash?: string;
-    blockBaseUrl?: string;
 }
 
 export async function renderEntryPointAsync(
     sys: System,
-    {mode, destination, userEntryPoint, gitHash, blockBaseUrl}: EntryPointOptions,
+    {mode, destination, userEntryPoint, gitHash}: EntryPointOptions,
 ): Promise<string> {
-    const isDevelopment = mode === 'development';
-    const ifDevelopmentMode = (tmpl: () => string) => (isDevelopment ? tmpl() : '');
     const frontendEntryModulePath = `./${sys.path.relative(
         sys.path.dirname(destination),
         userEntryPoint,
@@ -46,18 +43,6 @@ window['${GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function runBlock() {
         return;
     }
     didRun = true;
-    ${ifDevelopmentMode(
-        () =>
-            // In development mode, make sure requests to relative paths get
-            // routed to the local backend (instead of the block router).
-            `
-    var blockUrl = ${JSON.stringify(blockBaseUrl)};
-
-    var baseTag = document.createElement('base');
-    baseTag.setAttribute('href', blockUrl);
-    document.head.appendChild(baseTag);
-`,
-    )}
     // Requiring the entry point file runs user code. Be sure to do any setup
     // above this line.
     require(${JSON.stringify(frontendEntryModulePath)});

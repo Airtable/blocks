@@ -9,7 +9,7 @@ import {
     FinalizeCodeUploadResponse,
 } from './airtable_api';
 import {FetchInit} from './fetch_api';
-import {invariant, spawnUserError} from './error_utils';
+import {spawnUserError} from './error_utils';
 import {ReleaseCommandErrorInfo, ReleaseCommandErrorName} from './release_messages';
 
 export interface AirtableLegacyBlockApiBaseOptions extends AirtableApiOptions {
@@ -139,10 +139,9 @@ export class AirtableLegacyBlockApi extends AirtableApi {
     async createBuildAsync({
         s3,
         frontendBundle,
-        backendBundle,
     }: CreateBuildOptions): Promise<CreateBuildResponseJson> {
         const build = await this._blockBuildStartAsync({
-            hasBackend: backendBundle !== null,
+            hasBackend: false,
         });
 
         try {
@@ -150,16 +149,6 @@ export class AirtableLegacyBlockApi extends AirtableApi {
                 fileBuffer: frontendBundle,
                 uploadInfo: build.frontendBundleS3UploadInfo,
             });
-            if (backendBundle !== null) {
-                invariant(
-                    build.backendDeploymentPackageS3UploadInfo !== null,
-                    'Missing backend s3 upload info when uploading backend bundle',
-                );
-                await s3.uploadBundleAsync({
-                    fileBuffer: backendBundle,
-                    uploadInfo: build.backendDeploymentPackageS3UploadInfo,
-                });
-            }
         } catch (err) {
             await this.blockBuildFailedAsync({
                 buildId: build.buildId,

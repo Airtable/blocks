@@ -25,13 +25,14 @@ export type BuildState = BuildStateStart | BuildStateBuilding | BuildStateBuilt 
 
 export interface RunDevServerOptions {
     port: number;
-    liveReload?: {
-        https?: boolean;
+    liveReload: {
+        https: boolean;
         port: number;
     };
     mode: 'development' | 'production';
     context: string;
     entry: string;
+    tmpPath: string;
 }
 
 export interface RunDevServerMethods {

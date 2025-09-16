@@ -101,7 +101,6 @@ export interface AirtableApiOptions {
 export interface CreateBuildOptions {
     s3: S3Api;
     frontendBundle: Buffer;
-    backendBundle: Buffer | null;
 }
 
 export interface CreateReleaseOptions {
@@ -131,9 +130,7 @@ export interface UploadSubmissionOptions {
 export interface CreateBuildResponseJson {
     buildId: string;
     frontendBundleUploadUrl: string;
-    backendDeploymentPackageUploadUrl: string | null;
     frontendBundleS3UploadInfo: S3SignedUploadInfo;
-    backendDeploymentPackageS3UploadInfo: S3SignedUploadInfo | null;
 }
 
 function createAirtableApiError({

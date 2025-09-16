@@ -1,4 +1,4 @@
-import {AddressInfo} from 'net';
+import {AddressInfo, Socket} from 'net';
 import {createServer as createHTTPServer, Server as InsecureServer} from 'http';
 import {createServer as createHTTPSServer, Server as SecureServer} from 'https';
 import {promisify} from 'util';
@@ -64,11 +64,24 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
     app: Express | null;
     server: InsecureServer | null;
     secureServer: SecureServer | null;
+    private connections = new Set<Socket>();
 
     constructor(app: Express, server: InsecureServer, secureServer: SecureServer) {
         this.app = app;
         this.server = server;
         this.secureServer = secureServer;
+
+        this.trackConnections(server);
+        this.trackConnections(secureServer);
+    }
+
+    private trackConnections(server: InsecureServer | SecureServer) {
+        server.on('connection', (socket: Socket) => {
+            this.connections.add(socket);
+            socket.on('close', () => {
+                this.connections.delete(socket);
+            });
+        });
     }
 
     /**
@@ -126,6 +139,14 @@ class DevelopmentProxyServer implements DevelopmentServerInterface {
         const {server, secureServer} = this;
         this.server = null;
         this.secureServer = null;
+
+        this.connections.forEach((socket) => {
+            if (!socket.destroyed) {
+                socket.destroy();
+            }
+        });
+        this.connections.clear();
+
         await closeAsync(server);
         await closeAsync(secureServer);
     }

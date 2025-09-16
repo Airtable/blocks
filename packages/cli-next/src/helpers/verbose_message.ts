@@ -267,9 +267,6 @@ export const VerboseMessage = renderMessage.RenderMessage.extend<MessageInfo, {c
             return this.util
                 .chalk`❌ This block cannot be released with a comment. Run {cyan.bold block release} without {cyan.bold --comment}.`;
         },
-        releaseCommandBlock2BackendUnsupported() {
-            return this.util.chalk`❌ V2 blocks does not support backend routes.`;
-        },
         releaseCommandDeveloperCommentPrompt() {
             return this.util.chalk`Enter a comment describing the changes in this release`;
         },

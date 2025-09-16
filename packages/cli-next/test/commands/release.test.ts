@@ -272,14 +272,12 @@ function createStubs() {
                     : {
                           buildId: 'buildId',
                           frontendBundleUploadUrl: 'frontendBundleUploadUrl',
-                          backendDeploymentPackageUploadUrl: null,
                           frontendBundleS3UploadInfo: {
                               endpointUrl: 'endpointUrl',
                               key: 'frontendBundleS3Key',
                               keyPrefix: null,
                               params: {},
                           },
-                          backendDeploymentPackageS3UploadInfo: null,
                       };
             }
             async createReleaseAsync(options: CreateReleaseOptions): Promise<void> {
@@ -318,14 +316,12 @@ function createStubs() {
                 return {
                     buildId: 'buildId',
                     frontendBundleUploadUrl: 'frontendBundleUploadUrl',
-                    backendDeploymentPackageUploadUrl: null,
                     frontendBundleS3UploadInfo: {
                         endpointUrl: 'endpointUrl',
                         key: 'frontendBundleS3Key',
                         keyPrefix: null,
                         params: {},
                     },
-                    backendDeploymentPackageS3UploadInfo: null,
                 };
             }
 

@@ -237,7 +237,6 @@ export default class Run extends AirtableCommand {
                 mode: 'development',
                 destination: entryPointPath,
                 userEntryPoint,
-                blockBaseUrl: `https://localhost:${secureServerPort}`,
             }),
             appConfigModifiedPromise,
         ]);
@@ -275,6 +274,7 @@ export default class Run extends AirtableCommand {
                 mode: 'development',
                 context: appRootPath,
                 entry: entryPointPath,
+                tmpPath: this._appTemporaryPath,
             }),
             appConfigModifiedPromise,
         ]);
@@ -309,10 +309,13 @@ export default class Run extends AirtableCommand {
     }
 
     async finallyAsync() {
+        this.log('Shutting down...');
         await Promise.all([
             this._appTemporaryPath ? rmdirAsync(this.system, this._appTemporaryPath) : null,
             this._task ? this._task.teardownAsync() : null,
-            this._devServer ? this._devServer.closeAsync() : null,
         ]);
+        if (this._devServer) {
+            await this._devServer.closeAsync();
+        }
     }
 }
