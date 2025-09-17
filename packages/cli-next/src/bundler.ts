@@ -1,4 +1,4 @@
-const defaultBundler = require('@airtable/blocks-webpack-bundler').default;
+const defaultBundler = require('@airtable/blocks-esbuild-bundler').default;
 
 export default async function () {
     return defaultBundler();

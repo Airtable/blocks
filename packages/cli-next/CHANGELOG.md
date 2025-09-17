@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.9...HEAD)
+## [3.0.0](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.10...@airtable/blocks-cli@3.0.0)
+
+- **BREAKING:** Changes the default bundler to be @airtable/blocks-esbuild-bundler.
+
+## [2.0.10](https://github.com/Airtable/blocks/compare/@airtable/blocks-cli@2.0.9...@airtable/blocks-cli@2.0.10)
 
 - Minor improvements to exiting `block run`.
 
