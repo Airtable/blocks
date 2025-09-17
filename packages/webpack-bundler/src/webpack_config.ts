@@ -61,7 +61,7 @@ function injectLiveReloadClient(entry: string, liveReload: WebpackSummaryOptions
     let otherScripts = {};
     if (liveReload) {
         const clientPath = require.resolve('./live-reload-and-report-disconnection');
-        const protocol = liveReload.https ?? true ? 'https' : 'http';
+        const protocol = (liveReload.https ?? true) ? 'https' : 'http';
         otherScripts = {
             'live-reload-and-report-disconnection': `${clientPath}?${protocol}://localhost:${liveReload.port}'`,
         };

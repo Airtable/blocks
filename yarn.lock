@@ -7,35 +7,6 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.4.tgz#2856c55443d3d461693f32d2b96fb6ea92e1ffa9"
   integrity sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==
 
-"@airtable/blocks-cli@^2.0.6":
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/@airtable/blocks-cli/-/blocks-cli-2.0.10.tgz#b88c95f19ea527f786f48d30790f65e91af56edc"
-  integrity sha512-u8VOSwl+embKfhn4kqYKPggSEQmXmK3bRvmw8A/tIeBc4XHGS0Pxqr+9nusFfbMwvfYEi81X0jaXTLZN71sasA==
-  dependencies:
-    "@airtable/blocks-webpack-bundler" "^1.1.0"
-    "@oclif/command" "^1.8.0"
-    "@oclif/config" "^1.17.0"
-    "@oclif/plugin-help" "^3.2.0"
-    "@octokit/rest" "^18.2.0"
-    "@sentry/cli" "1.73.0"
-    "@types/npm" "^2.0.31"
-    "@types/tar" "^4.0.4"
-    archiver "^5.1.0"
-    chalk "^4.1.0"
-    cli-ux "^5.5.1"
-    clipboardy "^2.3.0"
-    cpx2 "7.0.1"
-    cross-spawn "^7.0.3"
-    debug "^4.2.0"
-    express "^4.20.0"
-    form-data "^3.0.0"
-    graceful-fs "^4.2.4"
-    http-proxy-middleware "^3.0.3"
-    strip-ansi "^6.0.0"
-    tar "^6.1.0"
-    tslib "^1.14.1"
-    typescript "^5.4.5"
-
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.3.0.tgz#ed441b6fa600072520ce18b43d2c8cc8caecc7f4"

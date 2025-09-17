@@ -71,7 +71,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
         const compiler = this._configureCompiler({...options});
 
         let fileDependencies: string[] = [];
-        compiler.hooks.finishMake.tapPromise('AirtableCancelBuildPlugin', async compilation => {
+        compiler.hooks.finishMake.tapPromise('AirtableCancelBuildPlugin', async (compilation) => {
             if (compilation.errors.length > 0) {
                 throw compilation.errors[0];
             } else {
@@ -108,7 +108,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
             emitBuildState({status: BuildStatus.BUILDING});
         });
 
-        compiler.hooks.done.tap('AirtableCliStatusPlugin', stats => {
+        compiler.hooks.done.tap('AirtableCliStatusPlugin', (stats) => {
             if (stats.hasErrors()) {
                 const firstError = stats.compilation.getErrors()[0];
                 if (firstError.name === 'ModuleNotFoundError') {
@@ -140,7 +140,7 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
             }
         });
 
-        compiler.hooks.failed.tap('AirtableCliStatusPlugin', error => {
+        compiler.hooks.failed.tap('AirtableCliStatusPlugin', (error) => {
             emitBuildState({
                 status: BuildStatus.ERROR,
                 error,
@@ -173,6 +173,8 @@ class Bundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskConsume
     }
 }
 
-export default async function(customizeWebpackConfig?: CustomizeWebpackConfigFn): Promise<Bundler> {
+export default async function (
+    customizeWebpackConfig?: CustomizeWebpackConfigFn,
+): Promise<Bundler> {
     return new Bundler(customizeWebpackConfig);
 }

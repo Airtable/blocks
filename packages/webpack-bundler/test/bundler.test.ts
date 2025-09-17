@@ -133,7 +133,7 @@ describe('run bundler', () => {
 
     testBundler
         .prepareFixture('bundler_custom_config')
-        .runBundlerPass(baseConfig => {
+        .runBundlerPass((baseConfig) => {
             baseConfig.module.rules.push({
                 test: /\.js$/,
                 loader: 'babel-loader',
@@ -227,13 +227,20 @@ function runBundlerServerOnFixture(): FancyTypes.Plugin<{
     return {
         async run(ctx) {
             const bundlerPort = (ctx.bundlerPort = await findPortAsync(0));
+            const liveReloadPort = await findPortAsync(0);
             const consumer = (ctx.bundlerConsumer = await createBundler());
+            const distPath = path.join(ctx.tmpPath, 'dist');
+            fs.mkdirSync(distPath, {recursive: true});
             await consumer.startDevServerAsync({
                 port: bundlerPort,
                 mode: ctx.compilerMode || 'development',
                 context: ctx.tmpPath,
                 entry: path.join(ctx.tmpPath, 'index'),
-
+                tmpPath: distPath,
+                liveReload: {
+                    https: true,
+                    port: liveReloadPort,
+                },
                 // eslint-disable-next-line @typescript-eslint/no-empty-function
                 emitBuildState() {},
             });

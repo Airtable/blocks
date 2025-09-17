@@ -16,7 +16,7 @@ require('webpack-dev-server/client');
  *
  * https://github.com/webpack/webpack-dev-server/blob/cd39491ea395c985f2014dfc03379db5c894f711/client-src/default/utils/sendMessage.js#L5
  */
-addEventListener('message', function(event) {
+addEventListener('message', function (event) {
     if (event && event.data && event.data.type === 'webpackClose') {
         throw new Error('Disconnected from development server');
     }
