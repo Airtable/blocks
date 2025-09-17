@@ -1,14 +1,14 @@
 {
     "name": "@airtable/blocks-esbuild-bundler",
     "description": "Esbuild bundler for @airtable/blocks-cli",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "homepage": "https://airtable.com/developers/blocks",
     "author": "Airtable",
     "peerDependencies": {
-        "@airtable/blocks-cli": "^2.0.10"
+        "@airtable/blocks-cli": "^2.0.10 || ^3.0.0"
     },
     "dependencies": {
-        "@airtable/blocks-cli": "^2.0.10",
+        "@airtable/blocks-cli": "^2.0.10 || ^3.0.0",
         "esbuild": "^0.25.9"
     },
     "devDependencies": {
