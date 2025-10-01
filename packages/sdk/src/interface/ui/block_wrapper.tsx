@@ -1,72 +1,57 @@
 /** @hidden */ /** */
 import * as React from 'react';
-import {css, keyframes} from 'emotion';
 import {type InterfaceBlockSdk} from '../sdk';
 import Loader from '../../shared/ui/loader';
 import {SdkContext} from '../../shared/ui/sdk_context';
+import {getCssContentToAddToHead, SPIN_SCALE_ANIMATION_NAME} from './global_css_helpers';
 
 interface BlockWrapperProps {
     sdk: InterfaceBlockSdk;
     children: React.ReactNode;
 }
 
-const suspenseFallbackClassName = css`
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    -ms-grid-row-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-`;
+const suspenseFallbackStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+};
 
-const spinScale = keyframes`
-    0% {
-        transform: rotate(0) scale(1);
-    }
-    50% {
-        transform: rotate(360deg) scale(0.9);
-    }
-    100% {
-        transform: rotate(720deg) scale(1);
-    }
-`;
+const animateSpinnerStyle: React.CSSProperties = {
+    animationIterationCount: 'infinite',
+    animationName: SPIN_SCALE_ANIMATION_NAME,
+    animationDuration: '1800ms',
+    animationTimingFunction: 'cubic-bezier(0.785, 0.135, 0.15, 0.86)',
+};
 
-const animateSpinnerClassName = css`
-    animation-iteration-count: infinite;
-    animation-name: ${spinScale};
-    animation-duration: 1800ms;
-    animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-`;
+export const BlockWrapper: React.FC<BlockWrapperProps> = ({sdk, children}) => {
+    React.useLayoutEffect(() => {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = getCssContentToAddToHead();
+        document.head.appendChild(styleElement);
 
-export class BlockWrapper extends React.Component<BlockWrapperProps> {
-    /** @internal */
-    _minSizeBeforeRender: {width: number | null; height: number | null} | null = null;
-    /** @hidden */
-    render() {
-        return (
-            <SdkContext.Provider value={this.props.sdk}>
-                <React.Suspense
-                    fallback={
-                        <div className={suspenseFallbackClassName}>
-                            <Loader className={animateSpinnerClassName} />
-                        </div>
-                    }
-                >
-                    {this.props.children}
-                </React.Suspense>
-            </SdkContext.Provider>
-        );
-    }
-}
+        return () => {
+            if (document.head.contains(styleElement)) {
+                document.head.removeChild(styleElement);
+            }
+        };
+    }, []);
+
+    return (
+        <SdkContext.Provider value={sdk}>
+            <React.Suspense
+                fallback={
+                    <div style={suspenseFallbackStyle}>
+                        <Loader style={animateSpinnerStyle} />
+                    </div>
+                }
+            >
+                {children}
+            </React.Suspense>
+        </SdkContext.Provider>
+    );
+};

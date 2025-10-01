@@ -1,8 +1,6 @@
 import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from './error_utils';
 
-export {default as isDeepEqual} from 'fast-deep-equal';
-
 /** @hidden */
 export type FlowAnyObject = any;
 /** @hidden */
@@ -80,6 +78,62 @@ export function cloneDeep<T extends unknown>(obj: T): T {
         return obj;
     }
     return JSON.parse(jsonString);
+}
+
+/**
+ * This is basically taken from https://github.com/epoberezkin/fast-deep-equal/blob/a8e7172b6c411ec320d6045fd4afbd2abc1b4bde/src/index.jst
+ * with some minor adjustments based on our needs.
+ * Differences:
+ * - Removed RegExp support because we don't need it
+ * - Removed .valueOf() and .toString() support because we don't need it
+ */
+export function isDeepEqual(a: any, b: any): boolean {
+    if (a === b) {
+        return true;
+    }
+
+    if (a && b && typeof a === 'object' && typeof b === 'object') {
+        if (a.constructor !== b.constructor) {
+            return false;
+        }
+
+        if (Array.isArray(a)) {
+            const length = a.length;
+            if (length !== b.length) {
+                return false;
+            }
+            for (let i = length - 1; i >= 0; i--) {
+                if (!isDeepEqual(a[i], b[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        const keys = Object.keys(a);
+        const length = keys.length;
+        if (length !== Object.keys(b).length) {
+            return false;
+        }
+
+        for (let i = length - 1; i >= 0; i--) {
+            if (!Object.prototype.hasOwnProperty.call(b, keys[i])) {
+                return false;
+            }
+        }
+
+        for (let i = length - 1; i >= 0; i--) {
+            const key = keys[i];
+            if (!isDeepEqual(a[key], b[key])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // eslint-disable-next-line no-self-compare
+    return a !== a && b !== b;
 }
 
 /**

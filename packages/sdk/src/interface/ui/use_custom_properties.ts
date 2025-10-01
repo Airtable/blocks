@@ -31,6 +31,10 @@ import {type Field} from '../models/field';
  *       possibleValues?: Array<Field>; // If not provided, all visible fields in the table will be shown in the dropdown.
  *       defaultValue?: Field;
  *     }
+ *   | {
+ *       type: 'table';
+ *       defaultValue?: Table;
+ *     }
  * );
  * ```
  */
@@ -48,6 +52,10 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
           /** If not provided, all visible fields in the table will be shown in the dropdown. */
           possibleValues?: Array<Field>;
           defaultValue?: Field;
+      }
+    | {
+          type: 'table';
+          defaultValue?: Table;
       }
 );
 
@@ -174,6 +182,13 @@ function convertBlockPageElementCustomPropertyToBlockInstallationPageElementCust
                 possibleValues: property.possibleValues?.map((field) => field.id),
                 defaultValue: property.defaultValue?.id,
             };
+        case 'table':
+            return {
+                key: property.key,
+                label: property.label,
+                type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.TABLE_ID,
+                defaultValue: property.defaultValue?.id,
+            };
         default:
             throw spawnUnknownSwitchCaseError('property type', property, 'type');
     }
@@ -189,17 +204,19 @@ function getCustomPropertyValue(
     const rawValue = globalConfig.get(property.key) ?? defaultValue;
 
     switch (property.type) {
-        case 'boolean':
+        case 'boolean': {
             if (typeof rawValue === 'boolean') {
                 return rawValue;
             }
             return defaultValue;
-        case 'string':
+        }
+        case 'string': {
             if (typeof rawValue === 'string') {
                 return rawValue;
             }
             return defaultValue;
-        case 'enum':
+        }
+        case 'enum': {
             if (
                 typeof rawValue === 'string' &&
                 property.possibleValues.some((value) => value.value === rawValue)
@@ -207,7 +224,8 @@ function getCustomPropertyValue(
                 return rawValue;
             }
             return defaultValue;
-        case 'field':
+        }
+        case 'field': {
             if (
                 typeof rawValue === 'string' &&
                 property.table === base.getTableById(property.table.id)
@@ -221,6 +239,16 @@ function getCustomPropertyValue(
                 }
             }
             return defaultValue;
+        }
+        case 'table': {
+            if (typeof rawValue === 'string') {
+                const tableIfExists = base.getTableByIdIfExists(rawValue);
+                if (tableIfExists) {
+                    return tableIfExists;
+                }
+            }
+            return defaultValue;
+        }
         default:
             throw spawnUnknownSwitchCaseError('property type', property, 'type');
     }

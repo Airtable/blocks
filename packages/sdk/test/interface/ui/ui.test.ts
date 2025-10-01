@@ -25,7 +25,6 @@ describe('ui entry point', () => {
     test('useGlobalConfig', () => run('useGlobalConfig'));
     test('useSynced', () => run('useSynced'));
     test('useWatchable', () => run('useWatchable'));
-    test('withHooks', () => run('withHooks'));
     test('colors', () => run('colors'));
     test('colorUtils', () => run('colorUtils'));
     test('loadCSSFromString', () => run('loadCSSFromString'));

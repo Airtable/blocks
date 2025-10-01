@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui: useLoadable */ /** */
-import {useMemo, useEffect} from 'react';
-import {useSubscription} from 'use-subscription';
+import {useMemo, useEffect, useSyncExternalStore} from 'react';
 import {compact, has} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
 import useArrayIdentity from '../../shared/ui/use_array_identity';
@@ -163,7 +162,10 @@ export default function useLoadable(
         }),
         [compactModels],
     );
-    useSubscription(modelIsLoadedSubscription);
+    useSyncExternalStore(
+        modelIsLoadedSubscription.subscribe,
+        modelIsLoadedSubscription.getCurrentValue,
+    );
 
     useEffect(() => {
         for (const model of compactModels) {

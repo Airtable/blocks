@@ -1,6 +1,5 @@
 /** @module @airtable/blocks/ui: useWatchable */ /** */
-import {useMemo, useRef} from 'react';
-import {useSubscription} from 'use-subscription';
+import {useMemo, useRef, useSyncExternalStore} from 'react';
 import {spawnError} from '../error_utils';
 import {compact} from '../private_utils';
 import type Watchable from '../watchable';
@@ -104,5 +103,5 @@ export default function useWatchable<Keys extends string>(
         };
     }, [compactModels, compactKeys]);
 
-    useSubscription(watchSubscription);
+    useSyncExternalStore(watchSubscription.subscribe, watchSubscription.getCurrentValue);
 }

@@ -1,5 +1,6 @@
 import {
     has,
+    isDeepEqual,
     isObjectEmpty,
     isNullOrUndefinedOrEmpty,
     compact,
@@ -35,6 +36,52 @@ describe('has', () => {
         }
         const obj = new Klass();
         expect(has(obj, 'onPrototype')).toBe(false);
+    });
+});
+
+describe('isDeepEqual', () => {
+    it('returns true for primitive values', () => {
+        expect(isDeepEqual(1, 1)).toBe(true);
+        expect(isDeepEqual('foo', 'foo')).toBe(true);
+        expect(isDeepEqual(true, true)).toBe(true);
+        expect(isDeepEqual(false, false)).toBe(true);
+        expect(isDeepEqual(null, null)).toBe(true);
+    });
+
+    it('returns false for primitive values', () => {
+        expect(isDeepEqual(1, 2)).toBe(false);
+        expect(isDeepEqual('foo', 'bar')).toBe(false);
+        expect(isDeepEqual(true, false)).toBe(false);
+        expect(isDeepEqual(null, undefined)).toBe(false);
+    });
+
+    it('returns true for arrays', () => {
+        expect(isDeepEqual([1, 2, 3], [1, 2, 3])).toBe(true);
+        expect(isDeepEqual([{foo: 'bar'}], [{foo: 'bar'}])).toBe(true);
+    });
+
+    it('returns false for arrays', () => {
+        expect(isDeepEqual([1, 2], [1, 2, 3])).toBe(false);
+        expect(isDeepEqual([1, 2, 3], [1, 2])).toBe(false);
+        expect(isDeepEqual([1, 2], [1, 3])).toBe(false);
+        expect(isDeepEqual([1, 2], [2, 1])).toBe(false);
+    });
+
+    it('returns true if the objects have the same keys and values', () => {
+        expect(isDeepEqual({foo: 'bar'}, {foo: 'bar'})).toBe(true);
+        expect(isDeepEqual({foo: 1}, {foo: 1})).toBe(true);
+        expect(isDeepEqual({foo: 1, bar: true}, {foo: 1, bar: true})).toBe(true);
+    });
+
+    it('returns false if the objects have different keys', () => {
+        expect(isDeepEqual({foo: 'bar'}, {foo: 'bar', baz: 'qux'})).toBe(false);
+    });
+
+    it('returns false if the objects have the same keys but the values are not equal', () => {
+        expect(isDeepEqual({foo: 'bar'}, {foo: 'baz'})).toBe(false);
+        expect(isDeepEqual({foo: 1}, {foo: 2})).toBe(false);
+        expect(isDeepEqual({foo: true}, {foo: false})).toBe(false);
+        expect(isDeepEqual({foo: true}, {foo: 'bar'})).toBe(false);
     });
 });
 

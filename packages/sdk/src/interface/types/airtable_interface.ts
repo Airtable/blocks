@@ -39,6 +39,7 @@ export enum BlockInstallationPageElementCustomPropertyTypeForAirtableInterface {
     STRING = 'string',
     ENUM = 'enum',
     FIELD_ID = 'fieldId',
+    TABLE_ID = 'tableId',
 }
 
 /** @hidden */
@@ -65,13 +66,15 @@ export type BlockInstallationPageElementCustomPropertyForAirtableInterface = {
           possibleValues?: Array<FieldId>;
           defaultValue?: FieldId;
       }
+    | {
+          type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.TABLE_ID;
+          defaultValue?: TableId;
+      }
 );
 
 /**
  * AirtableInterface is designed as the communication interface between the
- * Block SDK and Airtable. The mechanism through which we communicate with Airtable
- * depends on the context in which the block is running (i.e. frontend or backend),
- * but the interface should remain consistent.
+ * Block SDK and Airtable.
  *
  * @hidden
  */

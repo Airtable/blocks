@@ -3,7 +3,7 @@ import * as React from 'react';
 import {isEnumValue, type ObjectValues} from '../../shared/private_utils';
 import Watchable from '../../shared/watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
-import {baymax} from './baymax_utils';
+import {BUTTON_LINK_CLASS_NAME} from './global_css_helpers';
 
 const WatchableGlobalAlertKeys = Object.freeze({
     __alertInfo: '__alertInfo' as const,
@@ -20,9 +20,9 @@ const GlobalAlertInfo = () => {
     const sdk = useSdk();
 
     return (
-        <span className={baymax('center line-height-4 quiet strong')}>
+        <span style={{textAlign: 'center', lineHeight: 1.5, fontWeight: 500}}>
             <span
-                className={baymax('pointer understroke link-unquiet')}
+                className={BUTTON_LINK_CLASS_NAME}
                 onClick={() => {
                     sdk.reload();
                 }}
