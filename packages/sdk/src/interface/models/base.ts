@@ -24,9 +24,4 @@ export class Base extends BaseCore<InterfaceSdkMode> {
     _constructRecordStore(sdk: InterfaceBlockSdk, tableId: TableId): RecordStore {
         return new RecordStore(sdk, tableId);
     }
-
-    /** @internal */
-    _iterateTableIds(): Iterable<TableId> {
-        return Object.keys(this._data.tablesById);
-    }
 }

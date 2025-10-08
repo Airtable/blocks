@@ -5,7 +5,6 @@ import {type CursorData} from './cursor';
 
 /** @hidden */
 export interface BaseData extends BaseDataCore<TableData> {
-    tableOrder: Array<TableId>;
     activeTableId: TableId | null;
     cursorData: CursorData | null;
 }

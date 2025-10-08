@@ -103,6 +103,8 @@ abstract class RecordStoreCore<
      */
     abstract get recordIds(): Array<string>;
 
+    abstract __onDataDeletion(): void;
+
     getRecordByIdIfExists(recordId: string): SdkModeT['RecordT'] | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');

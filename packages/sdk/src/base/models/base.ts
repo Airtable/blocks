@@ -1,12 +1,10 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {BaseCore, type ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
+import {BaseCore} from '../../shared/models/base_core';
 import {MutationTypes} from '../types/mutations';
 import {type FieldType} from '../../shared/types/field_core';
 import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {type BaseSdkMode} from '../../sdk_mode';
 import {type TableId} from '../../shared/types/hyper_ids';
-import {entries} from '../../shared/private_utils';
-import {type BaseData} from '../types/base';
 import type BaseBlockSdk from '../sdk';
 import RecordStore from './record_store';
 import Table from './table';
@@ -43,11 +41,6 @@ class Base extends BaseCore<BaseSdkMode> {
     /** @internal */
     _constructRecordStore(sdk: BaseBlockSdk, tableId: TableId): RecordStore {
         return new RecordStore(sdk, tableId);
-    }
-
-    /** @internal */
-    _iterateTableIds(): Iterable<TableId> {
-        return this._data.tableOrder;
     }
 
     /**
@@ -234,35 +227,6 @@ class Base extends BaseCore<BaseSdkMode> {
         });
 
         return this.getTableById(tableId);
-    }
-
-    /**
-     * @internal
-     */
-    __triggerOnChangeForChangedPaths(changedPaths: ChangedPathsForType<BaseData>): void {
-        super.__triggerOnChangeForChangedPaths(changedPaths);
-
-        let didSchemaChange = false;
-        if (changedPaths.tableOrder) {
-            this._onChange(WatchableBaseKeys.tables);
-            didSchemaChange = true;
-
-            for (const [tableId, tableModel] of entries(this._tableModelsById)) {
-                if (tableModel.isDeleted) {
-                    delete this._tableModelsById[tableId];
-                }
-            }
-
-            for (const [tableId, recordStore] of entries(this._tableRecordStoresByTableId)) {
-                if (recordStore && recordStore.isDeleted) {
-                    recordStore.__onDataDeletion();
-                    delete this._tableRecordStoresByTableId[tableId];
-                }
-            }
-        }
-        if (didSchemaChange) {
-            this._onChange(WatchableBaseKeys.schema);
-        }
     }
 }
 

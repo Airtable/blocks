@@ -157,7 +157,7 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
      */
     get tables(): Array<SdkModeT['TableT']> {
         const tables: Array<SdkModeT['TableT']> = [];
-        for (const tableId of this._iterateTableIds()) {
+        for (const tableId of this._data.tableOrder) {
             const table = this.getTableByIdIfExists(tableId);
             if (table) {
                 tables.push(table);
@@ -173,8 +173,6 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
         sdk: SdkModeT['SdkT'],
         tableId: TableId,
     ): SdkModeT['RecordStoreT'];
-    /** @internal */
-    abstract _iterateTableIds(): Iterable<TableId>;
 
     /**
      * The users who have access to this base.
@@ -410,6 +408,22 @@ export abstract class BaseCore<SdkModeT extends SdkMode> extends AbstractModel<
         if (changedPaths.color) {
             this._onChange(WatchableBaseKeys.color);
             didSchemaChange = true;
+        }
+        if (changedPaths.tableOrder) {
+            this._onChange(WatchableBaseKeys.tables);
+            didSchemaChange = true;
+
+            for (const [tableId, tableModel] of entries(this._tableModelsById)) {
+                if (tableModel.isDeleted) {
+                    delete this._tableModelsById[tableId];
+                }
+            }
+            for (const [tableId, recordStore] of entries(this._tableRecordStoresByTableId)) {
+                if (recordStore && recordStore.isDeleted) {
+                    recordStore.__onDataDeletion();
+                    delete this._tableRecordStoresByTableId[tableId];
+                }
+            }
         }
         const {tablesById} = changedPaths;
         if (tablesById) {

@@ -48,6 +48,9 @@ export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableReco
         return this._data.recordOrder;
     }
 
+    __onDataDeletion(): void {
+    }
+
     triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>) {
         super.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.recordOrder) {

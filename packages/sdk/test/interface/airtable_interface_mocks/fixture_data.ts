@@ -42,6 +42,7 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
             id,
             name,
             color: color ?? MOCK_BASE_COLOR,
+            tableOrder: tables.map((t) => t.id),
             tablesById: keyBy<TableData, string>(
                 tables.map(convertTableFixtureDataToTableData),
                 getId,
