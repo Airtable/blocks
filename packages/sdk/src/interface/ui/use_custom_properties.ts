@@ -12,6 +12,12 @@ import type GlobalConfig from '../../shared/global_config';
 import {type Base} from '../models/base';
 import {spawnUnknownSwitchCaseError} from '../../shared/error_utils';
 import {type Field} from '../models/field';
+import {type FieldConfig} from '../models/models';
+import {type FieldId} from '../../shared/types/hyper_ids';
+import {type BaseData} from '../types/base';
+import {type FieldDataCore} from '../../shared/types/field_core';
+import {type ObjectMap} from '../../shared/private_utils';
+import {type FieldTypeConfig} from '../../shared/types/airtable_interface_core';
 
 /**
  * An object that represents a custom property that a block can set.
@@ -49,8 +55,10 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
     | {
           type: 'field';
           table: Table;
-          /** If not provided, all visible fields in the table will be shown in the dropdown. */
+          /** @deprecated Prefer `shouldFieldBeAllowed` instead. If not provided, all visible fields in the table will be shown in the dropdown. */
           possibleValues?: Array<Field>;
+          /** If provided, it will be used to filter the fields in the dropdown. */
+          shouldFieldBeAllowed?: (field: {id: FieldId; config: FieldConfig}) => boolean;
           defaultValue?: Field;
       }
     | {
@@ -77,11 +85,11 @@ type BlockPageElementCustomProperty = {key: string; label: string} & (
  *
  * function getCustomProperties(base: Base) {
  *     const table = base.tables[0];
- *     const numberFields = table.fields.filter(field => field.type === FieldType.NUMBER);
+ *     const isNumberField = (field: {id: FieldId, config: FieldConfig}) => field.config.type === FieldType.NUMBER;
  *     return [
  *         {key: 'title', label: 'Title', type: 'string', defaultValue: 'Chart'},
- *         {key: 'xAxis', label: 'X-axis', type: 'field', table, possibleValues: numberFields},
- *         {key: 'yAxis', label: 'Y-axis', type: 'field', table, possibleValues: numberFields},
+ *         {key: 'xAxis', label: 'X-axis', type: 'field', table, shouldFieldBeAllowed: isNumberField},
+ *         {key: 'yAxis', label: 'Y-axis', type: 'field', table, shouldFieldBeAllowed: isNumberField},
  *         {key: 'color', label: 'Color', type: 'enum', possibleValues: [{value: 'red', label: 'Red'}, {value: 'blue', label: 'Blue'}, {value: 'green', label: 'Green'}], defaultValue: 'red'},
  *         {key: 'showLegend', label: 'Show Legend', type: 'boolean', defaultValue: true},
  *     ];
@@ -123,8 +131,17 @@ export function useCustomProperties(
         if (hasError) {
             return;
         }
-        const customPropertiesForAirtableInterface = customProperties.map(
-            convertBlockPageElementCustomPropertyToBlockInstallationPageElementCustomPropertyForAirtableInterface,
+        const customPropertiesForAirtableInterface = customProperties.map((customProperty) =>
+            convertBlockPageElementCustomPropertyToBlockInstallationPageElementCustomPropertyForAirtableInterface(
+                sdk.base._getAllTableDataForEditModeConfiguration(),
+                (fieldData, fieldNamesById) =>
+                    sdk.__airtableInterface.fieldTypeProvider.getConfig(
+                        sdk.__appInterface,
+                        fieldData,
+                        fieldNamesById,
+                    ),
+                customProperty,
+            ),
         );
         sdk.setCustomPropertiesAsync(customPropertiesForAirtableInterface).catch((error) => {
             setErrorState({error});
@@ -148,6 +165,13 @@ export function useCustomProperties(
 
 /** @internal */
 function convertBlockPageElementCustomPropertyToBlockInstallationPageElementCustomPropertyForAirtableInterface(
+    allTableDataForEditModeConfiguration:
+        | BaseData['allTableDataForEditModeConfiguration']
+        | undefined,
+    getFieldConfig: (
+        fieldData: Pick<FieldDataCore, 'type' | 'typeOptions'>,
+        fieldNamesById: ObjectMap<FieldId, string>,
+    ) => FieldTypeConfig,
     property: BlockPageElementCustomProperty,
 ): BlockInstallationPageElementCustomPropertyForAirtableInterface {
     switch (property.type) {
@@ -173,15 +197,42 @@ function convertBlockPageElementCustomPropertyToBlockInstallationPageElementCust
                 possibleValues: property.possibleValues,
                 defaultValue: property.defaultValue,
             };
-        case 'field':
+        case 'field': {
+            let possibleValues: Array<FieldId> | undefined;
+            if (!allTableDataForEditModeConfiguration) {
+                possibleValues = undefined;
+            } else if (property.possibleValues) {
+                possibleValues = property.possibleValues.map((field) => field.id);
+            } else if (property.shouldFieldBeAllowed) {
+                const shouldFieldBeAllowed = property.shouldFieldBeAllowed;
+                const tableData = allTableDataForEditModeConfiguration[property.table.id];
+                if (!tableData) {
+                    possibleValues = [];
+                } else {
+                    const fieldNamesById = Object.fromEntries(
+                        Object.entries(tableData.fieldsById).map(([id, field]) => [id, field.name]),
+                    );
+                    possibleValues = Object.values(tableData.fieldsById)
+                        .filter((field) =>
+                            shouldFieldBeAllowed({
+                                id: field.id,
+                                config: getFieldConfig(field, fieldNamesById) as FieldConfig,
+                            }),
+                        )
+                        .map((field) => field.id);
+                }
+            } else {
+                possibleValues = undefined;
+            }
             return {
                 key: property.key,
                 label: property.label,
                 type: BlockInstallationPageElementCustomPropertyTypeForAirtableInterface.FIELD_ID,
                 tableId: property.table.id,
-                possibleValues: property.possibleValues?.map((field) => field.id),
+                possibleValues,
                 defaultValue: property.defaultValue?.id,
             };
+        }
         case 'table':
             return {
                 key: property.key,
@@ -231,11 +282,28 @@ function getCustomPropertyValue(
                 property.table === base.getTableById(property.table.id)
             ) {
                 const fieldModel = property.table.fields.find((field) => field.id === rawValue);
-                if (
-                    fieldModel &&
-                    (!property.possibleValues || property.possibleValues.includes(fieldModel))
-                ) {
-                    return fieldModel;
+                if (fieldModel) {
+                    if (property.possibleValues) {
+                        if (property.possibleValues.includes(fieldModel)) {
+                            return fieldModel;
+                        }
+                        return defaultValue;
+                    } else if (property.shouldFieldBeAllowed) {
+                        if (
+                            property.shouldFieldBeAllowed({
+                                id: fieldModel.id,
+                                config: {
+                                    type: fieldModel.type,
+                                    options: fieldModel.options,
+                                } as FieldConfig,
+                            })
+                        ) {
+                            return fieldModel;
+                        }
+                        return defaultValue;
+                    } else {
+                        return fieldModel;
+                    }
                 }
             }
             return defaultValue;

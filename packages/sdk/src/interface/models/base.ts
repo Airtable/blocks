@@ -1,7 +1,8 @@
-import {BaseCore} from '../../shared/models/base_core';
+import {BaseCore, type ChangedPathsForType, WatchableBaseKeys} from '../../shared/models/base_core';
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import {type TableId} from '../../shared/types/hyper_ids';
 import {type InterfaceBlockSdk} from '../sdk';
+import {type BaseData} from '../types/base';
 import {Table} from './table';
 import {RecordStore} from './record_store';
 
@@ -23,5 +24,19 @@ export class Base extends BaseCore<InterfaceSdkMode> {
     /** @internal */
     _constructRecordStore(sdk: InterfaceBlockSdk, tableId: TableId): RecordStore {
         return new RecordStore(sdk, tableId);
+    }
+
+    /** @internal */
+    _getAllTableDataForEditModeConfiguration(): BaseData['allTableDataForEditModeConfiguration'] {
+        return this._data.allTableDataForEditModeConfiguration;
+    }
+
+    /** @internal */
+    __triggerOnChangeForChangedPaths(changedPaths: ChangedPathsForType<BaseData>): void {
+        super.__triggerOnChangeForChangedPaths(changedPaths);
+
+        if (changedPaths.allTableDataForEditModeConfiguration) {
+            this._onChange(WatchableBaseKeys.schema);
+        }
     }
 }

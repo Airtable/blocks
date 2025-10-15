@@ -3,9 +3,8 @@ import {
     type SdkInitDataCore,
 } from '../../shared/types/airtable_interface_core';
 import {type InterfaceSdkMode} from '../../sdk_mode';
-import {type BaseDataCore} from '../../shared/types/base_core';
 import {type TableId, type PageId, type FieldId, type RecordId} from '../../shared/types/hyper_ids';
-import {type TableData} from './table';
+import {type BaseData} from './base';
 
 /** @hidden */
 export enum BlockRunContextType {
@@ -25,7 +24,7 @@ export type BlockRunContext = PageElementInQueryContainerBlockRunContextType;
 /** @hidden */
 export interface SdkInitData extends SdkInitDataCore {
     runContext: BlockRunContext;
-    baseData: BaseDataCore<TableData>;
+    baseData: BaseData;
 }
 
 /** @hidden */

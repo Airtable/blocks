@@ -42,7 +42,7 @@ export interface FieldTypeProviderCore {
     ): CellValueValidationResult;
     getConfig(
         appInterface: AppInterface,
-        fieldData: FieldDataCore,
+        fieldData: Pick<FieldDataCore, 'type' | 'typeOptions'>,
         fieldNamesById: ObjectMap<FieldId, string>,
     ): FieldTypeConfig;
     convertStringToCellValue(
