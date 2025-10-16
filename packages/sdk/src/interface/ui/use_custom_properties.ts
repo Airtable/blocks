@@ -34,7 +34,7 @@ import {type FieldTypeConfig} from '../../shared/types/airtable_interface_core';
  *   | {
  *       type: 'field';
  *       table: Table;
- *       possibleValues?: Array<Field>; // If not provided, all visible fields in the table will be shown in the dropdown.
+ *       shouldFieldBeAllowed?: (field: {id: FieldId; config: FieldConfig}) => boolean; // If not provided, all fields in the table will be shown in the dropdown.
  *       defaultValue?: Field;
  *     }
  *   | {
