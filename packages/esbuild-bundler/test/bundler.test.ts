@@ -33,14 +33,14 @@ describe('run bundler', () => {
         .prepareFixture('bundler_react_jsx')
         .runBundlerServer()
         .readServerBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes('import_jsx_dev_runtime.jsxDEV)(ReactApp')
         .it('bundles react components with server');
 
     testBundler
         .prepareFixture('bundler_react_jsx')
         .runBundlerPass()
         .readDiskBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes('import_jsx_dev_runtime.jsxDEV)(ReactApp')
         .it('bundles react components to disk');
 
     testBundler
@@ -91,14 +91,14 @@ describe('run bundler', () => {
         .prepareFixture('bundler_react_tsx')
         .runBundlerServer()
         .readServerBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes('import_jsx_dev_runtime.jsxDEV)(ReactApp')
         .it('bundles react typescript components with server');
 
     testBundler
         .prepareFixture('bundler_react_tsx')
         .runBundlerPass()
         .readDiskBundle()
-        .bundleIncludes('createElement(ReactApp')
+        .bundleIncludes('import_jsx_dev_runtime.jsxDEV)(ReactApp')
         .it('bundles react typescript components to disk');
 
     testBundler

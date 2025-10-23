@@ -39,6 +39,8 @@ class BlockBundler implements RunTaskConsumer, ReleaseTaskConsumer, SubmitTaskCo
             target: ['chrome91', 'firefox94', 'safari14.1', 'edge107'],
             define: {},
             format: 'iife',
+            jsx: 'automatic',
+            jsxDev: options.mode === 'development',
             loader: {
                 '.js': 'jsx',
                 '.md': 'text',
