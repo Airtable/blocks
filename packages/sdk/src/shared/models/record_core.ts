@@ -1,11 +1,5 @@
 import {type SdkMode} from '../../sdk_mode';
-import {
-    cloneDeep,
-    type FlowAnyObject,
-    isEnumValue,
-    isObjectEmpty,
-    type ObjectValues,
-} from '../private_utils';
+import {cloneDeep, type FlowAnyObject, isObjectEmpty, type ObjectValues} from '../private_utils';
 import {invariant} from '../error_utils';
 import {type FieldId, type RecordId} from '../types/hyper_ids';
 import {FieldType} from '../types/field_core';
@@ -16,9 +10,12 @@ export const WatchableRecordKeysCore = Object.freeze({
     name: 'name' as const,
     cellValues: 'cellValues' as const,
 });
+export const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 
 /** @hidden */
-type WatchableRecordKeyCore = ObjectValues<typeof WatchableRecordKeysCore>;
+type WatchableRecordKeyCore =
+    | ObjectValues<typeof WatchableRecordKeysCore>
+    | string;
 
 /** @hidden */
 export abstract class RecordCore<
@@ -27,10 +24,6 @@ export abstract class RecordCore<
 > extends AbstractModel<SdkModeT, SdkModeT['RecordDataT'], WatchableRecordKeyCore | WatchableKeys> {
     /** @internal */
     static _className = 'RecordCore';
-    /** @internal */
-    static _isWatchableKey(key: string): boolean {
-        return isEnumValue(WatchableRecordKeysCore, key);
-    }
     /** @internal */
     _parentRecordStore: SdkModeT['RecordStoreT'];
     /** @internal */
@@ -219,6 +212,10 @@ export abstract class RecordCore<
         if (cellValuesByFieldId && !isObjectEmpty(cellValuesByFieldId)) {
 
             this._onChange(WatchableRecordKeysCore.cellValues, Object.keys(cellValuesByFieldId));
+
+            for (const fieldId of Object.keys(cellValuesByFieldId)) {
+                this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
+            }
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
                 this._onChange(WatchableRecordKeysCore.name);

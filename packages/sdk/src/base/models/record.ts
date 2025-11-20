@@ -1,14 +1,13 @@
 /** @module @airtable/blocks/models: Record */ /** */
 import {type Color} from '../../shared/colors';
-import {RecordCore, WatchableRecordKeysCore} from '../../shared/models/record_core';
+import {
+    RecordCore,
+    WatchableCellValueInFieldKeyPrefix,
+    WatchableRecordKeysCore,
+} from '../../shared/models/record_core';
 import {type ViewId, type FieldId} from '../../shared/types/hyper_ids';
 import {type BaseSdkMode} from '../../sdk_mode';
-import {
-    isEnumValue,
-    type ObjectValues,
-    type FlowAnyObject,
-    isObjectEmpty,
-} from '../../shared/private_utils';
+import {isEnumValue, type ObjectValues, type FlowAnyObject} from '../../shared/private_utils';
 import type BlockSdk from '../sdk';
 import {invariant} from '../../shared/error_utils';
 import colorUtils from '../../shared/color_utils';
@@ -25,7 +24,7 @@ const WatchableRecordKeys = Object.freeze({
     ...WatchableRecordKeysCore,
     commentCount: 'commentCount' as const,
 });
-const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
+
 const WatchableColorInViewKeyPrefix = 'colorInView:';
 /**
  * Any key within record that can be watched:
@@ -264,12 +263,7 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
         super.__triggerOnChangeForDirtyPaths(dirtyPaths);
-        const {cellValuesByFieldId, commentCount} = dirtyPaths;
-        if (cellValuesByFieldId && !isObjectEmpty(cellValuesByFieldId)) {
-            for (const fieldId of Object.keys(cellValuesByFieldId)) {
-                this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
-            }
-        }
+        const {commentCount} = dirtyPaths;
         if (commentCount) {
             this._onChange(WatchableRecordKeys.commentCount);
         }

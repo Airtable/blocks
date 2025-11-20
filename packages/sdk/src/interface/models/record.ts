@@ -1,7 +1,11 @@
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import {spawnError} from '../../shared/error_utils';
-import {RecordCore, WatchableRecordKeysCore} from '../../shared/models/record_core';
-import {type ObjectValues} from '../../shared/private_utils';
+import {
+    RecordCore,
+    WatchableCellValueInFieldKeyPrefix,
+    WatchableRecordKeysCore,
+} from '../../shared/models/record_core';
+import {isEnumValue, type ObjectValues} from '../../shared/private_utils';
 import {FieldType} from '../../shared/types/field_core';
 import {type RecordId} from '../../shared/types/hyper_ids';
 import {type Field} from './field';
@@ -13,6 +17,7 @@ const WatchableRecordKeys = Object.freeze({
  * Any key within record that can be watched:
  * - `'name'`
  * - `'cellValues'`
+ * - `'cellValueInField:' + someFieldId`
  */
 type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
 
@@ -26,6 +31,13 @@ type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
 export class Record extends RecordCore<InterfaceSdkMode, WatchableRecordKey> {
     /** @internal */
     static _className = 'Record';
+    /** @internal */
+    static _isWatchableKey(key: string): boolean {
+        return (
+            isEnumValue(WatchableRecordKeys, key) ||
+            key.startsWith(WatchableCellValueInFieldKeyPrefix)
+        );
+    }
 
     /**
      * Fetch foreign records for a field. Subsequent calls to this method will
