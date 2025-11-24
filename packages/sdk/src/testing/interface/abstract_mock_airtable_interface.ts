@@ -10,6 +10,7 @@ import {
     type SdkInitData,
     type IdGenerator,
     type BlockInstallationPageElementCustomPropertyForAirtableInterface,
+    type SubElementSelectionState,
 } from '../../interface/types/airtable_interface';
 import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {cloneDeep, type ObjectMap} from '../../shared/private_utils';
@@ -142,6 +143,23 @@ export abstract class AbstractMockAirtableInterface
     ): Promise<boolean> {
         return Promise.resolve(true);
     }
+
+    setSelectedSubElementAsync(
+        selectedSubElement: SubElementSelectionState | null,
+    ): Promise<boolean> {
+        return Promise.resolve(true);
+    }
+
+    fetchAndSubscribeToSelectionDataAsync(
+        callback: (data: {selectedSubElementId: string | null}) => void,
+    ): Promise<{
+        selectedSubElementId: string | null;
+    }> {
+        this.on('selectedSubElementIdUpdates', callback);
+        return Promise.resolve({selectedSubElementId: null});
+    }
+
+    unsubscribeFromSelectionData(): void {}
 
     subscribeToModelUpdates(fn: (...args: any[]) => void) {
         this.on('modelupdates', fn);

@@ -7,6 +7,7 @@ import {Session} from './models/session';
 import {Mutations} from './models/mutations';
 import {Base} from './models/base';
 import {
+    type SubElementSelectionState,
     type BlockInstallationPageElementCustomPropertyForAirtableInterface,
     type BlockRunContext,
 } from './types/airtable_interface';
@@ -77,5 +78,30 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
         properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
     ): Promise<boolean> {
         return this.__airtableInterface.setCustomPropertiesAsync(properties);
+    }
+
+    /**
+     * @internal
+     */
+    setSelectedSubElementAsync(
+        selectedSubElement: SubElementSelectionState | null,
+    ): Promise<boolean> {
+        return this.__airtableInterface.setSelectedSubElementAsync(selectedSubElement);
+    }
+
+    /**
+     * @internal
+     */
+    fetchAndSubscribeToSelectionDataAsync(
+        callback: (data: {selectedSubElementId: string | null}) => void,
+    ): Promise<{selectedSubElementId: string | null}> {
+        return this.__airtableInterface.fetchAndSubscribeToSelectionDataAsync(callback);
+    }
+
+    /**
+     * @internal
+     */
+    unsubscribeFromSelectionData(): void {
+        return this.__airtableInterface.unsubscribeFromSelectionData();
     }
 }

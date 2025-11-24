@@ -71,6 +71,20 @@ export type BlockInstallationPageElementCustomPropertyForAirtableInterface = {
       }
 );
 
+/** @hidden */
+export interface SubElementSelectionState {
+    subElementId: string;
+    sourceLocation?: SourceLocation;
+    name?: string;
+}
+
+/** @hidden */
+interface SourceLocation {
+    filePath: string;
+    lineNumber: number;
+    columnNumber?: number;
+}
+
 /**
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable.
@@ -90,4 +104,11 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
     setCustomPropertiesAsync(
         properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
     ): Promise<boolean>;
+    setSelectedSubElementAsync(
+        selectedSubElement: SubElementSelectionState | null,
+    ): Promise<boolean>;
+    fetchAndSubscribeToSelectionDataAsync(
+        callback: (data: {selectedSubElementId: string | null}) => void,
+    ): Promise<{selectedSubElementId: string | null}>;
+    unsubscribeFromSelectionData(): void;
 }
