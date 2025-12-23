@@ -416,3 +416,6 @@ export function getLocaleAndDefaultLocale(): {locale?: string; defaultLocale?: s
         defaultLocale: 'defaultLocale' in sdkInitData ? sdkInitData.defaultLocale : undefined,
     };
 }
+
+/** @hidden */
+export {useMapApiToken as useMapApiToken_unstable} from '../interface/ui/use_map_api_token';

@@ -85,6 +85,19 @@ interface SourceLocation {
     columnNumber?: number;
 }
 
+/** @hidden */
+export type GetMapApiTokenResponse =
+    | {
+          success: true;
+          apiKey: string;
+          warningMessage?: string;
+      }
+    | {
+          success: false;
+          userFriendlyErrorMessage: string;
+          suggestedOmniPrompt?: string;
+      };
+
 /**
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable.
@@ -111,4 +124,5 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
         callback: (data: {selectedSubElementId: string | null}) => void,
     ): Promise<{selectedSubElementId: string | null}>;
     unsubscribeFromSelectionData(): void;
+    getMapApiTokenAsync?(): Promise<GetMapApiTokenResponse>;
 }

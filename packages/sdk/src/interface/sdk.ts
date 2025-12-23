@@ -3,6 +3,7 @@ import {type GlobalConfigUpdate} from '../shared/types/global_config';
 import {BlockSdkCore} from '../shared/sdk_core';
 import {type InterfaceSdkMode} from '../sdk_mode';
 import {type AppInterface} from '../shared/types/airtable_interface_core';
+import {invariant} from '../shared/error_utils';
 import {Session} from './models/session';
 import {Mutations} from './models/mutations';
 import {Base} from './models/base';
@@ -10,6 +11,7 @@ import {
     type SubElementSelectionState,
     type BlockInstallationPageElementCustomPropertyForAirtableInterface,
     type BlockRunContext,
+    type GetMapApiTokenResponse,
 } from './types/airtable_interface';
 
 /** @hidden */
@@ -103,5 +105,16 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
      */
     unsubscribeFromSelectionData(): void {
         return this.__airtableInterface.unsubscribeFromSelectionData();
+    }
+
+    /**
+     * @hidden
+     */
+    unstable_getMapApiTokenAsync(): Promise<GetMapApiTokenResponse> {
+        invariant(
+            this.__airtableInterface.getMapApiTokenAsync,
+            'map API token is not supported in this context',
+        );
+        return this.__airtableInterface.getMapApiTokenAsync();
     }
 }
