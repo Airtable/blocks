@@ -45,7 +45,10 @@ export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableReco
      * The record Ids in this table.
      */
     get recordIds(): Array<RecordId> {
-        return this._data.recordOrder;
+        return (
+            this._data.recordOrder
+                .filter((recordId) => this.getRecordByIdIfExists(recordId) !== null)
+        );
     }
 
     __onDataDeletion(): void {

@@ -1219,6 +1219,36 @@ describe('Table', () => {
 
             expect(result).toBeNull();
         });
+
+        it('filters recordIds when liveapp responds with stale recordOrder after multiple deletes', async () => {
+            makeEmptyRecord('rec1');
+            makeEmptyRecord('rec2');
+            makeEmptyRecord('rec3');
+
+            expect(table._recordStore.recordIds).toEqual(['rec1', 'rec2', 'rec3']);
+
+            const deletePromise1 = table.deleteRecordsAsync(['rec1']);
+
+            const deletePromise2 = table.deleteRecordsAsync(['rec2']);
+
+            expect(table._recordStore.recordIds).toEqual(['rec3']);
+
+            mockAirtableInterface.triggerModelUpdates([
+                {
+                    path: ['tablesById', 'tblDesignProjects', 'recordOrder'],
+                    value: ['rec2', 'rec3'],
+                },
+            ]);
+
+            expect(table._recordStore.recordIds).toEqual(['rec3']);
+
+            const records = table._recordStore.records;
+            expect(records.length).toBe(1);
+            expect(records[0].id).toBe('rec3');
+
+            await deletePromise1;
+            await deletePromise2;
+        });
     });
 
     describe('#description', () => {

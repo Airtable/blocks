@@ -1,5 +1,6 @@
 import {
     type AirtableInterfaceCore,
+    type AppInterface,
     type SdkInitDataCore,
 } from '../../shared/types/airtable_interface_core';
 import {type InterfaceSdkMode} from '../../sdk_mode';
@@ -30,6 +31,15 @@ export interface SdkInitData extends SdkInitDataCore {
 /** @hidden */
 export interface IdGenerator {
     generateRecordId(): string;
+}
+
+/** @hidden */
+export interface UrlConstructor {
+    getAttachmentClientUrl(
+        appInterface: AppInterface,
+        attachmentId: string,
+        attachmentUrl: string,
+    ): string;
 }
 
 /** @hidden */
@@ -106,6 +116,7 @@ export type GetMapApiTokenResponse =
  */
 export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMode> {
     idGenerator: IdGenerator;
+    urlConstructor: UrlConstructor;
 
     expandRecord(tableId: string, recordId: string): void;
     fetchForeignRecordsAsync(

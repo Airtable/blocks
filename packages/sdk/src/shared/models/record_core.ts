@@ -56,6 +56,31 @@ export abstract class RecordCore<
         invariant(recordsById, 'Record data is not loaded');
         return recordsById[this._id] ?? null;
     }
+    /**
+     * The primary cell value in this record, formatted as a `string`.
+     *
+     * @example
+     * ```js
+     * console.log(myRecord.name);
+     * // => '42'
+     * ```
+     */
+    get name(): string {
+        return this.getCellValueAsString(this.parentTable.primaryField);
+    }
+    /**
+     * The created time of this record.
+     *
+     * @example
+     * ```js
+     * console.log(`
+     *     This record was created at ${myRecord.createdTime.toISOString()}
+     * `);
+     * ```
+     */
+    get createdTime(): Date {
+        return new Date(this._data.createdTime);
+    }
 
     /**
      * The table that this record belongs to. Should never change because records aren't moved between tables.
@@ -179,29 +204,46 @@ export abstract class RecordCore<
         }
     }
     /**
-     * The primary cell value in this record, formatted as a `string`.
+     * Returns a URL that is suitable for rendering an attachment on the current client.
+     * The URL that is returned will only work for the current user.
      *
+     * @param attachmentId The ID of the attachment.
+     * @param attachmentUrl The attachment's URL (which is not suitable for rendering on the client).
      * @example
      * ```js
-     * console.log(myRecord.name);
-     * // => '42'
-     * ```
-     */
-    get name(): string {
-        return this.getCellValueAsString(this.parentTable.primaryField);
-    }
-    /**
-     * The created time of this record.
+     * import React from 'react';
      *
-     * @example
-     * ```js
-     * console.log(`
-     *     This record was created at ${myRecord.createdTime.toISOString()}
-     * `);
+     * function RecordAttachments(props) {
+     *     const {record, attachmentField} = props;
+     *     const attachmentCellValue = record.getCellValue(attachmentField);
+     *     if (attachmentCellValue === null) {
+     *         return null;
+     *     }
+     *     return (
+     *         <div>
+     *             {attachmentCellValue.map(attachmentObj => {
+     *                 const clientUrl =
+     *                     record.getAttachmentClientUrlFromCellValueUrl(
+     *                         attachmentObj.id,
+     *                         attachmentObj.url
+     *                     );
+     *                 return (
+     *                     <img key={attachmentObj.id} src={clientUrl} width={200} />
+     *                 );
+     *             })}
+     *         </div>
+     *     );
+     * }
      * ```
      */
-    get createdTime(): Date {
-        return new Date(this._data.createdTime);
+    getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
+        const airtableInterface = this._sdk.__airtableInterface;
+        const appInterface = this._sdk.__appInterface;
+        return airtableInterface.urlConstructor.getAttachmentClientUrl(
+            appInterface,
+            attachmentId,
+            attachmentUrl,
+        );
     }
     /**
      * @internal

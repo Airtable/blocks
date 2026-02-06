@@ -11,6 +11,7 @@ import {
     type IdGenerator,
     type BlockInstallationPageElementCustomPropertyForAirtableInterface,
     type SubElementSelectionState,
+    type UrlConstructor,
 } from '../../interface/types/airtable_interface';
 import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {cloneDeep, type ObjectMap} from '../../shared/private_utils';
@@ -56,6 +57,13 @@ const fieldTypeProvider: FieldTypeProviderCore = {
         fieldData: FieldData,
     ) {
         return {isValid: true};
+    },
+};
+
+/** @internal */
+const urlConstructor: UrlConstructor = {
+    getAttachmentClientUrl(appInterface, attachmentId, attachmentUrl) {
+        return attachmentUrl;
     },
 };
 
@@ -107,6 +115,10 @@ export abstract class AbstractMockAirtableInterface
 
     get fieldTypeProvider() {
         return fieldTypeProvider;
+    }
+
+    get urlConstructor() {
+        return urlConstructor;
     }
 
     get globalConfigHelpers() {

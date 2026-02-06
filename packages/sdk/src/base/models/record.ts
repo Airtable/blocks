@@ -110,48 +110,6 @@ class Record extends RecordCore<BaseSdkMode, WatchableRecordKey> {
     }
 
     /**
-     * Returns a URL that is suitable for rendering an attachment on the current client.
-     * The URL that is returned will only work for the current user.
-     *
-     * @param attachmentId The ID of the attachment.
-     * @param attachmentUrl The attachment's URL (which is not suitable for rendering on the client).
-     * @example
-     * ```js
-     * import React from 'react';
-     *
-     * function RecordAttachments(props) {
-     *     const {record, attachmentField} = props;
-     *     const attachmentCellValue = record.getCellValue(attachmentField);
-     *     if (attachmentCellValue === null) {
-     *         return null;
-     *     }
-     *     return (
-     *         <div>
-     *             {attachmentCellValue.map(attachmentObj => {
-     *                 const clientUrl =
-     *                     record.getAttachmentClientUrlFromCellValueUrl(
-     *                         attachmentObj.id,
-     *                         attachmentObj.url
-     *                     );
-     *                 return (
-     *                     <img key={attachmentObj.id} src={clientUrl} width={200} />
-     *                 );
-     *             })}
-     *         </div>
-     *     );
-     * }
-     * ```
-     */
-    getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const airtableInterface = this._sdk.__airtableInterface;
-        const appInterface = this._sdk.__appInterface;
-        return airtableInterface.urlConstructor.getAttachmentClientUrl(
-            appInterface,
-            attachmentId,
-            attachmentUrl,
-        );
-    }
-    /**
      * Gets the color of this record in a given view, or null if the record has no color in that
      * view.
      *

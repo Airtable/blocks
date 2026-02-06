@@ -92,7 +92,7 @@ abstract class RecordStoreCore<
         invariant(recordsById, 'Record metadata is not loaded');
         const records = this.recordIds.map((recordId) => {
             const record = this.getRecordByIdIfExists(recordId);
-            invariant(record, 'record');
+            invariant(record, 'record not found');
             return record;
         });
         return records;
