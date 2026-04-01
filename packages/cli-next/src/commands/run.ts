@@ -1,6 +1,6 @@
 import {flags as commandFlags} from '@oclif/command';
 import _debug from 'debug';
-import clipboardy from 'clipboardy';
+import { writeText } from 'tinyclip';
 import chalk from 'chalk';
 
 import AirtableCommand from '../helpers/airtable_command';
@@ -297,7 +297,7 @@ export default class Run extends AirtableCommand {
 
         try {
             await Promise.race([
-                clipboardy.write(`https://localhost:${secureServerPort}`),
+                writeText(`https://localhost:${secureServerPort}`),
                 appConfigModifiedPromise,
             ]);
             this.log(`https://localhost:${secureServerPort} has been copied to your clipboard`);

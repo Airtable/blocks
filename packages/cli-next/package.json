@@ -19,7 +19,6 @@
         "archiver": "^5.1.0",
         "chalk": "^4.1.0",
         "cli-ux": "^5.5.1",
-        "clipboardy": "^2.3.0",
         "cpx2": "7.0.1",
         "cross-spawn": "^7.0.3",
         "debug": "^4.2.0",
@@ -29,6 +28,7 @@
         "http-proxy-middleware": "^3.0.3",
         "strip-ansi": "^6.0.0",
         "tar": "^6.1.0",
+        "tinyclip": "^0.1.12",
         "tslib": "^1.14.1",
         "typescript": "^5.4.5"
     },
@@ -76,7 +76,7 @@
         "which": "^2.0.2"
     },
     "engines": {
-        "node": ">=10.0.0"
+        "node": ">=16.4.0"
     },
     "files": [
         "/bin",
