@@ -2,7 +2,7 @@
 import {MockAirtableInterface} from './airtable_interface_mocks/mock_airtable_interface';
 import type Table from '../../src/base/models/table';
 import type View from '../../src/base/models/view';
-import AbstractModelWithAsyncData from '../../src/base/models/abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../src/shared/models/abstract_model_with_async_data';
 import Sdk from '../../src/base/sdk';
 import {__reset, __sdk as sdk} from '../../src/base';
 import {type RequestJson} from '../../src/base/types/backend_fetch_types';

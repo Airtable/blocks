@@ -6,7 +6,7 @@ import {MutationTypes} from '../types/mutations';
 import AbstractModel from '../../shared/models/abstract_model';
 import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {type BaseSdkMode} from '../../sdk_mode';
-import ObjectPool from './object_pool';
+import {ObjectPool} from '../../shared/models/object_pool';
 import type Table from './table';
 import RecordQueryResult, {
     normalizeSortsOrGroups,

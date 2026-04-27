@@ -1,24 +1,24 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import type Sdk from '../sdk';
 import {
     fireAndForgetPromise,
     type FlowAnyFunction,
     type FlowAnyObject,
     type TimeoutId,
-} from '../../shared/private_utils';
-import {invariant} from '../../shared/error_utils';
-import AbstractModel from '../../shared/models/abstract_model';
-import {type BaseSdkMode} from '../../sdk_mode';
+} from '../private_utils';
+import {invariant} from '../error_utils';
+import {type SdkMode} from '../../sdk_mode';
+import AbstractModel from './abstract_model';
 
 /**
  * Abstract superclass for all Blocks SDK models that need to fetch async data.
  *
  * @docsPath models/advanced/AbstractModelWithAsyncData
  */
-abstract class AbstractModelWithAsyncData<
+export abstract class AbstractModelWithAsyncData<
+    SdkModeT extends SdkMode,
     DataType,
     WatchableKey extends string,
-> extends AbstractModel<BaseSdkMode, DataType, WatchableKey> {
+> extends AbstractModel<SdkModeT, DataType, WatchableKey> {
     /** @internal */
     static __DATA_UNLOAD_DELAY_MS = 1000;
     /** @internal */
@@ -46,7 +46,7 @@ abstract class AbstractModelWithAsyncData<
      */
     _isForceUnloaded: boolean = false;
     /** @hidden */
-    constructor(sdk: Sdk, modelId: string) {
+    constructor(sdk: SdkModeT['SdkT'], modelId: string) {
         super(sdk, modelId);
 
         this._isDataLoaded = false;
@@ -188,5 +188,3 @@ abstract class AbstractModelWithAsyncData<
         invariant(!this._isForceUnloaded, 'model (%s) permanently deleted', this.id);
     }
 }
-
-export default AbstractModelWithAsyncData;

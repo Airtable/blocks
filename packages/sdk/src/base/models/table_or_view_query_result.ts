@@ -12,6 +12,7 @@ import {
 import {invariant, spawnError} from '../../shared/error_utils';
 import {type VisList, type NormalizedGroupLevel} from '../types/airtable_interface';
 import {type GroupLevelData, type GroupData} from '../types/view';
+import {ObjectPool} from '../../shared/models/object_pool';
 import Table, {WatchableTableKeys} from './table';
 import type View from './view';
 import RecordQueryResult, {
@@ -22,7 +23,6 @@ import RecordQueryResult, {
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 import type Field from './field';
 import type Record from './record';
-import ObjectPool from './object_pool';
 import type RecordStore from './record_store';
 import {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';

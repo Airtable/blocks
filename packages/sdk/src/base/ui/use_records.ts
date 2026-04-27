@@ -13,7 +13,7 @@ import type Record from '../models/record';
 import * as RecordColoring from '../models/record_coloring';
 import View from '../models/view';
 import useWatchable from '../../shared/ui/use_watchable';
-import useLoadable from './use_loadable';
+import useLoadable from '../../shared/ui/use_loadable';
 
 /** */
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;

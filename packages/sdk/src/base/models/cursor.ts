@@ -4,7 +4,8 @@ import {type ModelChange} from '../../shared/types/base_core';
 import {isEnumValue, entries, type ObjectValues, type ObjectMap} from '../../shared/private_utils';
 import {invariant} from '../../shared/error_utils';
 import {type RecordId, type FieldId, type TableId, type ViewId} from '../../shared/types/hyper_ids';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../shared/models/abstract_model_with_async_data';
+import {type BaseSdkMode} from '../../sdk_mode';
 import Table from './table';
 import View from './view';
 import Record from './record';
@@ -82,7 +83,7 @@ interface CursorData {
  *
  * @docsPath models/Cursor
  */
-class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
+class Cursor extends AbstractModelWithAsyncData<BaseSdkMode, CursorData, WatchableCursorKey> {
     /** @internal */
     static _className = 'Cursor';
     /** @internal */

@@ -5,6 +5,7 @@ import {FieldType} from '../../shared/types/field_core';
 import {type RecordId} from '../../shared/types/hyper_ids';
 import {type ObjectMap} from '../../shared/private_utils';
 import useWatchable from '../../shared/ui/use_watchable';
+import {useColorScheme} from '../../shared/ui/use_color_scheme';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {type SdkMode} from '../../sdk_mode';
 
@@ -82,6 +83,7 @@ export function CellRenderer<SdkModeT extends SdkMode>(props: CellRendererProps<
     const sdk = useSdk();
     useWatchable(record, [`cellValueInField:${field.id}`]);
     useWatchable(field, ['type', 'options']);
+    const {colorScheme} = useColorScheme();
 
     if (field.isDeleted) {
         return null;
@@ -184,7 +186,7 @@ export function CellRenderer<SdkModeT extends SdkMode>(props: CellRendererProps<
         >
             <div
                 {...attributes}
-                className={`cell read ${cellClassName ?? ''}`}
+                className={`${colorScheme === 'dark' ? 'theme-dark ' : ''}cell read ${cellClassName ?? ''}`}
                 style={cellStyle}
                 dangerouslySetInnerHTML={{
                     __html: cellValueHtml,

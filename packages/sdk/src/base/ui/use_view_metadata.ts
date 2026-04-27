@@ -2,7 +2,7 @@
 import type ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import View from '../models/view';
 import useWatchable from '../../shared/ui/use_watchable';
-import useLoadable from './use_loadable';
+import useLoadable from '../../shared/ui/use_loadable';
 
 /** */
 function useViewMetadata(

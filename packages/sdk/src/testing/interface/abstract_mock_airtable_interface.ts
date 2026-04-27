@@ -173,6 +173,16 @@ export abstract class AbstractMockAirtableInterface
 
     unsubscribeFromSelectionData(): void {}
 
+    setSearchParamsAsync(searchParams: Record<string, string>): Promise<boolean> {
+        return Promise.resolve(true);
+    }
+
+    subscribeToSearchParamsUpdates(
+        callback: (data: {searchParams: Record<string, string>}) => void,
+    ): void {
+        this.on('searchParamsUpdates', callback);
+    }
+
     subscribeToModelUpdates(fn: (...args: any[]) => void) {
         this.on('modelupdates', fn);
     }

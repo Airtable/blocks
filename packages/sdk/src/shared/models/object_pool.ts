@@ -1,6 +1,6 @@
 /** @hidden */ /** */
-import {invariant} from '../../shared/error_utils';
-import {type TimeoutId} from '../../shared/private_utils';
+import {invariant} from '../error_utils';
+import {type TimeoutId} from '../private_utils';
 
 const WEAK_RETAIN_TIME_MS = 10000;
 
@@ -8,7 +8,7 @@ export interface Poolable {
     __poolKey: string;
 }
 
-class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
+export class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
     /** @internal */
     _objectsByKey: {[key: string]: Array<T> | void} = {};
     /** @internal */
@@ -137,5 +137,3 @@ class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
         return newObject;
     }
 }
-
-export default ObjectPool;

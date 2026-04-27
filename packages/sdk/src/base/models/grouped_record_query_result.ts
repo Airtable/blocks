@@ -5,6 +5,7 @@ import {type FlowAnyFunction, type FlowAnyObject, type ObjectMap} from '../../sh
 import {invariant} from '../../shared/error_utils';
 import {type GroupData} from '../types/view';
 import {type NormalizedGroupLevel} from '../types/airtable_interface';
+import {ObjectPool} from '../../shared/models/object_pool';
 import RecordQueryResult, {
     type WatchableRecordQueryResultKey,
     type NormalizedRecordQueryResultOpts,
@@ -12,7 +13,6 @@ import RecordQueryResult, {
 
 import type Table from './table';
 import type Field from './field';
-import ObjectPool from './object_pool';
 import type TableOrViewQueryResult from './table_or_view_query_result';
 
 /** @hidden */

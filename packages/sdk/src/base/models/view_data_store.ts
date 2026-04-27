@@ -14,7 +14,8 @@ import {type GroupData, type GroupLevelData, type ViewData} from '../types/view'
 import {type AirtableInterface} from '../types/airtable_interface';
 import {type Color} from '../../shared/colors';
 import {type ModelChange} from '../../shared/types/base_core';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../shared/models/abstract_model_with_async_data';
+import {type BaseSdkMode} from '../../sdk_mode';
 import type RecordStore from './record_store';
 import type Record from './record';
 
@@ -32,7 +33,11 @@ export const WatchableViewDataStoreKeys = Object.freeze({
 export type WatchableViewDataStoreKey = ObjectValues<typeof WatchableViewDataStoreKeys>;
 
 /** @internal */
-class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDataStoreKey> {
+class ViewDataStore extends AbstractModelWithAsyncData<
+    BaseSdkMode,
+    ViewData,
+    WatchableViewDataStoreKey
+> {
     static _className = 'ViewDataStore';
     static _isWatchableKey(key: string): boolean {
         return isEnumValue(WatchableViewDataStoreKeys, key);

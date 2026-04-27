@@ -33,6 +33,7 @@ export function convertFixtureDataToSdkInitData(fixtureData: FixtureData): SdkIn
         blockInstallationId: MOCK_BLOCK_INSTALLATION_ID,
         isFirstRun: false,
         initialKvValuesByKey: {},
+        initialSearchParams: {},
         runContext: {
             type: MOCK_BLOCK_RUN_CONTEXT_TYPE,
             pageId: MOCK_PAGE_ID,

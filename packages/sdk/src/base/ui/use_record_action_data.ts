@@ -4,7 +4,7 @@ import {WatchablePerformRecordActionKeys} from '../perform_record_action';
 import useWatchable from '../../shared/ui/use_watchable';
 import {useSdk} from '../../shared/ui/sdk_context';
 import {type BaseSdkMode} from '../../sdk_mode';
-import useLoadable from './use_loadable';
+import useLoadable from '../../shared/ui/use_loadable';
 
 /**
  * A hook to watch "open extension" / "perform record action" events (from button field). Returns

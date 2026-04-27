@@ -23,7 +23,7 @@ import RecordStoreCore, {
     WatchableCellValuesInFieldKeyPrefix,
     WatchableRecordStoreKeysCore,
 } from '../../shared/models/record_store_core';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../shared/models/abstract_model_with_async_data';
 import Record from './record';
 import ViewDataStore from './view_data_store';
 import type Table from './table';
@@ -194,7 +194,7 @@ class RecordStore extends RecordStoreCore<BaseSdkMode, WatchableRecordStoreKey> 
 }
 
 /** @internal */
-class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<TableData, string> {
+class RecordStoreAsyncLoader extends AbstractModelWithAsyncData<BaseSdkMode, TableData, string> {
     static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
         return key === WatchableRecordStoreKeys.cellValues;
     }

@@ -1,9 +1,10 @@
 import React, {Suspense} from 'react';
 import {act, render} from '@testing-library/react';
-import AbstractModelWithAsyncData from '../../../src/base/models/abstract_model_with_async_data';
-import useLoadable from '../../../src/base/ui/use_loadable';
+import {AbstractModelWithAsyncData} from '../../../src/shared/models/abstract_model_with_async_data';
+import useLoadable from '../../../src/shared/ui/use_loadable';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
 import Sdk from '../../../src/base/sdk';
+import {type BaseSdkMode} from '../../../src/sdk_mode';
 
 jest.useFakeTimers();
 
@@ -12,7 +13,11 @@ async function tickAsync() {
     jest.advanceTimersByTime(0);
 }
 
-class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataLoaded'> {
+class Thing extends AbstractModelWithAsyncData<
+    BaseSdkMode,
+    {name: string},
+    'name' | 'isDataLoaded'
+> {
     _resolve: (arg1: Array<'name' | 'isDataLoaded'>) => void = () => {};
     name: string;
 

@@ -26,6 +26,7 @@ export type BlockRunContext = PageElementInQueryContainerBlockRunContextType;
 export interface SdkInitData extends SdkInitDataCore {
     runContext: BlockRunContext;
     baseData: BaseData;
+    initialSearchParams: Record<string, string>;
 }
 
 /** @hidden */
@@ -136,4 +137,8 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
     ): Promise<{selectedSubElementId: string | null}>;
     unsubscribeFromSelectionData(): void;
     getMapApiTokenAsync?(): Promise<GetMapApiTokenResponse>;
+    setSearchParamsAsync(searchParams: Record<string, string>): Promise<boolean>;
+    subscribeToSearchParamsUpdates(
+        callback: (data: {searchParams: Record<string, string>}) => void,
+    ): void;
 }

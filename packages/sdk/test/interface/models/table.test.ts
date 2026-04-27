@@ -1227,9 +1227,9 @@ describe('Table', () => {
 
             expect(table._recordStore.recordIds).toEqual(['rec1', 'rec2', 'rec3']);
 
-            const deletePromise1 = table.deleteRecordsAsync(['rec1']);
+            const deleteRec1Promise = table.deleteRecordsAsync(['rec1']);
 
-            const deletePromise2 = table.deleteRecordsAsync(['rec2']);
+            const deleteRec2Promise = table.deleteRecordsAsync(['rec2']);
 
             expect(table._recordStore.recordIds).toEqual(['rec3']);
 
@@ -1246,8 +1246,8 @@ describe('Table', () => {
             expect(records.length).toBe(1);
             expect(records[0].id).toBe('rec3');
 
-            await deletePromise1;
-            await deletePromise2;
+            await deleteRec1Promise;
+            await deleteRec2Promise;
         });
     });
 

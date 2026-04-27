@@ -1,6 +1,10 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {MockAirtableInterface} from '../airtable_interface_mocks/mock_airtable_interface';
+import {
+    mockMatchMediaForDarkColorScheme,
+    resetMatchMediaToLightDefault,
+} from '../../match_media_test_utils';
 import {CellRenderer} from '../../../src/interface/ui/ui';
 import {SdkContext} from '../../../src/shared/ui/sdk_context';
 import {InterfaceBlockSdk} from '../../../src/interface/sdk';
@@ -43,5 +47,39 @@ describe('CellRenderer', () => {
                 <CellRenderer field={field} />
             </TestProvider>,
         );
+    });
+
+    it('omits theme-dark from the cell when prefers-color-scheme is light', () => {
+        const field = sdk.base.getTable('Design projects').getField('Name');
+        const {container} = render(
+            <TestProvider>
+                <CellRenderer field={field} />
+            </TestProvider>,
+        );
+        const cellEl = container.querySelector('.cell.read');
+        expect(cellEl).toBeTruthy();
+        expect(cellEl).not.toHaveClass('theme-dark');
+    });
+
+    describe('when prefers-color-scheme is dark', () => {
+        beforeEach(() => {
+            mockMatchMediaForDarkColorScheme();
+        });
+
+        afterEach(() => {
+            resetMatchMediaToLightDefault();
+        });
+
+        it('adds theme-dark to the cell', () => {
+            const field = sdk.base.getTable('Design projects').getField('Name');
+            const {container} = render(
+                <TestProvider>
+                    <CellRenderer field={field} />
+                </TestProvider>,
+            );
+            const cellEl = container.querySelector('.cell.read');
+            expect(cellEl).toBeTruthy();
+            expect(cellEl).toHaveClass('theme-dark');
+        });
     });
 });

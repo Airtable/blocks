@@ -13,12 +13,20 @@ import {
     type BlockRunContext,
     type GetMapApiTokenResponse,
 } from './types/airtable_interface';
+import {SearchParams} from './models/search_params';
 
 /** @hidden */
 export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
+    /** @internal */
+    _searchParams: SearchParams;
+
     constructor(airtableInterface: InterfaceSdkMode['AirtableInterfaceT']) {
         super(airtableInterface);
 
+        this._searchParams = new SearchParams(
+            airtableInterface.sdkInitData.initialSearchParams,
+            this,
+        );
         this._registerHandlers();
     }
     /** @internal */
@@ -48,6 +56,10 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
         this.__airtableInterface.subscribeToGlobalConfigUpdates(({updates}) => {
             this.__applyGlobalConfigUpdates(updates);
         });
+
+        this.__airtableInterface.subscribeToSearchParamsUpdates(({searchParams}) => {
+            this.__applySearchParamsUpdates(searchParams);
+        });
     }
     /** @internal */
     __applyModelChanges(changes: ReadonlyArray<ModelChange>) {
@@ -60,6 +72,10 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     __applyGlobalConfigUpdates(updates: ReadonlyArray<GlobalConfigUpdate>) {
         this.globalConfig.__setMultipleKvPaths(updates);
     }
+    /** @internal */
+    __applySearchParamsUpdates(searchParams: Record<string, string>) {
+        this._searchParams.__set(searchParams);
+    }
 
     /**
      * @internal
@@ -71,6 +87,11 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     /** @hidden */
     getBlockRunContext(): BlockRunContext {
         return this.__airtableInterface.sdkInitData.runContext;
+    }
+
+    /** @internal */
+    getInitialSearchParams(): Record<string, string> {
+        return this.__airtableInterface.sdkInitData.initialSearchParams;
     }
 
     /**
@@ -108,7 +129,7 @@ export class InterfaceBlockSdk extends BlockSdkCore<InterfaceSdkMode> {
     }
 
     /**
-     * @hidden
+     * @internal
      */
     unstable_getMapApiTokenAsync(): Promise<GetMapApiTokenResponse> {
         invariant(

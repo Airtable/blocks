@@ -1,8 +1,9 @@
 import {invariant} from '../shared/error_utils';
 import {isEnumValue, type ObjectValues} from '../shared/private_utils';
+import {AbstractModelWithAsyncData} from '../shared/models/abstract_model_with_async_data';
+import {type BaseSdkMode} from '../sdk_mode';
 import {type AirtableInterface} from './types/airtable_interface';
 import {type RecordActionData, type RecordActionDataCallback} from './types/record_action_data';
-import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
 import type Sdk from './sdk';
 
 /** @hidden */
@@ -42,6 +43,7 @@ type UnsubscribeFunction = () => void;
  * @internal
  * */
 export class PerformRecordAction extends AbstractModelWithAsyncData<
+    BaseSdkMode,
     RecordActionData | null,
     WatchablePerformRecordActionKey
 > {

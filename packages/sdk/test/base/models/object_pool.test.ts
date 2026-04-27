@@ -1,4 +1,4 @@
-import ObjectPool, {type Poolable} from '../../../src/base/models/object_pool';
+import {ObjectPool, type Poolable} from '../../../src/shared/models/object_pool';
 
 class TestPoolable implements Poolable {
     __poolKey: string;

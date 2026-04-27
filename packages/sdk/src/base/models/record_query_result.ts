@@ -16,7 +16,8 @@ import {
 import {spawnUnknownSwitchCaseError, spawnError, invariant} from '../../shared/error_utils';
 import type Watchable from '../../shared/watchable';
 import {type NormalizedGroupLevel} from '../types/airtable_interface';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../shared/models/abstract_model_with_async_data';
+import {type BaseSdkMode} from '../../sdk_mode';
 import type Table from './table';
 import Field from './field';
 import type Record from './record';
@@ -329,6 +330,7 @@ export function normalizeSortsOrGroups(
  * @docsPath models/query results/RecordQueryResult
  */
 abstract class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+    BaseSdkMode,
     DataType,
     WatchableRecordQueryResultKey
 > {

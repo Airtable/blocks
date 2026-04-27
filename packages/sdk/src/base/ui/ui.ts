@@ -11,7 +11,7 @@ export {default as expandRecord} from './expand_record';
 export {default as expandRecordList} from './expand_record_list';
 export {default as expandRecordPickerAsync} from './expand_record_picker_async';
 export {default as GlobalAlert} from './global_alert';
-export {default as useLoadable} from './use_loadable';
+export {default as useLoadable} from '../../shared/ui/use_loadable';
 export {useColorScheme} from '../../shared/ui/use_color_scheme';
 export {useRecordIds, useRecords, useRecordById, useRecordQueryResult} from './use_records';
 export {default as useBase} from './use_base';

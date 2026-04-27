@@ -4,7 +4,8 @@ import {type FieldId} from '../../shared/types/hyper_ids';
 import {type NormalizedGroupLevel} from '../types/airtable_interface';
 import {invariant} from '../../shared/error_utils';
 import {isEnumValue, getLocallyUniqueId, type ObjectValues} from '../../shared/private_utils';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import {AbstractModelWithAsyncData} from '../../shared/models/abstract_model_with_async_data';
+import {type BaseSdkMode} from '../../sdk_mode';
 import type ViewDataStore from './view_data_store';
 import type View from './view';
 import type Field from './field';
@@ -68,6 +69,7 @@ export type GroupLevels = Array<GroupLevel>;
  * @docsPath models/query results/ViewMetadataQueryResult
  */
 class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
+    BaseSdkMode,
     ViewMetadata,
     WatchableViewMetadataKey
 > {

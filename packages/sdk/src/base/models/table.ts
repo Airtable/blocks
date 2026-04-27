@@ -11,12 +11,12 @@ import {MutationTypes} from '../types/mutations';
 import {type BaseSdkMode} from '../../sdk_mode';
 import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {type ChangedPathsForType} from '../../shared/models/base_core';
+import {ObjectPool} from '../../shared/models/object_pool';
 import type RecordStore from './record_store';
 import RecordQueryResult, {type RecordQueryResultOpts} from './record_query_result';
 import Field from './field';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import View from './view';
-import ObjectPool from './object_pool';
 import type Base from './base';
 
 export const WatchableTableKeys = Object.freeze({
