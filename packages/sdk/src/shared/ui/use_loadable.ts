@@ -23,6 +23,8 @@ interface LoadableModel {
 
 const SUSPENSE_CLEAN_UP_MS = 60000;
 
+const failedSuspenseLoads = new WeakMap<LoadableModel, unknown>();
+
 /**
  * Options object for the {@link useLoadable} hook.
  */
@@ -129,19 +131,28 @@ export default function useLoadable(
     const areAllModelsLoaded = compactModels.every((model) => model.isDataLoaded);
 
     if (shouldSuspend && !areAllModelsLoaded) {
-        const suspensePromise = Promise.all(compactModels.map((model) => model.loadDataAsync()))
-            .then(() => {
-                setTimeout(() => {
-                    for (const model of compactModels) {
-                        model.unloadData();
-                    }
-                }, SUSPENSE_CLEAN_UP_MS);
-            })
-            .catch((error) => {
-                // eslint-disable-next-line no-console
-                console.error(error);
-                throw error;
-            });
+        for (const model of compactModels) {
+            if (failedSuspenseLoads.has(model)) {
+                throw failedSuspenseLoads.get(model);
+            }
+        }
+
+        const scheduleCleanup = () => {
+            setTimeout(() => {
+                for (const model of compactModels) {
+                    model.unloadData();
+                }
+            }, SUSPENSE_CLEAN_UP_MS);
+        };
+        const suspensePromise = Promise.all(
+            compactModels.map((model) =>
+                model.loadDataAsync().catch((error: unknown) => {
+                    failedSuspenseLoads.set(model, error);
+                    throw error;
+                }),
+            ),
+        );
+        suspensePromise.then(scheduleCleanup, scheduleCleanup);
 
         throw suspensePromise;
     }

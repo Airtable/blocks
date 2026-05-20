@@ -81,6 +81,7 @@ function convertTableFixtureDataToTableData(tableFixtureData: TableFixtureData):
             getId,
         ),
         recordOrder: records.map((r) => r.id),
+        dynamicQueriesByKey: {},
         lock: null,
         externalSyncById: null,
         isRecordExpansionEnabled: true,

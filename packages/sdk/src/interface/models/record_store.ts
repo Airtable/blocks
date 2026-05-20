@@ -2,11 +2,12 @@ import {type RecordId} from '../../shared/types/hyper_ids';
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import RecordStoreCore, {
     WatchableCellValuesInFieldKeyPrefix,
+    WatchableDynamicQueryKeyPrefix,
     WatchableRecordStoreKeysCore,
 } from '../../shared/models/record_store_core';
 import {type TableData} from '../types/table';
 import {type ChangedPathsForType} from '../../shared/models/base_core';
-import {isEnumValue, type ObjectValues} from '../../shared/private_utils';
+import {entries, isEnumValue, type ObjectValues} from '../../shared/private_utils';
 import {type Table} from './table';
 import {Record} from './record';
 
@@ -33,7 +34,8 @@ export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableReco
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
-            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix) ||
+            key.startsWith(WatchableDynamicQueryKeyPrefix)
         );
     }
 
@@ -55,6 +57,13 @@ export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableReco
     }
 
     triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>) {
+        if (dirtyPaths.dynamicQueriesByKey) {
+            for (const [queryKey, dirtyQueryPaths] of entries(dirtyPaths.dynamicQueriesByKey)) {
+                if (dirtyQueryPaths?._isDirty || dirtyQueryPaths?.recordOrder?._isDirty) {
+                    this._onChange(WatchableDynamicQueryKeyPrefix + queryKey);
+                }
+            }
+        }
         super.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.recordOrder) {
             this._onChange(WatchableRecordStoreKeys.recordOrder);

@@ -53,6 +53,10 @@ describe('expandRecord', () => {
         sdk = new InterfaceBlockSdk(mockAirtableInterface);
         sdk.base.getTableByName('Tasks');
         makeRecord('recA', {}, '2020-11-19T20:51:04.281Z');
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblTasks.dynamicQueriesByKey[
+            JSON.stringify(['table', 'tblTasks', null, null])
+        ] = {recordOrder: ['recA']};
     });
 
     afterEach(() => {

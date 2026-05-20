@@ -138,17 +138,22 @@ export abstract class AbstractModelWithAsyncData<
             return;
         }
         if (!this._pendingDataLoadPromise) {
-            this._pendingDataLoadPromise = this._loadDataAsync().then((changedKeys) => {
-                this._isDataLoaded = true;
-                this._pendingDataLoadPromise = null;
+            this._pendingDataLoadPromise = this._loadDataAsync()
+                .then((changedKeys) => {
+                    this._isDataLoaded = true;
+                    this._pendingDataLoadPromise = null;
 
-                for (const key of changedKeys) {
-                    this._onChange(key);
-                }
-                this._onChangeIsDataLoaded();
+                    for (const key of changedKeys) {
+                        this._onChange(key);
+                    }
+                    this._onChangeIsDataLoaded();
 
-                return changedKeys;
-            });
+                    return changedKeys;
+                })
+                .catch((err) => {
+                    this._pendingDataLoadPromise = null;
+                    throw err;
+                });
         }
         await this._pendingDataLoadPromise;
     }

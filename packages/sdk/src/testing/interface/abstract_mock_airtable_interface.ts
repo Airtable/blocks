@@ -195,6 +195,14 @@ export abstract class AbstractMockAirtableInterface
 
     triggerGlobalConfigUpdates() {}
 
+    async loadDynamicQueryAsync(_args: {
+        key: string;
+        tableId: string;
+        fieldIds: ReadonlyArray<string>;
+        recordIds: ReadonlyArray<string> | null;
+    }): Promise<void> {}
+    unloadDynamicQuery(_args: {key: string}): void {}
+
     abstract expandRecord(tableId: string, recordId: string): void;
     abstract reloadFrame(): void;
     abstract trackEvent(): void;

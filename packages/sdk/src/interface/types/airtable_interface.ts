@@ -141,4 +141,11 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
     subscribeToSearchParamsUpdates(
         callback: (data: {searchParams: Record<string, string>}) => void,
     ): void;
+    loadDynamicQueryAsync(args: {
+        key: string;
+        tableId: string;
+        fieldIds: ReadonlyArray<string>;
+        recordIds: ReadonlyArray<string> | null;
+    }): Promise<void>;
+    unloadDynamicQuery(args: {key: string}): void;
 }

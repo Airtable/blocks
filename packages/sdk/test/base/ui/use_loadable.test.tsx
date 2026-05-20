@@ -19,6 +19,7 @@ class Thing extends AbstractModelWithAsyncData<
     'name' | 'isDataLoaded'
 > {
     _resolve: (arg1: Array<'name' | 'isDataLoaded'>) => void = () => {};
+    _reject: (error: unknown) => void = () => {};
     name: string;
 
     static _isWatchableKey() {
@@ -43,8 +44,9 @@ class Thing extends AbstractModelWithAsyncData<
     }
 
     async _loadDataAsync(): Promise<Array<'name' | 'isDataLoaded'>> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this._resolve = resolve;
+            this._reject = reject;
         });
     }
 
@@ -53,8 +55,27 @@ class Thing extends AbstractModelWithAsyncData<
         this._resolve(['name', 'isDataLoaded']);
     }
 
+    rejectLoading(error: unknown) {
+        this._reject(error);
+    }
+
     _unloadData() {
         this.name = '';
+    }
+}
+
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: Error | null}> {
+    state = {error: null as Error | null};
+
+    static getDerivedStateFromError(error: Error) {
+        return {error};
+    }
+
+    render() {
+        if (this.state.error) {
+            return <span>error: {this.state.error.message}</span>;
+        }
+        return this.props.children;
     }
 }
 
@@ -363,6 +384,220 @@ describe('useLoadable', () => {
             jest.runAllTimers();
             expect(thing2.isDataLoaded).toBe(false);
             expect(thing3.isDataLoaded).toBe(false);
+        });
+    });
+
+    describe('error handling', () => {
+        let consoleErrorSpy: jest.SpyInstance;
+
+        beforeEach(() => {
+            consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            consoleErrorSpy.mockRestore();
+        });
+
+        const SingleComponent = ({thing}: {thing: Thing}) => {
+            useLoadable(thing);
+            return <span>loaded: {thing.name}</span>;
+        };
+
+        const MultiComponent = ({things}: {things: Array<Thing>}) => {
+            useLoadable(things);
+            return <span>all loaded</span>;
+        };
+
+        it('with suspense, surfaces a rejected load to the nearest Error Boundary', async () => {
+            const thing = new Thing(sdk);
+
+            const {container} = await new Promise<{container: HTMLElement}>((resolve) => {
+                act(() => {
+                    const result = render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <SingleComponent thing={thing} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve(result);
+                });
+            });
+
+            expect(container.textContent).toBe('suspended');
+
+            await act(async () => {
+                thing.rejectLoading(new Error('boom'));
+                await tickAsync();
+            });
+
+            expect(container.textContent).toBe('error: boom');
+        });
+
+        it('does not call loadDataAsync after a rejection (no retry loop)', async () => {
+            const thing = new Thing(sdk);
+            const loadSpy = jest.spyOn(thing, 'loadDataAsync');
+
+            await new Promise<void>((resolve) => {
+                act(() => {
+                    render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <SingleComponent thing={thing} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve();
+                });
+            });
+
+            const callsBeforeRejection = loadSpy.mock.calls.length;
+            expect(callsBeforeRejection).toBeGreaterThanOrEqual(1);
+
+            await act(async () => {
+                thing.rejectLoading(new Error('boom'));
+                await tickAsync();
+            });
+
+            expect(loadSpy.mock.calls.length).toBe(callsBeforeRejection);
+        });
+
+        it('caches the error per-model: a sibling whose load did not fail is not poisoned in another component', async () => {
+            const failingThing = new Thing(sdk);
+            const pendingThing = new Thing(sdk);
+
+            const {container, unmount} = await new Promise<{
+                container: HTMLElement;
+                unmount: () => void;
+            }>((resolve) => {
+                act(() => {
+                    const result = render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <MultiComponent things={[failingThing, pendingThing]} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve(result);
+                });
+            });
+
+            expect(container.textContent).toBe('suspended');
+
+            await act(async () => {
+                failingThing.rejectLoading(new Error('a-failed'));
+                await tickAsync();
+            });
+
+            expect(container.textContent).toBe('error: a-failed');
+
+            act(() => {
+                unmount();
+            });
+
+            const {container: container2} = await new Promise<{container: HTMLElement}>(
+                (resolve) => {
+                    act(() => {
+                        const result = render(
+                            <ErrorBoundary>
+                                <Suspense fallback={<span>suspended</span>}>
+                                    <SingleComponent thing={pendingThing} />
+                                </Suspense>
+                            </ErrorBoundary>,
+                        );
+                        resolve(result);
+                    });
+                },
+            );
+
+            expect(container2.textContent).toBe('suspended');
+
+            await act(async () => {
+                pendingThing.resolveLoading('ok');
+                await tickAsync();
+            });
+
+            expect(container2.textContent).toBe('loaded: ok');
+        });
+
+        it('a re-mount with a previously failed model still throws synchronously (cache persists)', async () => {
+            const thing = new Thing(sdk);
+
+            const {container: c1, unmount: unmount1} = await new Promise<{
+                container: HTMLElement;
+                unmount: () => void;
+            }>((resolve) => {
+                act(() => {
+                    const result = render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <SingleComponent thing={thing} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve(result);
+                });
+            });
+
+            await act(async () => {
+                thing.rejectLoading(new Error('boom'));
+                await tickAsync();
+            });
+
+            expect(c1.textContent).toBe('error: boom');
+
+            act(() => {
+                unmount1();
+            });
+
+            const {container: c2} = await new Promise<{container: HTMLElement}>((resolve) => {
+                act(() => {
+                    const result = render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <SingleComponent thing={thing} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve(result);
+                });
+            });
+
+            expect(c2.textContent).toBe('error: boom');
+        });
+
+        it('balances retain counts on a rejected suspense load (cleanup runs on both branches)', async () => {
+            const successfulSibling = new Thing(sdk);
+            const failingThing = new Thing(sdk);
+
+            await new Promise<void>((resolve) => {
+                act(() => {
+                    render(
+                        <ErrorBoundary>
+                            <Suspense fallback={<span>suspended</span>}>
+                                <MultiComponent things={[successfulSibling, failingThing]} />
+                            </Suspense>
+                        </ErrorBoundary>,
+                    );
+                    resolve();
+                });
+            });
+
+            expect(successfulSibling._dataRetainCount).toBeGreaterThanOrEqual(1);
+            expect(failingThing._dataRetainCount).toBeGreaterThanOrEqual(1);
+
+            await act(async () => {
+                failingThing.rejectLoading(new Error('boom'));
+                await tickAsync();
+            });
+
+            await act(async () => {
+                jest.advanceTimersByTime(60000);
+                await tickAsync();
+            });
+
+            expect(successfulSibling._dataRetainCount).toBe(0);
+            expect(failingThing._dataRetainCount).toBe(0);
         });
     });
 });

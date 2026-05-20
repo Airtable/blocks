@@ -9,6 +9,14 @@ export interface TableData extends TableDataCore {
     fieldsById: ObjectMap<FieldId, FieldData>;
     recordsById: ObjectMap<RecordId, RecordData>;
     recordOrder: Array<RecordId>;
+
+    dynamicQueriesByKey: ObjectMap<
+        string,
+        {
+            recordOrder: Array<RecordId>;
+        }
+    >;
+
     isRecordExpansionEnabled: boolean;
     canCreateRecordsInline: boolean;
     canEditRecordsInline: boolean;

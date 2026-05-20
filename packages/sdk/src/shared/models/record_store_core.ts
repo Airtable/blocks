@@ -21,6 +21,16 @@ export const WatchableRecordStoreKeysCore = Object.freeze({
 export const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
 /**
+ * Prefix for per-dynamic-query watch keys. A key of
+ * `dynamicQuery:<__poolKey>` fires when `dynamicQueriesByKey[<poolKey>].recordOrder`
+ * changes — scoped to that one query, so unrelated queries on the same table
+ * don't re-render when one query's result set changes.
+ *
+ * @internal
+ */
+export const WatchableDynamicQueryKeyPrefix = 'dynamicQuery:';
+
+/**
  * The string case is to accommodate prefix keys
  *
  * @internal

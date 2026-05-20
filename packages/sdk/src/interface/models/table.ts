@@ -1,9 +1,14 @@
+import {ObjectPool} from '../../shared/models/object_pool';
 import {TableCore} from '../../shared/models/table_core';
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {type PermissionCheckResult} from '../../shared/types/mutations_core';
 import {FieldType} from '../../shared/types/field_core';
+import {type InterfaceBlockSdk} from '../sdk';
 import {Field} from './field';
+import {type Base} from './base';
+import {type RecordStore} from './record_store';
+import {TableQueryResult, type TableQueryResultOpts} from './table_query_result';
 
 /**
  * Model class representing a table. Every {@link Base} has one or more tables.
@@ -23,9 +28,90 @@ import {Field} from './field';
  * @docsPath models/Table
  */
 export class Table extends TableCore<InterfaceSdkMode> {
+    /**
+     * Pool of `TableQueryResult` instances keyed by `__poolKey`. Callers
+     * (currently `TableQueryResult` itself for strong registration) and
+     * `Table.selectRecords` share this pool so identical opts return the
+     * same pooled instance across calls/components.
+     *
+     * @internal
+     */
+    __tableQueryResultPool: ObjectPool<TableQueryResult, typeof TableQueryResult>;
+
+    /** @internal */
+    constructor(
+        parentBase: Base,
+        recordStore: RecordStore,
+        tableId: string,
+        sdk: InterfaceBlockSdk,
+    ) {
+        super(parentBase, recordStore, tableId, sdk);
+        this.__tableQueryResultPool = new ObjectPool(TableQueryResult);
+    }
+
     /** @internal */
     _constructField(fieldId: FieldId): Field {
         return new Field(this.parentBase.__sdk, this, fieldId);
+    }
+
+    /**
+     * Select records from the table. Returns a {@link TableQueryResult}, which you
+     * can pass to {@link useRecords} to handle loading/unloading and updating your UI
+     * automatically.
+     *
+     * @param opts Options for the query, such as fields.
+     * @example
+     * ```js
+     * import {useBase, useRecords} from '@airtable/blocks/interface/ui';
+     *
+     * function TodoList() {
+     *     const base = useBase();
+     *     const table = base.getTableByName('Tasks');
+     *
+     *     const queryResult = table.selectRecords({fields: ['Name']});
+     *     const records = useRecords(queryResult);
+     *
+     *     return (
+     *         <ul>
+     *             {records.map(record => (
+     *                 <li key={record.id}>
+     *                     {record.getCellValueAsString('Name') || 'Unnamed record'}
+     *                 </li>
+     *             ))}
+     *         </ul>
+     *     );
+     * }
+     * ```
+     */
+    selectRecords(opts: TableQueryResultOpts = {}): TableQueryResult {
+        const normalizedOpts = TableQueryResult._normalizeOpts(this, opts);
+        return this.__tableQueryResultPool.getObjectForReuse(this._sdk, normalizedOpts);
+    }
+
+    /**
+     * Select and load records from the table. Returns a {@link TableQueryResult} promise where
+     * record data has been loaded.
+     *
+     * Consider using {@link useRecords} instead, unless you need to work with the
+     * query result directly. Record hooks handle loading/unloading and updating your UI
+     * automatically, but manually `select`ing records is useful for one-off data processing.
+     *
+     * Once you've finished with your query, remember to call `queryResult.unloadData()`.
+     *
+     * @param opts Options for the query, such as fields.
+     * @example
+     * ```js
+     * async function logRecordCountAsync(table) {
+     *     const query = await table.selectRecordsAsync({fields: ['Name']});
+     *     console.log(query.recordIds.length);
+     *     query.unloadData();
+     * }
+     * ```
+     */
+    async selectRecordsAsync(opts: TableQueryResultOpts = {}): Promise<TableQueryResult> {
+        const queryResult = this.selectRecords(opts);
+        await queryResult.loadDataAsync();
+        return queryResult;
     }
 
     /**
