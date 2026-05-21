@@ -9,6 +9,7 @@
     },
     "homepage": "https://airtable.com/developers/blocks",
     "exports": {
+        "./package.json": "./package.json",
         "./unstable_private_utils": {
             "types": "./dist/types/src/shared/unstable_private_utils.d.ts",
             "default": "./dist/esm/shared/unstable_private_utils.js"
