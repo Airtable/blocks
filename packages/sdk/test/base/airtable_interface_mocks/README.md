@@ -17,9 +17,9 @@ induce the SDK to send messages and verify their contents.
 
 ## Future Work
 
--   implement all of the `trigger*` methods
--   write more tests using this technique
--   extend the Block build process to allow developers to create a build which includes an
-    `AbstractMockAirtableInterface` implementation of their own design
--   design a higher-level API for Block developers to use, allowing them to elide details like table
-    IDs, making their test code more concise and familiar
+- implement all of the `trigger*` methods
+- write more tests using this technique
+- extend the Block build process to allow developers to create a build which includes an
+  `AbstractMockAirtableInterface` implementation of their own design
+- design a higher-level API for Block developers to use, allowing them to elide details like table
+  IDs, making their test code more concise and familiar

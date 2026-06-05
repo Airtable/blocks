@@ -14,3 +14,6 @@
 flow-typed
 .nyc_output
 .test-tmp
+
+# HTML comment in a list causes non-idempotent formatting (https://github.com/prettier/prettier/issues/16936)
+packages/cli-next/README.md

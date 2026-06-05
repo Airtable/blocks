@@ -124,6 +124,49 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
     };
 
     /**
+     * Fires when the table-level `recordsById` map changes (records added or
+     * removed at the table level). Complements `_onRecordStoreRecordOrderChanged`,
+     * which only fires when the host pushes a per-query `recordOrder` update.
+     *
+     * When a record is deleted optimistically, `recordsById` updates
+     * immediately but the host-mirrored `dynamicQueriesByKey[key].recordOrder`
+     * doesn't until the host syncs. `recordIds` is filtered against
+     * `recordsById`, so our view changes — but without this handler our
+     * `recordIds` / `records` watchers wouldn't fire until the host catches up.
+     * Filter on intersection with the raw recordOrder so we only fire for
+     * changes that actually affect this query.
+     *
+     * @internal
+     */
+    _onRecordStoreRecordsChanged = (
+        _model: unknown,
+        _key: string,
+        payload:
+            | {
+                  addedRecordIds: ReadonlyArray<RecordId>;
+                  removedRecordIds: ReadonlyArray<RecordId>;
+              }
+            | undefined,
+    ): void => {
+        if (!this.isDataLoaded || payload === undefined) {
+            return;
+        }
+        if (payload.removedRecordIds.length === 0) {
+            return;
+        }
+        const recordStore = this.parentTable.parentBase.__getRecordStore(this.parentTable.id);
+        const rawRecordOrder =
+            recordStore._data.dynamicQueriesByKey?.[this.__poolKey]?.recordOrder ?? [];
+        const rawSet = new Set<RecordId>(rawRecordOrder);
+        if (!payload.removedRecordIds.some((id) => rawSet.has(id))) {
+            return;
+        }
+        this._cachedRecordIdsSet = null;
+        this._onChange(WatchableRecordQueryResultKeysCore.recordIds);
+        this._onChange(WatchableRecordQueryResultKeysCore.records);
+    };
+
+    /**
      * Fires on changes to cell values for fields this query asked for (or any
      * cell value, if `fields === null`). We re-emit as `cellValues` + `records`
      * so consumers using `useWatchable(queryResult, ['records', 'cellValues'])`
@@ -242,7 +285,11 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
     get recordIds(): ReadonlyArray<RecordId> {
         invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
         const recordStore = this.parentTable.parentBase.__getRecordStore(this.parentTable.id);
-        return recordStore._data.dynamicQueriesByKey?.[this.__poolKey]?.recordOrder ?? [];
+        const recordOrder =
+            recordStore._data.dynamicQueriesByKey?.[this.__poolKey]?.recordOrder ?? [];
+        return recordOrder.filter(
+            (recordId) => recordStore.getRecordByIdIfExists(recordId) !== null,
+        );
     }
 
     /**
@@ -361,7 +408,24 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
             return field;
         };
 
+        const DENIED_PROPS = new Set<string | symbol>(['_data', '_baseData', '_getRawCellValue']);
+
         return {
+            has(target, prop) {
+                if (DENIED_PROPS.has(prop)) {
+                    return false;
+                }
+                return Reflect.has(target, prop);
+            },
+            ownKeys(target) {
+                return Reflect.ownKeys(target).filter((key) => !DENIED_PROPS.has(key));
+            },
+            getOwnPropertyDescriptor(target, prop) {
+                if (DENIED_PROPS.has(prop)) {
+                    return undefined;
+                }
+                return Reflect.getOwnPropertyDescriptor(target, prop);
+            },
             get(target, prop, receiver) {
                 if (prop === 'getCellValue') {
                     return (fieldOrIdOrName: Field | FieldId | string) => {
@@ -393,7 +457,7 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
                         return target.selectLinkedRecordsFromCellAsync(...args);
                     };
                 }
-                if (prop === '_data' || prop === '_baseData' || prop === '_getRawCellValue') {
+                if (DENIED_PROPS.has(prop)) {
                     throw spawnError(
                         'Direct access to %s on a field-gated record is not allowed; ' +
                             'use getCellValue / getCellValueAsString',
@@ -439,6 +503,7 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
             this._onRecordStoreRecordOrderChanged,
             this,
         );
+        recordStore.watch('recordIds', this._onRecordStoreRecordsChanged, this);
         const fieldIds = this._fieldIdsOrNullIfAllFields;
         if (fieldIds === null) {
             recordStore.watch('cellValues', this._onRecordStoreCellValuesChanged, this);
@@ -473,6 +538,7 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
             this._onRecordStoreRecordOrderChanged,
             this,
         );
+        recordStore.unwatch('recordIds', this._onRecordStoreRecordsChanged, this);
         const fieldIds = this._fieldIdsOrNullIfAllFields;
         if (fieldIds === null) {
             recordStore.unwatch('cellValues', this._onRecordStoreCellValuesChanged, this);

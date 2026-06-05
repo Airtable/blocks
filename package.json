@@ -45,8 +45,9 @@
     },
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",
+        "format:check": "prettier --check '**/*.{js,md,json,yml,ts,tsx}'",
         "test": "yarn workspaces run test",
-        "ci": "yarn workspaces run ci",
+        "ci": "yarn run format:check && yarn workspaces run ci",
         "pick-pr-from-example": "./bin/pick-pr-from-example",
         "release-example": "./bin/release-example"
     },

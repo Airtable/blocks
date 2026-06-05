@@ -602,6 +602,49 @@ describe('TableQueryResult', () => {
         expect(() => proxied.getCellValue('fld1stPrimary')).not.toThrow();
     });
 
+    it('proxy hides denied props from property enumeration (does not break dev tooling)', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const proxied = qr.records[0];
+
+        expect('_data' in proxied).toBe(false);
+        expect('_baseData' in proxied).toBe(false);
+        expect('_getRawCellValue' in proxied).toBe(false);
+
+        expect(Object.keys(proxied)).not.toContain('_data');
+        expect(Object.keys(proxied)).not.toContain('_baseData');
+        expect(Object.getOwnPropertyNames(proxied)).not.toContain('_data');
+        expect(Object.getOwnPropertyNames(proxied)).not.toContain('_baseData');
+
+        expect(Object.getOwnPropertyDescriptor(proxied, '_data')).toBeUndefined();
+        expect(Object.getOwnPropertyDescriptor(proxied, '_baseData')).toBeUndefined();
+
+        const seenKeys: Array<string> = [];
+        expect(() => {
+            // eslint-disable-next-line guard-for-in
+            for (const key in proxied) {
+                seenKeys.push(key);
+            }
+        }).not.toThrow();
+        expect(seenKeys).not.toContain('_data');
+        expect(seenKeys).not.toContain('_baseData');
+        expect(seenKeys).not.toContain('_getRawCellValue');
+    });
+
     it('proxy methods are bound to the receiver, not the raw target', async () => {
         const baseData = mockAirtableInterface.sdkInitData.baseData;
         baseData.tablesById.tblFirst.recordsById.recA = {
@@ -691,24 +734,97 @@ describe('TableQueryResult', () => {
         );
     });
 
-    it('records getter throws when a recordId in the result set is missing from the store', async () => {
+    it('hasRecord returns false for an optimistically-deleted record (cache invalidated)', async () => {
         const baseData = mockAirtableInterface.sdkInitData.baseData;
         baseData.tablesById.tblFirst.recordsById.recA = {
             id: 'recA',
             cellValuesByFieldId: {fld1stPrimary: 'Alice'},
             createdTime: '2020-01-01T00:00:00.000Z',
         };
-        baseData.tablesById.tblFirst.recordOrder.push('recA');
+        baseData.tablesById.tblFirst.recordsById.recB = {
+            id: 'recB',
+            cellValuesByFieldId: {fld1stPrimary: 'Bob'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA', 'recB');
 
         const qr = table.selectRecords({fields: ['fld1stPrimary']});
         baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
-            recordOrder: ['recA', 'recGhost'],
+            recordOrder: ['recA', 'recB'],
         };
         await act(async () => {
             await qr.loadDataAsync();
         });
 
-        expect(() => qr.records).toThrowError(/Record missing in table/);
+        expect(qr.hasRecord('recA')).toBe(true);
+        expect(qr.hasRecord('recB')).toBe(true);
+
+        const deletePromise = table.deleteRecordAsync('recA');
+        expect(qr.hasRecord('recA')).toBe(false);
+        expect(qr.hasRecord('recB')).toBe(true);
+        await deletePromise;
+    });
+
+    it('fires recordIds / records watchers on optimistic delete (before host syncs recordOrder)', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordsById.recB = {
+            id: 'recB',
+            cellValuesByFieldId: {fld1stPrimary: 'Bob'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA', 'recB');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA', 'recB'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const recordsHandler = jest.fn();
+        const recordIdsHandler = jest.fn();
+        qr.watch('records', recordsHandler);
+        qr.watch('recordIds', recordIdsHandler);
+
+        const deletePromise = table.deleteRecordAsync('recA');
+        expect(recordsHandler).toHaveBeenCalled();
+        expect(recordIdsHandler).toHaveBeenCalled();
+        await deletePromise;
+    });
+
+    it('records getter does not crash when a record is deleted before recordOrder is synced', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordsById.recB = {
+            id: 'recB',
+            cellValuesByFieldId: {fld1stPrimary: 'Bob'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA', 'recB');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA', 'recB'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const deletePromise = table.deleteRecordAsync('recA');
+        expect(() => qr.records).not.toThrow();
+        expect(qr.records.map((r) => r.id)).toEqual(['recB']);
+        expect(qr.recordIds).toEqual(['recB']);
+        await deletePromise;
     });
 
     it('hasRecord / getRecordByIdIfExists scope the lookup to this query result', async () => {
