@@ -9,7 +9,7 @@
     },
     "dependencies": {
         "@airtable/blocks-cli": "^2.0.6 || ^3.0.0",
-        "@babel/core": "^7.12.13",
+        "@babel/core": "^8.0.1",
         "@babel/preset-env": "^7.12.13",
         "@babel/preset-react": "^7.12.13",
         "@babel/preset-typescript": "^7.12.13",
@@ -17,7 +17,7 @@
         "css-loader": "^6.3.0",
         "style-loader": "^3.3.0",
         "webpack": "^5.9.0",
-        "webpack-dev-server": "^4.0.0"
+        "webpack-dev-server": "^5.2.5"
     },
     "devDependencies": {
         "@oclif/config": "^1.17.0",
