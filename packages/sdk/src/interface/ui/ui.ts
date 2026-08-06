@@ -5,6 +5,8 @@ import '..';
 export {CellRenderer} from './cell_renderer';
 export {expandRecord} from './expand_record';
 export {initializeBlock} from './initialize_block';
+export {openCommentsPanel} from './open_comments_panel';
+export {openRevisionHistory} from './open_revision_history';
 export {useBase} from './use_base';
 export {useColorScheme} from '../../shared/ui/use_color_scheme';
 export {useCustomProperties} from './use_custom_properties';

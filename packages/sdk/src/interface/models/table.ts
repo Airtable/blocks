@@ -155,6 +155,87 @@ export class Table extends TableCore<InterfaceSdkMode> {
         return this.checkPermissionToExpandRecords().hasPermission;
     }
 
+    /**
+     * Checks whether the native record comments panel can be opened for records in this table.
+     *
+     * Returns `{hasPermission: true}` if the panel can be opened,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise.
+     *
+     * @example
+     * ```js
+     * const commentsCheckResult = table.checkPermissionToOpenCommentsPanel();
+     * if (!commentsCheckResult.hasPermission) {
+     *     alert(commentsCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    checkPermissionToOpenCommentsPanel(): PermissionCheckResult {
+        const canOpen = this._baseData.tablesById[this.id].areRecordCommentsEnabled ?? false;
+        return canOpen
+            ? {hasPermission: true}
+            : {
+                  hasPermission: false,
+                  reasonDisplayString: 'Record comments are not enabled for this table',
+              };
+    }
+
+    /**
+     * An alias for `checkPermissionToOpenCommentsPanel().hasPermission`.
+     *
+     * Whether the native record comments panel can be opened for records in this table.
+     *
+     * @example
+     * ```js
+     * if (table.hasPermissionToOpenCommentsPanel()) {
+     *     openCommentsPanel(record);
+     * }
+     * ```
+     */
+    hasPermissionToOpenCommentsPanel(): boolean {
+        return this.checkPermissionToOpenCommentsPanel().hasPermission;
+    }
+
+    /**
+     * Checks whether the native record revision history panel can be opened for records in this
+     * table.
+     *
+     * Returns `{hasPermission: true}` if the panel can be opened,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise.
+     *
+     * @example
+     * ```js
+     * const revisionHistoryCheckResult = table.checkPermissionToOpenRevisionHistory();
+     * if (!revisionHistoryCheckResult.hasPermission) {
+     *     alert(revisionHistoryCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    checkPermissionToOpenRevisionHistory(): PermissionCheckResult {
+        const canOpen = this._baseData.tablesById[this.id].isRecordRevisionHistoryEnabled ?? false;
+        return canOpen
+            ? {hasPermission: true}
+            : {
+                  hasPermission: false,
+                  reasonDisplayString: 'Record revision history is not enabled for this table',
+              };
+    }
+
+    /**
+     * An alias for `checkPermissionToOpenRevisionHistory().hasPermission`.
+     *
+     * Whether the native record revision history panel can be opened for records in this table.
+     *
+     * @example
+     * ```js
+     * if (table.hasPermissionToOpenRevisionHistory()) {
+     *     openRevisionHistory(record);
+     * }
+     * ```
+     */
+    hasPermissionToOpenRevisionHistory(): boolean {
+        return this.checkPermissionToOpenRevisionHistory().hasPermission;
+    }
+
     /** @internal */
     _adjustCellValueForFieldIfNecessary(
         field: Field,

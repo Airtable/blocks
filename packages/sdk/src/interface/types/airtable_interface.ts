@@ -120,6 +120,8 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
     urlConstructor: UrlConstructor;
 
     expandRecord(tableId: string, recordId: string): void;
+    openCommentsPanel(tableId: string, recordId: string): void;
+    openRevisionHistory(tableId: string, recordId: string): void;
     fetchForeignRecordsAsync(
         tableId: string,
         recordId: string,

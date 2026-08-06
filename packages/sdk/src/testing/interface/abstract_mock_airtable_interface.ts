@@ -204,6 +204,8 @@ export abstract class AbstractMockAirtableInterface
     unloadDynamicQuery(_args: {key: string}): void {}
 
     abstract expandRecord(tableId: string, recordId: string): void;
+    abstract openCommentsPanel(tableId: string, recordId: string): void;
+    abstract openRevisionHistory(tableId: string, recordId: string): void;
     abstract reloadFrame(): void;
     abstract trackEvent(): void;
     abstract trackExposure(): void;

@@ -70,6 +70,12 @@ export class MockAirtableInterface extends AbstractMockAirtableInterface {
     expandRecord(tableId: string, recordId: string) {
         throw spawnError('expandRecord unimplemented');
     }
+    openCommentsPanel(tableId: string, recordId: string) {
+        throw spawnError('openCommentsPanel unimplemented');
+    }
+    openRevisionHistory(tableId: string, recordId: string) {
+        throw spawnError('openRevisionHistory unimplemented');
+    }
     reloadFrame() {
         throw spawnError('reloadFrame unimplemented');
     }

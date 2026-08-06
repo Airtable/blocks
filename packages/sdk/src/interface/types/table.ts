@@ -18,6 +18,8 @@ export interface TableData extends TableDataCore {
     >;
 
     isRecordExpansionEnabled: boolean;
+    areRecordCommentsEnabled?: boolean;
+    isRecordRevisionHistoryEnabled?: boolean;
     canCreateRecordsInline: boolean;
     canEditRecordsInline: boolean;
     canDestroyRecordsInline: boolean;
