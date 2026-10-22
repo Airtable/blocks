@@ -19,7 +19,10 @@ describe('ui entry point', () => {
     test('useBase', () => run('useBase'));
     test('useColorScheme', () => run('useColorScheme'));
     test('useCustomProperties', () => run('useCustomProperties'));
+    test('unstable_usePreloadedRecords', () => run('unstable_usePreloadedRecords'));
     test('useRecords', () => run('useRecords'));
+    test('unstable_useRecordsWithPreloadedPreview', () =>
+        run('unstable_useRecordsWithPreloadedPreview'));
     test('useRunInfo', () => run('useRunInfo'));
     test('useSession', () => run('useSession'));
     test('useGlobalConfig', () => run('useGlobalConfig'));

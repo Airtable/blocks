@@ -497,6 +497,21 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
             recordIds: this._getRecordIdsToLoad(),
         });
 
+        this._watchRecordStore();
+
+        return [
+            WatchableRecordQueryResultKeysCore.records,
+            WatchableRecordQueryResultKeysCore.recordIds,
+        ];
+    }
+
+    /**
+     * Forwards `RecordStore` changes that affect this query's records to this query's own
+     * watchers. Balanced by `_unwatchRecordStore`.
+     *
+     * @internal
+     */
+    _watchRecordStore(): void {
         const recordStore = this.parentTable.parentBase.__getRecordStore(this.parentTable.id);
         recordStore.watch(
             WatchableDynamicQueryKeyPrefix + this.__poolKey,
@@ -516,11 +531,6 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
                 );
             }
         }
-
-        return [
-            WatchableRecordQueryResultKeysCore.records,
-            WatchableRecordQueryResultKeysCore.recordIds,
-        ];
     }
 
     /**
@@ -532,6 +542,16 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
      * @internal
      */
     _unloadData(): void {
+        this._unwatchRecordStore();
+
+        this._sdk.__airtableInterface.unloadDynamicQuery({
+            key: this.__poolKey,
+        });
+        this._proxyByRecordId.clear();
+    }
+
+    /** @internal */
+    _unwatchRecordStore(): void {
         const recordStore = this.parentTable.parentBase.__getRecordStore(this.parentTable.id);
         recordStore.unwatch(
             WatchableDynamicQueryKeyPrefix + this.__poolKey,
@@ -551,10 +571,5 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
                 );
             }
         }
-
-        this._sdk.__airtableInterface.unloadDynamicQuery({
-            key: this.__poolKey,
-        });
-        this._proxyByRecordId.clear();
     }
 }

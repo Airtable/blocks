@@ -5,10 +5,7 @@
             "packages/sdk",
             "packages/*",
             "tools/*",
-            "docs",
-            "examples/todo-block",
-            "examples/update-records-block",
-            "examples/shared-code-block/hello-world-typescript-block"
+            "docs"
         ],
         "nohoist": [
             "{@airtable,@airtable-blocks-internal}/*/!(react|react-dom)",

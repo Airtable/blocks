@@ -14,6 +14,7 @@ import {Record} from './record';
 const WatchableRecordStoreKeys = Object.freeze({
     ...WatchableRecordStoreKeysCore,
     recordOrder: 'recordOrder' as const,
+    preloadedRecords: 'preloadedRecords' as const,
 });
 
 /**
@@ -67,6 +68,9 @@ export class RecordStore extends RecordStoreCore<InterfaceSdkMode, WatchableReco
         super.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.recordOrder) {
             this._onChange(WatchableRecordStoreKeys.recordOrder);
+        }
+        if (dirtyPaths.preloadedRecords) {
+            this._onChange(WatchableRecordStoreKeys.preloadedRecords);
         }
     }
 }

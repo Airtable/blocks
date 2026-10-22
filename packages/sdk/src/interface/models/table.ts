@@ -7,6 +7,7 @@ import {FieldType} from '../../shared/types/field_core';
 import {type InterfaceBlockSdk} from '../sdk';
 import {Field} from './field';
 import {type Base} from './base';
+import {PreloadedRecordsQueryResult} from './preloaded_records_query_result';
 import {type RecordStore} from './record_store';
 import {TableQueryResult, type TableQueryResultOpts} from './table_query_result';
 
@@ -37,6 +38,9 @@ export class Table extends TableCore<InterfaceSdkMode> {
      * @internal
      */
     __tableQueryResultPool: ObjectPool<TableQueryResult, typeof TableQueryResult>;
+
+    /** @internal */
+    _preloadedRecordsQueryResult: PreloadedRecordsQueryResult | null = null;
 
     /** @internal */
     constructor(
@@ -112,6 +116,49 @@ export class Table extends TableCore<InterfaceSdkMode> {
         const queryResult = this.selectRecords(opts);
         await queryResult.loadDataAsync();
         return queryResult;
+    }
+
+    /**
+     * Select the records of this table that Airtable preloaded for this extension. Returns a
+     * {@link PreloadedRecordsQueryResult}, which is already loaded, or `null` if no records of
+     * this table were preloaded: the builder didn't turn preloading on for this table, the records
+     * haven't arrived yet, or Airtable predates preloading.
+     *
+     * **Unstable:** this method may have breaking changes in a future release.
+     *
+     * The builder chooses which fields to preload and how many records (`rowLimit`). The records
+     * are the first `rowLimit` records that `useRecords(table)` returns. Consider using
+     * {@link unstable_usePreloadedRecords} instead, which re-renders your component when the
+     * preloaded records arrive or change.
+     *
+     * @example
+     * ```js
+     * const preloadedRecords = table.unstable_selectPreloadedRecords();
+     * if (preloadedRecords) {
+     *     console.log(preloadedRecords.records.length, preloadedRecords.hasMoreRecords);
+     * }
+     * ```
+     */
+    unstable_selectPreloadedRecords(): PreloadedRecordsQueryResult | null {
+        const tableData = this._baseData.tablesById[this.id];
+        const preloadedRecordsData = tableData?.preloadedRecords ?? null;
+        if (
+            preloadedRecordsData === null ||
+            !tableData.dynamicQueriesByKey?.[preloadedRecordsData.queryKey]
+        ) {
+            return null;
+        }
+        if (
+            this._preloadedRecordsQueryResult === null ||
+            !this._preloadedRecordsQueryResult._isForPreloadedRecordsData(preloadedRecordsData)
+        ) {
+            this._preloadedRecordsQueryResult = new PreloadedRecordsQueryResult(
+                this._sdk,
+                this,
+                preloadedRecordsData,
+            );
+        }
+        return this._preloadedRecordsQueryResult;
     }
 
     /**

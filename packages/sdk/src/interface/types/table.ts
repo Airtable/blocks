@@ -4,6 +4,21 @@ import {type ObjectMap} from '../../shared/private_utils';
 import {type RecordData} from './record';
 import {type FieldData, type FieldPermissionData} from './field';
 
+/**
+ * Describes the first rows of this table that the host loaded before the extension asked for any
+ * data. Present only while `dynamicQueriesByKey[queryKey]` holds those rows; its `recordOrder`
+ * holds up to `rowLimit + 1` record ids, the extra one signalling that more records match.
+ * The host never preloads records while a search term filters the element's records.
+ *
+ * @hidden
+ */
+export interface PreloadedRecordsData {
+    queryKey: string;
+    /** The only fields whose cell values are guaranteed to be loaded for these records. */
+    fieldIds: Array<FieldId>;
+    rowLimit: number;
+}
+
 /** @hidden */
 export interface TableData extends TableDataCore {
     fieldsById: ObjectMap<FieldId, FieldData>;
@@ -20,6 +35,7 @@ export interface TableData extends TableDataCore {
     isRecordExpansionEnabled: boolean;
     areRecordCommentsEnabled?: boolean;
     isRecordRevisionHistoryEnabled?: boolean;
+    preloadedRecords?: PreloadedRecordsData | null;
     canCreateRecordsInline: boolean;
     canEditRecordsInline: boolean;
     canDestroyRecordsInline: boolean;
