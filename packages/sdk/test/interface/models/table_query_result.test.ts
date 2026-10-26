@@ -531,6 +531,7 @@ describe('TableQueryResult', () => {
             'fetchForeignRecordsAsync',
             'selectLinkedRecordsFromCell',
             'selectLinkedRecordsFromCellAsync',
+            'watch',
         ];
         const DENIED = ['_data', '_baseData', '_getRawCellValue'];
         const PASS_THROUGH = [
@@ -549,7 +550,6 @@ describe('TableQueryResult', () => {
             'isDeleted',
             'toString',
             'unwatch',
-            'watch',
             '_dataOrNullIfDeleted',
             '_getFieldMatching',
             '_parentRecordStore',
@@ -600,6 +600,109 @@ describe('TableQueryResult', () => {
         ).toThrowError(/Direct access to _getRawCellValue/);
 
         expect(() => proxied.getCellValue('fld1stPrimary')).not.toThrow();
+    });
+
+    it('proxy reads createdTime and isDeleted from the raw record', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const proxied = qr.records[0];
+        expect(proxied.createdTime).toStrictEqual(new Date('2020-01-01T00:00:00.000Z'));
+        expect(proxied.isDeleted).toBe(false);
+
+        delete baseData.tablesById.tblFirst.recordsById.recA;
+        expect(proxied.isDeleted).toBe(true);
+    });
+
+    it('proxy keeps the record class', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const rawRecord = sdk.base.__getRecordStore('tblFirst').getRecordByIdIfExists('recA');
+        const proxied = qr.records[0];
+        expect(proxied.constructor).toBe(rawRecord?.constructor);
+        expect(proxied.toString()).toBe('[Record recA]');
+    });
+
+    it('proxy records can be watched, and watchers get the proxy', async () => {
+        const baseData = mockAirtableInterface.sdkInitData.baseData;
+        baseData.tablesById.tblFirst.recordsById.recA = {
+            id: 'recA',
+            cellValuesByFieldId: {fld1stPrimary: 'Alice'},
+            createdTime: '2020-01-01T00:00:00.000Z',
+        };
+        baseData.tablesById.tblFirst.recordOrder.push('recA');
+
+        const qr = table.selectRecords({fields: ['fld1stPrimary']});
+        baseData.tablesById.tblFirst.dynamicQueriesByKey[qr.__poolKey] = {
+            recordOrder: ['recA'],
+        };
+        await act(async () => {
+            await qr.loadDataAsync();
+        });
+
+        const renamePrimaryCellAsync = async (name: string) => {
+            await act(async () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tblFirst',
+                            'recordsById',
+                            'recA',
+                            'cellValuesByFieldId',
+                            'fld1stPrimary',
+                        ],
+                        value: name,
+                    },
+                ]);
+            });
+        };
+
+        const proxied = qr.records[0];
+        const keys = ['cellValues', 'cellValueInField:fld1stPrimary', 'name'];
+        const onChange = jest.fn();
+        const context = {};
+        expect(proxied.watch(keys, onChange, context)).toStrictEqual(keys);
+
+        await renamePrimaryCellAsync('Bob');
+        expect(onChange.mock.calls.map((call) => call[1])).toEqual(keys);
+        for (const [model] of onChange.mock.calls) {
+            expect(model).toBe(proxied);
+        }
+        for (const thisArg of onChange.mock.instances) {
+            expect(thisArg).toBe(context);
+        }
+
+        expect(proxied.unwatch(keys, onChange, context)).toStrictEqual(keys);
+        await renamePrimaryCellAsync('Carol');
+        expect(onChange).toHaveBeenCalledTimes(keys.length);
     });
 
     it('proxy hides denied props from property enumeration (does not break dev tooling)', async () => {

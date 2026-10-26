@@ -146,6 +146,31 @@ describe('PreloadedRecordsQueryResult', () => {
         );
     });
 
+    it('exposes the createdTime and isDeleted of its records', () => {
+        seedPreloadedRecords(makeRecords(1));
+
+        const [record] = table.unstable_selectPreloadedRecords()!.records;
+        expect(record.createdTime).toStrictEqual(new Date('2020-01-01T00:00:00.000Z'));
+        expect(record.isDeleted).toBe(false);
+    });
+
+    it('only lets its records watch the preloaded fields', () => {
+        seedPreloadedRecords(makeRecords(1), {fieldIds: ['fldMockLookup']});
+
+        const [record] = table.unstable_selectPreloadedRecords()!.records;
+        const onChange = jest.fn();
+        expect(() => record.watch('cellValueInField:fld1stPrimary', onChange)).toThrow(
+            "Field fld1stPrimary was not declared in this query result's fields",
+        );
+        expect(() => record.watch(['cellValues', 'name'], onChange)).toThrow(
+            "Field fld1stPrimary was not declared in this query result's fields",
+        );
+
+        const keys = ['cellValues', 'cellValueInField:fldMockLookup'];
+        expect(record.watch(keys, onChange)).toStrictEqual(keys);
+        expect(record.unwatch(keys, onChange)).toStrictEqual(keys);
+    });
+
     describe('_selectForRequestedFieldIds', () => {
         it('gates reads to the preloaded fields among the requested ones', () => {
             seedPreloadedRecords(makeRecords(1), {fieldIds: ['fldMockLookup', 'fld1stPrimary']});

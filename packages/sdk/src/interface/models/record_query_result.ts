@@ -1,6 +1,10 @@
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import {invariant, spawnError} from '../../shared/error_utils';
 import {
+    WatchableCellValueInFieldKeyPrefix,
+    WatchableRecordKeysCore,
+} from '../../shared/models/record_core';
+import {
     RecordQueryResultCore,
     WatchableRecordQueryResultKeysCore,
 } from '../../shared/models/record_query_result_core';
@@ -13,6 +17,9 @@ import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
 import {type Field} from './field';
 import {type Record} from './record';
 import {type Table} from './table';
+
+/** @internal */
+type RecordWatchCallback = Parameters<Record['watch']>[1];
 
 export const WatchableRecordQueryResultKeys = Object.freeze({
     ...WatchableRecordQueryResultKeysCore,
@@ -382,10 +389,13 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
      * consumer of Query A read a field that only Query B loaded — a silent
      * cross-query leak. The handler routes all cell-reading methods and
      * `selectLinkedRecordsFromCell*` (which reads the cell's links as its
-     * input) through a field-membership check.
+     * input) through a field-membership check. `watch` checks the fields
+     * behind `cellValueInField:` and `name` keys the same way, and its
+     * callbacks get the proxy, not the raw record.
      *
-     * Not gated: `id`, `name`, `parentTable`, `isDeleted`, and any other
-     * pass-through property.
+     * Not gated: `id`, `createdTime`, `isDeleted`, `parentTable`, and any other
+     * pass-through property. `name` reads the primary field's cell, so it is
+     * gated to queries that declare the primary field.
      *
      * The handler closes over `fieldIds` but not over any specific `Record`,
      * so one handler instance is reused for every proxy this query creates.
@@ -406,6 +416,37 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
                 );
             }
             return field;
+        };
+
+        const assertWatchableKeyLoaded = (target: Record, key: string): void => {
+            if (key.startsWith(WatchableCellValueInFieldKeyPrefix)) {
+                assertFieldLoaded(target, key.slice(WatchableCellValueInFieldKeyPrefix.length));
+            } else if (key === WatchableRecordKeysCore.name) {
+                assertFieldLoaded(target, target.parentTable.primaryField);
+            }
+        };
+
+        const gatedCallbackByProxyThenCallback = new WeakMap<
+            Record,
+            WeakMap<RecordWatchCallback, RecordWatchCallback>
+        >();
+        const getGatedCallback = (
+            proxy: Record,
+            callback: RecordWatchCallback,
+        ): RecordWatchCallback => {
+            let gatedCallbackByCallback = gatedCallbackByProxyThenCallback.get(proxy);
+            if (!gatedCallbackByCallback) {
+                gatedCallbackByCallback = new WeakMap();
+                gatedCallbackByProxyThenCallback.set(proxy, gatedCallbackByCallback);
+            }
+            let gatedCallback = gatedCallbackByCallback.get(callback);
+            if (!gatedCallback) {
+                gatedCallback = function (this: unknown, _rawRecord, key, ...args) {
+                    return callback.call(this, proxy, key, ...args);
+                };
+                gatedCallbackByCallback.set(callback, gatedCallback);
+            }
+            return gatedCallback;
         };
 
         const DENIED_PROPS = new Set<string | symbol>(['_data', '_baseData', '_getRawCellValue']);
@@ -456,6 +497,27 @@ export abstract class RecordQueryResult<DataType = {}> extends RecordQueryResult
                         assertFieldLoaded(target, args[0]);
                         return target.selectLinkedRecordsFromCellAsync(...args);
                     };
+                }
+                if (prop === 'watch') {
+                    return (...[keys, callback, context]: Parameters<Record['watch']>) => {
+                        for (const key of typeof keys === 'string' ? [keys] : keys) {
+                            assertWatchableKeyLoaded(target, key);
+                        }
+                        return target.watch(keys, getGatedCallback(receiver, callback), context);
+                    };
+                }
+                if (prop === 'unwatch') {
+                    return (...[keys, callback, context]: Parameters<Record['unwatch']>) =>
+                        target.unwatch(keys, getGatedCallback(receiver, callback), context);
+                }
+                if (prop === 'createdTime') {
+                    return target.createdTime;
+                }
+                if (prop === 'isDeleted') {
+                    return target.isDeleted;
+                }
+                if (prop === 'constructor') {
+                    return target.constructor;
                 }
                 if (DENIED_PROPS.has(prop)) {
                     throw spawnError(
