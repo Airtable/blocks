@@ -5,6 +5,7 @@ import {
 } from '../../shared/types/airtable_interface_core';
 import {type InterfaceSdkMode} from '../../sdk_mode';
 import {type TableId, type PageId, type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {type CollaboratorData} from '../../shared/types/collaborator';
 import {type BaseData} from './base';
 
 /** @hidden */
@@ -128,6 +129,10 @@ export interface AirtableInterface extends AirtableInterfaceCore<InterfaceSdkMod
         fieldId: string,
         filterString: string,
     ): Promise<{records: ReadonlyArray<{id: RecordId; name: string}>}>;
+    fetchEnterpriseUsersAsync(
+        filterString: string,
+        limit?: number,
+    ): Promise<{users: ReadonlyArray<CollaboratorData>}>;
     setCustomPropertiesAsync(
         properties: Array<BlockInstallationPageElementCustomPropertyForAirtableInterface>,
     ): Promise<boolean>;

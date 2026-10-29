@@ -14,6 +14,7 @@ import {
     type UrlConstructor,
 } from '../../interface/types/airtable_interface';
 import {type FieldId, type RecordId} from '../../shared/types/hyper_ids';
+import {type CollaboratorData} from '../../shared/types/collaborator';
 import {cloneDeep, type ObjectMap} from '../../shared/private_utils';
 import {spawnError} from '../../shared/error_utils';
 import {type ModelChange} from '../../shared/types/base_core';
@@ -148,6 +149,13 @@ export abstract class AbstractMockAirtableInterface
         filterString: string,
     ): Promise<{records: ReadonlyArray<{id: RecordId; name: string}>}> {
         return Promise.resolve({records: []});
+    }
+
+    fetchEnterpriseUsersAsync(
+        filterString: string,
+        limit?: number,
+    ): Promise<{users: ReadonlyArray<CollaboratorData>}> {
+        return Promise.resolve({users: []});
     }
 
     setCustomPropertiesAsync(

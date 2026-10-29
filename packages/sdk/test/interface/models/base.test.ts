@@ -375,4 +375,62 @@ describe('Base', () => {
             expect(base.workspaceId).toEqual('wspUai0ZmWFWfSBtb');
         });
     });
+
+    describe('fetchEnterpriseUsersAsync', () => {
+        const users = [
+            {id: 'usrBrianKnapp', name: 'Brian Knapp', email: 'brian.knapp@example.com'},
+            {id: 'usrBrianaKnott', name: 'Briana Knott', email: 'bknott@example.com'},
+        ];
+
+        it('forwards the filter string to the host and returns the matching users', async () => {
+            mockAirtableInterface.fetchEnterpriseUsersAsync.mockResolvedValue({users});
+
+            const result = await base.fetchEnterpriseUsersAsync('brian');
+
+            expect(mockAirtableInterface.fetchEnterpriseUsersAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.fetchEnterpriseUsersAsync).toHaveBeenCalledWith(
+                'brian',
+                undefined,
+            );
+            expect(result).toEqual({users});
+        });
+
+        it('forwards the limit to the host', async () => {
+            mockAirtableInterface.fetchEnterpriseUsersAsync.mockResolvedValue({users: []});
+
+            await base.fetchEnterpriseUsersAsync('brian', {limit: 5});
+
+            expect(mockAirtableInterface.fetchEnterpriseUsersAsync).toHaveBeenCalledWith(
+                'brian',
+                5,
+            );
+        });
+
+        it('rejects a non-string filter string before calling the host', () => {
+            expect(() =>
+                base.fetchEnterpriseUsersAsync(42 as unknown as string),
+            ).toThrowErrorMatchingInlineSnapshot(`"filterString must be a string"`);
+            expect(mockAirtableInterface.fetchEnterpriseUsersAsync).not.toHaveBeenCalled();
+        });
+
+        it.each([0, -1, 1.5, NaN])(
+            'rejects the non-positive-integer limit %p before calling the host',
+            (limit) => {
+                expect(() =>
+                    base.fetchEnterpriseUsersAsync('brian', {limit}),
+                ).toThrowErrorMatchingInlineSnapshot(`"limit must be a positive integer"`);
+                expect(mockAirtableInterface.fetchEnterpriseUsersAsync).not.toHaveBeenCalled();
+            },
+        );
+
+        it('propagates a host rejection', async () => {
+            mockAirtableInterface.fetchEnterpriseUsersAsync.mockRejectedValue(
+                new Error('FETCH_ENTERPRISE_USERS is not enabled for this base.'),
+            );
+
+            await expect(base.fetchEnterpriseUsersAsync('brian')).rejects.toThrow(
+                'FETCH_ENTERPRISE_USERS is not enabled for this base.',
+            );
+        });
+    });
 });
